@@ -1,7 +1,7 @@
 # Evergarden — Twilight Gardens / Advance Magic
 config-version: 2
 dimension:
-  world-name: evergarden
+  world-name: evergarden2
   seed: 72819345
   # ขอบเขตมิติ Evergarden (WorldBorder)
   # - 500000 = เส้นผ่านศูนย์กลาง 500,000 บล็อก (เดินทางได้ถึงพิกัด ±250,000)
@@ -10,6 +10,8 @@ dimension:
   # Fixed twilight: light gardens, dark sky, visible stars.
   time: 13000
 structures:
+  sky-whale:
+    enabled: true
   spacing-chunks: 18
   chance: 0.85
   minor:
@@ -68,7 +70,7 @@ relics:
 resource-pack:
   enabled: true
   # Pinned to the commit containing this release's embedded pack. Empty = bundled CDN URL.
-  url: 'https://raw.githubusercontent.com/40000years/Afterdeath/4bfd13c564239e16bb18062a53a5f3d646139e5b/evergarden/dist/evergarden-java.zip'
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/evergarden/dist/evergarden-java.zip'
   # Empty = calculate dynamically from embedded ZIP.
   sha1: ''
   required: false
@@ -94,7 +96,7 @@ compatibility:
     resource-pack:
       enabled: true
       # Verified GitHub mirror; clients do not need access to the Modrinth CDN.
-      url: https://raw.githubusercontent.com/40000years/Afterdeath/4bfd13c564239e16bb18062a53a5f3d646139e5b/evergarden/dist/Aeternum-Foods-26.x.zip
+      url: https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/evergarden/dist/Aeternum-Foods-26.x.zip
       sha1: f7137350c381dfb933f96e869bfaced4a292bcff
   # vanilla: Fairy/Bamboo use Jump Boost; no flight toggles or step-height changes.
   # enhanced: opt-in Double Jump and a temporary step-height modifier; test your anticheat first.

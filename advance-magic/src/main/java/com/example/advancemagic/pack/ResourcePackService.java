@@ -16,7 +16,7 @@ import java.util.jar.JarFile;
 
 public final class ResourcePackService implements Listener, AutoCloseable {
     public static final UUID PACK_ID=UUID.fromString("3e8e5b71-0600-4a42-a678-483a7cce5fb0");
-    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Afterdeath/DEV/advance-magic/dist/advance-magic-java.zip";
+    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/advance-magic/dist/advance-magic-java.zip";
     private static final List<String> FILES=List.of("advance-magic-java.zip","advance-magic-bedrock.mcpack",
             "geyser-mappings.json","pack-hashes.json","wand-preview.html","advance-magic-guide-th.png");
     private final JavaPlugin plugin;

@@ -79,7 +79,7 @@ public final class VoidscapePlugin extends JavaPlugin {
             layout=new DungeonLayout(seed,saved.getInt("spacing",18),saved.getDouble("chance",1.0));
             String worldName=saved.getString("world",configuredWorld);
             if(worldName.equals("the_void"))throw new IllegalStateException("Use a new world name for Evergarden; never replace the legacy world generator.");
-            voidWorld=new WorldCreator(worldName).seed(seed).environment(World.Environment.NORMAL).generator(new VoidGenerator(seed,layout)).createWorld();
+            voidWorld=new WorldCreator(worldName).seed(seed).environment(World.Environment.NORMAL).generator(new VoidGenerator(seed,layout,getConfig().getBoolean("structures.sky-whale.enabled",true))).createWorld();
             if(voidWorld==null)throw new IllegalStateException("Cannot load Evergarden world");
             voidWorld.setSpawnLocation(0,97,0);voidWorld.setTime(integer("dimension.time",13000,0,23999));
             voidWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE,false);

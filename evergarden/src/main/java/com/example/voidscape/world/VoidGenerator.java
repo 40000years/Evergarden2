@@ -11,11 +11,13 @@ import java.util.*;
 public final class VoidGenerator extends ChunkGenerator {
     private final long seed;
     private final DungeonLayout layout;
+    private final boolean skyWhaleEnabled;
     private final SimplexNoiseGenerator islands, detail;
     private final Blueprint[] sanctums={Blueprint.sanctumDark(),Blueprint.sanctumAstral(),Blueprint.sanctumTime()};
     public record Surface(boolean land,int top,int depth,int garden,boolean pond,boolean path) {}
-    public VoidGenerator(long seed,DungeonLayout layout) {
-        this.seed=seed;this.layout=layout;
+    public VoidGenerator(long seed,DungeonLayout layout) { this(seed,layout,true); }
+    public VoidGenerator(long seed,DungeonLayout layout,boolean skyWhaleEnabled) {
+        this.seed=seed;this.layout=layout;this.skyWhaleEnabled=skyWhaleEnabled;
         islands=new SimplexNoiseGenerator(seed);detail=new SimplexNoiseGenerator(seed^721945L);
     }
     private static double smooth(double t){t=Math.clamp(t,0,1);return t*t*(3-2*t);}
@@ -107,6 +109,7 @@ public final class VoidGenerator extends ChunkGenerator {
         put(data,cx,cz,0,96,0,Material.SEA_LANTERN);put(data,cx,cz,0,97,4,Material.LECTERN);
         for(int x=-1;x<=2;x++)for(int y=96;y<=100;y++)put(data,cx,cz,x,y,-5,(x==-1||x==2||y==96||y==100)?Material.QUARTZ_BLOCK:Material.STRUCTURE_VOID);
         for(var site:sites)if(site.contains(cx*16+8,cz*16+8,12))sanctums[site.kind().ordinal()].render(data,cx,cz,site);
+        if(skyWhaleEnabled)SkyWhale.render(data,cx,cz);
     }
     private static void put(ChunkData data,int cx,int cz,int x,int y,int z,Material m) {
         int lx=x-cx*16,lz=z-cz*16;

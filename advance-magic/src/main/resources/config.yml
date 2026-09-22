@@ -48,9 +48,9 @@ resource-pack:
   enabled: true
   # Direct HTTPS CDN URL (Fastly / GitHub). Empty = use bundled CDN URL.
   # Pinned to the last Java pack that still contains the carrot_on_a_stick model selector.
-  url: 'https://raw.githubusercontent.com/40000years/Afterdeath/5218913b7fa5acd8622e1fb1cfd93aceab4c1ee0/advance-magic/dist/advance-magic-java.zip'
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/advance-magic/dist/advance-magic-java.zip'
   # Must match the pinned GitHub ZIP; this is intentionally independent of the current JAR's embedded pack.
-  sha1: '6f61a5d5315f076aaaf89f982f95b8e58474ff2d'
+  sha1: '20ad3a9de124fbea08755941135c75d71f64130c'
   required: false
   host:
     enabled: false

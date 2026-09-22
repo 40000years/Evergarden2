@@ -83,6 +83,7 @@ public final class WandService implements Listener {
         var modelData=meta.getCustomModelDataComponent();
         modelData.setStrings(List.of("advance_magic:core_"+spell.id()));
         meta.setCustomModelDataComponent(modelData);
+        meta.setItemModel(new NamespacedKey("advance_magic","core_"+spell.id()));
         meta.getPersistentDataContainer().set(coreKey,PersistentDataType.STRING,spell.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("advance_magic","core"),PersistentDataType.STRING,spell.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("voidscape","magic_core"),PersistentDataType.STRING,spell.id());
@@ -127,6 +128,7 @@ public final class WandService implements Listener {
         // The vanilla model is a safe fallback when a client has no resource pack.
         var modelData=meta.getCustomModelDataComponent();
         modelData.setStrings(List.of("advance_magic:"+spell.id()));meta.setCustomModelDataComponent(modelData);
+        meta.setItemModel(new NamespacedKey("advance_magic",spell.id()));
         meta.getPersistentDataContainer().set(wandKey,PersistentDataType.STRING,spell.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("advance_magic","wand"),PersistentDataType.STRING,spell.id());
         meta.getPersistentDataContainer().set(castsKey,PersistentDataType.INTEGER,0);
@@ -264,16 +266,24 @@ public final class WandService implements Listener {
             boolean stateChanged=ensureWandState(item);
             var meta=item.getItemMeta();var data=meta.getCustomModelDataComponent();
             String key="advance_magic:"+spell.id();
-            if(!meta.hasItemModel()&&data.getStrings().equals(List.of(key)))return stateChanged;
-            meta.setItemModel(null);data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
+            if(new NamespacedKey("advance_magic",spell.id()).equals(meta.getItemModel())&&data.getStrings().equals(List.of(key)))return stateChanged;
+            meta.setItemModel(new NamespacedKey("advance_magic",spell.id()));data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
             item.setItemMeta(meta);return true;
         }
         Spell core=coreSpell(item);
         if(core!=null) {
             var meta=item.getItemMeta();var data=meta.getCustomModelDataComponent();
             String key="advance_magic:core_"+core.id();
-            if(!meta.hasItemModel()&&data.getStrings().equals(List.of(key)))return false;
-            meta.setItemModel(null);data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
+            if(new NamespacedKey("advance_magic","core_"+core.id()).equals(meta.getItemModel())&&data.getStrings().equals(List.of(key)))return false;
+            meta.setItemModel(new NamespacedKey("advance_magic","core_"+core.id()));data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
+            item.setItemMeta(meta);return true;
+        }
+        Upgrade upgrade=upgrade(item);
+        if(upgrade!=null){
+            var meta=item.getItemMeta();var data=meta.getCustomModelDataComponent();
+            String key="advance_magic:"+upgrade.id;
+            if(new NamespacedKey("advance_magic",upgrade.id).equals(meta.getItemModel())&&data.getStrings().equals(List.of(key)))return false;
+            meta.setItemModel(new NamespacedKey("advance_magic",upgrade.id));data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
             item.setItemMeta(meta);return true;
         }
         return false;
@@ -284,17 +294,44 @@ public final class WandService implements Listener {
             ItemStack item=inventory.getItem(slot);if(migrate(item))inventory.setItem(slot,item);
         }
     }
+    private ItemStack upgraded(ItemStack wand,ItemStack catalyst) {
+        if(spell(wand)==null)return null;
+        Upgrade type=upgrade(catalyst);if(type==null)return null;
+        NamespacedKey key=switch(type){case DURABILITY->durabilityLevelKey;case DAMAGE->damageLevelKey;case COOLDOWN->cooldownLevelKey;};
+        int current=level(wand,key);if(current>=MAX_UPGRADE_LEVEL)return null;
+        ItemStack result=wand.clone();var meta=result.getItemMeta();meta.getPersistentDataContainer().set(key,PersistentDataType.INTEGER,current+1);
+        if(type==Upgrade.DURABILITY)meta.getPersistentDataContainer().set(durabilityKey,PersistentDataType.INTEGER,
+                Math.min(BASE_USES+(current+1)*USES_PER_REPAIR,usesLeft(wand)+USES_PER_REPAIR));
+        result.setItemMeta(meta);refreshLore(result);return result;
+    }
     @EventHandler(priority=EventPriority.HIGHEST)
     public void anvil(PrepareAnvilEvent event) {
         ItemStack wand=event.getInventory().getFirstItem(), catalyst=event.getInventory().getSecondItem();
         if(spell(wand)==null){if(spell(catalyst)!=null)event.setResult(null);return;}
-        Upgrade upgrade=upgrade(catalyst);if(upgrade==null){event.setResult(null);return;}
-        NamespacedKey key=switch(upgrade){case DURABILITY->durabilityLevelKey;case DAMAGE->damageLevelKey;case COOLDOWN->cooldownLevelKey;};
-        int current=level(wand,key);if(current>=MAX_UPGRADE_LEVEL){event.setResult(null);return;}
-        ItemStack result=wand.clone();var meta=result.getItemMeta();meta.getPersistentDataContainer().set(key,PersistentDataType.INTEGER,current+1);
-        if(upgrade==Upgrade.DURABILITY)meta.getPersistentDataContainer().set(durabilityKey,PersistentDataType.INTEGER,
-                Math.min(BASE_USES+(current+1)*USES_PER_REPAIR,usesLeft(wand)+USES_PER_REPAIR));
-        result.setItemMeta(meta);refreshLore(result);event.setResult(result);event.getInventory().setRepairCost(1);
+        ItemStack result=upgraded(wand,catalyst);event.setResult(result);
+        if(result!=null)event.getInventory().setRepairCost(1);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void applyByClick(InventoryClickEvent event) {
+        if(event.getClick()!=ClickType.LEFT&&event.getClick()!=ClickType.RIGHT)return;
+        if(!(event.getWhoClicked() instanceof Player player)||!(event.getClickedInventory() instanceof org.bukkit.inventory.PlayerInventory))return;
+        ItemStack cursor=event.getCursor(),slot=event.getCurrentItem();
+        boolean coreOnCursor=upgrade(cursor)!=null&&spell(slot)!=null;
+        boolean wandOnCursor=spell(cursor)!=null&&upgrade(slot)!=null;
+        if(!coreOnCursor&&!wandOnCursor)return;
+        ItemStack result=coreOnCursor?upgraded(slot,cursor):upgraded(cursor,slot);
+        event.setCancelled(true);
+        if(result==null){player.sendMessage(ChatColor.RED+"This wand upgrade is already at level 10.");return;}
+        if(coreOnCursor){
+            event.setCurrentItem(result);
+            if(cursor.getAmount()==1)event.setCursor(new ItemStack(Material.AIR));
+            else{ItemStack remaining=cursor.clone();remaining.setAmount(cursor.getAmount()-1);event.setCursor(remaining);}
+        }else{
+            event.setCursor(result);
+            if(slot.getAmount()==1)event.setCurrentItem(new ItemStack(Material.AIR));
+            else{ItemStack remaining=slot.clone();remaining.setAmount(slot.getAmount()-1);event.setCurrentItem(remaining);}
+        }
+        player.sendMessage(ChatColor.GREEN+"Wand upgraded.");
     }
     @EventHandler(priority=EventPriority.HIGHEST)
     public void enchant(PrepareItemEnchantEvent event){if(spell(event.getItem())!=null)event.setCancelled(true);}

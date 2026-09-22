@@ -56,9 +56,10 @@ or Eternity scrolls are included. This averages 0.39 key shards and 0.039 stars 
 Rewards are shared, one-time exploration loot. A persistent chunk marker prevents
 refills after looting, chest removal, chunk reloads and normal server restarts.
 Existing whales are eligible when their library chunk loads (including at startup).
+Previously generated whale chests receive one random wand upgrade when their library chunk next loads.
 Occupied positions or missing library blocks are skipped permanently to preserve builds.
 Install the updated `dist/evergarden.jar` and restart the server.
 
 ## Resource packs
 
-Java pack URLs are pinned to the asset commit in **40000years/Evergarden2**. The new structure uses vanilla blocks and needs no pack update. Bedrock packs and Geyser mappings are embedded in the JARs and installed locally when Geyser-Spigot is present. To publish changed Java packs, commit the ZIPs first, then update URLs to that commit and their matching SHA-1 values before building. Pack regeneration is deliberate, not part of the default build.
+Java pack URLs are pinned to the asset commit in **40000years/Evergarden2**. The wand upgrade textures are in `advance-magic/dist/advance-magic-java.zip`, and its SHA-1 is recorded in the Advance Magic config. Bedrock packs and Geyser mappings are embedded in the JARs and installed locally when Geyser-Spigot is present. Install both updated JARs from the root `dist/` folder and restart the server. Wand upgrade cores work by dropping a core onto a wand in the player inventory or combining them in an anvil.

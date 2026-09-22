@@ -32,15 +32,36 @@ public final class WhaleTreasure implements Listener {
         if (site == null || chunk.getX() != Math.floorDiv(site.x() - 52, 16)
                 || chunk.getZ() != Math.floorDiv(site.z() + 7, 16)) return;
         var marker = plugin.key("whale_treasure_v1");
-        if (chunk.getPersistentDataContainer().has(marker, PersistentDataType.BYTE)) return;
+        var upgradeMarker = plugin.key("whale_wand_upgrades_v2");
+        boolean alreadyPopulated = chunk.getPersistentDataContainer().has(marker, PersistentDataType.BYTE);
+        if (alreadyPopulated && chunk.getPersistentDataContainer().has(upgradeMarker, PersistentDataType.BYTE)) return;
         // Both positions and all validation blocks are in this chunk: no neighbor loads.
         Random random = new Random(DungeonLayout.mix(chunk.getWorld().getSeed()
                 ^ (long)site.x() * 341873128712L ^ (long)site.z() * 132897987541L ^ 0x5748414c454cL));
         int count = random.nextInt(100) < 30 ? 2 : 1;
         int[] positions = random.nextBoolean() ? new int[]{-52, -50} : new int[]{-50, -52};
+        if(alreadyPopulated) {
+            // Existing whales were filled before wand upgrades existed. Add one
+            // upgrade to each surviving library chest without rerolling old loot.
+            chunk.getPersistentDataContainer().set(upgradeMarker, PersistentDataType.BYTE, (byte)1);
+            for(int i=0;i<count;i++) {
+                int x=Math.floorMod(site.x()+positions[i],16),z=Math.floorMod(site.z()+7,16);
+                var block=chunk.getBlock(x,115,z);
+                if(!(block.getState() instanceof Chest chest)
+                        || chunk.getBlock(x,114,z).getType()!=Material.SPRUCE_PLANKS
+                        || chunk.getBlock(x,115,z+1).getType()!=Material.BOOKSHELF)continue;
+                boolean hasUpgrade=Arrays.stream(chest.getBlockInventory().getContents()).filter(Objects::nonNull)
+                        .anyMatch(item->item.hasItemMeta()&&item.getItemMeta().getPersistentDataContainer()
+                                .has(new org.bukkit.NamespacedKey("advance_magic","wand_upgrade"),PersistentDataType.STRING));
+                int slot=chest.getBlockInventory().firstEmpty();
+                if(!hasUpgrade&&slot>=0)chest.getBlockInventory().setItem(slot,createWandUpgrade(random));
+            }
+            return;
+        }
         // Record the attempt even if a player built here, so removing their blocks
         // later cannot reroll or regenerate rewards.
         chunk.getPersistentDataContainer().set(marker, PersistentDataType.BYTE, (byte)1);
+        chunk.getPersistentDataContainer().set(upgradeMarker, PersistentDataType.BYTE, (byte)1);
         for (int i = 0; i < count; i++) {
             int x = Math.floorMod(site.x() + positions[i], 16), z = Math.floorMod(site.z() + 7, 16);
             var block = chunk.getBlock(x, 115, z);
@@ -105,11 +126,12 @@ public final class WhaleTreasure implements Listener {
         ItemStack item = new ItemStack(material);
         var meta = item.getItemMeta();
         meta.setDisplayName(org.bukkit.ChatColor.GOLD + "✦ " + title);
-        meta.setLore(List.of(org.bukkit.ChatColor.GRAY + "Use in an anvil with a magic wand",
+        meta.setLore(List.of(org.bukkit.ChatColor.GRAY + "Place on a magic wand or use an anvil",
                 org.bukkit.ChatColor.YELLOW + effect, org.bukkit.ChatColor.DARK_GRAY + "Sky Whale treasure · max level 10"));
         var model = meta.getCustomModelDataComponent();
         model.setStrings(List.of("advance_magic:" + id));
         meta.setCustomModelDataComponent(model);
+        meta.setItemModel(new org.bukkit.NamespacedKey("advance_magic", id));
         meta.getPersistentDataContainer().set(new org.bukkit.NamespacedKey("advance_magic", "wand_upgrade"), PersistentDataType.STRING, id);
         item.setItemMeta(meta);
         return item;

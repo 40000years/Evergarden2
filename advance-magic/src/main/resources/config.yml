@@ -47,10 +47,10 @@ follow-up:
 resource-pack:
   enabled: true
   # Direct HTTPS CDN URL (Fastly / GitHub). Empty = use bundled CDN URL.
-  # Pinned to the last Java pack that still contains the carrot_on_a_stick model selector.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/advance-magic/dist/advance-magic-java.zip'
+  # Pinned pack includes the three Sky Whale wand upgrade textures.
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/07dcac3/advance-magic/dist/advance-magic-java.zip'
   # Must match the pinned GitHub ZIP; this is intentionally independent of the current JAR's embedded pack.
-  sha1: '20ad3a9de124fbea08755941135c75d71f64130c'
+  sha1: 'fb436f7d2dd4f0fdf145a63fc2d1796166c5d70e'
   required: false
   host:
     enabled: false

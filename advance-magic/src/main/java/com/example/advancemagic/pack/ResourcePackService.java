@@ -16,7 +16,10 @@ import java.util.jar.JarFile;
 
 public final class ResourcePackService implements Listener, AutoCloseable {
     public static final UUID PACK_ID=UUID.fromString("3e8e5b71-0600-4a42-a678-483a7cce5fb0");
-    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/advance-magic/dist/advance-magic-java.zip";
+    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/07dcac3/advance-magic/dist/advance-magic-java.zip";
+    private static final String PREVIOUS_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/advance-magic/dist/advance-magic-java.zip";
+    private static final String PREVIOUS_SHA1 = "20ad3a9de124fbea08755941135c75d71f64130c";
+    private static final String CURRENT_SHA1 = "fb436f7d2dd4f0fdf145a63fc2d1796166c5d70e";
     private static final List<String> FILES=List.of("advance-magic-java.zip","advance-magic-bedrock.mcpack",
             "geyser-mappings.json","pack-hashes.json","wand-preview.html","advance-magic-guide-th.png");
     private final JavaPlugin plugin;
@@ -74,6 +77,13 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             if(input==null)throw new IOException("Embedded Java pack is missing");
             byte[] pack=input.readAllBytes();
             sha1=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(pack));
+            String previous=plugin.getConfig().getString("resource-pack.url","").trim();
+            if(previous.equals(PREVIOUS_CDN_URL)) {
+                plugin.getConfig().set("resource-pack.url",DEFAULT_CDN_URL);
+                String configuredHash=plugin.getConfig().getString("resource-pack.sha1","").trim();
+                if(configuredHash.equalsIgnoreCase(PREVIOUS_SHA1))plugin.getConfig().set("resource-pack.sha1",CURRENT_SHA1);
+                plugin.saveConfig();
+            }
             if(!plugin.getConfig().getBoolean("resource-pack.enabled",true))return;
             String configuredUrl=plugin.getConfig().getString("resource-pack.url","").trim();
             if(!configuredUrl.isBlank()) {

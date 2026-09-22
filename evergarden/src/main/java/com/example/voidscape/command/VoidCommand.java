@@ -100,6 +100,18 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                         plugin.message(p,"วาร์ปมายังจุดเกิดเกาะกลางมิติ (Y=97)");
                         return true;
                     }
+                    if(dest.equals("whale")||dest.equals("skywhale")) {
+                        if(!plugin.getConfig().getBoolean("structures.sky-whale.enabled",true)) {
+                            plugin.message(p,"ปิดการสร้างซากวาฬไว้ใน config");return true;
+                        }
+                        int fromX=p.getWorld()==plugin.world()?p.getLocation().getBlockX():0;
+                        int fromZ=p.getWorld()==plugin.world()?p.getLocation().getBlockZ():0;
+                        var whale=plugin.skyWhales().nearest(fromX,fromZ,12);
+                        if(whale==null){plugin.message(p,"ไม่พบซากวาฬในระยะค้นหา");return true;}
+                        p.teleport(new Location(plugin.world(),whale.x()-99.5,104,whale.z()+0.5));
+                        plugin.message(p,"ซากวาฬใกล้ที่สุดอยู่ที่ X="+whale.x()+" Z="+whale.z());
+                        return true;
+                    }
                     var kind=dest.contains("astral")?DungeonLayout.Kind.SANCTUM_ASTRAL:
                              dest.contains("time")?DungeonLayout.Kind.SANCTUM_TIME:
                              DungeonLayout.Kind.SANCTUM_DARK;
@@ -475,7 +487,7 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
         if(args.length==2&&args[0].equalsIgnoreCase("guide")) {
             c.addAll(List.of("1","2","3","crops","relics","magic"));
         }
-        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","spawn"));
+        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","whale","spawn"));
         if(args.length==2&&args[0].equalsIgnoreCase("give")&&isAdmin(sender)) {
             // Relics & Equipment
             for(Relic r:Relic.values()) c.add(r.id());

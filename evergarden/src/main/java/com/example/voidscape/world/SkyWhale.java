@@ -12,7 +12,6 @@ import java.util.*;
 
 /** A sculpted, immutable block landmark. Geometry is built once, then indexed by chunk. */
 public final class SkyWhale {
-    public static final int CENTER_X=0, CENTER_Z=-400;
     public static final int MIN_X=-110, MAX_X=110, MIN_Y=48, MAX_Y=184, MIN_Z=-60, MAX_Z=60;
     public record Block(int x,int y,int z,Material material) {}
     public record WalkPoint(int x,int y,int z) {}
@@ -36,7 +35,7 @@ public final class SkyWhale {
         VOXELS.forEach((key,material)->{
             int x=(int)((key>>32)&0xffff)-32768,y=(int)((key>>16)&0xffff),z=(int)(key&0xffff)-32768;
             Block b=new Block(x,y,z,material);blocks.add(b);
-            int cx=Math.floorDiv(x+CENTER_X,16),cz=Math.floorDiv(z+CENTER_Z,16);
+            int cx=Math.floorDiv(x,16),cz=Math.floorDiv(z,16);
             chunks.computeIfAbsent(chunkKey(cx,cz),k->new ArrayList<>()).add(b);
         });
         blocks.sort(Comparator.comparingInt(Block::x).thenComparingInt(Block::y).thenComparingInt(Block::z));
@@ -358,10 +357,12 @@ public final class SkyWhale {
             return data;
         });
     }
-    public static void render(ChunkData data,int chunkX,int chunkZ){
-        List<Block> blocks=CHUNKS.get(chunkKey(chunkX,chunkZ));if(blocks==null)return;
-        int ox=chunkX*16,oz=chunkZ*16;
+    public static void render(ChunkData data,int chunkX,int chunkZ,SkyWhaleLayout.Site site){
+        int localChunkX=chunkX-Math.floorDiv(site.x(),16);
+        int localChunkZ=chunkZ-Math.floorDiv(site.z(),16);
+        List<Block> blocks=CHUNKS.get(chunkKey(localChunkX,localChunkZ));if(blocks==null)return;
+        int ox=localChunkX*16,oz=localChunkZ*16;
         for(Block b:blocks)if(b.y>=data.getMinHeight()&&b.y<data.getMaxHeight())
-            data.setBlock(b.x+CENTER_X-ox,b.y,b.z+CENTER_Z-oz,data(b.material));
+            data.setBlock(b.x-ox,b.y,b.z-oz,data(b.material));
     }
 }

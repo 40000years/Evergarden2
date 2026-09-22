@@ -12,6 +12,11 @@ dimension:
 structures:
   sky-whale:
     enabled: true
+    # Sparse, seed-stable sites: roughly one candidate per 32x32 chunk cell.
+    # Placement chance and temple clearance make surviving sites rarer.
+    # Saved to world-layout.yml when the world first starts.
+    spacing-chunks: 32
+    chance: 0.80
   spacing-chunks: 18
   chance: 0.85
   minor:

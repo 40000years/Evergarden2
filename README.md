@@ -2,7 +2,7 @@
 
 ซากวาฬลอยฟ้าออกแบบใหม่: กะโหลกเปิดเป็นห้องพัก กระดูกขากรรไกรโค้ง ซี่โครงที่ค่อย ๆ เรียวและมีรอยหัก กระดูกสันหลังยกไปสู่หางรูปพระจันทร์เสี้ยว ทางเดินไม้ ตะเกียง มอส และสวนเชอร์รีบนเกาะลอย
 
-This repository is the isolated Evergarden / Advance Magic experiment. The plugin names remain compatible with the original modules. The default test world is `evergarden2`; the whale is centered near **X 0, Z -400**, with the main route at Y 100–124. Evergarden build `3.0.0-e2.2` contains the redesigned landmark.
+This repository is the isolated Evergarden / Advance Magic experiment. The plugin names remain compatible with the original modules. The default test world is `evergarden2`. Evergarden build `3.0.0-e2.3` places the redesigned landmark rarely across that world. Each site's main route is at Y 100–124.
 
 ## Actual block previews
 
@@ -16,21 +16,21 @@ These are renders of the **101,209 block positions** in `SkyWhale.blocks()`, inc
 
 Requires Java 25+ and Maven. Run `./build.sh` or `mvn -pl advance-magic,evergarden -am package -DskipTests`. This produces `advance-magic/target/advance-magic.jar` and `evergarden/target/evergarden.jar`, without copying files to a server.
 
-Install on a separate test server. These JARs use the existing plugin names, so use one version of each plugin per server. The first approach platform is around `-95 101 -400`; an administrator can inspect the full shape with:
+Install on a separate test server. These JARs use the existing plugin names, so use one version of each plugin per server. An administrator can jump to the approach island of the nearest whale site with:
 
 ```text
-/execute in minecraft:evergarden2 run tp @s -105 140 -470
+/evergarden tp whale
 ```
 
 **Already generated chunks keep the old design.** To view the redesign, use a fresh isolated test server/world. `plugins/Evergarden/world-layout.yml` stores the locked world name: editing only `dimension.world-name` does not switch an existing installation to a new world. Preserve existing worlds and player data.
 
-`structures.sky-whale.enabled` controls generation in fresh chunks. Placement is fixed and checked against the default seed's temples. The landmark uses ordinary blocks, persistent leaves, mature cave vines and no display entities, mobs, or scheduled animation. Its geometry is cached once and indexed by chunk. This does not constitute a many-player performance benchmark.
+`structures.sky-whale.enabled` controls generation in fresh chunks. Each 32×32 chunk grid cell has an 80% placement attempt; spawn protection and temple clearance can reject it. In a sample of 289 cells with the default seed, 89 sites survived, giving roughly one site per 900×900 blocks. This is a sparse, village-like target, not an exact village generation rule or fixed distance. The site in each cell is deterministic from the world seed. `structures.sky-whale.spacing-chunks` (32–64) and `chance` (0–1) are saved to `plugins/Evergarden/world-layout.yml` when first installed; changing the config afterward does not move sites in an existing world. The landmark uses ordinary blocks, persistent leaves, mature cave vines and no display entities, mobs, or scheduled animation. Its geometry is cached once and indexed by chunk. This does not constitute a many-player performance benchmark.
 
 ## Verification
 
 `python3 tests/sky-whale/run.py --paper-template /path/to/disposable-paper-template --java-home /path/to/jdk`
 
-The probe creates its own temporary server, checks every structure block and the surrounding reserved air, positive and negative chunk boundaries, 153 walkable route points, generation in reversed chunk order, default-seed temple separation, disabling the landmark, and saved-world reload behavior. It never regenerates an existing user world.
+The probe creates its own temporary server, checks seed-stable sparse placement and a second distant site, every structure block and the surrounding reserved air, positive and negative chunk boundaries, 153 walkable route points, generation in reversed chunk order, default-seed temple separation, disabling the landmark, and saved-world reload behavior. It never regenerates an existing user world.
 
 ## Reproduce previews
 

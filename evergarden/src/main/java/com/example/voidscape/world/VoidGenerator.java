@@ -12,12 +12,16 @@ public final class VoidGenerator extends ChunkGenerator {
     private final long seed;
     private final DungeonLayout layout;
     private final boolean skyWhaleEnabled;
+    private final SkyWhaleLayout skyWhales;
     private final SimplexNoiseGenerator islands, detail;
     private final Blueprint[] sanctums={Blueprint.sanctumDark(),Blueprint.sanctumAstral(),Blueprint.sanctumTime()};
     public record Surface(boolean land,int top,int depth,int garden,boolean pond,boolean path) {}
     public VoidGenerator(long seed,DungeonLayout layout) { this(seed,layout,true); }
     public VoidGenerator(long seed,DungeonLayout layout,boolean skyWhaleEnabled) {
-        this.seed=seed;this.layout=layout;this.skyWhaleEnabled=skyWhaleEnabled;
+        this(seed,layout,new SkyWhaleLayout(seed,layout,32,.80),skyWhaleEnabled);
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled) {
+        this.seed=seed;this.layout=layout;this.skyWhales=skyWhales;this.skyWhaleEnabled=skyWhaleEnabled;
         islands=new SimplexNoiseGenerator(seed);detail=new SimplexNoiseGenerator(seed^721945L);
     }
     private static double smooth(double t){t=Math.clamp(t,0,1);return t*t*(3-2*t);}
@@ -26,7 +30,7 @@ public final class VoidGenerator extends ChunkGenerator {
     private Surface surface(int x,int z,List<DungeonLayout.Site> sites) {
         // The landmark supplies its own islands and empty spaces. Noise terrain here
         // would fill its rib cage, bury the approach, and spoil the floating silhouette.
-        if(skyWhaleEnabled&&SkyWhale.containsColumn(x-SkyWhale.CENTER_X,z-SkyWhale.CENTER_Z))
+        if(skyWhaleEnabled&&skyWhales.at(x,z,0)!=null)
             return new Surface(false,95,0,garden(x,z),false,false);
         double radial=Math.hypot(x,z);
         double density=islands.noise(x/155.0,z/155.0)+0.18*detail.noise(x/49.0,z/49.0);
@@ -92,7 +96,7 @@ public final class VoidGenerator extends ChunkGenerator {
         for(int gx=Math.floorDiv(cx*16-7,19);gx<=Math.floorDiv(cx*16+22,19);gx++)for(int gz=Math.floorDiv(cz*16-7,19);gz<=Math.floorDiv(cz*16+22,19);gz++) {
             long h=hash(gx*19,gz*19);int tx=gx*19+4+Math.floorMod((int)h,11),tz=gz*19+4+Math.floorMod((int)(h>>>20),11);
             // A neighboring tree can reach across the reservation and across chunks.
-            if(skyWhaleEnabled&&SkyWhale.containsColumn(tx-SkyWhale.CENTER_X,tz-SkyWhale.CENTER_Z,6))continue;
+            if(skyWhaleEnabled&&skyWhales.at(tx,tz,6)!=null)continue;
             Surface s=surface(tx,tz);
             if(!s.land()||s.pond()||s.path()||s.depth()<16||Math.hypot(tx,tz)<19||layout.at(tx,tz,13)!=null)continue;
             // Broad, deliberately empty home sites.
@@ -115,7 +119,11 @@ public final class VoidGenerator extends ChunkGenerator {
         put(data,cx,cz,0,96,0,Material.SEA_LANTERN);put(data,cx,cz,0,97,4,Material.LECTERN);
         for(int x=-1;x<=2;x++)for(int y=96;y<=100;y++)put(data,cx,cz,x,y,-5,(x==-1||x==2||y==96||y==100)?Material.QUARTZ_BLOCK:Material.STRUCTURE_VOID);
         for(var site:sites)if(site.contains(cx*16+8,cz*16+8,12))sanctums[site.kind().ordinal()].render(data,cx,cz,site);
-        if(skyWhaleEnabled)SkyWhale.render(data,cx,cz);
+        if(skyWhaleEnabled){
+            var whale=skyWhales.cell(Math.floorDiv(cx,skyWhales.spacingChunks()),
+                    Math.floorDiv(cz,skyWhales.spacingChunks()));
+            if(whale!=null)SkyWhale.render(data,cx,cz,whale);
+        }
     }
     private static void put(ChunkData data,int cx,int cz,int x,int y,int z,Material m) {
         int lx=x-cx*16,lz=z-cz*16;

@@ -1,15 +1,20 @@
-Paper 26.2 build 121 / Evergarden 3.0.0-e2.2
-JAR SHA-256: 0e34e190e7c3c261f67007f71ecfa31630c9b01a64accee80d5a58952e4c2772
+Paper 26.2 build 121 / Evergarden 3.0.0-e2.3
+JAR SHA-256: 25b91d552d897fcefe126ee6e47948a574a0ea06143d12d9c7f564b73a0a0ea4
 
 PASS
+Nearest whale is seed-stable and outside the spawn zone: Site[x=-848, z=-656]
+89 sparse whale sites in 289 cells, with repeatable placement and no temple overlap
+A second distant site exists and the old fixed location is no longer reserved
 Every model block fits inside the reserved footprint
 23473 terrain columns reserved without a default-seed temple overlap
-Disabling the whale restores noise terrain in 14747 columns
+Disabling the whale restores noise terrain in 13092 columns
 101209 structure blocks match actual Paper-generated chunks
 8912423 reserved air cells remain clear of noise, trees and ruins
 24412 blocks preserved on positive/negative chunk edges
-160 chunks generated and scanned in 3.13 s (includes terrain, lighting and verification; not a server TPS benchmark)
+160 chunks generated and scanned in 4.66 s (includes terrain, lighting and verification; not a server TPS benchmark)
 153 route steps have solid floors, 3-block headroom and no gaps
+Admin whale teleport lands above the approach island with clear headroom
+A second distant whale generates in its own chunks at Site[x=-3952, z=2336]
 3215801 voxel samples identical after reverse-order generation
 Disposable probe world unloads after save
 Reload preserves existing chunks; a new design needs fresh chunks or an isolated new world

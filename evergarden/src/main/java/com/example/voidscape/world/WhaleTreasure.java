@@ -126,7 +126,7 @@ public final class WhaleTreasure implements Listener {
         ItemStack item = new ItemStack(material);
         var meta = item.getItemMeta();
         meta.setDisplayName(org.bukkit.ChatColor.GOLD + "✦ " + title);
-        meta.setLore(List.of(org.bukkit.ChatColor.GRAY + "Place on a magic wand or use an anvil",
+        meta.setLore(List.of(org.bukkit.ChatColor.GRAY + "Place on a magic wand in your inventory",
                 org.bukkit.ChatColor.YELLOW + effect, org.bukkit.ChatColor.DARK_GRAY + "Sky Whale treasure · max level 10"));
         var model = meta.getCustomModelDataComponent();
         model.setStrings(List.of("advance_magic:" + id));

@@ -306,10 +306,8 @@ public final class WandService implements Listener {
     }
     @EventHandler(priority=EventPriority.HIGHEST)
     public void anvil(PrepareAnvilEvent event) {
-        ItemStack wand=event.getInventory().getFirstItem(), catalyst=event.getInventory().getSecondItem();
-        if(spell(wand)==null){if(spell(catalyst)!=null)event.setResult(null);return;}
-        ItemStack result=upgraded(wand,catalyst);event.setResult(result);
-        if(result!=null)event.getInventory().setRepairCost(1);
+        if(spell(event.getInventory().getFirstItem())!=null
+                || spell(event.getInventory().getSecondItem())!=null)event.setResult(null);
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void applyByClick(InventoryClickEvent event) {

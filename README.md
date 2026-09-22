@@ -62,4 +62,4 @@ Install the updated `dist/evergarden.jar` and restart the server.
 
 ## Resource packs
 
-Java pack URLs are pinned to the asset commit in **40000years/Evergarden2**. The wand upgrade textures are in `advance-magic/dist/advance-magic-java.zip`, and its SHA-1 is recorded in the Advance Magic config. Bedrock packs and Geyser mappings are embedded in the JARs and installed locally when Geyser-Spigot is present. Install both updated JARs from the root `dist/` folder and restart the server. Wand upgrade cores work by dropping a core onto a wand in the player inventory or combining them in an anvil.
+Java pack URLs are pinned to the asset commit in **40000years/Evergarden2**. The wand upgrade textures are in `advance-magic/dist/advance-magic-java.zip`, and its SHA-1 is recorded in the Advance Magic config. Bedrock packs and Geyser mappings are embedded in the JARs and installed locally when Geyser-Spigot is present. Install both updated JARs from the root `dist/` folder and restart the server. Wand upgrade cores work only by dropping a core onto a wand in the player inventory; anvils cannot upgrade or repair wands.

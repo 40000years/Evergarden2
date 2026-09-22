@@ -100,6 +100,26 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                         plugin.message(p,"วาร์ปมายังจุดเกิดเกาะกลางมิติ (Y=97)");
                         return true;
                     }
+                    if(dest.equals("observatory")||dest.equals("garden")||dest.equals("hanging-garden")) {
+                        var kind=dest.equals("observatory")?com.example.voidscape.world.SkyLandmarkLayout.Kind.OBSERVATORY:
+                                com.example.voidscape.world.SkyLandmarkLayout.Kind.HANGING_GARDEN;
+                        if(!plugin.getConfig().getBoolean("structures."+kind.id+".enabled",true)){
+                            plugin.message(p,"This landmark is disabled in config.");return true;
+                        }
+                        int x=p.getWorld()==plugin.world()?p.getLocation().getBlockX():0;
+                        int z=p.getWorld()==plugin.world()?p.getLocation().getBlockZ():0;
+                        var site=plugin.skyLandmarks().nearest(kind,x,z,12);
+                        if(site==null){plugin.message(p,"No landmark found in the search radius.");return true;}
+                        int tx=site.x()+kind.arrivalX,tz=site.z()+kind.arrivalZ;
+                        Material expectedFloor=kind.blueprint().at(kind.arrivalX,kind.arrivalY-1,kind.arrivalZ);
+                        if(plugin.world().getBlockAt(tx,kind.arrivalY-1,tz).getType()!=expectedFloor
+                                ||!plugin.world().getBlockAt(tx,kind.arrivalY,tz).getType().isAir()
+                                ||!plugin.world().getBlockAt(tx,kind.arrivalY+1,tz).getType().isAir()){
+                            plugin.message(p,"This site is in previously generated terrain. Explore fresh chunks to find the new landmark.");return true;
+                        }
+                        p.teleport(new Location(plugin.world(),tx+.5,kind.arrivalY,tz+.5));
+                        plugin.message(p,kind.id+" X="+site.x()+" Z="+site.z());return true;
+                    }
                     if(dest.equals("whale")||dest.equals("skywhale")) {
                         if(!plugin.getConfig().getBoolean("structures.sky-whale.enabled",true)) {
                             plugin.message(p,"ปิดการสร้างซากวาฬไว้ใน config");return true;
@@ -487,7 +507,7 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
         if(args.length==2&&args[0].equalsIgnoreCase("guide")) {
             c.addAll(List.of("1","2","3","crops","relics","magic"));
         }
-        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","whale","spawn"));
+        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","whale","observatory","garden","spawn"));
         if(args.length==2&&args[0].equalsIgnoreCase("give")&&isAdmin(sender)) {
             // Relics & Equipment
             for(Relic r:Relic.values()) c.add(r.id());

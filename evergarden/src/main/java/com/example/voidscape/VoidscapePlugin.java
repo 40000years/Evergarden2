@@ -19,6 +19,7 @@ public final class VoidscapePlugin extends JavaPlugin {
     private World voidWorld;
     private DungeonLayout layout;
     private SkyWhaleLayout skyWhales;
+    private SkyLandmarkLayout skyLandmarks;
     private RelicService relics;
     private DungeonManager dungeons;
     private TravelListener travel;
@@ -86,9 +87,11 @@ public final class VoidscapePlugin extends JavaPlugin {
             long seed=saved.getLong("seed");
             layout=new DungeonLayout(seed,saved.getInt("spacing",18),saved.getDouble("chance",1.0));
             skyWhales=new SkyWhaleLayout(seed,layout,saved.getInt("sky-whale-spacing",32),saved.getDouble("sky-whale-chance",.80));
+            skyLandmarks=new SkyLandmarkLayout(seed,layout,skyWhales);
             String worldName=saved.getString("world",configuredWorld);
             if(worldName.equals("the_void"))throw new IllegalStateException("Use a new world name for Evergarden; never replace the legacy world generator.");
-            voidWorld=new WorldCreator(worldName).seed(seed).environment(World.Environment.NORMAL).generator(new VoidGenerator(seed,layout,skyWhales,getConfig().getBoolean("structures.sky-whale.enabled",true))).createWorld();
+            voidWorld=new WorldCreator(worldName).seed(seed).environment(World.Environment.NORMAL).generator(new VoidGenerator(seed,layout,skyWhales,getConfig().getBoolean("structures.sky-whale.enabled",true),
+                    skyLandmarks,getConfig().getBoolean("structures.observatory.enabled",true),getConfig().getBoolean("structures.hanging-garden.enabled",true))).createWorld();
             if(voidWorld==null)throw new IllegalStateException("Cannot load Evergarden world");
             voidWorld.setSpawnLocation(0,97,0);voidWorld.setTime(integer("dimension.time",13000,0,23999));
             voidWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE,false);
@@ -158,6 +161,7 @@ public final class VoidscapePlugin extends JavaPlugin {
     public com.example.voidscape.pack.ResourcePackService packs(){return packs;}
     public World world(){return voidWorld;} public DungeonLayout layout(){return layout;}
     public SkyWhaleLayout skyWhales(){return skyWhales;}
+    public SkyLandmarkLayout skyLandmarks(){return skyLandmarks;}
     public RelicService relics(){return relics;} public DungeonManager dungeons(){return dungeons;} public TravelListener travel(){return travel;}
     public com.example.voidscape.gui.AdminTestGui testGui(){return testGui;}
     public com.example.voidscape.gui.WandShowcaseGui wandGui(){return wandGui;}

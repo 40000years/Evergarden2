@@ -2,4 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 mvn -pl advance-magic,evergarden -am package -DskipTests
-printf 'Built JARs in advance-magic/target and evergarden/target. No server deployment performed.\n'
+mkdir -p dist
+cp advance-magic/target/advance-magic.jar dist/advance-magic.jar
+cp evergarden/target/evergarden.jar dist/evergarden.jar
+printf 'Built plugin JARs in dist/. No server deployment performed.\n'

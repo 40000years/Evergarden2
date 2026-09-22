@@ -13,6 +13,8 @@ public final class VoidGenerator extends ChunkGenerator {
     private final DungeonLayout layout;
     private final boolean skyWhaleEnabled;
     private final SkyWhaleLayout skyWhales;
+    private final SkyLandmarkLayout landmarks;
+    private final boolean observatoryEnabled,gardenEnabled;
     private final SimplexNoiseGenerator islands, detail;
     private final Blueprint[] sanctums={Blueprint.sanctumDark(),Blueprint.sanctumAstral(),Blueprint.sanctumTime()};
     public record Surface(boolean land,int top,int depth,int garden,boolean pond,boolean path) {}
@@ -21,8 +23,19 @@ public final class VoidGenerator extends ChunkGenerator {
         this(seed,layout,new SkyWhaleLayout(seed,layout,32,.80),skyWhaleEnabled);
     }
     public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,new SkyLandmarkLayout(seed,layout,skyWhales),false,false);
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled) {
         this.seed=seed;this.layout=layout;this.skyWhales=skyWhales;this.skyWhaleEnabled=skyWhaleEnabled;
+        this.landmarks=landmarks;this.observatoryEnabled=observatoryEnabled;this.gardenEnabled=gardenEnabled;
         islands=new SimplexNoiseGenerator(seed);detail=new SimplexNoiseGenerator(seed^721945L);
+    }
+    private boolean landmarkEnabled(SkyLandmarkLayout.Site site){
+        return site!=null&&(site.kind()==SkyLandmarkLayout.Kind.OBSERVATORY?observatoryEnabled:gardenEnabled);
+    }
+    private boolean landmarkReserved(int x,int z,int margin){
+        return (observatoryEnabled||gardenEnabled)&&landmarkEnabled(landmarks.at(x,z,margin));
     }
     private static double smooth(double t){t=Math.clamp(t,0,1);return t*t*(3-2*t);}
     private long hash(int x,int z){return DungeonLayout.mix(seed^(long)x*341873128712L^(long)z*132897987541L);}
@@ -30,7 +43,7 @@ public final class VoidGenerator extends ChunkGenerator {
     private Surface surface(int x,int z,List<DungeonLayout.Site> sites) {
         // The landmark supplies its own islands and empty spaces. Noise terrain here
         // would fill its rib cage, bury the approach, and spoil the floating silhouette.
-        if(skyWhaleEnabled&&skyWhales.at(x,z,0)!=null)
+        if((skyWhaleEnabled&&skyWhales.at(x,z,0)!=null)||landmarkReserved(x,z,0))
             return new Surface(false,95,0,garden(x,z),false,false);
         double radial=Math.hypot(x,z);
         double density=islands.noise(x/155.0,z/155.0)+0.18*detail.noise(x/49.0,z/49.0);
@@ -97,6 +110,7 @@ public final class VoidGenerator extends ChunkGenerator {
             long h=hash(gx*19,gz*19);int tx=gx*19+4+Math.floorMod((int)h,11),tz=gz*19+4+Math.floorMod((int)(h>>>20),11);
             // A neighboring tree can reach across the reservation and across chunks.
             if(skyWhaleEnabled&&skyWhales.at(tx,tz,6)!=null)continue;
+            if(landmarkReserved(tx,tz,6))continue;
             Surface s=surface(tx,tz);
             if(!s.land()||s.pond()||s.path()||s.depth()<16||Math.hypot(tx,tz)<19||layout.at(tx,tz,13)!=null)continue;
             // Broad, deliberately empty home sites.
@@ -124,6 +138,9 @@ public final class VoidGenerator extends ChunkGenerator {
                     Math.floorDiv(cz,skyWhales.spacingChunks()));
             if(whale!=null)SkyWhale.render(data,cx,cz,whale);
         }
+        if(observatoryEnabled||gardenEnabled)
+            for(var site:landmarks.cell(Math.floorDiv(cx,landmarks.spacingChunks()),Math.floorDiv(cz,landmarks.spacingChunks())))
+                if(landmarkEnabled(site))site.kind().blueprint().render(data,cx,cz,site.x(),site.z());
     }
     private static void put(ChunkData data,int cx,int cz,int x,int y,int z,Material m) {
         int lx=x-cx*16,lz=z-cz*16;

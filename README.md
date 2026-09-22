@@ -1,8 +1,58 @@
-# Evergarden2 — Sky Leviathan
+# Evergarden2 — Sky Landmarks
 
 ซากวาฬลอยฟ้าออกแบบใหม่: กะโหลกเปิดเป็นห้องพัก กระดูกขากรรไกรโค้ง ซี่โครงที่ค่อย ๆ เรียวและมีรอยหัก กระดูกสันหลังยกไปสู่หางรูปพระจันทร์เสี้ยว ทางเดินไม้ ตะเกียง มอส และสวนเชอร์รีบนเกาะลอย
 
 This repository is the isolated Evergarden / Advance Magic experiment. The plugin names remain compatible with the original modules. The default test world is `evergarden2`. Evergarden build `3.0.0-e2.3` places the redesigned landmark rarely across that world. Each site's main route is at Y 100–124.
+
+## Two additional sky landmarks (3.0.0-e2.4)
+
+The celestial observatory follows the reference's open blue/purple ribbed dome,
+large oxidized-copper and gold telescope, columned terraces, cherry gardens and
+waterfalls. The hanging garden has an inverted stone island, teal-roofed pavilion,
+cyan crystal roots, hanging foliage and a continuous spiral staircase from its
+lower arrival island to the summit. Both are ordinary vanilla blocks.
+
+[Observatory block preview](previews/observatory-block-preview.png) ·
+[Hanging garden block preview](previews/hanging-garden-block-preview.png)
+
+These previews render the actual generated block positions with simulated lighting;
+they are not Minecraft screenshots. The observatory contains 379,671 blocks and the
+hanging garden 220,587. Block geometry is cached once and clipped to each chunk.
+
+Install the updated root `dist/evergarden.jar` and restart. Existing generated
+chunks are preserved; the new landmarks appear in **fresh chunks**. Admin commands:
+
+```text
+/evergarden tp observatory
+/evergarden tp garden
+```
+
+`structures.observatory.enabled` and `structures.hanging-garden.enabled` toggle
+the two types separately. They share the world's saved whale spacing/chance and
+accepted grid cells. Each eligible cell searches for a non-overlapping pair around
+the unchanged whale position. Crowded cells that cannot fit both skip the pair.
+In three 289-cell tests, counts were exactly equal across all three types:
+89/89/89 for seed 72819345, 68/68/68 for 12345, and 89/89/89 for -817342.
+The new geometry also avoids the existing sanctums and spawn area.
+
+All three landmarks use **`structures.treasure`**: one chest, a 30% chance of a
+second, two crop stacks, and the original bonus weights by default. Every chest
+always contains one randomly chosen repair/damage/cooldown core. Changing the
+shared settings affects newly generated chests, never refills previously claimed
+chests. The one-time marker survives chest removal and server restarts.
+
+The disposable Paper test checks the generated blocks, clear route headroom,
+stair directions, persistent leaves, shared loot settings, and chest removal plus
+player edits across a real server restart:
+
+```text
+python tests/sky-landmarks/run.py --paper-template /path/to/paper-template --paper-jar paper.jar --java-home /path/to/jdk25
+```
+
+`evergarden/tests/SkyLandmarkChecks.java` checks reachable treasure, bounds,
+determinism, placement rates and exclusions without a server; supplying an output
+directory exports the exact blueprints as CSV. Render them with
+`tools/preview_landmarks.py <exports> --minecraft-jar <client.jar>` (NumPy/Pillow).
 
 ## Actual block previews
 

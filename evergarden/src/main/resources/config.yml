@@ -10,6 +10,24 @@ dimension:
   # Fixed twilight: light gardens, dark sky, visible stars.
   time: 13000
 structures:
+  observatory:
+    enabled: true
+  hanging-garden:
+    enabled: true
+  # All three landmarks share the locked sky-whale placement rate below.
+  # Shared one-time chest rewards; weights are relative, one bonus is drawn.
+  treasure:
+    second-chest-chance: 0.30
+    crop-stacks: 2
+    tier-three-chance: 0.75
+    seed-chance: 0.35
+    bonus-weights:
+      key-shard: 300
+      astral-dust: 150
+      nether-star: 30
+      limit-break: 15
+      unique-scroll: 5
+      none: 500
   sky-whale:
     enabled: true
     # Sparse, seed-stable sites: roughly one candidate per 32x32 chunk cell.

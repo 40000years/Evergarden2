@@ -1,0 +1,5 @@
+name: SkyLandmarkProbe
+version: '1.0'
+main: SkyLandmarkProbe
+api-version: '26.2'
+depend: [Evergarden]

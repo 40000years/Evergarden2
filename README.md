@@ -43,6 +43,22 @@ uv run --with pillow --with numpy tools/preview_sky_whale.py /tmp/sky-whale.csv
 
 The renderer discovers local Minecraft textures or accepts `--minecraft-jar PATH`. Textures themselves are not copied into this repository.
 
+## Whale treasure
+
+The skull library gains one chest (70%) or two (30%), beside the bookshelves.
+Each chest contains two crop stacks: each independently selects Tier 3 (75%) or
+Tier 4 (25%), then one seed (35%) or 1–2 produce (65%). Crops within a tier are equally likely.
+One optional bonus is rolled per chest: one key shard (30%), one Astral Dust (15%),
+one Nether Star (3%), one random Limit Break scroll (1.5%), or one random Unique
+Enchant skill scroll (0.5%); the remaining 50% gives no bonus. No Advance Magic cores
+or Eternity scrolls are included. This averages 0.39 key shards and 0.039 stars per whale.
+
+Rewards are shared, one-time exploration loot. A persistent chunk marker prevents
+refills after looting, chest removal, chunk reloads and normal server restarts.
+Existing whales are eligible when their library chunk loads (including at startup).
+Occupied positions or missing library blocks are skipped permanently to preserve builds.
+Install the updated `dist/evergarden.jar` and restart the server.
+
 ## Resource packs
 
 Java pack URLs are pinned to the asset commit in **40000years/Evergarden2**. The new structure uses vanilla blocks and needs no pack update. Bedrock packs and Geyser mappings are embedded in the JARs and installed locally when Geyser-Spigot is present. To publish changed Java packs, commit the ZIPs first, then update URLs to that commit and their matching SHA-1 values before building. Pack regeneration is deliberate, not part of the default build.

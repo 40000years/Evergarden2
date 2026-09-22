@@ -117,6 +117,9 @@ public final class VoidscapePlugin extends JavaPlugin {
             pm.registerEvents(crops,this);
             pm.registerEvents(cropBuffs,this);
             pm.registerEvents(cropGui,this);
+            var whaleTreasure = new WhaleTreasure(this);
+            pm.registerEvents(whaleTreasure,this);
+            for (Chunk chunk : voidWorld.getLoadedChunks()) whaleTreasure.populate(chunk);
             botanist=new com.example.voidscape.crop.BotanistNpc(this);
             pm.registerEvents(botanist,this);
             botanist.init();

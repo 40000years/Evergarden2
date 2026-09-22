@@ -1,0 +1,90 @@
+{
+  "source_csv_sha256": "a3f7da871d32a465ca5275f35d2808464a8174f6fab7b44807db7704fc7be272",
+  "block_count": 101209,
+  "materials": {
+    "ANDESITE": 11300,
+    "BONE_BLOCK": 14863,
+    "BOOKSHELF": 28,
+    "CALCITE": 3124,
+    "CAVE_VINES": 112,
+    "CAVE_VINES_PLANT": 1304,
+    "CHERRY_LEAVES": 2865,
+    "CHERRY_LOG": 340,
+    "CYAN_CARPET": 44,
+    "DEEPSLATE": 6358,
+    "DIRT": 8879,
+    "GOLD_BLOCK": 4,
+    "GRASS_BLOCK": 2470,
+    "IRON_CHAIN": 71,
+    "LANTERN": 19,
+    "MOSSY_COBBLESTONE": 4253,
+    "MOSS_BLOCK": 768,
+    "MOSS_CARPET": 122,
+    "OAK_LEAVES": 1347,
+    "OAK_LOG": 452,
+    "OCHRE_FROGLIGHT": 8,
+    "POLISHED_BLACKSTONE": 120,
+    "QUARTZ_BLOCK": 1574,
+    "SMOOTH_QUARTZ": 65,
+    "SMOOTH_QUARTZ_STAIRS": 60,
+    "SPRUCE_FENCE": 177,
+    "SPRUCE_LOG": 301,
+    "SPRUCE_PLANKS": 1263,
+    "SPRUCE_SLAB": 26,
+    "SPRUCE_STAIRS": 60,
+    "STONE": 36030,
+    "STRIPPED_SPRUCE_LOG": 72,
+    "TUFF": 2730
+  },
+  "bounds_min": [
+    -108,
+    53,
+    -37
+  ],
+  "bounds_max": [
+    86,
+    181,
+    43
+  ],
+  "texture_source": "1.21.1.jar",
+  "fallback_materials": [
+    "CYAN_CARPET"
+  ],
+  "images": [
+    {
+      "path": "sky-whale-block-preview.png",
+      "camera_azimuth": 217,
+      "camera_elevation": 18,
+      "rendered_faces": 22922,
+      "width": 2560,
+      "height": 2355,
+      "focus": null,
+      "span": null
+    },
+    {
+      "path": "sky-whale-sanctuary-detail.png",
+      "camera_azimuth": 215,
+      "camera_elevation": 9,
+      "rendered_faces": 9765,
+      "width": 2560,
+      "height": 1600,
+      "focus": [
+        -52,
+        117,
+        0
+      ],
+      "span": 105
+    },
+    {
+      "path": "sky-whale-side-preview.png",
+      "camera_azimuth": 195,
+      "camera_elevation": 12,
+      "rendered_faces": 23509,
+      "width": 2560,
+      "height": 1600,
+      "focus": null,
+      "span": null
+    }
+  ],
+  "disclosure": "Exact generated block positions; simulated lighting and sky; not an in-game screenshot."
+}

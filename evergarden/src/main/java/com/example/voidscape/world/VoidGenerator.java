@@ -24,6 +24,10 @@ public final class VoidGenerator extends ChunkGenerator {
     private long hash(int x,int z){return DungeonLayout.mix(seed^(long)x*341873128712L^(long)z*132897987541L);}
     public Surface surface(int x,int z){return surface(x,z,layout.nearby(x,z));}
     private Surface surface(int x,int z,List<DungeonLayout.Site> sites) {
+        // The landmark supplies its own islands and empty spaces. Noise terrain here
+        // would fill its rib cage, bury the approach, and spoil the floating silhouette.
+        if(skyWhaleEnabled&&SkyWhale.containsColumn(x-SkyWhale.CENTER_X,z-SkyWhale.CENTER_Z))
+            return new Surface(false,95,0,garden(x,z),false,false);
         double radial=Math.hypot(x,z);
         double density=islands.noise(x/155.0,z/155.0)+0.18*detail.noise(x/49.0,z/49.0);
         double strength=Math.max(density-0.02,1-radial/(116+10*detail.noise(x/60.0,z/60.0)));
@@ -87,6 +91,8 @@ public final class VoidGenerator extends ChunkGenerator {
         // Neighboring candidate cells are evaluated identically regardless of generation order.
         for(int gx=Math.floorDiv(cx*16-7,19);gx<=Math.floorDiv(cx*16+22,19);gx++)for(int gz=Math.floorDiv(cz*16-7,19);gz<=Math.floorDiv(cz*16+22,19);gz++) {
             long h=hash(gx*19,gz*19);int tx=gx*19+4+Math.floorMod((int)h,11),tz=gz*19+4+Math.floorMod((int)(h>>>20),11);
+            // A neighboring tree can reach across the reservation and across chunks.
+            if(skyWhaleEnabled&&SkyWhale.containsColumn(tx-SkyWhale.CENTER_X,tz-SkyWhale.CENTER_Z,6))continue;
             Surface s=surface(tx,tz);
             if(!s.land()||s.pond()||s.path()||s.depth()<16||Math.hypot(tx,tz)<19||layout.at(tx,tz,13)!=null)continue;
             // Broad, deliberately empty home sites.

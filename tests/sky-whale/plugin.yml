@@ -1,0 +1,5 @@
+name: SkyWhaleProbe
+version: '1.0'
+main: SkyWhaleProbe
+api-version: '26.2'
+depend: [Evergarden]

@@ -47,7 +47,7 @@ public final class SkyLandmarkLayout {
         }
         Collections.shuffle(candidates,new Random(DungeonLayout.mix(seed^0x534b59474152444eL^(long)gx*341873128712L^(long)gz*132897987541L)));
         for(Site first:candidates)for(Site second:candidates)
-            if(Math.abs(first.x-second.x)>124||Math.abs(first.z-second.z)>124)
+            if(Math.abs(first.x-second.x)>124&&Math.abs(first.z-second.z)>124)
                 return List.of(first,new Site(Kind.HANGING_GARDEN,second.x,second.z));
         // Extremely crowded cells omit both rather than overlap another structure.
         return List.of();

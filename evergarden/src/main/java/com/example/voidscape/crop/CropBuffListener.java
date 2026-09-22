@@ -51,6 +51,7 @@ public final class CropBuffListener implements Listener, AutoCloseable {
     private final Map<UUID, Long> titanUntil = new ConcurrentHashMap<>();
     private final Map<UUID, Long> shreddedTargets = new ConcurrentHashMap<>();
     private final Set<UUID> soulWardActive = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Map<UUID, Long> soulWardCooldown = new ConcurrentHashMap<>();
     private final Map<UUID, Long> kineticSlamUntil = new ConcurrentHashMap<>();
     private final Map<UUID, Long> chameleonUntil = new ConcurrentHashMap<>();
     private final Map<UUID, Long> abyssalBubbleUntil = new ConcurrentHashMap<>();
@@ -211,6 +212,15 @@ public final class CropBuffListener implements Listener, AutoCloseable {
         Player p = e.getPlayer();
         UUID id = p.getUniqueId();
         long now = System.currentTimeMillis();
+
+        // Tier 4 Totem vegetable: one activation per minute. Keep the item when
+        // the player attempts to consume it during the cooldown.
+        if (crop == CropType.SOUL_WARD_BULB && soulWardCooldown.getOrDefault(id, 0L) > now) {
+            e.setCancelled(true);
+            long remaining = (soulWardCooldown.get(id) - now + 999L) / 1000L;
+            p.sendActionBar(Component.text("โฆ Totem ผักยังติดคูลดาวน์อีก " + remaining + " วินาที", NamedTextColor.RED));
+            return;
+        }
 
         switch (crop) {
             // ==========================================
@@ -390,6 +400,7 @@ public final class CropBuffListener implements Listener, AutoCloseable {
                 p.sendActionBar(Component.text("✦ ผักโขม: Resistance I & แปลง 50% ดาเมจซ่อมเกราะ (2 นาที)", NamedTextColor.GOLD));
             }
             case SOUL_WARD_BULB -> {
+                soulWardCooldown.put(id, now + 60_000L);
                 soulWardActive.add(id);
                 p.getWorld().playSound(p.getLocation(), Sound.ITEM_TOTEM_USE, 0.6f, 1.5f);
                 p.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, p.getLocation().add(0, 1, 0), 25, 0.3, 0.5, 0.3, 0.15);

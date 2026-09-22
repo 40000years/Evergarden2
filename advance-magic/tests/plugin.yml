@@ -1,0 +1,5 @@
+name: AdvanceMagicIntegrationChecks
+version: 1.0.0
+main: IntegrationChecks
+api-version: '26.2'
+depend: [advance-magic]

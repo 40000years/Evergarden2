@@ -1,0 +1,106 @@
+# Evergarden — Twilight Gardens / Advance Magic
+config-version: 2
+dimension:
+  world-name: evergarden
+  seed: 72819345
+  # ขอบเขตมิติ Evergarden (WorldBorder)
+  # - 500000 = เส้นผ่านศูนย์กลาง 500,000 บล็อก (เดินทางได้ถึงพิกัด ±250,000)
+  # - 1000000 = เส้นผ่านศูนย์กลาง 1,000,000 บล็อก (เดินทางได้ถึงพิกัด ±500,000 ตามที่ต้องการ)
+  border-size: 1000000
+  # Fixed twilight: light gardens, dark sky, visible stars.
+  time: 13000
+structures:
+  spacing-chunks: 18
+  chance: 0.85
+  minor:
+    reset-hours: 2
+performance:
+  max-active-dungeons: 6
+  max-dungeon-mobs: 64
+  max-special-projectiles: 64
+  idle-reset-seconds: 60
+portal:
+  # Build a Nether Portal shape from Block of Quartz, then throw any flower into the empty frame.
+  entry-worlds: [world, world_nether, world_the_end]
+spawn-protection:
+  # ป้องกันพื้นที่เกาะเกิด (Spawn Island) และบริเวณประตูมิติใน Evergarden
+  # ผู้เล่นทั่วไปจะไม่สามารถขุด วางบล็อก เทหรือตักของเหลวบนเกาะหลักได้ (แอดมินใน Creative สามารถทำได้ปกติ)
+  enabled: true
+  # รัศมีการคุ้มครองรอบจุดศูนย์กลาง (0, 0) ครอบคลุมทั้งเกาะหลัก ประตูมิติ และลานเกิด (ค่าเริ่มต้น: 80 บล็อก)
+  radius: 80
+combat:
+  # Optional Weakness I from guardians/casters. Off so low-damage melee remains usable.
+  apply-weakness: false
+  # Five guardian waves, followed by one boss. Range 2-12.
+  waves: 5
+  custom-appearance: true
+  boss-skill-damage: 35
+  boss-health: 1024
+  guardian-health: 90
+  specialist-health: 80
+  boss-attack: 27
+  guardian-attack: 16
+  caster-interval-ms: 7000
+  boss-skill-interval-ms: 5500
+  # Preserve the 2.2-second warning; increase the configured base damage by 10%.
+  boss-skill-power-percent: 110
+  # Cobwebs are intentionally rare and cannot retrigger repeatedly on the same player.
+  cobweb-chance: 0.05
+  cobweb-cooldown-ms: 8000
+  true-death:
+    # จำนวนครั้งที่บอสโจมตีโดนผู้เล่นเพื่อเลื่อนระดับคำสาปขึ้น 1 ขั้น
+    hits-per-level: 10
+    # ระดับคำสาปสูงสุดที่จะ 'บังคับตาย (True Death ทะลวง Totem 100%)' ทันที
+    max-level: 5
+    # ดาเมจคลื่นคำสาปต่อเลเวลเมื่อเลื่อนขั้นระดับ 1 ถึง 4 (ไม่บังคับตาย · Totem ช่วยชีวิตได้หากเลือดหมด)
+    pulse-damage-per-level: 4.0
+rewards:
+  # Vault Loot Table Percentages:
+  # One reward per vault; rates are defined in VaultLootTable.
+  # 60% Consumables and reagents
+  # 15% Limit Break Scroll, 12% Unique Enchant Scroll
+  # 7% Advance Magic Core (14 normal types, equal chance)
+  # 5% Special Relic Equipment
+  # 0.5% Mythic Core of Levitation, 0.5% Scroll of Eternity
+  # Core total: 7.5%. These comments document VaultLootTable, not configurable weights.
+relics:
+  allow-pvp: false
+resource-pack:
+  enabled: true
+  # Pinned to the commit containing this release's embedded pack. Empty = bundled CDN URL.
+  url: 'https://raw.githubusercontent.com/40000years/Afterdeath/4bfd13c564239e16bb18062a53a5f3d646139e5b/evergarden/dist/evergarden-java.zip'
+  # Empty = calculate dynamically from embedded ZIP.
+  sha1: ''
+  required: false
+  host:
+    enabled: false
+    bind: 0.0.0.0
+    port: 8188
+    public-host: ''
+    public-url: ''
+  geyser:
+    auto-install: true
+
+# No anticheat bypass permissions are granted. Restart after changing modes.
+compatibility:
+  # Keep LevelledMobs active elsewhere, but automatically exclude the Evergarden world.
+  levelled-mobs-exclude-world: true
+  # Offer the official Java 26.x food pack when AeternumSeasons is enabled.
+  # Bedrock pack + mappings are installed before local Geyser starts when Aeternum is present.
+  aeternum-seasons:
+    bedrock:
+      # Installs missing official files, preserves existing files, and enables Geyser custom content.
+      auto-install: true
+    resource-pack:
+      enabled: true
+      # Verified GitHub mirror; clients do not need access to the Modrinth CDN.
+      url: https://raw.githubusercontent.com/40000years/Afterdeath/4bfd13c564239e16bb18062a53a5f3d646139e5b/evergarden/dist/Aeternum-Foods-26.x.zip
+      sha1: f7137350c381dfb933f96e869bfaced4a292bcff
+  # vanilla: Fairy/Bamboo use Jump Boost; no flight toggles or step-height changes.
+  # enhanced: opt-in Double Jump and a temporary step-height modifier; test your anticheat first.
+  # Glider always uses vanilla Slow Falling while sneaking, in either mode.
+  crop-movement: vanilla
+  # Capped server-sent grapple/knockback. Set false to disable these player impulses.
+  player-impulses: true
+  max-impulse-horizontal: 1.2
+  max-impulse-vertical: 1.0

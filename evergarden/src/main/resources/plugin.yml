@@ -1,0 +1,30 @@
+name: Evergarden
+version: '3.0.0'
+main: com.example.voidscape.VoidscapePlugin
+api-version: '26.2'
+description: Advance Magic Expansion - Crying obsidian portal, 3 sanctums and trial vaults.
+softdepend: [floodgate]
+provides: [Voidscape]
+loadbefore: [Geyser-Spigot]
+commands:
+  evergarden:
+    aliases: [garden, void, voidscape]
+    description: Explore Evergarden and claim dungeon relics
+    usage: /evergarden help
+  upgrade:
+    aliases: [up, enchantgui]
+    description: Open the Evergarden Enchanting and Upgrade menu
+    usage: /upgrade
+permissions:
+  evergarden.enter:
+    default: op
+    children:
+      voidscape.enter: true
+  evergarden.admin:
+    default: op
+    children:
+      voidscape.admin: true
+  voidscape.enter:
+    default: op
+  voidscape.admin:
+    default: op

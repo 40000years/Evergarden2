@@ -1,0 +1,5 @@
+name: VoidscapeIntegrationChecks
+version: '1.0'
+main: IntegrationChecks
+api-version: '26.2'
+depend: [Evergarden]

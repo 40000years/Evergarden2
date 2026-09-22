@@ -1,0 +1,127 @@
+{
+  "format_version": 2,
+  "items": {
+    "minecraft:beetroot_seeds": [
+      {
+        "type": "legacy",
+        "custom_model_data": 2301,
+        "bedrock_identifier": "aeternum:tomato",
+        "display_name": "Tomate",
+        "bedrock_options": {
+          "icon": "aeternum.tomato",
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "legacy",
+        "custom_model_data": 2303,
+        "bedrock_identifier": "aeternum:rice",
+        "display_name": "Arroz",
+        "bedrock_options": {
+          "icon": "aeternum.rice",
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:wheat_seeds": [
+      {
+        "type": "legacy",
+        "custom_model_data": 2302,
+        "bedrock_identifier": "aeternum:onion",
+        "display_name": "Cebolla",
+        "bedrock_options": {
+          "icon": "aeternum.onion",
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:mushroom_stew": [
+      {
+        "type": "legacy",
+        "custom_model_data": 2304,
+        "bedrock_identifier": "aeternum:tomato_salad",
+        "display_name": "Ensalada de tomate",
+        "bedrock_options": {
+          "icon": "aeternum.tomato_salad",
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:bread": [
+      {
+        "type": "legacy",
+        "custom_model_data": 2305,
+        "bedrock_identifier": "aeternum:vegetable_bread",
+        "display_name": "Pan de verduras",
+        "bedrock_options": {
+          "icon": "aeternum.vegetable_bread",
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "legacy",
+        "custom_model_data": 2306,
+        "bedrock_identifier": "aeternum:meat_sandwich",
+        "display_name": "Sándwich de carne",
+        "bedrock_options": {
+          "icon": "aeternum.meat_sandwich",
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:rabbit_stew": [
+      {
+        "type": "legacy",
+        "custom_model_data": 2307,
+        "bedrock_identifier": "aeternum:beef_rice_stew",
+        "display_name": "Estofado de carne con arroz",
+        "bedrock_options": {
+          "icon": "aeternum.beef_rice_stew",
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:honey_bottle": [
+      {
+        "type": "legacy",
+        "custom_model_data": 2310,
+        "bedrock_identifier": "aeternum:coffee",
+        "display_name": "Café",
+        "bedrock_options": {
+          "icon": "aeternum.coffee",
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "legacy",
+        "custom_model_data": 2311,
+        "bedrock_identifier": "aeternum:herbal_tea",
+        "display_name": "Té de hierbas",
+        "bedrock_options": {
+          "icon": "aeternum.herbal_tea",
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "legacy",
+        "custom_model_data": 2312,
+        "bedrock_identifier": "aeternum:energy_drink",
+        "display_name": "Bebida energética",
+        "bedrock_options": {
+          "icon": "aeternum.energy_drink",
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "legacy",
+        "custom_model_data": 2313,
+        "bedrock_identifier": "aeternum:hot_chocolate",
+        "display_name": "Chocolate caliente",
+        "bedrock_options": {
+          "icon": "aeternum.hot_chocolate",
+          "creative_category": "items"
+        }
+      }
+    ]
+  }
+}

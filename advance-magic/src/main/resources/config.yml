@@ -1,0 +1,75 @@
+# Allies: the caster, their tamed animals, and members of their main-scoreboard team.
+pvp: true
+max-active-effects: 128
+max-targets-per-effect: 32
+meteor:
+  ignite-terrain: true
+  # Explosions damage entities but never remove terrain blocks.
+  damage: 135.0
+damage:
+  sonic-boom: 112.5
+  blaze-barrage: 37.5
+  guardian-tidal-burst: 67.5
+  poison-impact: 30.0
+  lightning: 90.0
+  lightning-secondary: 45.0
+  frost-shatter: 52.5
+  earth-wall-rupture: 37.5
+  dragon-per-second: 45.0
+  wither-skull: 60.0
+  shulker-impact: 30.0
+  shulker-singularity-burst: 180.0
+  void-collapse: 67.5
+  shadow-step-rupture: 37.5
+  soul-nova: 52.5
+  shroud-ambush: 75.0
+  natures-bloom-thorns: 30.0
+# Automatic extra stage from the same cast, with no additional mana or cooldown.
+# Existing customized base damage settings are preserved when upgrading.
+follow-up:
+  damage:
+    lightning_strike: 27.0
+    frost_nova: 37.5
+    shadow_step: 30.0
+    natures_bloom: 22.5
+    earth_wall: 37.5
+    dragons_breath: 45.0
+    void_pull: 30.0
+    sonic_boom: 37.5
+    blaze_barrage: 30.0
+    wither_ray: 22.5
+    shulker_levitation: 30.0
+    meteor_strike: 22.5
+    iron_armor: 37.5
+    vex_legion: 37.5
+    guardian_beam: 30.0
+# Bundled pack is automatically offered one tick after joining.
+resource-pack:
+  enabled: true
+  # Direct HTTPS CDN URL (Fastly / GitHub). Empty = use bundled CDN URL.
+  # Pinned to the last Java pack that still contains the carrot_on_a_stick model selector.
+  url: 'https://raw.githubusercontent.com/40000years/Afterdeath/5218913b7fa5acd8622e1fb1cfd93aceab4c1ee0/advance-magic/dist/advance-magic-java.zip'
+  # Must match the pinned GitHub ZIP; this is intentionally independent of the current JAR's embedded pack.
+  sha1: '6f61a5d5315f076aaaf89f982f95b8e58474ff2d'
+  required: false
+  host:
+    enabled: false
+    bind: '0.0.0.0'
+    # Local micro-HTTP server (disabled by default in favor of HTTPS port 443 CDN).
+    port: 8187
+    # Empty = hostname the player joined. Set explicitly for proxies/SRV records.
+    public-host: ''
+    # Optional HTTP(S) reverse-proxy base URL. The pack path is appended.
+    public-url: ''
+  geyser:
+    # Copies Advance Magic's own files during onLoad, before Geyser starts.
+    auto-install: true
+
+compatibility:
+  # false: player roots use Slowness V; mobs retain the full root.
+  # true: also force player positions/velocity; test with your anticheat first.
+  hard-player-roots: false
+  # Server-sent, capped knockback/pull. Set false for strict servers (damage is unchanged).
+  player-spell-velocity: true
+  max-player-horizontal-velocity: 1.1
+  max-player-vertical-velocity: 0.9

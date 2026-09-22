@@ -1,0 +1,549 @@
+{
+  "format_version": 2,
+  "items": {
+    "minecraft:carrot_on_a_stick": [
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:lightning_strike"
+        },
+        "bedrock_identifier": "advance_magic:lightning_strike",
+        "display_name": "Lightning Strike Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.lightning_strike",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:frost_nova"
+        },
+        "bedrock_identifier": "advance_magic:frost_nova",
+        "display_name": "Frost Nova Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.frost_nova",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:shadow_step"
+        },
+        "bedrock_identifier": "advance_magic:shadow_step",
+        "display_name": "Shadow Step Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.shadow_step",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:natures_bloom"
+        },
+        "bedrock_identifier": "advance_magic:natures_bloom",
+        "display_name": "Nature's Bloom Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.natures_bloom",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:earth_wall"
+        },
+        "bedrock_identifier": "advance_magic:earth_wall",
+        "display_name": "Earth Wall Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.earth_wall",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:dragons_breath"
+        },
+        "bedrock_identifier": "advance_magic:dragons_breath",
+        "display_name": "Dragon's Breath Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.dragons_breath",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:void_pull"
+        },
+        "bedrock_identifier": "advance_magic:void_pull",
+        "display_name": "Void Pull Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.void_pull",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:sonic_boom"
+        },
+        "bedrock_identifier": "advance_magic:sonic_boom",
+        "display_name": "Sonic Boom Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.sonic_boom",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:blaze_barrage"
+        },
+        "bedrock_identifier": "advance_magic:blaze_barrage",
+        "display_name": "Blaze Barrage Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.blaze_barrage",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:wither_ray"
+        },
+        "bedrock_identifier": "advance_magic:wither_ray",
+        "display_name": "Wither Ray Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.wither_ray",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:shulker_levitation"
+        },
+        "bedrock_identifier": "advance_magic:shulker_levitation",
+        "display_name": "Shulker Levitation Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.shulker_levitation",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:meteor_strike"
+        },
+        "bedrock_identifier": "advance_magic:meteor_strike",
+        "display_name": "Meteor Strike Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.meteor_strike",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:iron_armor"
+        },
+        "bedrock_identifier": "advance_magic:iron_armor",
+        "display_name": "Iron Armor Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.iron_armor",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:vex_legion"
+        },
+        "bedrock_identifier": "advance_magic:vex_legion",
+        "display_name": "Vex Legion Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.vex_legion",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:carrot_on_a_stick",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:guardian_beam"
+        },
+        "bedrock_identifier": "advance_magic:guardian_beam",
+        "display_name": "Guardian Beam Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.guardian_beam",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      }
+    ],
+    "minecraft:heart_of_the_sea": [
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_lightning_strike"
+        },
+        "bedrock_identifier": "advance_magic:core_lightning_strike",
+        "display_name": "Core of Lightning",
+        "bedrock_options": {
+          "icon": "advance_magic.core_lightning_strike",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_frost_nova"
+        },
+        "bedrock_identifier": "advance_magic:core_frost_nova",
+        "display_name": "Core of Frost",
+        "bedrock_options": {
+          "icon": "advance_magic.core_frost_nova",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_shadow_step"
+        },
+        "bedrock_identifier": "advance_magic:core_shadow_step",
+        "display_name": "Core of Shadows",
+        "bedrock_options": {
+          "icon": "advance_magic.core_shadow_step",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_natures_bloom"
+        },
+        "bedrock_identifier": "advance_magic:core_natures_bloom",
+        "display_name": "Core of Nature",
+        "bedrock_options": {
+          "icon": "advance_magic.core_natures_bloom",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_earth_wall"
+        },
+        "bedrock_identifier": "advance_magic:core_earth_wall",
+        "display_name": "Core of Earth",
+        "bedrock_options": {
+          "icon": "advance_magic.core_earth_wall",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_dragons_breath"
+        },
+        "bedrock_identifier": "advance_magic:core_dragons_breath",
+        "display_name": "Core of Dragon",
+        "bedrock_options": {
+          "icon": "advance_magic.core_dragons_breath",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_void_pull"
+        },
+        "bedrock_identifier": "advance_magic:core_void_pull",
+        "display_name": "Core of the Void",
+        "bedrock_options": {
+          "icon": "advance_magic.core_void_pull",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_sonic_boom"
+        },
+        "bedrock_identifier": "advance_magic:core_sonic_boom",
+        "display_name": "Core of the Warden",
+        "bedrock_options": {
+          "icon": "advance_magic.core_sonic_boom",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_blaze_barrage"
+        },
+        "bedrock_identifier": "advance_magic:core_blaze_barrage",
+        "display_name": "Core of the Blaze",
+        "bedrock_options": {
+          "icon": "advance_magic.core_blaze_barrage",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_wither_ray"
+        },
+        "bedrock_identifier": "advance_magic:core_wither_ray",
+        "display_name": "Core of Wither",
+        "bedrock_options": {
+          "icon": "advance_magic.core_wither_ray",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_shulker_levitation"
+        },
+        "bedrock_identifier": "advance_magic:core_shulker_levitation",
+        "display_name": "Core of Levitation",
+        "bedrock_options": {
+          "icon": "advance_magic.core_shulker_levitation",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_meteor_strike"
+        },
+        "bedrock_identifier": "advance_magic:core_meteor_strike",
+        "display_name": "Core of Meteor",
+        "bedrock_options": {
+          "icon": "advance_magic.core_meteor_strike",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_iron_armor"
+        },
+        "bedrock_identifier": "advance_magic:core_iron_armor",
+        "display_name": "Core of Iron",
+        "bedrock_options": {
+          "icon": "advance_magic.core_iron_armor",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_vex_legion"
+        },
+        "bedrock_identifier": "advance_magic:core_vex_legion",
+        "display_name": "Core of Evocation",
+        "bedrock_options": {
+          "icon": "advance_magic.core_vex_legion",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:heart_of_the_sea",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:core_guardian_beam"
+        },
+        "bedrock_identifier": "advance_magic:core_guardian_beam",
+        "display_name": "Core of the Guardian",
+        "bedrock_options": {
+          "icon": "advance_magic.core_guardian_beam",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      }
+    ]
+  }
+}

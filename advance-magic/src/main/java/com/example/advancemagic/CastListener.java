@@ -118,6 +118,7 @@ public final class CastListener implements Listener {
     public boolean cast(Player p,Spell spell,ItemStack wandItem) {
         long now=System.currentTimeMillis();UUID id=p.getUniqueId();
         if(!canCast(p)){actionbar(p,"You cannot cast spells.");return false;}
+        if(wandItem!=null&&plugin.wands().usesLeft(wandItem)<=0){actionbar(p,"Wand durability is depleted.");return false;}
         if(!p.isOnline()||p.isDead()||p.getGameMode()==GameMode.SPECTATOR)return false;
         if(casting.contains(id)||now-lastInput.getOrDefault(id,0L)<150)return false;
         lastInput.put(id,now);casting.add(id);
@@ -153,12 +154,14 @@ public final class CastListener implements Listener {
             if(!account.reserve(spell.id(),spell.mana,effectiveCd,now))return false;
             boolean success=false;
             plugin.context().setCastVelocityMultiplier(p.getUniqueId(), event.getVelocityMultiplier());
+            plugin.context().setCastDamageMultiplier(p.getUniqueId(),wandItem==null?1.0:plugin.wands().damageMultiplier(wandItem));
             try { success=plugin.spells().cast(p,spell); }
             catch(RuntimeException ex){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Cast failed: "+spell,ex);}
-            finally { plugin.context().clearCastVelocityMultiplier(p.getUniqueId()); }
+            finally { plugin.context().clearCastVelocityMultiplier(p.getUniqueId());plugin.context().clearCastDamageMultiplier(p.getUniqueId()); }
             if(!success){account.refund(spell.id(),spell.mana);actionbar(p,"No valid target or safe destination.");}
             else {
                 Bukkit.getPluginManager().callEvent(new com.example.advancemagic.api.MagicCastSuccessEvent(p, spell));
+                if(wandItem!=null)plugin.wands().consumeUse(wandItem);
                 int casts=wandItem!=null?plugin.wands().recordCast(wandItem,spell):0;
                 String cdStr=String.format(Locale.ROOT,"%.1f",effectiveCd);
                 actionbar(p,spell.title+" | CD "+cdStr+"s"+(casts>0?" ("+casts+" casts)":""));
@@ -169,10 +172,12 @@ public final class CastListener implements Listener {
                         if(p.isOnline() && !p.isDead()) {
                             try {
                                 plugin.context().setCastVelocityMultiplier(p.getUniqueId(), event.getVelocityMultiplier());
+                                plugin.context().setCastDamageMultiplier(p.getUniqueId(),wandItem==null?1.0:plugin.wands().damageMultiplier(wandItem));
                                 try {
                                     plugin.spells().cast(p, spell);
                                 } finally {
                                     plugin.context().clearCastVelocityMultiplier(p.getUniqueId());
+                                    plugin.context().clearCastDamageMultiplier(p.getUniqueId());
                                 }
                                 p.getWorld().playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 0.8f, 1.6f);
                                 p.getWorld().spawnParticle(Particle.WITCH, p.getLocation().add(0, 1, 0), 15, 0.3, 0.4, 0.3, 0.05);

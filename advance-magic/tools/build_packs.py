@@ -26,6 +26,13 @@ def spells():
     return [(name.lower(), title, int(color, 16)) for name, title, core, mana, cd, color in rows]
 
 
+UPGRADES = (
+    ('wand_repair', 'prismarine_shard', 'Wand Repair Core'),
+    ('wand_damage', 'blaze_powder', 'Wand Damage Core'),
+    ('wand_cooldown', 'amethyst_shard', 'Wand Cooldown Core'),
+)
+
+
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
@@ -151,12 +158,32 @@ def main():
                                      'bedrock_identifier': f'advance_magic:core_{name}', 'display_name': core_titles[name],
                                      'bedrock_options': {'icon': f'advance_magic.core_{name}', 'allow_offhand': True, 'display_handheld': False, 'creative_category': 'items'}})
 
+        upgrade_definitions = {}
+        for name, material, title in UPGRADES:
+            source = ROOT / f'art/upgrades/{name}.png'
+            if not source.is_file():
+                raise FileNotFoundError(f'Missing final upgrade texture: {source}')
+            for destination in (java / f'assets/advance_magic/textures/item/{name}.png', bedrock / f'textures/items/{name}.png'):
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, destination)
+            write_json(java / f'assets/advance_magic/models/item/{name}.json', {
+                'parent': 'minecraft:item/generated', 'textures': {'layer0': f'advance_magic:item/{name}'}})
+            write_json(java / f'assets/advance_magic/items/{name}.json', {
+                'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/{name}'}})
+            atlas[f'advance_magic.{name}'] = {'textures': f'textures/items/{name}'}
+            upgrade_definitions.setdefault(f'minecraft:{material}', []).append({
+                'type': 'definition', 'model': f'minecraft:{material}',
+                'predicate': {'type': 'match', 'property': 'custom_model_data', 'index': 0, 'value': f'advance_magic:{name}'},
+                'bedrock_identifier': f'advance_magic:{name}', 'display_name': title,
+                'bedrock_options': {'icon': f'advance_magic.{name}', 'allow_offhand': True, 'display_handheld': False, 'creative_category': 'items'}})
+
         write_json(bedrock / 'textures/item_texture.json', {'resource_pack_name': 'advance_magic', 'texture_name': 'atlas.items', 'texture_data': atlas})
         write_json(DIST / 'geyser-mappings.json', {
             'format_version': 2,
             'items': {
                 'minecraft:carrot_on_a_stick': definitions,
-                'minecraft:heart_of_the_sea': core_definitions
+                'minecraft:heart_of_the_sea': core_definitions,
+                **upgrade_definitions
             }
         })
         shutil.copyfile(ROOT / 'art/wands/frost_nova.png', java / 'pack.png')

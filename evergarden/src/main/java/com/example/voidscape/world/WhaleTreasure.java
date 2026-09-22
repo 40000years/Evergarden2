@@ -63,6 +63,9 @@ public final class WhaleTreasure implements Listener {
 
     private List<ItemStack> roll(Random random) {
         List<ItemStack> items = new ArrayList<>();
+        // Every Sky Whale library chest has exactly one Advance Magic upgrade.
+        // It is deliberately generated here, never in the Vault reward table.
+        items.add(createWandUpgrade(random));
         for (int i = 0; i < 2; i++) {
             CropTier tier = random.nextInt(100) < 75 ? CropTier.TIER_3 : CropTier.TIER_4;
             CropType[] crops = Arrays.stream(CropType.values()).filter(c -> c.tier == tier).toArray(CropType[]::new);
@@ -79,5 +82,36 @@ public final class WhaleTreasure implements Listener {
         else if (bonus < 500) items.add(plugin.relics().createScrollUnique(
                 UniqueEnchant.values()[random.nextInt(UniqueEnchant.values().length)]));
         return items;
+    }
+
+    private ItemStack createWandUpgrade(Random random) {
+        String[] ids = {"wand_repair", "wand_damage", "wand_cooldown"};
+        String id = ids[random.nextInt(ids.length)];
+        Material material = switch (id) {
+            case "wand_repair" -> Material.PRISMARINE_SHARD;
+            case "wand_damage" -> Material.BLAZE_POWDER;
+            default -> Material.AMETHYST_SHARD;
+        };
+        String title = switch (id) {
+            case "wand_repair" -> "Wand Repair Core";
+            case "wand_damage" -> "Wand Damage Core";
+            default -> "Wand Cooldown Core";
+        };
+        String effect = switch (id) {
+            case "wand_repair" -> "Max durability +5";
+            case "wand_damage" -> "Damage +3%";
+            default -> "Cooldown -3%";
+        };
+        ItemStack item = new ItemStack(material);
+        var meta = item.getItemMeta();
+        meta.setDisplayName(org.bukkit.ChatColor.GOLD + "✦ " + title);
+        meta.setLore(List.of(org.bukkit.ChatColor.GRAY + "Use in an anvil with a magic wand",
+                org.bukkit.ChatColor.YELLOW + effect, org.bukkit.ChatColor.DARK_GRAY + "Sky Whale treasure · max level 10"));
+        var model = meta.getCustomModelDataComponent();
+        model.setStrings(List.of("advance_magic:" + id));
+        meta.setCustomModelDataComponent(model);
+        meta.getPersistentDataContainer().set(new org.bukkit.NamespacedKey("advance_magic", "wand_upgrade"), PersistentDataType.STRING, id);
+        item.setItemMeta(meta);
+        return item;
     }
 }

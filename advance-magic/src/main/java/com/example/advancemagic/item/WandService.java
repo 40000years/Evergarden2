@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.*;
 import org.bukkit.event.inventory.*;
+import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+import org.bukkit.event.player.PlayerItemMendEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.*;
@@ -19,6 +22,12 @@ public final class WandService implements Listener {
     private final NamespacedKey wandKey;
     private final NamespacedKey castsKey;
     private final NamespacedKey coreKey;
+    private final NamespacedKey durabilityKey;
+    private final NamespacedKey durabilityLevelKey;
+    private final NamespacedKey damageLevelKey;
+    private final NamespacedKey cooldownLevelKey;
+    private final NamespacedKey upgradeItemKey=new NamespacedKey("advance_magic","wand_upgrade");
+    public static final int BASE_USES=30, MAX_UPGRADE_LEVEL=10, USES_PER_REPAIR=5;
     private final Map<NamespacedKey,Spell> recipes=new HashMap<>();
     private final Plugin plugin;
     public WandService(Plugin plugin) {
@@ -26,6 +35,10 @@ public final class WandService implements Listener {
         wandKey=new NamespacedKey(plugin,"wand");
         castsKey=new NamespacedKey(plugin,"casts");
         coreKey=new NamespacedKey(plugin,"core");
+        durabilityKey=new NamespacedKey(plugin,"durability");
+        durabilityLevelKey=new NamespacedKey(plugin,"durability_level");
+        damageLevelKey=new NamespacedKey(plugin,"damage_level");
+        cooldownLevelKey=new NamespacedKey(plugin,"cooldown_level");
     }
     public static String coreTitle(Spell spell) {
         return switch(spell) {
@@ -117,7 +130,11 @@ public final class WandService implements Listener {
         meta.getPersistentDataContainer().set(wandKey,PersistentDataType.STRING,spell.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("advance_magic","wand"),PersistentDataType.STRING,spell.id());
         meta.getPersistentDataContainer().set(castsKey,PersistentDataType.INTEGER,0);
-        item.setItemMeta(meta);return item;
+        meta.getPersistentDataContainer().set(durabilityKey,PersistentDataType.INTEGER,BASE_USES);
+        meta.getPersistentDataContainer().set(durabilityLevelKey,PersistentDataType.INTEGER,0);
+        meta.getPersistentDataContainer().set(damageLevelKey,PersistentDataType.INTEGER,0);
+        meta.getPersistentDataContainer().set(cooldownLevelKey,PersistentDataType.INTEGER,0);
+        item.setItemMeta(meta);refreshLore(item);return item;
     }
     public Spell spell(ItemStack item) {
         if(item==null||item.getType()!=BASE||!item.hasItemMeta())return null;
@@ -136,12 +153,54 @@ public final class WandService implements Listener {
         if(item==null||!item.hasItemMeta())return 0;
         return item.getItemMeta().getPersistentDataContainer().getOrDefault(castsKey,PersistentDataType.INTEGER,0);
     }
+    public enum Upgrade { DURABILITY("wand_repair"), DAMAGE("wand_damage"), COOLDOWN("wand_cooldown"); final String id; Upgrade(String id){this.id=id;} }
+    public Upgrade upgrade(ItemStack item) {
+        if(item==null||!item.hasItemMeta())return null;
+        String id=item.getItemMeta().getPersistentDataContainer().get(upgradeItemKey,PersistentDataType.STRING);
+        for(Upgrade upgrade:Upgrade.values())if(upgrade.id.equals(id))return upgrade;
+        return null;
+    }
+    private int level(ItemStack item,NamespacedKey key) {
+        if(item==null||!item.hasItemMeta())return 0;
+        return Math.clamp(item.getItemMeta().getPersistentDataContainer().getOrDefault(key,PersistentDataType.INTEGER,0),0,MAX_UPGRADE_LEVEL);
+    }
+    public int durabilityLevel(ItemStack item){return level(item,durabilityLevelKey);}
+    public int damageLevel(ItemStack item){return level(item,damageLevelKey);}
+    public int cooldownLevel(ItemStack item){return level(item,cooldownLevelKey);}
+    public int maxUses(ItemStack item){return BASE_USES+durabilityLevel(item)*USES_PER_REPAIR;}
+    public int usesLeft(ItemStack item){
+        if(item==null||!item.hasItemMeta())return 0;
+        return Math.max(0,item.getItemMeta().getPersistentDataContainer().getOrDefault(durabilityKey,PersistentDataType.INTEGER,maxUses(item)));
+    }
+    public double damageMultiplier(ItemStack item){return 1.0+damageLevel(item)*.03;}
+    public boolean consumeUse(ItemStack item){
+        if(spell(item)==null||usesLeft(item)<=0)return false;
+        var meta=item.getItemMeta();meta.getPersistentDataContainer().set(durabilityKey,PersistentDataType.INTEGER,usesLeft(item)-1);item.setItemMeta(meta);refreshLore(item);return true;
+    }
+    private boolean ensureWandState(ItemStack item) {
+        if(spell(item)==null||!item.hasItemMeta())return false;
+        var meta=item.getItemMeta();var data=meta.getPersistentDataContainer();boolean changed=false;
+        if(!data.has(durabilityKey,PersistentDataType.INTEGER)){data.set(durabilityKey,PersistentDataType.INTEGER,BASE_USES);changed=true;}
+        if(!data.has(durabilityLevelKey,PersistentDataType.INTEGER)){data.set(durabilityLevelKey,PersistentDataType.INTEGER,0);changed=true;}
+        if(!data.has(damageLevelKey,PersistentDataType.INTEGER)){data.set(damageLevelKey,PersistentDataType.INTEGER,0);changed=true;}
+        if(!data.has(cooldownLevelKey,PersistentDataType.INTEGER)){data.set(cooldownLevelKey,PersistentDataType.INTEGER,0);changed=true;}
+        if(meta.hasEnchant(org.bukkit.enchantments.Enchantment.MENDING)){meta.removeEnchant(org.bukkit.enchantments.Enchantment.MENDING);changed=true;}
+        if(changed){item.setItemMeta(meta);refreshLore(item);} return changed;
+    }
+    private void refreshLore(ItemStack item) {
+        Spell spell=spell(item);if(spell==null||!item.hasItemMeta())return;
+        var meta=item.getItemMeta();int durability=durabilityLevel(item),damage=damageLevel(item),cooldown=cooldownLevel(item);
+        meta.setLore(List.of(ChatColor.GRAY+"Right-click to cast",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
+                ChatColor.AQUA+"Durability: "+usesLeft(item)+" / "+maxUses(item)+" uses",ChatColor.RED+"Damage: +"+(damage*3)+"%  "+ChatColor.YELLOW+"Cooldown: -"+(cooldown*3)+"%",
+                ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10"));
+        item.setItemMeta(meta);
+    }
     public double getEffectiveCooldown(ItemStack item,Spell spell) {
         if(spell==null)return 1.0;
         int count=casts(item);
         double reduction=(count/5)*5.0;
         double minCooldown=Math.max(1.0,spell.cooldown*0.2);
-        return Math.max(minCooldown,(double)spell.cooldown-reduction);
+        return Math.max(minCooldown,(double)spell.cooldown-reduction)*(1.0-cooldownLevel(item)*.03);
     }
     public int recordCast(ItemStack item,Spell spell) {
         if(item==null||!item.hasItemMeta()||spell==null)return 0;
@@ -170,6 +229,7 @@ public final class WandService implements Listener {
         lore.add(ChatColor.GREEN+"เอฟเฟกต์ต่อเนื่องอัตโนมัติ · ไม่เสียมานาเพิ่ม");
         meta.setLore(lore);
         item.setItemMeta(meta);
+        refreshLore(item);
         return count;
     }
     public void register() {
@@ -201,9 +261,10 @@ public final class WandService implements Listener {
     public boolean migrate(ItemStack item) {
         Spell spell=spell(item);
         if(spell!=null) {
+            boolean stateChanged=ensureWandState(item);
             var meta=item.getItemMeta();var data=meta.getCustomModelDataComponent();
             String key="advance_magic:"+spell.id();
-            if(!meta.hasItemModel()&&data.getStrings().equals(List.of(key)))return false;
+            if(!meta.hasItemModel()&&data.getStrings().equals(List.of(key)))return stateChanged;
             meta.setItemModel(null);data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
             item.setItemMeta(meta);return true;
         }
@@ -222,6 +283,28 @@ public final class WandService implements Listener {
         for(int slot=0;slot<inventory.getSize();slot++) {
             ItemStack item=inventory.getItem(slot);if(migrate(item))inventory.setItem(slot,item);
         }
+    }
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void anvil(PrepareAnvilEvent event) {
+        ItemStack wand=event.getInventory().getFirstItem(), catalyst=event.getInventory().getSecondItem();
+        if(spell(wand)==null){if(spell(catalyst)!=null)event.setResult(null);return;}
+        Upgrade upgrade=upgrade(catalyst);if(upgrade==null){event.setResult(null);return;}
+        NamespacedKey key=switch(upgrade){case DURABILITY->durabilityLevelKey;case DAMAGE->damageLevelKey;case COOLDOWN->cooldownLevelKey;};
+        int current=level(wand,key);if(current>=MAX_UPGRADE_LEVEL){event.setResult(null);return;}
+        ItemStack result=wand.clone();var meta=result.getItemMeta();meta.getPersistentDataContainer().set(key,PersistentDataType.INTEGER,current+1);
+        if(upgrade==Upgrade.DURABILITY)meta.getPersistentDataContainer().set(durabilityKey,PersistentDataType.INTEGER,
+                Math.min(BASE_USES+(current+1)*USES_PER_REPAIR,usesLeft(wand)+USES_PER_REPAIR));
+        result.setItemMeta(meta);refreshLore(result);event.setResult(result);event.getInventory().setRepairCost(1);
+    }
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void enchant(PrepareItemEnchantEvent event){if(spell(event.getItem())!=null)event.setCancelled(true);}
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void enchantResult(EnchantItemEvent event){if(spell(event.getItem())!=null)event.setCancelled(true);}
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void mend(PlayerItemMendEvent event){if(spell(event.getItem())!=null)event.setCancelled(true);}
+    @EventHandler(priority=EventPriority.HIGHEST)
+    public void smith(PrepareSmithingEvent event){
+        if(spell(event.getInventory().getItem(0))!=null||spell(event.getInventory().getItem(1))!=null||spell(event.getInventory().getItem(2))!=null)event.setResult(null);
     }
     public void migrateEntity(org.bukkit.entity.Entity entity) {
         if(entity instanceof org.bukkit.entity.Item dropped) {ItemStack item=dropped.getItemStack();if(migrate(item))dropped.setItemStack(item);}

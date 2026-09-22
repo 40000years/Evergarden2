@@ -75,6 +75,9 @@ public final class MagicContext {
         return true;
     }
     private final Map<UUID, Double> castVelocityMultipliers = new java.util.concurrent.ConcurrentHashMap<>();
+    private final Map<UUID, Double> castDamageMultipliers = new java.util.concurrent.ConcurrentHashMap<>();
+    public void setCastDamageMultiplier(UUID uuid,double multiplier){if(multiplier<=1.0)castDamageMultipliers.remove(uuid);else castDamageMultipliers.put(uuid,multiplier);}
+    public void clearCastDamageMultiplier(UUID uuid){castDamageMultipliers.remove(uuid);}
 
     public void setCastVelocityMultiplier(UUID uuid, double mult) {
         if (mult <= 1.0) castVelocityMultipliers.remove(uuid);
@@ -131,7 +134,7 @@ public final class MagicContext {
         e.setNoDamageTicks(0);
         magicDamageContext.set(Boolean.TRUE);
         try {
-            e.damage(Math.max(0,amount),DamageSource.builder(type).withCausingEntity(p).withDirectEntity(p).build());
+            e.damage(Math.max(0,amount*castDamageMultipliers.getOrDefault(p.getUniqueId(),1.0)),DamageSource.builder(type).withCausingEntity(p).withDirectEntity(p).build());
         } finally {
             magicDamageContext.set(Boolean.FALSE);
         }

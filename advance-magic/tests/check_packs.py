@@ -70,6 +70,10 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
         assert model['parent'] == 'minecraft:item/handheld'
         assert model['textures']['layer0'] == f'advance_magic:item/{name}'
         assert z.read(f'assets/advance_magic/textures/item/{name}.png') == (ROOT / f'art/wands/{name}.png').read_bytes()
+    for name in ('wand_repair', 'wand_damage', 'wand_cooldown'):
+        item = json.loads(z.read(f'assets/advance_magic/items/{name}.json'))
+        assert item['model']['model'] == f'advance_magic:item/{name}'
+        assert z.read(f'assets/advance_magic/textures/item/{name}.png') == (ROOT / f'art/upgrades/{name}.png').read_bytes()
 
 mapping = json.loads((dist / 'geyser-mappings.json').read_text())
 assert mapping['format_version'] == 2
@@ -83,6 +87,10 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
         assert definition['predicate'] == {'type': 'match', 'property': 'custom_model_data', 'index': 0, 'value': f'advance_magic:{name}'}
         assert definition['bedrock_options']['creative_category'] == 'equipment'
         assert z.read(atlas[definition['bedrock_options']['icon']]['textures'] + '.png') == (ROOT / f'art/wands/{name}.png').read_bytes()
+    for name, material in (('wand_repair', 'prismarine_shard'), ('wand_damage', 'blaze_powder'), ('wand_cooldown', 'amethyst_shard')):
+        definition = mapping['items'][f'minecraft:{material}'][0]
+        assert definition['predicate']['value'] == f'advance_magic:{name}'
+        assert z.read(atlas[definition['bedrock_options']['icon']]['textures'] + '.png') == (ROOT / f'art/upgrades/{name}.png').read_bytes()
 
 guide = (dist / 'advance-magic-guide-th.png').read_bytes()
 assert guide[:8] == b'\x89PNG\r\n\x1a\n' and min(struct.unpack('>II', guide[16:24])) >= 900
@@ -92,4 +100,4 @@ if '--assets-only' not in sys.argv:
             assert jar.read('resource-packs/' + name) == (dist / name).read_bytes(), f'Stale/missing embedded asset: {name}'
         assert not any('IntegrationChecks' in name or 'AccountingChecks' in name or name.startswith('net/minecraft/') for name in jar.namelist())
     assert (dist / 'advance-magic-1.0.0.jar').read_bytes() == (ROOT.parent / 'advance-magic.jar').read_bytes()
-print('PASS: 15 transparent textures, Java selectors + fallback, Geyser predicates, PNG CRCs, archives, hashes and embedded assets')
+print('PASS: wand/core/upgrade textures, Java selectors + fallback, Geyser predicates, PNG CRCs, archives, hashes and embedded assets')

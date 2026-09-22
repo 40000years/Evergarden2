@@ -46,7 +46,7 @@ The renderer discovers local Minecraft textures or accepts `--minecraft-jar PATH
 ## Whale treasure
 
 The skull library gains one chest (70%) or two (30%), beside the bookshelves.
-Each chest contains two crop stacks: each independently selects Tier 3 (75%) or
+Each chest contains one random wand-upgrade core (repair, damage, or cooldown) and two crop stacks: each independently selects Tier 3 (75%) or
 Tier 4 (25%), then one seed (35%) or 1–2 produce (65%). Crops within a tier are equally likely.
 One optional bonus is rolled per chest: one key shard (30%), one Astral Dust (15%),
 one Nether Star (3%), one random Limit Break scroll (1.5%), or one random Unique

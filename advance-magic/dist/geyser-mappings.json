@@ -544,6 +544,66 @@
           "creative_category": "items"
         }
       }
+    ],
+    "minecraft:prismarine_shard": [
+      {
+        "type": "definition",
+        "model": "minecraft:prismarine_shard",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:wand_repair"
+        },
+        "bedrock_identifier": "advance_magic:wand_repair",
+        "display_name": "Wand Repair Core",
+        "bedrock_options": {
+          "icon": "advance_magic.wand_repair",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:blaze_powder": [
+      {
+        "type": "definition",
+        "model": "minecraft:blaze_powder",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:wand_damage"
+        },
+        "bedrock_identifier": "advance_magic:wand_damage",
+        "display_name": "Wand Damage Core",
+        "bedrock_options": {
+          "icon": "advance_magic.wand_damage",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:amethyst_shard": [
+      {
+        "type": "definition",
+        "model": "minecraft:amethyst_shard",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "advance_magic:wand_cooldown"
+        },
+        "bedrock_identifier": "advance_magic:wand_cooldown",
+        "display_name": "Wand Cooldown Core",
+        "bedrock_options": {
+          "icon": "advance_magic.wand_cooldown",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      }
     ]
   }
 }

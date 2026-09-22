@@ -42,7 +42,7 @@ public final class SkyLandmarkLayout {
 
     /** Default: same grid spacing and chance as the whale layout. */
     public SkyLandmarkLayout(long seed, DungeonLayout temples, SkyWhaleLayout whales) {
-        this(seed, temples, whales, whales.spacingChunks(), 0.80);
+        this(seed, temples, whales, whales.spacingChunks(), whales.chance());
     }
 
     public SkyLandmarkLayout(long seed, DungeonLayout temples, SkyWhaleLayout whales,
@@ -51,10 +51,11 @@ public final class SkyLandmarkLayout {
         this.temples = temples;
         this.whales  = whales;
         this.spacing = Math.max(32, Math.min(64, spacingChunks));
-        this.chance  = Double.isFinite(chance) ? Math.clamp(chance, 0, 1) : 0;
+        this.chance  = Double.isFinite(chance) ? Math.clamp(chance, 0, 1) : 0.12;
     }
 
     public int spacingChunks() { return spacing; }
+    public double chance() { return chance; }
 
     private static long key(int x, int z) { return ((long) x << 32) | (z & 0xffffffffL); }
 

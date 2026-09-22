@@ -20,7 +20,7 @@ public final class VoidGenerator extends ChunkGenerator {
     public record Surface(boolean land,int top,int depth,int garden,boolean pond,boolean path) {}
     public VoidGenerator(long seed,DungeonLayout layout) { this(seed,layout,true); }
     public VoidGenerator(long seed,DungeonLayout layout,boolean skyWhaleEnabled) {
-        this(seed,layout,new SkyWhaleLayout(seed,layout,32,.80),skyWhaleEnabled);
+        this(seed,layout,new SkyWhaleLayout(seed,layout,32,.12),skyWhaleEnabled);
     }
     public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled) {
         this(seed,layout,skyWhales,skyWhaleEnabled,new SkyLandmarkLayout(seed,layout,skyWhales),false,false);

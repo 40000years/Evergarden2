@@ -22,6 +22,7 @@ public final class SkyWhaleLayout {
     }
 
     public int spacingChunks() { return spacing; }
+    public double chance() { return chance; }
 
     private static long key(int x, int z) { return ((long)x << 32) | (z & 0xffffffffL); }
 

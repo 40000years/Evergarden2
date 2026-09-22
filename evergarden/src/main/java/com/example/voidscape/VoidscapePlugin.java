@@ -77,17 +77,20 @@ public final class VoidscapePlugin extends JavaPlugin {
                 saved.set("world",configuredWorld);
                 saved.save(file);
             }
-            if(!saved.contains("sky-whale-spacing")||!saved.contains("sky-whale-chance")) {
-                if(!saved.contains("sky-whale-spacing"))
-                    saved.set("sky-whale-spacing",integer("structures.sky-whale.spacing-chunks",32,32,64));
-                if(!saved.contains("sky-whale-chance"))
-                    saved.set("sky-whale-chance",getConfig().getDouble("structures.sky-whale.chance",.80));
-                saved.save(file);
+            double defaultWhaleChance = 0.12;
+            double whaleChance = getConfig().getDouble("structures.sky-whale.chance", defaultWhaleChance);
+            if (!saved.contains("sky-whale-chance") || saved.getDouble("sky-whale-chance") > 0.50) {
+                saved.set("sky-whale-chance", whaleChance);
+            } else {
+                whaleChance = saved.getDouble("sky-whale-chance", defaultWhaleChance);
             }
+            int whaleSpacing = integer("structures.sky-whale.spacing-chunks", saved.getInt("sky-whale-spacing", 32), 32, 64);
+            saved.set("sky-whale-spacing", whaleSpacing);
+            saved.save(file);
             long seed=saved.getLong("seed");
             layout=new DungeonLayout(seed,saved.getInt("spacing",18),saved.getDouble("chance",1.0));
-            skyWhales=new SkyWhaleLayout(seed,layout,saved.getInt("sky-whale-spacing",32),saved.getDouble("sky-whale-chance",.80));
-            skyLandmarks=new SkyLandmarkLayout(seed,layout,skyWhales);
+            skyWhales=new SkyWhaleLayout(seed,layout,whaleSpacing,whaleChance);
+            skyLandmarks=new SkyLandmarkLayout(seed,layout,skyWhales,whaleSpacing,whaleChance);
             String worldName=saved.getString("world",configuredWorld);
             if(worldName.equals("the_void"))throw new IllegalStateException("Use a new world name for Evergarden; never replace the legacy world generator.");
             voidWorld=new WorldCreator(worldName).seed(seed).environment(World.Environment.NORMAL).generator(new VoidGenerator(seed,layout,skyWhales,getConfig().getBoolean("structures.sky-whale.enabled",true),

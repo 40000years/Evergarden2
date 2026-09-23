@@ -38,20 +38,29 @@ public final class SkyLandmarkLayout {
     private final SkyWhaleLayout whales;
     private final int spacing;
     private final double chance;
+    private final double unexploredChance;
+    private final Set<Long> legacyCells;
     private final Map<Long, List<Site>> cache = new ConcurrentHashMap<>();
 
     /** Default: same grid spacing and chance as the whale layout. */
     public SkyLandmarkLayout(long seed, DungeonLayout temples, SkyWhaleLayout whales) {
-        this(seed, temples, whales, whales.spacingChunks(), whales.chance());
+        this(seed, temples, whales, whales.spacingChunks(), whales.chance(), whales.unexploredChance(), whales.legacyCells());
     }
 
     public SkyLandmarkLayout(long seed, DungeonLayout temples, SkyWhaleLayout whales,
                              int spacingChunks, double chance) {
+        this(seed, temples, whales, spacingChunks, chance, chance, Set.of());
+    }
+
+    public SkyLandmarkLayout(long seed, DungeonLayout temples, SkyWhaleLayout whales,
+                             int spacingChunks, double chance, double unexploredChance, Set<Long> legacyCells) {
         this.seed    = seed;
         this.temples = temples;
         this.whales  = whales;
         this.spacing = Math.max(32, Math.min(64, spacingChunks));
         this.chance  = Double.isFinite(chance) ? Math.clamp(chance, 0, 1) : 0.12;
+        this.unexploredChance = Double.isFinite(unexploredChance) ? Math.clamp(unexploredChance, 0, 1) : 0;
+        this.legacyCells = Set.copyOf(legacyCells);
     }
 
     public int spacingChunks() { return spacing; }
@@ -94,7 +103,8 @@ public final class SkyLandmarkLayout {
         Random random = new Random(mixed);
 
         // Independent rarity roll – same mechanic as whale
-        if (random.nextDouble() >= chance) return null;
+        double cellChance = legacyCells.contains(key(gx, gz)) ? chance : unexploredChance;
+        if (random.nextDouble() >= cellChance) return null;
 
         // 8-chunk safe margin on each side (mirrors SkyWhaleLayout exactly)
         int x = (gx * spacing + 8 + random.nextInt(spacing - 16)) * 16;

@@ -63,7 +63,7 @@ public final class VoidscapePlugin extends JavaPlugin {
                 saveResource("config.yml",true);reloadConfig();
                 getLogger().info("Archived v1 config; v2 uses a separate world. Original world is preserved.");
             }
-            // Placement parameters are locked per world; changing density must never move existing dungeons.
+            // Keep the old layout for cells that already contain generated chunks.
             File file=new File(getDataFolder(),"world-layout.yml");
             YamlConfiguration saved=YamlConfiguration.loadConfiguration(file);
             String configuredWorld=getConfig().getString("dimension.world-name","evergarden");
@@ -77,21 +77,35 @@ public final class VoidscapePlugin extends JavaPlugin {
                 saved.set("world",configuredWorld);
                 saved.save(file);
             }
-            double defaultWhaleChance = 0.12;
+            double defaultWhaleChance = 0.01;
             double whaleChance = getConfig().getDouble("structures.sky-whale.chance", defaultWhaleChance);
             if (!saved.contains("sky-whale-chance") || saved.getDouble("sky-whale-chance") > 0.50) {
                 saved.set("sky-whale-chance", whaleChance);
             } else {
                 whaleChance = saved.getDouble("sky-whale-chance", defaultWhaleChance);
             }
-            int whaleSpacing = integer("structures.sky-whale.spacing-chunks", saved.getInt("sky-whale-spacing", 32), 32, 64);
+            int whaleSpacing = saved.contains("sky-whale-spacing")
+                    ? Math.clamp(saved.getInt("sky-whale-spacing"),32,64)
+                    : integer("structures.sky-whale.spacing-chunks",32,32,64);
             saved.set("sky-whale-spacing", whaleSpacing);
+            String worldName=saved.getString("world",configuredWorld);
+            if(saved.getInt("sky-rarity-version",0)<2) {
+                if(Bukkit.getWorlds().isEmpty())throw new IllegalStateException("Primary world must load before sky placement migration");
+                Set<Long> oldCells=SkyPlacementHistory.captureWorld(Bukkit.getWorldContainer().toPath(),
+                        Bukkit.getWorlds().getFirst().getWorldFolder().toPath(),worldName,whaleSpacing);
+                saved.set("sky-legacy-cells",oldCells.stream().sorted().toList());
+                saved.set("sky-whale-unexplored-chance",
+                        getConfig().getDouble("structures.sky-whale.unexplored-chance",0.01));
+                saved.set("sky-rarity-version",2);
+                getLogger().info("Preserved "+oldCells.size()+" explored sky cells at the original structure rate.");
+            }
             saved.save(file);
             long seed=saved.getLong("seed");
+            double unexploredChance=saved.getDouble("sky-whale-unexplored-chance",0.01);
+            Set<Long> oldCells=new HashSet<>(saved.getLongList("sky-legacy-cells"));
             layout=new DungeonLayout(seed,saved.getInt("spacing",18),saved.getDouble("chance",1.0));
-            skyWhales=new SkyWhaleLayout(seed,layout,whaleSpacing,whaleChance);
-            skyLandmarks=new SkyLandmarkLayout(seed,layout,skyWhales,whaleSpacing,whaleChance);
-            String worldName=saved.getString("world",configuredWorld);
+            skyWhales=new SkyWhaleLayout(seed,layout,whaleSpacing,whaleChance,unexploredChance,oldCells);
+            skyLandmarks=new SkyLandmarkLayout(seed,layout,skyWhales);
             if(worldName.equals("the_void"))throw new IllegalStateException("Use a new world name for Evergarden; never replace the legacy world generator.");
             voidWorld=new WorldCreator(worldName).seed(seed).environment(World.Environment.NORMAL).generator(new VoidGenerator(seed,layout,skyWhales,getConfig().getBoolean("structures.sky-whale.enabled",true),
                     skyLandmarks,getConfig().getBoolean("structures.observatory.enabled",true),getConfig().getBoolean("structures.hanging-garden.enabled",true))).createWorld();

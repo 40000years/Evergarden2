@@ -2,6 +2,7 @@ package com.example.voidscape.world;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /** Sparse, seed-stable placement. Every landmark fits inside its own grid cell. */
@@ -12,17 +13,28 @@ public final class SkyWhaleLayout {
     private final DungeonLayout temples;
     private final int spacing;
     private final double chance;
+    private final double unexploredChance;
+    private final Set<Long> legacyCells;
     private final ConcurrentHashMap<Long, Optional<Site>> cache = new ConcurrentHashMap<>();
 
     public SkyWhaleLayout(long seed, DungeonLayout temples, int spacingChunks, double chance) {
+        this(seed, temples, spacingChunks, chance, chance, Set.of());
+    }
+
+    public SkyWhaleLayout(long seed, DungeonLayout temples, int spacingChunks, double chance,
+                          double unexploredChance, Set<Long> legacyCells) {
         this.seed = seed;
         this.temples = temples;
         this.spacing = Math.max(32, Math.min(64, spacingChunks));
         this.chance = Double.isFinite(chance) ? Math.clamp(chance, 0, 1) : 0;
+        this.unexploredChance = Double.isFinite(unexploredChance) ? Math.clamp(unexploredChance, 0, 1) : 0;
+        this.legacyCells = Set.copyOf(legacyCells);
     }
 
     public int spacingChunks() { return spacing; }
     public double chance() { return chance; }
+    public double unexploredChance() { return unexploredChance; }
+    public Set<Long> legacyCells() { return legacyCells; }
 
     private static long key(int x, int z) { return ((long)x << 32) | (z & 0xffffffffL); }
 
@@ -35,7 +47,8 @@ public final class SkyWhaleLayout {
         long mixed = DungeonLayout.mix(seed ^ 0x779b8f38e312a0d5L
                 ^ ((long)gridX * 341873128712L) ^ ((long)gridZ * 132897987541L));
         Random random = new Random(mixed);
-        if (random.nextDouble() >= chance) return null;
+        double cellChance = legacyCells.contains(key(gridX, gridZ)) ? chance : unexploredChance;
+        if (random.nextDouble() >= cellChance) return null;
         // Eight chunks of margin contain the whole whale and its terrain reservation.
         int offset = 8 + random.nextInt(spacing - 16);
         int x = (gridX * spacing + offset) * 16;

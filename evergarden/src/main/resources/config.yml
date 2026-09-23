@@ -14,7 +14,7 @@ structures:
     enabled: true
   hanging-garden:
     enabled: true
-  # All three landmarks share the locked sky-whale placement rate below.
+  # Whale, observatory and hanging garden each roll the chance below.
   # Shared one-time chest rewards; weights are relative, one bonus is drawn.
   treasure:
     second-chest-chance: 0.30
@@ -30,11 +30,13 @@ structures:
       none: 500
   sky-whale:
     enabled: true
-    # Sparse, seed-stable sites: roughly one candidate per 32x32 chunk cell.
-    # Placement chance and temple clearance make surviving sites rarer.
-    # Saved to world-layout.yml when the world first starts.
+    # Each kind has one candidate per 32x32 chunk cell (512x512 blocks).
+    # The new 1% rate yields roughly one of the three structures per 3,000x3,000 blocks.
+    # Existing generated cells keep their old rate; unexplored cells use the new rate.
+    # Both rates and the explored-cell snapshot are saved in world-layout.yml.
     spacing-chunks: 32
-    chance: 0.12
+    chance: 0.01
+    unexplored-chance: 0.01
   spacing-chunks: 18
   chance: 0.85
   minor:

@@ -150,8 +150,8 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         String key="compatibility.aeternum-seasons.resource-pack";
         String url=config.getString(key+".url",AETERNUM_PACK_URL).trim();
         boolean oldModrinth=url.equals("https://cdn.modrinth.com/data/4hkZZzlQ/versions/VveNYYee/Aeternum-Foods-26.x.zip");
-        boolean movingGitHub=url.equals("https://raw.githubusercontent.com/40000years/Afterdeath/DEV/evergarden/dist/Aeternum-Foods-26.x.zip");
-        if(!oldModrinth&&!movingGitHub)return false;
+        boolean oldGitHub=url.matches("https://raw\\.githubusercontent\\.com/40000years/Afterdeath/(?:DEV|main|[a-fA-F0-9]{7,40})/evergarden/dist/Aeternum-Foods-26\\.x\\.zip");
+        if(!oldModrinth&&!oldGitHub)return false;
         config.set(key+".url",AETERNUM_PACK_URL);
         config.set(key+".sha1",AETERNUM_PACK_SHA1);
         return true;

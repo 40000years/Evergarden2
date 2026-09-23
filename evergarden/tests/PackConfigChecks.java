@@ -30,7 +30,9 @@ public final class PackConfigChecks {
         String key="compatibility.aeternum-seasons.resource-pack";
         for(String url:new String[]{
                 "https://cdn.modrinth.com/data/4hkZZzlQ/versions/VveNYYee/Aeternum-Foods-26.x.zip",
-                "https://raw.githubusercontent.com/40000years/Afterdeath/DEV/evergarden/dist/Aeternum-Foods-26.x.zip"}) {
+                "https://raw.githubusercontent.com/40000years/Afterdeath/DEV/evergarden/dist/Aeternum-Foods-26.x.zip",
+                "https://raw.githubusercontent.com/40000years/Afterdeath/main/evergarden/dist/Aeternum-Foods-26.x.zip",
+                "https://raw.githubusercontent.com/40000years/Afterdeath/4bfd13c564239e16bb18062a53a5f3d646139e5b/evergarden/dist/Aeternum-Foods-26.x.zip"}) {
             var config=new YamlConfiguration();
             config.set(key+".url",url);config.set(key+".sha1","old-hash");config.set(key+".enabled",false);
             check(ResourcePackService.migrateAeternumPackConfig(config),"Legacy Aeternum URL migrated to GitHub");

@@ -10,12 +10,15 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -46,6 +49,7 @@ public class DeathClockListener implements Listener {
     private final NamespacedKey keyPitch;
 
     private final Map<UUID, Location> lastDeathLocations = new ConcurrentHashMap<>();
+    private final Map<UUID, Location> pendingDeathClockLocations = new ConcurrentHashMap<>();
 
     public DeathClockListener(GeyserExamplePlugin plugin) {
         this.plugin = plugin;
@@ -62,26 +66,50 @@ public class DeathClockListener implements Listener {
     /**
      * ดักจับตอนผู้เล่นเสียชีวิต เพื่อบันทึกพิกัดล่าสุด
      */
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player player = event.getPlayer();
         Location deathLoc = player.getLocation();
-        lastDeathLocations.put(player.getUniqueId(), deathLoc);
+        UUID playerId = player.getUniqueId();
+        lastDeathLocations.put(playerId, deathLoc.clone());
+
+        Entity causingEntity = event.getDamageSource().getCausingEntity();
+        Entity directEntity = event.getDamageSource().getDirectEntity();
+        boolean playerCausedDeath = causingEntity instanceof Player || directEntity instanceof Player;
+
+        // Only award a clock when this death actually drops items. This also
+        // respects keep-inventory and PvP plugins that clear the death drops.
+        if (event.getKeepInventory() || event.getDrops().isEmpty() || playerCausedDeath) {
+            pendingDeathClockLocations.remove(playerId);
+            return;
+        }
+
+        pendingDeathClockLocations.put(playerId, deathLoc.clone());
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        UUID playerId = event.getPlayer().getUniqueId();
+        lastDeathLocations.remove(playerId);
+        pendingDeathClockLocations.remove(playerId);
     }
 
     /**
-     * มอบนาฬิกา Enchant ใส่เข้ามือหลักของผู้เล่นทันทีตอนเกิดใหม่ (Respawn)
+     * มอบนาฬิกาให้ผู้เล่นหลังเกิดใหม่ เฉพาะความตายที่มีไอเทมตกและไม่ใช่ PvP
      */
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        Location deathLoc = lastDeathLocations.get(player.getUniqueId());
+        Location deathLoc = pendingDeathClockLocations.remove(player.getUniqueId());
+        if (event.getRespawnReason() != PlayerRespawnEvent.RespawnReason.DEATH) {
+            return;
+        }
 
         if (deathLoc != null) {
             // ดีเลย์ 1 tick เพื่อให้ระบบ Respawn ของเกมเซ็ตอัป inventory เสร็จสมบูรณ์
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (player.isOnline()) {
-                    giveDeathClockToHand(player, deathLoc);
+                    giveDeathClockToInventory(player, deathLoc);
                 }
             });
         }
@@ -150,25 +178,26 @@ public class DeathClockListener implements Listener {
     }
 
     /**
-     * เสกนาฬิกาเข้าไปที่มือหลักของผู้เล่นโดยตรง พร้อมตั้งเวลานับถอยหลัง 120 วิ
+     * ใส่นาฬิกาลงในช่องว่างของกระเป๋า พร้อมตั้งเวลานับถอยหลัง 120 วินาที
      */
-    public void giveDeathClockToHand(Player player, Location deathLoc) {
+    private boolean giveDeathClockToInventory(Player player, Location deathLoc) {
         ItemStack clock = createDeathClock(deathLoc);
         PlayerInventory inv = player.getInventory();
 
-        // ถ้าที่มือหลักมีของอยู่ ให้ย้ายของเดิมเข้าช่องกระเป๋าอื่นก่อน
-        ItemStack currentHandItem = inv.getItemInMainHand();
-        if (currentHandItem != null && currentHandItem.getType() != Material.AIR) {
-            inv.addItem(currentHandItem);
+        // Never overwrite an existing item. If no slot can hold the clock,
+        // leave the player's inventory untouched and tell them why.
+        if (!inv.addItem(clock).isEmpty()) {
+            player.sendMessage(Component.text(
+                "ไม่ได้รับนาฬิกาย้อนเวลา เพราะกระเป๋าเต็ม ไอเทมเดิมของคุณยังอยู่ครบ",
+                NamedTextColor.RED
+            ));
+            return false;
         }
-
-        // วางนาฬิกาลงในมือหลักทันที
-        inv.setItemInMainHand(clock);
 
         // แสดงข้อความและ Title บนหน้าจอ
         Title title = Title.title(
             Component.text("นาฬิกาย้อนเวลา", NamedTextColor.GOLD, TextDecoration.BOLD),
-            Component.text("คลิกขวาในมือเพื่อวาร์ปกลับจุดตาย (หมดเวลาใน 120 วิ)", NamedTextColor.YELLOW),
+            Component.text("เลือกนาฬิกาในกระเป๋าแล้วคลิกขวา (หมดเวลาใน 120 วิ)", NamedTextColor.YELLOW),
             Title.Times.times(Duration.ofMillis(300), Duration.ofSeconds(3), Duration.ofMillis(500))
         );
         player.showTitle(title);
@@ -177,7 +206,7 @@ public class DeathClockListener implements Listener {
         player.sendMessage(
             Component.text("คุณได้รับ ", NamedTextColor.GRAY)
                 .append(Component.text("นาฬิกาย้อนเวลา", NamedTextColor.GOLD, TextDecoration.BOLD))
-                .append(Component.text(" เข้ามือแล้ว! คลิกขวาเพื่อวาร์ปกลับจุดตายทันที (มีเวลา 120 วินาที)", NamedTextColor.YELLOW))
+                .append(Component.text(" ในกระเป๋าแล้ว เลือกนาฬิกาและคลิกขวาเพื่อกลับจุดตาย (มีเวลา 120 วินาที)", NamedTextColor.YELLOW))
         );
 
         // แจ้งเตือนก่อนหมดเวลา 10 วินาที (2200 ticks = 110 วินาที)
@@ -193,6 +222,8 @@ public class DeathClockListener implements Listener {
                 removeExpiredClocks(player);
             }
         }, EXPIRE_TICKS);
+
+        return true;
     }
 
     /**
@@ -301,8 +332,8 @@ public class DeathClockListener implements Listener {
         return new Location(world, x, y, z, yaw != null ? yaw : 0f, pitch != null ? pitch : 0f);
     }
 
-    public void giveDeathClock(Player player) {
+    public boolean giveDeathClock(Player player) {
         Location loc = lastDeathLocations.getOrDefault(player.getUniqueId(), player.getLocation());
-        giveDeathClockToHand(player, loc);
+        return giveDeathClockToInventory(player, loc);
     }
 }

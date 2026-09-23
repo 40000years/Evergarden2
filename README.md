@@ -68,7 +68,7 @@ Requires Java 25+ and Maven. Run `./build.sh` or `mvn -pl afterdeath,advance-mag
 
 ## AfterDeath
 
-`dist/afterdeath.jar` adds the AfterDeath plugin from the Afterdeath repository. It gives a player who dies a 120-second death clock on respawn; right-clicking it returns them to their death location. Operators can test with `/deathclock`. `/platform` identifies Java or Bedrock players; Bedrock detection requires Floodgate, which remains optional.
+`dist/afterdeath.jar` adds the AfterDeath plugin from the Afterdeath repository. A death clock is awarded only for a death that drops items and was not caused by another player; this avoids awarding one for PvP deaths and keep-inventory deaths. The clock goes into an available inventory slot, and a full inventory is left unchanged. The clock lasts 120 seconds; select it and right-click to return to the death location. Operators can test with `/deathclock`. `/platform` identifies Java or Bedrock players; Bedrock detection requires Floodgate, which remains optional.
 
 Install on a separate test server. These JARs use the existing plugin names, so use one version of each plugin per server. An administrator can jump to the approach island of the nearest whale site with:
 

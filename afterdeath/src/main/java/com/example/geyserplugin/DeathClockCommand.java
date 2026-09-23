@@ -23,7 +23,6 @@ public class DeathClockCommand implements CommandExecutor {
         }
 
         deathClockListener.giveDeathClock(player);
-        player.sendMessage(Component.text("ได้รับนาฬิกาย้อนเวลาเรียบร้อยแล้ว!", NamedTextColor.GREEN));
         return true;
     }
 }

@@ -137,6 +137,7 @@ public final class RelicService implements Listener {
         var modelData=meta.getCustomModelDataComponent();
         modelData.setStrings(List.of("advance_magic:core_"+core.id()));
         meta.setCustomModelDataComponent(modelData);
+        meta.setItemModel(new NamespacedKey("advance_magic","core_"+core.id()));
         meta.getPersistentDataContainer().set(new NamespacedKey("advance_magic","core"),PersistentDataType.STRING,core.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("advance-magic","core"),PersistentDataType.STRING,core.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("voidscape","magic_core"),PersistentDataType.STRING,core.id());

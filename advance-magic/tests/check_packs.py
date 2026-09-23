@@ -1,6 +1,7 @@
 """Validate release assets, model routing, fallback and embedded binary integrity."""
 import hashlib
 import json
+import re
 import runpy
 import struct
 import sys
@@ -12,6 +13,13 @@ ROOT = Path(__file__).resolve().parents[1]
 catalog = runpy.run_path(str(ROOT / 'tools/build_packs.py'))['spells']()
 dist = ROOT / 'dist'
 hashes = json.loads((dist / 'pack-hashes.json').read_text())
+service_source = (ROOT / 'src/main/java/com/example/advancemagic/pack/ResourcePackService.java').read_text()
+pack_config = (ROOT / 'src/main/resources/config.yml').read_text()
+url = re.search(r'DEFAULT_CDN_URL = "([^"]+)"', service_source).group(1)
+sha1 = re.search(r'CURRENT_SHA1 = "([0-9a-f]{40})"', service_source).group(1)
+assert re.fullmatch(r'https://raw\.githubusercontent\.com/40000years/Evergarden2/[0-9a-f]{40}/advance-magic/dist/advance-magic-java\.zip', url)
+assert f"url: '{url}'" in pack_config and f"sha1: '{sha1}'" in pack_config
+assert sha1 == hashes['advance-magic-java.zip']
 
 
 def check_png(data):

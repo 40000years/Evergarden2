@@ -86,6 +86,8 @@ public final class GardensChecks extends JavaPlugin {
         for(Spell spell:Spell.values()) {
             ItemStack core=voids.relics().createMagicCore(spell.id());
             check(magic.wands().coreSpell(core)==spell,"vault core recognized "+spell.id());
+            check(new NamespacedKey("advance_magic","core_"+spell.id()).equals(core.getItemMeta().getItemModel()),
+                "vault core has a Bedrock model before first pickup "+spell.id());
             for(int mode=0;mode<3;mode++) {
                 ItemStack[] grid=grid(core,mode);
                 var result=Bukkit.craftItemResult(grid,world,actor);

@@ -48,7 +48,7 @@ resource-pack:
   enabled: true
   # Direct HTTPS CDN URL (Fastly / GitHub). Empty = use bundled CDN URL.
   # Pinned pack includes the three Sky Whale wand upgrade textures.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/07dcac3/advance-magic/dist/advance-magic-java.zip'
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/aad426f1b204d3ec2a61b87640a3fffefae5fbc1/advance-magic/dist/advance-magic-java.zip'
   # Must match the pinned GitHub ZIP; this is intentionally independent of the current JAR's embedded pack.
   sha1: 'fb436f7d2dd4f0fdf145a63fc2d1796166c5d70e'
   required: false

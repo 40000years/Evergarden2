@@ -1,0 +1,29 @@
+name: AfterDeath
+version: '${project.version}'
+main: com.example.geyserplugin.GeyserExamplePlugin
+api-version: '26.2'
+author: YourName
+description: ระบบนาฬิกาย้อนเวลากลับจุดเสียชีวิต (Death Clock) รองรับทั้ง Java และ Bedrock ผ่าน Geyser/Floodgate
+
+# ไม่บังคับให้ Floodgate/Geyser ต้องติดตั้งก่อน แต่ถ้าอยากบังคับให้ใส่ใน depend
+softdepend: [floodgate]
+
+commands:
+  platform:
+    description: แสดงว่าผู้เล่นต่อผ่าน Java หรือ Bedrock (Geyser)
+    usage: /platform
+    permission: geyserexample.platform
+    permission-message: "คุณไม่มีสิทธิ์ใช้งานคำสั่งนี้"
+  deathclock:
+    description: รับนาฬิกาย้อนเวลาไปยังจุดเสียชีวิตล่าสุด (สำหรับทดสอบ)
+    usage: /deathclock
+    permission: geyserexample.deathclock
+    permission-message: "คุณไม่มีสิทธิ์ใช้งานคำสั่งนี้"
+
+permissions:
+  geyserexample.platform:
+    description: อนุญาตให้ตรวจสอบแพลตฟอร์มของตนเอง
+    default: true
+  geyserexample.deathclock:
+    description: อนุญาตให้รับนาฬิกาย้อนเวลา
+    default: op

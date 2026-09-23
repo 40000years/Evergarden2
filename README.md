@@ -64,7 +64,11 @@ These are renders of the **101,209 block positions** in `SkyWhale.blocks()`, inc
 
 ## Build and try
 
-Requires Java 25+ and Maven. Run `./build.sh` or `mvn -pl advance-magic,evergarden -am package -DskipTests`. This produces `advance-magic/target/advance-magic.jar` and `evergarden/target/evergarden.jar`, without copying files to a server.
+Requires Java 25+ and Maven. Run `./build.sh` or `mvn -pl afterdeath,advance-magic,evergarden -am package -DskipTests`. This produces `afterdeath/target/afterdeath.jar`, `advance-magic/target/advance-magic.jar`, and `evergarden/target/evergarden.jar`. `./build.sh` also copies them to `dist/`, without copying files to a server.
+
+## AfterDeath
+
+`dist/afterdeath.jar` adds the AfterDeath plugin from the Afterdeath repository. It gives a player who dies a 120-second death clock on respawn; right-clicking it returns them to their death location. Operators can test with `/deathclock`. `/platform` identifies Java or Bedrock players; Bedrock detection requires Floodgate, which remains optional.
 
 Install on a separate test server. These JARs use the existing plugin names, so use one version of each plugin per server. An administrator can jump to the approach island of the nearest whale site with:
 

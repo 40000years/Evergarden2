@@ -10,6 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>afterdeath</module>
         <module>advance-magic</module>
         <module>evergarden</module>
     </modules>

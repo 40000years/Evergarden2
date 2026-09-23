@@ -17,6 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
+BEDROCK_PACK_VERSION = [1, 2, 0]  # Higher than the Afterdeath v1 pack [1, 1, *]. Bump for each release.
 
 
 def spells():
@@ -106,8 +107,8 @@ def main():
         write_json(bedrock / 'manifest.json', {
             'format_version': 2,
             'header': {'name': 'Advance Magic', 'description': '15 arcane wands for Geyser',
-                       'uuid': '2a3e0ee7-a0df-4102-a03f-a81275edb570', 'version': [1, 0, 1], 'min_engine_version': [1, 21, 80]},
-            'modules': [{'type': 'resources', 'uuid': '071b416b-df41-4c86-9ea4-7d6c3dfc02ac', 'version': [1, 0, 1]}]})
+                       'uuid': '2a3e0ee7-a0df-4102-a03f-a81275edb570', 'version': BEDROCK_PACK_VERSION, 'min_engine_version': [1, 21, 80]},
+            'modules': [{'type': 'resources', 'uuid': '071b416b-df41-4c86-9ea4-7d6c3dfc02ac', 'version': BEDROCK_PACK_VERSION}]})
         atlas, definitions, cases = {}, [], []
         core_atlas, core_definitions, core_cases = {}, [], []
         core_titles = {
@@ -188,18 +189,9 @@ def main():
         })
         shutil.copyfile(ROOT / 'art/wands/frost_nova.png', java / 'pack.png')
         shutil.copyfile(ROOT / 'art/wands/frost_nova.png', bedrock / 'pack_icon.png')
-        # Bedrock caches UUID + version. Update manifest version deterministically
-        # based on asset content while staying higher than legacy [1, 0, 1].
-        digest = hashlib.sha256()
-        for asset in sorted((p for p in bedrock.rglob('*') if p.is_file() and p.name != 'manifest.json'), key=lambda p: p.relative_to(bedrock).as_posix()):
-            digest.update(asset.relative_to(bedrock).as_posix().encode('utf8') + b'\0' + asset.read_bytes())
-        manifest = json.loads((bedrock / 'manifest.json').read_text(encoding='utf8'))
-        version = [1, 1, int(digest.hexdigest()[:7], 16) % 60000 + 1]
-        manifest['header']['version'] = version
-        for module in manifest['modules']:
-            module['version'] = version
-        write_json(bedrock / 'manifest.json', manifest)
-        print('Bedrock content version: ' + '.'.join(map(str, version)))
+        # Bedrock uses the pack UUID and version for cache/update identity. Keep this
+        # monotonically increasing; content hashes can produce a lower revision.
+        print('Bedrock content version: ' + '.'.join(map(str, BEDROCK_PACK_VERSION)))
         archive(java, DIST / 'advance-magic-java.zip')
         archive(bedrock, DIST / 'advance-magic-bedrock.mcpack')
         cards = []

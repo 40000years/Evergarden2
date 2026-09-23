@@ -17,8 +17,6 @@ import java.util.jar.JarFile;
 public final class ResourcePackService implements Listener, AutoCloseable {
     public static final UUID PACK_ID=UUID.fromString("3e8e5b71-0600-4a42-a678-483a7cce5fb0");
     public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/07dcac3/advance-magic/dist/advance-magic-java.zip";
-    private static final String PREVIOUS_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/advance-magic/dist/advance-magic-java.zip";
-    private static final String PREVIOUS_SHA1 = "20ad3a9de124fbea08755941135c75d71f64130c";
     private static final String CURRENT_SHA1 = "fb436f7d2dd4f0fdf145a63fc2d1796166c5d70e";
     private static final List<String> FILES=List.of("advance-magic-java.zip","advance-magic-bedrock.mcpack",
             "geyser-mappings.json","pack-hashes.json","wand-preview.html","advance-magic-guide-th.png");
@@ -77,12 +75,9 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             if(input==null)throw new IOException("Embedded Java pack is missing");
             byte[] pack=input.readAllBytes();
             sha1=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(pack));
-            String previous=plugin.getConfig().getString("resource-pack.url","").trim();
-            if(previous.equals(PREVIOUS_CDN_URL)) {
-                plugin.getConfig().set("resource-pack.url",DEFAULT_CDN_URL);
-                String configuredHash=plugin.getConfig().getString("resource-pack.sha1","").trim();
-                if(configuredHash.equalsIgnoreCase(PREVIOUS_SHA1))plugin.getConfig().set("resource-pack.sha1",CURRENT_SHA1);
+            if(migratePackConfig(plugin.getConfig())) {
                 plugin.saveConfig();
+                plugin.getLogger().info("Updated the official Advance Magic pack URL and SHA-1 for this release.");
             }
             if(!plugin.getConfig().getBoolean("resource-pack.enabled",true))return;
             String configuredUrl=plugin.getConfig().getString("resource-pack.url","").trim();
@@ -100,6 +95,18 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         }catch(IOException|GeneralSecurityException|IllegalArgumentException e) {
             failure=e.getMessage();plugin.getLogger().warning("Pack host could not start: "+failure+". Falling back to GitHub CDN.");
         }
+    }
+    static boolean migratePackConfig(org.bukkit.configuration.file.FileConfiguration config) {
+        String url=config.getString("resource-pack.url","").trim();
+        String hash=config.getString("resource-pack.sha1","").trim();
+        // Keep already-downloaded Afterdeath jars intact; upgrade their persisted config only
+        // when this Evergarden2 plugin is installed. Private pack URLs remain administrator-owned.
+        String officialPack="https://raw\\.githubusercontent\\.com/40000years/(?:Afterdeath|Evergarden2)/(?:DEV|main|[a-fA-F0-9]{7,40})/advance-magic/dist/advance-magic-java\\.zip";
+        if(!url.matches(officialPack))return false;
+        if(url.equals(DEFAULT_CDN_URL)&&hash.equalsIgnoreCase(CURRENT_SHA1))return false;
+        config.set("resource-pack.url",DEFAULT_CDN_URL);
+        config.set("resource-pack.sha1",CURRENT_SHA1);
+        return true;
     }
     private boolean bedrock(Player player) {
         for(String name:List.of("org.geysermc.floodgate.api.FloodgateApi","org.geysermc.geyser.api.GeyserApi")) {

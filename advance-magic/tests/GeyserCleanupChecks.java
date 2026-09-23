@@ -1,4 +1,5 @@
 import com.example.advancemagic.pack.GeyserPackCleanup;
+import com.example.advancemagic.pack.GeyserPackSetup;
 import com.google.gson.*;
 import java.nio.file.*;
 import java.util.zip.*;
@@ -36,6 +37,15 @@ public final class GeyserCleanupChecks {
         try(var files=Files.list(root.resolve("plugin-pack-backups"))){check(files.count()==2,"both originals backed up");}
         check(Files.readString(mappings.resolve("malformed.json")).equals("{"),"malformed unrelated file untouched");
         check(GeyserPackCleanup.clean(root,bundled,bundlePack,"canonical.json","canonical.mcpack")==0,"cleanup idempotent");
-        System.out.println("PASS: 7 Geyser duplicate cleanup checks");
+        Path config=root.resolve("config.yml");
+        Files.writeString(config,"gameplay:\n  enable-custom-content: false\n  force-resource-packs: false\n");
+        check(GeyserPackSetup.enableCustomContent(root),"disabled custom content enabled");
+        String updated=Files.readString(config);
+        check(updated.contains("enable-custom-content: true")&&updated.contains("force-resource-packs: false"),"unrelated config preserved");
+        try(var files=Files.list(root.resolve("plugin-pack-backups"))){check(files.count()==3,"config backed up");}
+        check(!GeyserPackSetup.enableCustomContent(root),"config update idempotent");
+        Path fresh=Files.createTempDirectory("geyser-fresh-check-");
+        check(GeyserPackSetup.enableCustomContent(fresh)&&Files.readString(fresh.resolve("config.yml")).contains("enable-custom-content: true"),"fresh Geyser config enabled");
+        System.out.println("PASS: Geyser duplicate cleanup and custom content setup checks");
     }
 }

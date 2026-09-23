@@ -82,19 +82,23 @@ assert len(definitions) == len(catalog) == 15
 assert len({row['bedrock_identifier'] for row in definitions}) == 15
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [1, 2, 0]
-    assert manifest['modules'][0]['version'] == [1, 2, 0]
+    assert manifest['header']['version'] == [1, 2, 2]
+    assert manifest['modules'][0]['version'] == [1, 2, 2]
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     for definition, (name, _, _) in zip(definitions, catalog):
-        assert definition['model'] == 'minecraft:carrot_on_a_stick'
-        assert definition['predicate'] == {'type': 'match', 'property': 'custom_model_data', 'index': 0, 'value': f'advance_magic:{name}'}
+        assert definition['model'] == f'advance_magic:{name}'
+        assert 'predicate' not in definition
         assert definition['bedrock_options']['creative_category'] == 'equipment'
         assert z.read(atlas[definition['bedrock_options']['icon']]['textures'] + '.png') == (ROOT / f'art/wands/{name}.png').read_bytes()
     for name, material in (('wand_repair', 'prismarine_shard'), ('wand_damage', 'blaze_powder'), ('wand_cooldown', 'amethyst_shard')):
         definition = mapping['items'][f'minecraft:{material}'][0]
-        assert definition['predicate']['value'] == f'advance_magic:{name}'
+        assert definition['model'] == f'advance_magic:{name}'
+        assert 'predicate' not in definition
         assert z.read(atlas[definition['bedrock_options']['icon']]['textures'] + '.png') == (ROOT / f'art/upgrades/{name}.png').read_bytes()
+    for definition, (name, _, _) in zip(mapping['items']['minecraft:heart_of_the_sea'], catalog):
+        assert definition['model'] == f'advance_magic:core_{name}'
+        assert 'predicate' not in definition
 
 guide = (dist / 'advance-magic-guide-th.png').read_bytes()
 assert guide[:8] == b'\x89PNG\r\n\x1a\n' and min(struct.unpack('>II', guide[16:24])) >= 900
@@ -103,5 +107,5 @@ if '--assets-only' not in sys.argv:
         for name in (*hashes, 'geyser-mappings.json', 'pack-hashes.json', 'wand-preview.html', 'advance-magic-guide-th.png'):
             assert jar.read('resource-packs/' + name) == (dist / name).read_bytes(), f'Stale/missing embedded asset: {name}'
         assert not any('IntegrationChecks' in name or 'AccountingChecks' in name or name.startswith('net/minecraft/') for name in jar.namelist())
-    assert (dist / 'advance-magic-1.0.0.jar').read_bytes() == (ROOT.parent / 'advance-magic.jar').read_bytes()
-print('PASS: wand/core/upgrade textures, Java selectors + fallback, Geyser predicates, PNG CRCs, archives, hashes and embedded assets')
+    assert (dist / 'advance-magic-1.0.0.jar').read_bytes() == (ROOT.parent / 'dist/advance-magic.jar').read_bytes()
+print('PASS: wand/core/upgrade textures, Java models, Geyser model mappings, PNG CRCs, archives, hashes and embedded assets')

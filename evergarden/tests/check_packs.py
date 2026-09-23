@@ -35,9 +35,16 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
     content_hash = hashlib.sha256()
     for name in sorted(n for n in bedrock.namelist() if not n.endswith('/') and n != 'manifest.json'):
         content_hash.update(name.encode('utf8') + b'\0' + bedrock.read(name))
-    expected_version = [3, 6, int(content_hash.hexdigest()[:7], 16) % 60000 + 1]
+    expected_version = [3, 7, int(content_hash.hexdigest()[:7], 16) % 60000 + 1]
     assert manifest['header']['version'] == expected_version
     assert manifest['modules'][0]['version'] == expected_version
+    with zipfile.ZipFile(root.parent / 'advance-magic/dist/advance-magic-bedrock.mcpack') as magic:
+        magic_atlas = json.loads(magic.read('textures/item_texture.json'))['texture_data']
+        assert magic_atlas.keys() <= atlas.keys(), 'Evergarden must also expose the Advance Magic icons'
+        for key, entry in magic_atlas.items():
+            if key.startswith('advance_magic.core_'):
+                continue
+            assert bedrock.read(entry['textures'] + '.png') == magic.read(entry['textures'] + '.png')
     assert not any('nether_portal' in name or name.endswith('/portal.png') for name in java.namelist())
     assert 'textures/blocks/portal.png' not in bedrock.namelist()
     assert json.loads(java.read('assets/voidscape/textures/item/azure_portal.png.mcmeta'))['animation']['frametime'] == 2

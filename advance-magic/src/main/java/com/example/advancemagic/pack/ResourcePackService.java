@@ -35,10 +35,17 @@ public final class ResourcePackService implements Listener, AutoCloseable {
                 writeChanged(output.resolve(name),input.readAllBytes());
             }
         }
-        if(!plugin.getConfig().getBoolean("resource-pack.geyser.auto-install",true))return;
+        if(!plugin.getConfig().getBoolean("resource-pack.geyser.auto-install",true)) {
+            geyserStatus="Bedrock auto-install disabled; copy the pack and mappings to the active Geyser instance.";
+            return;
+        }
         Path plugins=plugin.getDataFolder().toPath().toAbsolutePath().getParent();
         Path geyser=plugins.resolve("Geyser-Spigot");
         boolean present=Files.isDirectory(geyser);
+        if(!present) {
+            Path alternative=plugins.resolve("Geyser");
+            if(Files.isDirectory(alternative)){geyser=alternative;present=true;}
+        }
         if(!present)try(var jars=Files.list(plugins)) {
             for(Path path:jars.filter(p->p.getFileName().toString().endsWith(".jar")).toList()) {
                 try(JarFile jar=new JarFile(path.toFile())) {
@@ -56,7 +63,10 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             if(cleaned>0)plugin.getLogger().info("Cleaned "+cleaned+" duplicate Geyser files; originals saved in plugin-pack-backups.");
             writeChanged(geyser.resolve("packs/advance-magic-bedrock.mcpack"),Files.readAllBytes(output.resolve("advance-magic-bedrock.mcpack")));
             writeChanged(geyser.resolve("custom_mappings/advance-magic.json"),Files.readAllBytes(output.resolve("geyser-mappings.json")));
-            geyserStatus="Bedrock pack + mappings installed before Geyser-Spigot loads.";
+            boolean enabled=GeyserPackSetup.enableCustomContent(geyser);
+            geyserStatus="Bedrock pack + mappings installed in "+geyser.toAbsolutePath()
+                +(enabled?"; enabled custom content":"; custom content already enabled")
+                +". Restart Geyser and reconnect.";
             plugin.getLogger().info(geyserStatus);
         }
     }

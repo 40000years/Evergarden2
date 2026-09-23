@@ -347,6 +347,16 @@ def main():
  if core_cases:
   write_json(java/'assets/minecraft/items/heart_of_the_sea.json',{'model':{'type':'minecraft:select','property':'minecraft:custom_model_data','index':0,'cases':core_cases,'fallback':{'type':'minecraft:model','model':'minecraft:item/heart_of_the_sea'}}})
   # Advance Magic registers these core identifiers; do not register them twice.
+ # Include Advance Magic's missing icons in the pack that already serves crops.
+ with zipfile.ZipFile(ROOT.parent/'advance-magic/dist/advance-magic-bedrock.mcpack') as magic:
+  magic_atlas=json.loads(magic.read('textures/item_texture.json'))['texture_data']
+  for key,entry in magic_atlas.items():
+   if key in textures:continue  # Evergarden already has its own core artwork.
+   source=entry['textures']+'.png'
+   dest=bedrock/source
+   dest.parent.mkdir(parents=True,exist_ok=True)
+   dest.write_bytes(magic.read(source))
+   textures[key]=entry
  write_json(bedrock/'textures/item_texture.json',{'resource_pack_name':'voidscape','texture_name':'atlas.items','texture_data':textures})
  write_json(DIST/'geyser-mappings.json',mappings)
  key_art=ROOT/'art'/'equipment'/'void_key.png'
@@ -363,7 +373,7 @@ def main():
  manifest=json.loads((bedrock/'manifest.json').read_text(encoding='utf8'))
  # Bedrock manifest versions are three bounded integers; keep the hash-derived
  # component below the client parser's safe range while still changing each build.
- version=[3,6,int(digest.hexdigest()[:7],16) % 60000 + 1]
+ version=[3,7,int(digest.hexdigest()[:7],16) % 60000 + 1]
  manifest['header']['version']=version
  for module in manifest['modules']:module['version']=version
  write_json(bedrock/'manifest.json',manifest)

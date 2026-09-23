@@ -17,7 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [1, 2, 0]  # Higher than the Afterdeath v1 pack [1, 1, *]. Bump for each release.
+BEDROCK_PACK_VERSION = [1, 2, 2]  # Bump whenever Bedrock pack content changes so clients refresh their cache.
 
 
 def spells():
@@ -34,9 +34,14 @@ UPGRADES = (
 )
 
 
-def write_json(path, value):
+def write_json(path, value, line_ending='\n'):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
+    path.write_bytes(((json.dumps(value, ensure_ascii=False, indent=2) + '\n').replace('\n', line_ending)).encode('utf8'))
+
+
+def write_java_json(path, value):
+    # Keep the published Java ZIP byte-for-byte stable; its SHA-1 is pinned in config.
+    write_json(path, value, '\r\n')
 
 
 def wand(color, variant):
@@ -103,7 +108,7 @@ def main():
     # A fresh staging tree prevents removed assets leaking into subsequent builds.
     with tempfile.TemporaryDirectory(prefix='packs-', dir=target) as temp:
         java, bedrock = Path(temp) / 'java', Path(temp) / 'bedrock'
-        write_json(java / 'pack.mcmeta', {'pack': {'description': 'Advance Magic | 15 Arcane Wands', 'min_format': [75, 0], 'max_format': [88, 0]}})
+        write_java_json(java / 'pack.mcmeta', {'pack': {'description': 'Advance Magic | 15 Arcane Wands', 'min_format': [75, 0], 'max_format': [88, 0]}})
         write_json(bedrock / 'manifest.json', {
             'format_version': 2,
             'header': {'name': 'Advance Magic', 'description': '15 arcane wands for Geyser',
@@ -129,14 +134,13 @@ def main():
             for destination in (java / f'assets/advance_magic/textures/item/{name}.png', bedrock / f'textures/items/{name}.png'):
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(source, destination)
-            write_json(java / f'assets/advance_magic/models/item/{name}.json', {
+            write_java_json(java / f'assets/advance_magic/models/item/{name}.json', {
                 'parent': 'minecraft:item/handheld', 'textures': {'layer0': f'advance_magic:item/{name}'}})
-            write_json(java / f'assets/advance_magic/items/{name}.json', {
+            write_java_json(java / f'assets/advance_magic/items/{name}.json', {
                 'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/{name}'}})
             atlas[f'advance_magic.{name}'] = {'textures': f'textures/items/{name}'}
             cases.append({'when': f'advance_magic:{name}', 'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/{name}'}})
-            definitions.append({'type': 'definition', 'model': 'minecraft:carrot_on_a_stick',
-                                'predicate': {'type': 'match', 'property': 'custom_model_data', 'index': 0, 'value': f'advance_magic:{name}'},
+            definitions.append({'type': 'definition', 'model': f'advance_magic:{name}',
                                 'bedrock_identifier': f'advance_magic:{name}', 'display_name': title + ' Wand',
                                 'bedrock_options': {'icon': f'advance_magic.{name}', 'allow_offhand': True, 'display_handheld': True, 'creative_category': 'equipment'}})
 
@@ -148,14 +152,13 @@ def main():
             for destination in (java / f'assets/advance_magic/textures/item/core_{name}.png', bedrock / f'textures/items/core_{name}.png'):
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(core_source, destination)
-            write_json(java / f'assets/advance_magic/models/item/core_{name}.json', {
+            write_java_json(java / f'assets/advance_magic/models/item/core_{name}.json', {
                 'parent': 'minecraft:item/generated', 'textures': {'layer0': f'advance_magic:item/core_{name}'}})
-            write_json(java / f'assets/advance_magic/items/core_{name}.json', {
+            write_java_json(java / f'assets/advance_magic/items/core_{name}.json', {
                 'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/core_{name}'}})
             atlas[f'advance_magic.core_{name}'] = {'textures': f'textures/items/core_{name}'}
             core_cases.append({'when': f'advance_magic:core_{name}', 'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/core_{name}'}})
-            core_definitions.append({'type': 'definition', 'model': 'minecraft:heart_of_the_sea',
-                                     'predicate': {'type': 'match', 'property': 'custom_model_data', 'index': 0, 'value': f'advance_magic:core_{name}'},
+            core_definitions.append({'type': 'definition', 'model': f'advance_magic:core_{name}',
                                      'bedrock_identifier': f'advance_magic:core_{name}', 'display_name': core_titles[name],
                                      'bedrock_options': {'icon': f'advance_magic.core_{name}', 'allow_offhand': True, 'display_handheld': False, 'creative_category': 'items'}})
 
@@ -167,14 +170,13 @@ def main():
             for destination in (java / f'assets/advance_magic/textures/item/{name}.png', bedrock / f'textures/items/{name}.png'):
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(source, destination)
-            write_json(java / f'assets/advance_magic/models/item/{name}.json', {
+            write_java_json(java / f'assets/advance_magic/models/item/{name}.json', {
                 'parent': 'minecraft:item/generated', 'textures': {'layer0': f'advance_magic:item/{name}'}})
-            write_json(java / f'assets/advance_magic/items/{name}.json', {
+            write_java_json(java / f'assets/advance_magic/items/{name}.json', {
                 'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/{name}'}})
             atlas[f'advance_magic.{name}'] = {'textures': f'textures/items/{name}'}
             upgrade_definitions.setdefault(f'minecraft:{material}', []).append({
-                'type': 'definition', 'model': f'minecraft:{material}',
-                'predicate': {'type': 'match', 'property': 'custom_model_data', 'index': 0, 'value': f'advance_magic:{name}'},
+                'type': 'definition', 'model': f'advance_magic:{name}',
                 'bedrock_identifier': f'advance_magic:{name}', 'display_name': title,
                 'bedrock_options': {'icon': f'advance_magic.{name}', 'allow_offhand': True, 'display_handheld': False, 'creative_category': 'items'}})
 

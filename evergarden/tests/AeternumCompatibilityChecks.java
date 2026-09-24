@@ -77,12 +77,42 @@ public final class AeternumCompatibilityChecks extends JavaPlugin {
             if(level<10){
                 var upgraded=relics.evaluateScrollCraft(relics.createScrollLimitBreak(LimitBreakType.EFFICIENCY),item);
                 check(upgraded!=null&&relics.getLimitBreakLevel(upgraded,LimitBreakType.EFFICIENCY)==level+1,"explicit scroll upgrades native "+level+" to "+(level+1));
+                relics.migrate(upgraded);
+                check(relics.getLimitBreakLevel(upgraded,LimitBreakType.EFFICIENCY)==level+1
+                        &&upgraded.getItemMeta().getPersistentDataContainer().has(garden.key("lb_efficiency")),
+                    "explicit Evergarden scroll on foreign loot is preserved");
             }
         }
         var named=new ItemStack(Material.NETHERITE_PICKAXE);var meta=named.getItemMeta();
         meta.setDisplayName("Aeternum Smelter");meta.addEnchant(Enchantment.EFFICIENCY,8,true);named.setItemMeta(meta);
         var before=named.clone();relics.migrate(named);
         check(named.equals(before)&&relics.type(named)==null,"foreign display name cannot claim Evergarden ownership");
+        var repairedHeat=new ArrayList<ItemStack>();
+        var oldHeat=new ArrayList<ItemStack>();
+        for(Material material:List.of(Material.DIAMOND_PICKAXE,Material.DIAMOND_AXE)) {
+            var heat=new ItemStack(material);meta=heat.getItemMeta();
+            meta.addEnchant(Enchantment.EFFICIENCY,8,true);
+            meta.addEnchant(Enchantment.UNBREAKING,8,true);
+            meta.addEnchant(Enchantment.MENDING,1,true);
+            meta.getPersistentDataContainer().set(garden.key("lb_efficiency"),PersistentDataType.INTEGER,8);
+            meta.getPersistentDataContainer().set(new NamespacedKey("evergarden","ue_advance_tool"),PersistentDataType.BYTE,(byte)1);
+            var leakedTool=meta.getTool();leakedTool.setDefaultMiningSpeed(25.0f);
+            leakedTool.addRule(Tag.MINEABLE_PICKAXE,25.0f,true);
+            leakedTool.addRule(Tag.MINEABLE_AXE,25.0f,true);meta.setTool(leakedTool);
+            meta.setUnbreakable(true);heat.setItemMeta(meta);
+            oldHeat.add(heat.clone());
+            check(relics.migrate(heat),"plain Aeternum "+material+" legacy corruption is repaired");
+            meta=heat.getItemMeta();
+            check(!meta.hasTool()&&!meta.isUnbreakable()
+                    &&!EnchantApplyListener.hasUnique(heat,UniqueEnchant.ADVANCE_TOOL)
+                    &&relics.getLimitBreakLevel(heat,LimitBreakType.EFFICIENCY)==5,
+                "plain Aeternum "+material+" loses only Evergarden mining effects");
+            check(meta.getEnchantLevel(Enchantment.EFFICIENCY)==8
+                    &&meta.getEnchantLevel(Enchantment.UNBREAKING)==8
+                    &&meta.getEnchantLevel(Enchantment.MENDING)==1,
+                "plain Aeternum "+material+" keeps crate enchants");
+            repairedHeat.add(heat);
+        }
         var external=new ItemStack(Material.DIAMOND_PICKAXE);meta=external.getItemMeta();
         var tool=meta.getTool();tool.setDefaultMiningSpeed(3.0f);tool.addRule(List.of(Material.STONE),37.0f,true);meta.setTool(tool);
         relics.applyEternityMeta(meta);meta.setUnbreakable(true);external.setItemMeta(meta);before=external.clone();relics.migrate(external);
@@ -114,9 +144,80 @@ public final class AeternumCompatibilityChecks extends JavaPlugin {
         handle.connection=new ServerGamePacketListenerImpl(server,new TestConnection(),handle,CommonListenerCookie.createInitial(profile,false));
         handle.setPos(0.5,100,0.5);server.getPlayerList().getPlayers().add(handle);server.getPlayerList().getPlayersByUUID().put(profile.id(),handle);
         level.addNewPlayer(handle);actor=handle.getBukkitEntity();actor.setOp(true);actor.setGravity(false);actor.setGameMode(GameMode.SURVIVAL);
+        actor.getInventory().setItem(5,oldHeat.get(0).clone());
+        relics.migrate(actor.getInventory());
+        check(!actor.getInventory().getItem(5).getItemMeta().hasTool()
+                &&!actor.getInventory().getItem(5).getItemMeta().isUnbreakable(),
+            "old tool in player inventory is repaired on inventory migration");
+        var storedInventory=Bukkit.createInventory(null,9);storedInventory.setItem(0,oldHeat.get(1).clone());
+        relics.migrate(storedInventory);
+        check(!storedInventory.getItem(0).getItemMeta().hasTool()
+                &&storedInventory.getItem(0).getItemMeta().getEnchantLevel(Enchantment.EFFICIENCY)==8,
+            "old tool in container is repaired when its inventory opens");
+        actor.getInventory().setItem(6,oldHeat.get(0).clone());
+        relics.held(new org.bukkit.event.player.PlayerItemHeldEvent(actor,0,6));
+        check(!actor.getInventory().getItem(6).getItemMeta().hasTool()
+                &&!actor.getInventory().getItem(6).getItemMeta().isUnbreakable(),
+            "old tool is repaired when selected from the hotbar");
+        for(ItemStack heat:repairedHeat) {
+            actor.getInventory().setItemInMainHand(heat);
+            actor.removePotionEffect(org.bukkit.potion.PotionEffectType.HASTE);
+            var dirt=world.getBlockAt(30,100,30);dirt.setType(Material.DIRT);
+            garden.abilities().onBlockDamage(new org.bukkit.event.block.BlockDamageEvent(actor,dirt,heat,false));
+            check(!actor.hasPotionEffect(org.bukkit.potion.PotionEffectType.HASTE),
+                "plain Aeternum "+heat.getType()+" cannot grant Evergarden Haste on dirt");
+        }
+        var ownedPick=new ItemStack(Material.DIAMOND_PICKAXE);
+        meta=ownedPick.getItemMeta();relics.applyLimitBreakMeta(ownedPick.getType(),meta,LimitBreakType.EFFICIENCY,8);
+        ownedPick.setItemMeta(meta);actor.getInventory().setItemInMainHand(ownedPick);
+        var stone=world.getBlockAt(31,100,30);stone.setType(Material.STONE);
+        garden.abilities().onBlockDamage(new org.bukkit.event.block.BlockDamageEvent(actor,stone,ownedPick,false));
+        check(actor.hasPotionEffect(org.bukkit.potion.PotionEffectType.HASTE),
+            "owned Limit Break pickaxe grants Haste on stone");
+        garden.abilities().onHeldItemChange(new org.bukkit.event.player.PlayerItemHeldEvent(actor,0,1));
+        check(!actor.hasPotionEffect(org.bukkit.potion.PotionEffectType.HASTE),
+            "Evergarden Haste ends when changing held item");
+        garden.abilities().onBlockDamage(new org.bukkit.event.block.BlockDamageEvent(actor,stone,ownedPick,false));
+        var dirt=world.getBlockAt(30,100,30);
+        garden.abilities().onBlockDamage(new org.bukkit.event.block.BlockDamageEvent(actor,dirt,ownedPick,false));
+        check(!actor.hasPotionEffect(org.bukkit.potion.PotionEffectType.HASTE),
+            "Evergarden pickaxe Haste ends on the wrong block type");
+        for(int bx=40;bx<=43;bx++)for(int by=100;by<=104;by++) {
+            var block=world.getBlockAt(bx,by,40);
+            block.setType(bx==40||bx==43||by==100||by==104?Material.QUARTZ_BLOCK:Material.NETHER_PORTAL,false);
+        }
+        var oldGate=world.getBlockAt(41,101,40);
+        check(garden.travel().isQuartzPortal(oldGate)&&oldGate.getType()==Material.STRUCTURE_VOID,
+            "old quartz portal is adopted without rebuilding its frame");
+        var visualField=garden.travel().getClass().getDeclaredField("visuals");visualField.setAccessible(true);
+        var visualService=visualField.get(garden.travel());
+        var displayField=visualService.getClass().getDeclaredField("displays");displayField.setAccessible(true);
+        ((Map<?,?>)displayField.get(visualService)).clear(); // Simulate a restart before the frame breaks.
+        var frame=world.getBlockAt(40,102,40);
+        Bukkit.getPluginManager().callEvent(new org.bukkit.event.block.BlockBreakEvent(frame,actor));
+        frame.setType(Material.AIR,false);
+        check(oldGate.getType()==Material.AIR,"breaking old quartz frame removes portal cells");
+        check(world.getNearbyEntities(new Location(world,41.5,102,40.5),2.0,4.0,1.0).stream()
+                .noneMatch(entity->entity.getPersistentDataContainer().has(garden.key("portal_visual"))),
+            "breaking old quartz frame removes portal displays");
+        for(int bx=50;bx<=53;bx++)for(int by=100;by<=104;by++) {
+            world.getBlockAt(bx,by,40).setType(bx==50||bx==53||by==100||by==104
+                ?Material.QUARTZ_BLOCK:Material.NETHER_PORTAL,false);
+        }
+        var untouchedOldGate=world.getBlockAt(51,101,40);
+        var untouchedFrame=world.getBlockAt(50,102,40);
+        Bukkit.getPluginManager().callEvent(new org.bukkit.event.block.BlockBreakEvent(untouchedFrame,actor));
+        untouchedFrame.setType(Material.AIR,false);
+        check(untouchedOldGate.getType()==Material.AIR,
+            "breaking an unregistered old portal clears its cells");
+        var orphan=world.spawn(new Location(world,60.5,100.5,40.5),org.bukkit.entity.ArmorStand.class);
+        orphan.getPersistentDataContainer().set(garden.key("portal_visual"),PersistentDataType.STRING,
+            world.getName()+",60,100,40");
+        garden.travel().entitiesLoaded(new org.bukkit.event.world.EntitiesLoadEvent(orphan.getChunk(),List.of(orphan)));
+        check(!orphan.isValid(),"loaded orphan portal display is removed");
         Object foods=Arrays.stream(PlayerInteractEvent.getHandlerList().getRegisteredListeners()).map(r->r.getListener())
             .filter(l->l.getClass().getName().equals("Kinkin.aeternum.food.SeasonFoods")).findFirst().orElseThrow();
-        int x=1;
+        int x=100+new Random().nextInt(100000);
         for(String id:List.of("onion","tomato")){
             var field=foods.getClass().getDeclaredField(id+"Proto");field.setAccessible(true);
             var seed=((ItemStack)field.get(foods)).clone();seed.setAmount(3);before=seed.clone();relics.migrate(seed);

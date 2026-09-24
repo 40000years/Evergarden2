@@ -63,6 +63,7 @@ public final class WhaleTreasure implements Listener {
         // later cannot reroll or regenerate rewards.
         chunk.getPersistentDataContainer().set(marker, PersistentDataType.BYTE, (byte)1);
         chunk.getPersistentDataContainer().set(upgradeMarker, PersistentDataType.BYTE, (byte)1);
+        boolean restorationAdded=false;
         for (int i = 0; i < count; i++) {
             int x = Math.floorMod(site.x() + positions[i], 16), z = Math.floorMod(site.z() + 7, 16);
             var block = chunk.getBlock(x, 115, z);
@@ -80,6 +81,7 @@ public final class WhaleTreasure implements Listener {
             for (int slot = 0; slot < 27; slot++) slots.add(slot);
             Collections.shuffle(slots, random);
             for (int j = 0; j < loot.size(); j++) chest.getBlockInventory().setItem(slots.get(j), loot.get(j));
+            if(!restorationAdded){addRestoration(chest,site.x(),site.z(),0);restorationAdded=true;}
         }
     }
 
@@ -103,6 +105,7 @@ public final class WhaleTreasure implements Listener {
             Random random=new Random(DungeonLayout.mix(chunk.getWorld().getSeed()^((long)site.x()*341873128712L)
                     ^((long)site.z()*132897987541L)^0x5452454153555245L^kind.ordinal()));
             int count=chestCount(random);int[] positions=random.nextBoolean()?new int[]{4,6}:new int[]{6,4};
+            boolean restorationAdded=false;
             for(int i=0;i<count;i++){
                 int x=Math.floorMod(site.x()+positions[i],16),z=Math.floorMod(site.z()+kind.chestZ,16);
                 var block=chunk.getBlock(x,y,z);
@@ -118,8 +121,24 @@ public final class WhaleTreasure implements Listener {
                 List<Integer> slots=new ArrayList<>();for(int slot=0;slot<27;slot++)slots.add(slot);
                 Collections.shuffle(slots,random);
                 for(int j=0;j<loot.size();j++)chest.getBlockInventory().setItem(slots.get(j),loot.get(j));
+                if(!restorationAdded){addRestoration(chest,site.x(),site.z(),kind.ordinal()+1);restorationAdded=true;}
             }
         }
+    }
+
+    private void addRestoration(Chest chest,int x,int z,int kind){
+        if(plugin.restorationLayout()==null||!plugin.restorationLayout().fresh(x,z))return;
+        var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");
+        if(!(addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic)||!magic.isEnabled())return;
+        // Separate RNG preserves every original loot roll, chest count and slot order.
+        Random random=new Random(DungeonLayout.mix(plugin.world().getSeed()^((long)x*341873128712L)
+                ^((long)z*132897987541L)^0x524553544f52454cL^kind));
+        var inventory=chest.getBlockInventory();int slot=inventory.firstEmpty();
+        if(slot>=0)inventory.setItem(slot,magic.restoration().createCore());
+        double chance=plugin.getConfig().getDouble("structures.restoration.repair-wand-chance",.10);
+        if(!Double.isFinite(chance))chance=.10;
+        if(random.nextDouble()<Math.clamp(chance,0,1)&&(slot=inventory.firstEmpty())>=0)
+            inventory.setItem(slot,magic.restoration().createRepairWand());
     }
 
     private List<ItemStack> roll(Random random) {

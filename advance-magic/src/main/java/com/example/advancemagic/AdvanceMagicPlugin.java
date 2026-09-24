@@ -16,6 +16,7 @@ import java.util.*;
 public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     private ManaService mana;
     private WandService wands;
+    private com.example.advancemagic.item.RestorationService restoration;
     private EffectEngine effects;
     private StatusService statuses;
     private MagicContext context;
@@ -36,11 +37,13 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     public com.example.advancemagic.item.BedrockCreativeBridge creativeBridge(){return creativeBridge;}
     @Override public void onEnable() {
         saveDefaultConfig();mana=new ManaService(this);wands=new WandService(this);
+        restoration=new com.example.advancemagic.item.RestorationService(this);
+        for(Player player:Bukkit.getOnlinePlayers()){restoration.migrate(player.getInventory());restoration.migrate(player.getEnderChest());}
         effects=new EffectEngine(this,getConfig().getInt("max-active-effects",128));
         context=new MagicContext(this);statuses=new StatusService(this);
         areas=new AreaSpells(context);projectiles=new ProjectileSpells(context);
         spells=new SpellRegistry(context,areas,projectiles);casts=new CastListener(this);
-        for(Listener listener:List.of(this,wands,statuses,areas,projectiles,casts,packs))getServer().getPluginManager().registerEvents(listener,this);
+        for(Listener listener:List.of(this,wands,restoration,statuses,areas,projectiles,casts,packs))getServer().getPluginManager().registerEvents(listener,this);
         itemMenu=new com.example.advancemagic.item.MagicItemMenu(this);
         getServer().getPluginManager().registerEvents(itemMenu,this);
         creativeBridge=new com.example.advancemagic.item.BedrockCreativeBridge(this);
@@ -73,6 +76,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     public ResourcePackService packs(){return packs;}
     public ManaService mana(){return mana;}
     public WandService wands(){return wands;}
+    public com.example.advancemagic.item.RestorationService restoration(){return restoration;}
     public EffectEngine effects(){return effects;}
     public StatusService statuses(){return statuses;}
     public MagicContext context(){return context;}

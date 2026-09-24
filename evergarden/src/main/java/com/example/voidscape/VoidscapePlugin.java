@@ -20,6 +20,8 @@ public final class VoidscapePlugin extends JavaPlugin {
     private DungeonLayout layout;
     private SkyWhaleLayout skyWhales;
     private SkyLandmarkLayout skyLandmarks;
+    private RestorationLayout restorationLayout;
+    private RestorationAltars restorationAltars;
     private RelicService relics;
     private DungeonManager dungeons;
     private TravelListener travel;
@@ -42,7 +44,7 @@ public final class VoidscapePlugin extends JavaPlugin {
             Path legacy=current.resolveSibling("Voidscape");
             if(Files.isDirectory(legacy)) {
                 Files.createDirectories(current);
-                for(String file:List.of("config.yml","world-layout.yml","dungeons.yml")) {
+                for(String file:List.of("config.yml","world-layout.yml","dungeons.yml","portals.yml")) {
                     Path source=legacy.resolve(file),target=current.resolve(file);
                     if(Files.exists(source)&&!Files.exists(target))Files.copy(source,target);
                 }
@@ -99,16 +101,32 @@ public final class VoidscapePlugin extends JavaPlugin {
                 saved.set("sky-rarity-version",2);
                 getLogger().info("Preserved "+oldCells.size()+" explored sky cells at the original structure rate.");
             }
+            if(saved.getInt("sky-rarity-version",0)<3){
+                Set<Long> explored=new HashSet<>(SkyPlacementHistory.captureWorld(Bukkit.getWorldContainer().toPath(),
+                        Bukkit.getWorlds().getFirst().getWorldFolder().toPath(),worldName,whaleSpacing));
+                explored.addAll(saved.getLongList("sky-legacy-cells"));
+                saved.set("restoration-legacy-cells",explored.stream().sorted().toList());
+                saved.set("restoration-legacy-chance",saved.getDouble("sky-whale-unexplored-chance",.01));
+                saved.set("sky-whale-unexplored-chance",getConfig().getDouble("structures.restoration.unexplored-chance",.03));
+                saved.set("restoration-altar-chance",getConfig().getDouble("structures.restoration.altar-chance",.6));
+                saved.set("sky-rarity-version",3);
+                getLogger().info("Preserved "+explored.size()+" explored sky cells; restoration sanctuaries enabled in new cells.");
+            }
             saved.save(file);
             long seed=saved.getLong("seed");
             double unexploredChance=saved.getDouble("sky-whale-unexplored-chance",0.01);
             Set<Long> oldCells=new HashSet<>(saved.getLongList("sky-legacy-cells"));
             layout=new DungeonLayout(seed,saved.getInt("spacing",18),saved.getDouble("chance",1.0));
-            skyWhales=new SkyWhaleLayout(seed,layout,whaleSpacing,whaleChance,unexploredChance,oldCells);
+            Set<Long> repairOldCells=new HashSet<>(saved.getLongList("restoration-legacy-cells"));
+            skyWhales=new SkyWhaleLayout(seed,layout,whaleSpacing,whaleChance,unexploredChance,oldCells,
+                    repairOldCells,saved.getDouble("restoration-legacy-chance",.01));
             skyLandmarks=new SkyLandmarkLayout(seed,layout,skyWhales);
+            restorationLayout=new RestorationLayout(seed,skyWhales,skyLandmarks,repairOldCells,
+                    saved.getDouble("restoration-altar-chance",.6),getConfig().getBoolean("structures.sky-whale.enabled",true),
+                    getConfig().getBoolean("structures.hanging-garden.enabled",true),getConfig().getBoolean("structures.observatory.enabled",true));
             if(worldName.equals("the_void"))throw new IllegalStateException("Use a new world name for Evergarden; never replace the legacy world generator.");
             voidWorld=new WorldCreator(worldName).seed(seed).environment(World.Environment.NORMAL).generator(new VoidGenerator(seed,layout,skyWhales,getConfig().getBoolean("structures.sky-whale.enabled",true),
-                    skyLandmarks,getConfig().getBoolean("structures.observatory.enabled",true),getConfig().getBoolean("structures.hanging-garden.enabled",true))).createWorld();
+                    skyLandmarks,getConfig().getBoolean("structures.observatory.enabled",true),getConfig().getBoolean("structures.hanging-garden.enabled",true),restorationLayout)).createWorld();
             if(voidWorld==null)throw new IllegalStateException("Cannot load Evergarden world");
             voidWorld.setSpawnLocation(0,97,0);voidWorld.setTime(integer("dimension.time",13000,0,23999));
             voidWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE,false);
@@ -138,6 +156,10 @@ public final class VoidscapePlugin extends JavaPlugin {
             pm.registerEvents(cropBuffs,this);
             pm.registerEvents(cropGui,this);
             var whaleTreasure = new WhaleTreasure(this);
+            var magicPlugin=pm.getPlugin("advance-magic");
+            if(magicPlugin instanceof com.example.advancemagic.AdvanceMagicPlugin magic&&magic.isEnabled()){
+                restorationAltars=new RestorationAltars(this,magic);pm.registerEvents(restorationAltars,this);
+            }else getLogger().warning("Advance Magic is unavailable; restoration altar interactions are disabled.");
             pm.registerEvents(whaleTreasure,this);
             for (Chunk chunk : voidWorld.getLoadedChunks()) whaleTreasure.populate(chunk);
             botanist=new com.example.voidscape.crop.BotanistNpc(this);
@@ -170,7 +192,7 @@ public final class VoidscapePlugin extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
     }
-    @Override public void onDisable(){if(travel!=null)travel.close();if(packs!=null)packs.close();if(dungeons!=null)dungeons.close();if(relics!=null)relics.close();if(crops!=null)crops.close();if(cropBuffs!=null)cropBuffs.close();if(botanist!=null)botanist.close();}
+    @Override public void onDisable(){if(restorationAltars!=null)restorationAltars.close();if(travel!=null)travel.close();if(packs!=null)packs.close();if(dungeons!=null)dungeons.close();if(relics!=null)relics.close();if(crops!=null)crops.close();if(cropBuffs!=null)cropBuffs.close();if(botanist!=null)botanist.close();}
 
     public NamespacedKey key(String value){return new NamespacedKey("voidscape",value);}
     public int integer(String path,int value,int min,int max){return Math.max(min,Math.min(max,getConfig().getInt(path,value)));}
@@ -179,6 +201,7 @@ public final class VoidscapePlugin extends JavaPlugin {
     public World world(){return voidWorld;} public DungeonLayout layout(){return layout;}
     public SkyWhaleLayout skyWhales(){return skyWhales;}
     public SkyLandmarkLayout skyLandmarks(){return skyLandmarks;}
+    public RestorationLayout restorationLayout(){return restorationLayout;}
     public RelicService relics(){return relics;} public DungeonManager dungeons(){return dungeons;} public TravelListener travel(){return travel;}
     public com.example.voidscape.gui.AdminTestGui testGui(){return testGui;}
     public com.example.voidscape.gui.WandShowcaseGui wandGui(){return wandGui;}

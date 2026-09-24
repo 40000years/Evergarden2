@@ -2,6 +2,7 @@ package com.example.voidscape.item;
 
 import com.example.voidscape.VoidscapePlugin;
 import com.example.voidscape.enchant.EnchantApplyListener;
+import com.example.voidscape.enchant.ItemCategory;
 import com.example.voidscape.enchant.LimitBreakType;
 import com.example.voidscape.enchant.UniqueEnchant;
 import net.kyori.adventure.text.Component;
@@ -480,6 +481,10 @@ public final class RelicService implements Listener {
             || pdc.has(new NamespacedKey("evergarden", "astral_dust"), PersistentDataType.BYTE)) {
             return true;
         }
+        for (NamespacedKey key : pdc.getKeys()) {
+            if ((key.getNamespace().equals("voidscape") || key.getNamespace().equals("evergarden"))
+                && (key.getKey().startsWith("lb_") || key.getKey().startsWith("ue_"))) return true;
+        }
         if (meta.hasLore()) {
             for (Component line : meta.lore()) {
                 String plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(line);
@@ -514,13 +519,16 @@ public final class RelicService implements Listener {
     }
 
     public boolean cleanseAeternumCorruption(ItemStack item) {
+        return cleanseAeternumCorruption(item, false);
+    }
+
+    private boolean cleanseAeternumCorruption(ItemStack item, boolean plainHeatLoot) {
         if (item == null || !item.hasItemMeta()) return false;
         ItemMeta meta = item.getItemMeta();
-        if (!isAeternumItem(meta)) return false;
+        if (!plainHeatLoot && !isAeternumItem(meta)) return false;
 
         boolean changed = false;
         var pdc = meta.getPersistentDataContainer();
-
         // 1. Remove corrupted Evergarden / Voidscape Relic & Limit Break tags
         List<NamespacedKey> toRemove = new ArrayList<>();
         for (NamespacedKey k : pdc.getKeys()) {
@@ -580,14 +588,49 @@ public final class RelicService implements Listener {
             }
         }
 
+        if (plainHeatLoot) {
+            // HeatLootListener creates ordinary enchanted gear; neither component is part of its loot.
+            if (meta.hasTool() && isOldEvergardenToolComponent(meta, meta.getEnchantLevel(Enchantment.EFFICIENCY))) {
+                meta.setTool(null);
+                changed = true;
+            }
+            if (meta.isUnbreakable()) {
+                meta.setUnbreakable(false);
+                changed = true;
+            }
+        }
+
         if (changed) {
             item.setItemMeta(meta);
         }
         return changed;
     }
 
+    private boolean isOldEvergardenToolComponent(ItemMeta meta, int efficiency) {
+        var tool = meta.getTool();
+        if (tool.getDefaultMiningSpeed() == 25.0f) return true;
+        float oldEfficiencySpeed = 9.0f + efficiency * efficiency + 1.0f;
+        return tool.getDefaultMiningSpeed() == 1.0f && tool.getRules().stream()
+            .anyMatch(rule -> rule.getSpeed() != null && rule.getSpeed() == oldEfficiencySpeed);
+    }
+
+    private boolean isPlainAeternumHeatLoot(ItemStack item) {
+        if (item == null || !ItemCategory.TOOL.matches(item.getType()) || !item.hasItemMeta()) return false;
+        ItemMeta meta = item.getItemMeta();
+        if (meta.getEnchantLevel(Enchantment.EFFICIENCY) < 6 || meta.hasDisplayName() || meta.hasLore()) return false;
+        if (!(Bukkit.getPluginManager().getPlugin("AeternumSeasons") instanceof org.bukkit.plugin.java.JavaPlugin aeternum)) return false;
+        List<String> pool = aeternum.getConfig().getStringList("heat_loot.gear_pool");
+        if (pool.isEmpty()) pool = List.of("DIAMOND_PICKAXE", "DIAMOND_AXE");
+        if (pool.stream().noneMatch(name -> name.equalsIgnoreCase(item.getType().name()))) return false;
+        // Any other plugin's persistent marker takes precedence over this inferred loot signature.
+        for (NamespacedKey key : meta.getPersistentDataContainer().getKeys())
+            if (!key.getNamespace().equals("evergarden") && !key.getNamespace().equals("voidscape")) return false;
+        return true;
+    }
+
     public boolean migrate(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return false;
+        if (isPlainAeternumHeatLoot(item)) return cleanseAeternumCorruption(item, true);
         if (cleanseAeternumCorruption(item)) return true;
         if (isAeternumItem(item.getItemMeta())) return false;
         if (!isManagedItem(item)) return false;
@@ -657,6 +700,11 @@ public final class RelicService implements Listener {
         ));
     }
     @EventHandler public void open(org.bukkit.event.inventory.InventoryOpenEvent e){migrate(e.getInventory());migrate(e.getPlayer().getInventory());}
+    @EventHandler public void held(PlayerItemHeldEvent e){
+        var inventory=e.getPlayer().getInventory();
+        var item=inventory.getItem(e.getNewSlot());
+        if(migrate(item))inventory.setItem(e.getNewSlot(),item);
+    }
     @EventHandler public void pickup(EntityPickupItemEvent e){var item=e.getItem().getItemStack();if(migrate(item))e.getItem().setItemStack(item);}
     @EventHandler public void drop(ItemSpawnEvent e){var item=e.getEntity().getItemStack();if(migrate(item))e.getEntity().setItemStack(item);}
     public void migrateEntity(Entity entity) {

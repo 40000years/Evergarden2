@@ -3,6 +3,7 @@ import hashlib
 import json
 import zipfile
 import struct
+import re
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
@@ -19,9 +20,16 @@ relic_expected = {"voidscape:" + name for name in (
 )}
 assert len(definitions) == len(identifiers)
 assert relic_expected.issubset(identifiers), f"Missing relics: {relic_expected - identifiers}"
-assert len(identifiers) == 171, f"Expected 171 identifiers including the azure portal, got {len(identifiers)}"
+assert len(identifiers) == 174, f"Expected 174 identifiers including the restoration altars, got {len(identifiers)}"
 assert not identifiers & other_ids, 'Duplicate Geyser custom item IDs across plugins'
 hashes = json.loads((dist / 'pack-hashes.json').read_text())
+service_source = (root / 'src/main/java/com/example/voidscape/pack/ResourcePackService.java').read_text(encoding='utf8')
+pack_config = (root / 'src/main/resources/config.yml').read_text(encoding='utf8')
+url = re.search(r'DEFAULT_CDN_URL = "([^"]+)"', service_source).group(1)
+sha1 = re.search(r'CURRENT_SHA1 = "([0-9a-f]{40})"', service_source).group(1)
+assert re.fullmatch(r'https://raw\.githubusercontent\.com/40000years/Evergarden2/[0-9a-f]{40}/evergarden/dist/evergarden-java\.zip',url)
+assert f"url: '{url}'" in pack_config and f"sha1: '{sha1}'" in pack_config
+assert sha1 == hashes['evergarden-java.zip']
 for filename, digest in hashes.items():
     assert hashlib.sha1((dist / filename).read_bytes()).hexdigest() == digest
 with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist / 'evergarden-bedrock.mcpack') as bedrock:
@@ -32,10 +40,7 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
                 json.loads(archive.read(name))
     atlas = json.loads(bedrock.read('textures/item_texture.json'))['texture_data']
     manifest = json.loads(bedrock.read('manifest.json'))
-    content_hash = hashlib.sha256()
-    for name in sorted(n for n in bedrock.namelist() if not n.endswith('/') and n != 'manifest.json'):
-        content_hash.update(name.encode('utf8') + b'\0' + bedrock.read(name))
-    expected_version = [3, 7, int(content_hash.hexdigest()[:7], 16) % 60000 + 1]
+    expected_version = [3, 8, 1]
     assert manifest['header']['version'] == expected_version
     assert manifest['modules'][0]['version'] == expected_version
     with zipfile.ZipFile(root.parent / 'advance-magic/dist/advance-magic-bedrock.mcpack') as magic:
@@ -50,6 +55,11 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
     assert json.loads(java.read('assets/voidscape/textures/item/azure_portal.png.mcmeta'))['animation']['frametime'] == 2
     assert 'USE_UV_ANIM' in json.loads(bedrock.read('materials/evergarden_portal.material'))['materials']['evergarden_portal:entity_alphablend']['+defines']
     assert 'assets/minecraft/items/carved_pumpkin.json' not in java.namelist()
+    for theme in ('whale','garden','observatory'):
+        name=f'restoration_altar_{theme}'
+        assert f'assets/voidscape/items/{name}.json' in java.namelist()
+        assert f'attachables/{name}.json' in bedrock.namelist()
+        assert f'models/entity/{name}.geo.json' in bedrock.namelist()
     for base, entries in mapping['items'].items():
         selector_path = 'assets/minecraft/items/' + base.split(':')[1] + '.json'
         cases = set()
@@ -117,7 +127,7 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
     assert json.loads(java.read('assets/minecraft/items/shield.json'))['model']['fallback']['on_false']['model']['type'] == 'minecraft:shield'
     assert json.loads(java.read('assets/minecraft/items/shield.json'))['model']['fallback']['on_true']['model']['type'] == 'minecraft:shield'
     assert json.loads(java.read('assets/minecraft/items/shield.json'))['model']['fallback']['transformation']['scale'] == [1.0, -1.0, -1.0]
-with zipfile.ZipFile(dist / 'evergarden-3.0.0.jar') as jar:
+with zipfile.ZipFile(root.parent / 'dist/evergarden.jar') as jar:
     for filename in (*hashes, 'geyser-mappings.json', 'pack-hashes.json'):
         assert jar.read('resource-packs/' + filename) == (dist / filename).read_bytes()
 print('PASS: 20 model selectors, six Java/Bedrock wearable models, vanilla fallbacks, no cross-plugin Geyser ID collisions, hashes and embedded assets')

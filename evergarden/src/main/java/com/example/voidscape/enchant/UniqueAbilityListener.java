@@ -33,6 +33,7 @@ public final class UniqueAbilityListener implements Listener {
     private final Map<UUID, Long> shadowStepCooldown = new HashMap<>();
     private final Map<UUID, Long> lastSneakTime = new HashMap<>();
     private final Map<UUID, Long> bladeVortexCooldown = new HashMap<>();
+    private final Map<UUID, Integer> grantedMiningHaste = new HashMap<>();
     private final Set<UUID> recursiveBreaking = new HashSet<>();
 
     public UniqueAbilityListener(VoidscapePlugin plugin) {
@@ -456,26 +457,60 @@ public final class UniqueAbilityListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockDamage(org.bukkit.event.block.BlockDamageEvent event) {
         Player player = event.getPlayer();
+        clearMiningHaste(player);
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (tool == null || !tool.hasItemMeta()) return;
+        if (plugin.relics().migrate(tool)) player.getInventory().setItemInMainHand(tool);
 
         // Virtual Efficiency Bonus (Levels 6-10: Haste I at 6-7, Haste II at 8-9, Haste III at 10)
         int lbEff = plugin.relics().getLimitBreakLevel(tool, LimitBreakType.EFFICIENCY);
-        if (lbEff >= 9) {
+        boolean ownedEfficiency = tool.getItemMeta().getPersistentDataContainer()
+            .has(plugin.key("lb_efficiency"), PersistentDataType.INTEGER);
+        boolean correctBlock = isCorrectMiningTool(tool.getType(), event.getBlock().getType());
+        if (ownedEfficiency && correctBlock && lbEff >= 9) {
             Block block = event.getBlock();
             if (isPickaxeInstaMineable(block.getType())) {
                 event.setInstaBreak(true);
             }
         }
-        if (lbEff > 5) {
+        if (ownedEfficiency && correctBlock && lbEff > 5) {
             int amp = lbEff >= 10 ? 2 : (lbEff >= 8 ? 1 : 0);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 60, amp, false, false, false));
+            grantMiningHaste(player, amp);
         }
 
         // Advance Tool (Haste boost for ultra-fast digging on all platforms & Bedrock)
         if (EnchantApplyListener.hasUnique(tool, UniqueEnchant.ADVANCE_TOOL)) {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 60, 1, false, false, false));
+            grantMiningHaste(player, 1);
         }
+    }
+
+    private void grantMiningHaste(Player player, int amplifier) {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, 60, amplifier, true, false, false));
+        PotionEffect active = player.getPotionEffect(PotionEffectType.HASTE);
+        if (active != null && active.getAmplifier() == amplifier && active.isAmbient()
+            && !active.hasParticles() && !active.hasIcon() && active.getDuration() <= 60) {
+            grantedMiningHaste.put(player.getUniqueId(), amplifier);
+        }
+    }
+
+    private void clearMiningHaste(Player player) {
+        Integer amplifier = grantedMiningHaste.remove(player.getUniqueId());
+        if (amplifier == null) return;
+        PotionEffect active = player.getPotionEffect(PotionEffectType.HASTE);
+        if (active != null && active.getAmplifier() == amplifier && active.isAmbient()
+            && !active.hasParticles() && !active.hasIcon() && active.getDuration() <= 60) {
+            player.removePotionEffect(PotionEffectType.HASTE);
+        }
+    }
+
+    @EventHandler
+    public void onHeldItemChange(PlayerItemHeldEvent event) {
+        clearMiningHaste(event.getPlayer());
+    }
+
+    @EventHandler
+    public void onMiningHasteQuit(PlayerQuitEvent event) {
+        clearMiningHaste(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -593,6 +628,15 @@ public final class UniqueAbilityListener implements Listener {
             || name.contains("GRANITE") || name.contains("TUFF") || name.contains("BASALT")
             || name.contains("BLACKSTONE") || name.contains("NETHERRACK") || name.contains("SANDSTONE")
             || name.contains("BRICK") || name.contains("PRISMARINE");
+    }
+
+    private boolean isCorrectMiningTool(Material tool, Material block) {
+        String name=tool.name();
+        if(name.endsWith("_PICKAXE"))return Tag.MINEABLE_PICKAXE.isTagged(block);
+        if(name.endsWith("_AXE"))return Tag.MINEABLE_AXE.isTagged(block);
+        if(name.endsWith("_SHOVEL"))return Tag.MINEABLE_SHOVEL.isTagged(block);
+        if(name.endsWith("_HOE"))return Tag.MINEABLE_HOE.isTagged(block);
+        return false;
     }
 
     private org.bukkit.block.BlockFace getMiningFace(Player player) {

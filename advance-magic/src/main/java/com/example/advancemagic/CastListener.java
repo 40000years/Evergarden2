@@ -16,6 +16,8 @@ public final class CastListener implements Listener {
     private final AdvanceMagicPlugin plugin;
     private final Map<UUID,Long> lastInput=new HashMap<>();
     private final Set<UUID> casting=new HashSet<>();
+    private final Set<UUID> repairing=new HashSet<>();
+    public void repairing(Player player,boolean active){if(active)repairing.add(player.getUniqueId());else repairing.remove(player.getUniqueId());}
     public CastListener(AdvanceMagicPlugin plugin){this.plugin=plugin;}
     public void actionbar(Player p,String message) {
         var a=plugin.mana().account(p);
@@ -116,6 +118,7 @@ public final class CastListener implements Listener {
         return !player.isPermissionSet("advance-magic.cast") || player.hasPermission("advance-magic.cast");
     }
     public boolean cast(Player p,Spell spell,ItemStack wandItem) {
+        if(repairing.contains(p.getUniqueId()))return false;
         long now=System.currentTimeMillis();UUID id=p.getUniqueId();
         if(!canCast(p)){actionbar(p,"You cannot cast spells.");return false;}
         if(wandItem!=null&&plugin.wands().usesLeft(wandItem)<=0){actionbar(p,"Wand durability is depleted.");return false;}
@@ -189,5 +192,5 @@ public final class CastListener implements Listener {
             plugin.mana().save(p);return success;
         } finally {casting.remove(id);}
     }
-    public void quit(Player p){lastInput.remove(p.getUniqueId());casting.remove(p.getUniqueId());}
+    public void quit(Player p){lastInput.remove(p.getUniqueId());casting.remove(p.getUniqueId());repairing.remove(p.getUniqueId());}
 }

@@ -16,7 +16,8 @@ import java.util.jar.JarFile;
 
 public final class ResourcePackService implements Listener, AutoCloseable {
     public static final UUID PACK_ID=UUID.fromString("c8f2b94e-4a35-4d1b-9b67-0d2a6ef4f821");
-    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/evergarden/dist/evergarden-java.zip";
+    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/22195e2d658ffb3b79aba23c1f95bfdde8b5af7a/evergarden/dist/evergarden-java.zip";
+    private static final String CURRENT_SHA1 = "a61e5923248d962bd76181f93e576bd364366a1e";
     public static final UUID AETERNUM_PACK_ID=UUID.fromString("8d2af8f1-f85c-4b4e-8a37-a55a359ce496");
     public static final String AETERNUM_PACK_URL="https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/evergarden/dist/Aeternum-Foods-26.x.zip";
     public static final String AETERNUM_PACK_SHA1="f7137350c381dfb933f96e869bfaced4a292bcff";
@@ -118,7 +119,7 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             }
             if(migratePackConfig(plugin.getConfig())) {
                 plugin.saveConfig();
-                plugin.getLogger().info("Updated the official Evergarden pack URL and SHA-1 to match this release.");
+                plugin.getLogger().info("Updated the official Evergarden Java pack URL and SHA-1 for restoration art; private CDN URLs are preserved.");
             }
             if(!plugin.getConfig().getBoolean("resource-pack.enabled",true))return;
             String configuredUrl=plugin.getConfig().getString("resource-pack.url","").trim();
@@ -127,23 +128,24 @@ public final class ResourcePackService implements Listener, AutoCloseable {
                 return;
             }
             if(!plugin.getConfig().getBoolean("resource-pack.host.enabled",false)) {
-                plugin.getLogger().info("Evergarden local pack host disabled; serving Java pack via GitHub CDN.");
+                plugin.getLogger().info("Evergarden bundled pack host disabled; using the verified GitHub pack.");
                 return;
             }
             http=new PackHttpServer(plugin.getConfig().getString("resource-pack.host.bind","0.0.0.0"),
                     plugin.getConfig().getInt("resource-pack.host.port",8188),pack,sha1);
             plugin.getLogger().info("Bundled Java pack served on TCP "+http.port()+". Allow this port through your host/firewall; /evergarden pack shows status.");
         }catch(IOException|GeneralSecurityException|IllegalArgumentException e) {
-            failure=e.getMessage();plugin.getLogger().warning("Pack host could not start: "+failure+". Using GitHub CDN fallback.");
+            failure=e.getMessage();plugin.getLogger().warning("Pack host could not start: "+failure+". Using the verified GitHub pack.");
         }
     }
     static boolean migratePackConfig(org.bukkit.configuration.file.FileConfiguration config) {
         String url=config.getString("resource-pack.url","").trim();
         // Only migrate our published GitHub packs; private CDN/host settings remain administrator-owned.
-        if(!url.matches("https://raw\\.githubusercontent\\.com/40000years/Afterdeath/(?:DEV|main|[a-fA-F0-9]{7,40})/evergarden/dist/evergarden-java\\.zip"))return false;
-        if(url.equals(DEFAULT_CDN_URL))return false;
+        if(!url.matches("https://raw\\.githubusercontent\\.com/40000years/(?:Afterdeath|Evergarden2)/(?:DEV|main|[a-fA-F0-9]{7,40})/evergarden/dist/evergarden-java\\.zip"))return false;
+        if(url.equals(DEFAULT_CDN_URL)&&config.getString("resource-pack.sha1","").equalsIgnoreCase(CURRENT_SHA1))return false;
         config.set("resource-pack.url",DEFAULT_CDN_URL);
-        config.set("resource-pack.sha1",""); // Calculated from the embedded ZIP by offer().
+        config.set("resource-pack.host.enabled",false);
+        config.set("resource-pack.sha1",CURRENT_SHA1);
         return true;
     }
     static boolean migrateAeternumPackConfig(org.bukkit.configuration.file.FileConfiguration config) {
@@ -246,9 +248,9 @@ public final class ResourcePackService implements Listener, AutoCloseable {
     @EventHandler public void quit(PlayerQuitEvent event){statuses.remove(event.getPlayer().getUniqueId());aeternumStatuses.remove(event.getPlayer().getUniqueId());}
     public void describe(CommandSender sender) {
         sender.sendMessage(ChatColor.LIGHT_PURPLE+"Evergarden resource pack");
-        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Host: "+(http==null?"off (CDN active)":"TCP "+http.port()));
+        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Bundled host: "+(http==null?"off (GitHub pack active)":"TCP "+http.port()));
         sender.sendMessage("Bundled SHA-1: "+sha1);
-        String url=url(sender instanceof Player p?p:null);sender.sendMessage("URL: "+(url.isEmpty()?"CDN default":url));
+        String url=url(sender instanceof Player p?p:null);sender.sendMessage("URL: "+(url.isEmpty()?"unavailable":url));
         sender.sendMessage(geyserStatus);
         sender.sendMessage(bedrockPackInfo);
         sender.sendMessage(aeternumBedrockStatus);

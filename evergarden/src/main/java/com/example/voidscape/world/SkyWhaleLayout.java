@@ -15,6 +15,8 @@ public final class SkyWhaleLayout {
     private final double chance;
     private final double unexploredChance;
     private final Set<Long> legacyCells;
+    private final Set<Long> repairLegacyCells;
+    private final double repairLegacyChance;
     private final ConcurrentHashMap<Long, Optional<Site>> cache = new ConcurrentHashMap<>();
 
     public SkyWhaleLayout(long seed, DungeonLayout temples, int spacingChunks, double chance) {
@@ -23,18 +25,26 @@ public final class SkyWhaleLayout {
 
     public SkyWhaleLayout(long seed, DungeonLayout temples, int spacingChunks, double chance,
                           double unexploredChance, Set<Long> legacyCells) {
+        this(seed,temples,spacingChunks,chance,unexploredChance,legacyCells,Set.of(),unexploredChance);
+    }
+    public SkyWhaleLayout(long seed, DungeonLayout temples, int spacingChunks, double chance,
+                          double unexploredChance, Set<Long> legacyCells,Set<Long> repairLegacyCells,double repairLegacyChance) {
         this.seed = seed;
         this.temples = temples;
         this.spacing = Math.max(32, Math.min(64, spacingChunks));
         this.chance = Double.isFinite(chance) ? Math.clamp(chance, 0, 1) : 0;
         this.unexploredChance = Double.isFinite(unexploredChance) ? Math.clamp(unexploredChance, 0, 1) : 0;
         this.legacyCells = Set.copyOf(legacyCells);
+        this.repairLegacyCells=Set.copyOf(repairLegacyCells);
+        this.repairLegacyChance=Double.isFinite(repairLegacyChance)?Math.clamp(repairLegacyChance,0,1):0;
     }
 
     public int spacingChunks() { return spacing; }
     public double chance() { return chance; }
     public double unexploredChance() { return unexploredChance; }
     public Set<Long> legacyCells() { return legacyCells; }
+    public double chanceForCell(int x,int z){return legacyCells.contains(key(x,z))?chance:
+            repairLegacyCells.contains(key(x,z))?repairLegacyChance:unexploredChance;}
 
     private static long key(int x, int z) { return ((long)x << 32) | (z & 0xffffffffL); }
 
@@ -47,7 +57,7 @@ public final class SkyWhaleLayout {
         long mixed = DungeonLayout.mix(seed ^ 0x779b8f38e312a0d5L
                 ^ ((long)gridX * 341873128712L) ^ ((long)gridZ * 132897987541L));
         Random random = new Random(mixed);
-        double cellChance = legacyCells.contains(key(gridX, gridZ)) ? chance : unexploredChance;
+        double cellChance = chanceForCell(gridX,gridZ);
         if (random.nextDouble() >= cellChance) return null;
         // Eight chunks of margin contain the whole whale and its terrain reservation.
         int offset = 8 + random.nextInt(spacing - 16);

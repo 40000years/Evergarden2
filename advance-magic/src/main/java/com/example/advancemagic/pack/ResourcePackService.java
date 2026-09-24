@@ -16,8 +16,8 @@ import java.util.jar.JarFile;
 
 public final class ResourcePackService implements Listener, AutoCloseable {
     public static final UUID PACK_ID=UUID.fromString("3e8e5b71-0600-4a42-a678-483a7cce5fb0");
-    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/aad426f1b204d3ec2a61b87640a3fffefae5fbc1/advance-magic/dist/advance-magic-java.zip";
-    private static final String CURRENT_SHA1 = "fb436f7d2dd4f0fdf145a63fc2d1796166c5d70e";
+    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/22195e2d658ffb3b79aba23c1f95bfdde8b5af7a/advance-magic/dist/advance-magic-java.zip";
+    private static final String CURRENT_SHA1 = "23227999a6b6ae77eb9aa8b7c4fdbf49ab16ee84";
     private static final List<String> FILES=List.of("advance-magic-java.zip","advance-magic-bedrock.mcpack",
             "geyser-mappings.json","pack-hashes.json","wand-preview.html","advance-magic-guide-th.png");
     private final JavaPlugin plugin;
@@ -87,7 +87,7 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             sha1=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(pack));
             if(migratePackConfig(plugin.getConfig())) {
                 plugin.saveConfig();
-                plugin.getLogger().info("Updated the official Advance Magic pack URL and SHA-1 for this release.");
+                plugin.getLogger().info("Updated the official Advance Magic Java pack URL and SHA-1 for restoration art; private CDN URLs are preserved.");
             }
             if(!plugin.getConfig().getBoolean("resource-pack.enabled",true))return;
             String configuredUrl=plugin.getConfig().getString("resource-pack.url","").trim();
@@ -96,26 +96,26 @@ public final class ResourcePackService implements Listener, AutoCloseable {
                 return;
             }
             if(!plugin.getConfig().getBoolean("resource-pack.host.enabled",false)) {
-                plugin.getLogger().info("Advance Magic local pack host disabled; serving Java pack via GitHub CDN.");
+                plugin.getLogger().info("Advance Magic bundled pack host disabled; using the verified GitHub pack.");
                 return;
             }
             http=new PackHttpServer(plugin.getConfig().getString("resource-pack.host.bind","0.0.0.0"),
                     plugin.getConfig().getInt("resource-pack.host.port",8187),pack,sha1);
             plugin.getLogger().info("Bundled Java pack served on TCP "+http.port()+". Allow this port through your host/firewall; /magic pack shows status.");
         }catch(IOException|GeneralSecurityException|IllegalArgumentException e) {
-            failure=e.getMessage();plugin.getLogger().warning("Pack host could not start: "+failure+". Falling back to GitHub CDN.");
+            failure=e.getMessage();plugin.getLogger().warning("Pack host could not start: "+failure+". Using the verified GitHub pack.");
         }
     }
     static boolean migratePackConfig(org.bukkit.configuration.file.FileConfiguration config) {
         String url=config.getString("resource-pack.url","").trim();
-        String hash=config.getString("resource-pack.sha1","").trim();
         // Keep already-downloaded Afterdeath jars intact; upgrade their persisted config only
         // when this Evergarden2 plugin is installed. Private pack URLs remain administrator-owned.
         String officialPack="https://raw\\.githubusercontent\\.com/40000years/(?:Afterdeath|Evergarden2)/(?:DEV|main|[a-fA-F0-9]{7,40})/advance-magic/dist/advance-magic-java\\.zip";
         if(!url.matches(officialPack))return false;
-        if(url.equals(DEFAULT_CDN_URL)&&hash.equalsIgnoreCase(CURRENT_SHA1))return false;
+        if(url.equals(DEFAULT_CDN_URL)&&config.getString("resource-pack.sha1","").equalsIgnoreCase(CURRENT_SHA1))return false;
         config.set("resource-pack.url",DEFAULT_CDN_URL);
         config.set("resource-pack.sha1",CURRENT_SHA1);
+        config.set("resource-pack.host.enabled",false);
         return true;
     }
     private boolean bedrock(Player player) {
@@ -177,9 +177,9 @@ public final class ResourcePackService implements Listener, AutoCloseable {
     @EventHandler public void quit(PlayerQuitEvent event){statuses.remove(event.getPlayer().getUniqueId());}
     public void describe(CommandSender sender) {
         sender.sendMessage(ChatColor.LIGHT_PURPLE+"Advance Magic resource pack");
-        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Host: "+(http==null?"off (CDN active)":"TCP "+http.port()));
+        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Bundled host: "+(http==null?"off (GitHub pack active)":"TCP "+http.port()));
         sender.sendMessage("Bundled SHA-1: "+sha1);
-        String url=url(sender instanceof Player p?p:null);sender.sendMessage("URL: "+(url.isEmpty()?"CDN default":url));
+        String url=url(sender instanceof Player p?p:null);sender.sendMessage("URL: "+(url.isEmpty()?"unavailable":url));
         sender.sendMessage(geyserStatus);
         if(!failure.isEmpty())sender.sendMessage(ChatColor.RED+failure);
         if(sender instanceof Player p)sender.sendMessage("Your pack: "+statuses.getOrDefault(p.getUniqueId(),"not offered (or Bedrock)"));

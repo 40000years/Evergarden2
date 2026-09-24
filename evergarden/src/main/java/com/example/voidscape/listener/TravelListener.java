@@ -46,6 +46,8 @@ public final class TravelListener implements Listener {
             }
             visuals.save();
         }
+        for(World loadedWorld:Bukkit.getWorlds())
+            for(Chunk chunk:loadedWorld.getLoadedChunks())visuals.cleanupOrphanDisplays(Arrays.asList(chunk.getEntities()));
     }
 
     private boolean allowedEntryWorld(Player p){
@@ -247,12 +249,26 @@ public final class TravelListener implements Listener {
     }
 
     private boolean checkAndFillPortal(Block start,Axis axis) {
+        List<Block> cells=findQuartzPortalCells(start,axis);
+        if(cells==null)return false;
+        for(Block b:cells) {
+            visuals.add(b,axis);
+            if(b.getBlockData() instanceof Orientable orient) {
+                orient.setAxis(axis);
+                b.setBlockData(orient,false);
+            }
+        }
+        visuals.save();visuals.tick();
+        return true;
+    }
+
+    static List<Block> findQuartzPortalCells(Block start,Axis axis) {
         World w=start.getWorld();
         int y=start.getY(),x=start.getX(),z=start.getZ();
         // Find bottom inner Y
         while(y>start.getY()-21&&y>w.getMinHeight()+1&&isInnerBlock(w.getBlockAt(x,y-1,z))) y--;
         int minY=y;
-        if(w.getBlockAt(x,minY-1,z).getType()!=Material.QUARTZ_BLOCK)return false;
+        if(w.getBlockAt(x,minY-1,z).getType()!=Material.QUARTZ_BLOCK)return null;
 
         // Find min and max along axis
         int minD=axis==Axis.X?x:z,maxD=minD;
@@ -260,12 +276,12 @@ public final class TravelListener implements Listener {
         while(maxD<(axis==Axis.X?x:z)+21&&isInnerBlock(axis==Axis.X?w.getBlockAt(maxD+1,minY,z):w.getBlockAt(x,minY,maxD+1))) maxD++;
 
         int width=maxD-minD+1;
-        if(width<2||width>21)return false;
+        if(width<2||width>21)return null;
 
         // Check bottom border
         for(int d=minD;d<=maxD;d++) {
             Block b=axis==Axis.X?w.getBlockAt(d,minY-1,z):w.getBlockAt(x,minY-1,d);
-            if(b.getType()!=Material.QUARTZ_BLOCK)return false;
+            if(b.getType()!=Material.QUARTZ_BLOCK)return null;
         }
 
         // Find height
@@ -280,41 +296,43 @@ public final class TravelListener implements Listener {
             // Check side frames
             Block left=axis==Axis.X?w.getBlockAt(minD-1,curY,z):w.getBlockAt(x,curY,minD-1);
             Block right=axis==Axis.X?w.getBlockAt(maxD+1,curY,z):w.getBlockAt(x,curY,maxD+1);
-            if(left.getType()!=Material.QUARTZ_BLOCK||right.getType()!=Material.QUARTZ_BLOCK)return false;
+            if(left.getType()!=Material.QUARTZ_BLOCK||right.getType()!=Material.QUARTZ_BLOCK)return null;
             curY++;
         }
         int maxY=curY-1;
         int height=maxY-minY+1;
-        if(height<3||height>21)return false;
+        if(height<3||height>21)return null;
 
         // Check top border
         for(int d=minD;d<=maxD;d++) {
             Block b=axis==Axis.X?w.getBlockAt(d,maxY+1,z):w.getBlockAt(x,maxY+1,d);
-            if(b.getType()!=Material.QUARTZ_BLOCK)return false;
+            if(b.getType()!=Material.QUARTZ_BLOCK)return null;
         }
 
-        // Fill inner with NETHER_PORTAL
+        List<Block> cells=new ArrayList<>(width*height);
         for(int h=minY;h<=maxY;h++) {
             for(int d=minD;d<=maxD;d++) {
                 Block b=axis==Axis.X?w.getBlockAt(d,h,z):w.getBlockAt(x,h,d);
-                visuals.add(b,axis);
-                if(b.getBlockData() instanceof Orientable orient) {
-                    orient.setAxis(axis);
-                    b.setBlockData(orient,false);
-                }
+                cells.add(b);
             }
         }
-        visuals.save();visuals.tick();
-        return true;
+        return cells;
     }
 
-    private boolean isInnerBlock(Block b) {
+    private static boolean isInnerBlock(Block b) {
         Material m=b.getType();
-        return m==Material.AIR||m==Material.CAVE_AIR||m==Material.FIRE||m==Material.SOUL_FIRE||m==Material.STRUCTURE_VOID;
+        return m==Material.AIR||m==Material.CAVE_AIR||m==Material.FIRE||m==Material.SOUL_FIRE
+            ||m==Material.STRUCTURE_VOID||m==Material.NETHER_PORTAL;
     }
 
     public boolean isQuartzPortal(Block portalBlock) {
-        if(portalBlock==null||!visuals.contains(portalBlock))return false;
+        if(portalBlock==null)return false;
+        if(!visuals.contains(portalBlock)) {
+            // Older quartz gates used vanilla portal blocks, and gates can outlive a missing portals.yml.
+            Material material=portalBlock.getType();
+            if(material!=Material.NETHER_PORTAL&&material!=Material.STRUCTURE_VOID)return false;
+            return checkAndFillPortal(portalBlock,Axis.X)||checkAndFillPortal(portalBlock,Axis.Z);
+        }
         Queue<Block> queue=new ArrayDeque<>();
         Set<Block> visited=new HashSet<>();
         queue.add(portalBlock);
@@ -333,26 +351,30 @@ public final class TravelListener implements Listener {
     }
 
     private Block findQuartzPortalBlock(Player p, Location from) {
-        if(from!=null&&from.getWorld()==p.getWorld()&&from.getBlock().getType()==Material.STRUCTURE_VOID) {
+        if(from!=null&&from.getWorld()==p.getWorld()&&isPortalMaterial(from.getBlock())) {
             if(isQuartzPortal(from.getBlock())) return from.getBlock();
         }
         Block feet=p.getLocation().getBlock();
-        if(feet.getType()==Material.STRUCTURE_VOID&&isQuartzPortal(feet)) return feet;
+        if(isPortalMaterial(feet)&&isQuartzPortal(feet)) return feet;
         Block eye=p.getEyeLocation().getBlock();
-        if(eye.getType()==Material.STRUCTURE_VOID&&isQuartzPortal(eye)) return eye;
+        if(isPortalMaterial(eye)&&isQuartzPortal(eye)) return eye;
         Location loc=p.getLocation();
         int px=loc.getBlockX(),py=loc.getBlockY(),pz=loc.getBlockZ();
         for(int dx=-1;dx<=1;dx++) {
             for(int dy=-1;dy<=2;dy++) {
                 for(int dz=-1;dz<=1;dz++) {
                     Block b=loc.getWorld().getBlockAt(px+dx,py+dy,pz+dz);
-                    if(b.getType()==Material.STRUCTURE_VOID&&isQuartzPortal(b)) {
+                    if(isPortalMaterial(b)&&isQuartzPortal(b)) {
                         return b;
                     }
                 }
             }
         }
         return null;
+    }
+
+    private boolean isPortalMaterial(Block block) {
+        return block.getType()==Material.STRUCTURE_VOID||block.getType()==Material.NETHER_PORTAL;
     }
 
     @EventHandler(priority=EventPriority.NORMAL,ignoreCancelled=true)
@@ -445,13 +467,13 @@ public final class TravelListener implements Listener {
     }
 
     private void handlePortalBreak(Block broken) {
-        if(broken.getType()!=Material.QUARTZ_BLOCK&&broken.getType()!=Material.STRUCTURE_VOID)return;
-        if(broken.getType()==Material.STRUCTURE_VOID) {
+        if(broken.getType()!=Material.QUARTZ_BLOCK&&!isPortalMaterial(broken))return;
+        if(isPortalMaterial(broken)) {
             clearPortal(broken,new HashSet<>());
         }
         for(BlockFace face:new BlockFace[]{BlockFace.NORTH,BlockFace.SOUTH,BlockFace.EAST,BlockFace.WEST,BlockFace.UP,BlockFace.DOWN}) {
             Block adj=broken.getRelative(face);
-            if(adj.getType()==Material.STRUCTURE_VOID) {
+            if(isPortalMaterial(adj)) {
                 clearPortal(adj,new HashSet<>());
             }
         }
@@ -459,12 +481,17 @@ public final class TravelListener implements Listener {
     }
 
     private void clearPortal(Block b,Set<Block> seen) {
+        if(!visuals.contains(b)&&isPortalMaterial(b))isQuartzPortal(b);
         if(!visuals.contains(b)||!seen.add(b)||seen.size()>500)return;
         visuals.remove(b);
         b.setType(Material.AIR);
         for(BlockFace face:new BlockFace[]{BlockFace.NORTH,BlockFace.SOUTH,BlockFace.EAST,BlockFace.WEST,BlockFace.UP,BlockFace.DOWN}) {
             clearPortal(b.getRelative(face),seen);
         }
+    }
+
+    @EventHandler public void entitiesLoaded(org.bukkit.event.world.EntitiesLoadEvent e) {
+        visuals.cleanupOrphanDisplays(e.getEntities());
     }
 
     public void enter(Player p) {

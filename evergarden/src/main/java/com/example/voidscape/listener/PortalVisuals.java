@@ -70,6 +70,27 @@ public final class PortalVisuals {
         if (uuid == null) uuid = displays.remove(lk);
         Entity e = uuid == null ? null : Bukkit.getEntity(uuid);
         if (e != null) e.remove();
+        // After a restart the display UUID map is empty, but the persistent stand remains.
+        Location center=b.getLocation().add(0.5,-0.5,0.5);
+        for(Entity nearby:b.getWorld().getNearbyEntities(center,0.65,2.0,0.65))
+            if(nearby instanceof ArmorStand stand) {
+                String cell=stand.getPersistentDataContainer().get(plugin.key("portal_visual"),PersistentDataType.STRING);
+                if(k.equals(cell)||lk.equals(cell))stand.remove();
+            }
+    }
+    public void cleanupOrphanDisplays(Iterable<? extends Entity> entities) {
+        for(Entity entity:entities)if(entity instanceof ArmorStand stand) {
+            String cell=stand.getPersistentDataContainer().get(plugin.key("portal_visual"),PersistentDataType.STRING);
+            if(cell==null)continue;
+            String[] parts=cell.split(",");
+            if(parts.length!=4){stand.remove();continue;}
+            World world=resolveWorld(parts[0]);
+            if(world==null||world!=stand.getWorld()){stand.remove();continue;}
+            try {
+                Block block=world.getBlockAt(Integer.parseInt(parts[1]),Integer.parseInt(parts[2]),Integer.parseInt(parts[3]));
+                if(!cells.containsKey(key(block))&&!cells.containsKey(legacyKey(block)))stand.remove();
+            } catch(NumberFormatException ignored) {stand.remove();}
+        }
     }
     public void save() {
         var config = new YamlConfiguration();
@@ -82,6 +103,7 @@ public final class PortalVisuals {
     }
     public void tick() {
         boolean changed = false;
+        Set<String> validatedCells = new HashSet<>();
         for (var entry : new HashMap<>(cells).entrySet()) {
             String origKey = entry.getKey(); String[] parts = origKey.split(",");
             World w = resolveWorld(parts[0]);
@@ -97,6 +119,17 @@ public final class PortalVisuals {
             int x = Integer.parseInt(parts[1]), y = Integer.parseInt(parts[2]), z = Integer.parseInt(parts[3]);
             if (!w.isChunkLoaded(x >> 4, z >> 4)) continue;
             Block block = w.getBlockAt(x, y, z);
+            if (!validatedCells.contains(finalKey)) {
+                List<Block> frame=TravelListener.findQuartzPortalCells(block,entry.getValue());
+                if(frame==null) {
+                    remove(block);
+                    if(block.getType()==Material.STRUCTURE_VOID||block.getType()==Material.NETHER_PORTAL)
+                        block.setType(Material.AIR,false);
+                    changed=true;
+                    continue;
+                }
+                for(Block cell:frame)validatedCells.add(key(cell));
+            }
             if (block.getType() != Material.STRUCTURE_VOID) {
                 if (block.getType() == Material.AIR || block.getType() == Material.CAVE_AIR || block.getType() == Material.VOID_AIR) {
                     block.setType(Material.STRUCTURE_VOID, false);

@@ -65,7 +65,12 @@ for name, digest in hashes.items():
         assert z.testzip() is None
         for file in z.namelist():
             if file.endswith(('.json', '.mcmeta')): json.loads(z.read(file))
-            if file.endswith('.png'): check_png(z.read(file))
+            if file.endswith('.png'):
+                if 'restoration_' in file:
+                    image=z.read(file)
+                    assert image[:8] == b'\x89PNG\r\n\x1a\n'
+                    assert struct.unpack('>II',image[16:24]) == (64,64)
+                else: check_png(z.read(file))
 
 with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
     pack = json.loads(z.read('pack.mcmeta'))['pack']
@@ -82,6 +87,11 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
         item = json.loads(z.read(f'assets/advance_magic/items/{name}.json'))
         assert item['model']['model'] == f'advance_magic:item/{name}'
         assert z.read(f'assets/advance_magic/textures/item/{name}.png') == (ROOT / f'art/upgrades/{name}.png').read_bytes()
+    for name in ('restoration_wand','restoration_core'):
+        item=json.loads(z.read(f'assets/advance_magic/items/{name}.json'))
+        model=json.loads(z.read(f'assets/advance_magic/models/item/{name}.json'))
+        assert item['model']['model'] == f'advance_magic:item/{name}'
+        assert len(model['elements']) >= 10
 
 mapping = json.loads((dist / 'geyser-mappings.json').read_text())
 assert mapping['format_version'] == 2
@@ -90,8 +100,8 @@ assert len(definitions) == len(catalog) == 15
 assert len({row['bedrock_identifier'] for row in definitions}) == 15
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [1, 2, 2]
-    assert manifest['modules'][0]['version'] == [1, 2, 2]
+    assert manifest['header']['version'] == [1, 3, 0]
+    assert manifest['modules'][0]['version'] == [1, 3, 0]
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     for definition, (name, _, _) in zip(definitions, catalog):
@@ -107,13 +117,19 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     for definition, (name, _, _) in zip(mapping['items']['minecraft:heart_of_the_sea'], catalog):
         assert definition['model'] == f'advance_magic:core_{name}'
         assert 'predicate' not in definition
+    for name,material in (('restoration_wand','blaze_rod'),('restoration_core','prismarine_crystals')):
+        definition=mapping['items'][f'minecraft:{material}'][0]
+        assert definition['model'] == f'advance_magic:{name}'
+        assert definition['bedrock_identifier'] == f'advance_magic:{name}'
+        assert f'attachables/{name}.json' in z.namelist()
+        assert f'models/entity/{name}.geo.json' in z.namelist()
 
 guide = (dist / 'advance-magic-guide-th.png').read_bytes()
 assert guide[:8] == b'\x89PNG\r\n\x1a\n' and min(struct.unpack('>II', guide[16:24])) >= 900
 if '--assets-only' not in sys.argv:
-    with zipfile.ZipFile(dist / 'advance-magic-1.0.0.jar') as jar:
+    with zipfile.ZipFile(ROOT.parent / 'dist/advance-magic.jar') as jar:
         for name in (*hashes, 'geyser-mappings.json', 'pack-hashes.json', 'wand-preview.html', 'advance-magic-guide-th.png'):
             assert jar.read('resource-packs/' + name) == (dist / name).read_bytes(), f'Stale/missing embedded asset: {name}'
         assert not any('IntegrationChecks' in name or 'AccountingChecks' in name or name.startswith('net/minecraft/') for name in jar.namelist())
-    assert (dist / 'advance-magic-1.0.0.jar').read_bytes() == (ROOT.parent / 'dist/advance-magic.jar').read_bytes()
+    assert (ROOT / 'target/advance-magic.jar').read_bytes() == (ROOT.parent / 'dist/advance-magic.jar').read_bytes()
 print('PASS: wand/core/upgrade textures, Java models, Geyser model mappings, PNG CRCs, archives, hashes and embedded assets')

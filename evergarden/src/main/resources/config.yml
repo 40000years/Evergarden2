@@ -31,12 +31,17 @@ structures:
   sky-whale:
     enabled: true
     # Each kind has one candidate per 32x32 chunk cell (512x512 blocks).
-    # The new 1% rate yields roughly one of the three structures per 3,000x3,000 blocks.
-    # Existing generated cells keep their old rate; unexplored cells use the new rate.
-    # Both rates and the explored-cell snapshot are saved in world-layout.yml.
+    # Historical rates used before the restoration update. Do not rewrite old layouts.
+    # New cells use restoration.unexplored-chance after the one-time v3 migration.
     spacing-chunks: 32
     chance: 0.01
     unexplored-chance: 0.01
+  restoration:
+    # Initial migration values are persisted in world-layout.yml for seed stability.
+    unexplored-chance: 0.03
+    altar-chance: 0.60
+    # Exactly one Restoration Core per new structure; this is the additional wand roll.
+    repair-wand-chance: 0.10
   spacing-chunks: 18
   chance: 0.85
   minor:
@@ -94,10 +99,9 @@ relics:
   allow-pvp: false
 resource-pack:
   enabled: true
-  # Pinned to the commit containing this release's embedded pack. Empty = bundled CDN URL.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/evergarden/dist/evergarden-java.zip'
-  # Empty = calculate dynamically from embedded ZIP.
-  sha1: ''
+  # Pinned to the published restoration resource pack. Private CDN URLs are preserved.
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/22195e2d658ffb3b79aba23c1f95bfdde8b5af7a/evergarden/dist/evergarden-java.zip'
+  sha1: 'a61e5923248d962bd76181f93e576bd364366a1e'
   required: false
   host:
     enabled: false

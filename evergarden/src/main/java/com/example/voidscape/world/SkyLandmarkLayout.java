@@ -40,11 +40,13 @@ public final class SkyLandmarkLayout {
     private final double chance;
     private final double unexploredChance;
     private final Set<Long> legacyCells;
+    private boolean inheritWhaleHistory;
     private final Map<Long, List<Site>> cache = new ConcurrentHashMap<>();
 
     /** Default: same grid spacing and chance as the whale layout. */
     public SkyLandmarkLayout(long seed, DungeonLayout temples, SkyWhaleLayout whales) {
         this(seed, temples, whales, whales.spacingChunks(), whales.chance(), whales.unexploredChance(), whales.legacyCells());
+        inheritWhaleHistory=true;
     }
 
     public SkyLandmarkLayout(long seed, DungeonLayout temples, SkyWhaleLayout whales,
@@ -103,7 +105,7 @@ public final class SkyLandmarkLayout {
         Random random = new Random(mixed);
 
         // Independent rarity roll – same mechanic as whale
-        double cellChance = legacyCells.contains(key(gx, gz)) ? chance : unexploredChance;
+        double cellChance = inheritWhaleHistory?whales.chanceForCell(gx,gz):legacyCells.contains(key(gx, gz)) ? chance : unexploredChance;
         if (random.nextDouble() >= cellChance) return null;
 
         // 8-chunk safe margin on each side (mirrors SkyWhaleLayout exactly)

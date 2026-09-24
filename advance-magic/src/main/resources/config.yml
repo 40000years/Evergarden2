@@ -46,16 +46,14 @@ follow-up:
 # Bundled pack is automatically offered one tick after joining.
 resource-pack:
   enabled: true
-  # Direct HTTPS CDN URL (Fastly / GitHub). Empty = use bundled CDN URL.
-  # Pinned pack includes the three Sky Whale wand upgrade textures.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/aad426f1b204d3ec2a61b87640a3fffefae5fbc1/advance-magic/dist/advance-magic-java.zip'
-  # Must match the pinned GitHub ZIP; this is intentionally independent of the current JAR's embedded pack.
-  sha1: 'fb436f7d2dd4f0fdf145a63fc2d1796166c5d70e'
+  # Pinned to the published restoration resource pack. Private CDN URLs are preserved.
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/22195e2d658ffb3b79aba23c1f95bfdde8b5af7a/advance-magic/dist/advance-magic-java.zip'
+  sha1: '23227999a6b6ae77eb9aa8b7c4fdbf49ab16ee84'
   required: false
   host:
     enabled: false
     bind: '0.0.0.0'
-    # Local micro-HTTP server (disabled by default in favor of HTTPS port 443 CDN).
+    # Optional self-hosted pack; the GitHub URL above works without opening this port.
     port: 8187
     # Empty = hostname the player joined. Set explicitly for proxies/SRV records.
     public-host: ''

@@ -1,9 +1,9 @@
 name: Evergarden
-version: '3.0.0-e2.4'
+version: '3.0.0-e2.6-restoration-art'
 main: com.example.voidscape.VoidscapePlugin
 api-version: '26.2'
 description: Evergarden - Sky whale, celestial observatory, hanging garden, sanctums and trial vaults.
-softdepend: [floodgate]
+softdepend: [floodgate, advance-magic]
 provides: [Voidscape]
 loadbefore: [Geyser-Spigot]
 commands:

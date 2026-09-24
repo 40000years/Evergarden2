@@ -175,6 +175,13 @@ public final class WandService implements Listener {
         return Math.max(0,item.getItemMeta().getPersistentDataContainer().getOrDefault(durabilityKey,PersistentDataType.INTEGER,maxUses(item)));
     }
     public double damageMultiplier(ItemStack item){return 1.0+damageLevel(item)*.03;}
+    /** Restores plugin uses only; preserves type, upgrades, mastery and all other metadata. */
+    public boolean restore(ItemStack item){
+        if(spell(item)==null||item.getAmount()!=1||usesLeft(item)>=maxUses(item))return false;
+        var meta=item.getItemMeta();
+        meta.getPersistentDataContainer().set(durabilityKey,PersistentDataType.INTEGER,maxUses(item));
+        item.setItemMeta(meta);refreshLore(item);return true;
+    }
     public boolean consumeUse(ItemStack item){
         if(spell(item)==null||usesLeft(item)<=0)return false;
         var meta=item.getItemMeta();meta.getPersistentDataContainer().set(durabilityKey,PersistentDataType.INTEGER,usesLeft(item)-1);item.setItemMeta(meta);refreshLore(item);return true;

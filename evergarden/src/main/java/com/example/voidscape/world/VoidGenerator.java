@@ -15,6 +15,7 @@ public final class VoidGenerator extends ChunkGenerator {
     private final SkyWhaleLayout skyWhales;
     private final SkyLandmarkLayout landmarks;
     private final boolean observatoryEnabled,gardenEnabled;
+    private final RestorationLayout restoration;
     private final SimplexNoiseGenerator islands, detail;
     private final Blueprint[] sanctums={Blueprint.sanctumDark(),Blueprint.sanctumAstral(),Blueprint.sanctumTime()};
     public record Surface(boolean land,int top,int depth,int garden,boolean pond,boolean path) {}
@@ -27,8 +28,13 @@ public final class VoidGenerator extends ChunkGenerator {
     }
     public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
                          SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,null);
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration) {
         this.seed=seed;this.layout=layout;this.skyWhales=skyWhales;this.skyWhaleEnabled=skyWhaleEnabled;
         this.landmarks=landmarks;this.observatoryEnabled=observatoryEnabled;this.gardenEnabled=gardenEnabled;
+        this.restoration=restoration;
         islands=new SimplexNoiseGenerator(seed);detail=new SimplexNoiseGenerator(seed^721945L);
     }
     private boolean landmarkEnabled(SkyLandmarkLayout.Site site){
@@ -141,6 +147,8 @@ public final class VoidGenerator extends ChunkGenerator {
         if(observatoryEnabled||gardenEnabled)
             for(var site:landmarks.cell(Math.floorDiv(cx,landmarks.spacingChunks()),Math.floorDiv(cz,landmarks.spacingChunks())))
                 if(landmarkEnabled(site))site.kind().blueprint().render(data,cx,cz,site.x(),site.z());
+        if(restoration!=null)for(var site:restoration.cell(Math.floorDiv(cx*16,restoration.cellSize()),Math.floorDiv(cz*16,restoration.cellSize())))
+            RestorationShrine.render(data,cx,cz,site);
     }
     private static void put(ChunkData data,int cx,int cz,int x,int y,int z,Material m) {
         int lx=x-cx*16,lz=z-cz*16;

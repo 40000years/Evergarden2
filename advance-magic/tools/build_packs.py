@@ -13,11 +13,14 @@ import struct
 import tempfile
 import zipfile
 import zlib
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT.parent / 'tools'))
+import restoration_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [1, 2, 2]  # Bump whenever Bedrock pack content changes so clients refresh their cache.
+BEDROCK_PACK_VERSION = [1, 3, 0]  # Restoration 3D models and new cache revision.
 
 
 def spells():
@@ -180,6 +183,7 @@ def main():
                 'bedrock_identifier': f'advance_magic:{name}', 'display_name': title,
                 'bedrock_options': {'icon': f'advance_magic.{name}', 'allow_offhand': True, 'display_handheld': False, 'creative_category': 'items'}})
 
+        restoration_assets.register_magic(java, bedrock, atlas, upgrade_definitions)
         write_json(bedrock / 'textures/item_texture.json', {'resource_pack_name': 'advance_magic', 'texture_name': 'atlas.items', 'texture_data': atlas})
         write_json(DIST / 'geyser-mappings.json', {
             'format_version': 2,

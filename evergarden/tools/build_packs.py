@@ -5,8 +5,11 @@ from pathlib import Path
 import crop_assets
 import portal_assets
 import aeternum_assets
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT.parent / 'tools'))
+import restoration_assets
 (ROOT / 'target').mkdir(exist_ok=True)
 BUILD = Path(tempfile.mkdtemp(prefix='evergarden-packs-', dir=ROOT/'target'))
 DIST = ROOT / 'dist'
@@ -304,6 +307,7 @@ def main():
     'bedrock_options':{'icon':'voidscape.'+name,'allow_offhand':True,'display_handheld':base in ('netherite_pickaxe','netherite_sword','bow'),'creative_category':cat}})
  crop_assets.register_crop_assets(java, bedrock, textures, mappings, selectors, write_json, png)
  portal_assets.register(java, bedrock, textures, mappings, selectors, write_json)
+ restoration_assets.register_altars(java, bedrock, textures, mappings, selectors, write_json)
  fallback_overrides = {}
  aeternum_assets.register_aeternum_assets(java, bedrock, textures, mappings, selectors, write_json, fallback_overrides)
  for base,cases in selectors.items():
@@ -373,7 +377,7 @@ def main():
  manifest=json.loads((bedrock/'manifest.json').read_text(encoding='utf8'))
  # Bedrock manifest versions are three bounded integers; keep the hash-derived
  # component below the client parser's safe range while still changing each build.
- version=[3,7,int(digest.hexdigest()[:7],16) % 60000 + 1]
+ version=[3,8,1]
  manifest['header']['version']=version
  for module in manifest['modules']:module['version']=version
  write_json(bedrock/'manifest.json',manifest)

@@ -406,6 +406,34 @@
           "creative_category": "items"
         }
       }
+    ],
+    "minecraft:blaze_rod": [
+      {
+        "type": "definition",
+        "model": "advance_magic:restoration_wand",
+        "bedrock_identifier": "advance_magic:restoration_wand",
+        "display_name": "Wand of Restoration",
+        "bedrock_options": {
+          "icon": "advance_magic.restoration_wand",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      }
+    ],
+    "minecraft:prismarine_crystals": [
+      {
+        "type": "definition",
+        "model": "advance_magic:restoration_core",
+        "bedrock_identifier": "advance_magic:restoration_core",
+        "display_name": "Core of Restoration",
+        "bedrock_options": {
+          "icon": "advance_magic.restoration_core",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "equipment"
+        }
+      }
     ]
   }
 }

@@ -2232,6 +2232,57 @@
           "allow_offhand": false,
           "display_handheld": false
         }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:iron_helmet",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "voidscape:restoration_altar_whale"
+        },
+        "bedrock_identifier": "voidscape:restoration_altar_whale",
+        "display_name": "Restoration Altar / Whale",
+        "bedrock_options": {
+          "icon": "voidscape.restoration_altar_whale",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:iron_helmet",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "voidscape:restoration_altar_garden"
+        },
+        "bedrock_identifier": "voidscape:restoration_altar_garden",
+        "display_name": "Restoration Altar / Garden",
+        "bedrock_options": {
+          "icon": "voidscape.restoration_altar_garden",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "minecraft:iron_helmet",
+        "predicate": {
+          "type": "match",
+          "property": "custom_model_data",
+          "index": 0,
+          "value": "voidscape:restoration_altar_observatory"
+        },
+        "bedrock_identifier": "voidscape:restoration_altar_observatory",
+        "display_name": "Restoration Altar / Observatory",
+        "bedrock_options": {
+          "icon": "voidscape.restoration_altar_observatory",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
       }
     ]
   }

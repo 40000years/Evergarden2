@@ -16,22 +16,13 @@
       },
       "bones": [
         {
-          "name": "anchor",
-          "pivot": [
-            0,
-            0,
-            0
-          ],
-          "binding": "q.item_slot_to_bone_name(context.item_slot)"
-        },
-        {
           "name": "staff_root",
-          "parent": "anchor",
           "pivot": [
             0,
             0,
             0
           ],
+          "binding": "q.item_slot_to_bone_name(context.item_slot)",
           "locators": {
             "tail": [
               0,

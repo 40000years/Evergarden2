@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent / 'tools'))
 import restoration_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [1, 6, 0]  # Correct held attachable transforms for Bedrock.
+BEDROCK_PACK_VERSION = [1, 7, 0]  # Bind the held staff directly to its animated root.
 
 
 def spells():

@@ -1,6 +1,6 @@
 # ไม้เท้าบิน: ใช้งาน ติดตั้ง และผลทดสอบ
 
-โค้ดอยู่ใน Advance Magic รุ่น `1.2.7-flying-staff` แพ็กทั้งสองฝั่งอยู่ใน JAR และ `advance-magic/dist/` ไฟล์แยกใน `advance-magic/art/flying-staff/dist/` เป็นงาน preview ไม่ใช่แพ็กที่เซิร์ฟเวอร์แจก
+โค้ดอยู่ใน Advance Magic รุ่น `1.2.8-flying-staff` แพ็กทั้งสองฝั่งอยู่ใน JAR และ `advance-magic/dist/` ไฟล์แยกใน `advance-magic/art/flying-staff/dist/` เป็นงาน preview ไม่ใช่แพ็กที่เซิร์ฟเวอร์แจก
 
 ## Build บนเครื่องใหม่
 
@@ -29,7 +29,7 @@ cp advance-magic/target/advance-magic.jar dist/advance-magic.jar
 
 ## Resource pack
 
-`advance-magic/tools/build_packs.py` รวมโมเดลและแอนิเมชันเข้ากับแพ็กคทาเดิม โดยรักษา namespace/ไอเทมเดิมไว้ เพิ่ม Geyser mapping ในไฟล์เดียวกัน Bedrock pack version `2.0.0` ใช้ UUID ที่เปลี่ยนในรุ่น `1.9.0` ตัวแสดงผลบน Armor Stand ใช้ฐาน `carved_pumpkin` เพื่อให้ Java แสดง `item_model` แทนโมเดลเกราะ
+`advance-magic/tools/build_packs.py` รวมโมเดลและแอนิเมชันเข้ากับแพ็กคทาเดิม โดยรักษา namespace/ไอเทมเดิมไว้ เพิ่ม Geyser mapping ในไฟล์เดียวกัน Bedrock pack version `2.1.0` ใช้ UUID ที่เปลี่ยนในรุ่น `1.9.0` ตัวแสดงผลบน Armor Stand ใช้ฐาน `carved_pumpkin` เพื่อให้ Java แสดง `item_model` แทนโมเดลเกราะ
 
 มุมถือ Bedrock ของไม้เท้าบินและ Wand/Core of Restoration แปลงจากมุมและตำแหน่ง Java เป็นแกนของ attachable ที่ผูกกับมือ พร้อมเลื่อนจุดยึดให้ตรงโมเดล แพ็กก่อนหน้านี้นำค่าจาก Java ไปใช้ตรง ๆ จึงเห็นคทายื่นผิดมุมและต่ำกว่ามือ การแปลงอิง [เอกสาร attachable ของ Minecraft](https://learn.microsoft.com/en-us/minecraft/creator/documents/attachables?view=minecraft-bedrock-stable) และ [ตัวแปลง Rainbow ของ Geyser](https://github.com/GeyserMC/Rainbow)
 
@@ -40,6 +40,8 @@ cp advance-magic/target/advance-magic.jar dist/advance-magic.jar
 ผู้ใช้รายงานว่าภาพหลังแพ็ก `1.8.0` ยังเหมือนเดิม ตรวจไฟล์จริงในเซิร์ฟเวอร์แล้วพบ JAR และ Geyser pack ตรงกับ `1.8.0` ทุกไบต์ โดย Geyser เริ่มหลังปลั๊กอินติดตั้งแพ็ก รุ่น `1.9.0` เปลี่ยน UUID ของแพ็กเพื่อให้ Bedrock ดาวน์โหลดชุดใหม่แน่นอน และย้าย cube ของโมเดลที่ถือทั้งหมดมาไว้บน bone ที่ผูกมือและแอนิเมชันท่าถือโดยตรง ผลใน client ยังต้องยืนยันจากภาพจริง
 
 ภาพจากแพ็ก `1.9.0` ยืนยันว่าโมเดลที่ถือเปลี่ยนแล้ว แต่ในมุมบุคคลที่หนึ่งคทาใหญ่และยื่นข้ามจอ มุมบุคคลที่สามอยู่แถวเท้า รุ่น `2.0.0` หมุนและย่อ geometry ของคทาที่ถือให้ใช้แกนและจุดหมุนแบบ [Trident ของ Mojang](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/models/entity/trident.geo.json) แล้วใช้ [ท่าถือ Trident](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/animations/trident.animation.json) เป็นต้นแบบแยกตามมุมกล้อง Java และโมเดลคทาที่เรียกออกมาไม่เปลี่ยน
+
+ภาพจากแพ็ก `2.0.0` เวลา 22:30 ยืนยันว่าหัวคริสตัลชี้ลงและหลุดขอบล่างจอ ขณะที่ท้ายด้ามชี้ขึ้น จุดหมุน Y 24 อยู่ในหัวคริสตัล ส่วนกลางด้ามจับสีน้ำเงินอยู่ที่ Y 11.05205 รุ่น `2.1.0` หมุน geometry ที่ถือ 180 องศารอบ X แล้วเลื่อนกลางด้ามจับไปที่ pivot `[0,24,0]` โดยใช้ `(x,y,z) -> (x,35.05205-y,-z)` ท่าบุคคลที่หนึ่งคงเดิมเพื่อกลับหัวกับท้ายโดยอิงภาพจริง ส่วนบุคคลที่สามชดเชยมุม X จาก 97 เป็น -83 องศาเพื่อรักษาทิศเดิมหลังกลับ geometry พร้อมย้ายจุดจับไปที่ด้าม เพิ่ม locator `grip` เพื่อระบุจุดยึดให้ชัดเจน การจัดท่านี้ยังต้องยืนยันจาก Bedrock จริงทั้งสองมุมกล้อง
 
 Java เปิด bundled HTTP pack host บน TCP 8187 เป็นค่าเริ่มต้น เพราะ URL ของแพ็กเก่าที่เคยตรึงไว้ยังไม่มีไม้เท้า ระบบย้าย config ที่ชี้ URL ทางการรุ่นเก่ามาใช้ bundled host อัตโนมัติ และคำนวณ SHA-1 จาก ZIP ที่อยู่ใน JAR จริง URL ที่แอดมินกำหนดเองยังคงเดิม: ต้องอัปโหลด ZIP รุ่นใหม่นี้และตั้ง SHA-1 ให้ตรงเอง มิฉะนั้น Java จะเห็นภาพเก่า
 

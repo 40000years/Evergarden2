@@ -30,7 +30,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     @Override public void onLoad() {
         saveDefaultConfig();
         if(FlyingStaffService.upgradeSpeedConfig(getConfig()))
-            getLogger().info("Updated the previous default flying-staff speeds; custom speeds were preserved.");
+            getLogger().info("Updated flying-staff defaults and Turbo to 4x; custom base speeds were preserved.");
         getConfig().options().copyDefaults(true);saveConfig();
         packs=new ResourcePackService(this);
         try {packs.extract();}

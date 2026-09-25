@@ -46,11 +46,11 @@ follow-up:
 # Bundled pack is automatically offered one tick after joining.
 flying-staff:
   enabled: true
-  # Existing default speeds are upgraded once; custom values are kept.
-  speed-version: 2
-  horizontal-speed: 0.27
-  vertical-speed: 0.16
-  turbo-multiplier: 1.8
+  # Old default Turbo is the new normal speed; custom base speeds are kept.
+  speed-version: 3
+  horizontal-speed: 0.486
+  vertical-speed: 0.288
+  turbo-multiplier: 4.0
   mana-per-second: 2.0
   anticheat:
     # Permission is granted only while riding and removed on dismount/quit.

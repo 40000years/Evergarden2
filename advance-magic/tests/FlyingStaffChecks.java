@@ -51,8 +51,9 @@ public final class FlyingStaffChecks extends JavaPlugin {
         legacyConfig.set("flying-staff.horizontal-speed",.18);
         legacyConfig.set("flying-staff.vertical-speed",.12);
         check(com.example.advancemagic.item.FlyingStaffService.upgradeSpeedConfig(legacyConfig)
-            &&legacyConfig.getDouble("flying-staff.horizontal-speed")==.27
-            &&legacyConfig.getDouble("flying-staff.vertical-speed")==.16,"previous default speeds migrate once");
+            &&legacyConfig.getDouble("flying-staff.horizontal-speed")==.486
+            &&legacyConfig.getDouble("flying-staff.vertical-speed")==.288
+            &&legacyConfig.getDouble("flying-staff.turbo-multiplier")==4.0,"previous default speeds migrate once");
         check(!com.example.advancemagic.item.FlyingStaffService.upgradeSpeedConfig(legacyConfig),"speed migration does not repeat");
         var customConfig=new org.bukkit.configuration.file.YamlConfiguration();
         customConfig.set("flying-staff.horizontal-speed",.31);
@@ -63,8 +64,8 @@ public final class FlyingStaffChecks extends JavaPlugin {
         try{check(Files.readString(Path.of("server.properties")).contains("allow-flight=false"),"server flight stays disabled");}
         catch(Exception error){throw new RuntimeException(error);}
         World world=Bukkit.getWorlds().getFirst();
-        for(int x=-1;x<=1;x++)for(int z=-1;z<=1;z++)world.getChunkAt(x,z).setForceLoaded(true);
-        for(int x=-8;x<=8;x++)for(int z=-8;z<=8;z++){
+        for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)world.getChunkAt(x,z).setForceLoaded(true);
+        for(int x=-24;x<=24;x++)for(int z=-24;z<=24;z++){
             world.getBlockAt(x,99,z).setType(Material.STONE);
             for(int y=100;y<107;y++)world.getBlockAt(x,y,z).setType(Material.AIR);
         }

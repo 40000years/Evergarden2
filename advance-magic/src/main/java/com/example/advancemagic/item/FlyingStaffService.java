@@ -29,6 +29,10 @@ import java.util.*;
 /** One server-steered mount per player. The rider never gets Bukkit flight. */
 public final class FlyingStaffService implements Listener, AutoCloseable {
     private static final String BASE_MODEL="flying_staff";
+    private static final double MAX_HORIZONTAL_SPEED=2.4;
+    private static final double MAX_VERTICAL_SPEED=1.4;
+    private static final double MOVE_STEP=.25;
+    private static final double MAX_TERRAIN_CLIMB=1.0;
     private final AdvanceMagicPlugin plugin;
     private final NamespacedKey itemKey, entityKey, recipeKey;
     private final Map<UUID,Session> sessions=new HashMap<>();
@@ -43,6 +47,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         int age=0;
         boolean lowManaWarning;
         boolean manualTurbo;
+        final Vector motion=new Vector();
         PermissionAttachment exemption;
         Session(Player player,ArmorStand stand){this.owner=player.getUniqueId();this.stand=stand;this.returnLocation=player.getLocation();}
     }
@@ -54,12 +59,15 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         recipeKey=new NamespacedKey(plugin,"flying_staff");
     }
     public static boolean upgradeSpeedConfig(FileConfiguration config) {
-        if(config.contains("flying-staff.speed-version",true))return false;
-        if(Double.compare(config.getDouble("flying-staff.horizontal-speed",.18),.18)==0)
-            config.set("flying-staff.horizontal-speed",.27);
-        if(Double.compare(config.getDouble("flying-staff.vertical-speed",.12),.12)==0)
-            config.set("flying-staff.vertical-speed",.16);
-        config.set("flying-staff.speed-version",2);
+        if(config.getInt("flying-staff.speed-version",0)>=3)return false;
+        double horizontal=config.getDouble("flying-staff.horizontal-speed",.27);
+        double vertical=config.getDouble("flying-staff.vertical-speed",.16);
+        if(Double.compare(horizontal,.18)==0||Double.compare(horizontal,.27)==0)
+            config.set("flying-staff.horizontal-speed",.486);
+        if(Double.compare(vertical,.12)==0||Double.compare(vertical,.16)==0)
+            config.set("flying-staff.vertical-speed",.288);
+        config.set("flying-staff.turbo-multiplier",4.0);
+        config.set("flying-staff.speed-version",3);
         return true;
     }
     public ItemStack create() {
@@ -169,6 +177,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         if(plugin.mana().account(player).manaExact()<=0){player.sendMessage(ChatColor.RED+"มานาไม่พอสำหรับขี่ไม้เท้า");return;}
         if(session.stand.addPassenger(player)){
             session.phase=Phase.FLIGHT;session.age=0;session.lowManaWarning=false;session.manualTurbo=false;
+            session.motion.zero();
             session.stand.getEquipment().setHelmet(image("flight",0),true);
             exempt(player,session);
             player.setFallDistance(0);
@@ -207,7 +216,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         }
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,100,0,true,false,false));
         unexempt(player,session);
-        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;
+        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;session.motion.zero();
         session.stand.getEquipment().setHelmet(image("idle",0),true);
     }
     @EventHandler public void quit(PlayerQuitEvent event){closeOwner(event.getPlayer());}
@@ -269,12 +278,51 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         if(controls.isRight())target.add(side);
         if(controls.isLeft())target.subtract(side);
         if(target.lengthSquared()>1)target.normalize();
-        double multiplier=turbo(player,session)?Math.clamp(plugin.getConfig().getDouble("flying-staff.turbo-multiplier",1.8),1,2.5):1;
-        target.multiply(Math.min(Math.clamp(plugin.getConfig().getDouble("flying-staff.horizontal-speed",.27),.03,.4)*multiplier,.65));
-        double vertical=Math.min(Math.clamp(plugin.getConfig().getDouble("flying-staff.vertical-speed",.16),.03,.25)*multiplier,.35);
+        double multiplier=turbo(player,session)?Math.clamp(plugin.getConfig().getDouble("flying-staff.turbo-multiplier",4),1,4):1;
+        target.multiply(Math.min(Math.clamp(plugin.getConfig().getDouble("flying-staff.horizontal-speed",.486),.03,.6)*multiplier,MAX_HORIZONTAL_SPEED));
+        double vertical=Math.min(Math.clamp(plugin.getConfig().getDouble("flying-staff.vertical-speed",.288),.03,.35)*multiplier,MAX_VERTICAL_SPEED);
         if(controls.isJump())target.setY(vertical);
         else if(controls.isForward()&&player.getLocation().getPitch()>35)target.setY(-vertical);
         return target;
+    }
+    private void move(Session session,Player player,Vector motion) {
+        ArmorStand stand=session.stand;
+        Location start=stand.getLocation();
+        Location position=start.clone();
+        Vector requested=motion.clone();
+        double terrainClimb=0;
+        int steps=Math.max(1,(int)Math.ceil(Math.max(Math.max(Math.abs(motion.getX()),Math.abs(motion.getY())),
+            Math.abs(motion.getZ()))/MOVE_STEP));
+        Vector step=motion.clone().multiply(1.0/steps);
+        for(int i=0;i<steps;i++) {
+            Location full=position.clone().add(step);
+            if(clear(full)){position=full;continue;}
+            // Low flight should follow a one-block rise in the ground instead
+            // of repeatedly stopping against the edge of the next block.
+            if(step.getY()==0&&(step.getX()!=0||step.getZ()!=0)&&nearGround(position)) {
+                boolean steppedUp=false;
+                for(double rise=MOVE_STEP;rise<=MAX_TERRAIN_CLIMB-terrainClimb+.0001;rise+=MOVE_STEP) {
+                    Location above=position.clone().add(0,rise,0);
+                    if(!clear(above))break;
+                    Location over=above.clone().add(step.getX(),0,step.getZ());
+                    if(clear(over)){
+                        position=over;terrainClimb+=rise;steppedUp=true;break;
+                    }
+                }
+                if(steppedUp)continue;
+            }
+            if(step.getX()!=0&&clear(position.clone().add(step.getX(),0,0)))position.add(step.getX(),0,0);
+            if(step.getZ()!=0&&clear(position.clone().add(0,0,step.getZ())))position.add(0,0,step.getZ());
+            if(step.getY()!=0&&clear(position.clone().add(0,step.getY(),0)))position.add(0,step.getY(),0);
+        }
+        Vector actual=position.toVector().subtract(start.toVector());
+        session.motion.setX(actual.getX());session.motion.setZ(actual.getZ());
+        session.motion.setY(requested.getY()==0?0:actual.getY());
+        if(actual.lengthSquared()>0) {
+            position.setYaw(player.getLocation().getYaw());position.setPitch(0);
+            if(!stand.teleport(position,PlayerTeleportEvent.TeleportCause.PLUGIN,TeleportFlag.EntityState.RETAIN_PASSENGERS))
+                session.motion.zero();
+        } else stand.setRotation(player.getLocation().getYaw(),0);
     }
     public void tick() {
         for(Session session:new ArrayList<>(sessions.values())) {
@@ -295,7 +343,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
                     if(session.age%8==0)stand.getEquipment().setHelmet(image("idle",(session.age/8)%8),true);
                 }
                 case FLIGHT -> {
-                    if(player.getVehicle()!=stand){unexempt(player,session);session.phase=Phase.IDLE;session.age=0;break;}
+                    if(player.getVehicle()!=stand){unexempt(player,session);session.phase=Phase.IDLE;session.age=0;session.motion.zero();break;}
                     player.setFallDistance(0);
                     if(session.age%20==0){
                         var account=plugin.mana().account(player);
@@ -308,22 +356,23 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
                         }
                         if(account.manaExact()<=0){session.phase=Phase.LANDING;session.age=0;player.sendMessage(ChatColor.YELLOW+"มานาหมด ไม้เท้ากำลังลงจอด");break;}
                     }
-                    Vector velocity=input(player,session);
-                    if(velocity.lengthSquared()>0) {
-                        Location next=stand.getLocation().add(velocity);
-                        next.setYaw(player.getLocation().getYaw());next.setPitch(0);
-                        if(clear(next))stand.teleport(next,PlayerTeleportEvent.TeleportCause.PLUGIN,TeleportFlag.EntityState.RETAIN_PASSENGERS);
-                    } else stand.setRotation(player.getLocation().getYaw(),0);
+                    Vector target=input(player,session);
+                    // Ease abrupt key and joystick changes, then sweep the fast path in
+                    // short steps so Turbo cannot skip a wall between endpoints.
+                    double response=target.lengthSquared()>0?.4:.8;
+                    session.motion.multiply(1-response).add(target.multiply(response));
+                    if(session.motion.lengthSquared()<.0001)session.motion.zero();
+                    move(session,player,session.motion);
                     if(session.age%4==0)stand.getEquipment().setHelmet(image("flight",(session.age/4)%8),true);
                     if(session.age%5==0)stand.getWorld().spawnParticle(Particle.END_ROD,stand.getLocation().add(0,.9,0),2,.1,.08,.1,.004);
                 }
                 case LANDING -> {
-                    if(player.getVehicle()!=stand){unexempt(player,session);session.phase=Phase.IDLE;session.age=0;break;}
+                    if(player.getVehicle()!=stand){unexempt(player,session);session.phase=Phase.IDLE;session.age=0;session.motion.zero();break;}
                     player.setFallDistance(0);
                     if(nearGround(stand.getLocation())){
                         unexempt(player,session);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,100,0,true,false,false));
-                        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;
+                        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;session.motion.zero();
                         player.leaveVehicle();
                         stand.setVelocity(new Vector());
                         stand.getEquipment().setHelmet(image("idle",0),true);

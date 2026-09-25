@@ -1,6 +1,6 @@
 # ไม้เท้าบิน: ใช้งาน ติดตั้ง และผลทดสอบ
 
-โค้ดอยู่ใน Advance Magic รุ่น `1.2.2-flying-staff` แพ็กทั้งสองฝั่งอยู่ใน JAR และ `advance-magic/dist/` ไฟล์แยกใน `advance-magic/art/flying-staff/dist/` เป็นงาน preview ไม่ใช่แพ็กที่เซิร์ฟเวอร์แจก
+โค้ดอยู่ใน Advance Magic รุ่น `1.2.3-flying-staff` แพ็กทั้งสองฝั่งอยู่ใน JAR และ `advance-magic/dist/` ไฟล์แยกใน `advance-magic/art/flying-staff/dist/` เป็นงาน preview ไม่ใช่แพ็กที่เซิร์ฟเวอร์แจก
 
 ## Build บนเครื่องใหม่
 
@@ -29,7 +29,9 @@ cp advance-magic/target/advance-magic.jar dist/advance-magic.jar
 
 ## Resource pack
 
-`advance-magic/tools/build_packs.py` รวมโมเดลและแอนิเมชันเข้ากับแพ็กคทาเดิม โดยรักษา namespace/ไอเทมเดิมไว้ เพิ่ม Geyser mapping ในไฟล์เดียวกัน Bedrock pack version `1.5.0` ขยับจาก `1.4.0` เพื่อบังคับ client รับของใหม่ ตัวแสดงผลบน Armor Stand เปลี่ยนฐานจาก `iron_helmet` เป็น `carved_pumpkin` เพื่อให้ Java แสดง `item_model` แทนโมเดลเกราะ
+`advance-magic/tools/build_packs.py` รวมโมเดลและแอนิเมชันเข้ากับแพ็กคทาเดิม โดยรักษา namespace/ไอเทมเดิมไว้ เพิ่ม Geyser mapping ในไฟล์เดียวกัน Bedrock pack version `1.6.0` ขยับจาก `1.5.0` เพื่อให้ client รับมุมถือใหม่ ตัวแสดงผลบน Armor Stand ใช้ฐาน `carved_pumpkin` เพื่อให้ Java แสดง `item_model` แทนโมเดลเกราะ
+
+มุมถือ Bedrock ของไม้เท้าบินและ Wand/Core of Restoration แปลงจากมุมและตำแหน่ง Java เป็นแกนของ attachable ที่ผูกกับมือ พร้อมเลื่อนจุดยึดให้ตรงโมเดล แพ็กก่อนหน้านี้นำค่าจาก Java ไปใช้ตรง ๆ จึงเห็นคทายื่นผิดมุมและต่ำกว่ามือ การแปลงอิง [เอกสาร attachable ของ Minecraft](https://learn.microsoft.com/en-us/minecraft/creator/documents/attachables?view=minecraft-bedrock-stable) และ [ตัวแปลง Rainbow ของ Geyser](https://github.com/GeyserMC/Rainbow)
 
 Java เปิด bundled HTTP pack host บน TCP 8187 เป็นค่าเริ่มต้น เพราะ URL ของแพ็กเก่าที่เคยตรึงไว้ยังไม่มีไม้เท้า ระบบย้าย config ที่ชี้ URL ทางการรุ่นเก่ามาใช้ bundled host อัตโนมัติ และคำนวณ SHA-1 จาก ZIP ที่อยู่ใน JAR จริง URL ที่แอดมินกำหนดเองยังคงเดิม: ต้องอัปโหลด ZIP รุ่นใหม่นี้และตั้ง SHA-1 ให้ตรงเอง มิฉะนั้น Java จะเห็นภาพเก่า
 

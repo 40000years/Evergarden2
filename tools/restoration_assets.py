@@ -100,7 +100,7 @@ def asset(java,bedrock,namespace,name,kind,theme):
     for start,end,color in geometry(kind):
         u=color*2+.25
         elements.append({'from':start,'to':end,'faces':{f:{'uv':[u,.25,u+1.5,1.75],'texture':'#palette'} for f in ['north','south','east','west','up','down']}})
-        origin=[start[0]-8,start[1]+24,start[2]-8] if kind.startswith('altar') else [start[0]-8,start[1],start[2]-8]
+        origin=[start[0]-8,start[1]+24,start[2]-8] if kind.startswith('altar') else [8-end[0],start[1],start[2]-8]
         cubes.append({'origin':origin,'size':[end[i]-start[i] for i in range(3)],
                       'uv':{f:{'uv':[color*8+1,1],'uv_size':[6,6]} for f in ['north','south','east','west','up','down']}})
     display={
@@ -114,7 +114,13 @@ def asset(java,bedrock,namespace,name,kind,theme):
     write(java/f'assets/{namespace}/models/item/{name}.json',{'textures':{'palette':tex,'particle':tex},'elements':elements,'display':display})
     write(java/f'assets/{namespace}/items/{name}.json',{'model':{'type':'minecraft:model','model':f'{namespace}:item/{name}'}})
     worn=kind.startswith('altar')
-    bone={'name':'head' if worn else 'restoration','pivot':[0,24,0] if worn else [0,0,0],'cubes':cubes}
+    if worn:
+        pivot=[0,24,0]
+    else:
+        lower=[min(cube['origin'][axis] for cube in cubes) for axis in range(3)]
+        upper=[max(cube['origin'][axis]+cube['size'][axis] for cube in cubes) for axis in range(3)]
+        pivot=[round((lower[axis]+upper[axis])/2,4) for axis in range(3)]
+    bone={'name':'head' if worn else 'restoration','pivot':pivot,'cubes':cubes}
     if not worn: bone['binding']="q.item_slot_to_bone_name(context.item_slot)"
     write(bedrock/f'models/entity/{name}.geo.json',{'format_version':'1.16.0','minecraft:geometry':[{
         'description':{'identifier':f'geometry.{namespace}.{name}','texture_width':64,'texture_height':64,
@@ -123,10 +129,25 @@ def asset(java,bedrock,namespace,name,kind,theme):
         'textures':{'default':f'textures/items/{name}_palette'},'geometry':{'default':f'geometry.{namespace}.{name}'},
         'render_controllers':['controller.render.restoration']}
     if not worn:
-        animation=f'animation.{namespace}.{name}.hold'
-        write(bedrock/f'animations/{name}.json',{'format_version':'1.8.0','animations':{animation:{'loop':True,'bones':{
-            'restoration':{'rotation':[0,0,'context.is_first_person ? -20 : 0'],'position':[0,1,0],'scale':.65}}}}})
-        desc['animations']={'hold':animation};desc['scripts']={'animate':['hold']}
+        first=display['firstperson_righthand']
+        third=display['thirdperson_righthand']
+        first_rotation=first['rotation'];first_translation=first['translation']
+        third_rotation=third['rotation'];third_translation=third['translation']
+        animations={
+            'hold_first_person':{'rotation':[-90+first_rotation[1],-first_rotation[2],first_rotation[0]],
+                                 'position':[-first_translation[1],12.5+first_translation[2],first_translation[0]],
+                                 'scale':first['scale']},
+            'hold_third_person':{'rotation':[90,-third_rotation[2],-third_rotation[1]],
+                                 'position':[-third_translation[0],12.5+third_translation[2],-third_translation[1]],
+                                 'scale':third['scale']},
+        }
+        write(bedrock/f'animations/{name}.json',{'format_version':'1.8.0','animations':{
+            f'animation.{namespace}.{name}.{key}':{'loop':True,'bones':{'restoration':value}}
+            for key,value in animations.items()}})
+        desc['animations']={key:f'animation.{namespace}.{name}.{key}' for key in animations}
+        desc['scripts']={'animate':[
+            {'hold_first_person':'context.is_first_person'},
+            {'hold_third_person':'!context.is_first_person'}]}
     write(bedrock/f'attachables/{name}.json',{'format_version':'1.10.0','minecraft:attachable':{'description':desc}})
     write(bedrock/'render_controllers/restoration.json',{'format_version':'1.8.0','render_controllers':{
         'controller.render.restoration':{'geometry':'Geometry.default','materials':[{'*':'Material.default'}],'textures':['Texture.default']}}})

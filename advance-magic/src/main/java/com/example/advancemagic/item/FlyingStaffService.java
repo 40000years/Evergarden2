@@ -43,13 +43,16 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         final UUID owner;
         final ArmorStand stand;
         final Location returnLocation;
+        final boolean bedrock;
         Phase phase=Phase.SUMMON;
         int age=0;
         boolean lowManaWarning;
         boolean manualTurbo;
         final Vector motion=new Vector();
         PermissionAttachment exemption;
-        Session(Player player,ArmorStand stand){this.owner=player.getUniqueId();this.stand=stand;this.returnLocation=player.getLocation();}
+        Session(Player player,ArmorStand stand,boolean bedrock){
+            this.owner=player.getUniqueId();this.stand=stand;this.returnLocation=player.getLocation();this.bedrock=bedrock;
+        }
     }
 
     public FlyingStaffService(AdvanceMagicPlugin plugin) {
@@ -158,7 +161,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
             a.getEquipment().setHelmet(image("summon",0),true);
             for(ArmorStand.LockType lock:ArmorStand.LockType.values())a.addEquipmentLock(EquipmentSlot.HEAD,lock);
         });
-        Session session=new Session(player,stand);
+        Session session=new Session(player,stand,plugin.packs().isBedrock(player));
         sessions.put(player.getUniqueId(),session);byEntity.put(stand.getUniqueId(),session);
         target.getWorld().playSound(target,Sound.BLOCK_AMETHYST_BLOCK_RESONATE,.7f,1.5f);
         target.getWorld().spawnParticle(Particle.END_ROD,target.clone().add(0,1,0),8,.4,.3,.4,.01);
@@ -335,12 +338,13 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
             session.age++;
             switch(session.phase) {
                 case SUMMON -> {
-                    stand.getEquipment().setHelmet(image("summon",Math.min(6,session.age/2)),true);
+                    if(!session.bedrock)stand.getEquipment().setHelmet(image("summon",Math.min(6,session.age/2)),true);
                     if(session.age>=12){session.phase=Phase.IDLE;session.age=0;stand.getEquipment().setHelmet(image("idle",0),true);}
                 }
                 case IDLE -> {
                     stand.setVelocity(new Vector());
-                    if(session.age%8==0)stand.getEquipment().setHelmet(image("idle",(session.age/8)%8),true);
+                    if(!session.bedrock&&session.age%8==0)
+                        stand.getEquipment().setHelmet(image("idle",(session.age/8)%8),true);
                 }
                 case FLIGHT -> {
                     if(player.getVehicle()!=stand){unexempt(player,session);session.phase=Phase.IDLE;session.age=0;session.motion.zero();break;}
@@ -363,7 +367,10 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
                     session.motion.multiply(1-response).add(target.multiply(response));
                     if(session.motion.lengthSquared()<.0001)session.motion.zero();
                     move(session,player,session.motion);
-                    if(session.age%4==0)stand.getEquipment().setHelmet(image("flight",(session.age/4)%8),true);
+                    // Bedrock animates this attachable locally. Re-equipping every
+                    // four ticks restarts its animation and makes it flash.
+                    if(!session.bedrock&&session.age%4==0)
+                        stand.getEquipment().setHelmet(image("flight",(session.age/4)%8),true);
                     if(session.age%5==0)stand.getWorld().spawnParticle(Particle.END_ROD,stand.getLocation().add(0,.9,0),2,.1,.08,.1,.004);
                 }
                 case LANDING -> {
@@ -390,7 +397,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
                 }
                 case DISMISS -> {
                     stand.setVelocity(new Vector());
-                    stand.getEquipment().setHelmet(image("dismiss",Math.min(4,session.age/2)),true);
+                    if(!session.bedrock)stand.getEquipment().setHelmet(image("dismiss",Math.min(4,session.age/2)),true);
                     if(session.age>=8)closeSession(session);
                 }
             }

@@ -115,7 +115,7 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         config.set("resource-pack.host.enabled",true);
         return true;
     }
-    private boolean bedrock(Player player) {
+    public boolean isBedrock(Player player) {
         for(String name:List.of("org.geysermc.floodgate.api.FloodgateApi","org.geysermc.geyser.api.GeyserApi")) {
             try {
                 Class<?> type=Class.forName(name);boolean floodgate=name.contains("floodgate");
@@ -148,7 +148,7 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         }catch(IllegalArgumentException e){return "";}
     }
     public void offer(Player player) {
-        if(!plugin.getConfig().getBoolean("resource-pack.enabled",true)||bedrock(player))return;
+        if(!plugin.getConfig().getBoolean("resource-pack.enabled",true)||isBedrock(player))return;
         String url=url(player);
         if(url.isEmpty()) {statuses.put(player.getUniqueId(),"NOT_OFFERED: configure the public host/URL");return;}
         String digest=plugin.getConfig().getString("resource-pack.sha1","").trim();

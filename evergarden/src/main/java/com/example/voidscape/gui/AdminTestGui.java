@@ -80,9 +80,7 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         inv.setItem(12, plugin.relics().createScrollLimitBreak(LimitBreakType.EFFICIENCY));
         inv.setItem(13, plugin.relics().createScrollLimitBreak(LimitBreakType.FORTUNE));
         inv.setItem(14, plugin.relics().createScrollLimitBreak(LimitBreakType.LOOTING));
-        inv.setItem(15, createActionItem(Material.BLAZE_ROD, "§d§l✨ คลังคทาเวทมนตร์ (Wands Showcase)",
-            List.of("§eคลิกซ้าย: §aเปิดคลังคทาและแกนคทา 15 ชนิด (Showcase GUI)",
-                    "§dShift+คลิก: §7รับ Magic Wand ครบทั้ง 15 สายลงกระเป๋าทันที")));
+        inv.setItem(15, createFlyingStaffMenuItem());
         inv.setItem(16, createActionItem(Material.CHEST, "§b§l📦 รับ Limit Break x5 ทุกชนิด",
             List.of("§7คลิกเพื่อรับคัมภีร์ Limit Break ทุกสาย", "§7สายละ 5 เล่มลงในกระเป๋า")));
         inv.setItem(17, createActionItem(Material.BOOKSHELF, "§d§l📜 รับ Unique Enchants ครบ 22 ใบ",
@@ -276,7 +274,7 @@ public final class AdminTestGui implements InventoryHolder, Listener {
                 player.playSound(spawnLoc, Sound.ENTITY_WITHER_SPAWN, 0.8f, 1.0f);
                 plugin.message(player, "เสกบอสทดสอบ (Shadow Overlord) ตรงหน้าแล้ว!");
             }
-            case 15 -> { // 15 Magic Wands & Showcase
+            case 15 -> { // Flying Staff, Magic Wands & Showcase
                 if (event.isShiftClick()) {
                     for (RelicService.MagicCore c : RelicService.MAGIC_CORES) {
                         ItemStack wand = com.example.voidscape.command.VoidCommand.createWandViaAdvanceMagic(c.id());
@@ -284,10 +282,19 @@ public final class AdminTestGui implements InventoryHolder, Listener {
                     }
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.9f, 1.2f);
                     plugin.message(player, "ได้รับ Ancient Magic Wands ครบทั้ง 15 เล่ม!");
-                } else {
+                } else if (event.isRightClick()) {
                     if (plugin.wandGui() != null) {
                         plugin.wandGui().open(player);
                     }
+                } else {
+                    ItemStack staff = createFlyingStaff();
+                    if (staff == null) {
+                        plugin.message(player, "ต้องเปิดใช้งาน Advance Magic ก่อนจึงจะรับไม้เท้าบินได้");
+                        return;
+                    }
+                    giveOrDrop(player, staff);
+                    player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.9f, 1.2f);
+                    plugin.message(player, "ได้รับไม้เท้าบินแล้ว: คลิกขวาเรียก แล้วคลิกที่ไม้เท้าเพื่อขึ้นขี่");
                 }
             }
             case 50 -> { // 15 Magic Cores
@@ -352,6 +359,32 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         ItemStack item = new ItemStack(mat);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(Component.text(" "));
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    private ItemStack createFlyingStaff() {
+        org.bukkit.plugin.Plugin magicPlugin = Bukkit.getPluginManager().getPlugin("advance-magic");
+        if (magicPlugin instanceof com.example.advancemagic.AdvanceMagicPlugin magic
+                && magic.isEnabled() && magic.flyingStaff() != null) {
+            return magic.flyingStaff().create();
+        }
+        return null;
+    }
+
+    private ItemStack createFlyingStaffMenuItem() {
+        ItemStack item = createFlyingStaff();
+        if (item == null) {
+            return createActionItem(Material.BARRIER, ChatColor.RED + "ยังใช้ไม้เท้าบินไม่ได้",
+                    List.of(ChatColor.GRAY + "ต้องเปิดใช้งาน Advance Magic ก่อน"));
+        }
+        ItemMeta meta = item.getItemMeta();
+        List<String> lore = meta.hasLore() ? new ArrayList<>(meta.getLore()) : new ArrayList<>();
+        lore.add("");
+        lore.add(ChatColor.YELLOW + "คลิกซ้าย: รับไม้เท้าบิน");
+        lore.add(ChatColor.YELLOW + "คลิกขวา: เปิดคลังคทาเวทมนตร์");
+        lore.add(ChatColor.YELLOW + "Shift+คลิก: รับคทาทั้ง 15 สาย");
+        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }

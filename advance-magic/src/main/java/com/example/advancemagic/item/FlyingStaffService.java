@@ -4,6 +4,7 @@ import com.example.advancemagic.AdvanceMagicPlugin;
 import io.papermc.paper.entity.TeleportFlag;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -41,6 +42,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         Phase phase=Phase.SUMMON;
         int age=0;
         boolean lowManaWarning;
+        boolean manualTurbo;
         PermissionAttachment exemption;
         Session(Player player,ArmorStand stand){this.owner=player.getUniqueId();this.stand=stand;this.returnLocation=player.getLocation();}
     }
@@ -51,12 +53,23 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         entityKey=new NamespacedKey(plugin,"flying_staff_entity");
         recipeKey=new NamespacedKey(plugin,"flying_staff");
     }
+    public static boolean upgradeSpeedConfig(FileConfiguration config) {
+        if(config.contains("flying-staff.speed-version",true))return false;
+        if(Double.compare(config.getDouble("flying-staff.horizontal-speed",.18),.18)==0)
+            config.set("flying-staff.horizontal-speed",.27);
+        if(Double.compare(config.getDouble("flying-staff.vertical-speed",.12),.12)==0)
+            config.set("flying-staff.vertical-speed",.16);
+        config.set("flying-staff.speed-version",2);
+        return true;
+    }
     public ItemStack create() {
         ItemStack item=new ItemStack(Material.BLAZE_ROD);
         var meta=item.getItemMeta();
         meta.setDisplayName(ChatColor.GOLD+"✦ "+ChatColor.AQUA+"ไม้เท้าบิน");
         meta.setLore(List.of(ChatColor.GRAY+"คลิกขวาเพื่อเรียกไม้เท้า",ChatColor.GRAY+"คลิกที่ไม้เท้าเพื่อขึ้นขี่ · ย่องเพื่อลง",
-            ChatColor.GRAY+"กระโดดขึ้น · มองลงแล้วเดินหน้าเพื่อลงระดับ",ChatColor.AQUA+"ขณะขี่ใช้มานา 2 ต่อวินาที"));
+            ChatColor.GRAY+"กระโดดขึ้น · มองลงแล้วเดินหน้าเพื่อลงระดับ",
+            ChatColor.YELLOW+"Sprint เพื่อเร่ง · คลิกขวาขณะขี่เพื่อเปิด Turbo ค้าง",
+            ChatColor.AQUA+"ขณะขี่ใช้มานา 2 ต่อวินาที"));
         meta.setItemModel(new NamespacedKey("advance_magic",BASE_MODEL));
         meta.getPersistentDataContainer().set(itemKey,PersistentDataType.BYTE,(byte)1);
         item.setItemMeta(meta);
@@ -84,9 +97,17 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         Session session=sessions.get(player.getUniqueId());
         return session!=null&&player.getVehicle()==session.stand;
     }
+    public boolean toggleTurbo(Player player) {
+        Session session=sessions.get(player.getUniqueId());
+        if(session==null||player.getVehicle()!=session.stand)return false;
+        session.manualTurbo=!session.manualTurbo;
+        return session.manualTurbo;
+    }
     public boolean isDisplay(Entity entity) {return byEntity.containsKey(entity.getUniqueId());}
     private ItemStack image(String state,int frame) {
-        ItemStack item=new ItemStack(Material.IRON_HELMET);
+        // Armor models override item_model on an iron helmet. A carved pumpkin
+        // renders its item model in the head slot, including on armor stands.
+        ItemStack item=new ItemStack(Material.CARVED_PUMPKIN);
         var meta=item.getItemMeta();
         meta.setItemModel(new NamespacedKey("advance_magic","flying_staff_"+state));
         var data=meta.getCustomModelDataComponent();
@@ -104,7 +125,12 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         event.setCancelled(true);
         Player player=event.getPlayer();
         if(!plugin.getConfig().getBoolean("flying-staff.enabled",true)||!player.hasPermission("advance-magic.flying-staff")||
-            player.getGameMode()==GameMode.SPECTATOR||player.isInsideVehicle())return;
+            player.getGameMode()==GameMode.SPECTATOR)return;
+        if(isRiding(player)) {
+            player.sendMessage(ChatColor.AQUA+(toggleTurbo(player)?"เปิด Turbo ค้างแล้ว":"ปิด Turbo ค้างแล้ว"));
+            return;
+        }
+        if(player.isInsideVehicle())return;
         if(sessions.containsKey(player.getUniqueId())){
             player.sendMessage(ChatColor.YELLOW+"ไม้เท้าของคุณถูกเรียกอยู่แล้ว คลิกที่ไม้เท้าเพื่อขึ้นขี่");return;
         }
@@ -142,10 +168,11 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         }
         if(plugin.mana().account(player).manaExact()<=0){player.sendMessage(ChatColor.RED+"มานาไม่พอสำหรับขี่ไม้เท้า");return;}
         if(session.stand.addPassenger(player)){
-            session.phase=Phase.FLIGHT;session.age=0;session.lowManaWarning=false;
+            session.phase=Phase.FLIGHT;session.age=0;session.lowManaWarning=false;session.manualTurbo=false;
             session.stand.getEquipment().setHelmet(image("flight",0),true);
             exempt(player,session);
             player.setFallDistance(0);
+            player.sendMessage(ChatColor.AQUA+"Turbo: กด Sprint (Java: Ctrl, Bedrock: ปุ่มวิ่ง) หรือคลิกขวาไม้เท้าในมือเพื่อเปิดค้าง");
         }
     }
     @EventHandler(priority=EventPriority.HIGHEST)
@@ -180,7 +207,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         }
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,100,0,true,false,false));
         unexempt(player,session);
-        session.phase=Phase.IDLE;session.age=0;
+        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;
         session.stand.getEquipment().setHelmet(image("idle",0),true);
     }
     @EventHandler public void quit(PlayerQuitEvent event){closeOwner(event.getPlayer());}
@@ -227,7 +254,11 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         }
         return true;
     }
-    private Vector input(Player player) {
+    private boolean turbo(Player player,Session session) {
+        var controls=player.getCurrentInput();
+        return session.manualTurbo||controls.isSprint()||player.isSprinting();
+    }
+    private Vector input(Player player,Session session) {
         var controls=player.getCurrentInput();
         double yaw=Math.toRadians(player.getLocation().getYaw());
         Vector forward=new Vector(-Math.sin(yaw),0,Math.cos(yaw));
@@ -238,8 +269,9 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         if(controls.isRight())target.add(side);
         if(controls.isLeft())target.subtract(side);
         if(target.lengthSquared()>1)target.normalize();
-        target.multiply(Math.clamp(plugin.getConfig().getDouble("flying-staff.horizontal-speed",.18),.03,.35));
-        double vertical=Math.clamp(plugin.getConfig().getDouble("flying-staff.vertical-speed",.12),.03,.25);
+        double multiplier=turbo(player,session)?Math.clamp(plugin.getConfig().getDouble("flying-staff.turbo-multiplier",1.8),1,2.5):1;
+        target.multiply(Math.min(Math.clamp(plugin.getConfig().getDouble("flying-staff.horizontal-speed",.27),.03,.4)*multiplier,.65));
+        double vertical=Math.min(Math.clamp(plugin.getConfig().getDouble("flying-staff.vertical-speed",.16),.03,.25)*multiplier,.35);
         if(controls.isJump())target.setY(vertical);
         else if(controls.isForward()&&player.getLocation().getPitch()>35)target.setY(-vertical);
         return target;
@@ -269,14 +301,14 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
                         var account=plugin.mana().account(player);
                         double cost=Math.clamp(plugin.getConfig().getDouble("flying-staff.mana-per-second",2),.1,20);
                         account.setMana(account.manaExact()-cost);plugin.mana().save(player);
-                        plugin.casts().actionbar(player,"ไม้เท้าบิน");
+                        plugin.casts().actionbar(player,turbo(player,session)?"ไม้เท้าบิน · TURBO":"ไม้เท้าบิน");
                         if(account.manaExact()<=10&&!session.lowManaWarning){
                             session.lowManaWarning=true;
                             player.sendMessage(ChatColor.YELLOW+"มานาใกล้หมด เตรียมลงจอด");
                         }
                         if(account.manaExact()<=0){session.phase=Phase.LANDING;session.age=0;player.sendMessage(ChatColor.YELLOW+"มานาหมด ไม้เท้ากำลังลงจอด");break;}
                     }
-                    Vector velocity=input(player);
+                    Vector velocity=input(player,session);
                     if(velocity.lengthSquared()>0) {
                         Location next=stand.getLocation().add(velocity);
                         next.setYaw(player.getLocation().getYaw());next.setPitch(0);
@@ -291,7 +323,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
                     if(nearGround(stand.getLocation())){
                         unexempt(player,session);
                         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,100,0,true,false,false));
-                        session.phase=Phase.IDLE;session.age=0;
+                        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;
                         player.leaveVehicle();
                         stand.setVelocity(new Vector());
                         stand.getEquipment().setHelmet(image("idle",0),true);

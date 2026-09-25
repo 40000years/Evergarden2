@@ -107,8 +107,8 @@ assert len(definitions) == len(catalog) == 15
 assert len({row['bedrock_identifier'] for row in definitions}) == 15
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [1, 4, 0]
-    assert manifest['modules'][0]['version'] == [1, 4, 0]
+    assert manifest['header']['version'] == [1, 5, 0]
+    assert manifest['modules'][0]['version'] == [1, 5, 0]
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     for definition, (name, _, _) in zip(definitions, catalog):
@@ -132,7 +132,7 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
         assert f'models/entity/{name}.geo.json' in z.namelist()
     for state in ('','_summon','_idle','_flight','_dismiss'):
         name='flying_staff'+state
-        material='blaze_rod' if not state else 'iron_helmet'
+        material='blaze_rod' if not state else 'carved_pumpkin'
         assert any(row['model']==f'advance_magic:{name}' for row in mapping['items'][f'minecraft:{material}'])
         assert f'attachables/{name}.json' in z.namelist()
         assert f'assets/advance_magic/items/{name}.json' in zipfile.ZipFile(dist/'advance-magic-java.zip').namelist()

@@ -28,7 +28,10 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     private CastListener casts;
     private ResourcePackService packs;
     @Override public void onLoad() {
-        saveDefaultConfig();getConfig().options().copyDefaults(true);saveConfig();
+        saveDefaultConfig();
+        if(FlyingStaffService.upgradeSpeedConfig(getConfig()))
+            getLogger().info("Updated the previous default flying-staff speeds; custom speeds were preserved.");
+        getConfig().options().copyDefaults(true);saveConfig();
         packs=new ResourcePackService(this);
         try {packs.extract();}
         catch(java.io.IOException e){getLogger().log(java.util.logging.Level.SEVERE,"Could not extract bundled resource packs",e);}

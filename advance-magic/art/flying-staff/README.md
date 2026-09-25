@@ -24,10 +24,10 @@ Source JSON และ PNG ในโฟลเดอร์ `java/`/`bedrock/` เ�
 | Java `item_model` / Bedrock identifier | ไอเทมฐาน | หน้าที่ |
 | --- | --- | --- |
 | `advance_magic:flying_staff` | `blaze_rod` | ถือมือ/ไอคอน |
-| `advance_magic:flying_staff_summon` | `iron_helmet` | ภาพขณะเรียก |
-| `advance_magic:flying_staff_idle` | `iron_helmet` | ภาพลอยรอ |
-| `advance_magic:flying_staff_flight` | `iron_helmet` | ภาพขณะขี่ |
-| `advance_magic:flying_staff_dismiss` | `iron_helmet` | ภาพขณะเก็บ |
+| `advance_magic:flying_staff_summon` | `carved_pumpkin` | ภาพขณะเรียก |
+| `advance_magic:flying_staff_idle` | `carved_pumpkin` | ภาพลอยรอ |
+| `advance_magic:flying_staff_flight` | `carved_pumpkin` | ภาพขณะขี่ |
+| `advance_magic:flying_staff_dismiss` | `carved_pumpkin` | ภาพขณะเก็บ |
 
 ไอเทมฐานสำหรับแสดงภาพสวมบน Armor Stand ของระบบ ไม่ให้ผู้เล่นสวมหมวกจริง ไอเทม gameplay ตรวจ tag `advance-magic:flying_staff` ของปลั๊กอิน
 
@@ -65,7 +65,7 @@ Bedrock geometry `flying_staff_display` ยึด bone `head`; `staff_root` อ�
 ```mcfunction
 /give @s minecraft:blaze_rod[minecraft:item_model="advance_magic:flying_staff"]
 /summon minecraft:armor_stand ~ ~ ~ {Tags:["eg_flying_staff_art"],Invisible:1b,NoGravity:1b,Invulnerable:1b,Marker:1b}
-/item replace entity @e[type=minecraft:armor_stand,tag=eg_flying_staff_art,sort=nearest,limit=1] armor.head with minecraft:iron_helmet[minecraft:item_model="advance_magic:flying_staff_idle",minecraft:custom_model_data={floats:[0.0f]}]
+/item replace entity @e[type=minecraft:armor_stand,tag=eg_flying_staff_art,sort=nearest,limit=1] armor.head with minecraft:carved_pumpkin[minecraft:item_model="advance_magic:flying_staff_idle",minecraft:custom_model_data={floats:[0.0f]}]
 ```
 
 การดูเฟรม Java ให้เปลี่ยน model และเลขใน `floats` ตามตารางข้างบน โดยคำสั่งอย่างเดียวไม่ขับเฟรมต่อเนื่อง ลบเฉพาะตัวแสดงทดลองที่ติด tag นี้เมื่อเสร็จ:

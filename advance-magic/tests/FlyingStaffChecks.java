@@ -47,6 +47,19 @@ public final class FlyingStaffChecks extends JavaPlugin {
     void begin(){
         magic=(AdvanceMagicPlugin)Bukkit.getPluginManager().getPlugin("advance-magic");
         check(magic!=null&&magic.isEnabled(),"Advance Magic boots");
+        var legacyConfig=new org.bukkit.configuration.file.YamlConfiguration();
+        legacyConfig.set("flying-staff.horizontal-speed",.18);
+        legacyConfig.set("flying-staff.vertical-speed",.12);
+        check(com.example.advancemagic.item.FlyingStaffService.upgradeSpeedConfig(legacyConfig)
+            &&legacyConfig.getDouble("flying-staff.horizontal-speed")==.27
+            &&legacyConfig.getDouble("flying-staff.vertical-speed")==.16,"previous default speeds migrate once");
+        check(!com.example.advancemagic.item.FlyingStaffService.upgradeSpeedConfig(legacyConfig),"speed migration does not repeat");
+        var customConfig=new org.bukkit.configuration.file.YamlConfiguration();
+        customConfig.set("flying-staff.horizontal-speed",.31);
+        customConfig.set("flying-staff.vertical-speed",.20);
+        com.example.advancemagic.item.FlyingStaffService.upgradeSpeedConfig(customConfig);
+        check(customConfig.getDouble("flying-staff.horizontal-speed")==.31
+            &&customConfig.getDouble("flying-staff.vertical-speed")==.20,"custom speeds survive migration");
         try{check(Files.readString(Path.of("server.properties")).contains("allow-flight=false"),"server flight stays disabled");}
         catch(Exception error){throw new RuntimeException(error);}
         World world=Bukkit.getWorlds().getFirst();
@@ -83,6 +96,10 @@ public final class FlyingStaffChecks extends JavaPlugin {
         Bukkit.getPluginManager().callEvent(new PlayerInteractEvent(player,Action.RIGHT_CLICK_AIR,item,null,null,EquipmentSlot.HAND));
         stand=world.getEntitiesByClass(ArmorStand.class).stream().filter(magic.flyingStaff()::isDisplay).findFirst().orElse(null);
         check(stand!=null&&stand.isValid(),"right click summons staff display");
+        var display=stand.getEquipment().getHelmet();
+        check(display!=null&&display.getType()==Material.CARVED_PUMPKIN
+            &&display.getItemMeta().getItemModel().equals(new NamespacedKey("advance_magic","flying_staff_summon")),
+            "display uses a head item model instead of an armor model");
         Bukkit.getPluginManager().callEvent(new PlayerInteractEvent(player,Action.RIGHT_CLICK_AIR,item,null,null,EquipmentSlot.HAND));
         check(world.getEntitiesByClass(ArmorStand.class).stream().filter(magic.flyingStaff()::isDisplay).count()==1,"second right click cannot duplicate staff");
         later(14,this::board);
@@ -93,11 +110,25 @@ public final class FlyingStaffChecks extends JavaPlugin {
         check(!player.getAllowFlight()&&!player.isFlying(),"mount works with allow-flight=false and never grants flight");
         check(player.hasPermission("grim.disabled"),"temporary Grim permission is active while riding");
         Location before=stand.getLocation();
-        handle.connection.handlePlayerInput(new ServerboundPlayerInputPacket(new Input(true,false,false,false,true,false,false)));
+        handle.connection.handlePlayerInput(new ServerboundPlayerInputPacket(new Input(true,false,false,false,false,false,false)));
         later(4,()->{
-            check(stand.getLocation().getZ()>before.getZ()+.2&&stand.getLocation().getY()>before.getY()+.1,
-                "mounted forward/jump input moves the server-owned vehicle");
-            handle.connection.handlePlayerInput(new ServerboundPlayerInputPacket(new Input(false,false,false,false,false,false,false)));
+            double normal=stand.getLocation().getZ()-before.getZ();
+            check(normal>.7,"mounted forward input moves at the increased base speed");
+            Location turboStart=stand.getLocation();
+            handle.connection.handlePlayerInput(new ServerboundPlayerInputPacket(new Input(true,false,false,false,false,false,true)));
+            later(4,()->{
+                double sprint=stand.getLocation().getZ()-turboStart.getZ();
+                check(sprint>normal*1.5,"Sprint input accelerates the mounted staff");
+                Location manualStart=stand.getLocation();
+                handle.connection.handlePlayerInput(new ServerboundPlayerInputPacket(new Input(true,false,false,false,false,false,false)));
+                check(Bukkit.dispatchCommand(player,"magic turbo"),"rider can toggle Turbo by command");
+                later(4,()->{
+                    check(stand.getLocation().getZ()-manualStart.getZ()>normal*1.5,
+                        "manual Turbo works without Sprint input");
+                    check(Bukkit.dispatchCommand(player,"magic turbo"),"rider can turn manual Turbo off");
+                    handle.connection.handlePlayerInput(new ServerboundPlayerInputPacket(new Input(false,false,false,false,false,false,false)));
+                });
+            });
         });
         later(24,this::drain);
     }

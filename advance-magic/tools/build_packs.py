@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent / 'tools'))
 import restoration_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [1, 4, 0]  # Flying staff resources and animation.
+BEDROCK_PACK_VERSION = [1, 5, 0]  # Flying staff display item and animation.
 
 
 def spells():
@@ -191,12 +191,18 @@ def main():
             if source.is_file() and source.name not in ('pack.mcmeta', 'pack.png'):
                 destination = java / source.relative_to(staff / 'java')
                 destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(source, destination)
+                if source.suffix in ('.json', '.mcmeta'):
+                    destination.write_bytes(source.read_bytes().replace(b'\r\n', b'\n'))
+                else:
+                    shutil.copyfile(source, destination)
         for source in sorted((staff / 'bedrock').rglob('*')):
             if source.is_file() and source.name not in ('manifest.json', 'item_texture.json', 'pack_icon.png'):
                 destination = bedrock / source.relative_to(staff / 'bedrock')
                 destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(source, destination)
+                if source.suffix in ('.json', '.mcmeta'):
+                    destination.write_bytes(source.read_bytes().replace(b'\r\n', b'\n'))
+                else:
+                    shutil.copyfile(source, destination)
         staff_atlas = json.loads((staff / 'bedrock/textures/item_texture.json').read_text())['texture_data']
         atlas.update(staff_atlas)
         staff_definitions = json.loads((staff / 'geyser-mappings.json').read_text())['items']

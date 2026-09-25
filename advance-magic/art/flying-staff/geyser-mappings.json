@@ -14,7 +14,7 @@
         }
       }
     ],
-    "minecraft:iron_helmet": [
+    "minecraft:carved_pumpkin": [
       {
         "type": "definition",
         "model": "advance_magic:flying_staff_summon",

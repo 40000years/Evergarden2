@@ -17,6 +17,7 @@ public final class MagicCommand implements TabExecutor {
             sender.sendMessage(ChatColor.GRAY+"Craft: 8 Netherite Ingots / Nether Stars around a matching Evergarden Vault Core (mix allowed).");
             sender.sendMessage(ChatColor.YELLOW+"เมนูคราฟ: "+ChatColor.AQUA+"/magic craft "+ChatColor.GREEN+"(คราฟคทา) "+ChatColor.GRAY+"(แอดมิน: /magic items)");
             sender.sendMessage(ChatColor.GOLD+"ไม้เท้าบิน: "+ChatColor.GRAY+"สูตร GAG / BRB / GAG (G ทอง, A อเมทิสต์, B Blaze Rod, R Heart of the Sea)");
+            sender.sendMessage(ChatColor.GRAY+"ขณะขี่ กด Sprint เพื่อเร่ง หรือใช้ /magic turbo เพื่อเปิด/ปิด Turbo ค้าง");
             return true;
         }
         if(args[0].equalsIgnoreCase("items")||args[0].equalsIgnoreCase("craft")) {
@@ -47,6 +48,15 @@ public final class MagicCommand implements TabExecutor {
             }
             if(!sender.hasPermission("advance-magic.admin")){sender.sendMessage(ChatColor.RED+"No permission.");return true;}
             plugin.packs().describe(sender);return true;
+        }
+        if(args[0].equalsIgnoreCase("turbo")) {
+            if(!(sender instanceof Player player)){sender.sendMessage("Use this command in-game.");return true;}
+            if(!plugin.flyingStaff().isRiding(player)){
+                sender.sendMessage(ChatColor.YELLOW+"ต้องขึ้นขี่ไม้เท้าบินก่อนจึงจะใช้ Turbo ได้");return true;
+            }
+            boolean enabled=plugin.flyingStaff().toggleTurbo(player);
+            sender.sendMessage(ChatColor.AQUA+(enabled?"เปิด Turbo ค้างแล้ว":"ปิด Turbo ค้างแล้ว"));
+            return true;
         }
         if(args[0].equalsIgnoreCase("givestaff")) {
             if(!sender.hasPermission("advance-magic.admin")){sender.sendMessage(ChatColor.RED+"No permission.");return true;}
@@ -101,7 +111,7 @@ public final class MagicCommand implements TabExecutor {
             sender.sendMessage(ChatColor.GREEN+"Gave "+(isCore?"Core of "+com.example.advancemagic.item.WandService.coreTitle(spell):spell.title+" Wand")+" to "+p.getName());
             return true;
         }
-        sender.sendMessage("/magic [list|mana|craft|items|pack [resend]|givestaff [player]|give [player] <spell> [wand|core]|givecore [player] <spell>]");return true;
+        sender.sendMessage("/magic [list|mana|craft|items|pack [resend]|givestaff [player]|turbo|give [player] <spell> [wand|core]|givecore [player] <spell>]");return true;
     }
 
     private Player resolvePlayer(CommandSender sender, String targetName) {
@@ -137,7 +147,7 @@ public final class MagicCommand implements TabExecutor {
 
     public List<String> onTabComplete(CommandSender sender,Command command,String alias,String[] args) {
         List<String> values=new ArrayList<>();
-        if(args.length==1){values.addAll(List.of("list","mana","craft"));if(sender.hasPermission("advance-magic.admin"))values.addAll(List.of("give","givecore","givestaff","pack","items"));}
+        if(args.length==1){values.addAll(List.of("list","mana","craft","turbo"));if(sender.hasPermission("advance-magic.admin"))values.addAll(List.of("give","givecore","givestaff","pack","items"));}
         if(args.length==2&&sender.hasPermission("advance-magic.admin")&&args[0].equalsIgnoreCase("givestaff"))
             for(Player p:Bukkit.getOnlinePlayers())values.add(p.getName());
         if(args.length==2&&sender.hasPermission("advance-magic.admin")&&args[0].equalsIgnoreCase("pack"))values.add("resend");

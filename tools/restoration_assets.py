@@ -15,7 +15,7 @@ PALETTES = {
 
 def write(path, obj):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(obj, indent=2)+'\n', encoding='utf8')
+    path.write_bytes((json.dumps(obj, indent=2)+'\n').encode('utf8'))
 
 def png(path, pixels):
     h, w = len(pixels), len(pixels[0])

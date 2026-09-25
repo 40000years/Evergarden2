@@ -1,5 +1,5 @@
 name: advance-magic
-version: 1.2.0-flying-staff
+version: 1.2.1-flying-staff
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
 description: Fifteen server-side spells, mana and craftable wands.
@@ -8,7 +8,7 @@ loadbefore: [Geyser-Spigot]
 commands:
   magic:
     description: List spells, craft wands or open the admin item menu.
-    usage: /magic [list|mana|craft|items|pack [resend]|givestaff [player]|give <player> <spell>]
+    usage: /magic [list|mana|craft|items|pack [resend]|givestaff [player]|turbo|give <player> <spell>]
 permissions:
   advance-magic.cast:
     default: true

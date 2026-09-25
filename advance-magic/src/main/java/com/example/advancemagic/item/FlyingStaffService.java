@@ -36,6 +36,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
     private static final int MAX_LANDING_TICKS=1200;
     private static final int SAFE_DISMOUNT_TICKS=1400;
     private final AdvanceMagicPlugin plugin;
+    private final FlyingStaffDiagnostics diagnostics;
     private final NamespacedKey itemKey, entityKey, recipeKey;
     private final Map<UUID,Session> sessions=new HashMap<>();
     private final Map<UUID,Session> byEntity=new HashMap<>();
@@ -61,6 +62,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
 
     public FlyingStaffService(AdvanceMagicPlugin plugin) {
         this.plugin=plugin;
+        diagnostics=new FlyingStaffDiagnostics(plugin);
         itemKey=new NamespacedKey(plugin,"flying_staff");
         entityKey=new NamespacedKey(plugin,"flying_staff_entity");
         recipeKey=new NamespacedKey(plugin,"flying_staff");
@@ -183,6 +185,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         }
         if(plugin.mana().account(player).manaExact()<=0){player.sendMessage(ChatColor.RED+"มานาไม่พอสำหรับขี่ไม้เท้า");return;}
         if(session.stand.addPassenger(player)){
+            diagnostics.mount(player,session.stand);
             session.phase=Phase.FLIGHT;session.age=0;session.lowManaWarning=false;session.manualTurbo=false;
             session.motion.zero();
             session.stand.getEquipment().setHelmet(image("flight",0),true);
@@ -243,6 +246,11 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         showIdleAfterDismount(session);
     }
     @EventHandler public void quit(PlayerQuitEvent event){closeOwner(event.getPlayer());}
+    @EventHandler(priority=EventPriority.MONITOR)
+    public void traceDismount(EntityDismountEvent event){
+        if(event.getEntity() instanceof Player player&&byEntity.containsKey(event.getDismounted().getUniqueId()))
+            diagnostics.dismount(player,event.isCancelled());
+    }
     @EventHandler public void death(PlayerDeathEvent event){closeOwner(event.getEntity());}
     @EventHandler public void world(PlayerChangedWorldEvent event){closeOwner(event.getPlayer());}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
@@ -359,6 +367,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         } else stand.setRotation(player.getLocation().getYaw(),0);
     }
     public void tick() {
+        diagnostics.tick();
         for(Session session:new ArrayList<>(sessions.values())) {
             ArmorStand stand=session.stand;
             Player player=Bukkit.getPlayer(session.owner);
@@ -456,6 +465,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         if(session.stand.isValid())session.stand.remove();
     }
     @Override public void close() {
+        diagnostics.close();
         for(Session session:new ArrayList<>(sessions.values()))closeSession(session);
         Bukkit.removeRecipe(recipeKey);
     }

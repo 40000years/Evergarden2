@@ -47,6 +47,7 @@ public final class FlyingStaffChecks extends JavaPlugin {
     void begin(){
         magic=(AdvanceMagicPlugin)Bukkit.getPluginManager().getPlugin("advance-magic");
         check(magic!=null&&magic.isEnabled(),"Advance Magic boots");
+        try{FlightDiagnosticsChecks.run(this,magic);}catch(Exception error){throw new RuntimeException(error);}
         var legacyConfig=new org.bukkit.configuration.file.YamlConfiguration();
         legacyConfig.set("flying-staff.horizontal-speed",.18);
         legacyConfig.set("flying-staff.vertical-speed",.12);

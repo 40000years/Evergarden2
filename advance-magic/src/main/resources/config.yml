@@ -46,6 +46,10 @@ follow-up:
 # Bundled pack is automatically offered one tick after joining.
 flying-staff:
   enabled: true
+  diagnostics:
+    # One read-only Bedrock flight trace per player per restart, at most 120 seconds.
+    # Stops 20 seconds after dismount; writes StaffTrace lines to the server log.
+    enabled: true
   # Old default Turbo is the new normal speed; custom base speeds are kept.
   speed-version: 3
   horizontal-speed: 0.486

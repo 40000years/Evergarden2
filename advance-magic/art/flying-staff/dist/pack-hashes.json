@@ -1,0 +1,12 @@
+{
+  "flying-staff-java-preview.zip": {
+    "sha1": "c1af2ea163e4264cb9cd188389631be40dd16179",
+    "sha256": "c0faec54a0066dcc59ffabc7750718af605dfc67d39eecabf1dde171e33c64b9",
+    "bytes": 34850
+  },
+  "flying-staff-bedrock-preview.mcpack": {
+    "sha1": "bdc781abf7fb7bb25f7261e2f4b095490845e95a",
+    "sha256": "20da5ff936fb0a7d9e2244da3af51fa5efadb822eba08b7cf6ef4637cbaf0d0d",
+    "bytes": 19226
+  }
+}

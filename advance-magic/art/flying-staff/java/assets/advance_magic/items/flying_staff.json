@@ -1,0 +1,19 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:display_context",
+    "cases": [
+      {
+        "when": "gui",
+        "model": {
+          "type": "minecraft:model",
+          "model": "advance_magic:item/flying_staff_icon"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "advance_magic:item/flying_staff"
+    }
+  }
+}

@@ -1,0 +1,5 @@
+name: GrimAC
+version: 0.0.0-test
+main: FlyingStaffChecks
+api-version: '26.2'
+description: Isolated flying staff smoke test and Grim permission fixture.

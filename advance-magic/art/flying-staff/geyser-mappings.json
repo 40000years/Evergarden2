@@ -1,0 +1,64 @@
+{
+  "format_version": 2,
+  "items": {
+    "minecraft:blaze_rod": [
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff",
+        "bedrock_identifier": "advance_magic:flying_staff",
+        "display_name": "Flying Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff",
+          "allow_offhand": true,
+          "display_handheld": true
+        }
+      }
+    ],
+    "minecraft:iron_helmet": [
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff_summon",
+        "bedrock_identifier": "advance_magic:flying_staff_summon",
+        "display_name": "Flying Staff / summon",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff_idle",
+        "bedrock_identifier": "advance_magic:flying_staff_idle",
+        "display_name": "Flying Staff / idle",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff_flight",
+        "bedrock_identifier": "advance_magic:flying_staff_flight",
+        "display_name": "Flying Staff / flight",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff_dismiss",
+        "bedrock_identifier": "advance_magic:flying_staff_dismiss",
+        "display_name": "Flying Staff / dismiss",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      }
+    ]
+  }
+}

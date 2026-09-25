@@ -15,11 +15,9 @@ dist = ROOT / 'dist'
 hashes = json.loads((dist / 'pack-hashes.json').read_text())
 service_source = (ROOT / 'src/main/java/com/example/advancemagic/pack/ResourcePackService.java').read_text()
 pack_config = (ROOT / 'src/main/resources/config.yml').read_text()
-url = re.search(r'DEFAULT_CDN_URL = "([^"]+)"', service_source).group(1)
-sha1 = re.search(r'CURRENT_SHA1 = "([0-9a-f]{40})"', service_source).group(1)
-assert re.fullmatch(r'https://raw\.githubusercontent\.com/40000years/Evergarden2/[0-9a-f]{40}/advance-magic/dist/advance-magic-java\.zip', url)
-assert f"url: '{url}'" in pack_config and f"sha1: '{sha1}'" in pack_config
-assert sha1 == hashes['advance-magic-java.zip']
+assert "url: ''" in pack_config and "sha1: ''" in pack_config
+assert 'host:\n    enabled: true' in pack_config
+assert 'CURRENT_SHA1' not in service_source
 
 
 def check_png(data):
@@ -66,7 +64,11 @@ for name, digest in hashes.items():
         for file in z.namelist():
             if file.endswith(('.json', '.mcmeta')): json.loads(z.read(file))
             if file.endswith('.png'):
-                if 'restoration_' in file:
+                if 'flying_staff' in file:
+                    image=z.read(file)
+                    assert image[:8] == b'\x89PNG\r\n\x1a\n'
+                    assert struct.unpack('>II',image[16:24]) in {(16,16),(64,64),(64,1024),(128,128)}
+                elif 'restoration_' in file:
                     image=z.read(file)
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
                     assert struct.unpack('>II',image[16:24]) == (64,64)
@@ -92,6 +94,11 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
         model=json.loads(z.read(f'assets/advance_magic/models/item/{name}.json'))
         assert item['model']['model'] == f'advance_magic:item/{name}'
         assert len(model['elements']) >= 10
+    assert len(json.loads(z.read('assets/advance_magic/models/item/flying_staff.json'))['elements']) == 79
+    for state,count in [('summon',7),('idle',8),('flight',8),('dismiss',5)]:
+        definition=json.loads(z.read(f'assets/advance_magic/items/flying_staff_{state}.json'))['model']
+        assert definition['type']=='minecraft:range_dispatch'
+        assert len(definition['entries'])==count
 
 mapping = json.loads((dist / 'geyser-mappings.json').read_text())
 assert mapping['format_version'] == 2
@@ -100,8 +107,8 @@ assert len(definitions) == len(catalog) == 15
 assert len({row['bedrock_identifier'] for row in definitions}) == 15
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [1, 3, 0]
-    assert manifest['modules'][0]['version'] == [1, 3, 0]
+    assert manifest['header']['version'] == [1, 4, 0]
+    assert manifest['modules'][0]['version'] == [1, 4, 0]
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     for definition, (name, _, _) in zip(definitions, catalog):
@@ -123,6 +130,14 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
         assert definition['bedrock_identifier'] == f'advance_magic:{name}'
         assert f'attachables/{name}.json' in z.namelist()
         assert f'models/entity/{name}.geo.json' in z.namelist()
+    for state in ('','_summon','_idle','_flight','_dismiss'):
+        name='flying_staff'+state
+        material='blaze_rod' if not state else 'iron_helmet'
+        assert any(row['model']==f'advance_magic:{name}' for row in mapping['items'][f'minecraft:{material}'])
+        assert f'attachables/{name}.json' in z.namelist()
+        assert f'assets/advance_magic/items/{name}.json' in zipfile.ZipFile(dist/'advance-magic-java.zip').namelist()
+    assert 'animations/flying_staff.animation.json' in z.namelist()
+    assert 'particles/flying_staff_trail.particle.json' in z.namelist()
 
 guide = (dist / 'advance-magic-guide-th.png').read_bytes()
 assert guide[:8] == b'\x89PNG\r\n\x1a\n' and min(struct.unpack('>II', guide[16:24])) >= 900

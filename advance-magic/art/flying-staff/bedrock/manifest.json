@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Evergarden2 Flying Staff | Art Prototype",
+    "description": "Original staff model and animation study; gameplay is not implemented.",
+    "uuid": "553c35e1-5c1c-562a-805b-772352d515db",
+    "version": [
+      0,
+      1,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      80
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "a157e2bc-d711-5f48-9b7a-b1f847924b38",
+      "version": [
+        0,
+        1,
+        0
+      ]
+    }
+  ]
+}

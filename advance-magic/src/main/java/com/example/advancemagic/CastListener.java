@@ -66,6 +66,7 @@ public final class CastListener implements Listener {
 
     @EventHandler(priority=EventPriority.HIGH, ignoreCancelled=true)
     public void entity(PlayerInteractEntityEvent e) {
+        if(plugin.flyingStaff().isDisplay(e.getRightClicked()))return;
         ItemStack wandItem = heldItem(e.getPlayer(), e.getHand());
         Spell spell = plugin.wands().spell(wandItem);
         if(spell == null) return;
@@ -75,6 +76,7 @@ public final class CastListener implements Listener {
 
     @EventHandler(priority=EventPriority.HIGH, ignoreCancelled=true)
     public void onAttackEntity(org.bukkit.event.entity.EntityDamageByEntityEvent e) {
+        if(plugin.flyingStaff().isDisplay(e.getEntity()))return;
         if(plugin.context().isMagicDamage()) return;
         if(e.getCause() != org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
         // Bedrock Mobile: Tapping an enemy monster directly with the wand in hand

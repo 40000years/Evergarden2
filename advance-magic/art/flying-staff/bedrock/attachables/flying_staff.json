@@ -1,0 +1,34 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "advance_magic:flying_staff",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/items/flying_staff_palette"
+      },
+      "geometry": {
+        "default": "geometry.advance_magic.flying_staff_held"
+      },
+      "animations": {
+        "hold_first_person": "animation.advance_magic.flying_staff.hold_first_person",
+        "hold_third_person": "animation.advance_magic.flying_staff.hold_third_person"
+      },
+      "scripts": {
+        "animate": [
+          {
+            "hold_first_person": "context.is_first_person"
+          },
+          {
+            "hold_third_person": "!context.is_first_person"
+          }
+        ]
+      },
+      "render_controllers": [
+        "controller.render.advance_magic.flying_staff"
+      ]
+    }
+  }
+}

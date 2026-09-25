@@ -1,0 +1,22 @@
+{
+  "parent": "advance_magic:item/flying_staff",
+  "display": {
+    "head": {
+      "rotation": [
+        -0.6,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        -0.12,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  }
+}

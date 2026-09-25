@@ -44,16 +44,28 @@ follow-up:
     vex_legion: 37.5
     guardian_beam: 30.0
 # Bundled pack is automatically offered one tick after joining.
+flying-staff:
+  enabled: true
+  horizontal-speed: 0.18
+  vertical-speed: 0.12
+  mana-per-second: 2.0
+  anticheat:
+    # Permission is granted only while riding and removed on dismount/quit.
+    # Add other plugin permissions only after checking that plugin's documentation.
+    bypass-permissions:
+      GrimAC: [grim.disabled]
+      NoCheatPlus: [nocheatplus.checks.moving.vehicle]
 resource-pack:
   enabled: true
-  # Pinned to the published restoration resource pack. Private CDN URLs are preserved.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/22195e2d658ffb3b79aba23c1f95bfdde8b5af7a/advance-magic/dist/advance-magic-java.zip'
-  sha1: '23227999a6b6ae77eb9aa8b7c4fdbf49ab16ee84'
+  # The bundled pack includes the flying staff; set a custom URL/SHA-1 only
+  # when that URL serves this exact pack revision.
+  url: ''
+  sha1: ''
   required: false
   host:
-    enabled: false
+    enabled: true
     bind: '0.0.0.0'
-    # Optional self-hosted pack; the GitHub URL above works without opening this port.
+    # Must be reachable by Java clients when using the bundled pack.
     port: 8187
     # Empty = hostname the player joined. Set explicitly for proxies/SRV records.
     public-host: ''

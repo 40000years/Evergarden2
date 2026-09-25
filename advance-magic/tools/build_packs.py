@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent / 'tools'))
 import restoration_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [1, 3, 0]  # Restoration 3D models and new cache revision.
+BEDROCK_PACK_VERSION = [1, 4, 0]  # Flying staff resources and animation.
 
 
 def spells():
@@ -184,6 +184,24 @@ def main():
                 'bedrock_options': {'icon': f'advance_magic.{name}', 'allow_offhand': True, 'display_handheld': False, 'creative_category': 'items'}})
 
         restoration_assets.register_magic(java, bedrock, atlas, upgrade_definitions)
+        # Include the authored staff resources in the real packs, not as a second
+        # pack that could override the existing wand atlas or Geyser mappings.
+        staff = ROOT / 'art/flying-staff'
+        for source in sorted((staff / 'java').rglob('*')):
+            if source.is_file() and source.name not in ('pack.mcmeta', 'pack.png'):
+                destination = java / source.relative_to(staff / 'java')
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, destination)
+        for source in sorted((staff / 'bedrock').rglob('*')):
+            if source.is_file() and source.name not in ('manifest.json', 'item_texture.json', 'pack_icon.png'):
+                destination = bedrock / source.relative_to(staff / 'bedrock')
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, destination)
+        staff_atlas = json.loads((staff / 'bedrock/textures/item_texture.json').read_text())['texture_data']
+        atlas.update(staff_atlas)
+        staff_definitions = json.loads((staff / 'geyser-mappings.json').read_text())['items']
+        for material, rows in staff_definitions.items():
+            upgrade_definitions.setdefault(material, []).extend(rows)
         write_json(bedrock / 'textures/item_texture.json', {'resource_pack_name': 'advance_magic', 'texture_name': 'atlas.items', 'texture_data': atlas})
         write_json(DIST / 'geyser-mappings.json', {
             'format_version': 2,

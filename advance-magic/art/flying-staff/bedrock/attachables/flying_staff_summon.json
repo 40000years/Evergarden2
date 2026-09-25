@@ -1,0 +1,32 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "advance_magic:flying_staff_summon",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/items/flying_staff_palette"
+      },
+      "geometry": {
+        "default": "geometry.advance_magic.flying_staff_display"
+      },
+      "animations": {
+        "summon": "animation.advance_magic.flying_staff.summon"
+      },
+      "scripts": {
+        "animate": [
+          "summon"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.advance_magic.flying_staff"
+      ],
+      "particle_effects": {
+        "trail": "advance_magic:flying_staff_trail",
+        "spark": "advance_magic:flying_staff_spark"
+      }
+    }
+  }
+}

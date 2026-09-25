@@ -1,0 +1,9 @@
+{
+  "resource_pack_name": "evergarden_flying_staff_prototype",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "advance_magic.flying_staff": {
+      "textures": "textures/items/flying_staff"
+    }
+  }
+}

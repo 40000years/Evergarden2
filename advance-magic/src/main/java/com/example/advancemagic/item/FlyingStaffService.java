@@ -33,6 +33,8 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
     private static final double MAX_VERTICAL_SPEED=1.4;
     private static final double MOVE_STEP=.25;
     private static final double MAX_TERRAIN_CLIMB=1.0;
+    private static final int MAX_LANDING_TICKS=1200;
+    private static final int SAFE_DISMOUNT_TICKS=1400;
     private final AdvanceMagicPlugin plugin;
     private final NamespacedKey itemKey, entityKey, recipeKey;
     private final Map<UUID,Session> sessions=new HashMap<>();
@@ -48,6 +50,8 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         int age=0;
         boolean lowManaWarning;
         boolean manualTurbo;
+        boolean landingUnridden;
+        boolean idleFramePending;
         final Vector motion=new Vector();
         PermissionAttachment exemption;
         Session(Player player,ArmorStand stand,boolean bedrock){
@@ -212,15 +216,31 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         Session session=byEntity.get(event.getDismounted().getUniqueId());
         if(session==null||!session.owner.equals(player.getUniqueId())||
             (session.phase!=Phase.FLIGHT&&session.phase!=Phase.LANDING))return;
-        if(!nearGround(session.stand.getLocation())&&event.isCancellable()){
-            event.setCancelled(true);session.phase=Phase.LANDING;session.age=0;
-            player.sendMessage(ChatColor.AQUA+"ไม้เท้ากำลังลงจอด");
+        if(!nearGround(session.stand.getLocation())){
+            if(session.bedrock||!event.isCancellable()){
+                // Bedrock already starts the camera dismount when this event arrives.
+                // Cancelling it makes Geyser snap the rider back repeatedly.
+                if(!session.landingUnridden){
+                    session.landingUnridden=true;session.phase=Phase.LANDING;session.age=0;
+                    session.motion.zero();session.manualTurbo=false;
+                    unexempt(player,session);
+                    player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,SAFE_DISMOUNT_TICKS,0,true,false,false));
+                    player.setFallDistance(0);
+                    player.sendMessage(ChatColor.AQUA+"ลงจากไม้เท้าแล้ว · Slow Falling ช่วยพาลงพื้น");
+                }
+                return;
+            }
+            event.setCancelled(true);
+            if(session.phase==Phase.FLIGHT){
+                session.phase=Phase.LANDING;session.age=0;
+                player.sendMessage(ChatColor.AQUA+"ไม้เท้ากำลังลงจอด");
+            }
             return;
         }
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,100,0,true,false,false));
         unexempt(player,session);
-        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;session.motion.zero();
-        session.stand.getEquipment().setHelmet(image("idle",0),true);
+        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;session.landingUnridden=false;session.motion.zero();
+        showIdleAfterDismount(session);
     }
     @EventHandler public void quit(PlayerQuitEvent event){closeOwner(event.getPlayer());}
     @EventHandler public void death(PlayerDeathEvent event){closeOwner(event.getEntity());}
@@ -249,6 +269,17 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         if(session.exemption==null)return;
         try {player.removeAttachment(session.exemption);}catch(IllegalArgumentException ignored){}
         session.exemption=null;
+    }
+    private void showIdleAfterDismount(Session session) {
+        if(!session.bedrock){session.stand.getEquipment().setHelmet(image("idle",0),true);return;}
+        if(session.idleFramePending)return;
+        session.idleFramePending=true;
+        Bukkit.getScheduler().runTaskLater(plugin,()->{
+            session.idleFramePending=false;
+            if(sessions.get(session.owner)==session&&session.phase==Phase.IDLE&&
+                session.stand.isValid()&&session.stand.getPassengers().isEmpty())
+                session.stand.getEquipment().setHelmet(image("idle",0),true);
+        },2);
     }
     private boolean nearGround(Location loc) {
         World world=loc.getWorld();
@@ -374,21 +405,29 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
                     if(session.age%5==0)stand.getWorld().spawnParticle(Particle.END_ROD,stand.getLocation().add(0,.9,0),2,.1,.08,.1,.004);
                 }
                 case LANDING -> {
-                    if(player.getVehicle()!=stand){unexempt(player,session);session.phase=Phase.IDLE;session.age=0;session.motion.zero();break;}
-                    player.setFallDistance(0);
+                    if(!session.landingUnridden&&player.getVehicle()!=stand){
+                        unexempt(player,session);session.phase=Phase.IDLE;session.age=0;session.motion.zero();break;
+                    }
+                    if(player.getVehicle()==stand)player.setFallDistance(0);
                     if(nearGround(stand.getLocation())){
-                        unexempt(player,session);
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,100,0,true,false,false));
-                        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;session.motion.zero();
-                        player.leaveVehicle();
+                        if(player.getVehicle()==stand){
+                            unexempt(player,session);
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,100,0,true,false,false));
+                            player.leaveVehicle();
+                        }
+                        session.phase=Phase.IDLE;session.age=0;session.manualTurbo=false;
+                        session.landingUnridden=false;session.motion.zero();
                         stand.setVelocity(new Vector());
-                        stand.getEquipment().setHelmet(image("idle",0),true);
-                    } else if(session.age>200||stand.getLocation().getY()<stand.getWorld().getMinHeight()+3){
+                        showIdleAfterDismount(session);
+                    } else if(session.age>MAX_LANDING_TICKS||stand.getLocation().getY()<stand.getWorld().getMinHeight()+3){
                         // A void or blocked landing must not leave the rider falling.
-                        session.phase=Phase.IDLE;unexempt(player,session);player.leaveVehicle();
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,100,0,true,false,false));
-                        Location destination=clear(session.returnLocation)?session.returnLocation:stand.getWorld().getSpawnLocation();
-                        player.teleport(destination);
+                        session.phase=Phase.IDLE;unexempt(player,session);
+                        if(player.getVehicle()==stand){
+                            player.leaveVehicle();
+                            player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,100,0,true,false,false));
+                            Location destination=clear(session.returnLocation)?session.returnLocation:stand.getWorld().getSpawnLocation();
+                            player.teleport(destination);
+                        }
                         closeSession(session);
                     } else {
                         Location next=stand.getLocation().add(0,-.1,0);

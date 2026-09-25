@@ -50,6 +50,7 @@ Geyser-Spigot บนเครื่องเดียวกันจะรับ
 - Maven build ผ่าน; ตรวจโครงสร้าง ZIP, JSON, model, mappings, PNG, Bedrock manifest version, SHA-1 และไฟล์ที่ฝังใน JAR
 - Paper 26.2 บนเซิร์ฟเวอร์ทดสอบแยกที่ตั้ง `allow-flight=false` ผ่าน 32 การตรวจ: เรียกและขึ้นขี่จาก Bukkit event จริง, ตรวจไอเทมแสดงผลบนหัว Armor Stand, ส่งปุ่มเดินหน้าและ Sprint ผ่าน packet แล้ววัดความเร็ว, ใช้ `/magic turbo` เพื่อเร่งค้าง, อัปเดตค่า config เดิมโดยรักษาค่าที่ปรับเอง, มานาลดสุทธิ, ไม่มีสำเนาไม้เท้า, พาหนะถูกเก็บ, ลงจอดเมื่อมานาหมด และ HTTP แจก ZIP ตรงกับ SHA-1
 - Geyser-Spigot 2.11.3 บนเซิร์ฟเวอร์ทดสอบรันพร้อม JAR รุ่น `1.2.1-flying-staff` และแพ็ก Bedrock `1.5.0` ได้ จดทะเบียน custom items รวม 41 รายการ; ไฟล์ที่ติดตั้งใน `packs/` และ `custom_mappings/` ตรงกับไฟล์ที่ build ทุกบิต และ Paper ผ่าน 32 การตรวจในรอบเดียวกัน
+- ตรวจ bytecode ของไคลเอนต์ Java 26.2: `LivingEntityRenderer` ส่งไอเทมที่ไม่เข้าเงื่อนไข armor layer ไป `ItemModelResolver` ด้วยบริบท `HEAD`; `CustomHeadLayer` วาดผลลัพธ์นั้นบนหัวโมเดล ส่วน Geyser 2.11.3 แปลงจอยสัมผัสเป็นปุ่มเดินของ Java และ `SPRINT_DOWN` เป็นปุ่ม Sprint ใน packet อินพุต การตรวจนี้ยืนยันเส้นทางโค้ด แต่ยังไม่ใช่การเห็นภาพในเกมจริง
 - ทดสอบการให้และถอน permission กับปลั๊กอินจำลองชื่อ GrimAC; ยังไม่ได้ทดสอบกับ GrimAC หรือ NoCheatPlus จริง
 - ยังไม่ได้ต่อ Java/Bedrock client เพื่อดูท่านั่ง การเลี้ยว การวางบล็อกบนไม้เท้า ภาพ Geyser หรือพาร์ติเคิล Bedrock จึงต้องทดสอบบนเซิร์ฟเวอร์ staging ก่อนเปิดให้ผู้เล่น
 

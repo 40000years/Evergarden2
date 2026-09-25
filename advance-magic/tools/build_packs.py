@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent / 'tools'))
 import restoration_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [1, 9, 0]  # New pack identity and single-bone held staff.
+BEDROCK_PACK_VERSION = [2, 0, 0]  # Held staff uses the Bedrock trident coordinate frame.
 
 
 def spells():

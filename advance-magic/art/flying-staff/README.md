@@ -54,7 +54,7 @@ Bedrock ใช้ `animations/flying_staff.animation.json` มี 6 clips: ท�
 
 โมเดล Java หันหัวไปทาง `-Z` ศูนย์กลางด้ามอยู่ `[8,8,8]` จุดนั่งที่เสนออยู่แถว `[8,9.7,10]` ด้ามยาวประมาณ 2.94 บล็อกในสเกลแสดงภาพ 1.0 ทั้งจุดนั่งและสเกลยังต้องเทียบกับผู้เล่นจริง
 
-Bedrock geometry `flying_staff_display` ยึด bone `head`; `staff_root` อยู่ที่ `[0,24,0]` ส่วน `flying_staff_held` ผูก item slot, แอนิเมชันท่าถือ และ cube ทั้งหมดไว้บน `staff_root` bone เดียวที่ pivot `[0,8,0]` โดยแปลงพิกัดมาจากรูปทรง Java: X กลับด้าน, Y ใช้ค่า Java เดิม และ Z ลบ 8 มุมมองบุคคลที่หนึ่งของ Bedrock ลดขนาดและเลื่อนไปด้านขวาล่างเพื่อไม่บังกลางจอ
+Bedrock geometry `flying_staff_display` ยึด bone `head`; `staff_root` อยู่ที่ `[0,24,0]` ส่วน `flying_staff_held` ผูก item slot, แอนิเมชันท่าถือ และ cube ทั้งหมดไว้บน bone เดียว พิกัดของโมเดลที่ถือหมุนและย่อให้แกนด้ามยาวอยู่ตาม Y, หัวอยู่ที่ Y 28, ท้ายอยู่ที่ Y -3 และ pivot `[0,24,0]` ตามโครง [Trident ของ Mojang](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/models/entity/trident.geo.json) ท่าถืออิง [แอนิเมชัน Trident](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/animations/trident.animation.json) โมเดลคทาที่เรียกออกมาบน Armor Stand ยังคงแยกจากโมเดลที่ถือ
 
 ตัวแสดงต้องรักษา head pose ให้ตรงตามที่ออกแบบ ภายหลังต้องปรับ offset ระหว่าง entity, โมเดล และที่นั่งทั้งสอง client แอนิเมชันภาพที่ขยับได้ไม่ใช่ตำแหน่งชนบล็อกหรือที่นั่งจริง
 

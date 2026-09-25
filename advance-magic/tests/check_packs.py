@@ -107,8 +107,8 @@ assert len(definitions) == len(catalog) == 15
 assert len({row['bedrock_identifier'] for row in definitions}) == 15
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [1, 8, 0]
-    assert manifest['modules'][0]['version'] == [1, 8, 0]
+    assert manifest['header']['version'] == [1, 9, 0]
+    assert manifest['modules'][0]['version'] == [1, 9, 0]
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     for definition, (name, _, _) in zip(definitions, catalog):

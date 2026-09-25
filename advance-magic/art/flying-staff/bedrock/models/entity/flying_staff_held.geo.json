@@ -34,16 +34,7 @@
               8,
               -23
             ]
-          }
-        },
-        {
-          "name": "body",
-          "parent": "staff_root",
-          "pivot": [
-            0,
-            8,
-            0
-          ],
+          },
           "cubes": [
             {
               "origin": [
@@ -3152,18 +3143,7 @@
                   ]
                 }
               }
-            }
-          ]
-        },
-        {
-          "name": "runes",
-          "parent": "staff_root",
-          "pivot": [
-            0,
-            8,
-            0
-          ],
-          "cubes": [
+            },
             {
               "origin": [
                 -0.3,
@@ -3533,18 +3513,7 @@
                   ]
                 }
               }
-            }
-          ]
-        },
-        {
-          "name": "halo",
-          "parent": "staff_root",
-          "pivot": [
-            0,
-            8,
-            -18
-          ],
-          "cubes": [
+            },
             {
               "origin": [
                 -4.85,
@@ -4728,18 +4697,7 @@
                   ]
                 }
               }
-            }
-          ]
-        },
-        {
-          "name": "crystal",
-          "parent": "staff_root",
-          "pivot": [
-            0,
-            8,
-            -18
-          ],
-          "cubes": [
+            },
             {
               "origin": [
                 -0.5,

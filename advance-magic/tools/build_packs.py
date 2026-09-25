@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent / 'tools'))
 import restoration_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [1, 8, 0]  # Correct held staff geometry origin and first-person pose.
+BEDROCK_PACK_VERSION = [1, 9, 0]  # New pack identity and single-bone held staff.
 
 
 def spells():
@@ -115,8 +115,8 @@ def main():
         write_json(bedrock / 'manifest.json', {
             'format_version': 2,
             'header': {'name': 'Advance Magic', 'description': '15 arcane wands for Geyser',
-                       'uuid': '2a3e0ee7-a0df-4102-a03f-a81275edb570', 'version': BEDROCK_PACK_VERSION, 'min_engine_version': [1, 21, 80]},
-            'modules': [{'type': 'resources', 'uuid': '071b416b-df41-4c86-9ea4-7d6c3dfc02ac', 'version': BEDROCK_PACK_VERSION}]})
+                       'uuid': 'e8233d13-8c1f-4eb9-8275-4d1d32a9c193', 'version': BEDROCK_PACK_VERSION, 'min_engine_version': [1, 21, 80]},
+            'modules': [{'type': 'resources', 'uuid': '540c6378-ed9a-4e3a-b121-8f5d10607f72', 'version': BEDROCK_PACK_VERSION}]})
         atlas, definitions, cases = {}, [], []
         core_atlas, core_definitions, core_cases = {}, [], []
         core_titles = {

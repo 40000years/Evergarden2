@@ -512,7 +512,7 @@ public final class CropBuffListener implements Listener, AutoCloseable {
 
         p.playSound(p.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.2f);
         p.playSound(p.getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL, 0.7f, 1.3f);
-        p.getWorld().spawnParticle(Particle.DRAGON_BREATH, p.getLocation().add(0, 1, 0), 45, 0.4, 0.6, 0.4, 0.05);
+        p.getWorld().spawnParticle(Particle.DRAGON_BREATH, p.getLocation().add(0, 1, 0), 45, 0.4, 0.6, 0.4, 0.05, 1.0f);
         p.getWorld().spawnParticle(Particle.END_ROD, p.getLocation().add(0, 1, 0), 30, 0.4, 0.6, 0.4, 0.08);
 
         String gainStr = (gain == (long)gain) ? String.valueOf((long)gain) : String.format(Locale.ROOT, "%.1f", gain);

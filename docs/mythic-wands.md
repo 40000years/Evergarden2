@@ -1,9 +1,14 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.3.1-mythic-fields`, Evergarden `3.0.0-e2.13-mythic-fields`.
+Release: Advance Magic `1.3.1-mythic-fields`, Evergarden `3.0.0-e2.14-astral-particle-fix`.
 Install both JARs from the root `dist` directory and restart the server. This revision
 uses the existing packs (Advance Magic 2.2.0 / Evergarden 3.9.0); their hashes and
 item models are unchanged.
+
+Evergarden e2.14 also fixes Ancient Astral Root consumption: its `DRAGON_BREATH`
+effect now supplies the required `Float` power (`1.0f`), matching the other dragon
+particle calls. Mana gains and daily-use limits are unchanged. This fix was built
+with `-DskipTests`; no live consumption test was run for this revision.
 
 ## Abilities
 

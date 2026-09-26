@@ -35,7 +35,10 @@ public final class WhaleTreasure implements Listener {
         var marker = plugin.key("whale_treasure_v1");
         var upgradeMarker = plugin.key("whale_wand_upgrades_v2");
         boolean alreadyPopulated = chunk.getPersistentDataContainer().has(marker, PersistentDataType.BYTE);
-        if (alreadyPopulated && chunk.getPersistentDataContainer().has(upgradeMarker, PersistentDataType.BYTE)) return;
+        if (alreadyPopulated && chunk.getPersistentDataContainer().has(upgradeMarker, PersistentDataType.BYTE)) {
+            addFlyingStaff(chunk,site.x(),site.z(),"whale",115,7,new int[]{-52,-50},.075);
+            return;
+        }
         // Both positions and all validation blocks are in this chunk: no neighbor loads.
         Random random = new Random(DungeonLayout.mix(chunk.getWorld().getSeed()
                 ^ (long)site.x() * 341873128712L ^ (long)site.z() * 132897987541L ^ 0x5748414c454cL));
@@ -57,6 +60,7 @@ public final class WhaleTreasure implements Listener {
                 int slot=chest.getBlockInventory().firstEmpty();
                 if(!hasUpgrade&&slot>=0)chest.getBlockInventory().setItem(slot,createWandUpgrade(random));
             }
+            addFlyingStaff(chunk,site.x(),site.z(),"whale",115,7,new int[]{-52,-50},.075);
             return;
         }
         // Record the attempt even if a player built here, so removing their blocks
@@ -83,6 +87,7 @@ public final class WhaleTreasure implements Listener {
             for (int j = 0; j < loot.size(); j++) chest.getBlockInventory().setItem(slots.get(j), loot.get(j));
             if(!restorationAdded){addRestoration(chest,site.x(),site.z(),0);restorationAdded=true;}
         }
+        addFlyingStaff(chunk,site.x(),site.z(),"whale",115,7,new int[]{-52,-50},.075);
     }
 
     private int chestCount(Random random){
@@ -100,7 +105,10 @@ public final class WhaleTreasure implements Listener {
                     ||chunk.getX()!=Math.floorDiv(site.x()+4,16)
                     ||chunk.getZ()!=Math.floorDiv(site.z()+kind.chestZ,16))continue;
             var marker=plugin.key(kind.id+"_treasure_v1");
-            if(chunk.getPersistentDataContainer().has(marker,PersistentDataType.BYTE))continue;
+            if(chunk.getPersistentDataContainer().has(marker,PersistentDataType.BYTE)){
+                addFlyingStaff(chunk,site.x(),site.z(),kind.id,y,kind.chestZ,new int[]{4,6},.05);
+                continue;
+            }
             chunk.getPersistentDataContainer().set(marker,PersistentDataType.BYTE,(byte)1);
             Random random=new Random(DungeonLayout.mix(chunk.getWorld().getSeed()^((long)site.x()*341873128712L)
                     ^((long)site.z()*132897987541L)^0x5452454153555245L^kind.ordinal()));
@@ -123,7 +131,36 @@ public final class WhaleTreasure implements Listener {
                 for(int j=0;j<loot.size();j++)chest.getBlockInventory().setItem(slots.get(j),loot.get(j));
                 if(!restorationAdded){addRestoration(chest,site.x(),site.z(),kind.ordinal()+1);restorationAdded=true;}
             }
+            addFlyingStaff(chunk,site.x(),site.z(),kind.id,y,kind.chestZ,new int[]{4,6},.05);
         }
+    }
+
+    private void addFlyingStaff(Chunk chunk,int siteX,int siteZ,String kind,int y,int chestZ,int[] offsets,double fallback){
+        var marker=plugin.key(kind+"_flying_staff_v1");
+        var persistent=chunk.getPersistentDataContainer();
+        if(persistent.has(marker,PersistentDataType.BYTE))return;
+        var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");
+        if(!(addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic)||!magic.isEnabled())return;
+        // Record one attempt per structure, even if its chests were removed or full.
+        // This also gives surviving old treasure chests a single upgrade roll.
+        persistent.set(marker,PersistentDataType.BYTE,(byte)1);
+        List<Chest> chests=new ArrayList<>();
+        for(int offset:offsets){
+            int x=Math.floorMod(siteX+offset,16),z=Math.floorMod(siteZ+chestZ,16);
+            if(!(chunk.getBlock(x,y,z).getState() instanceof Chest chest)
+                    ||chunk.getBlock(x,y-1,z).getType()!=Material.SPRUCE_PLANKS
+                    ||chunk.getBlock(x,y,z+1).getType()!=Material.BOOKSHELF)continue;
+            // Do not add another staff to a chest that already contains one.
+            if(Arrays.stream(chest.getBlockInventory().getContents()).anyMatch(magic.flyingStaff()::isStaff))return;
+            if(chest.getBlockInventory().firstEmpty()>=0)chests.add(chest);
+        }
+        if(chests.isEmpty())return;
+        // A separate deterministic stream preserves the existing rewards and chest count.
+        Random random=new Random(DungeonLayout.mix(chunk.getWorld().getSeed()^((long)siteX*341873128712L)
+                ^((long)siteZ*132897987541L)^0x464c59494e475354L^kind.hashCode()));
+        if(random.nextDouble()>=probability("flying-staff-chances."+kind,fallback))return;
+        var inventory=chests.get(random.nextInt(chests.size())).getBlockInventory();
+        inventory.setItem(inventory.firstEmpty(),magic.flyingStaff().create());
     }
 
     private void addRestoration(Chest chest,int x,int z,int kind){

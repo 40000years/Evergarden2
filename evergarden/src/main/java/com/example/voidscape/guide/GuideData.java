@@ -90,7 +90,7 @@ public final class GuideData {
         ),
         new GuidePage(
             "อัตราสุ่ม Evergarden Vault",
-            "§1§lตารางสุ่ม Evergarden Vault§r\n§8(ปรับสมดุลระยะยาว · 10,000 Tickets)§r\n\n§a• 60.0% วัตถุดิบและของใช้§r\n  (Key Shard, Repair Stone, Void Elixir, Echo Shard)\n§6• 15.0% Limit Break Scrolls (14 แบบ)§r\n§e• 12.0% Unique Enchant Scrolls (22 แบบ)§r\n§b• 7.0% Magic Cores (14 ธาตุ)§r\n§6• 5.0% ยุทธภัณฑ์โบราณ (6 ชิ้น)§r\n§d• 0.5% Core of Levitation §4[MYTHIC]§r\n§d• 0.5% Scroll of Eternity §4[MYTHIC]§r\n\n§7* ทุกการเปิด Vault จะได้รับ Astral Dust x2 แน่นอน และมีโอกาส 25% ได้รับเมล็ดพืช Tier III-IV เพิ่มเติม!§r"
+            "§1§lตารางสุ่ม Evergarden Vault§r\n§8(ปรับสมดุลระยะยาว · 10,000 Tickets)§r\n\n§a• 59.0% วัตถุดิบและของใช้§r\n  (Key Shard, Repair Stone, Void Elixir, Echo Shard)\n§6• 15.0% Limit Break Scrolls (14 แบบ)§r\n§e• 12.0% Unique Enchant Scrolls (22 แบบ)§r\n§b• 7.0% Magic Cores (14 ธาตุ)§r\n§6• 5.0% ยุทธภัณฑ์โบราณ (6 ชิ้น)§r\n§b• 1.0% ไม้เท้าบิน§r\n§d• 0.5% Core of Levitation §4[MYTHIC]§r\n§d• 0.5% Scroll of Eternity §4[MYTHIC]§r\n\n§7* ทุกการเปิด Vault จะได้รับ Astral Dust x2 แน่นอน และมีโอกาส 25% ได้รับเมล็ดพืช Tier III-IV เพิ่มเติม!§r"
         )
     );
 

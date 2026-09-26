@@ -726,6 +726,11 @@ public final class RelicService implements Listener {
     public ItemStack rollVaultReward() {
         var random=java.util.concurrent.ThreadLocalRandom.current();
         return switch(VaultLootTable.reward(random.nextInt(10000))) {
+            case FLYING_STAFF -> {
+                var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");
+                yield addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()
+                        ? magic.flyingStaff().create() : createKeyShard(1);
+            }
             case SCROLL_ETERNITY -> createScrollEternity();
             case MYTHIC_CORE -> createMagicCore("shulker_levitation");
             case LIMIT_BREAK -> {

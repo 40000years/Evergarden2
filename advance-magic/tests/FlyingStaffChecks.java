@@ -94,7 +94,7 @@ public final class FlyingStaffChecks extends JavaPlugin {
         }catch(Exception error){throw new RuntimeException(error);}
         var item=magic.flyingStaff().create();
         check(magic.flyingStaff().isStaff(item)&&!magic.flyingStaff().isStaff(new org.bukkit.inventory.ItemStack(Material.BLAZE_ROD)),"only tagged staff works");
-        check(Bukkit.getRecipe(new NamespacedKey(magic,"flying_staff"))!=null,"ordinary player recipe exists");
+        check(Bukkit.getRecipe(new NamespacedKey(magic,"flying_staff"))==null,"flying staff cannot be crafted");
         player.getInventory().setItemInMainHand(item);
         magic.mana().account(player).setMana(100);
         Bukkit.getPluginManager().callEvent(new PlayerInteractEvent(player,Action.RIGHT_CLICK_AIR,item,null,null,EquipmentSlot.HAND));

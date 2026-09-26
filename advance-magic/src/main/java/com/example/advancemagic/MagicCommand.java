@@ -16,7 +16,7 @@ public final class MagicCommand implements TabExecutor {
             for(Spell s:Spell.values())sender.sendMessage(ChatColor.AQUA+s.id()+ChatColor.GRAY+" | "+s.mana+" mana | "+s.cooldown+"s | Core: Core of "+com.example.advancemagic.item.WandService.coreTitle(s));
             sender.sendMessage(ChatColor.GRAY+"Craft: 8 Netherite Ingots / Nether Stars around a matching Evergarden Vault Core (mix allowed).");
             sender.sendMessage(ChatColor.YELLOW+"เมนูคราฟ: "+ChatColor.AQUA+"/magic craft "+ChatColor.GREEN+"(คราฟคทา) "+ChatColor.GRAY+"(แอดมิน: /magic items)");
-            sender.sendMessage(ChatColor.GOLD+"ไม้เท้าบิน: "+ChatColor.GRAY+"สูตร GAG / BRB / GAG (G ทอง, A อเมทิสต์, B Blaze Rod, R Heart of the Sea)");
+            sender.sendMessage(ChatColor.GOLD+"ไม้เท้าบิน: "+ChatColor.GRAY+"หาได้จาก Whale, Garden, Observatory และ Evergarden Vault · คราฟต์ไม่ได้");
             sender.sendMessage(ChatColor.GRAY+"ขณะขี่ กด Sprint เพื่อเร่ง หรือใช้ /magic turbo เพื่อเปิด/ปิด Turbo ค้าง");
             return true;
         }

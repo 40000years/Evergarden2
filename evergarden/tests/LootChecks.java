@@ -3,9 +3,9 @@ import java.util.Arrays;
 
 public final class LootChecks {
     public static void main(String[] args) {
-        int[] counts=new int[7];
+        int[] counts=new int[VaultLootTable.Reward.values().length];
         for(int ticket=0;ticket<10000;ticket++)counts[VaultLootTable.reward(ticket).ordinal()]++;
-        if(!Arrays.equals(counts,new int[]{1500,1200,700,500,6000,50,50}))
+        if(!Arrays.equals(counts,new int[]{1500,1200,700,500,5900,50,50,100}))
             throw new AssertionError("Incorrect reward odds: "+Arrays.toString(counts));
         for(int invalid:new int[]{-1,10000}) {
             try {VaultLootTable.reward(invalid);throw new AssertionError("Invalid ticket accepted");}

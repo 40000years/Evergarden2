@@ -60,7 +60,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("magic")).setExecutor(command);getCommand("magic").setTabCompleter(command);
         Bukkit.getScheduler().runTaskTimer(this,()->{effects.tick();statuses.tick();areas.tick();flyingStaff.tick();},1,1);
         Bukkit.getScheduler().runTaskTimer(this,()->Bukkit.getOnlinePlayers().stream().filter(p->!flyingStaff.isRiding(p)).forEach(mana::regenerate),20,20);
-        for(Player p:Bukkit.getOnlinePlayers()){mana.account(p);wands.discover(p);flyingStaff.discover(p);wands.migrate(p.getInventory());packs.offer(p);}
+        for(Player p:Bukkit.getOnlinePlayers()){mana.account(p);wands.discover(p);flyingStaff.removeLegacyRecipe(p);wands.migrate(p.getInventory());packs.offer(p);}
         for(World world:Bukkit.getWorlds())world.getEntities().forEach(wands::migrateEntity);
         getLogger().info("15 spells and recipes registered. No client mod or packet dependency required.");
     }
@@ -73,7 +73,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         if(wands!=null)wands.close();if(mana!=null)Bukkit.getOnlinePlayers().forEach(mana::quit);
     }
     @EventHandler public void join(PlayerJoinEvent e) {
-        Player p=e.getPlayer();mana.account(p);wands.discover(p);flyingStaff.discover(p);statuses.joined(p);wands.migrate(p.getInventory());wands.migrate(p.getEnderChest());
+        Player p=e.getPlayer();mana.account(p);wands.discover(p);flyingStaff.removeLegacyRecipe(p);statuses.joined(p);wands.migrate(p.getInventory());wands.migrate(p.getEnderChest());
         Bukkit.getScheduler().runTaskLater(this,()->{if(p.isOnline()){statuses.joined(p);packs.offer(p);}},1);
     }
     @EventHandler public void quit(PlayerQuitEvent e){cleanup(e.getPlayer());mana.quit(e.getPlayer());casts.quit(e.getPlayer());}

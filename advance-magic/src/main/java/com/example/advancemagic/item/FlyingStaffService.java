@@ -16,7 +16,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -101,17 +100,11 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
     }
     public void register() {
         Bukkit.removeRecipe(recipeKey);
-        ShapedRecipe recipe=new ShapedRecipe(recipeKey,create());
-        recipe.shape("GAG","BRB","GAG");
-        recipe.setIngredient('G',Material.GOLD_INGOT);
-        recipe.setIngredient('A',Material.AMETHYST_SHARD);
-        recipe.setIngredient('B',Material.BLAZE_ROD);
-        recipe.setIngredient('R',Material.HEART_OF_THE_SEA);
-        Bukkit.addRecipe(recipe);
-        for(Player player:Bukkit.getOnlinePlayers())discover(player);
+        for(Player player:Bukkit.getOnlinePlayers())removeLegacyRecipe(player);
     }
-    public void discover(Player player) {
-        if(player.hasPermission("advance-magic.flying-staff"))player.discoverRecipe(recipeKey);
+    public void removeLegacyRecipe(Player player) {
+        // Clear saved recipe-book entries, including players joining after an upgrade.
+        player.undiscoverRecipe(recipeKey);
     }
     public boolean isRiding(Player player) {
         Session session=sessions.get(player.getUniqueId());

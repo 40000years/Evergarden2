@@ -11,7 +11,7 @@
 ## ติดตั้งและเรียกบอส
 
 1. ใช้ Paper **26.2** และ Java **25** วาง `dist/7sins.jar` ใน `plugins/` แล้วเริ่มเซิร์ฟเวอร์ใหม่
-2. แพ็ก Java ถูกฝังใน JAR; เซิร์ฟเวอร์จะส่งแพ็กจาก [GitHub raw URL ที่ตรึงไว้กับ commit SHA](https://raw.githubusercontent.com/40000years/Evergarden2/e92101935ef8ea08b0fa886ffec1cddd25c8a218/7sins/src/main/resources/resource-packs/7sins-java.zip)
+2. แพ็ก Java ถูกฝังใน JAR; เซิร์ฟเวอร์จะส่งแพ็กจาก [GitHub raw URL ที่ตรึงไว้กับ commit SHA](https://raw.githubusercontent.com/40000years/Evergarden2/be0f38c0f2049f2772a58bc60d2cb00f101d54b3/7sins/src/main/resources/resource-packs/7sins-java.zip)
    และ Minecraft ตรวจสอบ SHA-1 ของ ZIP จากไฟล์ที่ฝังในปลั๊กอินก่อนโหลด
 3. หากใช้ URL ส่วนตัวให้แทนที่ `resource-pack.url`; ปล่อยค่าว่างเพื่อใช้เซิร์ฟเวอร์ไฟล์ในตัว
    กรณีนี้เปิด TCP **8188** และตั้ง `resource-pack.host.public-host` เป็น IP หรือชื่อโฮสต์ของเซิร์ฟเวอร์

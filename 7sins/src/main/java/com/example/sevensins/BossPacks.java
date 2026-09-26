@@ -17,7 +17,7 @@ import java.util.concurrent.*;
 public final class BossPacks implements Listener, AutoCloseable {
     public static final UUID PACK_ID = UUID.fromString("c67c5645-89c9-4a41-a8ef-bd93e55280c5");
     /** Pinned to the source pack that ships inside the matching version of 7sins.jar. */
-    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/e92101935ef8ea08b0fa886ffec1cddd25c8a218/7sins/src/main/resources/resource-packs/7sins-java.zip";
+    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/be0f38c0f2049f2772a58bc60d2cb00f101d54b3/7sins/src/main/resources/resource-packs/7sins-java.zip";
     private final SevenSinsPlugin plugin;
     private final Set<UUID> loaded = new HashSet<>();
     private final Map<UUID, String> statuses = new HashMap<>();

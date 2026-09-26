@@ -70,7 +70,7 @@ public final class MythicSpells {
     }
     private void sun(Location at,double radius,int age,int layer) {
         // Three great circles give a recognizable 3D orb from either client's view.
-        int points=48+layer*8;float size=2.8f+layer*.25f;
+        int points=48+layer*16;float size=2.8f+layer*.25f;
         for(int i=0;i<points;i++) {
             double a=TAU*i/points, x=Math.cos(a)*radius, y=Math.sin(a)*radius;
             dust(at.clone().add(x,y,0),WHITE,size);
@@ -116,10 +116,12 @@ public final class MythicSpells {
     public boolean solar(Player p) {
         Location at=center(p);
         if(at==null||!room(at))return false;
-        double[] radii={4.4,6.2,8.0,9.8,11.6};double[] heights=new double[5];heights[0]=16;
-        for(int i=1;i<5;i++)heights[i]=heights[i-1]+radii[i-1]+radii[i]+2;
+        // Each sphere doubles in radius and diameter; keep a visible surface-to-surface gap.
+        double[] radii={4.4,8.8,17.6,35.2,70.4};double[] heights=new double[5];heights[0]=18;
+        for(int i=1;i<5;i++)heights[i]=heights[i-1]+radii[i-1]+radii[i]+Math.max(8,radii[i]*.4);
         double scale=Math.min(1,(at.getWorld().getMaxHeight()-1-at.getY())/(heights[4]+radii[4]+1.5));
-        if(scale<.3)return false;
+        // Scale the complete stack together so the 1:2:4:8:16 proportions survive near the ceiling.
+        if(scale<.1)return false;
         Location high=at.clone().add(0,heights[0]*scale,0);
         Location top=at.clone().add(0,(heights[4]+radii[4]+1.5)*scale,0);
         if(!c.loaded(high)||!c.loaded(top))return false;
@@ -193,7 +195,11 @@ public final class MythicSpells {
         return true;
     }
 
-    private void clock(Location at,Vector right,int age,int offset,double radius) {
+    private Location clockPoint(Location at,Vector right,Vector up,double angle,double radius) {
+        return at.clone().add(right.clone().multiply(Math.cos(angle)*radius))
+            .add(up.clone().multiply(Math.sin(angle)*radius));
+    }
+    private void clock(Location at,Vector right,Vector up,int age,int offset,double radius) {
         double turn=age<88?age*.055:-(age-88)*.12;
         turn+=offset*.35;
         // Static outlines persist for 0.8 seconds in Bedrock; redraw every 0.4 seconds.
@@ -201,21 +207,21 @@ public final class MythicSpells {
             int points=radius>8?120:72;
             for(int i=0;i<points;i++) {
                 double a=TAU*i/points;
-                dust(at.clone().add(right.clone().multiply(Math.cos(a)*radius)).add(0,Math.sin(a)*radius,0),GOLD,radius>8?2.8f:2f);
+                dust(clockPoint(at,right,up,a,radius),GOLD,radius>8?2.8f:2f);
             }
             for(int i=0;i<12;i++) {
                 double a=TAU*i/12;
-                Location outer=at.clone().add(right.clone().multiply(Math.cos(a)*radius*.9375)).add(0,Math.sin(a)*radius*.9375,0);
-                Location inner=at.clone().add(right.clone().multiply(Math.cos(a)*radius*.825)).add(0,Math.sin(a)*radius*.825,0);
+                Location outer=clockPoint(at,right,up,a,radius*.9375);
+                Location inner=clockPoint(at,right,up,a,radius*.825);
                 line(inner,outer,i%3==0?CYAN:VIOLET,1.8f,3);
             }
             if(radius>8)for(int i=0;i<96;i++){
                 double a=TAU*i/96;
-                dust(at.clone().add(right.clone().multiply(Math.cos(a)*(radius+1))).add(0,Math.sin(a)*(radius+1),0),CYAN,2f);
+                dust(clockPoint(at,right,up,a,radius+1),CYAN,2f);
             }
         }
-        line(at,at.clone().add(right.clone().multiply(Math.cos(turn)*radius*.7875)).add(0,Math.sin(turn)*radius*.7875,0),CYAN,2.5f,20);
-        line(at,at.clone().add(right.clone().multiply(Math.cos(turn*.22+1)*radius*.5)).add(0,Math.sin(turn*.22+1)*radius*.5,0),VIOLET,2.5f,14);
+        line(at,clockPoint(at,right,up,turn,radius*.7875),CYAN,2.5f,20);
+        line(at,clockPoint(at,right,up,turn*.22+1,radius*.5),VIOLET,2.5f,14);
         spark(at,Particle.END_ROD,4,.4);
     }
     private boolean boss(LivingEntity target) {
@@ -226,13 +232,15 @@ public final class MythicSpells {
     public boolean chronos(Player p) {
         Location at=center(p);
         if(at==null||!room(at))return false;
-        // Lift the constellation so its surrounding 44-block dial remains above ground.
+        // Keep the five upright clocks beneath a horizontal 44-block dial floating overhead.
         Location face=at.clone().add(0,24,0);
-        if(!c.loaded(face.clone().add(0,23,0)))return false;
+        Location outerFace=face.clone().add(0,12,0);
+        if(!c.loaded(face.clone().add(0,8,0))||!c.loaded(outerFace.clone().add(0,1,0)))return false;
         Vector forward=p.getEyeLocation().getDirection().setY(0);
         if(forward.lengthSquared()<.01)forward=new Vector(0,0,1);
         forward.normalize();
         final Vector right=new Vector(forward.getZ(),0,-forward.getX()).normalize();
+        final Vector outerUp=forward.clone(), upright=new Vector(0,1,0);
         List<Location> faces=new ArrayList<>();List<Vector> axes=new ArrayList<>();
         faces.add(face);axes.add(right);
         for(int i=0;i<4;i++){
@@ -246,10 +254,11 @@ public final class MythicSpells {
         List<Location> emitters=new ArrayList<>();
         for(int i=0;i<12;i++){
             double a=TAU*i/12;
-            Location source=face.clone().add(right.clone().multiply(Math.cos(a)*22)).add(0,Math.sin(a)*22,0);
-            if(!c.loaded(source))return false;
+            Location source=clockPoint(outerFace,right,outerUp,a,22);
             // Java's native beam anchor bobs below the crystal entity's origin.
-            emitters.add(source.add(0,1,0));
+            source.add(0,1,0);
+            if(!c.loaded(source))return false;
+            emitters.add(source);
         }
         double power=c.getCastDamageMultiplier(p.getUniqueId());
         double bladeDamage=c.configuredDamage("damage.chronos-blade",24);
@@ -260,12 +269,12 @@ public final class MythicSpells {
         CrystalBeamVisuals.Projection[] projection={null};
         Set<UUID> firstRound=new HashSet<>();
         start(p,at,Math.max(191,88+lifetime+1),(effect,age)->{
-            if(!c.loaded(at)||!c.loaded(face))return false;
+            if(!c.loaded(at)||!c.loaded(face)||!c.loaded(outerFace))return false;
             visuals.frame(at);
             if(age==0)projection[0]=crystalBeams.open(effect,emitters,face);
             if(age%4==0&&age<160) {
-                for(int i=0;i<faces.size();i++)clock(faces.get(i),axes.get(i),age,i,8);
-                clock(face,right,age,5,22);
+                for(int i=0;i<faces.size();i++)clock(faces.get(i),axes.get(i),upright,age,i,8);
+                clock(outerFace,right,outerUp,age,5,22);
                 glyph(at,age,CYAN);
             }
             if(age%4==0&&projection[0]!=null){

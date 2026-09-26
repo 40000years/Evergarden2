@@ -240,8 +240,8 @@ public final class WandService implements Listener {
             var mythicLore=new ArrayList<>(meta.getLore());
             mythicLore.add(0,ChatColor.GOLD+"[MYTHIC · ระดับตำนานสูงสุด]");
             mythicLore.add(ChatColor.YELLOW+(spell==Spell.SOLAR_APOCALYPSE
-                ?"สุริยัน 5 ชั้น · จุติพร้อมกัน · ทะเลลาวา"
-                :"นาฬิกา 5 เรือน · วงกาลเวลา · ทะเลพิษ"));
+                ?"สุริยัน 5 ชั้น ขนาดทวีคูณ · ทะเลลาวา"
+                :"นาฬิกา 5 เรือน · วงกาลเวลาลอยเหนือ · ทะเลพิษ"));
             mythicLore.add(ChatColor.LIGHT_PURPLE+"Mastery: "+casts(item)+" casts");
             meta.setLore(mythicLore);
         }

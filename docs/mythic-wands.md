@@ -1,6 +1,6 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.3.2-mythic-celestial-stack`, Evergarden `3.0.0-e2.15-mythic-celestial-stack`.
+Release: Advance Magic `1.3.3-mythic-orbits`, Evergarden `3.0.0-e2.16-mythic-orbits`.
 Install both JARs from the root `dist` directory and restart the server. This revision
 uses the existing packs (Advance Magic 2.2.0 / Evergarden 3.9.0); their hashes and
 item models are unchanged.
@@ -14,22 +14,29 @@ with `-DskipTests`; no live consumption test was run for this revision.
 
 | Wand | Mana | Base cooldown | Timeline | Base damage on a target hit by every stage |
 | --- | ---: | ---: | --- | ---: |
-| Solar Apocalypse | 100 | 45 s | Five increasingly large stacked suns, golden glyph, five beams, simultaneous descent, shockwave and lava sea | 5 × 32 + 180 = 340, plus lava contact damage |
-| Chronos: Final Hour | 95 | 40 s | Five clocks enclosed by a larger dial, outer End Crystal beams converging on the central clock, inner lasers, reversed echoes and poison sea | 5 × 24 + 5 × 16.8 + 100 = 304, plus poison/contact damage |
+| Solar Apocalypse | 100 | 45 s | Five stacked suns with doubling diameters and wide gaps, golden glyph, five beams, simultaneous descent, shockwave and lava sea | 5 × 32 + 180 = 340, plus lava contact damage |
+| Chronos: Final Hour | 95 | 40 s | Five upright clocks beneath a floating horizontal dial, outer End Crystal beams converging downward on the central clock, inner lasers, reversed echoes and poison sea | 5 × 24 + 5 × 16.8 + 100 = 304, plus poison/contact damage |
 
-Solar's five sun radii are 4.4, 6.2, 8.0, 9.8 and 11.6 blocks. Their mature centres
-are 16, 28.6, 44.8, 64.6 and 88 blocks above the aim point, with clear gaps between
-layers. All begin descending at tick 90 and converge on the same impact at tick
-110; the final damage is applied once. The stack scales uniformly near the world's
-height limit; casting is refused if there is less than 30% of its normal headroom.
-Geometry is redrawn every six ticks with 48–80 samples per great circle.
+Solar's nominal sun radii are 4.4, 8.8, 17.6, 35.2 and 70.4 blocks: both radius
+and diameter double at every layer, preserving a **1:2:4:8:16** size ratio. Their
+mature centres are 18, 39.2, 73.6, 140.48 and 274.24 blocks above the aim point.
+Surface-to-surface gaps are 8, 8, 14.08 and 28.16 blocks. All begin descending at
+tick 90 and converge on the same impact at tick 110; final damage is applied once.
+The complete stack scales uniformly to fit below the world's height limit, including
+its outer rays; casting is refused below 10% of normal headroom. For example, with
+an aim point at Y=100 and a world ceiling of 320, the scale is about 0.633: diameters
+are approximately 5.57, 11.14, 22.27, 44.54 and 89.08 blocks. The doubling ratio is
+unchanged; apparent screen size also depends on the viewer's distance and angle.
+Geometry is redrawn every six ticks with 48–112 samples per great circle.
 
-Chronos keeps the five 8-block-radius clocks and adds a concentric outer dial with
-radius 22 (44 blocks across). The constellation's centre is raised to 24 blocks
-above the aim point so the entire outer dial is above ground. Twelve native End
-Crystal emitters occupy its hour positions and beam into the central clock from
-tick 40 until shatter at tick 160. Inner clocks retain their coloured particle lasers
-into the ground target. Only the outer dial uses the End Crystal beam style.
+Chronos keeps the five upright 8-block-radius clocks and places its outer dial
+**horizontally in the XZ plane**, with radius 22 (44 blocks across). The main clock
+centre is 24 blocks above the aim point; the outer dial floats another 12 blocks
+above it, at a height of 36 blocks. Its outline, hour markers, hands and crystal
+positions all use the horizontal plane. Twelve native End Crystal emitters occupy
+its hour positions and beam down into the central clock from tick 40 until shatter
+at tick 160. Inner clocks retain their coloured particle lasers into the ground
+target. Only the outer dial uses the End Crystal beam style.
 
 Solar impacts at 5.5 seconds; Chronos shatters at 8 seconds. Their temporary fields
 last 15 seconds from creation (Solar at impact; Chronos at 4.4 seconds). Aim at a mob
@@ -161,5 +168,8 @@ The existing particle allowance is now 65,000 packets per cast to cover the larg
 geometry plus the particle fallback for outer beams. The **1.3.2 / e2.15** JARs
 were built with Maven `-DskipTests`; the packet API was
 inspected against the local Paper 26.2 JAR and the installed Geyser beam translator.
-Tests were not rerun in these revisions. Native terrain cleanup, five-sun motion
-and crystal beam projections still need a two-client play check.
+The **1.3.3 / e2.16** refinement also uses Maven `-DskipTests` and changes the
+Solar size/spacing and outer Chronos orientation; it adds no resource-pack assets.
+Tests were not rerun in these revisions. Native terrain cleanup, five-sun motion,
+the doubled sphere sizes and horizontal crystal beam projections still need a
+two-client play check.

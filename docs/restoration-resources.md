@@ -1,5 +1,7 @@
 # Restoration resource update
 
+คู่มือนี้เป็นบันทึกรุ่น Restoration เดิม แพ็กปัจจุบันคือ Advance Magic `2.1.0` / Evergarden `3.8.2` ดูการแก้ mapping และขั้นตอนติดตั้งล่าสุดใน [Bedrock item pack audit](bedrock-item-pack-audit.md)
+
 Advance Magic `1.1.1-restoration-art` / Evergarden `3.0.0-e2.6-restoration-art`
 
 ## หน้าตาใหม่

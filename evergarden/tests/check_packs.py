@@ -10,6 +10,40 @@ root = Path(__file__).resolve().parents[1]
 dist = root / 'dist'
 mapping = json.loads((dist / 'geyser-mappings.json').read_text())
 other = json.loads((root.parent / 'advance-magic/dist/geyser-mappings.json').read_text())
+
+def check_bedrock_references(pack_paths):
+    """Resolve attachable references across the packs served together, including vanilla exceptions."""
+    documents = []
+    files = set()
+    for path in pack_paths:
+        with zipfile.ZipFile(path) as pack:
+            files.update(pack.namelist())
+            documents.extend((name, json.loads(pack.read(name))) for name in pack.namelist() if name.endswith('.json'))
+    documents = [(name, data) for name, data in documents if isinstance(data, dict)]
+    geometry_ids = {geo['description']['identifier'] for _, data in documents for geo in data.get('minecraft:geometry', [])}
+    controllers = {key for _, data in documents for key in data.get('render_controllers', {})}
+    animations = {key for _, data in documents for key in data.get('animations', {})}
+    for name, data in documents:
+        atlas = data.get('texture_data', {})
+        for key, entry in atlas.items():
+            references = entry['textures']
+            for ref in references if isinstance(references, list) else [references]:
+                assert ref + '.png' in files, ('Missing atlas texture', name, key, ref)
+        description = data.get('minecraft:attachable', {}).get('description')
+        if description is None:
+            continue
+        for ref in description.get('geometry', {}).values():
+            assert ref in geometry_ids, ('Missing attachable geometry', name, ref)
+        for ref in description.get('render_controllers', []):
+            if isinstance(ref, dict):
+                ref = next(iter(ref))
+            assert ref in controllers, ('Missing render controller', name, ref)
+        for ref in description.get('textures', {}).values():
+            assert ref + '.png' in files or ref == 'textures/misc/enchanted_item_glint', ('Missing attachable texture', name, ref)
+        for ref in description.get('animations', {}).values():
+            assert ref in animations or ref in ('animation.bow.wield', 'animation.bow.wield_first_person_pull'), ('Missing animation', name, ref)
+
+check_bedrock_references([dist / 'evergarden-bedrock.mcpack', root.parent / 'advance-magic/dist/advance-magic-bedrock.mcpack'])
 definitions = [d for group in mapping['items'].values() for d in group]
 identifiers = {d['bedrock_identifier'] for d in definitions}
 other_ids = {d['bedrock_identifier'] for group in other['items'].values() for d in group}
@@ -40,7 +74,7 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
                 json.loads(archive.read(name))
     atlas = json.loads(bedrock.read('textures/item_texture.json'))['texture_data']
     manifest = json.loads(bedrock.read('manifest.json'))
-    expected_version = [3, 8, 1]
+    expected_version = [3, 8, 2]
     assert manifest['header']['version'] == expected_version
     assert manifest['modules'][0]['version'] == expected_version
     with zipfile.ZipFile(root.parent / 'advance-magic/dist/advance-magic-bedrock.mcpack') as magic:
@@ -71,12 +105,12 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
             name = entry['bedrock_identifier'].split(':')[1]
             # Crops and head models use direct item_model components; relics
             # additionally support the legacy custom-model-data selector.
-            if name.startswith(('seed_', 'crop_')):
+            if name.startswith(('seed_', 'crop_')) or name == 'void_elixir' or name.endswith(('_mask', '_crown')):
                 assert entry['model'] == entry['bedrock_identifier']
                 assert 'predicate' not in entry
             else:
                 assert entry['model'] == base
-            if not name.startswith(('seed_', 'crop_')) and not name.endswith(('_mask', '_crown')):
+            if not name.startswith(('seed_', 'crop_')) and name != 'void_elixir' and not name.endswith(('_mask', '_crown')):
                 assert entry['predicate']['value'] in cases
             assert json.loads(java.read(f'assets/voidscape/items/{name}.json'))['model']
             java_texture = java.read(f'assets/voidscape/textures/item/{name}.png')
@@ -130,4 +164,6 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
 with zipfile.ZipFile(root.parent / 'dist/evergarden.jar') as jar:
     for filename in (*hashes, 'geyser-mappings.json', 'pack-hashes.json'):
         assert jar.read('resource-packs/' + filename) == (dist / filename).read_bytes()
-print('PASS: 20 model selectors, six Java/Bedrock wearable models, vanilla fallbacks, no cross-plugin Geyser ID collisions, hashes and embedded assets')
+    for filename in ('evergarden-bedrock.mcpack', 'geyser-mappings.json'):
+        assert jar.read('geyser/' + filename) == (dist / filename).read_bytes()
+print('PASS: all Bedrock atlas/geometry/texture/controller/animation references, 20 relic routes, six wearable models, vanilla fallbacks, no cross-plugin IDs, hashes and embedded assets')

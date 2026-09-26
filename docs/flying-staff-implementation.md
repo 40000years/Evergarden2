@@ -1,6 +1,6 @@
 # ไม้เท้าบิน: ใช้งาน ติดตั้ง และผลทดสอบ
 
-โค้ดอยู่ใน Advance Magic รุ่น `1.2.15-flying-staff` ใช้คู่กับ Evergarden `3.0.0-e2.10-flying-staff-durability` ต้องอัปเดต JAR ทั้งสองตัว แพ็กทั้งสองฝั่งอยู่ใน JAR และ `advance-magic/dist/` ไฟล์แยกใน `advance-magic/art/flying-staff/dist/` เป็นงาน preview ไม่ใช่แพ็กที่เซิร์ฟเวอร์แจก
+โค้ดอยู่ใน Advance Magic รุ่น `1.2.15-flying-staff` ใช้คู่กับ Evergarden `3.0.0-e2.11-bedrock-elixir` เมื่อเริ่มใช้ระบบความทนทานต้องอัปเดต JAR ทั้งสองตัว หากใช้ `1.2.15` / `e2.10` อยู่แล้ว การแก้แพ็กน้ำยา Bedrock อัปเดตเฉพาะ Evergarden ได้ แพ็กทั้งสองฝั่งอยู่ใน JAR และ `advance-magic/dist/` ไฟล์แยกใน `advance-magic/art/flying-staff/dist/` เป็นงาน preview ไม่ใช่แพ็กที่เซิร์ฟเวอร์แจก ดูผลตรวจใน [Bedrock item pack audit](bedrock-item-pack-audit.md)
 
 ## อัตราและความทนทานปัจจุบัน (1.2.15 / e2.10)
 

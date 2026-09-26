@@ -119,6 +119,8 @@ Install the updated `dist/evergarden.jar` and restart the server.
 Advance Magic now includes **Solar Apocalypse** and **Chronos: Final Hour**,
 bringing the catalog to 17 wands and three Mythic cores. The new items use flat
 pixel art, with shared cinematic geometry and dedicated Bedrock colour emitters.
+Their elemental cores are independent framed orbs: a solar-energy crystal inside
+amber glass, and a cyan hourglass inside violet glass.
 Solar summons five spaced suns stacked overhead, each twice the diameter of the
 one below, dropping together into a temporary lava sea. Chronos places a larger
 horizontal outer dial above five clocks, with End Crystal beams converging downward

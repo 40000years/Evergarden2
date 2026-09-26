@@ -1,9 +1,11 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.3.3-mythic-orbits`, Evergarden `3.0.0-e2.16-mythic-orbits`.
+Release: Advance Magic `1.3.4-mythic-cores`, Evergarden `3.0.0-e2.17-mythic-cores`.
 Install both JARs from the root `dist` directory and restart the server. This revision
-uses the existing packs (Advance Magic 2.2.0 / Evergarden 3.9.0); their hashes and
-item models are unchanged.
+bundles refreshed packs (Advance Magic 2.3.0 / Evergarden 3.10.0) with two newly
+designed elemental cores. Reconnect clients to download the updated artwork.
+Evergarden migrates official pack URLs to the immutable published Java pack;
+administrator-owned private CDN URLs continue to require their own pack update.
 
 Evergarden e2.14 also fixes Ancient Astral Root consumption: its `DRAGON_BREATH`
 effect now supplies the required `Float` power (`1.0f`), matching the other dragon
@@ -130,10 +132,34 @@ The particle format follows [Minecraft's billboard component](https://learn.micr
 
 ## Pixel art provenance
 
-Created with the built-in imagegen tool using `lightning_strike.png` as the original
-first-set style reference. Prepared as 128 × 128 transparent RGBA sprites with a
-limited palette and crisp nearest-neighbour pixels. New cores use the corresponding
-wand heads. Existing wand sprites and their models are preserved.
+Wands were created with the built-in imagegen tool using `lightning_strike.png` as
+the original first-set style reference. Prepared as 128 × 128 transparent RGBA
+sprites with a limited palette and crisp nearest-neighbour pixels.
+
+The **1.3.4 / e2.17** core redesign uses the built-in `image_gen.imagegen` tool with
+the original Lightning, Meteor and Levitation **core** sprites as style references.
+Both new sprites use the same round glass relic and antique gold compass-frame
+family as the established cores, each with four small cardinal studs:
+
+- **Core of the Sun:** amber/orange glass containing a bright faceted solar-energy
+  crystal and an internal spiral of fire.
+- **Core of Time:** violet glass containing a cyan hourglass with gold end caps and
+  falling pale cyan sand.
+
+They are independently generated objects with their own silhouettes and internal
+symbols. Production sprites are converted to 128 × 128 with nearest-neighbour
+sampling and their generated RGBA transparency is retained. Java and Bedrock
+receive these same PNGs through both bundled packs; existing core items use their
+existing identifiers and automatically display the new designs after pack refresh.
+The standalone core generator preserves the two authored Mythic PNGs.
+
+Exact prompt set and references:
+[`advance-magic/art/mythic-core-prompts.json`](../advance-magic/art/mythic-core-prompts.json).
+Size-conversion command (after generating both source PNGs):
+
+```powershell
+./advance-magic/tools/prepare_mythic_core_art.ps1 -SunImage <sun.png> -TimeImage <time.png>
+```
 
 Final assets:
 
@@ -170,6 +196,9 @@ were built with Maven `-DskipTests`; the packet API was
 inspected against the local Paper 26.2 JAR and the installed Geyser beam translator.
 The **1.3.3 / e2.16** refinement also uses Maven `-DskipTests` and changes the
 Solar size/spacing and outer Chronos orientation; it adds no resource-pack assets.
+The **1.3.4 / e2.17** core redesign rebuilds all four packs and both JARs with
+Maven `-DskipTests`. Pack archive inspection shows only the two core PNG entries
+changed in each Java ZIP, plus the manifest versions in each Bedrock pack.
 Tests were not rerun in these revisions. Native terrain cleanup, five-sun motion,
 the doubled sphere sizes and horizontal crystal beam projections still need a
 two-client play check.

@@ -1,5 +1,5 @@
 name: Evergarden
-version: '3.0.0-e2.16-mythic-orbits'
+version: '3.0.0-e2.17-mythic-cores'
 main: com.example.voidscape.VoidscapePlugin
 api-version: '26.2'
 description: Evergarden - Sky whale, celestial observatory, hanging garden, sanctums and trial vaults.

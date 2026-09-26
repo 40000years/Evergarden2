@@ -1,10 +1,18 @@
-config-version: 3
+config-version: 4
 wrath:
   health: 1800.0
   model-scale: 5.0
   incoming-damage-multiplier: 0.7
   # Base damage is multiplied by this value. Damage uses vanilla armor/shields.
   damage-multiplier: 3.0
+  # Faster chase; enraged movement gains another 15%.
+  movement-speed: 0.42
+  # Independent of model size, so giant Wrath responds to archers at ordinary bow ranges.
+  ranged-trigger-distance: 20.0
+  arrival:
+    # Raw damage, before vanilla armor/shields; not multiplied by damage-multiplier.
+    damage: 200.0
+    radius: 40.0
   phase-two-absorption-seconds: 15
   armor-break:
     reduction: 0.6

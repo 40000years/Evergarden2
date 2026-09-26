@@ -8,6 +8,11 @@ public final class WrathCombatChecks {
     private static int checks;
     private static void check(boolean value, String message) { if (!value) throw new AssertionError(message); checks++; }
     public static void main(String[] args) {
+        check(WrathCombat.inArrival(40,0,0,40), "Arrival covers its configured forty-block radius");
+        check(!WrathCombat.inArrival(40.01,0,0,40), "Arrival does not damage beyond its visible ring");
+        check(WrathCombat.inArrival(0,0,1,40), "A small jump does not bypass the spawn explosion");
+        check(!WrathCombat.inArrival(0,0,20.01,40), "Arrival has bounded vertical reach");
+        check(!WrathCombat.inArrival(0,0,-2.01,40), "Arrival does not hit deep underground");
         check(WrathCombat.inSweep(0, 4, 0, 1), "Front is dangerous");
         check(!WrathCombat.inSweep(0, -1, 0, 1), "Behind boss is safe");
         check(!WrathCombat.inSweep(0, 5.01, 0, 1), "Outside sweep is safe");

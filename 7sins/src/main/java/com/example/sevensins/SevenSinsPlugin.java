@@ -14,17 +14,20 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     private final Map<UUID, WrathBoss> bosses = new LinkedHashMap<>();
     private BossPacks packs;
     private WrathArmorBreak armorBreak;
+    private WrathTremor tremor;
     private NamespacedKey entityKey;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         int configVersion = getConfig().getInt("config-version", 0);
-        if (configVersion < 3) {
+        if (configVersion < 4) {
             if (configVersion < 2 && getConfig().getDouble("wrath.health", 600) == 600) getConfig().set("wrath.health", 1800);
-            if (getConfig().getDouble("wrath.damage-multiplier", 1) == 1) getConfig().set("wrath.damage-multiplier", 3);
-            if (getConfig().getDouble("wrath.arena-radius", 28) == 28) getConfig().set("wrath.arena-radius", 140);
-            getConfig().set("config-version", 3); getConfig().options().copyDefaults(true); saveConfig();
+            if (configVersion < 3) {
+                if (getConfig().getDouble("wrath.damage-multiplier", 1) == 1) getConfig().set("wrath.damage-multiplier", 3);
+                if (getConfig().getDouble("wrath.arena-radius", 28) == 28) getConfig().set("wrath.arena-radius", 140);
+            }
+            getConfig().set("config-version", 4); getConfig().options().copyDefaults(true); saveConfig();
         }
         entityKey = new NamespacedKey(this, "boss_entity");
         // Remove only leftovers bearing our own marker, e.g. after an interrupted reload.
@@ -32,10 +35,12 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             if (e.getPersistentDataContainer().has(entityKey, PersistentDataType.STRING)) e.remove();
         packs = new BossPacks(this); packs.start();
         armorBreak = new WrathArmorBreak(this);
+        tremor = new WrathTremor(this);
         Bukkit.getPluginManager().registerEvents(this, this);
         Objects.requireNonNull(getCommand("7sins")).setTabCompleter(this);
         Bukkit.getScheduler().runTaskTimer(this, () -> {
             armorBreak.tick();
+            tremor.tick();
             for (WrathBoss boss : List.copyOf(bosses.values())) {
                 try { boss.tick(); }
                 catch (RuntimeException error) { getLogger().log(java.util.logging.Level.SEVERE, "Wrath encounter failed", error); boss.remove(); }
@@ -48,10 +53,11 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     @Override
     public void onDisable() {
         bosses.values().forEach(WrathBoss::remove); bosses.clear();
-        if (armorBreak != null) armorBreak.close(); if (packs != null) packs.close();
+        if (armorBreak != null) armorBreak.close(); if (tremor != null) tremor.close(); if (packs != null) packs.close();
     }
     public BossPacks packs() { return packs; }
     public WrathArmorBreak armorBreak() { return armorBreak; }
+    public WrathTremor tremor() { return tremor; }
     public double wrathScale() {
         double scale = getConfig().getDouble("wrath.model-scale", 5);
         return Double.isFinite(scale) ? Math.max(0.25, Math.min(8, scale)) : 5;
@@ -75,6 +81,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             if (sender.hasPermission("7sins.admin")) sender.sendMessage("§7/7sins spawn wrath §fเรียกบอสด้านหน้า | §7/7sins remove §fลบบอสที่ใกล้ที่สุด");
             sender.sendMessage("§6ฟันกวาด: อ้อมหลัง | ทุบพื้น: กระโดด | พุ่งชน: ล่อชนกำแพง | วงไฟ: เข้าวงใน");
             sender.sendMessage("§6กระทืบเท้า (โจมตีปกติ): กระโดดหรือถอย | ดาบจากพื้น: หลบวงแดง");
+            sender.sendMessage("§cตอนเกิดระเบิด 200 ดาเมจในระยะ 40 บล็อก | โดนค้อน: ตรึง 1 วิ แล้วช้า 80% อีก 2 วิ");
             sender.sendMessage("§cโดนสกิลแล้วเกราะลด 60% นาน 8 วิ และเสียความทนทานเกราะ 25% — กระทืบปกติไม่มีผลนี้");
             sender.sendMessage("§eเฟสสอง: ช่วงยืนดูดซับ หยุดตี! ดาเมจโจมตีจะกลายเป็นเลือดจนหมดเวลาบน BossBar");
             return true;
@@ -109,7 +116,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             return true;
         }
         try {
-            spawnWrath(spawn.location()); player.sendMessage("§cWRATH ถูกปลุกแล้ว! §7เตรียมสู้ในอีก 4 วินาที — ใช้ Survival เพื่อเข้าต่อสู้");
+            spawnWrath(spawn.location()); player.sendMessage("§cWRATH ถูกปลุกแล้ว! §cระเบิดตอนเกิด 200 ดาเมจ! §7จากนั้นเริ่มไล่ใน 4 วินาที — ใช้ Survival เพื่อเข้าต่อสู้");
         } catch (IllegalStateException error) { player.sendMessage("§c[7sins] " + error.getMessage()); }
         return true;
     }
@@ -149,7 +156,11 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     }
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true) public void rage(EntityDamageEvent e) {
         WrathBoss boss = bosses.get(e.getEntity().getUniqueId());
-        if (boss != null) boss.attacked(e.getFinalDamage());
+        if (boss != null) {
+            boss.attacked(e.getFinalDamage());
+            if (e.getFinalDamage() > 0 && e.getDamageSource().getDirectEntity() instanceof Projectile
+                    && e.getDamageSource().getCausingEntity() instanceof Player player) boss.rangedHit(player);
+        }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true) public void absorb(EntityDamageByEntityEvent e) {
         WrathBoss boss = bosses.get(e.getEntity().getUniqueId());

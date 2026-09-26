@@ -23,6 +23,7 @@ public final class WrathBoss {
     private final WrathBlades blades;
     private final BossBar bar;
     private final double maxHealth, nativeMaxHealth, radius, damageMultiplier, incomingMultiplier, scale;
+    private final double movementSpeed, rangedDistance, arrivalDamage, arrivalRadius;
     private final int idleLimit;
     private final int absorptionDuration;
     private final Set<UUID> hit = new HashSet<>();
@@ -32,6 +33,9 @@ public final class WrathBoss {
     private Vector facing = new Vector(0, 0, 1);
     private int ticks, remaining = 80, total = 80, cooldown = 40, idle, attackIndex, rage;
     private int basicCooldown = 20;
+    private int pressureCooldown, pressureIndex, shooterUntil;
+    private UUID shooter;
+    private boolean arrivalBlasted;
     private boolean enraged;
     private UUID pendingHit;
     private boolean hitAccepted;
@@ -47,6 +51,10 @@ public final class WrathBoss {
         incomingMultiplier = bounded(plugin.getConfig().getDouble("wrath.incoming-damage-multiplier", 0.7), 0.1, 2, 0.7);
         radius = bounded(plugin.getConfig().getDouble("wrath.arena-radius", 140), 12, 256, 140);
         damageMultiplier = bounded(plugin.getConfig().getDouble("wrath.damage-multiplier", 3), 0.1, 30, 3);
+        movementSpeed = bounded(plugin.getConfig().getDouble("wrath.movement-speed", 0.42), 0.1, 1, 0.42);
+        rangedDistance = bounded(plugin.getConfig().getDouble("wrath.ranged-trigger-distance", 20), 8, 64, 20);
+        arrivalDamage = bounded(plugin.getConfig().getDouble("wrath.arrival.damage", 200), 0, 10000, 200);
+        arrivalRadius = bounded(plugin.getConfig().getDouble("wrath.arrival.radius", 40), 1, radius, Math.min(40, radius));
         idleLimit = Math.max(20, Math.min(3600, plugin.getConfig().getInt("wrath.idle-despawn-seconds", 120))) * 20;
         base = home.getWorld().spawn(home, Husk.class, e -> {
             e.setPersistent(false); e.setRemoveWhenFarAway(false); e.setSilent(true); e.setInvisible(true);
@@ -55,7 +63,7 @@ public final class WrathBoss {
             e.getEquipment().clear(); e.setGlowing(false);
             e.getAttribute(Attribute.MAX_HEALTH).setBaseValue(nativeMaxHealth); e.setHealth(nativeMaxHealth);
             e.getAttribute(Attribute.SCALE).setBaseValue(1.65*scale);
-            e.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.25);
+            e.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(movementSpeed);
             e.getAttribute(Attribute.KNOCKBACK_RESISTANCE).setBaseValue(0.9);
             e.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(radius);
             e.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(0);
@@ -73,6 +81,7 @@ public final class WrathBoss {
         blades = new WrathBlades(plugin, this);
         bar = Bukkit.createBossBar("WRATH · THE ASHEN EXECUTIONER", BarColor.RED, BarStyle.SEGMENTED_10);
         model.animate(home, 0, state, attack, 0, false, false);
+        ring(home, arrivalRadius, Color.fromRGB(255, 70, 20));
         sound(Sound.ENTITY_WITHER_SPAWN, 1.4f, 0.5f);
     }
 
@@ -101,6 +110,9 @@ public final class WrathBoss {
         keepBaseHidden();
         blades.tick();
         List<Player> players = participants();
+        // Run after the manager registers this boss so normal outgoing damage events can be observed.
+        if (!arrivalBlasted) arrivalBlast(players);
+        pressureCooldown = Math.max(0, pressureCooldown - 2);
         Set<UUID> nearby = new HashSet<>();
         for (Player p : base.getWorld().getPlayers()) if (p.getLocation().distanceSquared(home) <= (radius + 12) * (radius + 12)) {
             nearby.add(p.getUniqueId()); if (!bar.getPlayers().contains(p)) bar.addPlayer(p);
@@ -127,7 +139,7 @@ public final class WrathBoss {
             announce("เกราะแตกแล้ว! WRATH เข้าสู่เฟสคลั่ง", NamedTextColor.RED);
             sound(Sound.ENTITY_WITHER_DEATH, 1.5f, 0.6f);
         }
-        Player target = players.stream().min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(base.getLocation()))).orElse(null);
+        Player target = selectTarget(players);
         switch (state) {
             case ARRIVAL, TRANSITION -> {
                 halt(); ring(base.getLocation(), 2.5*scale, Color.fromRGB(255, 85, 25));
@@ -137,7 +149,7 @@ public final class WrathBoss {
                         change(State.ABSORB, absorptionDuration);
                         announce("WRATH ดูดซับดาเมจเป็นเลือด! หยุดตี " + absorptionSecondsLeft() + " วินาที", NamedTextColor.YELLOW);
                         sound(Sound.BLOCK_BEACON_ACTIVATE,1.5f,0.6f);
-                    } else { change(State.CHASE, 0); cooldown = 30; }
+                    } else { change(State.CHASE, 0); cooldown = 18; }
                 }
             }
             case ABSORB -> {
@@ -153,31 +165,12 @@ public final class WrathBoss {
                     sound(Sound.BLOCK_BEACON_DEACTIVATE,1.5f,0.8f);
                 }
             }
-            case CHASE -> {
-                if (target != null) {
-                    if (ticks % 10 == 0) base.getPathfinder().moveTo(target.getLocation(), enraged ? 1.3 : 1.0);
-                    face(target.getLocation());
-                    cooldown -= 2;
-                    basicCooldown -= 2;
-                    double distance = target.getLocation().distanceSquared(base.getLocation());
-                    if (cooldown <= 0) {
-                        Player distant = players.stream().filter(p -> p.getLocation().distanceSquared(base.getLocation()) > 64*scale*scale)
-                                .max(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(base.getLocation()))).orElse(null);
-                        if (distant != null && (distance > 64*scale*scale || attackIndex % 3 == 2)) startAttack(Attack.BLADES, distant.getLocation());
-                        else if (enraged && attackIndex % 4 == 3) startAttack(Attack.RING, target.getLocation());
-                        else if (distance > 36*scale*scale) startAttack(Attack.CHARGE, target.getLocation());
-                        else startAttack(attackIndex % 3 == 1 ? Attack.SLAM : Attack.SWEEP, target.getLocation());
-                        attackIndex++;
-                    } else if (basicCooldown <= 0 && distance <= 3.2*3.2*scale*scale) {
-                        startAttack(Attack.STOMP, target.getLocation());
-                    }
-                }
-            }
+            case CHASE -> chase(players, target);
             case WINDUP -> {
                 halt(); warning();
                 if ((remaining -= 2) <= 0) {
                     if (attack == Attack.CHARGE) change(State.CHARGE, 26);
-                    else if (attack == Attack.BLADES) change(State.RECOVERY, enraged ? 22 : 32);
+                    else if (attack == Attack.BLADES) change(State.RECOVERY, enraged ? 16 : 24);
                     else change(State.STRIKE, attack == Attack.STOMP ? 6 : attack == Attack.SLAM ? 10 : 8);
                 }
             }
@@ -185,7 +178,7 @@ public final class WrathBoss {
                 halt(); warning();
                 if ((remaining -= 2) <= 0) {
                     executeImpact();
-                    change(State.RECOVERY, attack == Attack.STOMP ? 18 : enraged ? 26 : 36);
+                    change(State.RECOVERY, attack == Attack.STOMP ? 14 : enraged ? 18 : 24);
                 }
             }
             case CHARGE -> charge(players);
@@ -194,7 +187,7 @@ public final class WrathBoss {
                 if ((remaining -= 2) <= 0) {
                     boolean basic = state == State.RECOVERY && attack == Attack.STOMP;
                     change(State.CHASE, 0); basicCooldown = enraged ? 18 : 24;
-                    if (!basic) cooldown = Math.max(32, (enraged ? 60 : 80) - rage / 5);
+                    if (!basic) cooldown = Math.max(18, (enraged ? 28 : 40) - rage / 5);
                 }
             }
             default -> {}
@@ -205,6 +198,56 @@ public final class WrathBoss {
         }
         model.animate(base.getLocation(), ticks, state, attack, total == 0 ? 0 : 1.0 - (double) remaining / total,
                 enraged, state == State.CHASE && target != null || state == State.CHARGE);
+    }
+
+    private Player selectTarget(List<Player> players) {
+        if (ticks < shooterUntil) for (Player player : players) if (player.getUniqueId().equals(shooter)) return player;
+        return players.stream().min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(base.getLocation()))).orElse(null);
+    }
+    private Player pressureTarget(List<Player> players) {
+        List<Player> distant = players.stream().filter(p -> p.getLocation().distanceSquared(base.getLocation()) >= rangedDistance * rangedDistance).toList();
+        if (ticks < shooterUntil) for (Player player : distant) if (player.getUniqueId().equals(shooter)) return player;
+        return distant.stream().max(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(base.getLocation()))).orElse(null);
+    }
+    void rangedHit(Player player) {
+        shooter = player.getUniqueId(); shooterUntil = ticks + 120;
+        pressureCooldown = Math.min(pressureCooldown, 12);
+    }
+    private void chase(List<Player> players, Player target) {
+        if (target == null) return;
+        double speed = movementSpeed * (enraged ? 1.15 : 1);
+        if (base.getAttribute(Attribute.MOVEMENT_SPEED).getBaseValue() != speed)
+            base.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(speed);
+        if (ticks % 6 == 0) base.getPathfinder().moveTo(target.getLocation(), 1.15);
+        face(target.getLocation()); cooldown -= 2; basicCooldown -= 2;
+        Player distant = pressureTarget(players);
+        if (distant != null && pressureCooldown <= 0 && !blades.active()) {
+            // This clock runs during attacks too: melee cooldowns cannot starve the ranged response.
+            Attack pressure = pressureIndex++ % 3 == 2 ? Attack.CHARGE : Attack.BLADES;
+            pressureCooldown = enraged ? 80 : 120;
+            startAttack(pressure, distant.getLocation());
+            return;
+        }
+        double distance = target.getLocation().distanceSquared(base.getLocation());
+        if (cooldown <= 0) {
+            if (enraged && attackIndex % 4 == 3) startAttack(Attack.RING, target.getLocation());
+            else if (distance > 36 * scale * scale) startAttack(Attack.CHARGE, target.getLocation());
+            else startAttack(attackIndex % 3 == 1 ? Attack.SLAM : Attack.SWEEP, target.getLocation());
+            attackIndex++;
+        } else if (basicCooldown <= 0 && distance <= 3.2 * 3.2 * scale * scale) startAttack(Attack.STOMP, target.getLocation());
+    }
+    private void arrivalBlast(List<Player> players) {
+        if (arrivalBlasted) return;
+        arrivalBlasted = true;
+        Set<UUID> arrivals = new HashSet<>();
+        sound(Sound.ENTITY_GENERIC_EXPLODE, 2, 0.5f);
+        ring(home, arrivalRadius, Color.fromRGB(255, 100, 20));
+        base.getWorld().spawnParticle(Particle.EXPLOSION_EMITTER, home.clone().add(0, 1, 0), 1);
+        for (Player player : players) {
+            Vector d = player.getLocation().toVector().subtract(home.toVector());
+            if (WrathCombat.inArrival(d.getX(), d.getZ(), d.getY(), arrivalRadius) && clearSight(player, home))
+                dealHit(player, arrivalDamage, 0.6, arrivals, false, false);
+        }
     }
 
     private void keepBaseHidden() {
@@ -219,9 +262,12 @@ public final class WrathBoss {
     }
 
     private List<Player> participants() {
-        return base.getWorld().getPlayers().stream().filter(p -> p.isValid() && !p.isDead()
-                && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE)
-                && p.getLocation().distanceSquared(home) <= radius * radius).toList();
+        return base.getWorld().getPlayers().stream().filter(this::participates).toList();
+    }
+    private boolean participates(Player player) {
+        return player.isValid() && !player.isDead()
+                && (player.getGameMode() == GameMode.SURVIVAL || player.getGameMode() == GameMode.ADVENTURE)
+                && player.getLocation().distanceSquared(home) <= radius * radius;
     }
 
     void startAttack(Attack next, Location target) {
@@ -229,12 +275,12 @@ public final class WrathBoss {
         facing = target.toVector().subtract(anchor.toVector()).setY(0);
         if (facing.lengthSquared() < 0.001) facing = new Vector(0, 0, 1); else facing.normalize();
         face(target); hit.clear(); halt();
-        int duration = switch (attack) { case SWEEP -> 28; case SLAM -> 44; case CHARGE -> 36; case RING -> 52; case BLADES -> 36; case STOMP -> 16; };
+        int duration = switch (attack) { case SWEEP -> 22; case SLAM -> 34; case CHARGE -> 22; case RING -> 40; case BLADES -> 24; case STOMP -> 16; };
         change(State.WINDUP, enraged ? duration - (attack == Attack.STOMP ? 2 : 6) : duration);
         if (attack == Attack.BLADES) blades.cast(anchor, target, remaining);
         String cue = switch (attack) {
             case SWEEP -> "ฟันกวาด — ถอยออกหรืออ้อมหลัง!";
-            case SLAM -> "ทุบพื้น — กระโดดตอนค้อนลง หรือออกนอกวง!";
+            case SLAM -> "ค้อนแรงสะเทือน — กระโดดตอนค้อนลง! โดนแล้วตรึงและช้า!";
             case CHARGE -> "พุ่งชน — หลบด้านข้าง หรือล่อให้ชนกำแพง!";
             case RING -> "วงไฟ — เข้าวงใน หรือหนีออกนอกวง!";
             case BLADES -> "ดาบประหารจากพื้น — ออกจากรอยแดง!";
@@ -285,7 +331,7 @@ public final class WrathBoss {
                 case RING -> WrathCombat.inRing(relative.getX()/scale, relative.getZ()/scale, y);
                 default -> false;
             };
-            if (inside && clearSight(p, anchor)) hurt(p, attack == Attack.STOMP ? 10 : attack == Attack.SWEEP ? 18 : attack == Attack.SLAM ? 24 : 22, attack == Attack.SLAM ? 0.45 : 0.2);
+            if (inside && clearSight(p, anchor)) hurt(p, attack == Attack.STOMP ? 10 : attack == Attack.SWEEP ? 18 : attack == Attack.SLAM ? 36 : 22, attack == Attack.SLAM ? 0.45 : 0.2);
         }
         if (attack == Attack.SLAM) ring(anchor, 6.5*scale, Color.fromRGB(255, 190, 75));
         if (attack == Attack.RING) { ring(anchor, 3*scale, Color.fromRGB(255, 150, 40)); ring(anchor, 9*scale, Color.fromRGB(255, 150, 40)); }
@@ -320,19 +366,20 @@ public final class WrathBoss {
     }
 
     private void hurt(Player player, double damage, double lift) {
-        hurt(player, damage, lift, hit, attack != Attack.STOMP);
+        dealHit(player, scaledDamage(damage), lift, hit, attack != Attack.STOMP, attack == Attack.SLAM);
     }
     void hurt(Player player, double damage, double lift, Set<UUID> castHits) {
-        hurt(player, damage, lift, castHits, true);
+        dealHit(player, scaledDamage(damage), lift, castHits, true, false);
     }
-    private void hurt(Player player, double damage, double lift, Set<UUID> castHits, boolean breakArmor) {
-        if (!castHits.add(player.getUniqueId())) return;
+    private double scaledDamage(double damage) { return damage * damageMultiplier * (enraged ? 1.2 : 1) * (1 + rage / 400.0); }
+    private void dealHit(Player player, double damage, double lift, Set<UUID> castHits, boolean breakArmor, boolean tremor) {
+        if (damage <= 0 || !castHits.add(player.getUniqueId())) return;
         double before = player.getHealth() + player.getAbsorptionAmount();
         WrathArmorBreak.Trial trial = breakArmor ? plugin.armorBreak().begin(player) : null;
         pendingHit = player.getUniqueId(); hitAccepted = false; acceptedDamage = 0;
         boolean landed = false;
         try {
-            player.damage(damage * damageMultiplier * (enraged ? 1.2 : 1) * (1 + rage / 400.0), base);
+            player.damage(damage, base);
             landed = hitAccepted && (acceptedDamage > 0 || player.getHealth() + player.getAbsorptionAmount() < before);
         } finally {
             pendingHit = null;
@@ -342,6 +389,7 @@ public final class WrathBoss {
         if (landed && !player.isDead()) {
             Vector push = player.getLocation().toVector().subtract(base.getLocation().toVector()).setY(0);
             if (push.lengthSquared() > 0.001) player.setVelocity(push.normalize().multiply(0.65).setY(lift));
+            if (tremor) plugin.tremor().apply(player, base.getUniqueId());
         }
     }
     void observeHit(Player player, boolean accepted, double damage) {
@@ -381,6 +429,8 @@ public final class WrathBoss {
         blades.clear();
         halt(); base.teleport(home); base.setHealth(nativeMaxHealth); enraged = false; rage = 0;
         change(State.ARRIVAL, 60); cooldown = 40; hit.clear();
+        shooter = null; shooterUntil = 0; pressureCooldown = 0;
+        plugin.tremor().clearBoss(base.getUniqueId());
     }
     private void announce(String text, NamedTextColor color) {
         for (Player p : bar.getPlayers()) p.sendActionBar(Component.text(text, color));
@@ -411,6 +461,7 @@ public final class WrathBoss {
     }
     public void remove() {
         if (state == State.REMOVED) return;
-        state = State.REMOVED; bar.removeAll(); blades.clear(); model.remove(); base.remove();
+        state = State.REMOVED; bar.removeAll(); blades.clear(); model.remove();
+        plugin.tremor().clearBoss(base.getUniqueId()); base.remove();
     }
 }

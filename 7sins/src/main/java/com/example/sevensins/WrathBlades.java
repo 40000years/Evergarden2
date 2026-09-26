@@ -46,10 +46,18 @@ final class WrathBlades {
                 Location ground=ground(point);
                 if(ground!=null) add(ground,windup+i*2);
             }
-            // The last two points surround the locked target position; no homing after warning.
+            // A fork at the locked target and two retreat points punish constant backpedaling.
+            // Every floor point is fixed before its warning; strafing remains a counter.
             for(int side:new int[]{-1,1}) {
-                Location point=target.clone().add(-delta.getZ()*side*1.6,0,delta.getX()*side*1.6);
+                Location point=target.clone().add(-delta.getZ()*side*1.8,0,delta.getX()*side*1.8);
                 Location ground=ground(point); if(ground!=null)add(ground,windup+count*2);
+            }
+            for(int step=1;step<=2;step++) {
+                Location retreat=target.clone().add(delta.clone().multiply(step*3));
+                for(int side:new int[]{-1,0,1}) {
+                    Location point=retreat.clone().add(-delta.getZ()*side*1.8,0,delta.getX()*side*1.8);
+                    Location ground=ground(point); if(ground!=null)add(ground,windup+count*2+step*6);
+                }
             }
             for(Player p:Bukkit.getOnlinePlayers())refresh(p);
         } catch(RuntimeException error) {clear();throw error;}
@@ -123,7 +131,7 @@ final class WrathBlades {
                     for(Player p:boss.bladeTargets()) {
                         Vector d=p.getLocation().toVector().subtract(s.floor.toVector());
                         if(d.getY()>-0.5&&d.getY()<2.8&&Math.hypot(d.getX(),d.getZ())<=1.25&&boss.clearSight(p,s.floor))
-                            boss.hurt(p,24,0.35,hit);
+                            boss.hurt(p,32,0.35,hit);
                     }
                 }
             }
@@ -131,5 +139,6 @@ final class WrathBlades {
         }
     }
     List<Entity> entities() {List<Entity> result=new ArrayList<>();for(Spike s:spikes){result.add(s.fang);result.add(s.sword);result.add(s.fallback);}return result;}
+    boolean active() { return !spikes.isEmpty(); }
     void clear() {spikes.forEach(Spike::remove);spikes.clear();hit.clear();}
 }

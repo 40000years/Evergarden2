@@ -27,6 +27,12 @@ public final class WrathProbe extends JavaPlugin {
     private static Object call(Object object, String method, Class<?>[] types, Object... args) throws Exception {
         Method m = object.getClass().getDeclaredMethod(method, types); m.setAccessible(true); return m.invoke(object, args);
     }
+    private static void set(Object object, String name, Object value) throws Exception {
+        Field field=object.getClass().getDeclaredField(name);field.setAccessible(true);field.set(object,value);
+    }
+    private static Object get(Object object,String name) throws Exception {
+        Field field=object.getClass().getDeclaredField(name);field.setAccessible(true);return field.get(object);
+    }
     @Override public void onEnable() {
         Bukkit.getScheduler().runTaskLater(this, () -> {
             String result="PASS";
@@ -76,6 +82,9 @@ public final class WrathProbe extends JavaPlugin {
         check(plugin.getConfig().getDouble("wrath.damage-multiplier")==3&&plugin.getConfig().getDouble("wrath.arena-radius")==140,
                 "Old default damage and arena are upgraded to 3x damage and giant arena");
         check(boss.entity().isValid() && boss.entity().isInvisible() && boss.health()==1800&&boss.entity().getHealth()<=1024,"Boss has configured HP while respecting Minecraft's native health cap");
+        check(boss.entity().getAttribute(Attribute.MOVEMENT_SPEED).getBaseValue()==0.42,
+                "Giant boss uses the faster configured movement speed");
+        arrivalChecks(boss,world,home);
         @SuppressWarnings("unchecked") List<Entity> visuals=(List<Entity>)call(boss,"visuals",new Class<?>[0]);
         check(visuals.size()==10 && visuals.stream().filter(e->e instanceof ItemDisplay).count()==9,"Nine live model bones plus one armor fallback");
         check(visuals.stream().allMatch(e->!e.isPersistent()&&!e.isVisibleByDefault()),"Temporary visuals are hidden until viewer selection");
@@ -109,6 +118,8 @@ public final class WrathProbe extends JavaPlugin {
         }
         check(true,"All six attacks including the normal stomp execute on Paper");
         basicDamageChecks(boss,home);
+        tremorChecks(plugin,boss,world,home);
+        pressureChecks(boss,home);
         Field bladeField=WrathBoss.class.getDeclaredField("blades");bladeField.setAccessible(true);
         Object blades=bladeField.get(boss);
         @SuppressWarnings("unchecked") List<Entity> bladeEntities=(List<Entity>)call(blades,"entities",new Class<?>[0]);
@@ -266,6 +277,143 @@ public final class WrathProbe extends JavaPlugin {
         }
         Files.writeString(getServer().getWorldContainer().toPath().resolve("wrath-animation-poses.json"),new com.google.gson.Gson().toJson(frames));
         check(true,"Exported runtime skeletal poses for walk, slam, stomp and sweep visual review");
+    }
+
+    private record Target(Player player, double[] health, double[] damage, int[] hits, boolean[] accepted, double[] factor) {}
+    private Target target(WrathBoss boss, Location location, LivingEntity attributes) {
+        UUID id=UUID.randomUUID();double[] health={2000},damage={0},factor={1};int[] hits={0};boolean[] accepted={true};
+        ItemStack[][] armor={new ItemStack[4]};
+        PlayerInventory inventory=(PlayerInventory)Proxy.newProxyInstance(PlayerInventory.class.getClassLoader(),new Class<?>[]{PlayerInventory.class},(p,m,a)->switch(m.getName()) {
+            case "getArmorContents" -> armor[0].clone();
+            case "setArmorContents" -> {armor[0]=((ItemStack[])a[0]).clone();yield null;}
+            default -> throw new UnsupportedOperationException(m.getName());
+        });
+        Player player=(Player)Proxy.newProxyInstance(Player.class.getClassLoader(),new Class<?>[]{Player.class},(p,m,a)->switch(m.getName()) {
+            case "getUniqueId" -> id;
+            case "getLocation" -> location.clone();
+            case "getWorld" -> location.getWorld();
+            case "getGameMode" -> GameMode.SURVIVAL;
+            case "getHealth" -> health[0];
+            case "getAbsorptionAmount" -> 0.0;
+            case "getAttribute" -> attributes==null?null:attributes.getAttribute((Attribute)a[0]);
+            case "getInventory" -> inventory;
+            case "isDead" -> false;
+            case "isOnline", "isValid" -> true;
+            case "damage" -> {
+                hits[0]++;damage[0]=(double)a[0];
+                double effective=accepted[0]?damage[0]*factor[0]:0;
+                health[0]-=effective;
+                call(boss,"observeHit",new Class<?>[]{Player.class,boolean.class,double.class},p,accepted[0],effective);
+                yield null;
+            }
+            case "setVelocity", "sendActionBar", "setSprinting", "playHurtAnimation", "playSound" -> null;
+            case "getName", "toString" -> "WrathCombatTarget";
+            case "hashCode" -> id.hashCode();
+            case "equals" -> p==a[0];
+            default -> throw new UnsupportedOperationException(m.getName());
+        });
+        return new Target(player,health,damage,hits,accepted,factor);
+    }
+    private void arrivalChecks(WrathBoss boss,World world,Location home) throws Exception {
+        Target inside=target(boss,home.clone().add(5,0,0),null),outside=target(boss,home.clone().add(41,0,0),null);
+        Target blocked=target(boss,home.clone().add(0,0,8),null);
+        for(int y=0;y<=3;y++)world.getBlockAt(0,home.getBlockY()+y,4).setType(Material.STONE,false);
+        set(boss,"arrivalBlasted",false);
+        call(boss,"arrivalBlast",new Class<?>[]{List.class},List.of(inside.player(),outside.player(),blocked.player()));
+        check(inside.hits()[0]==1&&inside.damage()[0]==200&&inside.health()[0]==1800,
+                "Spawn explosion deals exactly 200 raw damage, without multiplying it by the existing 3x combat multiplier");
+        check(outside.hits()[0]==0&&blocked.hits()[0]==0,"Spawn explosion respects its radius and does not damage through solid walls");
+        call(boss,"arrivalBlast",new Class<?>[]{List.class},List.of(inside.player()));
+        check(inside.hits()[0]==1,"Spawn explosion runs once per encounter instead of repeating after reset or every tick");
+        for(GameMode mode:List.of(GameMode.CREATIVE,GameMode.SPECTATOR)) {
+            Player viewer=(Player)Proxy.newProxyInstance(Player.class.getClassLoader(),new Class<?>[]{Player.class},(p,m,a)->
+                    m.getName().equals("getGameMode")?mode:m.invoke(inside.player(),a));
+            check(!(boolean)call(boss,"participates",new Class<?>[]{Player.class},viewer),mode+" players are excluded from spawn and combat damage");
+        }
+        for(int y=0;y<=3;y++)world.getBlockAt(0,home.getBlockY()+y,4).setType(Material.AIR,false);
+    }
+    private void pressureChecks(WrathBoss boss,Location home) throws Exception {
+        Object blades=get(boss,"blades");call(blades,"clear",new Class<?>[0]);
+        Target melee=target(boss,home.clone().add(0,0,5),null),archer=target(boss,home.clone().add(0,0,30),null);
+        set(boss,"pressureCooldown",0);set(boss,"pressureIndex",0);set(boss,"cooldown",200);set(boss,"basicCooldown",200);
+        call(boss,"chase",new Class<?>[]{List.class,Player.class},List.of(melee.player(),archer.player()),melee.player());
+        check(get(boss,"attack")==WrathBoss.Attack.BLADES&&boss.state()==WrathBoss.State.WINDUP,
+                "An archer at 30 blocks triggers swords even while a melee player is closer and the normal skill cooldown is active");
+        @SuppressWarnings("unchecked") List<Entity> first=(List<Entity>)call(blades,"entities",new Class<?>[0]);
+        check(first.stream().anyMatch(e->e instanceof EvokerFangs&&e.isValid()),"The ranged decision actually creates live ground swords on Paper");
+        set(boss,"pressureCooldown",0);
+        call(boss,"chase",new Class<?>[]{List.class,Player.class},List.of(melee.player(),archer.player()),melee.player());
+        check(first.stream().allMatch(Entity::isValid),"A new ranged response cannot cancel the still-warning tail of the previous sword wave");
+        Target farther=target(boss,home.clone().add(0,0,60),null);
+        set(boss,"pressureCooldown",100);call(boss,"rangedHit",new Class<?>[]{Player.class},archer.player());
+        check((int)get(boss,"pressureCooldown")<=12,"A projectile hit accelerates the ranged response to at most twelve ticks");
+        check(call(boss,"selectTarget",new Class<?>[]{List.class},List.of(melee.player(),archer.player()))==archer.player()
+                &&call(boss,"pressureTarget",new Class<?>[]{List.class},List.of(archer.player(),farther.player()))==archer.player(),
+                "Recent archer becomes the chase and sword priority, rather than a nearer melee player or an uninvolved farther player");
+        set(boss,"ticks",(int)get(boss,"shooterUntil"));
+        check(call(boss,"selectTarget",new Class<?>[]{List.class},List.of(melee.player(),archer.player()))==melee.player(),
+                "Ranged threat expires so the boss does not permanently lock on a departed archer");
+        call(blades,"clear",new Class<?>[0]);set(boss,"pressureCooldown",0);set(boss,"pressureIndex",2);
+        call(boss,"chase",new Class<?>[]{List.class,Player.class},List.of(archer.player()),archer.player());
+        check(get(boss,"attack")==WrathBoss.Attack.CHARGE,"Every third ranged response closes distance with a charge");
+        call(blades,"cast",new Class<?>[]{Location.class,Location.class,int.class},home,home.clone().add(0,0,30),24);
+        @SuppressWarnings("unchecked") List<Entity> fork=(List<Entity>)call(blades,"entities",new Class<?>[0]);
+        check(fork.stream().anyMatch(e->e instanceof EvokerFangs&&e.getLocation().getZ()>home.getZ()+35),
+                "Telegraphed swords also cover retreat points six blocks beyond the locked archer position");
+        set(boss,"pressureCooldown",100);set(boss,"shooter",null);
+        Arrow arrow=home.getWorld().spawn(home.clone().add(0,4,0),Arrow.class);
+        org.bukkit.damage.DamageSource source=(org.bukkit.damage.DamageSource)Proxy.newProxyInstance(
+                org.bukkit.damage.DamageSource.class.getClassLoader(),new Class<?>[]{org.bukkit.damage.DamageSource.class},(p,m,a)->switch(m.getName()) {
+                    case "getDirectEntity" -> arrow;
+                    case "getCausingEntity" -> archer.player();
+                    case "getDamageType" -> org.bukkit.damage.DamageType.ARROW;
+                    case "getDamageLocation", "getSourceLocation" -> home;
+                    case "isIndirect" -> true;
+                    case "scalesWithDifficulty" -> false;
+                    case "getFoodExhaustion" -> 0.1f;
+                    default -> throw new UnsupportedOperationException(m.getName());
+                });
+        var event=(org.bukkit.event.entity.EntityDamageByEntityEvent)org.bukkit.event.entity.EntityDamageByEntityEvent.class
+                .getConstructor(Entity.class,Entity.class,EntityDamageEvent.DamageCause.class,org.bukkit.damage.DamageSource.class,double.class)
+                .newInstance(arrow,boss.entity(),EntityDamageEvent.DamageCause.PROJECTILE,source,10.0);
+        Bukkit.getPluginManager().callEvent(event);
+        check(archer.player().getUniqueId().equals(get(boss,"shooter"))&&(int)get(boss,"pressureCooldown")<=12,
+                "Actual Bukkit projectile-damage event dispatch registers the archer and accelerates the ranged response");
+        arrow.remove();
+    }
+    private void tremorChecks(SevenSinsPlugin plugin,WrathBoss boss,World world,Location home) throws Exception {
+        Horse attributes=world.spawn(home.clone().add(10,0,0),Horse.class,e->{e.setAI(false);e.setSilent(true);});
+        var movement=attributes.getAttribute(Attribute.MOVEMENT_SPEED);var jump=attributes.getAttribute(Attribute.JUMP_STRENGTH);
+        double originalMove=movement.getValue(),originalJump=jump.getValue();
+        Target victim=target(boss,home.clone().add(0,0,2),attributes);
+        call(boss,"startAttack",new Class<?>[]{WrathBoss.Attack.class,Location.class},WrathBoss.Attack.SLAM,home.clone().add(0,0,2));
+        victim.accepted()[0]=false;
+        call(boss,"hurt",new Class<?>[]{Player.class,double.class,double.class},victim.player(),36.0,0.45);
+        check(movement.getValue()==originalMove&&jump.getValue()==originalJump,"Cancelled hammer damage does not root or slow a protected player");
+        call(boss,"startAttack",new Class<?>[]{WrathBoss.Attack.class,Location.class},WrathBoss.Attack.SLAM,home.clone().add(0,0,2));
+        victim.accepted()[0]=true;victim.factor()[0]=0;
+        call(boss,"hurt",new Class<?>[]{Player.class,double.class,double.class},victim.player(),36.0,0.45);
+        check(movement.getValue()==originalMove,"A fully shield-blocked hammer hit applies no concussion");
+        call(boss,"startAttack",new Class<?>[]{WrathBoss.Attack.class,Location.class},WrathBoss.Attack.SLAM,home.clone().add(0,0,2));
+        victim.factor()[0]=1;
+        call(boss,"hurt",new Class<?>[]{Player.class,double.class,double.class},victim.player(),36.0,0.45);
+        check(victim.damage()[0]==108&&movement.getValue()==0&&jump.getValue()==0,
+                "A landed hammer hit deals 108 raw damage and roots movement and jumping on real Paper attributes");
+        int now=Bukkit.getCurrentTick();
+        call(plugin.tremor(),"tick",new Class<?>[]{int.class},now+19);
+        check(movement.getValue()==0,"Concussion stays rooted through tick nineteen");
+        call(plugin.tremor(),"tick",new Class<?>[]{int.class},now+20);
+        check(Math.abs(movement.getValue()-originalMove*0.2)<0.00001&&Math.abs(jump.getValue()-originalJump*0.2)<0.00001,
+                "At twenty ticks the root becomes eighty percent movement and jump slowdown");
+        call(plugin.tremor(),"tick",new Class<?>[]{int.class},now+60);
+        check(movement.getValue()==originalMove&&jump.getValue()==originalJump,"All concussion modifiers expire at sixty ticks without changing base attributes");
+        plugin.tremor().apply(victim.player(),boss.entity().getUniqueId());plugin.tremor().apply(victim.player(),boss.entity().getUniqueId());
+        check(movement.getModifiers().stream().filter(m->m.getKey().getKey().equals("wrath_tremor_move")).count()==1,
+                "Repeated hammer hits refresh concussion without stacking movement modifiers");
+        plugin.tremor().clearBoss(UUID.randomUUID());check(movement.getValue()==0,"Cleanup of another boss does not remove this concussion");
+        plugin.tremor().clearBoss(boss.entity().getUniqueId());
+        check(movement.getValue()==originalMove&&jump.getValue()==originalJump,"Encounter cleanup immediately restores its concussed players");
+        attributes.remove();
     }
 
     private void basicDamageChecks(WrathBoss boss,Location home) throws Exception {

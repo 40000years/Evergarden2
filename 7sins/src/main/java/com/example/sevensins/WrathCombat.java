@@ -4,6 +4,10 @@ package com.example.sevensins;
 public final class WrathCombat {
     private WrathCombat() {}
 
+    public static boolean inArrival(double x, double z, double height, double radius) {
+        return Math.hypot(x, z) <= radius && height >= -2 && height <= 20;
+    }
+
     public static boolean inStomp(double x, double z, double feetAboveGround) {
         return Math.hypot(x, z) <= 3.2 && feetAboveGround < 0.65 && feetAboveGround > -2;
     }

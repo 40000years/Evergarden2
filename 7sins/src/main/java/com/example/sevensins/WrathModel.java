@@ -14,6 +14,7 @@ import java.util.*;
 final class WrathModel {
     private record Bone(ItemDisplay entity, String id, float x, float y, float z) {}
     private final SevenSinsPlugin plugin;
+    private final float scale;
     private final List<Bone> bones = new ArrayList<>();
     private ArmorStand fallback;
     private boolean unbound;
@@ -23,8 +24,9 @@ final class WrathModel {
     private float walkingWeight;
     private final Map<String, WrathAnimation.Pose> rendered = new HashMap<>();
 
-    WrathModel(SevenSinsPlugin plugin, Location at) {
+    WrathModel(SevenSinsPlugin plugin, Location at, double scale) {
         this.plugin = plugin;
+        this.scale = (float)scale;
         heading = at.getYaw();
         try {
         add(at, "body", 0, 1.65f, 0);
@@ -39,7 +41,7 @@ final class WrathModel {
         fallback = at.getWorld().spawn(at, ArmorStand.class, e -> {
             e.setVisibleByDefault(false); e.setPersistent(false); e.setGravity(false);
             e.setMarker(true); e.setVisible(false); e.setInvulnerable(true); e.setSilent(true); e.setArms(true);
-            e.getAttribute(Attribute.SCALE).setBaseValue(1.5);
+            e.getAttribute(Attribute.SCALE).setBaseValue(1.5*scale);
             e.getEquipment().setHelmet(new ItemStack(Material.WITHER_SKELETON_SKULL));
             e.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
             e.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
@@ -61,7 +63,7 @@ final class WrathModel {
             e.setVisibleByDefault(false); e.setPersistent(false); e.setInvulnerable(true);
             e.setItemStack(item); e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
             e.setInterpolationDuration(2); e.setTeleportDuration(2); e.setViewRange(1.2f);
-            e.setRotation(0, 0); e.setDisplayWidth(8); e.setDisplayHeight(8);
+            e.setRotation(0, 0); e.setDisplayWidth(8*scale); e.setDisplayHeight(8*scale);
             e.getPersistentDataContainer().set(plugin.entityKey(), org.bukkit.persistence.PersistentDataType.STRING, "visual");
             if (id.equals("core")) e.setBrightness(new Display.Brightness(15, 15));
         });
@@ -96,7 +98,7 @@ final class WrathModel {
         double distance=lastAnchor==null?0:Math.hypot(at.getX()-lastAnchor.getX(),at.getZ()-lastAnchor.getZ());
         float targetWeight=walking?(float)Math.min(1,distance/0.17):0;
         walkingWeight+=(targetWeight-walkingWeight)*0.28f;
-        if(distance<2) stride+=distance*3.8;
+        if(distance<2*scale) stride+=distance*3.8/scale;
         Map<String, WrathAnimation.Pose> sampled=WrathAnimation.sample(state,attack,progress,stride,walkingWeight,ticks,enraged);
         for (Bone bone : bones) {
             WrathAnimation.Pose pose=sampled.get(bone.id);
@@ -111,8 +113,8 @@ final class WrathModel {
             Quaternionf rotation = new Quaternionf(root).mul(pose.rotation());
             Transformation previous = bone.entity.getTransformation();
             if (rotation.dot(previous.getLeftRotation()) < 0) rotation.set(-rotation.x, -rotation.y, -rotation.z, -rotation.w);
-            Transformation transform = new Transformation(root.transform(new Vector3f(pose.position())),
-                    rotation, new Vector3f(1, 1, 1), new Quaternionf());
+            Transformation transform = new Transformation(root.transform(new Vector3f(pose.position()).mul(scale)),
+                    rotation, new Vector3f(scale), new Quaternionf());
             if (!transform.equals(previous)) {
                 bone.entity.setTransformation(transform);
                 bone.entity.setInterpolationDelay(0);

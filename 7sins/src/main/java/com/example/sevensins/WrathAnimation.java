@@ -66,6 +66,10 @@ public final class WrathAnimation {
             }
         }
         if(state==WrathBoss.State.CHARGE) {bodyX=-0.28f; armL=-0.35f;}
+        if(state==WrathBoss.State.ABSORB) {
+            bodyX=-0.04f; bodyY=0; bodyZ=0; drop=0;
+            armL=0.8f; armR=0.25f; legL=0; legR=0;
+        }
         if(state==WrathBoss.State.STAGGER) {
             float weight=progress<0.12?ease(progress/0.12):1-ease((progress-0.75)/0.25);
             bodyX-=0.36f*weight; drop-=0.2f*weight;

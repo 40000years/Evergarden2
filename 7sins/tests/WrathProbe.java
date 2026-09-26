@@ -44,10 +44,20 @@ public final class WrathProbe extends JavaPlugin {
         for(int x=-10;x<=10;x++)for(int z=-10;z<=10;z++) before.add(world.getBlockAt(x,home.getBlockY()-1,z).getType());
         WrathBoss boss=plugin.spawnWrath(home);
         check(plugin.getConfig().getDouble("wrath.health")==1800,"Old default 600 HP is migrated to 1800 without deleting config");
+        check(plugin.getConfig().getDouble("wrath.damage-multiplier")==3&&plugin.getConfig().getDouble("wrath.arena-radius")==140,
+                "Old default damage and arena are upgraded to 3x damage and giant arena");
         check(boss.entity().isValid() && boss.entity().isInvisible() && boss.health()==1800&&boss.entity().getHealth()<=1024,"Boss has configured HP while respecting Minecraft's native health cap");
         @SuppressWarnings("unchecked") List<Entity> visuals=(List<Entity>)call(boss,"visuals",new Class<?>[0]);
         check(visuals.size()==10 && visuals.stream().filter(e->e instanceof ItemDisplay).count()==9,"Nine live model bones plus one armor fallback");
         check(visuals.stream().allMatch(e->!e.isPersistent()&&!e.isVisibleByDefault()),"Temporary visuals are hidden until viewer selection");
+        check(boss.scale()==5&&Math.abs(boss.entity().getAttribute(Attribute.SCALE).getValue()-8.25)<0.001,
+                "Native hitbox is five times the previous base scale");
+        check(visuals.stream().filter(e->e instanceof ItemDisplay).allMatch(e->{
+            ItemDisplay display=(ItemDisplay)e;
+            return display.getTransformation().getScale().x==5&&display.getDisplayHeight()>=40;
+        }),"Every custom bone and its culling bounds are scaled five times");
+        check(visuals.stream().filter(e->e instanceof ArmorStand).allMatch(e->((ArmorStand)e).getAttribute(Attribute.SCALE).getValue()==7.5),
+                "No-pack fallback uses the same fivefold enlargement");
         check(Arrays.stream(boss.entity().getEquipment().getArmorContents()).allMatch(i->i==null||i.getType().isAir()),
                 "Invisible native base carries no visible armor inside the custom model");
         check(visuals.stream().filter(e->e instanceof ArmorStand).allMatch(e->!((ArmorStand)e).isVisible()),
@@ -89,6 +99,7 @@ public final class WrathProbe extends JavaPlugin {
         boss.entity().setNoDamageTicks(0); boss.entity().damage(30);
         check(Math.abs(boss.health()-900)<0.01,"Phase transition cannot be skipped by burst damage");
         check(bladeEntities.stream().noneMatch(Entity::isValid),"Phase change cancels every pending sword and fang");
+        absorptionChecks(boss,world,home);
         for(Entity e:visuals) if(e instanceof ItemDisplay display)
             check(Float.isFinite(display.getTransformation().getTranslation().y)&&display.getLocation().getYaw()==0&&display.getDisplayHeight()>=4,
                     "Stable zero-yaw anchor and full model culling bounds "+display.getItemStack().getItemMeta().getItemModel());
@@ -140,8 +151,8 @@ public final class WrathProbe extends JavaPlugin {
         Field manager=SevenSinsPlugin.class.getDeclaredField("bosses");manager.setAccessible(true);
         ((Map<?,?>)manager.get(plugin)).clear();
         boss=plugin.spawnWrath(home);
-        world.getChunkAt(2,0);
-        boolean teleported=boss.entity().teleport(home.clone().add(40,0,0)); boss.tick();
+        world.getChunkAt(10,0);
+        boolean teleported=boss.entity().teleport(home.clone().add(160,0,0)); boss.tick();
         check(teleported&&boss.entity().isValid()&&boss.entity().getLocation().distanceSquared(home)<1&&boss.health()==1800,
                 "Arena leash resets boss without editing terrain: valid="+boss.entity().isValid()+" state="+boss.state()+" location="+boss.entity().getLocation());
         @SuppressWarnings("unchecked") List<Entity> shutdownVisuals=(List<Entity>)call(boss,"visuals",new Class<?>[0]);
@@ -169,7 +180,7 @@ public final class WrathProbe extends JavaPlugin {
 
     private void basicDamageChecks(WrathBoss boss,Location home) throws Exception {
         call(boss,"startAttack",new Class<?>[]{WrathBoss.Attack.class,Location.class},WrathBoss.Attack.STOMP,home.clone().add(0,0,2));
-        UUID id=UUID.randomUUID(); double[] health={20}; int[] hits={0};
+        UUID id=UUID.randomUUID(); double[] health={100}; int[] hits={0};
         Player player=(Player)Proxy.newProxyInstance(Player.class.getClassLoader(),new Class<?>[]{Player.class},(p,m,a)->switch(m.getName()) {
             case "getUniqueId" -> id;
             case "getHealth" -> health[0];
@@ -183,7 +194,47 @@ public final class WrathProbe extends JavaPlugin {
         });
         call(boss,"hurt",new Class<?>[]{Player.class,double.class,double.class},player,10.0,0.2);
         call(boss,"hurt",new Class<?>[]{Player.class,double.class,double.class},player,10.0,0.2);
-        check(hits[0]==1&&health[0]==10,"Normal stomp hits once for 10 damage without armor debuff or special durability loss");
+        check(hits[0]==1&&health[0]==70,"Normal stomp hits once for 30 damage without armor debuff or special durability loss");
+    }
+
+    private void absorptionChecks(WrathBoss boss,World world,Location home) throws Exception {
+        while(boss.state()==WrathBoss.State.TRANSITION) boss.tick();
+        check(boss.state()==WrathBoss.State.ABSORB&&boss.absorptionSecondsLeft()==15&&!boss.entity().hasAI(),
+                "Phase two begins a stationary 15-second absorption window");
+        Husk attacker=world.spawn(home.clone().add(10,0,0),Husk.class,e->{e.setAI(false);e.setSilent(true);});
+        org.bukkit.event.Listener protection=new org.bukkit.event.Listener() {};
+        Bukkit.getPluginManager().registerEvent(org.bukkit.event.entity.EntityDamageByEntityEvent.class,protection,
+                org.bukkit.event.EventPriority.HIGH,(listener,event)->{
+                    var hit=(org.bukkit.event.entity.EntityDamageByEntityEvent)event;
+                    if(hit.getEntity().equals(boss.entity()))hit.setCancelled(true);
+                },this,false);
+        double before=boss.health();
+        boss.entity().setNoDamageTicks(0);boss.entity().damage(40,attacker);
+        check(boss.health()==before,"Protected or cancelled attacks do not heal the absorbing boss");
+        org.bukkit.event.HandlerList.unregisterAll(protection);
+        double[] observed={0};
+        org.bukkit.event.Listener observer=new org.bukkit.event.Listener() {};
+        Bukkit.getPluginManager().registerEvent(org.bukkit.event.entity.EntityDamageByEntityEvent.class,observer,
+                org.bukkit.event.EventPriority.MONITOR,(listener,event)->{
+                    var hit=(org.bukkit.event.entity.EntityDamageByEntityEvent)event;
+                    if(hit.getEntity().equals(boss.entity()))observed[0]=hit.getFinalDamage();
+                },this,false);
+        boss.entity().setNoDamageTicks(0);boss.entity().damage(40,attacker);
+        org.bukkit.event.HandlerList.unregisterAll(observer);
+        check(boss.health()>before&&Math.abs(boss.health()-before-observed[0]*1800/1024)<0.01,
+                "Incoming effective damage becomes the same amount of encounter HP");
+        call(boss,"absorbDamage",new Class<?>[]{double.class},Double.MAX_VALUE);
+        check(boss.health()==1800,"Absorbed damage is capped at maximum HP");
+        boss.entity().setHealth(700*1024.0/1800);
+        for(int i=0;i<149;i++)boss.tick();
+        check(boss.absorbing()&&boss.absorptionSecondsLeft()==1,"Absorption remains active through tick 298");
+        boss.tick();
+        check(!boss.absorbing()&&boss.state()==WrathBoss.State.CHASE,"Absorption expires exactly after 300 server ticks");
+        boss.entity().setNoDamageTicks(0);before=boss.health();boss.entity().damage(40,attacker);
+        check(boss.health()<before&&boss.enraged(),"Attacks damage again after expiry and phase two remains active");
+        call(boss,"absorbDamage",new Class<?>[]{double.class},100.0);
+        check(boss.health()<before,"Healing above half HP does not restart absorption or phase one");
+        attacker.remove();
     }
 
     private void armorChecks(SevenSinsPlugin plugin,World world,Location home) throws Exception {

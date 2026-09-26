@@ -20,9 +20,12 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     @Override
     public void onEnable() {
         saveDefaultConfig();
-        if (getConfig().getInt("config-version", 0) < 2) {
-            if (getConfig().getDouble("wrath.health", 600) == 600) getConfig().set("wrath.health", 1800);
-            getConfig().set("config-version", 2); getConfig().options().copyDefaults(true); saveConfig();
+        int configVersion = getConfig().getInt("config-version", 0);
+        if (configVersion < 3) {
+            if (configVersion < 2 && getConfig().getDouble("wrath.health", 600) == 600) getConfig().set("wrath.health", 1800);
+            if (getConfig().getDouble("wrath.damage-multiplier", 1) == 1) getConfig().set("wrath.damage-multiplier", 3);
+            if (getConfig().getDouble("wrath.arena-radius", 28) == 28) getConfig().set("wrath.arena-radius", 140);
+            getConfig().set("config-version", 3); getConfig().options().copyDefaults(true); saveConfig();
         }
         entityKey = new NamespacedKey(this, "boss_entity");
         // Remove only leftovers bearing our own marker, e.g. after an interrupted reload.
@@ -50,6 +53,10 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     }
     public BossPacks packs() { return packs; }
     public WrathArmorBreak armorBreak() { return armorBreak; }
+    public double wrathScale() {
+        double scale = getConfig().getDouble("wrath.model-scale", 5);
+        return Double.isFinite(scale) ? Math.max(0.25, Math.min(8, scale)) : 5;
+    }
     NamespacedKey entityKey() { return entityKey; }
     public Collection<WrathBoss> bosses() { return List.copyOf(bosses.values()); }
     public WrathBoss spawnWrath(Location location) {
@@ -70,6 +77,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             sender.sendMessage("§6ฟันกวาด: อ้อมหลัง | ทุบพื้น: กระโดด | พุ่งชน: ล่อชนกำแพง | วงไฟ: เข้าวงใน");
             sender.sendMessage("§6กระทืบเท้า (โจมตีปกติ): กระโดดหรือถอย | ดาบจากพื้น: หลบวงแดง");
             sender.sendMessage("§cโดนสกิลแล้วเกราะลด 60% นาน 8 วิ และเสียความทนทานเกราะ 25% — กระทืบปกติไม่มีผลนี้");
+            sender.sendMessage("§eเฟสสอง: ช่วงยืนดูดซับ หยุดตี! ดาเมจโจมตีจะกลายเป็นเลือดจนหมดเวลาบน BossBar");
             return true;
         }
         if (action.equals("list")) {
@@ -93,7 +101,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
         }
         if (args.length > 2 || args.length == 2 && !args[1].equalsIgnoreCase("wrath")) return false;
         Location floor = spawnFloor(player);
-        if (floor == null) { player.sendMessage("§cหาที่เกิดไม่ได้ ต้องมีพื้นแข็งและพื้นที่สูงอย่างน้อย 4 บล็อกด้านหน้า"); return true; }
+        if (floor == null) { player.sendMessage("§cหาที่เกิดไม่ได้ ต้องมีพื้นแข็งและพื้นที่เปิดสูงอย่างน้อย " + (int)Math.ceil(5*wrathScale()) + " บล็อกด้านหน้า"); return true; }
         try {
             spawnWrath(floor); player.sendMessage("§cWRATH ถูกปลุกแล้ว! §7เตรียมสู้ในอีก 4 วินาที — ใช้ Survival เพื่อเข้าต่อสู้");
         } catch (IllegalStateException error) { player.sendMessage("§c[7sins] " + error.getMessage()); }
@@ -102,14 +110,17 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     private Location spawnFloor(Player player) {
         Vector direction = player.getLocation().getDirection().setY(0);
         if (direction.lengthSquared() < 0.001) direction = new Vector(0, 0, 1);
-        Location point = player.getLocation().add(direction.normalize().multiply(7));
+        double scale = wrathScale();
+        int footprint = Math.max(1, (int)Math.ceil(scale));
+        int height = (int)Math.ceil(5*scale);
+        Location point = player.getLocation().add(direction.normalize().multiply(7*scale));
         for (int dy = 3; dy >= -8; dy--) {
             int y = player.getLocation().getBlockY() + dy;
-            if (y < player.getWorld().getMinHeight() + 1 || y + 4 >= player.getWorld().getMaxHeight()) continue;
+            if (y < player.getWorld().getMinHeight() + 1 || y + height >= player.getWorld().getMaxHeight()) continue;
             boolean clear = true;
-            for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) {
+            for (int x = -footprint; x <= footprint; x++) for (int z = -footprint; z <= footprint; z++) {
                 if (!player.getWorld().getBlockAt(point.getBlockX() + x, y - 1, point.getBlockZ() + z).getType().isSolid()) clear = false;
-                for (int h = 0; h < 4; h++) if (!player.getWorld().getBlockAt(point.getBlockX() + x, y + h, point.getBlockZ() + z).isPassable()
+                for (int h = 0; h < height; h++) if (!player.getWorld().getBlockAt(point.getBlockX() + x, y + h, point.getBlockZ() + z).isPassable()
                         || player.getWorld().getBlockAt(point.getBlockX() + x, y + h, point.getBlockZ() + z).isLiquid()) clear = false;
             }
             if (clear) return new Location(player.getWorld(), point.getBlockX() + 0.5, y, point.getBlockZ() + 0.5, player.getLocation().getYaw() + 180, 0);
@@ -153,6 +164,13 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true) public void rage(EntityDamageEvent e) {
         WrathBoss boss = bosses.get(e.getEntity().getUniqueId());
         if (boss != null) boss.attacked(e.getFinalDamage());
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true) public void absorb(EntityDamageByEntityEvent e) {
+        WrathBoss boss = bosses.get(e.getEntity().getUniqueId());
+        if (boss == null || !boss.absorbing() || e.isCancelled()) return;
+        double damage = e.getFinalDamage();
+        e.setCancelled(true);
+        boss.absorbDamage(damage);
     }
     @EventHandler(priority = EventPriority.MONITOR) public void outgoing(EntityDamageByEntityEvent e) {
         WrathBoss boss = bosses.get(e.getDamager().getUniqueId());

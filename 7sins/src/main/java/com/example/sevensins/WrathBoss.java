@@ -13,7 +13,7 @@ import java.util.*;
 
 /** A bounded encounter driven by one shared server task; no block edits or delayed attacks. */
 public final class WrathBoss {
-    public enum State { ARRIVAL, CHASE, WINDUP, STRIKE, CHARGE, RECOVERY, STAGGER, TRANSITION, REMOVED }
+    public enum State { ARRIVAL, CHASE, WINDUP, STRIKE, CHARGE, RECOVERY, STAGGER, TRANSITION, ABSORB, REMOVED }
     public enum Attack { SWEEP, SLAM, CHARGE, RING, BLADES, STOMP }
     private final SevenSinsPlugin plugin;
     private final Husk base;
@@ -21,8 +21,9 @@ public final class WrathBoss {
     private final WrathModel model;
     private final WrathBlades blades;
     private final BossBar bar;
-    private final double maxHealth, nativeMaxHealth, radius, damageMultiplier, incomingMultiplier;
+    private final double maxHealth, nativeMaxHealth, radius, damageMultiplier, incomingMultiplier, scale;
     private final int idleLimit;
+    private final int absorptionDuration;
     private final Set<UUID> hit = new HashSet<>();
     private State state = State.ARRIVAL;
     private Attack attack = Attack.SWEEP;
@@ -37,12 +38,14 @@ public final class WrathBoss {
 
     WrathBoss(SevenSinsPlugin plugin, Location home) {
         this.plugin = plugin; this.home = home.clone(); anchor = home.clone();
+        scale = plugin.wrathScale();
+        absorptionDuration = (int)(bounded(plugin.getConfig().getDouble("wrath.phase-two-absorption-seconds",15),1,60,15)*20);
         maxHealth = bounded(plugin.getConfig().getDouble("wrath.health", 1800), 40, 100000, 1800);
         // Minecraft clamps living-entity health to 1024. Scale damage while showing encounter HP.
         nativeMaxHealth = Math.min(maxHealth, 1024);
         incomingMultiplier = bounded(plugin.getConfig().getDouble("wrath.incoming-damage-multiplier", 0.7), 0.1, 2, 0.7);
-        radius = bounded(plugin.getConfig().getDouble("wrath.arena-radius", 28), 12, 64, 28);
-        damageMultiplier = bounded(plugin.getConfig().getDouble("wrath.damage-multiplier", 1), 0.1, 10, 1);
+        radius = bounded(plugin.getConfig().getDouble("wrath.arena-radius", 140), 12, 256, 140);
+        damageMultiplier = bounded(plugin.getConfig().getDouble("wrath.damage-multiplier", 3), 0.1, 30, 3);
         idleLimit = Math.max(20, Math.min(3600, plugin.getConfig().getInt("wrath.idle-despawn-seconds", 120))) * 20;
         base = home.getWorld().spawn(home, Husk.class, e -> {
             e.setPersistent(false); e.setRemoveWhenFarAway(false); e.setSilent(true); e.setInvisible(true);
@@ -50,7 +53,7 @@ public final class WrathBoss {
             // Invisibility does not hide randomly generated equipment on a native mob.
             e.getEquipment().clear(); e.setGlowing(false);
             e.getAttribute(Attribute.MAX_HEALTH).setBaseValue(nativeMaxHealth); e.setHealth(nativeMaxHealth);
-            e.getAttribute(Attribute.SCALE).setBaseValue(1.65);
+            e.getAttribute(Attribute.SCALE).setBaseValue(1.65*scale);
             e.getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.25);
             e.getAttribute(Attribute.KNOCKBACK_RESISTANCE).setBaseValue(0.9);
             e.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(radius);
@@ -61,7 +64,7 @@ public final class WrathBoss {
         });
         if (!base.isValid()) throw new IllegalStateException("Boss spawn was rejected by the server.");
         WrathModel created;
-        try { created = new WrathModel(plugin, home); }
+        try { created = new WrathModel(plugin, home, scale); }
         catch (RuntimeException error) { base.remove(); throw error; }
         model = created;
         blades = new WrathBlades(plugin, this);
@@ -78,6 +81,10 @@ public final class WrathBoss {
     public State state() { return state; }
     public boolean enraged() { return enraged; }
     public int rage() { return rage; }
+    public double scale() { return scale; }
+    public double arenaRadius() { return radius; }
+    public boolean absorbing() { return state == State.ABSORB && remaining > 0 && !base.isDead(); }
+    public int absorptionSecondsLeft() { return absorbing() ? (remaining+19)/20 : 0; }
     public Location home() { return home.clone(); }
     List<Entity> visuals() { return model.entities(); }
     void refresh(Player player) { model.refresh(player); blades.refresh(player); }
@@ -97,14 +104,16 @@ public final class WrathBoss {
         }
         for (Player p : List.copyOf(bar.getPlayers())) if (!nearby.contains(p.getUniqueId())) bar.removePlayer(p);
         bar.setProgress(Math.max(0, Math.min(1, base.getHealth() / nativeMaxHealth)));
-        bar.setTitle("WRATH · " + (enraged ? "UNBOUND" : "THE ASHEN EXECUTIONER") + "  |  RAGE " + rage + "%");
+        bar.setColor(absorbing() ? BarColor.YELLOW : BarColor.RED);
+        bar.setTitle(absorbing() ? "WRATH · ดูดซับดาเมจเป็นเลือด — หยุดตี! " + absorptionSecondsLeft() + "s"
+                : "WRATH · " + (enraged ? "UNBOUND" : "THE ASHEN EXECUTIONER") + "  |  RAGE " + rage + "%");
         if (ticks % 20 == 0) rage = Math.max(0, rage - (state == State.STAGGER ? 8 : 2));
         if (players.isEmpty()) idle += 2; else idle = 0;
         if (idle >= idleLimit) { remove(); return; }
         if (base.getLocation().distanceSquared(home) > radius * radius || base.getLocation().getY() < home.getY() - 6) {
             reset(); return;
         }
-        if (players.isEmpty() && state != State.ARRIVAL && state != State.TRANSITION) {
+        if (players.isEmpty() && state != State.ARRIVAL && state != State.TRANSITION && state != State.ABSORB) {
             blades.clear();
             change(State.CHASE, 0); halt(); cooldown = 40;
             if (idle == 100) reset();
@@ -118,8 +127,28 @@ public final class WrathBoss {
         Player target = players.stream().min(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(base.getLocation()))).orElse(null);
         switch (state) {
             case ARRIVAL, TRANSITION -> {
-                halt(); ring(base.getLocation(), 2.5, Color.fromRGB(255, 85, 25));
-                if ((remaining -= 2) <= 0) { change(State.CHASE, 0); cooldown = 30; }
+                halt(); ring(base.getLocation(), 2.5*scale, Color.fromRGB(255, 85, 25));
+                if ((remaining -= 2) <= 0) {
+                    if (state == State.TRANSITION) {
+                        anchor = base.getLocation().clone(); blades.clear();
+                        change(State.ABSORB, absorptionDuration);
+                        announce("WRATH ดูดซับดาเมจเป็นเลือด! หยุดตี " + absorptionSecondsLeft() + " วินาที", NamedTextColor.YELLOW);
+                        sound(Sound.BLOCK_BEACON_ACTIVATE,1.5f,0.6f);
+                    } else { change(State.CHASE, 0); cooldown = 30; }
+                }
+            }
+            case ABSORB -> {
+                halt();
+                if (base.getLocation().distanceSquared(anchor) > 0.01) base.teleport(anchor);
+                if (ticks % 4 == 0) {
+                    ring(anchor, 2.5*scale, Color.fromRGB(255, 220, 80));
+                    base.getWorld().spawnParticle(Particle.ENCHANT,anchor.clone().add(0,2*scale,0),20,0.6*scale,0.4*scale,0.6*scale,0.1);
+                }
+                if ((remaining -= 2) <= 0) {
+                    change(State.CHASE,0); cooldown = 20; basicCooldown = 20;
+                    announce("ดูดซับสิ้นสุดแล้ว — โจมตี WRATH ได้!", NamedTextColor.AQUA);
+                    sound(Sound.BLOCK_BEACON_DEACTIVATE,1.5f,0.8f);
+                }
             }
             case CHASE -> {
                 if (target != null) {
@@ -129,14 +158,14 @@ public final class WrathBoss {
                     basicCooldown -= 2;
                     double distance = target.getLocation().distanceSquared(base.getLocation());
                     if (cooldown <= 0) {
-                        Player distant = players.stream().filter(p -> p.getLocation().distanceSquared(base.getLocation()) > 64)
+                        Player distant = players.stream().filter(p -> p.getLocation().distanceSquared(base.getLocation()) > 64*scale*scale)
                                 .max(Comparator.comparingDouble(p -> p.getLocation().distanceSquared(base.getLocation()))).orElse(null);
-                        if (distant != null && (distance > 64 || attackIndex % 3 == 2)) startAttack(Attack.BLADES, distant.getLocation());
+                        if (distant != null && (distance > 64*scale*scale || attackIndex % 3 == 2)) startAttack(Attack.BLADES, distant.getLocation());
                         else if (enraged && attackIndex % 4 == 3) startAttack(Attack.RING, target.getLocation());
-                        else if (distance > 36) startAttack(Attack.CHARGE, target.getLocation());
+                        else if (distance > 36*scale*scale) startAttack(Attack.CHARGE, target.getLocation());
                         else startAttack(attackIndex % 3 == 1 ? Attack.SLAM : Attack.SWEEP, target.getLocation());
                         attackIndex++;
-                    } else if (basicCooldown <= 0 && distance <= 3.2*3.2) {
+                    } else if (basicCooldown <= 0 && distance <= 3.2*3.2*scale*scale) {
                         startAttack(Attack.STOMP, target.getLocation());
                     }
                 }
@@ -168,8 +197,8 @@ public final class WrathBoss {
             default -> {}
         }
         if (ticks % 6 == 0) {
-            base.getWorld().spawnParticle(Particle.SMOKE, base.getLocation().add(0, 2.4, 0), 3, 0.4, 0.2, 0.4, 0.01);
-            dust(base.getLocation().add(0, 2.0, 0), enraged ? Color.fromRGB(255, 170, 35) : Color.fromRGB(225, 25, 40), 3);
+            base.getWorld().spawnParticle(Particle.SMOKE, base.getLocation().add(0, 2.4*scale, 0), 3, 0.4*scale, 0.2*scale, 0.4*scale, 0.01);
+            dust(base.getLocation().add(0, 2.0*scale, 0), enraged ? Color.fromRGB(255, 170, 35) : Color.fromRGB(225, 25, 40), 3);
         }
         model.animate(base.getLocation(), ticks, state, attack, total == 0 ? 0 : 1.0 - (double) remaining / total,
                 enraged, state == State.CHASE && target != null || state == State.CHARGE);
@@ -205,23 +234,23 @@ public final class WrathBoss {
         if (ticks % 4 != 0) return;
         Color color = Color.fromRGB(255, 55, 35);
         switch (attack) {
-            case STOMP -> ring(anchor, 3.2, Color.fromRGB(255, 175, 65));
-            case SLAM -> { ring(anchor, 6.5, color); ring(anchor, 3.25, color); }
-            case RING -> { ring(anchor, 3, Color.fromRGB(90, 220, 180)); ring(anchor, 9, color); ring(anchor, 6, color); }
+            case STOMP -> ring(anchor, 3.2*scale, Color.fromRGB(255, 175, 65));
+            case SLAM -> { ring(anchor, 6.5*scale, color); ring(anchor, 3.25*scale, color); }
+            case RING -> { ring(anchor, 3*scale, Color.fromRGB(90, 220, 180)); ring(anchor, 9*scale, color); ring(anchor, 6*scale, color); }
             case SWEEP -> {
                 double center = Math.atan2(facing.getZ(), facing.getX());
                 for (int a = -75; a <= 75; a += 5) {
                     double angle = center + Math.toRadians(a);
-                    dust(anchor.clone().add(Math.cos(angle) * 5, 0.12, Math.sin(angle) * 5), color, 1);
+                    dust(anchor.clone().add(Math.cos(angle) * 5*scale, 0.12, Math.sin(angle) * 5*scale), color, 1);
                 }
                 for (int a : new int[]{-75, 75}) for (double r = 1; r <= 5; r += 0.5) {
                     double angle = center + Math.toRadians(a);
-                    dust(anchor.clone().add(Math.cos(angle) * r, 0.12, Math.sin(angle) * r), color, 1);
+                    dust(anchor.clone().add(Math.cos(angle) * r*scale, 0.12, Math.sin(angle) * r*scale), color, 1);
                 }
             }
             case CHARGE -> {
                 for (double i = 1; i <= 12; i += 0.6) for (int sign : new int[]{-1, 1})
-                    dust(anchor.clone().add(facing.clone().multiply(i)).add(-facing.getZ() * sign * 1.5, 0.12, facing.getX() * sign * 1.5), color, 1);
+                    dust(anchor.clone().add(facing.clone().multiply(i*scale)).add(-facing.getZ() * sign * 1.5*scale, 0.12, facing.getX() * sign * 1.5*scale), color, 1);
             }
             case BLADES -> {} // Each locked ground point draws its own warning.
         }
@@ -236,35 +265,37 @@ public final class WrathBoss {
             Vector relative = p.getLocation().toVector().subtract(anchor.toVector());
             double y = relative.getY();
             boolean inside = switch (attack) {
-                case STOMP -> WrathCombat.inStomp(relative.getX(), relative.getZ(), y);
-                case SWEEP -> y > -2 && y < 3.5 && WrathCombat.inSweep(relative.getX(), relative.getZ(), facing.getX(), facing.getZ());
-                case SLAM -> WrathCombat.inSlam(relative.getX(), relative.getZ(), y);
-                case RING -> WrathCombat.inRing(relative.getX(), relative.getZ(), y);
+                case STOMP -> WrathCombat.inStomp(relative.getX()/scale, relative.getZ()/scale, y);
+                case SWEEP -> y > -2 && y < 3.5*scale && WrathCombat.inSweep(relative.getX()/scale, relative.getZ()/scale, facing.getX(), facing.getZ());
+                case SLAM -> WrathCombat.inSlam(relative.getX()/scale, relative.getZ()/scale, y);
+                case RING -> WrathCombat.inRing(relative.getX()/scale, relative.getZ()/scale, y);
                 default -> false;
             };
             if (inside && clearSight(p, anchor)) hurt(p, attack == Attack.STOMP ? 10 : attack == Attack.SWEEP ? 18 : attack == Attack.SLAM ? 24 : 22, attack == Attack.SLAM ? 0.45 : 0.2);
         }
-        if (attack == Attack.SLAM) ring(anchor, 6.5, Color.fromRGB(255, 190, 75));
-        if (attack == Attack.RING) { ring(anchor, 3, Color.fromRGB(255, 150, 40)); ring(anchor, 9, Color.fromRGB(255, 150, 40)); }
+        if (attack == Attack.SLAM) ring(anchor, 6.5*scale, Color.fromRGB(255, 190, 75));
+        if (attack == Attack.RING) { ring(anchor, 3*scale, Color.fromRGB(255, 150, 40)); ring(anchor, 9*scale, Color.fromRGB(255, 150, 40)); }
     }
 
     private void charge(List<Player> players) {
         Location at = base.getLocation();
         // Check the next swept step at feet/torso/head, so even a one-block wall staggers Wrath.
         boolean wall = false;
-        for (double y : new double[]{0.3, 1.4, 2.7}) {
-            if (base.getWorld().rayTraceBlocks(at.clone().add(0, y, 0), facing, 1.8, FluidCollisionMode.NEVER, true) != null) wall = true;
+        for (double y : new double[]{0.3, 1.4*scale, 2.7*scale}) for (int side : new int[]{-1,0,1}) {
+            double offset = side*base.getWidth()*0.45;
+            Location ray = at.clone().add(-facing.getZ()*offset,y,facing.getX()*offset);
+            if (base.getWorld().rayTraceBlocks(ray, facing, 1.8*scale, FluidCollisionMode.NEVER, true) != null) wall = true;
         }
         if (wall) { stagger(); return; }
         Vector traveled = at.toVector().subtract(anchor.toVector());
-        if (traveled.lengthSquared() > 144 || (remaining -= 2) <= 0) { halt(); change(State.RECOVERY, 30); return; }
+        if (traveled.lengthSquared() > 144*scale*scale || (remaining -= 2) <= 0) { halt(); change(State.RECOVERY, 30); return; }
         for (Player p : players) {
             Vector relative = p.getLocation().toVector().subtract(at.toVector());
-            if (relative.getY() > -2 && relative.getY() < 3.5
-                    && WrathCombat.inCharge(relative.getX(), relative.getZ(), facing.getX(), facing.getZ(), 1.8)
+            if (relative.getY() > -2 && relative.getY() < 3.5*scale
+                    && WrathCombat.inCharge(relative.getX()/scale, relative.getZ()/scale, facing.getX(), facing.getZ(), 1.8)
                     && clearSight(p, at)) hurt(p, 26, 0.4);
         }
-        base.setVelocity(facing.clone().multiply(0.72).setY(base.getVelocity().getY()));
+        base.setVelocity(facing.clone().multiply(0.72*scale).setY(base.getVelocity().getY()));
         base.getWorld().spawnParticle(Particle.SMOKE, at.clone().add(0, 0.2, 0), 5, 0.6, 0.1, 0.6, 0.03);
     }
 
@@ -310,6 +341,12 @@ public final class WrathBoss {
         sound(Sound.BLOCK_ANVIL_LAND, 1.4f, 0.6f);
     }
     double damageScale() { return state == State.ARRIVAL || state == State.TRANSITION ? 0 : incomingMultiplier * nativeMaxHealth / maxHealth * (state == State.STAGGER ? 1.5 : 1); }
+    void absorbDamage(double nativeDamage) {
+        if (!absorbing() || !Double.isFinite(nativeDamage) || nativeDamage <= 0) return;
+        base.setHealth(Math.min(nativeMaxHealth,base.getHealth()+nativeDamage));
+        base.getWorld().spawnParticle(Particle.HEART,base.getLocation().add(0,2*scale,0),8,0.4*scale,0.3*scale,0.4*scale,0);
+        sound(Sound.ENTITY_PLAYER_LEVELUP,0.8f,0.6f);
+    }
     double phaseOneDamageLimit() { return enraged ? Double.POSITIVE_INFINITY : Math.max(0, base.getHealth() - nativeMaxHealth * 0.5); }
     void attacked(double damage) { if (damage > 0 && state != State.STAGGER) rage = Math.min(100, rage + Math.max(1, (int) Math.ceil(damage * maxHealth / nativeMaxHealth / 3))); }
 
@@ -337,8 +374,9 @@ public final class WrathBoss {
     private void sound(Sound sound, float volume, float pitch) { base.getWorld().playSound(base.getLocation(), sound, volume, pitch); }
     private void dust(Location at, Color color, int count) { at.getWorld().spawnParticle(Particle.DUST, at, count, 0, 0, 0, 0, new Particle.DustOptions(color, 1.2f)); }
     private void ring(Location at, double radius, Color color) {
-        for (int i = 0; i < 48; i++) {
-            double angle = i * Math.PI / 24;
+        int points=(int)Math.ceil(48*Math.sqrt(scale));
+        for (int i = 0; i < points; i++) {
+            double angle = i * Math.PI * 2 / points;
             dust(at.clone().add(Math.cos(angle) * radius, 0.12, Math.sin(angle) * radius), color, 1);
         }
     }

@@ -68,7 +68,8 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             sender.sendMessage("§7/7sins pack §fรับแพ็กโมเดลบอส | §7/7sins list §fดูบอสที่กำลังทำงาน");
             if (sender.hasPermission("7sins.admin")) sender.sendMessage("§7/7sins spawn wrath §fเรียกบอสด้านหน้า | §7/7sins remove §fลบบอสที่ใกล้ที่สุด");
             sender.sendMessage("§6ฟันกวาด: อ้อมหลัง | ทุบพื้น: กระโดด | พุ่งชน: ล่อชนกำแพง | วงไฟ: เข้าวงใน");
-            sender.sendMessage("§6ดาบจากพื้น: หลบวงแดง | §cโดนท่าแล้วเกราะลด 60% นาน 8 วิ และเสียความทนทานเกราะ 25%");
+            sender.sendMessage("§6กระทืบเท้า (โจมตีปกติ): กระโดดหรือถอย | ดาบจากพื้น: หลบวงแดง");
+            sender.sendMessage("§cโดนสกิลแล้วเกราะลด 60% นาน 8 วิ และเสียความทนทานเกราะ 25% — กระทืบปกติไม่มีผลนี้");
             return true;
         }
         if (action.equals("list")) {

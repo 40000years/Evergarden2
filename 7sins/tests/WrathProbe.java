@@ -48,6 +48,11 @@ public final class WrathProbe extends JavaPlugin {
         @SuppressWarnings("unchecked") List<Entity> visuals=(List<Entity>)call(boss,"visuals",new Class<?>[0]);
         check(visuals.size()==10 && visuals.stream().filter(e->e instanceof ItemDisplay).count()==9,"Nine live model bones plus one armor fallback");
         check(visuals.stream().allMatch(e->!e.isPersistent()&&!e.isVisibleByDefault()),"Temporary visuals are hidden until viewer selection");
+        check(Arrays.stream(boss.entity().getEquipment().getArmorContents()).allMatch(i->i==null||i.getType().isAir()),
+                "Invisible native base carries no visible armor inside the custom model");
+        check(visuals.stream().filter(e->e instanceof ArmorStand).allMatch(e->!((ArmorStand)e).isVisible()),
+                "Fallback stand body is invisible beneath its armor");
+        animationFrames();
         boss.entity().damage(20);
         check(boss.health()==1800,"Arrival damage is cancelled by actual Bukkit event dispatch");
         for(int i=0;i<41;i++) boss.tick();
@@ -63,7 +68,8 @@ public final class WrathProbe extends JavaPlugin {
             call(boss,"warning",new Class<?>[0]);
             if(attack!=WrathBoss.Attack.CHARGE) call(boss,"executeImpact",new Class<?>[0]);
         }
-        check(true,"All five telegraphs and impact effects execute on Paper");
+        check(true,"All six attacks including the normal stomp execute on Paper");
+        basicDamageChecks(boss,home);
         Field bladeField=WrathBoss.class.getDeclaredField("blades");bladeField.setAccessible(true);
         Object blades=bladeField.get(boss);
         @SuppressWarnings("unchecked") List<Entity> bladeEntities=(List<Entity>)call(blades,"entities",new Class<?>[0]);
@@ -106,6 +112,7 @@ public final class WrathProbe extends JavaPlugin {
         plugin.packs().status(new PlayerResourcePackStatusEvent(viewer,BossPacks.PACK_ID,PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
         check(plugin.packs().loaded(viewer)&&visibility.stream().filter(s->s.equals("showEntity:ITEM_DISPLAY")).count()==9,
                 "Successful pack load switches the viewer to nine custom bones");
+        check(visibility.getFirst().equals("hideEntity:ARMOR_STAND"),"Fallback is hidden before custom bones are shown");
         plugin.packs().status(new PlayerResourcePackStatusEvent(viewer,UUID.randomUUID(),PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD));
         check(plugin.packs().loaded(viewer),"Another plugin's pack failure does not hide Wrath models");
         plugin.packs().status(new PlayerResourcePackStatusEvent(viewer,BossPacks.PACK_ID,PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD));
@@ -141,6 +148,42 @@ public final class WrathProbe extends JavaPlugin {
         Bukkit.getPluginManager().disablePlugin(plugin);
         check(!boss.entity().isValid()&&shutdownVisuals.stream().noneMatch(Entity::isValid),"Plugin disable cleans every encounter");
         check(world.getEntities().stream().noneMatch(e->e instanceof org.bukkit.entity.Item),"Admin cleanup awards no loot");
+    }
+
+    private void animationFrames() throws Exception {
+        List<Object> frames=new ArrayList<>();
+        for(String clip:List.of("walk","slam","stomp","sweep")) for(int tick=0;tick<=96;tick+=2) {
+            WrathBoss.Attack attack=clip.equals("stomp")?WrathBoss.Attack.STOMP:clip.equals("sweep")?WrathBoss.Attack.SWEEP:WrathBoss.Attack.SLAM;
+            WrathBoss.State state=clip.equals("walk")?WrathBoss.State.CHASE:tick<44?WrathBoss.State.WINDUP:tick<54?WrathBoss.State.STRIKE:WrathBoss.State.RECOVERY;
+            double progress=tick<44?tick/44.0:tick<54?(tick-44)/10.0:Math.min(1,(tick-54)/36.0);
+            Map<String,Object> bones=new LinkedHashMap<>();
+            WrathAnimation.sample(state,attack,progress,tick*0.16,clip.equals("walk")?1:0,tick,false).forEach((id,pose)->{
+                var p=pose.position();var q=pose.rotation();
+                bones.put(id,Map.of("position",List.of(p.x,p.y,p.z),"rotation",List.of(q.x,q.y,q.z,q.w)));
+            });
+            frames.add(Map.of("clip",clip,"tick",tick,"bones",bones));
+        }
+        Files.writeString(getServer().getWorldContainer().toPath().resolve("wrath-animation-poses.json"),new com.google.gson.Gson().toJson(frames));
+        check(true,"Exported runtime skeletal poses for walk, slam, stomp and sweep visual review");
+    }
+
+    private void basicDamageChecks(WrathBoss boss,Location home) throws Exception {
+        call(boss,"startAttack",new Class<?>[]{WrathBoss.Attack.class,Location.class},WrathBoss.Attack.STOMP,home.clone().add(0,0,2));
+        UUID id=UUID.randomUUID(); double[] health={20}; int[] hits={0};
+        Player player=(Player)Proxy.newProxyInstance(Player.class.getClassLoader(),new Class<?>[]{Player.class},(p,m,a)->switch(m.getName()) {
+            case "getUniqueId" -> id;
+            case "getHealth" -> health[0];
+            case "getAbsorptionAmount" -> 0.0;
+            case "damage" -> { hits[0]++;health[0]-=(double)a[0];call(boss,"observeHit",new Class<?>[]{Player.class,boolean.class,double.class},p,true,a[0]);yield null; }
+            case "getLocation" -> home.clone().add(0,0,2);
+            case "isDead" -> false;
+            case "setVelocity" -> null;
+            // Any armor/inventory access fails: the ordinary attack must never apply armor break.
+            default -> throw new UnsupportedOperationException("Normal stomp accessed "+m.getName());
+        });
+        call(boss,"hurt",new Class<?>[]{Player.class,double.class,double.class},player,10.0,0.2);
+        call(boss,"hurt",new Class<?>[]{Player.class,double.class,double.class},player,10.0,0.2);
+        check(hits[0]==1&&health[0]==10,"Normal stomp hits once for 10 damage without armor debuff or special durability loss");
     }
 
     private void armorChecks(SevenSinsPlugin plugin,World world,Location home) throws Exception {

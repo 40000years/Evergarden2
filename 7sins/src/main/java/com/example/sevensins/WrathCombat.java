@@ -4,6 +4,10 @@ package com.example.sevensins;
 public final class WrathCombat {
     private WrathCombat() {}
 
+    public static boolean inStomp(double x, double z, double feetAboveGround) {
+        return Math.hypot(x, z) <= 3.2 && feetAboveGround < 0.65 && feetAboveGround > -2;
+    }
+
     public static boolean inSweep(double x, double z, double dx, double dz) {
         double length = Math.hypot(x, z);
         return length <= 5.0 && (length < 0.001 || (x * dx + z * dz) / length >= Math.cos(Math.toRadians(75)));

@@ -76,16 +76,18 @@ def geometry():
         box(part, (2, 5, 1), (14, 10, 5), 'edge')
         box(part, (6, 0, 2), (10, 5, 4), 'gold')
         box(part, (5, 8, 0), (11, 10, 1), 'ember')
-    # Executioner's cleaver: long black haft, notched blade and glowing cutting edge.
-    box('cleaver', (6, -13, 6), (9, 24, 9), 'coal')
-    for y in range(-8, 15, 5):
-        box('cleaver', (5.5, y, 5.5), (9.5, y+1.5, 9.5), 'gold')
-    box('cleaver', (8, 9, 4), (26, 24, 11), 'armor')
-    box('cleaver', (22, 4, 3), (28, 24, 12), 'edge')
-    box('cleaver', (27, 4, 4), (29, 24, 11), 'ember')
-    box('cleaver', (11, 22, 3), (23, 26, 12), 'bone')
-    box('cleaver', (15, 12, 3), (18, 21, 4), 'hot')
-    box('cleaver', (10, 6, 4), (16, 10, 11), 'coal')
+    # War hammer: grip at (8,8,8), long haft and a broad striking head above it.
+    # Keep the legacy 'cleaver' item ID so existing model mappings remain valid.
+    box('cleaver', (6.5, -12, 6.5), (9.5, 26, 9.5), 'coal')
+    for y in (-8, -3, 2, 7, 12, 17):
+        box('cleaver', (6, y, 6), (10, y+1.5, 10), 'gold')
+    box('cleaver', (-5, 23, 1), (21, 32, 15), 'armor')
+    box('cleaver', (-8, 22, 0), (-4, 32, 16), 'edge')
+    box('cleaver', (20, 22, 0), (24, 32, 16), 'edge')
+    box('cleaver', (-8, 23, -1), (-4, 31, 1), 'ember')
+    box('cleaver', (20, 23, -1), (24, 31, 1), 'ember')
+    box('cleaver', (5, 24, -1), (11, 30, 1), 'hot')
+    box('cleaver', (5, -14, 5), (11, -11, 11), 'bone')
     # The exposed red heart is a full-bright item bone.
     box('core', (4, 4, 5), (12, 12, 11), 'coal')
     box('core', (5, 5, 3), (11, 11, 6), 'ember',
@@ -95,10 +97,7 @@ def geometry():
     for x, z in [(0, 4), (12, 4), (4, 0), (4, 12)]:
         box('crown', (x, 7, z), (x+4, 9, z+4), 'gold')
         box('crown', (x+1, 9, z+1), (x+3, 14, z+3), 'ember')
-    # Put the blade outside the right hand, rather than across the chest.
-    for cube in PARTS['cleaver']:
-        left, right = cube['from'][0], cube['to'][0]
-        cube['from'][0], cube['to'][0] = 16-right, 16-left
+
 
 
 def png(path, pixels):
@@ -184,7 +183,7 @@ def make_pack():
 
 
 PIVOTS = {'body':(0,1.65,0),'head':(0,2.85,0),'left_arm':(.8,2.3,0),'right_arm':(-.8,2.3,0),
-          'left_leg':(.35,.85,0),'right_leg':(-.35,.85,0),'cleaver':(-.9,1.4,-.35),
+          'left_leg':(.35,.875,0),'right_leg':(-.35,.875,0),'cleaver':(-.8863,1.2235,-.02),
           'core':(0,2,-.42),'crown':(0,3.15,0)}
 
 
@@ -192,7 +191,7 @@ def model_faces(yaw=-25):
     faces = []
     theta = math.radians(yaw)
     # Front is local -Z, exactly as the Java item models.
-    def transform(point, cube, pivot):
+    def transform(point, cube, pivot, name):
         p = list(point)
         if 'rotation' in cube:
             r = cube['rotation']; origin = r['origin']; angle = math.radians(r['angle'])
@@ -200,12 +199,16 @@ def model_faces(yaw=-25):
             a,b = axes; u,v = p[a]-origin[a], p[b]-origin[b]
             p[a]=origin[a]+u*math.cos(angle)-v*math.sin(angle)
             p[b]=origin[b]+u*math.sin(angle)+v*math.cos(angle)
-        x,y,z = [(p[i]-8)/16+pivot[i] for i in range(3)]
+        x,y,z = [(p[i]-8)/16 for i in range(3)]
+        rx,rz = {'cleaver':(-2.3,.35),'right_arm':(0,-.08),'left_arm':(0,-.06)}.get(name,(0,0))
+        x,y = x*math.cos(rz)-y*math.sin(rz), x*math.sin(rz)+y*math.cos(rz)
+        y,z = y*math.cos(rx)-z*math.sin(rx), y*math.sin(rx)+z*math.cos(rx)
+        x,y,z = x+pivot[0],y+pivot[1],z+pivot[2]
         return x*math.cos(theta)-z*math.sin(theta), y, x*math.sin(theta)+z*math.cos(theta)
     for name, cubes in PARTS.items():
         for cube in cubes:
             a,b=cube['from'],cube['to']
-            points = [transform((x,y,z), cube, PIVOTS[name]) for x,y,z in
+            points = [transform((x,y,z), cube, PIVOTS[name], name) for x,y,z in
                       [(a[0],a[1],a[2]),(b[0],a[1],a[2]),(b[0],b[1],a[2]),(a[0],b[1],a[2]),
                        (a[0],a[1],b[2]),(b[0],a[1],b[2]),(b[0],b[1],b[2]),(a[0],b[1],b[2])]]
             for ids, shade in [((0,1,2,3),1.05),((4,7,6,5),.6),((0,3,7,4),.7),((1,5,6,2),.85),((3,2,6,7),1.25),((0,4,5,1),.45)]:

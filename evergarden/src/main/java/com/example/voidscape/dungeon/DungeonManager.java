@@ -514,6 +514,10 @@ public final class DungeonManager implements Listener {
         // exception our dimension mob filter cancels every planted crop visual.
         if(e.getEntity() instanceof ArmorStand && e.getEntity().getPersistentDataContainer()
                 .has(new NamespacedKey("voidscape", "crop_entity"), PersistentDataType.STRING)) return;
+        // Advance Magic sets this owner tag in its pre-spawn consumer. Only
+        // its flying staff stand bypasses our filter; mob spawning stays blocked.
+        if(e.getEntity() instanceof ArmorStand && e.getEntity().getPersistentDataContainer()
+                .has(new NamespacedKey("advance-magic", "flying_staff_entity"), PersistentDataType.STRING)) return;
         if(e.getEntity() instanceof Villager) return;
         if(e.getEntity().getPersistentDataContainer().has(plugin.key("botanist_npc"), PersistentDataType.BYTE)) return;
         if(e.getLocation().getWorld()==plugin.world()&&!runId.equals(e.getEntity().getPersistentDataContainer().get(runKey,PersistentDataType.STRING)))e.setCancelled(true);

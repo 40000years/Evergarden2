@@ -55,6 +55,8 @@ cp advance-magic/target/advance-magic.jar dist/advance-magic.jar
 
 ## ใช้งาน
 
+Evergarden `3.0.0-e2.9-flying-staff-spawn` อนุญาตให้เรียกไม้เท้าในมิติ Evergarden: ตัวกรอง `CreatureSpawnEvent` ยกเว้นเฉพาะ Armor Stand ที่มีแท็กเจ้าของ `advance-magic:flying_staff_entity` ซึ่ง Advance Magic ใส่ก่อนเกิด entity ไม่ยกเว้นมอนสเตอร์หรือ Armor Stand ทั่วไป และไม่เปลี่ยน gamerule กันมอนสเตอร์เกิด การแก้นี้ต้องอัปเดตเฉพาะ `evergarden.jar` โดยใช้ Advance Magic `1.2.14` เดิมได้ ยังไม่ได้ลองในเกมจริง
+
 ผู้เล่นทั่วไปหาไม้เท้าได้จากกล่อง Whale, Hanging Garden, Observatory และ Evergarden Vault ตามอัตราด้านบน คราฟต์ไม่ได้ แอดมินให้ของทดสอบได้ด้วย `/magic givestaff [ชื่อผู้เล่น]` หรือเมนู `/magic items` สิทธิ์ใช้งาน `advance-magic.flying-staff` เปิดให้ผู้เล่นทั่วไป
 
 ถือไม้เท้าคลิกขวาเพื่อเรียกข้างหน้า หรือเรียกตัวเดิมกลับมาเมื่อหายไปจากสายตา คลิกขวาที่ตัวไม้เท้าเพื่อขึ้นขี่ ย่องเมื่อต้องการลง Java ลงพร้อมไม้เท้า ส่วน Bedrock ลงได้ทันทีพร้อม Slow Falling ลงแล้วตีไม้เท้าเพื่อเก็บ ไอเทมเดิมไม่ถูกย้ายหรือดรอปซ้ำ เรียกได้หนึ่งตัวต่อคน ต้องยังมีไอเทมอยู่ในตัวจึงขี่ต่อได้

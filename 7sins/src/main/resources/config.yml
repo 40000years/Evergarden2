@@ -8,9 +8,9 @@ wrath:
   idle-despawn-seconds: 120
 resource-pack:
   auto-send: true
-  # Immutable raw GitHub URL uses the same version of the embedded resource pack.
+  # Immutable raw GitHub URL; SHA-1 is computed from the identical bundled ZIP.
   # To use a private pack host, replace this URL. Set it blank to use the built-in server.
-  url: ''
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/e92101935ef8ea08b0fa886ffec1cddd25c8a218/7sins/src/main/resources/resource-packs/7sins-java.zip'
   host:
     enabled: true
     bind: '0.0.0.0'

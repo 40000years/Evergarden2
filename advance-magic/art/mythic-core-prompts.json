@@ -1,0 +1,29 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "date": "2026-09-26",
+  "final_size": [
+    128,
+    128
+  ],
+  "preparation": "Nearest-neighbor size conversion only; generated RGBA alpha preserved.",
+  "assets": [
+    {
+      "id": "core_solar_apocalypse",
+      "role": "Independent elemental core sprite",
+      "references": [
+        "advance-magic/art/cores/core_meteor_strike.png",
+        "advance-magic/art/cores/core_lightning_strike.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: production Minecraft inventory item sprite, Core of the Sun, replacement elemental core. The two supplied images are STYLE REFERENCES ONLY: match their compact round magical orb inside a dark outlined antique gold compass frame, their chunky square pixel clusters and very simple low-resolution inventory readability. Create one original self-contained SUN CORE with a round amber-orange glass sphere enclosed by a thick antique gold rim and four tiny cardinal gold studs. INSIDE the glass is a bright white-yellow faceted solar energy diamond with a simple orange spiral of fire around it, dark crimson at lower right and a tiny white glass highlight at upper left. This is a spherical magical relic, with no wand shaft, no handle, no stick, no gear, no long sun rays; do not make a cropped wand head. Face-on, centered, fills about 80 percent of a square canvas, generous completely transparent padding. True transparent RGBA background, no shadow or ground. Authentic 32 by 32 pixel-art design expanded to 128 by 128 using nearest-neighbor only, each logical pixel a crisp square block, limited 12-color palette, no antialiasing, blur, gradients, photorealism, 3D render, text, labels, watermarks, inset panels or checkerboard drawn into the image. Please deliver a single square PNG sprite with transparency."
+    },
+    {
+      "id": "core_chronos_final_hour",
+      "role": "Independent elemental core sprite",
+      "references": [
+        "advance-magic/art/cores/core_shulker_levitation.png",
+        "advance-magic/art/cores/core_lightning_strike.png"
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: production Minecraft inventory item sprite, Core of Time, replacement elemental core. The supplied images are STYLE REFERENCES ONLY: match their compact round magical orb in a dark outlined antique gold compass frame, chunky square pixel clusters and clear low-resolution inventory readability. Create one original self-contained TIME CORE: a deep midnight-purple and violet glass sphere inside a thick antique gold rim with four tiny cardinal gold studs. INSIDE the sphere is a boldly readable small upright HOURGLASS: two cyan crystal triangular chambers, narrow waist, pale cyan sand falling, antique gold top and bottom caps. A few small violet/cyan energy pixel accents stay within the glass. The hourglass must be unmistakable at tiny inventory size. Glass glint at upper left, darker violet lower right. This is a round magical relic, NOT a circular clock face: absolutely no clock hands, numerals, watch crown, wand shaft, stick, handle, gear or cropped wand head. Face-on, centered, fills about 80 percent of a square canvas, generous completely transparent padding. True transparent RGBA background, no shadow or ground. Authentic 32 by 32 pixel-art design expanded to 128 by 128 with nearest-neighbor only, each logical pixel a crisp square block, limited 12-color palette, no antialiasing, blur, gradients, photorealism, 3D render, text, labels, watermarks, inset panels or checkerboard drawn into the image. Deliver a single square PNG sprite with transparency."
+    }
+  ]
+}

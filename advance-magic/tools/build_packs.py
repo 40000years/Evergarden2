@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT.parent / 'tools'))
 import restoration_assets
 import mythic_particles
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [2, 2, 0]  # Two new flat pixel-art Mythic wands and cores.
+BEDROCK_PACK_VERSION = [2, 3, 0]  # Independent orb designs for the Sun and Time cores.
 
 
 def spells():

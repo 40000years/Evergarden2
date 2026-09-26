@@ -383,7 +383,7 @@ def main():
  manifest=json.loads((bedrock/'manifest.json').read_text(encoding='utf8'))
  import mythic_particles
  mythic_particles.register(bedrock,write_json,lambda path,pixels:png(path,pixels,len(pixels)))
- version=[3,9,0]
+ version=[3,10,0]
  manifest['header']['version']=version
  for module in manifest['modules']:module['version']=version
  write_json(bedrock/'manifest.json',manifest)

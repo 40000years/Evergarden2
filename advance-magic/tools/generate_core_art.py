@@ -323,6 +323,8 @@ def generate_core(spell_id, title, primary, highlight, dark_shade, glow):
 def main():
     print(f'Generating {len(SPELLS)} Core pixel art textures in {OUTPUT} and {EVERGARDEN_CORES}...')
     valid_names = {f'core_{spell_id}.png' for spell_id, _, _, _, _, _ in SPELLS}
+    # These independently authored Mythic cores are maintained as final PNG assets.
+    valid_names.update({'core_solar_apocalypse.png', 'core_chronos_final_hour.png'})
     
     # Clean up legacy/unregistered cores
     for d in (OUTPUT, EVERGARDEN_CORES):

@@ -6,6 +6,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.*;
@@ -36,6 +40,15 @@ public final class WrathProbe extends JavaPlugin {
     private void probe() throws Exception {
         SevenSinsPlugin plugin=(SevenSinsPlugin) Bukkit.getPluginManager().getPlugin("7sins");
         check(plugin!=null && plugin.isEnabled(),"7sins loads on Paper 26.2 without ModelEngine or Floodgate");
+        Listener equipmentPlugin = new Listener() {};
+        Bukkit.getPluginManager().registerEvent(CreatureSpawnEvent.class, equipmentPlugin, EventPriority.MONITOR,
+                (listener,event) -> {
+                    if (((CreatureSpawnEvent)event).getEntity() instanceof Husk husk) {
+                        husk.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
+                        husk.getEquipment().setItemInMainHand(new ItemStack(Material.MACE));
+                        husk.setGlowing(true);
+                    }
+                }, this);
         World world=Bukkit.getWorlds().getFirst(); world.setTime(6000);
         Location home=new Location(world,0.5,world.getHighestBlockYAt(0,0)+1,0.5);
         for(int x=-12;x<=12;x++)for(int z=-12;z<=12;z++)
@@ -44,6 +57,21 @@ public final class WrathProbe extends JavaPlugin {
         for(int x=-10;x<=10;x++)for(int z=-10;z<=10;z++) before.add(world.getBlockAt(x,home.getBlockY()-1,z).getType());
         spawnChecks(plugin,world,home.getBlockY()+100);
         WrathBoss boss=plugin.spawnWrath(home);
+        HandlerList.unregisterAll(equipmentPlugin);
+        check(boss.entity().getEquipment().getHelmet()==null||boss.entity().getEquipment().getHelmet().getType().isAir(),
+                "Equipment added by another plugin's spawn listener is removed after spawn dispatch");
+        check(boss.entity().getEquipment().getItemInMainHand().getType().isAir()&&!boss.entity().isGlowing(),
+                "Spawn listener cannot leave a visible weapon or native glow inside the custom boss");
+        boss.entity().getEquipment().setArmorContents(new ItemStack[]{new ItemStack(Material.NETHERITE_BOOTS),
+                new ItemStack(Material.NETHERITE_LEGGINGS),new ItemStack(Material.NETHERITE_CHESTPLATE),new ItemStack(Material.NETHERITE_HELMET)});
+        boss.entity().getEquipment().setItemInMainHand(new ItemStack(Material.MACE));
+        boss.entity().getEquipment().setItemInOffHand(new ItemStack(Material.SHIELD));
+        boss.entity().setInvisible(false);boss.entity().setGlowing(true);boss.tick();
+        check(Arrays.stream(boss.entity().getEquipment().getArmorContents()).allMatch(i->i==null||i.getType().isAir())
+                &&boss.entity().getEquipment().getItemInMainHand().getType().isAir()
+                &&boss.entity().getEquipment().getItemInOffHand().getType().isAir()
+                &&boss.entity().isInvisible()&&!boss.entity().isGlowing(),
+                "Delayed equipment and visibility changes are cleaned on the next boss tick without hiding its hitbox");
         check(plugin.getConfig().getDouble("wrath.health")==1800,"Old default 600 HP is migrated to 1800 without deleting config");
         check(plugin.getConfig().getDouble("wrath.damage-multiplier")==3&&plugin.getConfig().getDouble("wrath.arena-radius")==140,
                 "Old default damage and arena are upgraded to 3x damage and giant arena");
@@ -125,10 +153,21 @@ public final class WrathProbe extends JavaPlugin {
         check(plugin.packs().loaded(viewer)&&visibility.stream().filter(s->s.equals("showEntity:ITEM_DISPLAY")).count()==9,
                 "Successful pack load switches the viewer to nine custom bones");
         check(visibility.getFirst().equals("hideEntity:ARMOR_STAND"),"Fallback is hidden before custom bones are shown");
+        check(visuals.stream().filter(e->e instanceof ArmorStand).noneMatch(Entity::isValid)
+                &&((List<?>)call(boss,"visuals",new Class<?>[0])).size()==9,
+                "When all online viewers have the pack the physical fallback is removed, leaving only nine custom bones");
+        boss.tick();
+        check(boss.entity().isValid(),"Custom animation and combat keep working after fallback removal");
         plugin.packs().status(new PlayerResourcePackStatusEvent(viewer,UUID.randomUUID(),PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD));
         check(plugin.packs().loaded(viewer),"Another plugin's pack failure does not hide Wrath models");
+        visibility.clear();
         plugin.packs().status(new PlayerResourcePackStatusEvent(viewer,BossPacks.PACK_ID,PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD));
         check(!plugin.packs().loaded(viewer),"Failed boss pack restores the fallback");
+        @SuppressWarnings("unchecked") List<Entity> restored=(List<Entity>)call(boss,"visuals",new Class<?>[0]);
+        check(restored.size()==10&&restored.stream().anyMatch(e->e instanceof ArmorStand&&e.isValid())
+                &&visibility.stream().filter(s->s.startsWith("showEntity")).toList().equals(List.of("showEntity:ARMOR_STAND")),
+                "A viewer without the pack gets a newly created fallback while every custom bone is hidden");
+        boss.tick();
 
         String url=plugin.packs().url(viewer);
         HttpClient client=HttpClient.newHttpClient();
@@ -148,6 +187,7 @@ public final class WrathProbe extends JavaPlugin {
         catch(IllegalStateException expected) {check(true,"Overlapping encounters are rejected");}
         boss.remove();
         check(!boss.entity().isValid()&&visuals.stream().noneMatch(Entity::isValid),"Removal cleans base and every model entity");
+        check(restored.stream().noneMatch(Entity::isValid),"Removal also cleans a fallback recreated after a pack failure");
         // Allow manager to retire removed boss before a new spawn.
         Field manager=SevenSinsPlugin.class.getDeclaredField("bosses");manager.setAccessible(true);
         ((Map<?,?>)manager.get(plugin)).clear();

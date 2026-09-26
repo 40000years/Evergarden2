@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>7sins</artifactId>
-  <version>0.5.1</version>
+  <version>0.5.2</version>
     <packaging>jar</packaging>
 
     <build>

@@ -7,6 +7,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.boss.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import java.util.*;
@@ -63,6 +64,8 @@ public final class WrathBoss {
             e.getPersistentDataContainer().set(plugin.entityKey(), PersistentDataType.STRING, "wrath");
         });
         if (!base.isValid()) throw new IllegalStateException("Boss spawn was rejected by the server.");
+        // Spawn listeners can equip the Husk after the pre-spawn initializer has run.
+        keepBaseHidden();
         WrathModel created;
         try { created = new WrathModel(plugin, home, scale); }
         catch (RuntimeException error) { base.remove(); throw error; }
@@ -95,7 +98,7 @@ public final class WrathBoss {
             remove(); return;
         }
         ticks += 2;
-        if (!base.isInvisible()) base.setInvisible(true);
+        keepBaseHidden();
         blades.tick();
         List<Player> players = participants();
         Set<UUID> nearby = new HashSet<>();
@@ -202,6 +205,17 @@ public final class WrathBoss {
         }
         model.animate(base.getLocation(), ticks, state, attack, total == 0 ? 0 : 1.0 - (double) remaining / total,
                 enraged, state == State.CHASE && target != null || state == State.CHARGE);
+    }
+
+    private void keepBaseHidden() {
+        if (!base.isInvisible()) base.setInvisible(true);
+        if (base.isGlowing()) base.setGlowing(false);
+        var equipment = base.getEquipment();
+        for (EquipmentSlot slot : List.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND,
+                EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
+            ItemStack item = equipment.getItem(slot);
+            if (item != null && !item.getType().isAir()) equipment.setItem(slot, null);
+        }
     }
 
     private List<Player> participants() {

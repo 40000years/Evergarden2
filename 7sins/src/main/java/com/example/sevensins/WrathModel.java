@@ -38,10 +38,20 @@ final class WrathModel {
         add(at, "cleaver", -0.9f, 1.4f, -0.35f);
         add(at, "core", 0, 2.0f, -0.42f);
         add(at, "crown", 0, 3.15f, 0);
-        fallback = at.getWorld().spawn(at, ArmorStand.class, e -> {
+        createFallback(at);
+        animate(at, 0, WrathBoss.State.ARRIVAL, WrathBoss.Attack.SWEEP, 0, false, false);
+        for (Player player : Bukkit.getOnlinePlayers()) refresh(player);
+        } catch (RuntimeException error) {
+            bones.forEach(b -> b.entity.remove()); if (fallback != null) fallback.remove(); throw error;
+        }
+    }
+
+    private void createFallback(Location at) {
+        Location spawn = at.clone(); spawn.setYaw(heading); spawn.setPitch(0);
+        fallback = at.getWorld().spawn(spawn, ArmorStand.class, e -> {
             e.setVisibleByDefault(false); e.setPersistent(false); e.setGravity(false);
             e.setMarker(true); e.setVisible(false); e.setInvulnerable(true); e.setSilent(true); e.setArms(true);
-            e.getAttribute(Attribute.SCALE).setBaseValue(1.5*scale);
+            e.getAttribute(Attribute.SCALE).setBaseValue(1.5*this.scale);
             e.getEquipment().setHelmet(new ItemStack(Material.WITHER_SKELETON_SKULL));
             e.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
             e.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
@@ -49,11 +59,6 @@ final class WrathModel {
             e.getEquipment().setItemInMainHand(new ItemStack(Material.MACE));
             e.getPersistentDataContainer().set(plugin.entityKey(), org.bukkit.persistence.PersistentDataType.STRING, "visual");
         });
-        animate(at, 0, WrathBoss.State.ARRIVAL, WrathBoss.Attack.SWEEP, 0, false, false);
-        for (Player player : Bukkit.getOnlinePlayers()) refresh(player);
-        } catch (RuntimeException error) {
-            bones.forEach(b -> b.entity.remove()); if (fallback != null) fallback.remove(); throw error;
-        }
     }
 
     private void add(Location at, String id, float x, float y, float z) {
@@ -73,11 +78,18 @@ final class WrathModel {
 
     void refresh(Player player) {
         boolean custom = plugin.packs().loaded(player);
-        if (custom) player.hideEntity(plugin, fallback);
+        if (custom && fallback != null) player.hideEntity(plugin, fallback);
         for (Bone bone : bones) {
             if (custom) player.showEntity(plugin, bone.entity); else player.hideEntity(plugin, bone.entity);
         }
-        if (!custom) player.showEntity(plugin, fallback);
+        if (!custom) {
+            if (fallback == null) createFallback(lastAnchor);
+            player.showEntity(plugin, fallback);
+        } else if (fallback != null && Bukkit.getOnlinePlayers().stream().allMatch(p -> plugin.packs().loaded(p))) {
+            // No fallback entity remains inside the custom boss when every viewer has the pack.
+            // It is recreated on demand if a Java/Bedrock viewer without the pack arrives.
+            fallback.remove(); fallback = null;
+        }
     }
 
     void animate(Location at, int ticks, WrathBoss.State state, WrathBoss.Attack attack, double progress, boolean enraged, boolean walking) {
@@ -122,6 +134,7 @@ final class WrathModel {
             bone.entity.setGlowing(enraged && bone.id.equals("core"));
         }
         lastAnchor = renderAnchor;
+        if (fallback == null) return;
         Location fallbackAt = at.clone(); fallbackAt.setYaw(heading); fallbackAt.setPitch(0);
         if (moved || Math.abs(fallback.getLocation().getYaw() - heading) > 0.1) fallback.teleport(fallbackAt);
         fallback.setRightArmPose(armPose(sampled.get("right_arm").rotation()));
@@ -136,8 +149,8 @@ final class WrathModel {
         return new EulerAngle(-angles.x,angles.y,angles.z);
     }
 
-    void remove() { bones.forEach(b -> b.entity.remove()); fallback.remove(); }
+    void remove() { bones.forEach(b -> b.entity.remove()); if (fallback != null) fallback.remove(); }
     List<Entity> entities() {
-        List<Entity> list = new ArrayList<>(); bones.forEach(b -> list.add(b.entity)); list.add(fallback); return list;
+        List<Entity> list = new ArrayList<>(); bones.forEach(b -> list.add(b.entity)); if (fallback != null) list.add(fallback); return list;
     }
 }

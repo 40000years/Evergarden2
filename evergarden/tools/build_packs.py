@@ -338,10 +338,13 @@ def main():
   'void_pull':'Core of the Void','sonic_boom':'Core of the Warden',
   'blaze_barrage':'Core of the Blaze','wither_ray':'Core of Wither',
   'shulker_levitation':'Core of Levitation','meteor_strike':'Core of Meteor',
-  'iron_armor':'Core of Iron','vex_legion':'Core of Evocation','guardian_beam':'Core of the Guardian'
+  'iron_armor':'Core of Iron','vex_legion':'Core of Evocation','guardian_beam':'Core of the Guardian',
+  'solar_apocalypse':'Core of the Sun','chronos_final_hour':'Core of Time'
  }
  for c_id,c_title in core_items.items():
   source=ROOT/f'art/cores/core_{c_id}.png'
+  if c_id in ('solar_apocalypse','chronos_final_hour'):
+   source=ROOT.parent/f'advance-magic/art/cores/core_{c_id}.png'
   if source.is_file():
    data=source.read_bytes()
    for dest in (java/f'assets/advance_magic/textures/item/core_{c_id}.png',bedrock/f'textures/items/core_{c_id}.png'):
@@ -378,7 +381,9 @@ def main():
  # Bedrock caches UUID + version, not the Java ZIP SHA-1. Increment this
  # release version whenever the Bedrock assets or their item routing change.
  manifest=json.loads((bedrock/'manifest.json').read_text(encoding='utf8'))
- version=[3,8,2]
+ import mythic_particles
+ mythic_particles.register(bedrock,write_json,lambda path,pixels:png(path,pixels,len(pixels)))
+ version=[3,9,0]
  manifest['header']['version']=version
  for module in manifest['modules']:module['version']=version
  write_json(bedrock/'manifest.json',manifest)

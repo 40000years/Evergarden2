@@ -78,6 +78,7 @@ public final class MagicContext {
     private final Map<UUID, Double> castDamageMultipliers = new java.util.concurrent.ConcurrentHashMap<>();
     public void setCastDamageMultiplier(UUID uuid,double multiplier){if(multiplier<=1.0)castDamageMultipliers.remove(uuid);else castDamageMultipliers.put(uuid,multiplier);}
     public void clearCastDamageMultiplier(UUID uuid){castDamageMultipliers.remove(uuid);}
+    public double getCastDamageMultiplier(UUID uuid){return castDamageMultipliers.getOrDefault(uuid,1.0);}
 
     public void setCastVelocityMultiplier(UUID uuid, double mult) {
         if (mult <= 1.0) castVelocityMultipliers.remove(uuid);

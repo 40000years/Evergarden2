@@ -83,6 +83,8 @@ public final class BalanceChecks extends JavaPlugin implements org.bukkit.event.
         if(index==Spell.values().length){cancellation();return;}
         reset();Spell spell=Spell.values()[index];expected=7.123+index/1000.0;
         plugin.getConfig().set("follow-up.damage."+spell.id(),expected);
+        if(spell==Spell.SOLAR_APOCALYPSE)plugin.getConfig().set("damage.solar-apocalypse",expected);
+        if(spell==Spell.CHRONOS_FINAL_HOUR)plugin.getConfig().set("damage.chronos-shatter",expected);
         if(spell==Spell.SHADOW_STEP){anchor.setZ(12.5);target.teleport(anchor);}
         if(spell==Spell.DRAGONS_BREATH){anchor.setZ(15.5);target.teleport(anchor);target.setMaximumNoDamageTicks(20);}
         if(spell==Spell.METEOR_STRIKE)player.teleport(new Location(world,0.5,100,0.5,0,20));

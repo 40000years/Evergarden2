@@ -43,7 +43,7 @@ public final class WandShowcaseGui implements InventoryHolder, Listener {
     }
 
     public void open(Player player) {
-        Inventory inv = Bukkit.createInventory(this, 54, parseLegacy("§5§lAdvance Magic §8✦ §f15 Wands & Ancient Cores"));
+        Inventory inv = Bukkit.createInventory(this, 54, parseLegacy("§5§lAdvance Magic §8✦ §f17 Wands & Ancient Cores"));
         List<RelicService.MagicCore> cores = RelicService.MAGIC_CORES;
 
         // Row 0 (0-8): First 9 Wands
@@ -51,12 +51,10 @@ public final class WandShowcaseGui implements InventoryHolder, Listener {
             inv.setItem(i, createWandDisplayItem(cores.get(i)));
         }
 
-        // Row 1 (9-17): Next 6 Wands + Actions
-        for (int i = 0; i < 6 && (i + 9) < cores.size(); i++) {
+        // Row 1 (9-17): Next 8 wands; controls stay in the bottom row.
+        for (int i = 0; i < 8 && (i + 9) < cores.size(); i++) {
             inv.setItem(9 + i, createWandDisplayItem(cores.get(9 + i)));
         }
-        inv.setItem(15, createSeparator(Material.PURPLE_STAINED_GLASS_PANE, "§5✦ คทาเวทมนตร์ 15 สาย"));
-        inv.setItem(16, createAction(Material.NETHER_STAR, "§d§l🪄 รับคทาครบ 15 เล่ม", List.of("§7คลิกเพื่อรับ Magic Wand ครบทั้ง 15 เล่ม", "§7ลงในกระเป๋าทันที")));
         inv.setItem(17, createSeparator(Material.PURPLE_STAINED_GLASS_PANE, "§5✦"));
 
         // Row 2 (18-26): First 9 Cores
@@ -64,23 +62,21 @@ public final class WandShowcaseGui implements InventoryHolder, Listener {
             inv.setItem(18 + i, createCoreDisplayItem(cores.get(i)));
         }
 
-        // Row 3 (27-35): Next 6 Cores + Actions
-        for (int i = 0; i < 6 && (i + 9) < cores.size(); i++) {
+        // Row 3 (27-35): Next 8 cores.
+        for (int i = 0; i < 8 && (i + 9) < cores.size(); i++) {
             inv.setItem(27 + i, createCoreDisplayItem(cores.get(9 + i)));
         }
-        inv.setItem(33, createSeparator(Material.MAGENTA_STAINED_GLASS_PANE, "§d✦ แกนเวทมนตร์ 15 ธาตุ"));
-        inv.setItem(34, createAction(Material.HEART_OF_THE_SEA, "§6§l🔮 รับแกนครบ 15 ชิ้น (x1)", List.of("§7คลิกเพื่อรับ Magic Core ครบทุกธาตุ", "§7ธาตุละ 1 ชิ้นลงในกระเป๋า")));
-        inv.setItem(35, createAction(Material.ENDER_EYE, "§e§l🔮 รับแกนครบ 15 ชิ้น (x16)", List.of("§7คลิกเพื่อรับ Magic Core ครบทุกธาตุ", "§7ธาตุละ 16 ชิ้นลงในกระเป๋า")));
+        inv.setItem(35, createSeparator(Material.MAGENTA_STAINED_GLASS_PANE, "§d✦"));
 
         // Row 4 (36-44): Info Banner & Separator
         for (int i = 36; i <= 44; i++) {
             inv.setItem(i, createSeparator(Material.BLACK_STAINED_GLASS_PANE, "§8✦"));
         }
         inv.setItem(40, createAction(Material.BOOK, "§b§l📖 คู่มือการเสกคทา & แกนเวทมนตร์", List.of(
-            "§7• ด้านบน (แถว 0-1): คทาเวทมนตร์ 15 สาย",
+            "§7• ด้านบน (แถว 0-1): คทาเวทมนตร์ 17 สาย",
             "§7  - §eคลิกซ้าย: §fรับคทา 1 เล่ม",
             "§7  - §6คลิกขวา: §fรับแกนเวทมนตร์ (Core) ของคทานั้น",
-            "§7• ด้านล่าง (แถว 2-3): แกนเวทมนตร์ 15 ธาตุ",
+            "§7• ด้านล่าง (แถว 2-3): แกนเวทมนตร์ 17 ธาตุ",
             "§7  - §eคลิกซ้าย: §fรับแกน x1",
             "§7  - §6คลิกขวา: §fรับแกน x16",
             "§7  - §bShift+คลิก: §fรับคทาเวทมนตร์ของแกนนี้"
@@ -90,10 +86,10 @@ public final class WandShowcaseGui implements InventoryHolder, Listener {
         inv.setItem(45, createAction(Material.WHEAT, "§a§l🌿 คลังพืชผล Evergarden (30 Crops)", List.of("§7คลิกเพื่อสลับไปยังหน้าต่างคลังพืชผลและอาหาร 30 ชนิด")));
         inv.setItem(46, createAction(Material.NETHERITE_PICKAXE, "§b§l⚔️ คลังยุทธภัณฑ์ & วัตถุดิบ (Relics)", List.of("§7คลิกเพื่อสลับไปยังคลัง Relics, คัมภีร์, และวัตถุดิบ")));
         inv.setItem(47, createAction(Material.COMMAND_BLOCK, "§6§l⚙️ แผงควบคุมระบบ (Admin Test Kit)", List.of("§7คลิกเพื่อสลับไปยังแผงควบคุมระบบ /evergarden test")));
-        inv.setItem(48, createAction(Material.CARROT_ON_A_STICK, "§d§l🪄 รับคทาครบ 15 เล่ม", List.of("§7รับคทาเวทมนตร์ครบทั้ง 15 เล่มทันที")));
-        inv.setItem(49, createAction(Material.HEART_OF_THE_SEA, "§e§l🔮 รับแกน x16 ครบ 15 ธาตุ", List.of("§7รับแกนเวทมนตร์ครบทั้ง 15 ธาตุ กองละ 16 ชิ้น")));
+        inv.setItem(48, createAction(Material.CARROT_ON_A_STICK, "§d§l🪄 รับคทาครบ 17 เล่ม", List.of("§7รับคทาเวทมนตร์ครบทั้ง 17 เล่มทันที")));
+        inv.setItem(49, createAction(Material.HEART_OF_THE_SEA, "§e§l🔮 รับแกน x16 ครบ 17 ธาตุ", List.of("§7รับแกนเวทมนตร์ครบทั้ง 17 ธาตุ กองละ 16 ชิ้น")));
         inv.setItem(50, plugin.testGui().createFlyingStaffMenuItem());
-        inv.setItem(51, createSeparator(Material.BLACK_STAINED_GLASS_PANE, "§8✦"));
+        inv.setItem(51, createAction(Material.NETHER_STAR, "§6§lรับแกนครบ 17 ชิ้น (x1)", List.of("§7ธาตุละ 1 ชิ้นลงในกระเป๋า")));
         inv.setItem(52, createSeparator(Material.BLACK_STAINED_GLASS_PANE, "§8✦"));
         inv.setItem(53, createAction(Material.BARRIER, "§c§l❌ ปิดเมนู (Close)", List.of("§7คลิกเพื่อปิดหน้าต่างนี้")));
 
@@ -184,10 +180,10 @@ public final class WandShowcaseGui implements InventoryHolder, Listener {
 
         List<RelicService.MagicCore> cores = RelicService.MAGIC_CORES;
 
-        // 1. Wand Slots (Row 0: 0-8, Row 1: 9-14)
+        // 1. Wand Slots (0-16)
         int wandIndex = -1;
         if (slot >= 0 && slot <= 8) wandIndex = slot;
-        else if (slot >= 9 && slot <= 14) wandIndex = slot;
+        else if (slot >= 9 && slot <= 16) wandIndex = slot;
 
         if (wandIndex >= 0 && wandIndex < cores.size()) {
             RelicService.MagicCore core = cores.get(wandIndex);
@@ -207,10 +203,10 @@ public final class WandShowcaseGui implements InventoryHolder, Listener {
             return;
         }
 
-        // 2. Core Slots (Row 2: 18-26, Row 3: 27-32)
+        // 2. Core Slots (18-34)
         int coreIndex = -1;
         if (slot >= 18 && slot <= 26) coreIndex = slot - 18;
-        else if (slot >= 27 && slot <= 32) coreIndex = (slot - 27) + 9;
+        else if (slot >= 27 && slot <= 34) coreIndex = (slot - 27) + 9;
 
         if (coreIndex >= 0 && coreIndex < cores.size()) {
             RelicService.MagicCore core = cores.get(coreIndex);
@@ -238,22 +234,22 @@ public final class WandShowcaseGui implements InventoryHolder, Listener {
 
         // 3. Action & Navigation Slots
         switch (slot) {
-            case 16, 48 -> { // All 15 wands
+            case 48 -> { // All wands
                 for (RelicService.MagicCore c : cores) {
                     ItemStack wand = VoidCommand.createWandViaAdvanceMagic(c.id());
                     if (wand != null) giveItem(p, wand);
                 }
                 p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.2f);
-                p.sendMessage(ChatColor.LIGHT_PURPLE + "✦ ได้รับ Magic Wands ครบทั้ง 15 เล่มเรียบร้อยแล้ว!");
+                p.sendMessage(ChatColor.LIGHT_PURPLE + "✦ ได้รับ Magic Wands ครบทั้ง 17 เล่มเรียบร้อยแล้ว!");
             }
-            case 34 -> { // All 15 cores x1
+            case 51 -> { // All cores x1
                 for (RelicService.MagicCore c : cores) {
                     giveItem(p, plugin.relics().createMagicCore(c));
                 }
                 p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.9f, 1.4f);
-                p.sendMessage(ChatColor.GOLD + "✦ ได้รับ Magic Cores ครบทุกธาตุ 15 ชิ้นเรียบร้อยแล้ว!");
+                p.sendMessage(ChatColor.GOLD + "✦ ได้รับ Magic Cores ครบทุกธาตุ 17 ชิ้นเรียบร้อยแล้ว!");
             }
-            case 35, 49 -> { // All 15 cores x16
+            case 49 -> { // All cores x16
                 for (RelicService.MagicCore c : cores) {
                     ItemStack st = plugin.relics().createMagicCore(c);
                     st.setAmount(16);

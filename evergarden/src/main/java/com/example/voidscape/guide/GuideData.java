@@ -90,7 +90,7 @@ public final class GuideData {
         ),
         new GuidePage(
             "อัตราสุ่ม Evergarden Vault",
-            "§1§lตารางสุ่ม Evergarden Vault§r\n§8(ปรับสมดุลระยะยาว · 10,000 Tickets)§r\n\n§a• 58.5% วัตถุดิบและของใช้§r\n  (Key Shard, Repair Stone, Void Elixir, Echo Shard)\n§6• 15.0% Limit Break Scrolls (14 แบบ)§r\n§e• 12.0% Unique Enchant Scrolls (22 แบบ)§r\n§b• 7.0% Magic Cores (14 ธาตุ)§r\n§6• 5.0% ยุทธภัณฑ์โบราณ (6 ชิ้น)§r\n§b• 1.5% ไม้เท้าบิน§r\n§d• 0.5% Core of Levitation §4[MYTHIC]§r\n§d• 0.5% Scroll of Eternity §4[MYTHIC]§r\n\n§7* ทุกการเปิด Vault จะได้รับ Astral Dust x2 แน่นอน และมีโอกาส 25% ได้รับเมล็ดพืช Tier III-IV เพิ่มเติม!§r"
+            "§1§lตารางสุ่ม Evergarden Vault§r\n§8(ปรับสมดุลระยะยาว · 10,000 Tickets)§r\n\n§a• 58.5% วัตถุดิบและของใช้§r\n  (Key Shard, Repair Stone, Void Elixir, Echo Shard)\n§6• 15.0% Limit Break Scrolls (14 แบบ)§r\n§e• 12.0% Unique Enchant Scrolls (22 แบบ)§r\n§b• 7.0% Magic Cores (14 ธาตุ)§r\n§6• 5.0% ยุทธภัณฑ์โบราณ (6 ชิ้น)§r\n§b• 1.5% ไม้เท้าบิน§r\n§d• 0.5% Mythic Cores (Levitation / Sun / Time) §4[MYTHIC]§r\n§d• 0.5% Scroll of Eternity §4[MYTHIC]§r\n\n§7* ทุกการเปิด Vault จะได้รับ Astral Dust x2 แน่นอน และมีโอกาส 25% ได้รับเมล็ดพืช Tier III-IV เพิ่มเติม!§r"
         )
     );
 
@@ -100,11 +100,11 @@ public final class GuideData {
     public static final List<GuidePage> MAGIC_PAGES = List.of(
         new GuidePage(
             "สารบัญ: Advance Magic",
-            "§1§lคัมภีร์เวทมนตร์ Advance Magic§r\n§8เล่มที่ 3 · คทา มานา และแกนเวทมนตร์ 15 ธาตุ§r\n\n§b§l[ สารบัญ ]§r\n§0 2. ระบบเวทมนตร์, มานา และการคราฟต์\n§0 3. แกนในตำนาน: Shulker Levitation [MYTHIC]\n§0 4. ธาตุสายฟ้า & น้ำแข็ง (Lightning & Frost)\n§0 5. ธาตุเพลิง & มังกร (Meteor & Dragon)\n§0 6. ธาตุเพลิงพลาสม่า & เลเซอร์ (Blaze & Guardian)\n§0 7. ธาตุมิติสุญญากาศ & คลื่นโซนิค (Void & Sonic)\n§0 8. ธาตุพฤกษา & ปฐพี (Nature & Earth)\n§0 9. ธาตุเงา & อัญเชิญเวกซ์ (Shadow & Vex)\n§0 10. ธาตุวิเธอร์ & ปราการเหล็ก (Wither & Iron)"
+            "§1§lคัมภีร์เวทมนตร์ Advance Magic§r\n§8เล่มที่ 3 · คทา มานา และแกนเวทมนตร์ 17 ธาตุ§r\n\n§b§l[ สารบัญ ]§r\n§0 2. ระบบเวทมนตร์, มานา และการคราฟต์\n§0 3. แกนในตำนาน: Shulker Levitation [MYTHIC]\n§0 4. ธาตุสายฟ้า & น้ำแข็ง (Lightning & Frost)\n§0 5. ธาตุเพลิง & มังกร (Meteor & Dragon)\n§0 6. ธาตุเพลิงพลาสม่า & เลเซอร์ (Blaze & Guardian)\n§0 7. ธาตุมิติสุญญากาศ & คลื่นโซนิค (Void & Sonic)\n§0 8. ธาตุพฤกษา & ปฐพี (Nature & Earth)\n§0 9. ธาตุเงา & อัญเชิญเวกซ์ (Shadow & Vex)\n§0 10. ธาตุวิเธอร์ & ปราการเหล็ก (Wither & Iron)\n§0 11. Solar Apocalypse [MYTHIC]\n§0 12. Chronos: Final Hour [MYTHIC]"
         ),
         new GuidePage(
             "ระบบเวทมนตร์และการคราฟต์",
-            "§b--- ระบบเวทมนตร์ Advance Magic ---§r\n\nคทาเวทมนตร์มีทั้งหมด 15 สาย แต่ละสายใช้ Magic Core ที่ได้รับจาก Evergarden Vault เป็นแกนกลาง\n\nการคราฟต์คทา:\nวาง Magic Core ตรงกลางโต๊ะคราฟต์ ล้อมด้วย Netherite Ingot 8 แท่ง หรือ Nether Star 8 ชิ้น\n\nการใช้งาน:\nถือคทาแล้วคลิกขวาเพื่อร่ายมหาเวท\n• ตรวจสอบระดับมานาปัจจุบันด้วย /magic mana\n• มานาจะฟื้นฟูอัตโนมัติตามเวลา\n• คทาแต่ละชนิดมีเอฟเฟกต์เฉพาะตัว ไม่เสียความทนทาน"
+            "§b--- ระบบเวทมนตร์ Advance Magic ---§r\n\nคทาเวทมนตร์มีทั้งหมด 17 สาย แต่ละสายใช้ Magic Core ที่ได้รับจาก Evergarden Vault เป็นแกนกลาง\n\nการคราฟต์คทา:\nวาง Magic Core ตรงกลางโต๊ะคราฟต์ ล้อมด้วย Netherite Ingot 8 แท่ง หรือ Nether Star 8 ชิ้น\n\nการใช้งาน:\nถือคทาแล้วคลิกขวาเพื่อร่ายมหาเวท\n• ตรวจสอบระดับมานาปัจจุบันด้วย /magic mana\n• มานาจะฟื้นฟูอัตโนมัติตามเวลา\n• คทาแต่ละชนิดมีเอฟเฟกต์เฉพาะตัว ใช้ความทนทาน 1 ต่อการร่ายสำเร็จ ซ่อมและอัปเกรดได้"
         ),
         new GuidePage(
             "มหาเวท Shulker Levitation",
@@ -137,6 +137,14 @@ public final class GuideData {
         new GuidePage(
             "ธาตุวิเธอร์ & ปราการเหล็ก",
             "§8--- ธาตุวิเธอร์และปราการเหล็ก ---§r\n\n• Wither Ray (Core of Wither)\n  (มานา: 85 | คูลดาวน์: 12 วินาที)\n  ยิงกะโหลกวิเธอร์ต่อเนื่อง 6 ลูกรัวๆ ปิดท้ายด้วยกะโหลกวิเธอร์ชาร์จพลังมหาศาล ระเบิดแรง 60 ดาเมจ + ติดสถานะ Wither II\n\n• Iron Armor (Core of Iron)\n  (มานา: 60 | คูลดาวน์: 35 วินาที)\n  สวมชุดเกราะเหล็กศักดิ์สิทธิ์ ผลักศัตรูรอบตัวกระเด็น และมอบบัฟ Resistance IV, Fire Resistance, Strength II นาน 1 นาที"
+        ),
+        new GuidePage(
+            "มหาเวทสุริยันล้างโลก [MYTHIC]",
+            "§6--- Solar Apocalypse ---§r\n\nCore of the Sun · มานา 100 · คูลดาวน์ 45 วินาที\n\nเรียกดวงอาทิตย์ขนาดยักษ์เหนือเป้าหมาย วงเวททองดึงศัตรูเข้ามา ลำแสง 5 เส้นโจมตีเส้นละ 32 ดาเมจ ก่อนสุริยันตกลงมาระเบิด 180 ดาเมจในรัศมี 16 บล็อก พร้อมคลื่นเพลิงผลักศัตรู\n\nใช้ความทนทาน 1 ต่อการร่ายสำเร็จ ซ่อมและอัปเกรดได้เหมือนคทาอื่น\n\nหมวด Mythic Core ใน Vault รวม 0.5% สุ่มหนึ่งในสามแกน"
+        ),
+        new GuidePage(
+            "มหาเวทราชันกาลเวลา [MYTHIC]",
+            "§b--- Chronos: Final Hour ---§r\n\nCore of Time · มานา 95 · คูลดาวน์ 40 วินาที\n\nสร้างหน้าปัดนาฬิกายักษ์ ตรึงศัตรูชั่วคราวในระยะ 12 บล็อก บอสจะติดช้าแทน คมเวทเวลาโจมตี 5 ครั้ง ครั้งละ 24 ดาเมจ จากนั้นหน้าปัดหมุนย้อนและสะท้อนคมเวทอีก 5 ครั้งที่ความแรง 70% ก่อนแตกสลาย 100 ดาเมจ\n\nความทนทาน การซ่อมและอัปเกรดใช้ระบบเดียวกับคทาอื่น เอฟเฟกต์ต่อเนื่องไม่เสียมานาหรือความทนทานเพิ่ม"
         )
     );
 

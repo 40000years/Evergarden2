@@ -18,7 +18,7 @@ public final class MagicItemMenu implements Listener {
         final Inventory inventory;
         Menu(boolean admin) {
             this.admin=admin;
-            inventory=Bukkit.createInventory(this,36,admin?"Magic: Wands / Cores":"Magic: Craft a Wand");
+            inventory=Bukkit.createInventory(this,admin?54:36,admin?"Magic: Wands / Cores":"Magic: Craft a Wand");
         }
         public Inventory getInventory(){return inventory;}
     }
@@ -33,9 +33,9 @@ public final class MagicItemMenu implements Listener {
             lore.add(ChatColor.YELLOW+(admin?"แตะเพื่อรับคทา":"แตะเพื่อคราฟ: Core ธาตุนี้ 1 + Netherite/Nether Star 8"));
             meta.setLore(lore);wand.setItemMeta(meta);
             menu.inventory.setItem(spell.ordinal(),wand);
-            if(admin)menu.inventory.setItem(18+spell.ordinal(),plugin.wands().createCore(spell));
+            if(admin)menu.inventory.setItem(27+spell.ordinal(),plugin.wands().createCore(spell));
         }
-        if(admin){menu.inventory.setItem(16,plugin.restoration().createCore());menu.inventory.setItem(17,plugin.restoration().createRepairWand());menu.inventory.setItem(35,plugin.flyingStaff().create());}
+        if(admin){menu.inventory.setItem(48,plugin.restoration().createCore());menu.inventory.setItem(49,plugin.restoration().createRepairWand());menu.inventory.setItem(50,plugin.flyingStaff().create());}
         player.openInventory(menu.inventory);
     }
     /** Plan against clones first: failed crafts never consume ingredients or drop the result. */
@@ -70,21 +70,21 @@ public final class MagicItemMenu implements Listener {
         if(!(event.getWhoClicked() instanceof Player player)||!event.isLeftClick()||event.isShiftClick())return;
         int slot=event.getRawSlot();
         if(slot<0||slot>=menu.inventory.getSize())return;
-        if(menu.admin&&slot==35){
+        if(menu.admin&&slot==50){
             if(!player.hasPermission("advance-magic.admin"))return;
             var left=player.getInventory().addItem(plugin.flyingStaff().create());
             if(!left.isEmpty())player.sendMessage(ChatColor.RED+"กระเป๋าเต็ม กรุณาเว้นที่ 1 ช่อง");
             Bukkit.getScheduler().runTask(plugin,player::updateInventory);
             return;
         }
-        if(menu.admin&&(slot==16||slot==17)){
+        if(menu.admin&&(slot==48||slot==49)){
             if(!player.hasPermission("advance-magic.admin"))return;
-            var left=player.getInventory().addItem(slot==16?plugin.restoration().createCore():plugin.restoration().createRepairWand());
+            var left=player.getInventory().addItem(slot==48?plugin.restoration().createCore():plugin.restoration().createRepairWand());
             if(!left.isEmpty())player.sendMessage(ChatColor.RED+"Inventory full.");
             return;
         }
-        boolean core=slot>=18;
-        int index=core?slot-18:slot;
+        boolean core=slot>=27;
+        int index=core?slot-27:slot;
         if(index>=Spell.values().length||(!menu.admin&&core))return;
         Spell spell=Spell.values()[index];
         if(menu.admin) {

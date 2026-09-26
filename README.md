@@ -116,4 +116,9 @@ Install the updated `dist/evergarden.jar` and restart the server.
 
 ## Resource packs
 
+Advance Magic now includes **Solar Apocalypse** and **Chronos: Final Hour**,
+bringing the catalog to 17 wands and three Mythic cores. The new items use flat
+pixel art, with shared cinematic geometry and dedicated Bedrock colour emitters.
+See [abilities, admin commands, drop rates and verification](docs/mythic-wands.md).
+
 The Advance Magic Java pack with the new flying staff is served from its bundled host on TCP 8187 by default. Its SHA-1 is calculated from the ZIP embedded in `dist/advance-magic.jar`; see `/magic pack` for the public URL and status. Bedrock packs and Geyser mappings are embedded in the JARs and installed locally when Geyser-Spigot is present. See [the flying staff setup and checks](docs/flying-staff-implementation.md) for controls, `allow-flight=false`, and anti-cheat permissions. Wand upgrade cores work only by dropping a core onto a wand in the player inventory; anvils cannot upgrade or repair wands.

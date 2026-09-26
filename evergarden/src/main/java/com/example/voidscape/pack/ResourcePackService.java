@@ -16,8 +16,8 @@ import java.util.jar.JarFile;
 
 public final class ResourcePackService implements Listener, AutoCloseable {
     public static final UUID PACK_ID=UUID.fromString("c8f2b94e-4a35-4d1b-9b67-0d2a6ef4f821");
-    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/777eecad0e27e43a7a2ac37df9599aa5b51b7c26/evergarden/dist/evergarden-java.zip";
-    private static final String CURRENT_SHA1 = "82891b97d4ee3102e340ad5c70984493043f25ea";
+    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/c29fd11ce15bbd7aba865b883d0b8a24b46f8878/evergarden/dist/evergarden-java.zip";
+    private static final String CURRENT_SHA1 = "32decd0faab1a8ca393c8d80194cc2eea9b48de4";
     public static final UUID AETERNUM_PACK_ID=UUID.fromString("8d2af8f1-f85c-4b4e-8a37-a55a359ce496");
     public static final String AETERNUM_PACK_URL="https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/evergarden/dist/Aeternum-Foods-26.x.zip";
     public static final String AETERNUM_PACK_SHA1="f7137350c381dfb933f96e869bfaced4a292bcff";
@@ -119,7 +119,7 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             }
             if(migratePackConfig(plugin.getConfig())) {
                 plugin.saveConfig();
-                plugin.getLogger().info("Updated the official Evergarden Java pack URL and SHA-1 for restoration art; private CDN URLs are preserved.");
+                plugin.getLogger().info("Updated the official Evergarden Java pack URL and SHA-1 for the bundled assets; private CDN URLs are preserved.");
             }
             if(!plugin.getConfig().getBoolean("resource-pack.enabled",true))return;
             String configuredUrl=plugin.getConfig().getString("resource-pack.url","").trim();

@@ -45,7 +45,8 @@ classes.mkdir(exist_ok=True)
 deps = [*plugins.glob('*.jar'), *(server / 'versions').rglob('*.jar'), *(server / 'libraries').rglob('*.jar'),
         *Path.home().joinpath('.m2/repository/org/jetbrains/annotations').rglob('*.jar')]
 subprocess.run(['javac', '-proc:none', '-encoding', 'UTF-8', '-cp', os.pathsep.join(map(str, deps)),
-                '-d', str(classes), str(Path(__file__).with_name('BedrockItemChecks.java'))], check=True)
+                '-d', str(classes), str(Path(__file__).with_name('BedrockItemChecks.java')),
+                str(Path(__file__).with_name('MythicSpellChecks.java'))], check=True)
 (classes / 'plugin.yml').write_text("name: BedrockItemChecks\nversion: '1.0'\nmain: BedrockItemChecks\napi-version: '26.2'\ndepend: [Evergarden, advance-magic, Geyser-Spigot]\n", encoding='utf-8')
 subprocess.run(['jar', '--create', '--file', str(plugins / 'bedrock-item-checks.jar'), '-C', str(classes), '.'], check=True)
 (server / 'eula.txt').write_text('eula=true\n')

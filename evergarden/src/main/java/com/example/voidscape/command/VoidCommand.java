@@ -535,7 +535,7 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                 c.add("crop_"+crop.id);
             }
             // Shortcuts
-            c.addAll(List.of("smelter","pickaxe","eternity","key","shard","dust","repair","elixir","storm","nova","blade","aegis","shulker_levitation","shulker","wand","crops","seeds","guide","guide_crops","guide_relics","guide_magic"));
+            c.addAll(List.of("smelter","pickaxe","eternity","key","shard","dust","repair","elixir","storm","nova","blade","aegis","shulker_levitation","solar_apocalypse","chronos_final_hour","shulker","wand","crops","seeds","guide","guide_crops","guide_relics","guide_magic"));
         }
         if(args.length==3&&args[0].equalsIgnoreCase("give")&&isAdmin(sender)) {
             c.addAll(List.of("@a","@p","@s","1","2","4","8","16","32","64"));

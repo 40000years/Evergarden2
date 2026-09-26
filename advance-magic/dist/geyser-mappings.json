@@ -181,6 +181,30 @@
           "display_handheld": true,
           "creative_category": "equipment"
         }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:solar_apocalypse",
+        "bedrock_identifier": "advance_magic:solar_apocalypse",
+        "display_name": "Solar Apocalypse Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.solar_apocalypse",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:chronos_final_hour",
+        "bedrock_identifier": "advance_magic:chronos_final_hour",
+        "display_name": "Chronos: Final Hour Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.chronos_final_hour",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
       }
     ],
     "minecraft:heart_of_the_sea": [
@@ -359,6 +383,30 @@
         "display_name": "Core of the Guardian",
         "bedrock_options": {
           "icon": "advance_magic.core_guardian_beam",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:core_solar_apocalypse",
+        "bedrock_identifier": "advance_magic:core_solar_apocalypse",
+        "display_name": "Core of the Sun",
+        "bedrock_options": {
+          "icon": "advance_magic.core_solar_apocalypse",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:core_chronos_final_hour",
+        "bedrock_identifier": "advance_magic:core_chronos_final_hour",
+        "display_name": "Core of Time",
+        "bedrock_options": {
+          "icon": "advance_magic.core_chronos_final_hour",
           "allow_offhand": true,
           "display_handheld": false,
           "creative_category": "items"

@@ -19,7 +19,9 @@ public enum Spell {
     METEOR_STRIKE("Meteor Strike", Material.MAGMA_BLOCK, 90, 20, 0xFF8546),
     IRON_ARMOR("Iron Armor", Material.IRON_BLOCK, 60, 35, 0xCCD8E0),
     VEX_LEGION("Vex Legion", Material.TOTEM_OF_UNDYING, 80, 25, 0xB4D8E7),
-    GUARDIAN_BEAM("Guardian Beam", Material.PRISMARINE_SHARD, 60, 10, 0x56E0B5);
+    GUARDIAN_BEAM("Guardian Beam", Material.PRISMARINE_SHARD, 60, 10, 0x56E0B5),
+    SOLAR_APOCALYPSE("Solar Apocalypse", Material.SUNFLOWER, 100, 45, 0xFFD34D),
+    CHRONOS_FINAL_HOUR("Chronos: Final Hour", Material.CLOCK, 95, 40, 0x72EDFF);
 
     public final String title;
     public final Material core;
@@ -28,9 +30,14 @@ public enum Spell {
         this.title=title; this.core=core; this.mana=mana; this.cooldown=cooldown; this.color=color;
     }
     public String id() { return name().toLowerCase(Locale.ROOT); }
+    public boolean isMythic() {
+        return this==SHULKER_LEVITATION||this==SOLAR_APOCALYPSE||this==CHRONOS_FINAL_HOUR;
+    }
     public static Spell parse(String text) {
         if(text==null) return null;
         String upper=text.toUpperCase(Locale.ROOT).trim();
+        if(upper.equals("SOLAR")||upper.equals("SUN"))return SOLAR_APOCALYPSE;
+        if(upper.equals("CHRONOS")||upper.equals("FINAL_HOUR"))return CHRONOS_FINAL_HOUR;
         if(upper.contains("INVISIBILITY")||upper.equals("SHROUD")) return SONIC_BOOM;
         if(upper.contains("POISON")||upper.contains("SPORES")) return BLAZE_BARRAGE;
         if(upper.contains("SOUL")||upper.equals("SOULS")||upper.contains("DRAIN")) return GUARDIAN_BEAM;

@@ -1,0 +1,227 @@
+package com.example.advancemagic.spell;
+
+import org.bukkit.*;
+import org.bukkit.damage.DamageType;
+import org.bukkit.entity.*;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+import java.util.*;
+
+/** Shared world-space geometry using vanilla particles translated by Geyser.
+ * No displays, camera packets, world-time changes, terrain edits or unowned tasks.
+ * A single scope owns each complete cast, including its final attack and echoes.
+ */
+public final class MythicSpells {
+    private static final double TAU=Math.PI*2;
+    private static final Color GOLD=Color.fromRGB(0xFFD34D), WHITE=Color.fromRGB(0xFFF2AF),
+        ORANGE=Color.fromRGB(0xFF732D), CYAN=Color.fromRGB(0x72EDFF), VIOLET=Color.fromRGB(0xA36BFF);
+    private final MagicContext c;
+    private final MythicVisuals visuals;
+    private final Map<UUID,Integer> activeByWorld=new HashMap<>();
+    public MythicSpells(MagicContext c){this.c=c;visuals=new MythicVisuals(c);}
+    private boolean room(Location at) {
+        return c.plugin.effects().hasCapacity()&&activeByWorld.getOrDefault(at.getWorld().getUID(),0)
+            <Math.clamp(c.plugin.getConfig().getInt("mythic-max-active-per-world",4),1,16);
+    }
+    private void start(Player p,Location at,int duration,
+            java.util.function.BiPredicate<com.example.advancemagic.effect.EffectEngine.Effect,Integer> body) {
+        UUID world=at.getWorld().getUID();
+        var effect=c.plugin.effects().start(p,duration,body);
+        activeByWorld.merge(world,1,Integer::sum);
+        effect.onClose(()->activeByWorld.computeIfPresent(world,(id,count)->count<=1?null:count-1));
+        effect.onClose(visuals::clear);
+    }
+
+    private Location center(Player player) {
+        var hit=c.target(player,30);
+        Location at=hit==null?player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(16))
+            :hit.getHitEntity()!=null?hit.getHitEntity().getLocation().add(0,.15,0)
+            :hit.getHitPosition().toLocation(player.getWorld()).add(0,.15,0);
+        return c.loaded(at)?at:null;
+    }
+    private void dust(Location at,Color color,float size) {
+        visuals.dust(at,color,size);
+    }
+    private void spark(Location at,Particle particle,int count,double spread) {
+        if(c.loaded(at))at.getWorld().spawnParticle(particle,at,count,spread,spread,spread,0,null,true);
+    }
+    private void line(Location from,Location to,Color color,float size,int samples) {
+        Vector delta=to.toVector().subtract(from.toVector());
+        int n=Math.min(40,Math.max(2,samples));
+        for(int i=0;i<=n;i++)dust(from.clone().add(delta.clone().multiply((double)i/n)),color,size);
+    }
+    private void ring(Location at,double radius,Color color,float size,int count,double turn) {
+        for(int i=0;i<count;i++) {
+            double a=TAU*i/count+turn;
+            dust(at.clone().add(Math.cos(a)*radius,0,Math.sin(a)*radius),color,size);
+        }
+    }
+    private void glyph(Location at,int age,Color color) {
+        ring(at,12,color,1.5f,64,0);
+        ring(at,9,color,1.2f,48,0);
+        for(int i=0;i<10;i++) {
+            double a=TAU*i/10+age*.012;
+            Vector inner=new Vector(Math.cos(a)*9,0,Math.sin(a)*9);
+            Vector outer=new Vector(Math.cos(a)*12,0,Math.sin(a)*12);
+            line(at.clone().add(inner),at.clone().add(outer),color,1.3f,4);
+        }
+    }
+    private void sun(Location at,double radius,int age) {
+        // Three great circles give a recognizable 3D orb from either client's view.
+        for(int i=0;i<48;i++) {
+            double a=TAU*i/48, x=Math.cos(a)*radius, y=Math.sin(a)*radius;
+            dust(at.clone().add(x,y,0),WHITE,2.8f);
+            dust(at.clone().add(x,0,y),GOLD,2.8f);
+            dust(at.clone().add(0,x,y),ORANGE,2.6f);
+        }
+        for(int latitude=-2;latitude<=2;latitude++) {
+            double y=radius*latitude/3, circle=Math.sqrt(radius*radius-y*y);
+            ring(at.clone().add(0,y,0),circle,latitude%2==0?GOLD:ORANGE,2.4f,24,age*.015);
+        }
+        for(int i=0;i<12;i++) {
+            double a=TAU*i/12+age*.018;
+            Vector ray=new Vector(Math.cos(a),Math.sin(a),Math.sin(a*.5)*.3);
+            line(at.clone().add(ray.clone().multiply(radius)),at.clone().add(ray.multiply(radius+1.5)),GOLD,2f,3);
+        }
+        spark(at,Particle.FLAME,32,radius*.65);
+        spark(at,Particle.END_ROD,10,radius*.35);
+    }
+    private List<LivingEntity> targets(Player p,Location at,double radius,Spell spell) {
+        return c.nearby(p,at,radius,false).stream().filter(e->c.affect(p,e,spell)).toList();
+    }
+    private void hit(Player p,LivingEntity target,double damage,double multiplier) {
+        // The cast listener clears its multiplier after scheduling; capture it once.
+        c.damage(p,target,damage*multiplier,DamageType.MAGIC);
+    }
+    public boolean solar(Player p) {
+        Location at=center(p);
+        if(at==null||!room(at))return false;
+        Location high=at.clone().add(0,16,0);
+        if(!c.loaded(high))return false;
+        double power=c.getCastDamageMultiplier(p.getUniqueId());
+        double beamDamage=c.configuredDamage("damage.solar-beam",32);
+        double burstDamage=c.configuredDamage("damage.solar-apocalypse",180);
+        at.getWorld().playSound(at,Sound.ENTITY_ENDER_DRAGON_GROWL,2f,.65f);
+        start(p,at,141,(effect,age)->{
+            if(!c.loaded(at)||!c.loaded(high))return false;
+            visuals.frame(at);
+            if(age%4==0&&age<110)glyph(at,age,GOLD);
+            if(age%3==0&&age<110) {
+                double descent=age<90?0:Math.min(1,(age-90)/20.0);
+                sun(high.clone().add(0,-15*descent,0),age<40?1.4+age*.075:4.4-descent*1.8,age);
+            }
+            if(age<90&&age%10==0)for(var e:targets(p,at,14,Spell.SOLAR_APOCALYPSE)) {
+                Vector pull=at.toVector().subtract(e.getLocation().toVector()).setY(0);
+                if(pull.lengthSquared()>.25)c.velocity(e,pull.normalize().multiply(.3).setY(.08));
+                c.potion(e,PotionEffectType.SLOWNESS,15,1);
+            }
+            if(age>=40&&age<=80&&(age-40)%10==0) {
+                int beam=(age-40)/10;
+                double angle=TAU*beam/5;
+                Location impact=at.clone().add(Math.cos(angle)*4,0,Math.sin(angle)*4);
+                line(high,impact,WHITE,3.5f,40);
+                line(high.clone().add(.5,0,0),impact.clone().add(.5,0,0),ORANGE,2.5f,32);
+                ring(impact,5,GOLD,2f,40,0);
+                spark(impact,Particle.FLAME,60,1.8);
+                at.getWorld().playSound(impact,Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1.5f,1.25f);
+                for(var e:targets(p,impact,7,Spell.SOLAR_APOCALYPSE)) {
+                    hit(p,e,beamDamage,power);
+                    if(!e.isDead())e.setFireTicks(Math.max(e.getFireTicks(),60));
+                }
+            }
+            if(age==110) {
+                spark(at.clone().add(0,1,0),Particle.EXPLOSION_EMITTER,1,0);
+                spark(at.clone().add(0,2,0),Particle.FLAME,120,4);
+                spark(at,Particle.END_ROD,60,3);
+                at.getWorld().playSound(at,Sound.ENTITY_GENERIC_EXPLODE,2.5f,.6f);
+                for(var e:targets(p,at,16,Spell.SOLAR_APOCALYPSE)) {
+                    hit(p,e,burstDamage,power);
+                    if(!e.isDead()) {
+                        Vector push=e.getLocation().toVector().subtract(at.toVector()).setY(0);
+                        if(push.lengthSquared()>.01)c.velocity(e,push.normalize().multiply(1.4).setY(.65));
+                    }
+                }
+            }
+            if(age>=110&&age%2==0) {
+                double radius=1+(age-110)*.6;
+                ring(at.clone().add(0,.5,0),radius,ORANGE,2.5f,80,0);
+                ring(at.clone().add(0,1.2,0),radius*.9,GOLD,1.8f,48,0);
+            }
+            return true;
+        });
+        return true;
+    }
+
+    private void clock(Location at,Vector right,int age) {
+        double turn=age<88?age*.055:-(age-88)*.12;
+        for(int i=0;i<72;i++) {
+            double a=TAU*i/72;
+            dust(at.clone().add(right.clone().multiply(Math.cos(a)*8)).add(0,Math.sin(a)*8,0),GOLD,2f);
+        }
+        for(int i=0;i<12;i++) {
+            double a=TAU*i/12;
+            Location outer=at.clone().add(right.clone().multiply(Math.cos(a)*7.5)).add(0,Math.sin(a)*7.5,0);
+            Location inner=at.clone().add(right.clone().multiply(Math.cos(a)*6.6)).add(0,Math.sin(a)*6.6,0);
+            line(inner,outer,i%3==0?CYAN:VIOLET,1.8f,3);
+        }
+        line(at,at.clone().add(right.clone().multiply(Math.cos(turn)*6.3)).add(0,Math.sin(turn)*6.3,0),CYAN,2.5f,20);
+        line(at,at.clone().add(right.clone().multiply(Math.cos(turn*.22+1)*4)).add(0,Math.sin(turn*.22+1)*4,0),VIOLET,2.5f,14);
+        spark(at,Particle.END_ROD,4,.4);
+    }
+    private boolean boss(LivingEntity target) {
+        var health=target.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+        return target instanceof EnderDragon||target instanceof Wither||target instanceof Warden
+            ||(health!=null&&health.getValue()>=150);
+    }
+    public boolean chronos(Player p) {
+        Location at=center(p);
+        if(at==null||!room(at))return false;
+        Location face=at.clone().add(0,10,0);
+        if(!c.loaded(face.clone().add(0,8,0)))return false;
+        Vector forward=p.getEyeLocation().getDirection().setY(0);
+        if(forward.lengthSquared()<.01)forward=new Vector(0,0,1);
+        final Vector right=new Vector(forward.getZ(),0,-forward.getX()).normalize();
+        double power=c.getCastDamageMultiplier(p.getUniqueId());
+        double bladeDamage=c.configuredDamage("damage.chronos-blade",24);
+        double shatterDamage=c.configuredDamage("damage.chronos-shatter",100);
+        Set<UUID> firstRound=new HashSet<>();
+        start(p,at,151,(effect,age)->{
+            if(!c.loaded(at)||!c.loaded(face))return false;
+            visuals.frame(at);
+            if(age%4==0&&age<118) {clock(face,right,age);glyph(at,age,CYAN);}
+            if(age%10==0&&age<=60)for(var e:targets(p,at,12,Spell.CHRONOS_FINAL_HOUR)) {
+                if(boss(e))c.potion(e,PotionEffectType.SLOWNESS,25,1);
+                else c.plugin.statuses().root(p,e);
+            }
+            // Five time blades, then five reversed visual/damage echoes.
+            boolean first=age>=40&&age<=80&&(age-40)%10==0;
+            boolean echo=age>=100&&age<=140&&(age-100)%10==0;
+            if(first||echo) {
+                int index=first?(age-40)/10:4-(age-100)/10;
+                double a=TAU*index/5;
+                Location source=at.clone().add(Math.cos(a)*12,3+Math.sin(a)*2,Math.sin(a)*12);
+                line(source,at.clone().add(0,1,0),echo?VIOLET:CYAN,2.3f,36);
+                line(source.clone().add(0,.6,0),at.clone().add(0,1.6,0),WHITE,1.2f,24);
+                spark(at,Particle.END_ROD,16,2);
+                at.getWorld().playSound(at,Sound.BLOCK_AMETHYST_BLOCK_RESONATE,1.2f,echo?.7f:1.6f);
+                for(var e:targets(p,at,12,Spell.CHRONOS_FINAL_HOUR)) {
+                    if(first)firstRound.add(e.getUniqueId());
+                    if(first||firstRound.contains(e.getUniqueId()))hit(p,e,bladeDamage*(echo?.7:1),power);
+                }
+            }
+            if(age==88)at.getWorld().playSound(at,Sound.BLOCK_BEACON_DEACTIVATE,1.8f,.5f);
+            if(age==118) {
+                spark(face,Particle.END_ROD,80,6);
+                spark(at,Particle.EXPLOSION,4,3);
+                at.getWorld().playSound(at,Sound.BLOCK_GLASS_BREAK,2f,.6f);
+                for(var e:targets(p,at,12,Spell.CHRONOS_FINAL_HOUR))hit(p,e,shatterDamage,power);
+            }
+            if(age>=118&&age%2==0) {
+                ring(at.clone().add(0,.8,0),1+(age-118)*.5,VIOLET,2f,64,-age*.06);
+                ring(at.clone().add(0,1.5,0),1+(age-118)*.35,CYAN,1.6f,48,age*.06);
+            }
+            return true;
+        });
+        return true;
+    }
+}

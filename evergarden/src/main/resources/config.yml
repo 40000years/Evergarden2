@@ -106,8 +106,8 @@ relics:
 resource-pack:
   enabled: true
   # Pinned to the published restoration resource pack. Private CDN URLs are preserved.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/777eecad0e27e43a7a2ac37df9599aa5b51b7c26/evergarden/dist/evergarden-java.zip'
-  sha1: '82891b97d4ee3102e340ad5c70984493043f25ea'
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/c29fd11ce15bbd7aba865b883d0b8a24b46f8878/evergarden/dist/evergarden-java.zip'
+  sha1: '32decd0faab1a8ca393c8d80194cc2eea9b48de4'
   required: false
   host:
     enabled: false

@@ -8,7 +8,7 @@ package com.example.voidscape.item;
  * 3400..3899  (5.0%) : Special Relic Equipment (Rift Pickaxe, Smelter Pickaxe, Storm Bow, Nova Bow, Rift Blade, Eternal Aegis)
  * 3900..9749 (58.5%) : Useful Reagents & Elixirs (Key Shard, Repair Stone, Void Elixir, Echo Shard)
  * 9750..9899  (1.5%) : Flying Staff
- * 9900..9949  (0.5%) : Mythic Core (Shulker Levitation)
+ * 9900..9949  (0.5%) : Mythic Core (Levitation / Sun / Time, equally likely)
  * 9950..9999  (0.5%) : Scroll of Eternity (Unbreakable 100% Mythic)
  */
 public final class VaultLootTable {

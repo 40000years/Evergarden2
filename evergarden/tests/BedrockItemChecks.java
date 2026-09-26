@@ -84,6 +84,7 @@ public final class BedrockItemChecks extends JavaPlugin {
                 }
                 expectedIds.removeAll(seen);
                 if(!expectedIds.isEmpty())throw new AssertionError("Missing coverage: "+expectedIds);
+                MythicSpellChecks.run(this,magic,garden);
                 Files.writeString(Path.of("bedrock-items-result.txt"),"PASS "+checks+" translations / "+seen.size()+" custom identifiers / "+Registries.ITEMS.get().size()+" Bedrock protocol tables; vanilla honey bottle unchanged");
             }catch(Throwable error){
                 getLogger().log(java.util.logging.Level.SEVERE,"BEDROCK ITEM CHECK FAILED",error);

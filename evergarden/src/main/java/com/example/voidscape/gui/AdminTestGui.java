@@ -82,7 +82,7 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         inv.setItem(14, plugin.relics().createScrollLimitBreak(LimitBreakType.LOOTING));
         inv.setItem(15, createActionItem(Material.CARROT_ON_A_STICK, "§d§l🪄 คลังคทาเวทมนตร์ & ไม้เท้าบิน",
             List.of("§eคลิก: §aเปิดคลังคทาเวทมนตร์และปุ่มรับไม้เท้าบิน",
-                    "§6Shift+คลิก: §7รับคทาทั้ง 15 สายลงกระเป๋าทันที")));
+                    "§6Shift+คลิก: §7รับคทาทั้ง 17 สายลงกระเป๋าทันที")));
         inv.setItem(16, createActionItem(Material.CHEST, "§b§l📦 รับ Limit Break x5 ทุกชนิด",
             List.of("§7คลิกเพื่อรับคัมภีร์ Limit Break ทุกสาย", "§7สายละ 5 เล่มลงในกระเป๋า")));
         inv.setItem(17, createActionItem(Material.BOOKSHELF, "§d§l📜 รับ Unique Enchants ครบ 22 ใบ",
@@ -283,19 +283,19 @@ public final class AdminTestGui implements InventoryHolder, Listener {
                         if (wand != null) giveOrDrop(player, wand);
                     }
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.9f, 1.2f);
-                    plugin.message(player, "ได้รับ Ancient Magic Wands ครบทั้ง 15 เล่ม!");
+                    plugin.message(player, "ได้รับ Ancient Magic Wands ครบทั้ง 17 เล่ม!");
                 } else {
                     if (plugin.wandGui() != null) {
                         plugin.wandGui().open(player);
                     }
                 }
             }
-            case 50 -> { // 15 Magic Cores
+            case 50 -> { // 17 Magic Cores
                 for (RelicService.MagicCore c : RelicService.MAGIC_CORES) {
                     giveOrDrop(player, plugin.relics().createMagicCore(c));
                 }
                 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.9f, 1.2f);
-                plugin.message(player, "ได้รับ Ancient Magic Cores ครบทุกธาตุ 15 ชิ้น!");
+                plugin.message(player, "ได้รับ Ancient Magic Cores ครบทุกธาตุ 17 ชิ้น!");
             }
             case 51 -> { // Clear mobs
                 plugin.dungeons().clearAllDungeonMobs();

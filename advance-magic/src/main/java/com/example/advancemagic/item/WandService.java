@@ -59,6 +59,8 @@ public final class WandService implements Listener {
             case IRON_ARMOR -> "Iron";
             case VEX_LEGION -> "Evocation";
             case GUARDIAN_BEAM -> "the Guardian";
+            case SOLAR_APOCALYPSE -> "the Sun";
+            case CHRONOS_FINAL_HOUR -> "Time";
         };
     }
     public ItemStack createCore(Spell spell) {
@@ -71,8 +73,14 @@ public final class WandService implements Listener {
                 ChatColor.DARK_PURPLE+"§k||§r "+ChatColor.LIGHT_PURPLE+"Forbidden Dragon Heart "+ChatColor.DARK_PURPLE+"§k||",
                 ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+"Shulker Levitation Wand",
                 ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.RED+"✦ อัตราดรอป 0.5% ใน Evergarden Vault [สุดยอดของแรร์]"
+                ChatColor.RED+"✦ หมวด Mythic ใน Vault รวม 0.5% · สุ่มหนึ่งในสามแกน"
             ));
+        } else if(spell.isMythic()) {
+            meta.setDisplayName(ChatColor.GOLD+"✦ Core of "+coreTitle(spell)+ChatColor.RED+" [MYTHIC]");
+            meta.setLore(List.of(ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC]",
+                ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+spell.title+" Wand",
+                ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
+                ChatColor.DARK_AQUA+"หมวด Mythic ใน Evergarden Vault: 0.5% · สุ่ม 1 ใน 3 แกน"));
         } else {
             meta.setDisplayName(ChatColor.GOLD+"✦ Core of "+coreTitle(spell));
             meta.setLore(List.of(
@@ -120,7 +128,8 @@ public final class WandService implements Listener {
                 ChatColor.YELLOW+"⚡ พายุฟ้าผ่า · มังกรจุติ · มหาหลุมดำกลืนมิติ · ดินแดน Sculk Wither III"
             ));
         } else {
-            meta.setDisplayName(ChatColor.LIGHT_PURPLE+"✦ "+spell.title+" Wand");
+            meta.setDisplayName((spell.isMythic()?ChatColor.GOLD:ChatColor.LIGHT_PURPLE)+"✦ "+spell.title+" Wand"
+                +(spell.isMythic()?ChatColor.RED+" [MYTHIC]":""));
             meta.setLore(List.of(ChatColor.GRAY+"คลิกขวาเพื่อร่ายเวทมนตร์",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+spell.cooldown+"s"));
         }
         var lore=new ArrayList<>(meta.getLore());
@@ -227,6 +236,15 @@ public final class WandService implements Listener {
         meta.setLore(List.of(ChatColor.GRAY+"Right-click to cast",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
                 ChatColor.AQUA+"Durability: "+usesLeft(item)+" / "+maxUses(item)+" uses",ChatColor.RED+"Damage: +"+(damage*3)+"%  "+ChatColor.YELLOW+"Cooldown: -"+(cooldown*3)+"%",
                 ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10"));
+        if(spell==Spell.SOLAR_APOCALYPSE||spell==Spell.CHRONOS_FINAL_HOUR) {
+            var mythicLore=new ArrayList<>(meta.getLore());
+            mythicLore.add(0,ChatColor.GOLD+"[MYTHIC · ระดับตำนานสูงสุด]");
+            mythicLore.add(ChatColor.YELLOW+(spell==Spell.SOLAR_APOCALYPSE
+                ?"สุริยันจุติ · ลำแสง 5 เส้น · มหาระเบิดล้างโลก"
+                :"หน้าปัดกาลเวลา · หยุดศัตรู · คมเวทสะท้อนอดีต"));
+            mythicLore.add(ChatColor.LIGHT_PURPLE+"Mastery: "+casts(item)+" casts");
+            meta.setLore(mythicLore);
+        }
         item.setItemMeta(meta);
     }
     public double getEffectiveCooldown(ItemStack item,Spell spell) {

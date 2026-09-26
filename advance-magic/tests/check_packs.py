@@ -74,6 +74,20 @@ for name, digest in hashes.items():
                     assert struct.unpack('>II',image[16:24]) == (64,64)
                 else: check_png(z.read(file))
 
+# The new colour adapter must never reference an emitter missing from either pack.
+with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as magic, zipfile.ZipFile(ROOT.parent / 'evergarden/dist/evergarden-bedrock.mcpack') as garden:
+    for tint in ('gold', 'white', 'orange', 'cyan', 'violet'):
+        path=f'particles/mythic_{tint}.particle.json'
+        assert json.loads(magic.read(path))==json.loads(garden.read(path))
+        effect=json.loads(magic.read(path))['particle_effect']
+        assert effect['description']['identifier']==f'advance_magic:mythic_{tint}'
+        texture=effect['description']['basic_render_parameters']['texture']+'.png'
+        assert magic.read(texture)==garden.read(texture)
+        components=effect['components']
+        assert components['minecraft:emitter_rate_instant']['num_particles']==1
+        assert components['minecraft:particle_lifetime_expression']['max_lifetime']<=1
+        assert all('variable.magic_size' in expression for expression in components['minecraft:particle_appearance_billboard']['size'])
+
 with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
     pack = json.loads(z.read('pack.mcmeta'))['pack']
     assert pack['min_format'] == [75, 0] and pack['max_format'] == [88, 0]
@@ -83,6 +97,7 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
         assert item['model']['model'] == f'advance_magic:item/{name}'
         model = json.loads(z.read(f'assets/advance_magic/models/item/{name}.json'))
         assert model['parent'] == 'minecraft:item/handheld'
+        assert 'elements' not in model, 'Wands retain flat pixel art instead of authored 3D geometry'
         assert model['textures']['layer0'] == f'advance_magic:item/{name}'
         assert z.read(f'assets/advance_magic/textures/item/{name}.png') == (ROOT / f'art/wands/{name}.png').read_bytes()
     for name in ('wand_repair', 'wand_damage', 'wand_cooldown'):
@@ -103,12 +118,12 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
 mapping = json.loads((dist / 'geyser-mappings.json').read_text())
 assert mapping['format_version'] == 2
 definitions = mapping['items']['minecraft:carrot_on_a_stick']
-assert len(definitions) == len(catalog) == 15
-assert len({row['bedrock_identifier'] for row in definitions}) == 15
+assert len(definitions) == len(catalog) == 17
+assert len({row['bedrock_identifier'] for row in definitions}) == 17
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [2, 1, 0]
-    assert manifest['modules'][0]['version'] == [2, 1, 0]
+    assert manifest['header']['version'] == [2, 2, 0]
+    assert manifest['modules'][0]['version'] == [2, 2, 0]
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     for definition, (name, _, _) in zip(definitions, catalog):

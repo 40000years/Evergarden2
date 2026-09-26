@@ -256,13 +256,7 @@
     "minecraft:honey_bottle": [
       {
         "type": "definition",
-        "model": "minecraft:honey_bottle",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:void_elixir"
-        },
+        "model": "voidscape:void_elixir",
         "bedrock_identifier": "voidscape:void_elixir",
         "display_name": "Void Walker Elixir",
         "bedrock_options": {
@@ -276,13 +270,7 @@
     "minecraft:carved_pumpkin": [
       {
         "type": "definition",
-        "model": "minecraft:carved_pumpkin",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:thorn_mask"
-        },
+        "model": "voidscape:thorn_mask",
         "bedrock_identifier": "voidscape:thorn_mask",
         "display_name": "Thorn Mask",
         "bedrock_options": {
@@ -294,13 +282,7 @@
       },
       {
         "type": "definition",
-        "model": "minecraft:carved_pumpkin",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:thorn_crown"
-        },
+        "model": "voidscape:thorn_crown",
         "bedrock_identifier": "voidscape:thorn_crown",
         "display_name": "Thorn Crown",
         "bedrock_options": {
@@ -312,13 +294,7 @@
       },
       {
         "type": "definition",
-        "model": "minecraft:carved_pumpkin",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:astral_mask"
-        },
+        "model": "voidscape:astral_mask",
         "bedrock_identifier": "voidscape:astral_mask",
         "display_name": "Astral Mask",
         "bedrock_options": {
@@ -330,13 +306,7 @@
       },
       {
         "type": "definition",
-        "model": "minecraft:carved_pumpkin",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:astral_crown"
-        },
+        "model": "voidscape:astral_crown",
         "bedrock_identifier": "voidscape:astral_crown",
         "display_name": "Astral Crown",
         "bedrock_options": {
@@ -348,13 +318,7 @@
       },
       {
         "type": "definition",
-        "model": "minecraft:carved_pumpkin",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:chrono_mask"
-        },
+        "model": "voidscape:chrono_mask",
         "bedrock_identifier": "voidscape:chrono_mask",
         "display_name": "Chrono Mask",
         "bedrock_options": {
@@ -366,13 +330,7 @@
       },
       {
         "type": "definition",
-        "model": "minecraft:carved_pumpkin",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:chrono_crown"
-        },
+        "model": "voidscape:chrono_crown",
         "bedrock_identifier": "voidscape:chrono_crown",
         "display_name": "Chrono Crown",
         "bedrock_options": {

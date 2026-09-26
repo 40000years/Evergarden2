@@ -305,6 +305,12 @@ def main():
     'predicate':{'type':'match','property':'custom_model_data','index':0,'value':'voidscape:'+name},
     'bedrock_identifier':'voidscape:'+name,'display_name':title,
     'bedrock_options':{'icon':'voidscape.'+name,'allow_offhand':True,'display_handheld':base in ('netherite_pickaxe','netherite_sword','bow'),'creative_category':cat}})
+  if name=='void_elixir' or name in MASKS:
+   # RelicService and GuardianAppearance set a direct item_model. Geyser v2
+   # indexes mappings by that component before checking any predicate.
+   entry=mappings['items']['minecraft:'+base][-1]
+   entry['model']='voidscape:'+name
+   del entry['predicate']
  crop_assets.register_crop_assets(java, bedrock, textures, mappings, selectors, write_json, png)
  portal_assets.register(java, bedrock, textures, mappings, selectors, write_json)
  restoration_assets.register_altars(java, bedrock, textures, mappings, selectors, write_json)
@@ -369,15 +375,10 @@ def main():
   (bedrock/'pack_icon.png').write_bytes(key_art.read_bytes())
  else:
   png(java/'pack.png',icon('void_key'));png(bedrock/'pack_icon.png',icon('void_key'))
- # Bedrock caches UUID + version, not the Java ZIP SHA-1. Give every content
- # revision a deterministic cache identity while retaining the owned pack UUID.
- digest=hashlib.sha256()
- for asset in sorted((p for p in bedrock.rglob('*') if p.is_file() and p.name!='manifest.json'),key=lambda p:p.relative_to(bedrock).as_posix()):
-  digest.update(asset.relative_to(bedrock).as_posix().encode('utf8')+b'\0'+asset.read_bytes())
+ # Bedrock caches UUID + version, not the Java ZIP SHA-1. Increment this
+ # release version whenever the Bedrock assets or their item routing change.
  manifest=json.loads((bedrock/'manifest.json').read_text(encoding='utf8'))
- # Bedrock manifest versions are three bounded integers; keep the hash-derived
- # component below the client parser's safe range while still changing each build.
- version=[3,8,1]
+ version=[3,8,2]
  manifest['header']['version']=version
  for module in manifest['modules']:module['version']=version
  write_json(bedrock/'manifest.json',manifest)

@@ -104,7 +104,7 @@ public final class MythicSpellChecks implements Listener {
             check(Math.abs(hits.stream().mapToDouble(Double::doubleValue).sum()-expected)<.001,"complete damage budget "+expected);
             check(ally.getHealth()==1000&&protectedTarget.getHealth()==1000,"allies and protected targets untouched");
             check(!connection.particles.isEmpty(),"Java receives actual particle packets");
-            check(connection.particles.size()<50000,"per-cast particle work is bounded");
+            check(connection.particles.size()<65000,"per-cast particle work is bounded, including crystal-beam fallback");
             check(magic.wands().restore(player.getInventory().getItemInMainHand()),"restoration supports the new wand");
             check(magic.wands().usesLeft(player.getInventory().getItemInMainHand())==30,"restored durability preserved");
             check(world.getTime()==time&&world.hasStorm()==storm,"season time and weather unchanged");

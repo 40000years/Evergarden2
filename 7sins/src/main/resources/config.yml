@@ -1,7 +1,14 @@
+config-version: 2
 wrath:
-  health: 600.0
+  health: 1800.0
+  incoming-damage-multiplier: 0.7
   # Base damage is multiplied by this value. Damage uses vanilla armor/shields.
   damage-multiplier: 1.0
+  armor-break:
+    reduction: 0.6
+    duration-seconds: 8
+    # Percent of MAX durability per equipped piece, once per landed cast.
+    durability-percent: 25
   arena-radius: 28.0
   max-active: 3
   # Abandoned encounters disappear after this many seconds; no loot is awarded.

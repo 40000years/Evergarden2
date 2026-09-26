@@ -229,7 +229,7 @@
     "fixed": {
       "rotation": [
         0,
-        0,
+        180,
         0
       ],
       "translation": [

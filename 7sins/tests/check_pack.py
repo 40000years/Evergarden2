@@ -16,11 +16,12 @@ with zipfile.ZipFile(pack) as z:
     assert metadata['min_format']==[88,0] and metadata['max_format']==[88,0]
     assert not any(name.startswith('assets/minecraft/') for name in z.namelist()), 'No vanilla asset overrides'
     cubes=0
-    models=names+[name+'_unbound' for name in ('body','head','cleaver','core')]
+    models=names+[name+'_unbound' for name in ('body','head','cleaver','core')]+['ground_sword']
     for name in models:
         item=json.loads(z.read(f'assets/sevensins/items/wrath/{name}.json'))
         assert item['model']['model']==f'sevensins:wrath/{name}'
         model=json.loads(z.read(f'assets/sevensins/models/wrath/{name}.json'))
+        assert model['display']['fixed']['rotation']==[0,180,0], 'Item renderer flip must be compensated'
         for ref in model['textures'].values():
             ns,path=ref.split(':')
             png=z.read(f'assets/{ns}/textures/{path}.png')

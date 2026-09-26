@@ -21,7 +21,7 @@ shutil.copy2(args.paper_template/'paper.jar',server/'paper.jar')
 plugins=server/'plugins';plugins.mkdir()
 shutil.copy2(root/'target/7sins.jar',plugins/'7sins.jar')
 config=plugins/'7sins';config.mkdir()
-(config/'config.yml').write_text('resource-pack:\n  auto-send: false\n  host:\n    port: 0\n    bind: 127.0.0.1\n    public-host: 127.0.0.1\n',encoding='utf8')
+(config/'config.yml').write_text('wrath:\n  health: 600.0\nresource-pack:\n  url: \'\'\n  auto-send: false\n  host:\n    port: 0\n    bind: 127.0.0.1\n    public-host: 127.0.0.1\n',encoding='utf8')
 classes=server/'probe-classes';classes.mkdir()
 suffix='.exe' if os.name=='nt' else ''
 java,javac,jar=[str(args.java_home/'bin'/f'{name}{suffix}') for name in ('java','javac','jar')]

@@ -1,4 +1,5 @@
 import com.example.sevensins.WrathCombat;
+import com.example.sevensins.WrathPose;
 
 public final class WrathCombatChecks {
     private static int checks;
@@ -16,6 +17,10 @@ public final class WrathCombatChecks {
         check(!WrathCombat.inRing(9.01, 0, 0), "Outside ring is safe");
         check(WrathCombat.inCharge(0.5, 1.7, 0, 1, 1.8), "Charge hits between server updates");
         check(!WrathCombat.inCharge(1.51, 1, 0, 1, 1.8), "Sidestep clears charge");
+        check(WrathPose.turn(179,-179,18)==181,"Yaw seam takes the two-degree path");
+        check(WrathPose.turn(-179,179,18)==-181,"Reverse yaw seam takes the two-degree path");
+        check(WrathPose.turn(0,160,18)==18,"Large target jumps have bounded visual turn speed");
+        check(WrathPose.turn(720,1,18)==721,"Unwrapped headings remain continuous");
         // Warning rotations must agree with hits across every world yaw.
         for (int angle = 0; angle < 360; angle += 5) {
             double a = Math.toRadians(angle), dx = Math.cos(a), dz = Math.sin(a);

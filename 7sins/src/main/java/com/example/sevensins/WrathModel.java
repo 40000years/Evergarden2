@@ -17,9 +17,12 @@ final class WrathModel {
     private final List<Bone> bones = new ArrayList<>();
     private ArmorStand fallback;
     private boolean unbound;
+    private float heading;
+    private Location lastAnchor;
 
     WrathModel(SevenSinsPlugin plugin, Location at) {
         this.plugin = plugin;
+        heading = at.getYaw();
         try {
         add(at, "body", 0, 1.65f, 0);
         add(at, "head", 0, 2.85f, 0);
@@ -54,6 +57,7 @@ final class WrathModel {
             e.setVisibleByDefault(false); e.setPersistent(false); e.setInvulnerable(true);
             e.setItemStack(item); e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
             e.setInterpolationDuration(2); e.setTeleportDuration(2); e.setViewRange(1.2f);
+            e.setRotation(0, 0); e.setDisplayWidth(8); e.setDisplayHeight(8);
             e.getPersistentDataContainer().set(plugin.entityKey(), org.bukkit.persistence.PersistentDataType.STRING, "visual");
             if (id.equals("core")) e.setBrightness(new Display.Brightness(15, 15));
         });
@@ -70,6 +74,12 @@ final class WrathModel {
     }
 
     void animate(Location at, int ticks, WrathBoss.State state, double progress, boolean enraged, boolean walking) {
+        heading = WrathPose.turn(heading, at.getYaw(), 18);
+        // All bones share one heading. Entity teleport packets contain no yaw rotation.
+        Quaternionf root = new Quaternionf().rotationY((float) Math.toRadians(180 - heading));
+        Location renderAnchor = at.clone(); renderAnchor.setYaw(0); renderAnchor.setPitch(0);
+        boolean moved = lastAnchor == null || !lastAnchor.getWorld().equals(at.getWorld())
+                || lastAnchor.distanceSquared(renderAnchor) > 0.000001;
         if (unbound != enraged) {
             unbound = enraged;
             for (Bone bone : bones) if (Set.of("body", "head", "cleaver", "core").contains(bone.id)) {
@@ -97,13 +107,22 @@ final class WrathModel {
                 case "core" -> { y += breathe; if (stagger) {y -= 0.35f; z -= 0.25f;} }
                 default -> {}
             }
-            bone.entity.teleport(at);
-            bone.entity.setInterpolationDelay(0);
-            bone.entity.setTransformation(new Transformation(new Vector3f(x, y, z),
-                    new Quaternionf().rotationXYZ(rx, ry, rz), new Vector3f(1, 1, 1), new Quaternionf()));
+            if (moved) bone.entity.teleport(renderAnchor);
+            Quaternionf rotation = new Quaternionf(root).mul(new Quaternionf().rotationXYZ(rx, ry, rz));
+            Transformation previous = bone.entity.getTransformation();
+            // q and -q describe the same pose; keep a continuous quaternion representation.
+            if (rotation.dot(previous.getLeftRotation()) < 0) rotation.set(-rotation.x, -rotation.y, -rotation.z, -rotation.w);
+            Transformation pose = new Transformation(root.transform(new Vector3f(x, y, z)),
+                    rotation, new Vector3f(1, 1, 1), new Quaternionf());
+            if (!pose.equals(previous)) {
+                bone.entity.setTransformation(pose);
+                bone.entity.setInterpolationDelay(0);
+            }
             bone.entity.setGlowing(enraged && bone.id.equals("core"));
         }
-        fallback.teleport(at);
+        lastAnchor = renderAnchor;
+        Location fallbackAt = at.clone(); fallbackAt.setYaw(heading); fallbackAt.setPitch(0);
+        if (moved || Math.abs(fallback.getLocation().getYaw() - heading) > 0.1) fallback.teleport(fallbackAt);
         fallback.setRightArmPose(new EulerAngle(-raise * 2.1 + (strike ? 0.6 : 0), 0, 0.15));
         fallback.setLeftLegPose(new EulerAngle(gait, 0, 0));
         fallback.setRightLegPose(new EulerAngle(-gait, 0, 0));

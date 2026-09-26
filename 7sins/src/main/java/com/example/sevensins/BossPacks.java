@@ -28,6 +28,12 @@ public final class BossPacks implements Listener, AutoCloseable {
 
     BossPacks(SevenSinsPlugin plugin) { this.plugin = plugin; }
     void start() {
+        String currentUrl = plugin.getConfig().getString("resource-pack.url", "").trim();
+        if (currentUrl.matches("https://raw\\.githubusercontent\\.com/40000years/Evergarden2/[0-9a-f]{7,40}/7sins/src/main/resources/resource-packs/7sins-java\\.zip")
+                && !currentUrl.equals(DEFAULT_CDN_URL)) {
+            plugin.getConfig().set("resource-pack.url", DEFAULT_CDN_URL); plugin.saveConfig();
+            plugin.getLogger().info("Updated official Wrath pack to the matching pinned GitHub URL.");
+        }
         try (InputStream in = plugin.getResource("resource-packs/7sins-java.zip")) {
             if (in == null) throw new IOException("Missing bundled 7sins-java.zip");
             bytes = in.readAllBytes(); hash = MessageDigest.getInstance("SHA-1").digest(bytes);

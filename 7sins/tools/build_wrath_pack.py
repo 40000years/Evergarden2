@@ -130,6 +130,17 @@ def make_pack():
             pixels.append(row)
         png(PACK/f'assets/sevensins/textures/item/wrath/{material}.png', pixels)
     models = dict(PARTS)
+    # A narrow executioner's sword with an upward point; separate from the boss bones.
+    models['ground_sword'] = [
+        {'from':[6,0,6], 'to':[10,8,10], 'material':'coal'},
+        {'from':[1,7,5], 'to':[15,10,11], 'material':'gold'},
+        {'from':[5,10,6], 'to':[11,25,10], 'material':'armor'},
+        {'from':[4,10,6], 'to':[5,25,10], 'material':'ember'},
+        {'from':[11,10,6], 'to':[12,25,10], 'material':'ember'},
+        {'from':[6,25,6.5], 'to':[10,29,9.5], 'material':'edge'},
+        {'from':[7,29,7], 'to':[9,32,9], 'material':'hot'},
+        {'from':[7,11,5], 'to':[9,24,6], 'material':'hot'},
+    ]
     for name in ('body', 'head', 'cleaver', 'core'):
         cubes = json.loads(json.dumps(PARTS[name]))
         for cube in cubes:
@@ -146,7 +157,8 @@ def make_pack():
         write_json(PACK/f'assets/sevensins/models/wrath/{name}.json', {
             'textures': {m:f'sevensins:item/wrath/{m}' for m in PALETTE},
             'elements': elements, 'gui_light':'front',
-            'display': {'fixed': {'rotation':[0,0,0], 'translation':[0,0,0], 'scale':[1,1,1]}}})
+            # Cancel the item renderer's Y flip so cubes, offsets and pivots agree.
+            'display': {'fixed': {'rotation':[0,180,0], 'translation':[0,0,0], 'scale':[1,1,1]}}})
         write_json(PACK/f'assets/sevensins/items/wrath/{name}.json', {
             'model': {'type':'minecraft:model', 'model':f'sevensins:wrath/{name}'}})
     # Original pack icon: burning eye slits inside a horned dark helmet.

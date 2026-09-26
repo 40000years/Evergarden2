@@ -93,7 +93,7 @@ public final class BalanceChecks extends JavaPlugin implements org.bukkit.event.
         check(plugin.casts().cast(player,spell,wand),"single input casts "+spell);
         check(account.manaExact()==100-spell.mana,"charges mana once "+spell);
         long cooldown=account.end(spell.id());
-        later(145,()->{
+        later(195,()->{
             check(hit,"automatic extra damage stage reaches enemy "+spell);
             check(account.end(spell.id())==cooldown,"extra stage does not restart cooldown "+spell);
             check(plugin.wands().casts(wand)==1,"extra stage does not add mastery casts "+spell);

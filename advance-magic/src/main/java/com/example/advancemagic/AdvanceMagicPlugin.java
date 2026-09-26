@@ -20,6 +20,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     private com.example.advancemagic.item.RestorationService restoration;
     private FlyingStaffService flyingStaff;
     private EffectEngine effects;
+    private TemporaryTerrainService terrain;
     private StatusService statuses;
     private MagicContext context;
     private AreaSpells areas;
@@ -47,9 +48,11 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         for(Player player:Bukkit.getOnlinePlayers()){restoration.migrate(player.getInventory());restoration.migrate(player.getEnderChest());}
         effects=new EffectEngine(this,getConfig().getInt("max-active-effects",128));
         context=new MagicContext(this);statuses=new StatusService(this);
+        terrain=new TemporaryTerrainService(this);
         areas=new AreaSpells(context);projectiles=new ProjectileSpells(context);
         spells=new SpellRegistry(context,areas,projectiles);casts=new CastListener(this);
-        for(Listener listener:List.of(this,wands,restoration,flyingStaff,statuses,areas,projectiles,casts,packs))getServer().getPluginManager().registerEvents(listener,this);
+        for(Listener listener:List.of(this,wands,restoration,flyingStaff,statuses,areas,projectiles,casts,packs,terrain))getServer().getPluginManager().registerEvents(listener,this);
+        terrain.recoverLoaded();
         itemMenu=new com.example.advancemagic.item.MagicItemMenu(this);
         getServer().getPluginManager().registerEvents(itemMenu,this);
         creativeBridge=new com.example.advancemagic.item.BedrockCreativeBridge(this);
@@ -69,6 +72,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         if(flyingStaff!=null)flyingStaff.close();
         if(packs!=null)packs.close();
         if(effects!=null)effects.close();if(statuses!=null)statuses.close();
+        if(terrain!=null)terrain.close();
         if(areas!=null)areas.close();if(projectiles!=null)projectiles.close();
         if(wands!=null)wands.close();if(mana!=null)Bukkit.getOnlinePlayers().forEach(mana::quit);
     }
@@ -86,6 +90,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     public com.example.advancemagic.item.RestorationService restoration(){return restoration;}
     public FlyingStaffService flyingStaff(){return flyingStaff;}
     public EffectEngine effects(){return effects;}
+    public TemporaryTerrainService terrain(){return terrain;}
     public StatusService statuses(){return statuses;}
     public MagicContext context(){return context;}
     public AreaSpells areas(){return areas;}

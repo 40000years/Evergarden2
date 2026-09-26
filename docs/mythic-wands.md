@@ -1,24 +1,56 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.3.0-mythic-wands`, Evergarden `3.0.0-e2.12-mythic-wands`.
-Install both JARs from the root `dist` directory and restart the server, then reconnect
-Bedrock so Geyser offers the new packs (Advance Magic 2.2.0 / Evergarden 3.9.0).
+Release: Advance Magic `1.3.1-mythic-fields`, Evergarden `3.0.0-e2.13-mythic-fields`.
+Install both JARs from the root `dist` directory and restart the server. This revision
+uses the existing packs (Advance Magic 2.2.0 / Evergarden 3.9.0); their hashes and
+item models are unchanged.
 
 ## Abilities
 
 | Wand | Mana | Base cooldown | Timeline | Base damage on a target hit by every stage |
 | --- | ---: | ---: | --- | ---: |
-| Solar Apocalypse | 100 | 45 s | Giant rising sun, golden glyph, five descending beams, falling sun and expanding shockwave | 5 × 32 + 180 = 340 |
-| Chronos: Final Hour | 95 | 40 s | Giant moving clock, short root, five time blades, reversed 70% echoes and clock shatter | 5 × 24 + 5 × 16.8 + 100 = 304 |
+| Solar Apocalypse | 100 | 45 s | Giant sun, golden glyph, five beams, falling sun, shockwave and temporary sea of lava | 5 × 32 + 180 = 340, plus lava contact damage |
+| Chronos: Final Hour | 95 | 40 s | Five giant clocks, short root, simultaneous lasers, reversed echoes, poison sea and five-clock shatter | 5 × 24 + 5 × 16.8 + 100 = 304, plus poison/contact damage |
 
-Solar finishes after about 7 seconds; Chronos after about 7.5 seconds. Aim at a mob
+Solar impacts at 5.5 seconds; Chronos shatters at 8 seconds. Their temporary fields
+last 15 seconds from creation (Solar at impact; Chronos at 4.4 seconds). Aim at a mob
 or block within 30 blocks. With no hit, the spell centers 16 blocks ahead. Solar's
 final burst has radius 16; Chronos attacks within radius 12. Damage uses the normal
 magic protection event, enemy/team/PVP filters and wand damage upgrades.
 High-health mobs (150+ maximum health), Wither, Warden and Ender Dragon receive
 Slowness II instead of a hard root. Players use the existing root compatibility policy.
-Native resistance to potion effects still applies. Neither spell edits terrain, time,
-weather, chunks or a player's camera. Closing a cast cancels its remaining attacks.
+Native resistance to potion effects still applies. Closing a cast cancels remaining
+attacks and restores its terrain. Neither spell changes time, weather or the camera,
+and casts do not load or generate chunks.
+
+## Temporary seas
+
+Solar replaces exposed ground in a radius of 16 with native lava; Chronos replaces
+it with native water. Both clients therefore see the same terrain geometry and
+use the matching liquid physics. The field expands over one second, holds until
+halfway through its lifetime, then restores the ground from the outside inward.
+Poison-water contact applies **Poison V**, refreshed for five seconds, plus 12 magic
+damage per second. Solar contact deals 12 magic damage per second and ignites enemies.
+All contact attacks use the usual enemy/team/PVP filters and `MagicAffectEvent`.
+Native lava damage/combustion in the field is suppressed in favour of these owned attacks.
+Five clock lasers fire together; damage is charged once per volley, rather than once
+per rendered beam. Base mana, cooldown and durability costs are unchanged.
+
+Only exposed full ground blocks or liquid surfaces within three blocks above to
+eight below the aim height are eligible. Containers, block entities, trees, portal
+frames, bedrock, barriers and floors supporting plants are skipped. Fluids cannot
+flow, be collected in buckets, form stone or ignite nearby builds. Managed cells
+are protected from breaking, placement, explosions and piston movement while active.
+Overlapping casts retain a shared original snapshot; each restores its own layer.
+External edits that replace the managed liquid are preserved.
+Swimmers intersecting a returning solid floor are lifted to clear space above it.
+
+Original block data is written to `plugins/advance-magic/mythic-terrain-recovery.yml`
+before painting, using a staged atomic replacement. Cleanup covers completion,
+logout, death, world changes, chunk unload and plugin shutdown. Recovery entries
+are retained until a subsequent chunk/world save; after an interrupted session,
+remaining liquid cells are restored as their chunks load. The journal must remain
+beside the plugin data when restarting or recovering the world.
 
 They support the existing 30-use durability, repair, upgrades and mastery system.
 Craft with the matching core and eight Netherite Ingots / Nether Stars.
@@ -39,7 +71,10 @@ bulk buttons occupy separate slots. Direct commands:
 
 Damage defaults can be overridden in Advance Magic's config:
 `damage.solar-beam`, `damage.solar-apocalypse`, `damage.chronos-blade`,
-`damage.chronos-shatter`. `mythic-max-active-per-world` defaults to 4 (range 1–16).
+`damage.chronos-shatter`, `damage.solar-lava`, `damage.chronos-poison`.
+`mythic-terrain.radius` defaults to 16 (range 6–18); `duration-seconds` defaults to
+15 (range 3–30); `poison-amplifier` defaults to 4 (Poison V).
+`mythic-max-active-per-world` defaults to 4 (range 1–16).
 The limit releases on normal completion, interruption, logout and plugin shutdown.
 
 ## Java and Bedrock rendering
@@ -89,6 +124,10 @@ and actual Geyser particle packet objects plus the bundled emitter files.
 Pack checks validate sprite transparency, routing, hashes and embedded resources.
 This does not launch or restart the live Minecraft server.
 
-Verified on the installed Paper 26.2 build 121 and Geyser 2.11.3 build 1246:
+The **initial 1.3.0 release** was verified on Paper 26.2 build 121 and Geyser 2.11.3 build 1246:
 663 item translations across 218 custom identifiers / three protocol registries,
-and 145 Mythic checks. Both full timelines completed without spell/particle errors.
+and 145 Mythic checks. Both original timelines completed without spell/particle errors.
+For **1.3.1**, the existing fixtures' durations and particle allowance were updated,
+and both JARs were built with Maven `-DskipTests`. Tests were not rerun in this
+revision; native terrain cleanup and the expanded visuals still need a two-client
+play check.

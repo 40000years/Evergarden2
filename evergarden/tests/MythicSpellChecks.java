@@ -97,14 +97,14 @@ public final class MythicSpellChecks implements Listener {
                 check(ordinary.hasPotionEffect(PotionEffectType.SLOWNESS)&&ordinary.getPotionEffect(PotionEffectType.SLOWNESS).getAmplifier()==127,"ordinary mobs are rooted");
                 check(target.getPotionEffect(PotionEffectType.SLOWNESS).getAmplifier()==1,"high-health bosses are slowed without a hard root");
             }
-            tick(130);
+            tick(110+magic.terrain().duration()+1);
             check(magic.effects().size()==0,"full timeline finishes and cleans up");
             check(hits.size()==(spell==Spell.SOLAR_APOCALYPSE?6:11),"all beams/blades, echo and finisher hit");
             double expected=spell==Spell.SOLAR_APOCALYPSE?340:304;
             check(Math.abs(hits.stream().mapToDouble(Double::doubleValue).sum()-expected)<.001,"complete damage budget "+expected);
             check(ally.getHealth()==1000&&protectedTarget.getHealth()==1000,"allies and protected targets untouched");
             check(!connection.particles.isEmpty(),"Java receives actual particle packets");
-            check(connection.particles.size()<25000,"per-cast particle work is bounded");
+            check(connection.particles.size()<50000,"per-cast particle work is bounded");
             check(magic.wands().restore(player.getInventory().getItemInMainHand()),"restoration supports the new wand");
             check(magic.wands().usesLeft(player.getInventory().getItemInMainHand())==30,"restored durability preserved");
             check(world.getTime()==time&&world.hasStorm()==storm,"season time and weather unchanged");
@@ -113,7 +113,7 @@ public final class MythicSpellChecks implements Listener {
         target.setHealth(1000);hits.clear();
         magic.context().setCastDamageMultiplier(player.getUniqueId(),1.3);
         check(magic.spells().cast(player,Spell.CHRONOS_FINAL_HOUR),"upgraded Chronos starts");
-        magic.context().clearCastDamageMultiplier(player.getUniqueId());tick(151);
+        magic.context().clearCastDamageMultiplier(player.getUniqueId());tick(88+magic.terrain().duration()+1);
         check(Math.abs(hits.stream().mapToDouble(Double::doubleValue).sum()-395.2)<.001,"damage multiplier survives the delayed timeline");
         tick(1);
         blockAll=true;hits.clear();check(magic.spells().cast(player,Spell.SOLAR_APOCALYPSE),"protected solar still renders");tick(142);

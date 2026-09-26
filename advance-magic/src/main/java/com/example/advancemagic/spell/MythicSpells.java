@@ -5,10 +5,11 @@ import org.bukkit.damage.DamageType;
 import org.bukkit.entity.*;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import com.example.advancemagic.effect.TemporaryTerrainService;
 import java.util.*;
 
-/** Shared world-space geometry using vanilla particles translated by Geyser.
- * No displays, camera packets, world-time changes, terrain edits or unowned tasks.
+/** Shared world-space geometry with journaled, owned temporary terrain.
+ * No displays, camera packets, world-time changes or unowned tasks.
  * A single scope owns each complete cast, including its final attack and echoes.
  */
 public final class MythicSpells {
@@ -93,6 +94,23 @@ public final class MythicSpells {
         // The cast listener clears its multiplier after scheduling; capture it once.
         c.damage(p,target,damage*multiplier,DamageType.MAGIC);
     }
+    private void terrainPulse(Player p,Location at,TemporaryTerrainService.Zone zone,int age,
+                              Spell spell,double power,double damage,boolean poison) {
+        if(age%5==0)for(Location surface:zone.samples(14,age*7)){
+            dust(surface,poison?VIOLET:ORANGE,1.8f);
+            dust(surface.clone().add(0,.35,0),poison?CYAN:GOLD,1.2f);
+            spark(surface,poison?Particle.END_ROD:Particle.FLAME,2,.2);
+        }
+        if(age%20!=0)return;
+        double radius=Math.clamp(c.plugin.getConfig().getInt("mythic-terrain.radius",16),6,18)+1;
+        for(var e:targets(p,at,radius,spell))if(zone.touches(e)){
+            hit(p,e,damage,power);
+            if(e.isDead())continue;
+            if(poison)c.potion(e,PotionEffectType.POISON,100,
+                Math.clamp(c.plugin.getConfig().getInt("mythic-terrain.poison-amplifier",4),0,9));
+            else e.setFireTicks(Math.max(e.getFireTicks(),60));
+        }
+    }
     public boolean solar(Player p) {
         Location at=center(p);
         if(at==null||!room(at))return false;
@@ -101,8 +119,11 @@ public final class MythicSpells {
         double power=c.getCastDamageMultiplier(p.getUniqueId());
         double beamDamage=c.configuredDamage("damage.solar-beam",32);
         double burstDamage=c.configuredDamage("damage.solar-apocalypse",180);
+        double lavaDamage=c.configuredDamage("damage.solar-lava",12);
+        int lifetime=c.plugin.terrain().duration();
+        TemporaryTerrainService.Zone[] sea={null};
         at.getWorld().playSound(at,Sound.ENTITY_ENDER_DRAGON_GROWL,2f,.65f);
-        start(p,at,141,(effect,age)->{
+        start(p,at,Math.max(141,110+lifetime+1),(effect,age)->{
             if(!c.loaded(at)||!c.loaded(high))return false;
             visuals.frame(at);
             if(age%4==0&&age<110)glyph(at,age,GOLD);
@@ -141,28 +162,38 @@ public final class MythicSpells {
                         if(push.lengthSquared()>.01)c.velocity(e,push.normalize().multiply(1.4).setY(.65));
                     }
                 }
+                sea[0]=c.plugin.terrain().open(p,Spell.SOLAR_APOCALYPSE,at,Material.LAVA);
+                effect.onClose(sea[0]::close);
             }
-            if(age>=110&&age%2==0) {
+            if(age>=110&&age<=140&&age%2==0) {
                 double radius=1+(age-110)*.6;
                 ring(at.clone().add(0,.5,0),radius,ORANGE,2.5f,80,0);
                 ring(at.clone().add(0,1.2,0),radius*.9,GOLD,1.8f,48,0);
+            }
+            if(sea[0]!=null){
+                sea[0].tick(age-110,lifetime);
+                terrainPulse(p,at,sea[0],age-110,Spell.SOLAR_APOCALYPSE,power,lavaDamage,false);
             }
             return true;
         });
         return true;
     }
 
-    private void clock(Location at,Vector right,int age) {
+    private void clock(Location at,Vector right,int age,int offset) {
         double turn=age<88?age*.055:-(age-88)*.12;
-        for(int i=0;i<72;i++) {
-            double a=TAU*i/72;
-            dust(at.clone().add(right.clone().multiply(Math.cos(a)*8)).add(0,Math.sin(a)*8,0),GOLD,2f);
-        }
-        for(int i=0;i<12;i++) {
-            double a=TAU*i/12;
-            Location outer=at.clone().add(right.clone().multiply(Math.cos(a)*7.5)).add(0,Math.sin(a)*7.5,0);
-            Location inner=at.clone().add(right.clone().multiply(Math.cos(a)*6.6)).add(0,Math.sin(a)*6.6,0);
-            line(inner,outer,i%3==0?CYAN:VIOLET,1.8f,3);
+        turn+=offset*.35;
+        // Static outlines persist for 0.8 seconds in Bedrock; redraw every 0.4 seconds.
+        if(age%8==0){
+            for(int i=0;i<72;i++) {
+                double a=TAU*i/72;
+                dust(at.clone().add(right.clone().multiply(Math.cos(a)*8)).add(0,Math.sin(a)*8,0),GOLD,2f);
+            }
+            for(int i=0;i<12;i++) {
+                double a=TAU*i/12;
+                Location outer=at.clone().add(right.clone().multiply(Math.cos(a)*7.5)).add(0,Math.sin(a)*7.5,0);
+                Location inner=at.clone().add(right.clone().multiply(Math.cos(a)*6.6)).add(0,Math.sin(a)*6.6,0);
+                line(inner,outer,i%3==0?CYAN:VIOLET,1.8f,3);
+            }
         }
         line(at,at.clone().add(right.clone().multiply(Math.cos(turn)*6.3)).add(0,Math.sin(turn)*6.3,0),CYAN,2.5f,20);
         line(at,at.clone().add(right.clone().multiply(Math.cos(turn*.22+1)*4)).add(0,Math.sin(turn*.22+1)*4,0),VIOLET,2.5f,14);
@@ -180,28 +211,40 @@ public final class MythicSpells {
         if(!c.loaded(face.clone().add(0,8,0)))return false;
         Vector forward=p.getEyeLocation().getDirection().setY(0);
         if(forward.lengthSquared()<.01)forward=new Vector(0,0,1);
+        forward.normalize();
         final Vector right=new Vector(forward.getZ(),0,-forward.getX()).normalize();
+        List<Location> faces=new ArrayList<>();List<Vector> axes=new ArrayList<>();
+        faces.add(face);axes.add(right);
+        for(int i=0;i<4;i++){
+            // Diagonal flanks relative to the caster keep a nearby clock off the central sightline.
+            double angle=TAU*i/4+Math.PI/4;
+            Vector radial=right.clone().multiply(Math.cos(angle)).add(forward.clone().multiply(Math.sin(angle)));
+            Location surround=at.clone().add(radial.multiply(14)).add(0,11,0);
+            if(!c.loaded(surround)||!c.loaded(surround.clone().add(0,8,0)))return false;
+            faces.add(surround);axes.add(right.clone().multiply(-Math.sin(angle)).add(forward.clone().multiply(Math.cos(angle))));
+        }
         double power=c.getCastDamageMultiplier(p.getUniqueId());
         double bladeDamage=c.configuredDamage("damage.chronos-blade",24);
         double shatterDamage=c.configuredDamage("damage.chronos-shatter",100);
+        double poisonDamage=c.configuredDamage("damage.chronos-poison",12);
+        int lifetime=c.plugin.terrain().duration();
+        TemporaryTerrainService.Zone[] sea={null};
         Set<UUID> firstRound=new HashSet<>();
-        start(p,at,151,(effect,age)->{
+        start(p,at,Math.max(191,88+lifetime+1),(effect,age)->{
             if(!c.loaded(at)||!c.loaded(face))return false;
             visuals.frame(at);
-            if(age%4==0&&age<118) {clock(face,right,age);glyph(at,age,CYAN);}
+            if(age%4==0&&age<160) {
+                for(int i=0;i<faces.size();i++)clock(faces.get(i),axes.get(i),age,i);
+                glyph(at,age,CYAN);
+            }
             if(age%10==0&&age<=60)for(var e:targets(p,at,12,Spell.CHRONOS_FINAL_HOUR)) {
                 if(boss(e))c.potion(e,PotionEffectType.SLOWNESS,25,1);
                 else c.plugin.statuses().root(p,e);
             }
-            // Five time blades, then five reversed visual/damage echoes.
+            // All five clocks fire together; one damage pulse per volley.
             boolean first=age>=40&&age<=80&&(age-40)%10==0;
             boolean echo=age>=100&&age<=140&&(age-100)%10==0;
             if(first||echo) {
-                int index=first?(age-40)/10:4-(age-100)/10;
-                double a=TAU*index/5;
-                Location source=at.clone().add(Math.cos(a)*12,3+Math.sin(a)*2,Math.sin(a)*12);
-                line(source,at.clone().add(0,1,0),echo?VIOLET:CYAN,2.3f,36);
-                line(source.clone().add(0,.6,0),at.clone().add(0,1.6,0),WHITE,1.2f,24);
                 spark(at,Particle.END_ROD,16,2);
                 at.getWorld().playSound(at,Sound.BLOCK_AMETHYST_BLOCK_RESONATE,1.2f,echo?.7f:1.6f);
                 for(var e:targets(p,at,12,Spell.CHRONOS_FINAL_HOUR)) {
@@ -209,16 +252,30 @@ public final class MythicSpells {
                     if(first||firstRound.contains(e.getUniqueId()))hit(p,e,bladeDamage*(echo?.7:1),power);
                 }
             }
-            if(age==88)at.getWorld().playSound(at,Sound.BLOCK_BEACON_DEACTIVATE,1.8f,.5f);
-            if(age==118) {
-                spark(face,Particle.END_ROD,80,6);
+            boolean firing=(age>=40&&age<=86&&(age-40)%10<=6)
+                ||(age>=100&&age<=146&&(age-100)%10<=6);
+            if(firing&&age%2==0)for(Location source:faces){
+                line(source,at.clone().add(0,1,0),age>=100?VIOLET:CYAN,2.8f,36);
+                line(source.clone().add(0,.3,0),at.clone().add(0,1.3,0),WHITE,1.4f,24);
+            }
+            if(age==88){
+                at.getWorld().playSound(at,Sound.BLOCK_BEACON_DEACTIVATE,1.8f,.5f);
+                sea[0]=c.plugin.terrain().open(p,Spell.CHRONOS_FINAL_HOUR,at,Material.WATER);
+                effect.onClose(sea[0]::close);
+            }
+            if(age==160) {
+                for(Location source:faces)spark(source,Particle.END_ROD,50,5);
                 spark(at,Particle.EXPLOSION,4,3);
                 at.getWorld().playSound(at,Sound.BLOCK_GLASS_BREAK,2f,.6f);
                 for(var e:targets(p,at,12,Spell.CHRONOS_FINAL_HOUR))hit(p,e,shatterDamage,power);
             }
-            if(age>=118&&age%2==0) {
-                ring(at.clone().add(0,.8,0),1+(age-118)*.5,VIOLET,2f,64,-age*.06);
-                ring(at.clone().add(0,1.5,0),1+(age-118)*.35,CYAN,1.6f,48,age*.06);
+            if(age>=160&&age<=190&&age%2==0) {
+                ring(at.clone().add(0,.8,0),1+(age-160)*.5,VIOLET,2f,64,-age*.06);
+                ring(at.clone().add(0,1.5,0),1+(age-160)*.35,CYAN,1.6f,48,age*.06);
+            }
+            if(sea[0]!=null){
+                sea[0].tick(age-88,lifetime);
+                terrainPulse(p,at,sea[0],age-88,Spell.CHRONOS_FINAL_HOUR,power,poisonDamage,true);
             }
             return true;
         });

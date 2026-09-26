@@ -4,6 +4,12 @@ max-active-effects: 128
 max-targets-per-effect: 32
 # Bound the new cinematic spells' packet work independently of older spells.
 mythic-max-active-per-world: 4
+mythic-terrain:
+  # Native, non-flowing liquids; ground returns from the outside inward.
+  radius: 16
+  duration-seconds: 15
+  # 4 = Poison V, refreshed for 5 seconds while enemies touch the water.
+  poison-amplifier: 4
 meteor:
   ignite-terrain: true
   # Explosions damage entities but never remove terrain blocks.
@@ -11,8 +17,10 @@ meteor:
 damage:
   solar-beam: 32.0
   solar-apocalypse: 180.0
+  solar-lava: 12.0
   chronos-blade: 24.0
   chronos-shatter: 100.0
+  chronos-poison: 12.0
   sonic-boom: 112.5
   blaze-barrage: 37.5
   guardian-tidal-burst: 67.5

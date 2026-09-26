@@ -1,9 +1,12 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.3.4-mythic-cores`, Evergarden `3.0.0-e2.17-mythic-cores`.
+Release: Advance Magic `1.3.5-player-guide`, Evergarden `3.0.0-e2.18-player-guide`.
 Install both JARs from the root `dist` directory and restart the server. This revision
 bundles refreshed packs (Advance Magic 2.3.0 / Evergarden 3.10.0) with two newly
 designed elemental cores. Reconnect clients to download the updated artwork.
+The player guide now covers all 17 spells, wand durability/upgrades, both restoration
+methods, ruined altar sites, flying staff controls and current item sources.
+See [the guide and patch infographic](player-guide-update.md).
 Evergarden migrates official pack URLs to the immutable published Java pack;
 administrator-owned private CDN URLs continue to require their own pack update.
 

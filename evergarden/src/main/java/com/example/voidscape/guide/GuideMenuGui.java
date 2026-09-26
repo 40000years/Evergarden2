@@ -81,6 +81,7 @@ public final class GuideMenuGui implements InventoryHolder, Listener {
                 "§8- 6 ยุทธภัณฑ์โบราณ (ที่ขุด 3x3, หลอมแร่, ดาบวาร์ป, ธนู, โล่)",
                 "§8- Scroll of Eternity [MYTHIC] และ Limit Break",
                 "§8- ตารางสุ่ม Evergarden Vault ปรับปรุงใหม่",
+                "§8- Whale, Garden, Observatory และสมบัติลอยฟ้า",
                 "",
                 "§e▶ คลิกซ้ายเพื่อเปิดอ่าน §8| §6Shift+คลิกเพื่อรับสมุด"
             )
@@ -95,8 +96,9 @@ public final class GuideMenuGui implements InventoryHolder, Listener {
                 GuideBookType.MAGIC.description,
                 "§8- ระบบมานา /magic mana และการคราฟต์คทา",
                 "§8- Shulker Levitation [MYTHIC] พายุสายฟ้ามังกร",
-                "§8- คทาทั้ง 15 ธาตุ (สายฟ้า, น้ำแข็ง, อุกกาบาต, มังกร,",
-                "§8  พลาสม่าเบลซ, เลเซอร์การ์เดียน, โซนิคบูม, เวกซ์ ฯลฯ)",
+                "§8- คทาเวท 17 ธาตุ รวม Solar และ Chronos [MYTHIC]",
+                "§8- ความทนทาน, แกนอัปเกรด และแท่นฟื้นฟู",
+                "§8- Wand of Restoration และไม้เท้าบิน",
                 "",
                 "§e▶ คลิกซ้ายเพื่อเปิดอ่าน §8| §6Shift+คลิกเพื่อรับสมุด"
             )

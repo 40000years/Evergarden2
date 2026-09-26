@@ -127,5 +127,7 @@ horizontal outer dial above five clocks, with End Crystal beams converging downw
 on the central clock and a Poison V water field.
 The ground gradually returns to its original blocks after 15 seconds.
 See [abilities, admin commands, drop rates and verification](docs/mythic-wands.md).
+The refreshed `/evergarden guide` includes restoration, ruined altar sites and
+flying staff instructions. [Current player guide and patch poster](docs/player-guide-update.md).
 
 The Advance Magic Java pack with the new flying staff is served from its bundled host on TCP 8187 by default. Its SHA-1 is calculated from the ZIP embedded in `dist/advance-magic.jar`; see `/magic pack` for the public URL and status. Bedrock packs and Geyser mappings are embedded in the JARs and installed locally when Geyser-Spigot is present. See [the flying staff setup and checks](docs/flying-staff-implementation.md) for controls, `allow-flight=false`, and anti-cheat permissions. Wand upgrade cores work only by dropping a core onto a wand in the player inventory; anvils cannot upgrade or repair wands.

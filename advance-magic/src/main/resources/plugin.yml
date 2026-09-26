@@ -1,5 +1,5 @@
 name: advance-magic
-version: 1.3.4-mythic-cores
+version: 1.3.5-player-guide
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
 description: Seventeen spells including three Mythic wands, mana and crafting.

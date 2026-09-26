@@ -17,7 +17,7 @@ resource-pack:
   auto-send: true
   # Immutable raw GitHub URL; SHA-1 is computed from the identical bundled ZIP.
   # To use a private pack host, replace this URL. Set it blank to use the built-in server.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/be0f38c0f2049f2772a58bc60d2cb00f101d54b3/7sins/src/main/resources/resource-packs/7sins-java.zip'
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/d594e164da75d30484e07de63f325f20d270c39c/7sins/src/main/resources/resource-packs/7sins-java.zip'
   host:
     enabled: true
     bind: '0.0.0.0'

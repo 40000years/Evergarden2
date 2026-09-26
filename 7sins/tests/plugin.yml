@@ -1,0 +1,5 @@
+name: WrathProbe
+version: 1.0.0
+main: WrathProbe
+api-version: '26.2'
+depend: [7sins]

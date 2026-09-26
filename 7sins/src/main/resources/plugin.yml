@@ -1,0 +1,15 @@
+name: 7sins
+version: '${project.version}'
+main: com.example.sevensins.SevenSinsPlugin
+api-version: '26.2'
+description: Wrath, the Ashen Executioner. A custom two-phase boss encounter.
+softdepend: [floodgate]
+commands:
+  7sins:
+    description: Summon Wrath or load the boss resource pack.
+    usage: /7sins [spawn wrath|remove|list|pack|help]
+    aliases: [sevensins]
+permissions:
+  7sins.admin:
+    description: Summon and remove 7sins bosses.
+    default: op

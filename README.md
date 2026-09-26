@@ -64,7 +64,9 @@ These are renders of the **101,209 block positions** in `SkyWhale.blocks()`, inc
 
 ## Build and try
 
-Requires Java 25+ and Maven. Run `./build.sh` or `mvn -pl afterdeath,advance-magic,evergarden -am package -DskipTests`. This produces `afterdeath/target/afterdeath.jar`, `advance-magic/target/advance-magic.jar`, and `evergarden/target/evergarden.jar`. `./build.sh` also copies them to `dist/`, without copying files to a server.
+Requires Java 25+ and Maven. Run `./build.sh` or `mvn -pl afterdeath,advance-magic,evergarden,7sins -am package -DskipTests`. This produces `afterdeath/target/afterdeath.jar`, `advance-magic/target/advance-magic.jar`, `evergarden/target/evergarden.jar`, and `7sins/target/7sins.jar`. `./build.sh` also copies them to `dist/`, without copying files to a server.
+
+`7sins` includes Wrath, the Ashen Executioner: an original articulated model, an embedded Java resource pack, and a two-phase boss with telegraphed attacks. Summon it with `/7sins spawn wrath` (operator). Bedrock and players without the pack receive a vanilla armor fallback. See [7sins setup and combat guide](7sins/README.md).
 
 ## AfterDeath
 

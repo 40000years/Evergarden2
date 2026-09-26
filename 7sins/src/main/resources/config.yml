@@ -1,0 +1,19 @@
+wrath:
+  health: 600.0
+  # Base damage is multiplied by this value. Damage uses vanilla armor/shields.
+  damage-multiplier: 1.0
+  arena-radius: 28.0
+  max-active: 3
+  # Abandoned encounters disappear after this many seconds; no loot is awarded.
+  idle-despawn-seconds: 120
+resource-pack:
+  auto-send: true
+  # Immutable raw GitHub URL uses the same version of the embedded resource pack.
+  # To use a private pack host, replace this URL. Set it blank to use the built-in server.
+  url: ''
+  host:
+    enabled: true
+    bind: '0.0.0.0'
+    port: 8188
+    # Used only when url is empty: public hostname/IP reachable by players.
+    public-host: ''

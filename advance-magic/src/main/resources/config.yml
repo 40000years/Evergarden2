@@ -56,6 +56,8 @@ flying-staff:
   vertical-speed: 0.288
   turbo-multiplier: 4.0
   mana-per-second: 2.0
+  # Normal = 2 mana/sec; Turbo = 3 mana/sec with the default multiplier.
+  turbo-mana-multiplier: 1.5
   anticheat:
     # Permission is granted only while riding and removed on dismount/quit.
     # Add other plugin permissions only after checking that plugin's documentation.

@@ -147,9 +147,28 @@ public final class FlyingStaffChecks extends JavaPlugin {
         check(flightTeleports==0,"ordinary flight does not trigger player teleport/season arrival refresh: "+flightTeleports);
         check(player.getLocation().distanceSquared(stand.getLocation())<4,"passenger position follows moving staff");
         check(Arrays.asList(stand.getChunk().getEntities()).contains(stand),"moved staff remains indexed in its destination chunk");
-        check(magic.mana().account(player).manaExact()==98,"exact mana drain with regeneration paused");
+        check(magic.mana().account(player).manaExact()<98,"short Sprint/manual Turbo bursts incur their extra mana cost");
         check(stand.isValid()&&player.getVehicle()==stand,"mount stays valid during hover");
         check(!player.getAllowFlight(),"flight flag remains disabled after moving");
+        double normalStart=magic.mana().account(player).manaExact();
+        later(20,()->{
+            check(Math.abs(normalStart-magic.mana().account(player).manaExact()-2)<.001,"normal riding costs 2 mana per second");
+            handle.connection.handlePlayerInput(new ServerboundPlayerInputPacket(new Input(false,false,false,false,false,false,true)));
+            double sprintStart=magic.mana().account(player).manaExact();
+            later(20,()->{
+                check(Math.abs(sprintStart-magic.mana().account(player).manaExact()-3)<.001,"Sprint Turbo costs 3 mana per second");
+                handle.connection.handlePlayerInput(new ServerboundPlayerInputPacket(new Input(false,false,false,false,false,false,false)));
+                check(magic.flyingStaff().toggleTurbo(player),"enable manual Turbo for mana measurement");
+                double manualStart=magic.mana().account(player).manaExact();
+                later(20,()->{
+                    check(Math.abs(manualStart-magic.mana().account(player).manaExact()-3)<.001,"manual Turbo costs 3 mana per second");
+                    check(!magic.flyingStaff().toggleTurbo(player),"disable manual Turbo after mana measurement");
+                    dismountAndRecall();
+                });
+            });
+        });
+    }
+    void dismountAndRecall(){
         try {
             var sessionsField=magic.flyingStaff().getClass().getDeclaredField("sessions");sessionsField.setAccessible(true);
             Object session=((Map<?,?>)sessionsField.get(magic.flyingStaff())).get(player.getUniqueId());
@@ -163,6 +182,25 @@ public final class FlyingStaffChecks extends JavaPlugin {
         int beforeTeleport=allTeleports;
         check(player.teleport(player.getLocation().add(.25,0,0))&&allTeleports==beforeTeleport+1,
             "real player teleports still reach arrival listeners");
+        UUID original=stand.getUniqueId();
+        Location oldPosition=stand.getLocation();
+        Location walkTarget=player.getLocation().add(12,0,0);
+        handle.setPos(walkTarget.getX(),walkTarget.getY(),walkTarget.getZ());
+        check(stand.isValid(),"walking away leaves the forgotten staff available to recall");
+        Location recallTarget=player.getLocation().add(0,0,1.5);
+        var obstruction=player.getWorld().getBlockAt(recallTarget);
+        Material originalBlock=obstruction.getType();
+        obstruction.setType(Material.STONE);
+        var staffItem=player.getInventory().getItemInMainHand();
+        Bukkit.getPluginManager().callEvent(new PlayerInteractEvent(player,Action.RIGHT_CLICK_AIR,staffItem,null,null,EquipmentSlot.HAND));
+        check(stand.getLocation().distanceSquared(oldPosition)<.001,"blocked recall leaves the original staff where it was");
+        obstruction.setType(originalBlock);
+        Bukkit.getPluginManager().callEvent(new PlayerInteractEvent(player,Action.RIGHT_CLICK_AIR,staffItem,null,null,EquipmentSlot.HAND));
+        check(stand.getUniqueId().equals(original)&&stand.getLocation().distanceSquared(recallTarget)<.001,"recall brings the same staff to the owner");
+        check(player.getWorld().getEntitiesByClass(ArmorStand.class).stream().filter(magic.flyingStaff()::isDisplay).count()==1,"recall does not duplicate staff entities");
+        later(14,this::dismissAndRemount);
+    }
+    void dismissAndRemount(){
         Bukkit.getPluginManager().callEvent(new org.bukkit.event.entity.EntityDamageByEntityEvent(player,stand,org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK,1.0));
         later(12,()->{
             check(!stand.isValid(),"dismiss removes temporary entity");

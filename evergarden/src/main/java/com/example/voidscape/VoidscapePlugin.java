@@ -49,7 +49,7 @@ public final class VoidscapePlugin extends JavaPlugin {
                     if(Files.exists(source)&&!Files.exists(target))Files.copy(source,target);
                 }
             }
-            saveDefaultConfig();getConfig().options().copyDefaults(true);saveConfig();
+            saveDefaultConfig();WhaleTreasure.upgradeFlyingStaffRates(getConfig());getConfig().options().copyDefaults(true);saveConfig();
             packs=new com.example.voidscape.pack.ResourcePackService(this);packs.extract();
         } catch(Exception error) {loadFailed=true;getLogger().log(java.util.logging.Level.SEVERE,"Cannot safely initialize Evergarden",error);}
     }

@@ -60,7 +60,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         Objects.requireNonNull(getCommand("magic")).setExecutor(command);getCommand("magic").setTabCompleter(command);
         Bukkit.getScheduler().runTaskTimer(this,()->{effects.tick();statuses.tick();areas.tick();flyingStaff.tick();},1,1);
         Bukkit.getScheduler().runTaskTimer(this,()->Bukkit.getOnlinePlayers().stream().filter(p->!flyingStaff.isRiding(p)).forEach(mana::regenerate),20,20);
-        for(Player p:Bukkit.getOnlinePlayers()){mana.account(p);wands.discover(p);flyingStaff.removeLegacyRecipe(p);wands.migrate(p.getInventory());packs.offer(p);}
+        for(Player p:Bukkit.getOnlinePlayers()){mana.account(p);wands.discover(p);flyingStaff.removeLegacyRecipe(p);wands.migrate(p.getInventory());wands.migrate(p.getEnderChest());packs.offer(p);}
         for(World world:Bukkit.getWorlds())world.getEntities().forEach(wands::migrateEntity);
         getLogger().info("15 spells and recipes registered. No client mod or packet dependency required.");
     }

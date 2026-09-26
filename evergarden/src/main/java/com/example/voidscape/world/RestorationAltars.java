@@ -80,7 +80,7 @@ public final class RestorationAltars implements Listener {
     @EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
     public void drop(PlayerDropItemEvent e){
         Selection selected=selections.get(e.getPlayer().getUniqueId());
-        if(selected==null||magic.wands().spell(e.getItemDrop().getItemStack())==null)return;
+        if(selected==null||!magic.wands().isDurable(e.getItemDrop().getItemStack()))return;
         // Cancel the real drop before any world item can be collected or cleared.
         e.setCancelled(true);
         Bukkit.getScheduler().runTask(plugin,()->{if(e.getPlayer().isOnline())start(e.getPlayer());});
@@ -92,7 +92,7 @@ public final class RestorationAltars implements Listener {
         if(rituals.values().stream().anyMatch(r->r.selection().site().equals(s.site()))){message(p,"แท่นกำลังทำพิธีให้ผู้เล่นอีกคน รอสักครู่");return;}
         int slot=p.getInventory().getHeldItemSlot();ItemStack wand=p.getInventory().getItem(slot);
         if(slot==s.fuelSlot()||wand==null||!magic.wands().restore(wand.clone())){
-            message(p,"ถือคทาเวทปกติที่ความทนทานยังไม่เต็ม — คทาฟื้นฟู 5 ครั้งซ่อมไม่ได้");return;
+            message(p,"ถือคทาเวทหรือไม้เท้าบินที่ความทนทานยังไม่เต็ม — คทาฟื้นฟู 5 ครั้งซ่อมไม่ได้");return;
         }
         rituals.put(id,new Ritual(s,slot,wand.clone(),ticks));
         message(p,"เริ่มพิธี 10 วินาที อยู่ใกล้แท่นและเก็บ Core / คทาไว้ในช่องเดิม");

@@ -88,7 +88,7 @@ public final class RestorationService implements Listener {
         ItemStack source=player.getInventory().getItemInMainHand();
         if(!isRepairWand(source)||source.getAmount()!=1||charges(source)<=0)return "คทาฟื้นฟูนี้ใช้พลังครบ 5 ครั้งแล้ว";
         ItemStack repaired=target.getInventory().getItemInMainHand().clone();
-        if(!plugin.wands().restore(repaired))return "เป้าหมายต้องถือคทาปกติที่ความทนทานยังไม่เต็ม";
+        if(!plugin.wands().restore(repaired))return "เป้าหมายต้องถือคทาเวทหรือไม้เท้าบินที่ความทนทานยังไม่เต็ม";
         ItemStack spent=source.clone();var meta=spent.getItemMeta();
         meta.getPersistentDataContainer().set(charges,PersistentDataType.INTEGER,charges(source)-1);spent.setItemMeta(meta);refresh(spent);
         player.getInventory().setItemInMainHand(spent);target.getInventory().setItemInMainHand(repaired);

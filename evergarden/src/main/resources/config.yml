@@ -17,11 +17,12 @@ structures:
   # Whale, observatory and hanging garden each roll the chance below.
   # Shared one-time chest rewards; weights are relative, one bonus is drawn.
   treasure:
+    flying-staff-rate-version: 2
     # One roll per structure, at most one staff across both chests; never craftable.
     flying-staff-chances:
-      whale: 0.075
-      hanging-garden: 0.05
-      observatory: 0.05
+      whale: 0.10
+      hanging-garden: 0.075
+      observatory: 0.075
     second-chest-chance: 0.30
     crop-stacks: 2
     tier-three-chance: 0.75
@@ -94,7 +95,7 @@ combat:
 rewards:
   # Vault Loot Table Percentages:
   # One reward per vault; rates are defined in VaultLootTable.
-  # 59% Consumables and reagents, 1% Flying Staff
+  # 58.5% Consumables and reagents, 1.5% Flying Staff
   # 15% Limit Break Scroll, 12% Unique Enchant Scroll
   # 7% Advance Magic Core (14 normal types, equal chance)
   # 5% Special Relic Equipment

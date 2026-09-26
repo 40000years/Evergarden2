@@ -21,6 +21,18 @@ public final class WhaleTreasure implements Listener {
     private final VoidscapePlugin plugin;
     public WhaleTreasure(VoidscapePlugin plugin) { this.plugin = plugin; }
 
+    public static void upgradeFlyingStaffRates(org.bukkit.configuration.file.FileConfiguration config){
+        String version="structures.treasure.flying-staff-rate-version";
+        if(config.contains(version,true)&&config.getInt(version)>=2)return;
+        String[] kinds={"whale","hanging-garden","observatory"};
+        double[] oldRates={.075,.05,.05},newRates={.10,.075,.075};
+        for(int i=0;i<kinds.length;i++){
+            String path="structures.treasure.flying-staff-chances."+kinds[i];
+            if(!config.contains(path,true)||Double.compare(config.getDouble(path),oldRates[i])==0)config.set(path,newRates[i]);
+        }
+        config.set(version,2);
+    }
+
     @EventHandler
     public void onLoad(ChunkLoadEvent event) { populate(event.getChunk()); }
 
@@ -36,7 +48,7 @@ public final class WhaleTreasure implements Listener {
         var upgradeMarker = plugin.key("whale_wand_upgrades_v2");
         boolean alreadyPopulated = chunk.getPersistentDataContainer().has(marker, PersistentDataType.BYTE);
         if (alreadyPopulated && chunk.getPersistentDataContainer().has(upgradeMarker, PersistentDataType.BYTE)) {
-            addFlyingStaff(chunk,site.x(),site.z(),"whale",115,7,new int[]{-52,-50},.075);
+            addFlyingStaff(chunk,site.x(),site.z(),"whale",115,7,new int[]{-52,-50},.10);
             return;
         }
         // Both positions and all validation blocks are in this chunk: no neighbor loads.
@@ -60,7 +72,7 @@ public final class WhaleTreasure implements Listener {
                 int slot=chest.getBlockInventory().firstEmpty();
                 if(!hasUpgrade&&slot>=0)chest.getBlockInventory().setItem(slot,createWandUpgrade(random));
             }
-            addFlyingStaff(chunk,site.x(),site.z(),"whale",115,7,new int[]{-52,-50},.075);
+            addFlyingStaff(chunk,site.x(),site.z(),"whale",115,7,new int[]{-52,-50},.10);
             return;
         }
         // Record the attempt even if a player built here, so removing their blocks
@@ -87,7 +99,7 @@ public final class WhaleTreasure implements Listener {
             for (int j = 0; j < loot.size(); j++) chest.getBlockInventory().setItem(slots.get(j), loot.get(j));
             if(!restorationAdded){addRestoration(chest,site.x(),site.z(),0);restorationAdded=true;}
         }
-        addFlyingStaff(chunk,site.x(),site.z(),"whale",115,7,new int[]{-52,-50},.075);
+        addFlyingStaff(chunk,site.x(),site.z(),"whale",115,7,new int[]{-52,-50},.10);
     }
 
     private int chestCount(Random random){
@@ -106,7 +118,7 @@ public final class WhaleTreasure implements Listener {
                     ||chunk.getZ()!=Math.floorDiv(site.z()+kind.chestZ,16))continue;
             var marker=plugin.key(kind.id+"_treasure_v1");
             if(chunk.getPersistentDataContainer().has(marker,PersistentDataType.BYTE)){
-                addFlyingStaff(chunk,site.x(),site.z(),kind.id,y,kind.chestZ,new int[]{4,6},.05);
+                addFlyingStaff(chunk,site.x(),site.z(),kind.id,y,kind.chestZ,new int[]{4,6},.075);
                 continue;
             }
             chunk.getPersistentDataContainer().set(marker,PersistentDataType.BYTE,(byte)1);
@@ -131,7 +143,7 @@ public final class WhaleTreasure implements Listener {
                 for(int j=0;j<loot.size();j++)chest.getBlockInventory().setItem(slots.get(j),loot.get(j));
                 if(!restorationAdded){addRestoration(chest,site.x(),site.z(),kind.ordinal()+1);restorationAdded=true;}
             }
-            addFlyingStaff(chunk,site.x(),site.z(),kind.id,y,kind.chestZ,new int[]{4,6},.05);
+            addFlyingStaff(chunk,site.x(),site.z(),kind.id,y,kind.chestZ,new int[]{4,6},.075);
         }
     }
 

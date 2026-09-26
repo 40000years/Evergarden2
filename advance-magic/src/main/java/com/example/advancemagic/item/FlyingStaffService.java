@@ -85,13 +85,10 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         ItemStack item=new ItemStack(Material.BLAZE_ROD);
         var meta=item.getItemMeta();
         meta.setDisplayName(ChatColor.GOLD+"✦ "+ChatColor.AQUA+"ไม้เท้าบิน");
-        meta.setLore(List.of(ChatColor.GRAY+"คลิกขวาเพื่อเรียกไม้เท้า · เรียกกลับได้ถ้าลืมไว้",ChatColor.GRAY+"คลิกที่ไม้เท้าเพื่อขึ้นขี่ · ย่องเพื่อลง",
-            ChatColor.GRAY+"กระโดดขึ้น · มองลงแล้วเดินหน้าเพื่อลงระดับ",
-            ChatColor.YELLOW+"Sprint เพื่อเร่ง · คลิกขวาขณะขี่เพื่อเปิด Turbo ค้าง",
-            ChatColor.AQUA+"Turbo ใช้มานาเร็วกว่าการขี่ปกติ"));
         meta.setItemModel(new NamespacedKey("advance_magic",BASE_MODEL));
         meta.getPersistentDataContainer().set(itemKey,PersistentDataType.BYTE,(byte)1);
         item.setItemMeta(meta);
+        plugin.wands().migrate(item);
         return item;
     }
     public boolean isStaff(ItemStack item) {
@@ -144,6 +141,16 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
             return;
         }
         if(player.isInsideVehicle())return;
+        ItemStack held=player.getInventory().getItemInMainHand();
+        if(!isStaff(held))return;
+        plugin.wands().migrate(held);
+        player.getInventory().setItemInMainHand(held);
+        if(held.getAmount()!=1){
+            player.sendMessage(ChatColor.YELLOW+"แยกไม้เท้าบินทีละอันก่อนเรียก");return;
+        }
+        if(plugin.wands().usesLeft(held)<=0){
+            player.sendMessage(ChatColor.RED+"ไม้เท้าบินหมดความทนทานแล้ว ซ่อมด้วยคทาหรือแท่นฟื้นฟูก่อนเรียก");return;
+        }
         Location origin=player.getLocation();
         Vector direction=origin.getDirection().setY(0);
         if(direction.lengthSquared()<.01)direction=new Vector(0,0,1);
@@ -176,7 +183,14 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
                 a.getEquipment().setHelmet(image("summon",0),true);
                 for(ArmorStand.LockType lock:ArmorStand.LockType.values())a.addEquipmentLock(EquipmentSlot.HEAD,lock);
             });
+            if(!stand.isValid()||stand.isDead()){
+                player.sendMessage(ChatColor.YELLOW+"เรียกไม้เท้าที่นี่ไม่ได้ — ยังไม่เสียความทนทาน");return;
+            }
         }
+        // Spend only after a successful spawn/recall. The final use may still be ridden.
+        plugin.wands().consumeUse(held);
+        player.getInventory().setItemInMainHand(held);
+        player.saveData();
         Session session=new Session(player,stand,plugin.packs().isBedrock(player));
         sessions.put(player.getUniqueId(),session);byEntity.put(stand.getUniqueId(),session);
         target.getWorld().playSound(target,Sound.BLOCK_AMETHYST_BLOCK_RESONATE,.7f,1.5f);

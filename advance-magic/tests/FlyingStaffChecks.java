@@ -40,6 +40,8 @@ public final class FlyingStaffChecks extends JavaPlugin {
     ServerPlayer handle;
     ArmorStand stand;
     int checks;
+    int flightTeleports;
+    int allTeleports;
     void check(boolean value,String label){if(!value)throw new AssertionError(label);checks++;getLogger().info("PASS "+label);}
     @Override public void onEnable(){Bukkit.getScheduler().runTaskLater(this,()->run(this::begin),20);}
     void run(Runnable task){try{task.run();}catch(Throwable error){finish(error);}}
@@ -111,6 +113,13 @@ public final class FlyingStaffChecks extends JavaPlugin {
         check(magic.flyingStaff().isRiding(player),"click seats rider on staff");
         check(!player.getAllowFlight()&&!player.isFlying(),"mount works with allow-flight=false and never grants flight");
         check(player.hasPermission("grim.disabled"),"temporary Grim permission is active while riding");
+        Bukkit.getPluginManager().registerEvents(new org.bukkit.event.Listener(){
+            @org.bukkit.event.EventHandler(priority=org.bukkit.event.EventPriority.MONITOR,ignoreCancelled=true)
+            public void teleport(org.bukkit.event.player.PlayerTeleportEvent event){
+                if(event.getPlayer()==player)allTeleports++;
+                if(event.getPlayer()==player&&player.getVehicle()==stand)flightTeleports++;
+            }
+        },this);
         Location before=stand.getLocation();
         handle.connection.handlePlayerInput(new ServerboundPlayerInputPacket(new Input(true,false,false,false,false,false,false)));
         later(4,()->{
@@ -135,11 +144,25 @@ public final class FlyingStaffChecks extends JavaPlugin {
         later(24,this::drain);
     }
     void drain(){
+        check(flightTeleports==0,"ordinary flight does not trigger player teleport/season arrival refresh: "+flightTeleports);
+        check(player.getLocation().distanceSquared(stand.getLocation())<4,"passenger position follows moving staff");
+        check(Arrays.asList(stand.getChunk().getEntities()).contains(stand),"moved staff remains indexed in its destination chunk");
         check(magic.mana().account(player).manaExact()==98,"exact mana drain with regeneration paused");
         check(stand.isValid()&&player.getVehicle()==stand,"mount stays valid during hover");
         check(!player.getAllowFlight(),"flight flag remains disabled after moving");
+        try {
+            var sessionsField=magic.flyingStaff().getClass().getDeclaredField("sessions");sessionsField.setAccessible(true);
+            Object session=((Map<?,?>)sessionsField.get(magic.flyingStaff())).get(player.getUniqueId());
+            var bedrockField=session.getClass().getDeclaredField("bedrock");bedrockField.setAccessible(true);bedrockField.setBoolean(session,true);
+        }catch(Exception error){throw new RuntimeException(error);}
+        int beforeDismount=allTeleports;
         player.leaveVehicle();
+        check(allTeleports==beforeDismount,"Bedrock staff dismount does not trigger a successful teleport/arrival refresh");
+        check(player.getVehicle()==null,"suppressing the local exit teleport still removes the passenger");
         check(!player.hasPermission("grim.disabled"),"anti-cheat exemption is removed on dismount");
+        int beforeTeleport=allTeleports;
+        check(player.teleport(player.getLocation().add(.25,0,0))&&allTeleports==beforeTeleport+1,
+            "real player teleports still reach arrival listeners");
         Bukkit.getPluginManager().callEvent(new org.bukkit.event.entity.EntityDamageByEntityEvent(player,stand,org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_ATTACK,1.0));
         later(12,()->{
             check(!stand.isValid(),"dismiss removes temporary entity");

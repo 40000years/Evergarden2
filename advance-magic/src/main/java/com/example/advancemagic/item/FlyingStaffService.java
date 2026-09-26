@@ -1,7 +1,6 @@
 package com.example.advancemagic.item;
 
 import com.example.advancemagic.AdvanceMagicPlugin;
-import io.papermc.paper.entity.TeleportFlag;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -37,6 +36,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
     private static final int SAFE_DISMOUNT_TICKS=1400;
     private final AdvanceMagicPlugin plugin;
     private final FlyingStaffDiagnostics diagnostics;
+    private final FlyingStaffMovement movement;
     private final NamespacedKey itemKey, entityKey, recipeKey;
     private final Map<UUID,Session> sessions=new HashMap<>();
     private final Map<UUID,Session> byEntity=new HashMap<>();
@@ -53,6 +53,8 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         boolean manualTurbo;
         boolean landingUnridden;
         boolean idleFramePending;
+        Location dismountOrigin;
+        int dismountTick;
         final Vector motion=new Vector();
         PermissionAttachment exemption;
         Session(Player player,ArmorStand stand,boolean bedrock){
@@ -63,6 +65,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
     public FlyingStaffService(AdvanceMagicPlugin plugin) {
         this.plugin=plugin;
         diagnostics=new FlyingStaffDiagnostics(plugin);
+        movement=new FlyingStaffMovement();
         itemKey=new NamespacedKey(plugin,"flying_staff");
         entityKey=new NamespacedKey(plugin,"flying_staff_entity");
         recipeKey=new NamespacedKey(plugin,"flying_staff");
@@ -248,8 +251,30 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
     @EventHandler public void quit(PlayerQuitEvent event){closeOwner(event.getPlayer());}
     @EventHandler(priority=EventPriority.MONITOR)
     public void traceDismount(EntityDismountEvent event){
-        if(event.getEntity() instanceof Player player&&byEntity.containsKey(event.getDismounted().getUniqueId()))
+        if(event.getEntity() instanceof Player player&&byEntity.containsKey(event.getDismounted().getUniqueId())){
+            Session session=byEntity.get(event.getDismounted().getUniqueId());
+            if(session.owner.equals(player.getUniqueId())&&session.bedrock&&!event.isCancelled()){
+                session.dismountOrigin=player.getLocation();
+                session.dismountTick=Bukkit.getCurrentTick();
+            }
             diagnostics.dismount(player,event.isCancelled());
+        }
+    }
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void localDismountTeleport(PlayerTeleportEvent event){
+        if(event.getCause()!=PlayerTeleportEvent.TeleportCause.DISMOUNT)return;
+        Session session=sessions.get(event.getPlayer().getUniqueId());
+        if(session==null||session.dismountOrigin==null)return;
+        Location origin=session.dismountOrigin;
+        session.dismountOrigin=null;
+        if(session.dismountTick!=Bukkit.getCurrentTick()||event.getTo()==null||
+            event.getFrom().getWorld()!=origin.getWorld()||event.getTo().getWorld()!=origin.getWorld()||
+            event.getFrom().distanceSquared(origin)>16||event.getTo().distanceSquared(origin)>16)return;
+        // Paper already removed the passenger. Its synthetic exit teleport is
+        // unnecessary for this collision-free mount and triggers arrival refreshes.
+        // Staying at the checked seat position lets Bedrock dismount normally and
+        // descend with Slow Falling. Real teleports and other vehicles are untouched.
+        event.setCancelled(true);
     }
     @EventHandler public void death(PlayerDeathEvent event){closeOwner(event.getEntity());}
     @EventHandler public void world(PlayerChangedWorldEvent event){closeOwner(event.getPlayer());}
@@ -362,8 +387,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
         session.motion.setY(requested.getY()==0?0:actual.getY());
         if(actual.lengthSquared()>0) {
             position.setYaw(player.getLocation().getYaw());position.setPitch(0);
-            if(!stand.teleport(position,PlayerTeleportEvent.TeleportCause.PLUGIN,TeleportFlag.EntityState.RETAIN_PASSENGERS))
-                session.motion.zero();
+            movement.move(stand,position);
         } else stand.setRotation(player.getLocation().getYaw(),0);
     }
     public void tick() {
@@ -440,7 +464,7 @@ public final class FlyingStaffService implements Listener, AutoCloseable {
                         closeSession(session);
                     } else {
                         Location next=stand.getLocation().add(0,-.1,0);
-                        if(clear(next))stand.teleport(next,PlayerTeleportEvent.TeleportCause.PLUGIN,TeleportFlag.EntityState.RETAIN_PASSENGERS);
+                        if(clear(next))movement.move(stand,next);
                     }
                 }
                 case DISMISS -> {

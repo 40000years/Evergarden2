@@ -42,6 +42,7 @@ public final class WrathProbe extends JavaPlugin {
             world.getBlockAt(x,home.getBlockY()-1,z).setType(Material.STONE,false);
         List<Material> before=new ArrayList<>();
         for(int x=-10;x<=10;x++)for(int z=-10;z<=10;z++) before.add(world.getBlockAt(x,home.getBlockY()-1,z).getType());
+        spawnChecks(plugin,world,home.getBlockY()+100);
         WrathBoss boss=plugin.spawnWrath(home);
         check(plugin.getConfig().getDouble("wrath.health")==1800,"Old default 600 HP is migrated to 1800 without deleting config");
         check(plugin.getConfig().getDouble("wrath.damage-multiplier")==3&&plugin.getConfig().getDouble("wrath.arena-radius")==140,
@@ -159,6 +160,55 @@ public final class WrathProbe extends JavaPlugin {
         Bukkit.getPluginManager().disablePlugin(plugin);
         check(!boss.entity().isValid()&&shutdownVisuals.stream().noneMatch(Entity::isValid),"Plugin disable cleans every encounter");
         check(world.getEntities().stream().noneMatch(e->e instanceof org.bukkit.entity.Item),"Admin cleanup awards no loot");
+    }
+
+    private void spawnChecks(SevenSinsPlugin plugin,World world,int y) throws Exception {
+        Location origin=new Location(world,0.5,y+1,0.5,0,0);
+        for(int x=-3;x<=3;x++)for(int z=32;z<=38;z++)world.getBlockAt(x,y,z).setType(Material.STONE,false);
+        WrathSpawn.Result full=WrathSpawn.find(origin,5);
+        check(full.location()!=null&&Math.abs(full.location().getY()-(y+1.01))<0.001,
+                "Giant spawn accepts a supported 7x7 platform instead of requiring an 11x11 integer floor");
+        for(int x=-3;x<=3;x++)for(int z=32;z<=38;z++) {
+            var slab=(org.bukkit.block.data.type.Slab)Material.POLISHED_ANDESITE_SLAB.createBlockData();
+            slab.setType(org.bukkit.block.data.type.Slab.Type.BOTTOM);world.getBlockAt(x,y,z).setBlockData(slab,false);
+        }
+        origin.setY(y+0.5);origin.setPitch(90);
+        WrathSpawn.Result lower=WrathSpawn.find(origin,5);
+        check(lower.location()!=null&&Math.abs(lower.location().getY()-(y+0.51))<0.001,
+                "Looking down on bottom slabs finds the actual half-block surface");
+        WrathBoss actual=plugin.spawnWrath(lower.location());
+        check(actual.entity().isValid()&&Math.abs(actual.home().getY()-(y+0.51))<0.001,
+                "Fivefold Wrath spawns successfully on the fractional slab floor");
+        actual.remove();
+        Field manager=SevenSinsPlugin.class.getDeclaredField("bosses");manager.setAccessible(true);((Map<?,?>)manager.get(plugin)).clear();
+        for(int x=-3;x<=3;x++)for(int z=32;z<=38;z++) {
+            var slab=(org.bukkit.block.data.type.Slab)Material.POLISHED_ANDESITE_SLAB.createBlockData();
+            slab.setType(org.bukkit.block.data.type.Slab.Type.TOP);world.getBlockAt(x,y,z).setBlockData(slab,false);
+        }
+        WrathSpawn.Result upper=WrathSpawn.find(origin,5);
+        check(upper.location()!=null&&Math.abs(upper.location().getY()-(y+1.01))<0.001,"Upper slabs support the giant spawn");
+        for(int x=-3;x<=3;x++)for(int z=32;z<=38;z++) {
+            world.getBlockAt(x,y,z).setType(Material.STONE,false);
+            world.getBlockAt(x,y+1,z).setType(Material.GRAY_CARPET,false);
+        }
+        origin.setY(y+1.0625);
+        WrathSpawn.Result carpet=WrathSpawn.find(origin,5);
+        check(carpet.location()!=null&&Math.abs(carpet.location().getY()-(y+1.0725))<0.001,"Carpet height is supported without rounding into blocks");
+        for(int x=-3;x<=3;x++)for(int z=32;z<=38;z++)world.getBlockAt(x,y+1,z).setType(Material.AIR,false);
+        origin.setY(y+13);origin.setPitch(0);
+        check(WrathSpawn.find(origin,5).location()!=null,"A player hovering in Creative can find the platform below");
+        origin.setY(y+1);
+        for(int x=-3;x<=3;x++)for(int z=32;z<=38;z++)world.getBlockAt(x,y+10,z).setType(Material.STONE,false);
+        WrathSpawn.Result blocked=WrathSpawn.find(origin,5);
+        check(blocked.location()==null&&blocked.failure()==WrathSpawn.Failure.BLOCKED,"A genuinely low ceiling is rejected with an accurate reason");
+        for(int x=-3;x<=3;x++)for(int z=17;z<=23;z++)world.getBlockAt(x,y,z).setType(Material.STONE,false);
+        WrathSpawn.Result nearby=WrathSpawn.find(origin,5);
+        check(nearby.location()!=null&&nearby.location().getZ()<30,"Blocked 35-block target falls back to an open nearby spawn");
+        for(int x=-3;x<=3;x++)for(int z=17;z<=38;z++) {
+            world.getBlockAt(x,y,z).setType(Material.AIR,false);world.getBlockAt(x,y+10,z).setType(Material.AIR,false);
+        }
+        WrathSpawn.Result missing=WrathSpawn.find(origin,5);
+        check(missing.location()==null&&missing.failure()==WrathSpawn.Failure.NO_GROUND,"Missing ground is distinguished from obstructed headroom");
     }
 
     private void animationFrames() throws Exception {

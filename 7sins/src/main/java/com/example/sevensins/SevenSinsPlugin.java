@@ -8,7 +8,6 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 import java.util.*;
 
 public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCompleter {
@@ -100,32 +99,19 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             return true;
         }
         if (args.length > 2 || args.length == 2 && !args[1].equalsIgnoreCase("wrath")) return false;
-        Location floor = spawnFloor(player);
-        if (floor == null) { player.sendMessage("§cหาที่เกิดไม่ได้ ต้องมีพื้นแข็งและพื้นที่เปิดสูงอย่างน้อย " + (int)Math.ceil(5*wrathScale()) + " บล็อกด้านหน้า"); return true; }
+        WrathSpawn.Result spawn = WrathSpawn.find(player.getLocation(),wrathScale());
+        if (spawn.location() == null) {
+            player.sendMessage("§c" + switch(spawn.failure()) {
+                case NO_GROUND -> "ไม่พบพื้นรองรับด้านหน้า ลองลงใกล้พื้นหรือหันไปทางพื้นที่ที่มีพื้น";
+                case UNEVEN_GROUND -> "พื้นด้านหน้าแคบหรือต่างระดับมาก ลองหันไปทางพื้นที่ราบกว่านี้";
+                case BLOCKED -> "จุดเกิดด้านหน้าติดบล็อก เพดาน หรือของเหลว ต้องมีช่องโล่งสูงประมาณ " + (int)Math.ceil(4*wrathScale()) + " บล็อก";
+            });
+            return true;
+        }
         try {
-            spawnWrath(floor); player.sendMessage("§cWRATH ถูกปลุกแล้ว! §7เตรียมสู้ในอีก 4 วินาที — ใช้ Survival เพื่อเข้าต่อสู้");
+            spawnWrath(spawn.location()); player.sendMessage("§cWRATH ถูกปลุกแล้ว! §7เตรียมสู้ในอีก 4 วินาที — ใช้ Survival เพื่อเข้าต่อสู้");
         } catch (IllegalStateException error) { player.sendMessage("§c[7sins] " + error.getMessage()); }
         return true;
-    }
-    private Location spawnFloor(Player player) {
-        Vector direction = player.getLocation().getDirection().setY(0);
-        if (direction.lengthSquared() < 0.001) direction = new Vector(0, 0, 1);
-        double scale = wrathScale();
-        int footprint = Math.max(1, (int)Math.ceil(scale));
-        int height = (int)Math.ceil(5*scale);
-        Location point = player.getLocation().add(direction.normalize().multiply(7*scale));
-        for (int dy = 3; dy >= -8; dy--) {
-            int y = player.getLocation().getBlockY() + dy;
-            if (y < player.getWorld().getMinHeight() + 1 || y + height >= player.getWorld().getMaxHeight()) continue;
-            boolean clear = true;
-            for (int x = -footprint; x <= footprint; x++) for (int z = -footprint; z <= footprint; z++) {
-                if (!player.getWorld().getBlockAt(point.getBlockX() + x, y - 1, point.getBlockZ() + z).getType().isSolid()) clear = false;
-                for (int h = 0; h < height; h++) if (!player.getWorld().getBlockAt(point.getBlockX() + x, y + h, point.getBlockZ() + z).isPassable()
-                        || player.getWorld().getBlockAt(point.getBlockX() + x, y + h, point.getBlockZ() + z).isLiquid()) clear = false;
-            }
-            if (clear) return new Location(player.getWorld(), point.getBlockX() + 0.5, y, point.getBlockZ() + 0.5, player.getLocation().getYaw() + 180, 0);
-        }
-        return null;
     }
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> choices = args.length == 1 ? sender.hasPermission("7sins.admin")

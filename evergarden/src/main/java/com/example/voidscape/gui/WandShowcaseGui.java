@@ -92,7 +92,7 @@ public final class WandShowcaseGui implements InventoryHolder, Listener {
         inv.setItem(47, createAction(Material.COMMAND_BLOCK, "§6§l⚙️ แผงควบคุมระบบ (Admin Test Kit)", List.of("§7คลิกเพื่อสลับไปยังแผงควบคุมระบบ /evergarden test")));
         inv.setItem(48, createAction(Material.CARROT_ON_A_STICK, "§d§l🪄 รับคทาครบ 15 เล่ม", List.of("§7รับคทาเวทมนตร์ครบทั้ง 15 เล่มทันที")));
         inv.setItem(49, createAction(Material.HEART_OF_THE_SEA, "§e§l🔮 รับแกน x16 ครบ 15 ธาตุ", List.of("§7รับแกนเวทมนตร์ครบทั้ง 15 ธาตุ กองละ 16 ชิ้น")));
-        inv.setItem(50, createSeparator(Material.BLACK_STAINED_GLASS_PANE, "§8✦"));
+        inv.setItem(50, plugin.testGui().createFlyingStaffMenuItem());
         inv.setItem(51, createSeparator(Material.BLACK_STAINED_GLASS_PANE, "§8✦"));
         inv.setItem(52, createSeparator(Material.BLACK_STAINED_GLASS_PANE, "§8✦"));
         inv.setItem(53, createAction(Material.BARRIER, "§c§l❌ ปิดเมนู (Close)", List.of("§7คลิกเพื่อปิดหน้าต่างนี้")));
@@ -265,6 +265,16 @@ public final class WandShowcaseGui implements InventoryHolder, Listener {
             case 45 -> plugin.cropGui().open(p);
             case 46 -> plugin.relicGui().open(p);
             case 47 -> plugin.testGui().open(p);
+            case 50 -> {
+                ItemStack staff = plugin.testGui().createFlyingStaff();
+                if (staff == null) {
+                    p.sendMessage(ChatColor.RED + "ต้องเปิดใช้งาน Advance Magic ก่อนจึงจะรับไม้เท้าบินได้");
+                    return;
+                }
+                giveItem(p, staff);
+                p.playSound(p.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.9f, 1.2f);
+                p.sendMessage(ChatColor.AQUA + "✦ ได้รับไม้เท้าบินแล้ว: คลิกขวาเรียก แล้วคลิกที่ไม้เท้าเพื่อขึ้นขี่");
+            }
         }
     }
 

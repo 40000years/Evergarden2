@@ -17,23 +17,25 @@ with zipfile.ZipFile(pack) as z:
     assert not any(name.startswith('assets/minecraft/') for name in z.namelist()), 'No vanilla asset overrides'
     cubes=0
     models=names+[name+'_unbound' for name in ('body','head','cleaver','core')]+['ground_sword']
-    for name in models:
-        item=json.loads(z.read(f'assets/sevensins/items/wrath/{name}.json'))
-        assert item['model']['model']==f'sevensins:wrath/{name}'
-        model=json.loads(z.read(f'assets/sevensins/models/wrath/{name}.json'))
-        assert model['display']['fixed']['rotation']==[0,180,0], 'Item renderer flip must be compensated'
-        for ref in model['textures'].values():
-            ns,path=ref.split(':')
-            png=z.read(f'assets/{ns}/textures/{path}.png')
-            assert png.startswith(b'\x89PNG\r\n\x1a\n')
-        for cube in model['elements']:
-            assert all(-16<=v<=32 for p in ('from','to') for v in cube[p]), (name,cube)
-            assert all(a<b for a,b in zip(cube['from'],cube['to']))
-            if 'rotation' in cube:
-                assert cube['rotation']['angle'] in [-45,-22.5,0,22.5,45]
-            assert len(cube['faces'])==6
-            cubes+=1
-    print(f'PASS: {len(names)} runtime bones, {len(models)} model variants, {cubes} valid cubes, every texture resolved, no vanilla overrides')
+    sins=('wrath','pride','greed','lust','envy','gluttony','sloth')
+    for sin in sins:
+        for name in models:
+            item=json.loads(z.read(f'assets/sevensins/items/{sin}/{name}.json'))
+            assert item['model']['model']==f'sevensins:{sin}/{name}'
+            model=json.loads(z.read(f'assets/sevensins/models/{sin}/{name}.json'))
+            assert model['display']['fixed']['rotation']==[0,180,0], 'Item renderer flip must be compensated'
+            for ref in model['textures'].values():
+                ns,path=ref.split(':')
+                png=z.read(f'assets/{ns}/textures/{path}.png')
+                assert png.startswith(b'\x89PNG\r\n\x1a\n')
+            for cube in model['elements']:
+                assert all(-16<=v<=32 for p in ('from','to') for v in cube[p]), (sin,name,cube)
+                assert all(a<b for a,b in zip(cube['from'],cube['to']))
+                if 'rotation' in cube:
+                    assert cube['rotation']['angle'] in [-45,-22.5,0,22.5,45]
+                assert len(cube['faces'])==6
+                cubes+=1
+    print(f'PASS: {len(sins)} bosses, {len(names)} runtime bones each, {len(models)*len(sins)} model variants, {cubes} valid cubes, every texture resolved, no vanilla overrides')
 record=json.loads((root/'art/pack-hashes.json').read_text())
 assert record['java_sha1']==hashlib.sha1(pack.read_bytes()).hexdigest()
 print('PASS: pack checksum matches manifest')

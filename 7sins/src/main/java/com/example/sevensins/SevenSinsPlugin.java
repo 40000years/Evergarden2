@@ -43,11 +43,11 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             tremor.tick();
             for (WrathBoss boss : List.copyOf(bosses.values())) {
                 try { boss.tick(); }
-                catch (RuntimeException error) { getLogger().log(java.util.logging.Level.SEVERE, "Wrath encounter failed", error); boss.remove(); }
+                catch (RuntimeException error) { getLogger().log(java.util.logging.Level.SEVERE, boss.name() + " encounter failed", error); boss.remove(); }
                 if (boss.state() == WrathBoss.State.REMOVED) bosses.remove(boss.entity().getUniqueId());
             }
         }, 2, 2);
-        getLogger().info("7sins: Wrath, the Ashen Executioner, is ready. /7sins spawn wrath");
+        getLogger().info("7sins: seven bosses are ready. /7sins spawn <sin>");
     }
 
     @Override
@@ -64,21 +64,23 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     }
     NamespacedKey entityKey() { return entityKey; }
     public Collection<WrathBoss> bosses() { return List.copyOf(bosses.values()); }
-    public WrathBoss spawnWrath(Location location) {
+    public WrathBoss spawnWrath(Location location) { return spawnSin(location, SinType.WRATH); }
+    public WrathBoss spawnSin(Location location, SinType type) {
+        Objects.requireNonNull(type, "sin type");
         int limit = Math.max(1, Math.min(10, getConfig().getInt("wrath.max-active", 3)));
         if (bosses.size() >= limit) throw new IllegalStateException("จำนวนบอสเต็มแล้ว (" + limit + ")");
         for (WrathBoss boss : bosses.values()) if (boss.home().getWorld().equals(location.getWorld())
                 && boss.home().distanceSquared(location) < 64 * 64) throw new IllegalStateException("มีบอสอยู่ใกล้เกินไป กรุณาห่างออกไป 64 บล็อก");
-        WrathBoss boss = new WrathBoss(this, location); bosses.put(boss.entity().getUniqueId(), boss); return boss;
+        WrathBoss boss = new WrathBoss(this, location, type); bosses.put(boss.entity().getUniqueId(), boss); return boss;
     }
     void refresh(Player player) { bosses.values().forEach(b -> b.refresh(player)); }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         String action = args.length == 0 ? "help" : args[0].toLowerCase(Locale.ROOT);
         if (action.equals("help")) {
-            sender.sendMessage("§c7sins · WRATH — THE ASHEN EXECUTIONER");
+            sender.sendMessage("§c7sins · บอสเจ็ดบาป");
             sender.sendMessage("§7/7sins pack §fรับแพ็กโมเดลบอส | §7/7sins list §fดูบอสที่กำลังทำงาน");
-            if (sender.hasPermission("7sins.admin")) sender.sendMessage("§7/7sins spawn wrath §fเรียกบอสด้านหน้า | §7/7sins remove §fลบบอสที่ใกล้ที่สุด");
+            if (sender.hasPermission("7sins.admin")) sender.sendMessage("§7/7sins spawn <wrath|pride|greed|lust|envy|gluttony|sloth> §fเรียกบอสด้านหน้า | §7/7sins remove §fลบบอสที่ใกล้ที่สุด");
             sender.sendMessage("§6ฟันกวาด: อ้อมหลัง | ทุบพื้น: กระโดด | พุ่งชน: ล่อชนกำแพง | วงไฟ: เข้าวงใน");
             sender.sendMessage("§6กระทืบเท้า (โจมตีปกติ): กระโดดหรือถอย | ดาบจากพื้น: หลบวงแดง");
             sender.sendMessage("§cตอนเกิดระเบิด 200 ดาเมจในระยะ 40 บล็อก | โดนค้อน: ตรึง 1 วิ แล้วช้า 80% อีก 2 วิ");
@@ -88,7 +90,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
         }
         if (action.equals("list")) {
             sender.sendMessage("§6[7sins] บอสที่กำลังทำงาน: " + bosses.size());
-            for (WrathBoss b : bosses.values()) sender.sendMessage("§7Wrath · " + b.home().getWorld().getName() + " "
+            for (WrathBoss b : bosses.values()) sender.sendMessage("§7" + b.name() + " · " + b.home().getWorld().getName() + " "
                     + b.home().getBlockX() + " " + b.home().getBlockY() + " " + b.home().getBlockZ()
                     + " · HP " + Math.round(b.health()) + " · " + b.state());
             return true;
@@ -102,10 +104,12 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
                     && b.entity().getLocation().distanceSquared(player.getLocation()) <= 64 * 64)
                     .min(Comparator.comparingDouble(b -> b.entity().getLocation().distanceSquared(player.getLocation()))).orElse(null);
             if (nearest == null) player.sendMessage("§7ไม่มีบอสในระยะ 64 บล็อก");
-            else { nearest.remove(); bosses.remove(nearest.entity().getUniqueId()); player.sendMessage("§6ลบ Wrath แล้ว"); }
+            else { nearest.remove(); bosses.remove(nearest.entity().getUniqueId()); player.sendMessage("§6ลบ " + nearest.name() + " แล้ว"); }
             return true;
         }
-        if (args.length > 2 || args.length == 2 && !args[1].equalsIgnoreCase("wrath")) return false;
+        if (args.length > 2) return false;
+        SinType type = args.length < 2 ? SinType.WRATH : SinType.parse(args[1]);
+        if (type == null) { player.sendMessage("§cเลือกบาป: wrath, pride, greed, lust, envy, gluttony, sloth"); return true; }
         WrathSpawn.Result spawn = WrathSpawn.find(player.getLocation(),wrathScale());
         if (spawn.location() == null) {
             player.sendMessage("§c" + switch(spawn.failure()) {
@@ -116,14 +120,14 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             return true;
         }
         try {
-            spawnWrath(spawn.location()); player.sendMessage("§cWRATH ถูกปลุกแล้ว! §cระเบิดตอนเกิด 200 ดาเมจ! §7จากนั้นเริ่มไล่ใน 4 วินาที — ใช้ Survival เพื่อเข้าต่อสู้");
+            spawnSin(spawn.location(), type); player.sendMessage("§c" + type.title().toUpperCase(Locale.ROOT) + " ถูกปลุกแล้ว! §cระเบิดตอนเกิด 200 ดาเมจ! §7จากนั้นเริ่มไล่ใน 4 วินาที — ใช้ Survival เพื่อเข้าต่อสู้");
         } catch (IllegalStateException error) { player.sendMessage("§c[7sins] " + error.getMessage()); }
         return true;
     }
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> choices = args.length == 1 ? sender.hasPermission("7sins.admin")
                 ? List.of("spawn", "remove", "list", "pack", "help") : List.of("list", "pack", "help")
-                : args.length == 2 && args[0].equalsIgnoreCase("spawn") ? List.of("wrath") : List.of();
+                : args.length == 2 && args[0].equalsIgnoreCase("spawn") ? Arrays.stream(SinType.values()).map(SinType::id).toList() : List.of();
         String prefix = args.length == 0 ? "" : args[args.length - 1].toLowerCase(Locale.ROOT);
         return choices.stream().filter(s -> s.startsWith(prefix)).toList();
     }

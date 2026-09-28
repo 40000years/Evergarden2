@@ -202,6 +202,20 @@ public final class WrathProbe extends JavaPlugin {
         // Allow manager to retire removed boss before a new spawn.
         Field manager=SevenSinsPlugin.class.getDeclaredField("bosses");manager.setAccessible(true);
         ((Map<?,?>)manager.get(plugin)).clear();
+        for (SinType sin : SinType.values()) if (sin != SinType.WRATH) {
+            WrathBoss other=plugin.spawnSin(home,sin);
+            @SuppressWarnings("unchecked") List<Entity> pieces=(List<Entity>)call(other,"visuals",new Class<?>[0]);
+            check(other.type()==sin && other.health()==sin.health() && pieces.stream().filter(e->e instanceof ItemDisplay).count()==9,
+                    sin.title()+" spawns with comparable HP and nine articulated bones");
+            check(pieces.stream().filter(e->e instanceof ItemDisplay).map(e->((ItemDisplay)e).getItemStack().getItemMeta().getItemModel())
+                    .allMatch(id->id!=null && id.getKey().startsWith(sin.id()+"/")),sin.title()+" uses its own pack models");
+            other.tick();
+            other.entity().setHealth(512);other.tick();
+            check(other.enraged() && other.state()==WrathBoss.State.TRANSITION,sin.title()+" enters a protected second phase");
+            other.remove();
+            check(!other.entity().isValid()&&pieces.stream().noneMatch(Entity::isValid),sin.title()+" cleans all encounter entities");
+            ((Map<?,?>)manager.get(plugin)).clear();
+        }
         boss=plugin.spawnWrath(home);
         world.getChunkAt(10,0);
         boolean teleported=boss.entity().teleport(home.clone().add(160,0,0)); boss.tick();

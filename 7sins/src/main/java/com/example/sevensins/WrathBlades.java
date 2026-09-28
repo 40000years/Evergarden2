@@ -76,11 +76,11 @@ final class WrathBlades {
         try {
             fang=floor.getWorld().spawn(floor,EvokerFangs.class,e->{
                 e.setOwner(boss.entity());e.setAttackDelay(Math.max(0,trigger-8));e.setVisibleByDefault(false);e.setPersistent(false);
-                e.getPersistentDataContainer().set(plugin.entityKey(),PersistentDataType.STRING,"wrath-fang");
+                e.getPersistentDataContainer().set(plugin.entityKey(),PersistentDataType.STRING,boss.type().id()+"-fang");
             });
             Location buried=floor.clone().add(0,-3,0);buried.setYaw(0);buried.setPitch(0);
             ItemStack item=new ItemStack(Material.PAPER);var meta=item.getItemMeta();
-            meta.setItemModel(new NamespacedKey("sevensins","wrath/ground_sword"));item.setItemMeta(meta);
+            meta.setItemModel(new NamespacedKey("sevensins",boss.type().id()+"/ground_sword"));item.setItemMeta(meta);
             sword=floor.getWorld().spawn(buried,ItemDisplay.class,e->{
                 e.setItemStack(item);e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
                 e.setPersistent(false);e.setVisibleByDefault(false);e.setInvulnerable(true);
@@ -117,7 +117,7 @@ final class WrathBlades {
                 if(s.age%4==0) for(int i=0;i<16;i++) {
                     double angle=i*Math.PI/8;
                     s.floor.getWorld().spawnParticle(Particle.DUST,s.floor.clone().add(Math.cos(angle)*1.25,0.1,Math.sin(angle)*1.25),1,
-                            0,0,0,0,new Particle.DustOptions(Color.fromRGB(245,40,40),1.2f));
+                            0,0,0,0,new Particle.DustOptions(boss.type().color(),1.2f));
                 }
             } else {
                 double height=Math.min(1,(s.age-riseAt)/8.0);

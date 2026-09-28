@@ -9,6 +9,8 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import java.util.*;
 
@@ -17,6 +19,7 @@ public final class WrathBoss {
     public enum State { ARRIVAL, CHASE, WINDUP, STRIKE, CHARGE, RECOVERY, STAGGER, TRANSITION, ABSORB, REMOVED }
     public enum Attack { SWEEP, SLAM, CHARGE, RING, BLADES, STOMP }
     private final SevenSinsPlugin plugin;
+    private final SinType type;
     private final Husk base;
     private final Location home;
     private final WrathModel model;
@@ -41,17 +44,19 @@ public final class WrathBoss {
     private boolean hitAccepted;
     private double acceptedDamage;
 
-    WrathBoss(SevenSinsPlugin plugin, Location home) {
+    WrathBoss(SevenSinsPlugin plugin, Location home) { this(plugin, home, SinType.WRATH); }
+    WrathBoss(SevenSinsPlugin plugin, Location home, SinType type) {
+        this.type = type;
         this.plugin = plugin; this.home = home.clone(); anchor = home.clone();
         scale = plugin.wrathScale();
         absorptionDuration = (int)(bounded(plugin.getConfig().getDouble("wrath.phase-two-absorption-seconds",15),1,60,15)*20);
-        maxHealth = bounded(plugin.getConfig().getDouble("wrath.health", 1800), 40, 100000, 1800);
+        maxHealth = type == SinType.WRATH ? bounded(plugin.getConfig().getDouble("wrath.health", 1800), 40, 100000, 1800) : type.health();
         // Minecraft clamps living-entity health to 1024. Scale damage while showing encounter HP.
         nativeMaxHealth = Math.min(maxHealth, 1024);
         incomingMultiplier = bounded(plugin.getConfig().getDouble("wrath.incoming-damage-multiplier", 0.7), 0.1, 2, 0.7);
         radius = bounded(plugin.getConfig().getDouble("wrath.arena-radius", 140), 12, 256, 140);
-        damageMultiplier = bounded(plugin.getConfig().getDouble("wrath.damage-multiplier", 3), 0.1, 30, 3);
-        movementSpeed = bounded(plugin.getConfig().getDouble("wrath.movement-speed", 0.42), 0.1, 1, 0.42);
+        damageMultiplier = type == SinType.WRATH ? bounded(plugin.getConfig().getDouble("wrath.damage-multiplier", 3), 0.1, 30, 3) : type.damage();
+        movementSpeed = type == SinType.WRATH ? bounded(plugin.getConfig().getDouble("wrath.movement-speed", 0.42), 0.1, 1, 0.42) : type.speed();
         rangedDistance = bounded(plugin.getConfig().getDouble("wrath.ranged-trigger-distance", 20), 8, 64, 20);
         arrivalDamage = bounded(plugin.getConfig().getDouble("wrath.arrival.damage", 200), 0, 10000, 200);
         arrivalRadius = bounded(plugin.getConfig().getDouble("wrath.arrival.radius", 40), 1, radius, Math.min(40, radius));
@@ -67,21 +72,21 @@ public final class WrathBoss {
             e.getAttribute(Attribute.KNOCKBACK_RESISTANCE).setBaseValue(0.9);
             e.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(radius);
             e.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(0);
-            e.customName(Component.text("WRATH · THE ASHEN EXECUTIONER", NamedTextColor.DARK_RED));
+            e.customName(Component.text(type.display(), NamedTextColor.DARK_RED));
             e.setCustomNameVisible(false);
-            e.getPersistentDataContainer().set(plugin.entityKey(), PersistentDataType.STRING, "wrath");
+            e.getPersistentDataContainer().set(plugin.entityKey(), PersistentDataType.STRING, type.id());
         });
         if (!base.isValid()) throw new IllegalStateException("Boss spawn was rejected by the server.");
         // Spawn listeners can equip the Husk after the pre-spawn initializer has run.
         keepBaseHidden();
         WrathModel created;
-        try { created = new WrathModel(plugin, home, scale); }
+        try { created = new WrathModel(plugin, home, scale, type); }
         catch (RuntimeException error) { base.remove(); throw error; }
         model = created;
         blades = new WrathBlades(plugin, this);
-        bar = Bukkit.createBossBar("WRATH · THE ASHEN EXECUTIONER", BarColor.RED, BarStyle.SEGMENTED_10);
+        bar = Bukkit.createBossBar(type.display(), BarColor.RED, BarStyle.SEGMENTED_10);
         model.animate(home, 0, state, attack, 0, false, false);
-        ring(home, arrivalRadius, Color.fromRGB(255, 70, 20));
+        ring(home, arrivalRadius, type.color());
         sound(Sound.ENTITY_WITHER_SPAWN, 1.4f, 0.5f);
     }
 
@@ -95,6 +100,10 @@ public final class WrathBoss {
     public int rage() { return rage; }
     public double scale() { return scale; }
     public double arenaRadius() { return radius; }
+    public SinType type() { return type; }
+    String name() { return type.title(); }
+    String phase() { return state.name(); }
+    boolean removed() { return state == State.REMOVED; }
     public boolean absorbing() { return state == State.ABSORB && remaining > 0 && !base.isDead(); }
     public int absorptionSecondsLeft() { return absorbing() ? (remaining+19)/20 : 0; }
     public Location home() { return home.clone(); }
@@ -119,9 +128,15 @@ public final class WrathBoss {
         }
         for (Player p : List.copyOf(bar.getPlayers())) if (!nearby.contains(p.getUniqueId())) bar.removePlayer(p);
         bar.setProgress(Math.max(0, Math.min(1, base.getHealth() / nativeMaxHealth)));
-        bar.setColor(absorbing() ? BarColor.YELLOW : BarColor.RED);
-        bar.setTitle(absorbing() ? "WRATH · ดูดซับดาเมจเป็นเลือด — หยุดตี! " + absorptionSecondsLeft() + "s"
-                : "WRATH · " + (enraged ? "UNBOUND" : "THE ASHEN EXECUTIONER") + "  |  RAGE " + rage + "%");
+        bar.setColor(absorbing() ? BarColor.YELLOW : switch (type) {
+            case WRATH -> BarColor.RED;
+            case PRIDE, GREED -> BarColor.YELLOW;
+            case LUST -> BarColor.PINK;
+            case ENVY, GLUTTONY -> BarColor.GREEN;
+            case SLOTH -> BarColor.PURPLE;
+        });
+        bar.setTitle(absorbing() ? type.title().toUpperCase(Locale.ROOT) + " · ดูดซับดาเมจเป็นเลือด — หยุดตี! " + absorptionSecondsLeft() + "s"
+                : type.title().toUpperCase(Locale.ROOT) + " · " + (enraged ? "UNBOUND" : type.epithet().toUpperCase(Locale.ROOT)) + "  |  RAGE " + rage + "%");
         if (ticks % 20 == 0) rage = Math.max(0, rage - (state == State.STAGGER ? 8 : 2));
         if (players.isEmpty()) idle += 2; else idle = 0;
         if (idle >= idleLimit) { remove(); return; }
@@ -136,18 +151,18 @@ public final class WrathBoss {
         if (!enraged && base.getHealth() <= nativeMaxHealth * 0.5 + 0.0001) {
             enraged = true; rage = 0; change(State.TRANSITION, 60); halt();
             blades.clear();
-            announce("เกราะแตกแล้ว! WRATH เข้าสู่เฟสคลั่ง", NamedTextColor.RED);
+            announce("เกราะแตกแล้ว! " + type.title() + " เข้าสู่เฟสคลั่ง", NamedTextColor.RED);
             sound(Sound.ENTITY_WITHER_DEATH, 1.5f, 0.6f);
         }
         Player target = selectTarget(players);
         switch (state) {
             case ARRIVAL, TRANSITION -> {
-                halt(); ring(base.getLocation(), 2.5*scale, Color.fromRGB(255, 85, 25));
+                halt(); ring(base.getLocation(), 2.5*scale, type.color());
                 if ((remaining -= 2) <= 0) {
                     if (state == State.TRANSITION) {
                         anchor = base.getLocation().clone(); blades.clear();
                         change(State.ABSORB, absorptionDuration);
-                        announce("WRATH ดูดซับดาเมจเป็นเลือด! หยุดตี " + absorptionSecondsLeft() + " วินาที", NamedTextColor.YELLOW);
+                        announce(type.title() + " ดูดซับดาเมจเป็นเลือด! หยุดตี " + absorptionSecondsLeft() + " วินาที", NamedTextColor.YELLOW);
                         sound(Sound.BLOCK_BEACON_ACTIVATE,1.5f,0.6f);
                     } else { change(State.CHASE, 0); cooldown = 18; }
                 }
@@ -156,12 +171,12 @@ public final class WrathBoss {
                 halt();
                 if (base.getLocation().distanceSquared(anchor) > 0.01) base.teleport(anchor);
                 if (ticks % 4 == 0) {
-                    ring(anchor, 2.5*scale, Color.fromRGB(255, 220, 80));
+                    ring(anchor, 2.5*scale, type.color());
                     base.getWorld().spawnParticle(Particle.ENCHANT,anchor.clone().add(0,2*scale,0),20,0.6*scale,0.4*scale,0.6*scale,0.1);
                 }
                 if ((remaining -= 2) <= 0) {
                     change(State.CHASE,0); cooldown = 20; basicCooldown = 20;
-                    announce("ดูดซับสิ้นสุดแล้ว — โจมตี WRATH ได้!", NamedTextColor.AQUA);
+                    announce("ดูดซับสิ้นสุดแล้ว — โจมตี " + type.title() + " ได้!", NamedTextColor.AQUA);
                     sound(Sound.BLOCK_BEACON_DEACTIVATE,1.5f,0.8f);
                 }
             }
@@ -194,7 +209,7 @@ public final class WrathBoss {
         }
         if (ticks % 6 == 0) {
             base.getWorld().spawnParticle(Particle.SMOKE, base.getLocation().add(0, 2.4*scale, 0), 3, 0.4*scale, 0.2*scale, 0.4*scale, 0.01);
-            dust(base.getLocation().add(0, 2.0*scale, 0), enraged ? Color.fromRGB(255, 170, 35) : Color.fromRGB(225, 25, 40), 3);
+            dust(base.getLocation().add(0, 2.0*scale, 0), type.color(), 3);
         }
         model.animate(base.getLocation(), ticks, state, attack, total == 0 ? 0 : 1.0 - (double) remaining / total,
                 enraged, state == State.CHASE && target != null || state == State.CHARGE);
@@ -223,7 +238,7 @@ public final class WrathBoss {
         Player distant = pressureTarget(players);
         if (distant != null && pressureCooldown <= 0 && !blades.active()) {
             // This clock runs during attacks too: melee cooldowns cannot starve the ranged response.
-            Attack pressure = pressureIndex++ % 3 == 2 ? Attack.CHARGE : Attack.BLADES;
+            Attack pressure = pressureIndex++ % 3 == 2 && type != SinType.ENVY ? Attack.CHARGE : Attack.BLADES;
             pressureCooldown = enraged ? 80 : 120;
             startAttack(pressure, distant.getLocation());
             return;
@@ -231,8 +246,15 @@ public final class WrathBoss {
         double distance = target.getLocation().distanceSquared(base.getLocation());
         if (cooldown <= 0) {
             if (enraged && attackIndex % 4 == 3) startAttack(Attack.RING, target.getLocation());
-            else if (distance > 36 * scale * scale) startAttack(Attack.CHARGE, target.getLocation());
-            else startAttack(attackIndex % 3 == 1 ? Attack.SLAM : Attack.SWEEP, target.getLocation());
+            else if (distance > 36 * scale * scale) startAttack(type == SinType.ENVY ? Attack.BLADES : Attack.CHARGE, target.getLocation());
+            else startAttack(switch (type) {
+                case WRATH, PRIDE -> attackIndex % 3 == 1 ? Attack.SLAM : Attack.SWEEP;
+                case GREED -> attackIndex % 3 == 1 ? Attack.RING : Attack.SWEEP;
+                case LUST -> attackIndex % 3 == 1 ? Attack.RING : Attack.SWEEP;
+                case ENVY -> attackIndex % 3 == 1 ? Attack.BLADES : Attack.CHARGE;
+                case GLUTTONY -> attackIndex % 3 == 1 ? Attack.SLAM : Attack.RING;
+                case SLOTH -> attackIndex % 3 == 1 ? Attack.RING : Attack.SLAM;
+            }, target.getLocation());
             attackIndex++;
         } else if (basicCooldown <= 0 && distance <= 3.2 * 3.2 * scale * scale) startAttack(Attack.STOMP, target.getLocation());
     }
@@ -241,7 +263,7 @@ public final class WrathBoss {
         arrivalBlasted = true;
         Set<UUID> arrivals = new HashSet<>();
         sound(Sound.ENTITY_GENERIC_EXPLODE, 2, 0.5f);
-        ring(home, arrivalRadius, Color.fromRGB(255, 100, 20));
+        ring(home, arrivalRadius, type.color());
         base.getWorld().spawnParticle(Particle.EXPLOSION_EMITTER, home.clone().add(0, 1, 0), 1);
         for (Player player : players) {
             Vector d = player.getLocation().toVector().subtract(home.toVector());
@@ -286,15 +308,35 @@ public final class WrathBoss {
             case BLADES -> "ดาบประหารจากพื้น — ออกจากรอยแดง!";
             case STOMP -> "กระทืบเท้า — กระโดดหรือถอยออก!";
         };
+        if (type != SinType.WRATH) cue = switch (attack) {
+            case SWEEP -> type.title() + " · ฟันกวาด — อ้อมหลังหรือถอยออก!";
+            case SLAM -> type.title() + " · ทุบพื้น — กระโดดตอนกระแทก!";
+            case CHARGE -> type.title() + " · พุ่งชน — หลบด้านข้าง!";
+            case BLADES -> type.title() + " · ดาบผุดจากพื้น — ออกจากรอยเตือน!";
+            case STOMP -> type.title() + " · กระทืบเท้า — กระโดดหรือถอย!";
+            case RING -> switch (type) {
+                case GREED -> "GREED · แม่เหล็กทอง — วงกำลังดึงเข้ากลาง!";
+                case GLUTTONY -> "GLUTTONY · ปากเหว — หนีแรงดูดออกนอกวง!";
+                case SLOTH -> "SLOTH · วงเวลาเชื่องช้า — ออกนอกวง!";
+                case LUST -> "LUST · วงหนามโลหิต — เข้าวงในหรือหนีออก!";
+                default -> type.title() + " · วงพิพากษา — เข้าวงในหรือหนีออก!";
+            };
+        };
         announce(cue, NamedTextColor.GOLD);
         sound(attack == Attack.STOMP ? Sound.BLOCK_NETHERITE_BLOCK_STEP : Sound.ENTITY_IRON_GOLEM_REPAIR, 1, 0.6f);
     }
 
     private void warning() {
         if (ticks % 4 != 0) return;
-        Color color = Color.fromRGB(255, 55, 35);
+        Color color = type.color();
+        if (attack == Attack.RING && (type == SinType.GREED || type == SinType.GLUTTONY) && ticks % 8 == 0)
+            for (Player player : participants()) {
+                Vector pull = anchor.toVector().subtract(player.getLocation().toVector()).setY(0);
+                if (pull.lengthSquared() < 16 * scale * scale && pull.lengthSquared() > 4)
+                    player.setVelocity(player.getVelocity().add(pull.normalize().multiply(type == SinType.GLUTTONY ? 0.35 : 0.22)));
+            }
         switch (attack) {
-            case STOMP -> ring(anchor, 3.2*scale, Color.fromRGB(255, 175, 65));
+            case STOMP -> ring(anchor, 3.2*scale, type.color());
             case SLAM -> { ring(anchor, 6.5*scale, color); ring(anchor, 3.25*scale, color); }
             case RING -> { ring(anchor, 3*scale, Color.fromRGB(90, 220, 180)); ring(anchor, 9*scale, color); ring(anchor, 6*scale, color); }
             case SWEEP -> {
@@ -333,8 +375,8 @@ public final class WrathBoss {
             };
             if (inside && clearSight(p, anchor)) hurt(p, attack == Attack.STOMP ? 10 : attack == Attack.SWEEP ? 18 : attack == Attack.SLAM ? 36 : 22, attack == Attack.SLAM ? 0.45 : 0.2);
         }
-        if (attack == Attack.SLAM) ring(anchor, 6.5*scale, Color.fromRGB(255, 190, 75));
-        if (attack == Attack.RING) { ring(anchor, 3*scale, Color.fromRGB(255, 150, 40)); ring(anchor, 9*scale, Color.fromRGB(255, 150, 40)); }
+        if (attack == Attack.SLAM) ring(anchor, 6.5*scale, type.color());
+        if (attack == Attack.RING) { ring(anchor, 3*scale, type.color()); ring(anchor, 9*scale, type.color()); }
     }
 
     private void charge(List<Player> players) {
@@ -390,6 +432,31 @@ public final class WrathBoss {
             Vector push = player.getLocation().toVector().subtract(base.getLocation().toVector()).setY(0);
             if (push.lengthSquared() > 0.001) player.setVelocity(push.normalize().multiply(0.65).setY(lift));
             if (tremor) plugin.tremor().apply(player, base.getUniqueId());
+            if (breakArmor) sinHit(player);
+        }
+    }
+    private void sinHit(Player player) {
+        switch (type) {
+            case WRATH -> {}
+            case PRIDE -> player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 80, 1));
+            case GREED -> {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 100, 1));
+                Vector toward = base.getLocation().toVector().subtract(player.getLocation().toVector()).setY(0);
+                if (toward.lengthSquared() > 1) player.setVelocity(toward.normalize().multiply(0.75).setY(0.15));
+            }
+            case LUST -> {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 80, 1));
+                base.setHealth(Math.min(nativeMaxHealth, base.getHealth() + 15 * nativeMaxHealth / maxHealth));
+            }
+            case ENVY -> player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 45, 0));
+            case GLUTTONY -> {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 140, 2));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 1));
+            }
+            case SLOTH -> {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 100, 3));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 100, 2));
+            }
         }
     }
     void observeHit(Player player, boolean accepted, double damage) {
@@ -399,7 +466,7 @@ public final class WrathBoss {
 
     void stagger() {
         halt(); rage = 0; change(State.STAGGER, 80);
-        announce("WRATH เสียหลัก! โจมตีแกนอก — ดาเมจเพิ่ม 50%", NamedTextColor.AQUA);
+        announce(type.title() + " เสียหลัก! โจมตีแกนอก — ดาเมจเพิ่ม 50%", NamedTextColor.AQUA);
         sound(Sound.BLOCK_ANVIL_LAND, 1.4f, 0.6f);
     }
     double damageScale() { return state == State.ARRIVAL || state == State.TRANSITION ? 0 : incomingMultiplier * nativeMaxHealth / maxHealth * (state == State.STAGGER ? 1.5 : 1); }
@@ -449,10 +516,10 @@ public final class WrathBoss {
         if (killer != null) {
             ItemStack reward = new ItemStack(Material.NETHER_STAR);
             var meta = reward.getItemMeta();
-            meta.displayName(Component.text("หัวใจแห่งโทสะ · Wrath Heart", NamedTextColor.RED));
-            meta.lore(List.of(Component.text("หลักฐานชัยชนะเหนือ The Ashen Executioner", NamedTextColor.GRAY),
+            meta.displayName(Component.text("หัวใจแห่ง" + type.title() + " · " + type.title() + " Heart", NamedTextColor.RED));
+            meta.lore(List.of(Component.text("หลักฐานชัยชนะเหนือ " + type.epithet(), NamedTextColor.GRAY),
                     Component.text("วัตถุดิบของ 7sins — ยังไม่มีสูตรคราฟต์", NamedTextColor.DARK_GRAY)));
-            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "wrath_heart"), PersistentDataType.BYTE, (byte) 1);
+            meta.getPersistentDataContainer().set(new NamespacedKey(plugin, type.id() + "_heart"), PersistentDataType.BYTE, (byte) 1);
             reward.setItemMeta(meta); base.getWorld().dropItemNaturally(base.getLocation(), reward);
             sound(Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.2f, 0.8f);
         }

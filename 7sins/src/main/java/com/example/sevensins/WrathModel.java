@@ -14,6 +14,7 @@ import java.util.*;
 final class WrathModel {
     private record Bone(ItemDisplay entity, String id, float x, float y, float z) {}
     private final SevenSinsPlugin plugin;
+    private final SinType type;
     private final float scale;
     private final List<Bone> bones = new ArrayList<>();
     private ArmorStand fallback;
@@ -24,8 +25,10 @@ final class WrathModel {
     private float walkingWeight;
     private final Map<String, WrathAnimation.Pose> rendered = new HashMap<>();
 
-    WrathModel(SevenSinsPlugin plugin, Location at, double scale) {
+    WrathModel(SevenSinsPlugin plugin, Location at, double scale) { this(plugin, at, scale, SinType.WRATH); }
+    WrathModel(SevenSinsPlugin plugin, Location at, double scale, SinType type) {
         this.plugin = plugin;
+        this.type = type;
         this.scale = (float)scale;
         heading = at.getYaw();
         try {
@@ -52,18 +55,35 @@ final class WrathModel {
             e.setVisibleByDefault(false); e.setPersistent(false); e.setGravity(false);
             e.setMarker(true); e.setVisible(false); e.setInvulnerable(true); e.setSilent(true); e.setArms(true);
             e.getAttribute(Attribute.SCALE).setBaseValue(1.5*this.scale);
-            e.getEquipment().setHelmet(new ItemStack(Material.WITHER_SKELETON_SKULL));
-            e.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
+            e.getEquipment().setHelmet(new ItemStack(switch(type) {
+                case WRATH, LUST -> Material.WITHER_SKELETON_SKULL;
+                case PRIDE, GREED -> Material.GOLDEN_HELMET;
+                case ENVY, GLUTTONY -> Material.ZOMBIE_HEAD;
+                case SLOTH -> Material.SKELETON_SKULL;
+            }));
+            e.getEquipment().setChestplate(new ItemStack(switch(type) {
+                case PRIDE, GREED -> Material.GOLDEN_CHESTPLATE;
+                case ENVY -> Material.DIAMOND_CHESTPLATE;
+                case GLUTTONY -> Material.IRON_CHESTPLATE;
+                default -> Material.NETHERITE_CHESTPLATE;
+            }));
             e.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
             e.getEquipment().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
-            e.getEquipment().setItemInMainHand(new ItemStack(Material.MACE));
+            e.getEquipment().setItemInMainHand(new ItemStack(switch(type) {
+                case WRATH, SLOTH -> Material.MACE;
+                case PRIDE -> Material.GOLDEN_SWORD;
+                case GREED -> Material.GOLDEN_AXE;
+                case LUST -> Material.TRIDENT;
+                case ENVY -> Material.DIAMOND_SWORD;
+                case GLUTTONY -> Material.IRON_AXE;
+            }));
             e.getPersistentDataContainer().set(plugin.entityKey(), org.bukkit.persistence.PersistentDataType.STRING, "visual");
         });
     }
 
     private void add(Location at, String id, float x, float y, float z) {
         ItemStack item = new ItemStack(Material.PAPER);
-        var meta = item.getItemMeta(); meta.setItemModel(new NamespacedKey("sevensins", "wrath/" + id)); item.setItemMeta(meta);
+        var meta = item.getItemMeta(); meta.setItemModel(new NamespacedKey("sevensins", type.id() + "/" + id)); item.setItemMeta(meta);
         ItemDisplay display = at.getWorld().spawn(at, ItemDisplay.class, e -> {
             e.setVisibleByDefault(false); e.setPersistent(false); e.setInvulnerable(true);
             e.setItemStack(item); e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
@@ -103,7 +123,7 @@ final class WrathModel {
             unbound = enraged;
             for (Bone bone : bones) if (Set.of("body", "head", "cleaver", "core").contains(bone.id)) {
                 ItemStack item = bone.entity.getItemStack(); var meta = item.getItemMeta();
-                meta.setItemModel(new NamespacedKey("sevensins", "wrath/" + bone.id + (enraged ? "_unbound" : "")));
+                meta.setItemModel(new NamespacedKey("sevensins", type.id() + "/" + bone.id + (enraged ? "_unbound" : "")));
                 item.setItemMeta(meta); bone.entity.setItemStack(item);
             }
         }

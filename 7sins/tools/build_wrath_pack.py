@@ -9,94 +9,17 @@ from pathlib import Path
 import struct
 import zipfile
 import zlib
+import boss_designs as designs
 
 ROOT = Path(__file__).resolve().parents[1]
 PACK = ROOT / 'art/java'
-PALETTE = {
-    'armor': (30, 33, 44), 'edge': (78, 83, 98), 'bone': (192, 176, 151),
-    'coal': (12, 11, 19), 'ember': (237, 47, 31), 'gold': (165, 96, 51),
-    'hot': (255, 179, 63), 'cloth': (73, 16, 29),
-}
+PALETTE = designs.PALETTES['wrath']
 PARTS = {}
 
 
-def box(part, a, b, material, rotation=None):
-    cube = {'from': list(a), 'to': list(b), 'material': material}
-    if rotation:
-        cube['rotation'] = rotation
-    PARTS.setdefault(part, []).append(cube)
-
-
 def geometry():
-    # Coordinates use the item display center at (8,8,8); 16 pixels = one block.
-    box('body', (-2, 1, 3), (18, 17, 13), 'armor')
-    box('body', (-4, 13, 1), (20, 20, 15), 'edge')
-    box('body', (1, -1, 4), (15, 3, 13), 'coal')
-    box('body', (-3, -5, 4), (19, 1, 14), 'armor')
-    box('body', (-2, -5, 2), (4, 5, 5), 'cloth')
-    box('body', (12, -5, 2), (18, 5, 5), 'cloth')
-    # Six ivory ribs frame the recessed, burning heart.
-    for y, width in [(5, 7), (9, 8), (13, 9)]:
-        box('body', (8-width, y, 0), (6, y+2, 3), 'bone')
-        box('body', (10, y, 0), (8+width, y+2, 3), 'bone')
-    box('body', (7, 1, 0), (9, 5, 3), 'bone')
-    for x in (-1, 16):
-        for y in (4, 8, 12):
-            box('body', (x, y, 12), (x+2, y+2, 15), 'gold')
-    # A scorched faceplate, red slit eyes and hanging teeth.
-    box('head', (2, 2, 3), (14, 14, 13), 'coal')
-    box('head', (1, 8, 1), (15, 14, 5), 'armor')
-    box('head', (2, 6, 1), (6, 8, 2), 'ember')
-    box('head', (10, 6, 1), (14, 8, 2), 'ember')
-    box('head', (7, 4, 0), (9, 10, 3), 'edge')
-    box('head', (2, 1, 1), (14, 4, 4), 'bone')
-    for x in (3, 6, 9, 12):
-        box('head', (x, -1, 1), (x+1, 2, 3), 'bone')
-    for side in (-1, 1):
-        x = 8 + side * 8
-        box('head', (x-2, 10, 6), (x+2, 18, 10), 'bone',
-            {'origin': [x, 10, 8], 'axis': 'z', 'angle': -side*22.5})
-        x = 8 + side * 11
-        box('head', (x-1.5, 16, 6.5), (x+1.5, 24, 9.5), 'coal',
-            {'origin': [x, 16, 8], 'axis': 'z', 'angle': side*22.5})
-    # Uneven spiked pauldrons and long plated forearms, each pivoted at shoulder.
-    for part, side in [('left_arm', 1), ('right_arm', -1)]:
-        box(part, (2, -8, 4), (14, 13, 13), 'armor')
-        box(part, (0, 9, 2), (16, 16, 15), 'edge')
-        box(part, (3, -12, 3), (13, -5, 14), 'coal')
-        for x in (2, 10):
-            box(part, (x, 15, 5), (x+3, 23 if side == -1 else 20, 9), 'bone',
-                {'origin': [x+1.5, 15, 7], 'axis': 'z', 'angle': -side*22.5})
-        box(part, (4, -3, 2), (12, 1, 4), 'ember')
-        for y in (-7, 2, 6):
-            box(part, (1, y, 3), (15, y+1, 5), 'gold')
-    for part in ('left_leg', 'right_leg'):
-        box(part, (3, -3, 4), (13, 16, 13), 'armor')
-        box(part, (1, -6, -1), (15, 0, 14), 'coal')
-        box(part, (2, 5, 1), (14, 10, 5), 'edge')
-        box(part, (6, 0, 2), (10, 5, 4), 'gold')
-        box(part, (5, 8, 0), (11, 10, 1), 'ember')
-    # War hammer: grip at (8,8,8), long haft and a broad striking head above it.
-    # Keep the legacy 'cleaver' item ID so existing model mappings remain valid.
-    box('cleaver', (6.5, -12, 6.5), (9.5, 26, 9.5), 'coal')
-    for y in (-8, -3, 2, 7, 12, 17):
-        box('cleaver', (6, y, 6), (10, y+1.5, 10), 'gold')
-    box('cleaver', (-5, 23, 1), (21, 32, 15), 'armor')
-    box('cleaver', (-8, 22, 0), (-4, 32, 16), 'edge')
-    box('cleaver', (20, 22, 0), (24, 32, 16), 'edge')
-    box('cleaver', (-8, 23, -1), (-4, 31, 1), 'ember')
-    box('cleaver', (20, 23, -1), (24, 31, 1), 'ember')
-    box('cleaver', (5, 24, -1), (11, 30, 1), 'hot')
-    box('cleaver', (5, -14, 5), (11, -11, 11), 'bone')
-    # The exposed red heart is a full-bright item bone.
-    box('core', (4, 4, 5), (12, 12, 11), 'coal')
-    box('core', (5, 5, 3), (11, 11, 6), 'ember',
-        {'origin': [8, 8, 4.5], 'axis': 'z', 'angle': 45})
-    box('core', (6.5, 6.5, 2), (9.5, 9.5, 4), 'hot')
-    # Floating, broken iron halo; independent rotation makes it feel possessed.
-    for x, z in [(0, 4), (12, 4), (4, 0), (4, 12)]:
-        box('crown', (x, 7, z), (x+4, 9, z+4), 'gold')
-        box('crown', (x+1, 9, z+1), (x+3, 14, z+3), 'ember')
+    PARTS.clear()
+    PARTS.update(designs.geometry('wrath', variants=False))
 
 
 
@@ -115,120 +38,18 @@ def write_json(path, data):
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2)+'\n', encoding='utf8')
 
 
-SIN_PALETTES = {
-    'pride': {'armor':(62,49,91),'edge':(171,133,57),'bone':(243,217,145),'coal':(24,18,40),'ember':(252,202,60),'gold':(249,233,146),'hot':(255,248,202),'cloth':(83,38,100)},
-    'greed': {'armor':(45,74,62),'edge':(160,117,35),'bone':(218,198,113),'coal':(16,35,30),'ember':(227,174,48),'gold':(251,210,77),'hot':(255,246,147),'cloth':(41,103,73)},
-    'lust': {'armor':(70,27,61),'edge':(151,57,100),'bone':(234,182,203),'coal':(30,13,38),'ember':(223,43,99),'gold':(211,130,163),'hot':(255,150,201),'cloth':(111,25,70)},
-    'envy': {'armor':(26,59,68),'edge':(60,146,121),'bone':(169,225,203),'coal':(10,28,37),'ember':(58,222,156),'gold':(102,198,174),'hot':(182,255,219),'cloth':(27,86,79)},
-    'gluttony': {'armor':(55,66,37),'edge':(112,140,59),'bone':(217,219,148),'coal':(22,32,25),'ember':(130,209,67),'gold':(180,151,65),'hot':(218,255,112),'cloth':(72,83,38)},
-    'sloth': {'armor':(57,48,76),'edge':(121,99,150),'bone':(192,177,221),'coal':(24,22,38),'ember':(143,99,207),'gold':(160,131,189),'hot':(218,183,255),'cloth':(66,53,88)},
-}
+SIN_PALETTES = {sin: palette for sin, palette in designs.PALETTES.items() if sin != 'wrath'}
 
 
 def sin_geometry(sin):
-    """Nine bones with sin-specific silhouettes; dimensions match the animated pivots."""
-    parts = {}
-    def add(part, a, b, material, rotation=None):
-        cube = {'from':list(a), 'to':list(b), 'material':material}
-        if rotation: cube['rotation'] = rotation
-        parts.setdefault(part, []).append(cube)
-    wide = sin in ('greed','gluttony','sloth')
-    shoulder = -6 if wide else -3
-    add('body',(shoulder,0,3),(16-shoulder,17,14),'armor')
-    add('body',(shoulder-2,13,2),(18-shoulder,19,15),'edge')
-    add('body',(0,-4,4),(16,2,14),'cloth')
-    add('body',(5,4,0),(11,12,4),'coal')
-    for y in (4,8,12):
-        add('body',(shoulder,y,1),(3,y+1.5,4),'bone')
-        add('body',(13,y,1),(16-shoulder,y+1.5,4),'bone')
-    add('head',(1,1,2),(15,15,14),'coal')
-    add('head',(0,7,1),(16,15,6),'armor')
-    add('head',(2,6,0),(6,9,2),'ember')
-    add('head',(10,6,0),(14,9,2),'ember')
-    add('head',(3,1,0),(13,5,4),'bone')
-    for part in ('left_arm','right_arm'):
-        add(part,(2,-10,3),(14,13,14),'armor')
-        add(part,(0,10,1),(16,17,15),'edge')
-        add(part,(4,-13,4),(12,-9,13),'coal')
-        add(part,(2,-4,1),(14,-1,4),'ember')
-    for part in ('left_leg','right_leg'):
-        add(part,(3,-4,3),(13,16,13),'armor')
-        add(part,(1,-7,-1),(15,0,15),'coal')
-        add(part,(3,5,0),(13,9,4),'edge')
-    add('core',(4,4,4),(12,12,11),'coal')
-    add('core',(6,5,1),(10,11,5),'ember')
-    add('core',(7,7,0),(9,9,2),'hot')
-    add('cleaver',(6,-13,6),(10,25,10),'coal')
-    add('cleaver',(5,-13,5),(11,-10,11),'bone')
-    if sin == 'pride':
-        # Tall seven-point crown and a royal scepter/halberd.
-        for x, height in ((-4,19),(0,24),(4,20),(7,28),(10,20),(14,24),(18,19)):
-            add('crown',(x,7,5),(x+2,height,10),'gold')
-        add('crown',(-5,6,4),(20,10,12),'edge')
-        add('body',(-6,-5,11),(22,5,15),'cloth')
-        add('cleaver',(-2,20,4),(18,29,12),'gold')
-        add('cleaver',(5,25,2),(11,31,14),'hot')
-    elif sin == 'greed':
-        # Coin vault chest, four clawed crown prongs and hooked chain mace.
-        for x in (-5,15):
-            add('body',(x,1,0),(x+6,18,6),'gold')
-            add('head',(x,5,0),(x+5,11,5),'gold')
-        for x in (-5,2,11,18): add('crown',(x,5,4),(x+4,18,12),'gold')
-        for y in (0,5,10,15,20): add('cleaver',(4,y,4),(12,y+2,12),'gold')
-        add('cleaver',(-4,22,0),(20,31,16),'edge')
-    elif sin == 'lust':
-        # Narrow, blade-like diadem, winged shoulders and a thorn spear.
-        add('crown',(-1,5,5),(2,29,9),'ember')
-        add('crown',(14,5,5),(17,29,9),'ember')
-        add('crown',(3,9,3),(13,14,11),'gold')
-        for part in ('left_arm','right_arm'):
-            add(part,(-3,8,10),(19,16,14),'cloth')
-        add('cleaver',(4,22,5),(12,32,11),'ember')
-        add('cleaver',(1,18,6),(15,21,10),'gold')
-    elif sin == 'envy':
-        # Asymmetric mirror horns and double-ended jagged blade.
-        add('crown',(-5,7,5),(1,27,11),'hot')
-        add('crown',(14,7,5),(19,20,11),'edge')
-        add('head',(-3,4,8),(3,15,14),'edge')
-        add('head',(13,1,7),(19,13,14),'hot')
-        add('cleaver',(3,19,4),(13,32,12),'hot')
-        add('cleaver',(3,-16,4),(13,-9,12),'ember')
-    elif sin == 'gluttony':
-        # Hinged-looking layered mouth, tusks and a forked eating implement.
-        add('head',(-5,-4,-2),(21,4,8),'bone')
-        add('head',(-4,4,-3),(20,8,4),'coal')
-        for x in (-3,2,7,12,17): add('head',(x,1,-4),(x+2,8,0),'bone')
-        add('body',(-8,-4,1),(24,9,13),'cloth')
-        for x in (-3,5,13,20): add('crown',(x,4,5),(x+3,18,10),'bone')
-        add('cleaver',(2,19,4),(5,32,10),'bone')
-        add('cleaver',(11,19,4),(14,32,10),'bone')
-    else:
-        # Sloth: fallen mantle, one shoulder hanging low, burial scythe.
-        add('crown',(-5,4,5),(20,9,13),'bone')
-        add('crown',(13,8,5),(18,20,11),'ember')
-        add('left_arm',(-5,-12,9),(17,8,15),'cloth')
-        add('body',(-8,-9,11),(21,3,15),'cloth')
-        add('cleaver',(-8,21,4),(21,27,11),'bone')
-        add('cleaver',(-9,16,5),(-5,28,10),'hot')
-    sword = [
-        {'from':[6,0,6],'to':[10,9,10],'material':'coal'},
-        {'from':[2,8,5],'to':[14,11,11],'material':'gold'},
-        {'from':[5,11,6],'to':[11,27,10],'material':'armor'},
-        {'from':[7,27,7],'to':[9,32,9],'material':'hot'},
-    ]
-    parts['ground_sword'] = sword
-    for bone in ('body','head','cleaver','core'):
-        parts[bone+'_unbound'] = [{**cube, 'material': 'hot' if cube['material']=='ember' else cube['material']} for cube in parts[bone]]
-    return parts
+    return designs.geometry(sin)
+
 
 
 def make_other_sins():
     for sin, palette in SIN_PALETTES.items():
         for material,color in palette.items():
-            pixels=[]
-            for y in range(16):
-                pixels.append([tuple(max(0,min(255,c+((x*17+y*31+x*y*3)%17)-8)) for c in color)+(255,) for x in range(16)])
-            png(PACK/f'assets/sevensins/textures/item/{sin}/{material}.png',pixels)
+            png(PACK/f'assets/sevensins/textures/item/{sin}/{material}.png',designs.texture(material,color))
         for name,cubes in sin_geometry(sin).items():
             elements=[]
             for cube in cubes:
@@ -236,7 +57,7 @@ def make_other_sins():
                 element['faces']={face:{'uv':[0,0,16,16],'texture':'#'+cube['material']} for face in ('north','south','east','west','up','down')}
                 elements.append(element)
             write_json(PACK/f'assets/sevensins/models/{sin}/{name}.json',{
-                'textures':{m:f'sevensins:item/{sin}/{m}' for m in palette},
+                'textures':{'particle':f'sevensins:item/{sin}/armor', **{m:f'sevensins:item/{sin}/{m}' for m in palette}},
                 'elements':elements,'gui_light':'front',
                 'display':{'fixed':{'rotation':[0,180,0],'translation':[0,0,0],'scale':[1,1,1]}}})
             write_json(PACK/f'assets/sevensins/items/{sin}/{name}.json',{
@@ -248,15 +69,7 @@ def make_pack():
                                           'min_format': [88, 0], 'max_format': [88, 0]}})
     make_other_sins()
     for material, color in PALETTE.items():
-        pixels = []
-        for y in range(16):
-            row = []
-            for x in range(16):
-                noise = ((x*17+y*31+x*y*3)%17)-8
-                highlight = 18 if (x+y)%11 == 0 else 0
-                row.append(tuple(max(0, min(255, c+noise+highlight)) for c in color)+(255,))
-            pixels.append(row)
-        png(PACK/f'assets/sevensins/textures/item/wrath/{material}.png', pixels)
+        png(PACK/f'assets/sevensins/textures/item/wrath/{material}.png',designs.texture(material,color))
     models = dict(PARTS)
     # A narrow executioner's sword with an upward point; separate from the boss bones.
     models['ground_sword'] = [
@@ -283,7 +96,7 @@ def make_pack():
             element['faces'] = {face: {'uv':[0,0,16,16], 'texture':'#'+cube['material']} for face in ('north','south','east','west','up','down')}
             elements.append(element)
         write_json(PACK/f'assets/sevensins/models/wrath/{name}.json', {
-            'textures': {m:f'sevensins:item/wrath/{m}' for m in PALETTE},
+            'textures': {'particle':'sevensins:item/wrath/armor', **{m:f'sevensins:item/wrath/{m}' for m in PALETTE}},
             'elements': elements, 'gui_light':'front',
             # Cancel the item renderer's Y flip so cubes, offsets and pivots agree.
             'display': {'fixed': {'rotation':[0,180,0], 'translation':[0,0,0], 'scale':[1,1,1]}}})
@@ -307,7 +120,9 @@ def make_pack():
             info.compress_type = zipfile.ZIP_DEFLATED
             archive.writestr(info, path.read_bytes())
     digest = hashlib.sha1(output.read_bytes()).hexdigest()
-    write_json(ROOT/'art/pack-hashes.json', {'java_sha1':digest, 'parts':len(PARTS), 'cubes':sum(map(len, PARTS.values())), 'resource_pack_format':[88,0]})
+    write_json(ROOT/'art/pack-hashes.json', {'java_sha1':digest, 'parts':len(PARTS), 'cubes':sum(map(len, PARTS.values())),
+        'bosses':{sin:{'bones':len(parts),'cubes':sum(map(len,parts.values()))} for sin in designs.PALETTES
+                  for parts in [designs.geometry(sin,variants=False)]}, 'resource_pack_format':[88,0]})
     print(f'{output}: {output.stat().st_size} bytes, SHA-1 {digest}')
 
 
@@ -319,6 +134,8 @@ PIVOTS = {'body':(0,1.65,0),'head':(0,2.85,0),'left_arm':(.8,2.3,0),'right_arm':
 def model_faces(yaw=-25):
     faces = []
     theta = math.radians(yaw)
+    pose_path=ROOT/'art/model-rest-pose.json'
+    poses=json.loads(pose_path.read_text()).get('wrath',{}).get('bones',{}) if pose_path.exists() else {}
     # Front is local -Z, exactly as the Java item models.
     def transform(point, cube, pivot, name):
         p = list(point)
@@ -329,10 +146,16 @@ def model_faces(yaw=-25):
             p[a]=origin[a]+u*math.cos(angle)-v*math.sin(angle)
             p[b]=origin[b]+u*math.sin(angle)+v*math.cos(angle)
         x,y,z = [(p[i]-8)/16 for i in range(3)]
-        rx,rz = {'cleaver':(-2.3,.35),'right_arm':(0,-.08),'left_arm':(0,-.06)}.get(name,(0,0))
-        x,y = x*math.cos(rz)-y*math.sin(rz), x*math.sin(rz)+y*math.cos(rz)
-        y,z = y*math.cos(rx)-z*math.sin(rx), y*math.sin(rx)+z*math.cos(rx)
-        x,y,z = x+pivot[0],y+pivot[1],z+pivot[2]
+        if name in poses:
+            a,b,c,w=poses[name]['rotation']
+            tx,ty,tz=2*(b*z-c*y),2*(c*x-a*z),2*(a*y-b*x)
+            x,y,z=x+w*tx+b*tz-c*ty,y+w*ty+c*tx-a*tz,z+w*tz+a*ty-b*tx
+            x,y,z=[v+o for v,o in zip((x,y,z),poses[name]['position'])]
+        else:
+            rx,rz = {'cleaver':(-2.3,.35),'right_arm':(0,-.08),'left_arm':(0,-.06)}.get(name,(0,0))
+            x,y = x*math.cos(rz)-y*math.sin(rz), x*math.sin(rz)+y*math.cos(rz)
+            y,z = y*math.cos(rx)-z*math.sin(rx), y*math.sin(rx)+z*math.cos(rx)
+            x,y,z = x+pivot[0],y+pivot[1],z+pivot[2]
         return x*math.cos(theta)-z*math.sin(theta), y, x*math.sin(theta)+z*math.cos(theta)
     for name, cubes in PARTS.items():
         for cube in cubes:

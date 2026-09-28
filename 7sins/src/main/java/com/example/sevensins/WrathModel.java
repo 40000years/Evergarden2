@@ -131,7 +131,7 @@ final class WrathModel {
         float targetWeight=walking?(float)Math.min(1,distance/0.17):0;
         walkingWeight+=(targetWeight-walkingWeight)*0.28f;
         if(distance<2*scale) stride+=distance*3.8/scale;
-        Map<String, WrathAnimation.Pose> sampled=WrathAnimation.sample(state,attack,progress,stride,walkingWeight,ticks,enraged);
+        Map<String, WrathAnimation.Pose> sampled=WrathAnimation.sample(type,state,attack,progress,stride,walkingWeight,ticks,enraged);
         for (Bone bone : bones) {
             WrathAnimation.Pose pose=sampled.get(bone.id);
             WrathAnimation.Pose old=rendered.get(bone.id);

@@ -49,7 +49,7 @@ public final class WrathProbe extends JavaPlugin {
         Listener equipmentPlugin = new Listener() {};
         Bukkit.getPluginManager().registerEvent(CreatureSpawnEvent.class, equipmentPlugin, EventPriority.MONITOR,
                 (listener,event) -> {
-                    if (((CreatureSpawnEvent)event).getEntity() instanceof Husk husk) {
+                    if (event instanceof CreatureSpawnEvent spawn && spawn.getEntity() instanceof Husk husk) {
                         husk.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
                         husk.getEquipment().setItemInMainHand(new ItemStack(Material.MACE));
                         husk.setGlowing(true);
@@ -283,13 +283,23 @@ public final class WrathProbe extends JavaPlugin {
             WrathBoss.State state=clip.equals("walk")?WrathBoss.State.CHASE:tick<44?WrathBoss.State.WINDUP:tick<54?WrathBoss.State.STRIKE:WrathBoss.State.RECOVERY;
             double progress=tick<44?tick/44.0:tick<54?(tick-44)/10.0:Math.min(1,(tick-54)/36.0);
             Map<String,Object> bones=new LinkedHashMap<>();
-            WrathAnimation.sample(state,attack,progress,tick*0.16,clip.equals("walk")?1:0,tick,false).forEach((id,pose)->{
+            WrathAnimation.sample(SinType.WRATH,state,attack,progress,tick*0.16,clip.equals("walk")?1:0,tick,false).forEach((id,pose)->{
                 var p=pose.position();var q=pose.rotation();
                 bones.put(id,Map.of("position",List.of(p.x,p.y,p.z),"rotation",List.of(q.x,q.y,q.z,q.w)));
             });
             frames.add(Map.of("clip",clip,"tick",tick,"bones",bones));
         }
         Files.writeString(getServer().getWorldContainer().toPath().resolve("wrath-animation-poses.json"),new com.google.gson.Gson().toJson(frames));
+        Map<String,Object> roster=new LinkedHashMap<>();
+        for(SinType sin:SinType.values()) {
+            Map<String,Object> bones=new LinkedHashMap<>();
+            WrathAnimation.sample(sin,WrathBoss.State.CHASE,WrathBoss.Attack.SWEEP,0,0,0,0,false).forEach((id,pose)->{
+                var p=pose.position();var q=pose.rotation();
+                bones.put(id,Map.of("position",List.of(p.x,p.y,p.z),"rotation",List.of(q.x,q.y,q.z,q.w)));
+            });
+            roster.put(sin.id(),Map.of("bones",bones));
+        }
+        Files.writeString(getServer().getWorldContainer().toPath().resolve("sin-model-poses.json"),new com.google.gson.Gson().toJson(roster));
         check(true,"Exported runtime skeletal poses for walk, slam, stomp and sweep visual review");
     }
 

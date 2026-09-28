@@ -14,6 +14,46 @@ public final class WrathAnimation {
     }
     private static float mix(float a, float b, float t) { return a+(b-a)*t; }
 
+    /** Keep the authored attack/grip chain, but carry each weapon in its own silhouette. */
+    public static Map<String, Pose> sample(SinType type, WrathBoss.State state, WrathBoss.Attack attack,
+            double progress, double stride, float walking, int ticks, boolean enraged) {
+        Map<String,Pose> poses=sample(state,attack,progress,stride,walking,ticks,enraged);
+        float stance=switch(type) {
+            case WRATH -> 0.52f;
+            case PRIDE -> 0.48f;
+            case GREED -> 0.58f;
+            case LUST -> 0.42f;
+            case ENVY -> 0.5f;
+            case GLUTTONY, SLOTH -> 0.6f;
+        };
+        for(String leg:List.of("left_leg","right_leg")) {
+            Pose pose=poses.get(leg);
+            float offset=(stance-0.35f)*(leg.equals("left_leg")?1:-1);
+            poses.put(leg,new Pose(new Vector3f(pose.position()).add(offset,0,0),new Quaternionf(pose.rotation())));
+        }
+        float authored=switch(state) {
+            case WINDUP -> ease(progress);
+            case STRIKE -> 1;
+            case RECOVERY -> 1-ease((progress-0.15)/0.85);
+            default -> 0;
+        };
+        // Ranged spell casts keep the blade upright while the free hand casts.
+        if(attack!=WrathBoss.Attack.SWEEP&&attack!=WrathBoss.Attack.SLAM) authored=0;
+        Pose weapon=poses.get("cleaver");
+        float carry=switch(type) {
+            case PRIDE -> -0.25f;
+            case GREED -> -0.7f;
+            case LUST -> -0.15f;
+            case ENVY -> -0.5f;
+            case GLUTTONY -> -0.85f;
+            case SLOTH -> -0.25f;
+            default -> -1.7f;
+        };
+        Quaternionf rest=new Quaternionf(poses.get("body").rotation()).mul(new Quaternionf().rotationXYZ(carry,0,type==SinType.WRATH?0.35f:0.7f));
+        poses.put("cleaver",new Pose(new Vector3f(weapon.position()),rest.slerp(weapon.rotation(),authored)));
+        return poses;
+    }
+
     public static Map<String, Pose> sample(WrathBoss.State state, WrathBoss.Attack attack,
             double progress, double stride, float walking, int ticks, boolean enraged) {
         float p=ease(progress), active=0, swing=0;

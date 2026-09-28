@@ -42,5 +42,7 @@ try:
     result=(server/'wrath-probe-result.txt').read_text()
     print(result,flush=True)
     if not result.startswith('PASS\n'):raise RuntimeError('Wrath probe failed')
+    if 'Could not pass event' in log.read_text(errors='replace'):
+        raise RuntimeError('An event listener failed during the probe')
 except Exception:
     print(log.read_text(errors='replace')[-14000:]);raise

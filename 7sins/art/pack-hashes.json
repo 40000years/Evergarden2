@@ -1,7 +1,37 @@
 {
-  "java_sha1": "efadcc258e3804c7f255840c2afa0db2c1c4848e",
+  "java_sha1": "a3ae134917d487696911eec6b8a65546e3cf739d",
   "parts": 9,
-  "cubes": 86,
+  "cubes": 156,
+  "bosses": {
+    "wrath": {
+      "bones": 9,
+      "cubes": 156
+    },
+    "pride": {
+      "bones": 9,
+      "cubes": 149
+    },
+    "greed": {
+      "bones": 9,
+      "cubes": 161
+    },
+    "lust": {
+      "bones": 9,
+      "cubes": 157
+    },
+    "envy": {
+      "bones": 9,
+      "cubes": 137
+    },
+    "gluttony": {
+      "bones": 9,
+      "cubes": 154
+    },
+    "sloth": {
+      "bones": 9,
+      "cubes": 146
+    }
+  },
   "resource_pack_format": [
     88,
     0

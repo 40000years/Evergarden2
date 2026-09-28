@@ -1,5 +1,6 @@
 {
   "textures": {
+    "particle": "sevensins:item/envy/armor",
     "armor": "sevensins:item/envy/armor",
     "edge": "sevensins:item/envy/edge",
     "bone": "sevensins:item/envy/bone",
@@ -11,16 +12,25 @@
   },
   "elements": [
     {
+      "to": [
+        14,
+        14,
+        8
+      ],
       "from": [
-        4,
-        4,
+        2,
+        2,
         4
       ],
-      "to": [
-        12,
-        12,
-        11
-      ],
+      "rotation": {
+        "origin": [
+          8.0,
+          8.0,
+          6.0
+        ],
+        "axis": "z",
+        "angle": 45
+      },
       "faces": {
         "north": {
           "uv": [
@@ -79,16 +89,102 @@
       }
     },
     {
-      "from": [
-        6,
-        5,
-        1
-      ],
       "to": [
-        10,
-        11,
+        12,
+        12,
         5
       ],
+      "from": [
+        4,
+        4,
+        2
+      ],
+      "rotation": {
+        "origin": [
+          8.0,
+          8.0,
+          3.5
+        ],
+        "axis": "z",
+        "angle": 45
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#gold"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#gold"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#gold"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#gold"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#gold"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#gold"
+        }
+      }
+    },
+    {
+      "to": [
+        11,
+        11,
+        3
+      ],
+      "from": [
+        5,
+        5,
+        0
+      ],
+      "rotation": {
+        "origin": [
+          8.0,
+          8.0,
+          1.5
+        ],
+        "axis": "z",
+        "angle": 45
+      },
       "faces": {
         "north": {
           "uv": [
@@ -147,16 +243,25 @@
       }
     },
     {
-      "from": [
-        7,
-        7,
-        0
-      ],
       "to": [
         9,
         9,
-        2
+        1
       ],
+      "from": [
+        7,
+        7,
+        -1
+      ],
+      "rotation": {
+        "origin": [
+          8.0,
+          8.0,
+          0.0
+        ],
+        "axis": "z",
+        "angle": 45
+      },
       "faces": {
         "north": {
           "uv": [

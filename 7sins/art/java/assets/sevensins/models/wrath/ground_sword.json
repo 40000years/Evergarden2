@@ -1,5 +1,6 @@
 {
   "textures": {
+    "particle": "sevensins:item/wrath/armor",
     "armor": "sevensins:item/wrath/armor",
     "edge": "sevensins:item/wrath/edge",
     "bone": "sevensins:item/wrath/bone",

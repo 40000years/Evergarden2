@@ -2,6 +2,7 @@ import com.example.sevensins.WrathCombat;
 import com.example.sevensins.WrathPose;
 import com.example.sevensins.WrathAnimation;
 import com.example.sevensins.WrathBoss;
+import com.example.sevensins.SinType;
 import org.joml.Vector3f;
 
 public final class WrathCombatChecks {
@@ -44,19 +45,24 @@ public final class WrathCombatChecks {
     }
 
     private static void animationChecks() {
-        for(var attack:WrathBoss.Attack.values()) {
+        for(var sin:SinType.values()) for(var attack:WrathBoss.Attack.values()) {
             for(var state:new WrathBoss.State[]{WrathBoss.State.WINDUP,WrathBoss.State.STRIKE,WrathBoss.State.RECOVERY}) {
                 for(int step=0;step<=20;step++) {
-                    var pose=WrathAnimation.sample(state,attack,step/20.0,0,0,0,false);
+                    var pose=WrathAnimation.sample(sin,state,attack,step/20.0,0,0,0,false);
                     var arm=pose.get("right_arm");
                     Vector3f grip=arm.rotation().transform(new Vector3f(0,-1.08f,-0.02f)).add(arm.position());
-                    check(grip.distance(pose.get("cleaver").position())<0.0001,"Hammer stays attached to hand throughout "+attack+" "+state);
+                    check(grip.distance(pose.get("cleaver").position())<0.0001,sin+" weapon stays attached to hand throughout "+attack+" "+state);
                 }
             }
-            var raised=WrathAnimation.sample(WrathBoss.State.WINDUP,attack,1,0,0,0,false);
-            var swing=WrathAnimation.sample(WrathBoss.State.STRIKE,attack,0,0,0,0,false);
-            var contact=WrathAnimation.sample(WrathBoss.State.STRIKE,attack,1,0,0,0,false);
-            var recover=WrathAnimation.sample(WrathBoss.State.RECOVERY,attack,0,0,0,0,false);
+            var raised=WrathAnimation.sample(sin,WrathBoss.State.WINDUP,attack,1,0,0,0,false);
+            var swing=WrathAnimation.sample(sin,WrathBoss.State.STRIKE,attack,0,0,0,0,false);
+            var contact=WrathAnimation.sample(sin,WrathBoss.State.STRIKE,attack,1,0,0,0,false);
+            var recover=WrathAnimation.sample(sin,WrathBoss.State.RECOVERY,attack,0,0,0,0,false);
+            var idle=WrathAnimation.sample(sin,WrathBoss.State.CHASE,attack,0,0,0,0,false).get("cleaver");
+            var begin=WrathAnimation.sample(sin,WrathBoss.State.WINDUP,attack,0,0,0,0,false).get("cleaver");
+            var end=WrathAnimation.sample(sin,WrathBoss.State.RECOVERY,attack,1,0,0,0,false).get("cleaver");
+            check(Math.abs(idle.rotation().dot(begin.rotation()))>0.9999 && Math.abs(idle.rotation().dot(end.rotation()))>0.9999,
+                    sin+" weapon returns continuously to its own carry pose after "+attack);
             for(String bone:raised.keySet()) {
                 check(raised.get(bone).position().distance(swing.get(bone).position())<0.0001
                         &&Math.abs(raised.get(bone).rotation().dot(swing.get(bone).rotation()))>0.9999,"Continuous windup/swing "+attack+" "+bone);

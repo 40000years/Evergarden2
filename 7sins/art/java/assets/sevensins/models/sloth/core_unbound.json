@@ -1,5 +1,6 @@
 {
   "textures": {
+    "particle": "sevensins:item/sloth/armor",
     "armor": "sevensins:item/sloth/armor",
     "edge": "sevensins:item/sloth/edge",
     "bone": "sevensins:item/sloth/bone",
@@ -11,15 +12,219 @@
   },
   "elements": [
     {
+      "to": [
+        14,
+        3,
+        8
+      ],
       "from": [
+        2,
+        0,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        }
+      }
+    },
+    {
+      "to": [
+        14,
+        16,
+        8
+      ],
+      "from": [
+        2,
+        13,
+        3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#ember"
+        }
+      }
+    },
+    {
+      "to": [
         4,
-        4,
+        13,
+        7
+      ],
+      "from": [
+        2,
+        3,
         4
       ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bone"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bone"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bone"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bone"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bone"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#bone"
+        }
+      }
+    },
+    {
       "to": [
+        14,
+        13,
+        7
+      ],
+      "from": [
         12,
-        12,
-        11
+        3,
+        4
       ],
       "faces": {
         "north": {
@@ -29,7 +234,7 @@
             16,
             16
           ],
-          "texture": "#coal"
+          "texture": "#bone"
         },
         "south": {
           "uv": [
@@ -38,7 +243,7 @@
             16,
             16
           ],
-          "texture": "#coal"
+          "texture": "#bone"
         },
         "east": {
           "uv": [
@@ -47,7 +252,7 @@
             16,
             16
           ],
-          "texture": "#coal"
+          "texture": "#bone"
         },
         "west": {
           "uv": [
@@ -56,7 +261,7 @@
             16,
             16
           ],
-          "texture": "#coal"
+          "texture": "#bone"
         },
         "up": {
           "uv": [
@@ -65,7 +270,7 @@
             16,
             16
           ],
-          "texture": "#coal"
+          "texture": "#bone"
         },
         "down": {
           "uv": [
@@ -74,20 +279,20 @@
             16,
             16
           ],
-          "texture": "#coal"
+          "texture": "#bone"
         }
       }
     },
     {
-      "from": [
-        6,
-        5,
-        1
-      ],
       "to": [
+        12,
+        13,
+        7
+      ],
+      "from": [
+        4,
         10,
-        11,
-        5
+        3
       ],
       "faces": {
         "north": {
@@ -147,15 +352,83 @@
       }
     },
     {
-      "from": [
-        7,
-        7,
-        0
-      ],
       "to": [
         9,
-        9,
+        11,
+        6
+      ],
+      "from": [
+        7,
+        5,
         2
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#hot"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#hot"
+        },
+        "east": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#hot"
+        },
+        "west": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#hot"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#hot"
+        },
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#hot"
+        }
+      }
+    },
+    {
+      "to": [
+        12,
+        6,
+        7
+      ],
+      "from": [
+        4,
+        3,
+        3
       ],
       "faces": {
         "north": {

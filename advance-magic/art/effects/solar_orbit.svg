@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.0549">
+<circle cx="512" cy="512" r="474" stroke="#ffd640" stroke-width="19"/>
+<circle cx="512" cy="512" r="465" stroke="#fff7b9" stroke-width="17"/>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.1255">
+<circle cx="512" cy="512" r="474" stroke="#ffd640" stroke-width="12"/>
+<circle cx="512" cy="512" r="465" stroke="#fff7b9" stroke-width="10"/>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.2941">
+<circle cx="512" cy="512" r="474" stroke="#ffd640" stroke-width="7"/>
+<circle cx="512" cy="512" r="465" stroke="#fff7b9" stroke-width="5"/>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="1.0000">
+<circle cx="512" cy="512" r="474" stroke="#ffd640" stroke-width="4"/>
+<circle cx="512" cy="512" r="465" stroke="#fff7b9" stroke-width="2"/>
+</g>
+</svg>

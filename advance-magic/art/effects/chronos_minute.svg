@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.0549">
+<polyline points="454.00,512.00 512.00,501.00 868.00,507.00 912.00,512.00 868.00,517.00 512.00,523.00 454.00,512.00" stroke="#72edff" stroke-width="18"/>
+<polyline points="506.00,512.00 874.00,512.00" stroke="#fff7b9" stroke-width="17"/>
+<polyline points="847.00,499.00 887.00,512.00 847.00,525.00" stroke="#72edff" stroke-width="18"/>
+<circle cx="512" cy="512" r="19" stroke="#fff7b9" stroke-width="18"/>
+<polyline points="434.00,512.00 454.00,501.00 474.00,512.00 454.00,523.00 434.00,512.00" stroke="#72edff" stroke-width="17"/>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.1255">
+<polyline points="454.00,512.00 512.00,501.00 868.00,507.00 912.00,512.00 868.00,517.00 512.00,523.00 454.00,512.00" stroke="#72edff" stroke-width="11"/>
+<polyline points="506.00,512.00 874.00,512.00" stroke="#fff7b9" stroke-width="10"/>
+<polyline points="847.00,499.00 887.00,512.00 847.00,525.00" stroke="#72edff" stroke-width="11"/>
+<circle cx="512" cy="512" r="19" stroke="#fff7b9" stroke-width="11"/>
+<polyline points="434.00,512.00 454.00,501.00 474.00,512.00 454.00,523.00 434.00,512.00" stroke="#72edff" stroke-width="10"/>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.2941">
+<polyline points="454.00,512.00 512.00,501.00 868.00,507.00 912.00,512.00 868.00,517.00 512.00,523.00 454.00,512.00" stroke="#72edff" stroke-width="6"/>
+<polyline points="506.00,512.00 874.00,512.00" stroke="#fff7b9" stroke-width="5"/>
+<polyline points="847.00,499.00 887.00,512.00 847.00,525.00" stroke="#72edff" stroke-width="6"/>
+<circle cx="512" cy="512" r="19" stroke="#fff7b9" stroke-width="6"/>
+<polyline points="434.00,512.00 454.00,501.00 474.00,512.00 454.00,523.00 434.00,512.00" stroke="#72edff" stroke-width="5"/>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="1.0000">
+<polyline points="454.00,512.00 512.00,501.00 868.00,507.00 912.00,512.00 868.00,517.00 512.00,523.00 454.00,512.00" stroke="#72edff" stroke-width="3"/>
+<polyline points="506.00,512.00 874.00,512.00" stroke="#fff7b9" stroke-width="2"/>
+<polyline points="847.00,499.00 887.00,512.00 847.00,525.00" stroke="#72edff" stroke-width="3"/>
+<circle cx="512" cy="512" r="19" stroke="#fff7b9" stroke-width="3"/>
+<polyline points="434.00,512.00 454.00,501.00 474.00,512.00 454.00,523.00 434.00,512.00" stroke="#72edff" stroke-width="2"/>
+</g>
+</svg>

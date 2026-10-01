@@ -78,10 +78,14 @@ public final class IntegrationChecks extends JavaPlugin {
         }
         check(plugin.wands().spell(new ItemStack(Material.CARROT_ON_A_STICK))==null,"vanilla item cannot cast");
         check(!plugin.wands().migrate(new ItemStack(Material.CARROT_ON_A_STICK)),"migration leaves vanilla items alone");
-        check(plugin.getConfig().getBoolean("resource-pack.enabled")&&plugin.getConfig().getBoolean("resource-pack.host.enabled"),"automatic packs enabled by default, including existing configs");
+        check(plugin.getConfig().getBoolean("resource-pack.enabled")&&!plugin.getConfig().getBoolean("resource-pack.host.enabled"),"published Java pack enabled by default");
+        check(plugin.packs().url(player).startsWith("https://raw.githubusercontent.com/40000years/Evergarden2/"),"Java pack uses the published URL");
         for(String asset:List.of("advance-magic-java.zip","advance-magic-bedrock.mcpack","geyser-mappings.json","advance-magic-guide-th.png"))
             check(new java.io.File(plugin.getDataFolder(),"resource-packs/"+asset).length()>0,"embedded asset extracted: "+asset);
+        plugin.getConfig().set("resource-pack.url","");plugin.getConfig().set("resource-pack.sha1","");
+        plugin.getConfig().set("resource-pack.host.enabled",true);
         plugin.getConfig().set("resource-pack.host.public-host","127.0.0.1");
+        plugin.packs().close();plugin.packs().start();
         String packUrl=plugin.packs().url(player);
         check(packUrl.startsWith("http://127.0.0.1:"),"automatic pack public URL");
         try(var client=java.net.http.HttpClient.newHttpClient()) {

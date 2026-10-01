@@ -106,8 +106,8 @@ relics:
 resource-pack:
   enabled: true
   # Pinned to the published pack with the redesigned Mythic cores. Private CDN URLs are preserved.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/196a8d2fcc984e6d795b9339e9154498501aecae/evergarden/dist/evergarden-java.zip'
-  sha1: '12afb1f5cd246e5af6f621a81b5a12864a40185e'
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/0e6a864979528b50e00e48baa98e267993803ba4/evergarden/dist/evergarden-java.zip'
+  sha1: '764b727583b67d39a9445ce5bb99fc243f16d683'
   required: false
   host:
     enabled: false

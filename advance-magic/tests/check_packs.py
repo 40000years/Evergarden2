@@ -15,8 +15,9 @@ dist = ROOT / 'dist'
 hashes = json.loads((dist / 'pack-hashes.json').read_text())
 service_source = (ROOT / 'src/main/java/com/example/advancemagic/pack/ResourcePackService.java').read_text()
 pack_config = (ROOT / 'src/main/resources/config.yml').read_text()
-assert "url: ''" in pack_config and "sha1: ''" in pack_config
-assert 'host:\n    enabled: true' in pack_config
+assert "url: 'https://raw.githubusercontent.com/40000years/Evergarden2/0e6a864979528b50e00e48baa98e267993803ba4/advance-magic/dist/advance-magic-java.zip'" in pack_config
+assert "sha1: '278eef0ea167e62d84152f57bb32c60483b62e8f'" in pack_config
+assert 'host:\n    enabled: false' in pack_config
 assert 'CURRENT_SHA1' not in service_source
 
 

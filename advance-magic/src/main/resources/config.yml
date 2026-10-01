@@ -84,13 +84,12 @@ flying-staff:
       NoCheatPlus: [nocheatplus.checks.moving.vehicle]
 resource-pack:
   enabled: true
-  # The bundled pack includes the flying staff; set a custom URL/SHA-1 only
-  # when that URL serves this exact pack revision.
-  url: ''
-  sha1: ''
+  # Pin the GitHub pack to the revision embedded in this plugin.
+  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/0e6a864979528b50e00e48baa98e267993803ba4/advance-magic/dist/advance-magic-java.zip'
+  sha1: '278eef0ea167e62d84152f57bb32c60483b62e8f'
   required: false
   host:
-    enabled: true
+    enabled: false
     bind: '0.0.0.0'
     # Must be reachable by Java clients when using the bundled pack.
     port: 8187

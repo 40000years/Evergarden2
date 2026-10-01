@@ -83,9 +83,9 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             if(input==null)throw new IOException("Embedded Java pack is missing");
             byte[] pack=input.readAllBytes();
             sha1=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(pack));
-            if(migratePackConfig(plugin.getConfig())) {
+            if(migratePackConfig(plugin.getConfig(),sha1)) {
                 plugin.saveConfig();
-                plugin.getLogger().info("Switched the previous official pack URL to the bundled flying-staff pack host; private CDN URLs are preserved.");
+                plugin.getLogger().info("Updated the previous Advance Magic pack settings to the published Java pack URL.");
             }
             if(!plugin.getConfig().getBoolean("resource-pack.enabled",true))return;
             String configuredUrl=plugin.getConfig().getString("resource-pack.url","").trim();
@@ -105,14 +105,26 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             failure=e.getMessage();plugin.getLogger().warning("Pack host could not start: "+failure);
         }
     }
-    static boolean migratePackConfig(org.bukkit.configuration.file.FileConfiguration config) {
+    static boolean migratePackConfig(org.bukkit.configuration.file.FileConfiguration config,String bundledSha1) {
         String url=config.getString("resource-pack.url","").trim();
-        // Migrate only previous official pack URLs; keep administrator-owned CDN URLs intact.
+        var defaults=config.getDefaults();
+        if(defaults==null)return false;
+        String publishedUrl=defaults.getString("resource-pack.url","").trim();
+        String publishedSha1=defaults.getString("resource-pack.sha1","").trim();
+        // A changed embedded pack must not be paired with an older pinned download.
+        if(publishedUrl.isEmpty()||!bundledSha1.equalsIgnoreCase(publishedSha1))return false;
+        // Preserve administrator-owned CDN URLs and configured public hosts.
         String officialPack="https://raw\\.githubusercontent\\.com/40000years/(?:Afterdeath|Evergarden2)/(?:DEV|main|[a-fA-F0-9]{7,40})/advance-magic/dist/advance-magic-java\\.zip";
-        if(!url.matches(officialPack))return false;
-        config.set("resource-pack.url","");
-        config.set("resource-pack.sha1","");
-        config.set("resource-pack.host.enabled",true);
+        boolean oldOfficial=url.matches(officialPack)&&!url.equals(publishedUrl);
+        boolean oldBundledHost=url.isEmpty()&&config.getBoolean("resource-pack.host.enabled",false)
+            &&config.getString("resource-pack.host.public-url","").isBlank()
+            &&config.getString("resource-pack.host.public-host","").isBlank()
+            &&config.getString("resource-pack.host.bind","0.0.0.0").equals("0.0.0.0")
+            &&config.getInt("resource-pack.host.port",8187)==8187;
+        if(!oldOfficial&&!oldBundledHost)return false;
+        config.set("resource-pack.url",publishedUrl);
+        config.set("resource-pack.sha1",publishedSha1);
+        config.set("resource-pack.host.enabled",false);
         return true;
     }
     public boolean isBedrock(Player player) {

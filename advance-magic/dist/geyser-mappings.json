@@ -205,6 +205,18 @@
           "display_handheld": true,
           "creative_category": "equipment"
         }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:heavens_judgment",
+        "bedrock_identifier": "advance_magic:heavens_judgment",
+        "display_name": "Heaven's Judgment Wand",
+        "bedrock_options": {
+          "icon": "advance_magic.heavens_judgment",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
       }
     ],
     "minecraft:heart_of_the_sea": [
@@ -407,6 +419,18 @@
         "display_name": "Core of Time",
         "bedrock_options": {
           "icon": "advance_magic.core_chronos_final_hour",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:core_heavens_judgment",
+        "bedrock_identifier": "advance_magic:core_heavens_judgment",
+        "display_name": "Core of Judgment",
+        "bedrock_options": {
+          "icon": "advance_magic.core_heavens_judgment",
           "allow_offhand": true,
           "display_handheld": false,
           "creative_category": "items"

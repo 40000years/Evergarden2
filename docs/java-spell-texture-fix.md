@@ -45,6 +45,23 @@ now reject JARs containing these error stubs. `ReleaseLinkageChecks.java` also
 executes the MythicSpells constructor and resolves the effect classes and
 Evergarden's MagicCastEvent listener against the release JARs.
 
+The release JARs at commit `322c670b8c4f47a496cc2078004f54c03ff93f74`
+were checked on 2026-10-01 in an isolated Paper 26.2 build 121 server with Java
+25. Both plugins enabled successfully. The Mythic spell probe passed 226 checks
+across Solar, Chronos and Judgment, including damage, protection and cleanup;
+the Bedrock probe passed 1,115 translations and 220 custom identifiers across
+five protocol tables. Both pack checks passed, and the compiler stub check
+rejected the original broken JAR. Downloads from GitHub matched the tested JARs
+byte for byte:
+
+| JAR | SHA-256 |
+| --- | --- |
+| `dist/advance-magic.jar` | `977d8e78057c59b46ff166539346f990f26d911dc7ea698ff76c3cbb989df62b` |
+| `dist/evergarden.jar` | `6dc5672b32e2f871b80be54ce6b5e33bf546755a85d88f725974178fd6b1dcee` |
+
+`build.sh` now performs a clean Maven build and rejects compiler error stubs
+before copying the release JARs to `dist/`.
+
 Build the supplement with:
 
 ```powershell

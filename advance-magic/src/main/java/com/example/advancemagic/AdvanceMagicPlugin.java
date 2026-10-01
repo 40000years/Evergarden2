@@ -32,10 +32,24 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         saveDefaultConfig();
         if(FlyingStaffService.upgradeSpeedConfig(getConfig()))
             getLogger().info("Updated flying-staff defaults and Turbo to 4x; custom base speeds were preserved.");
+        if(upgradeMythicBalanceConfig())
+            getLogger().info("Updated Solar and Chronos damage defaults for the ice-field finale; custom damage values were preserved.");
         getConfig().options().copyDefaults(true);saveConfig();
         packs=new ResourcePackService(this);
         try {packs.extract();}
         catch(java.io.IOException e){getLogger().log(java.util.logging.Level.SEVERE,"Could not extract bundled resource packs",e);}
+    }
+    private boolean upgradeMythicBalanceConfig() {
+        var config=getConfig();
+        if(config.isSet("internal.mythic-ice-balance-version"))return false;
+        boolean changed=false;
+        if(Double.compare(config.getDouble("damage.solar-beam"),32.0)==0){config.set("damage.solar-beam",45.0);changed=true;}
+        if(Double.compare(config.getDouble("damage.solar-apocalypse"),180.0)==0){config.set("damage.solar-apocalypse",250.0);changed=true;}
+        if(Double.compare(config.getDouble("damage.solar-lava"),12.0)==0){config.set("damage.solar-lava",18.0);changed=true;}
+        if(Double.compare(config.getDouble("damage.chronos-blade"),24.0)==0){config.set("damage.chronos-blade",30.0);changed=true;}
+        if(Double.compare(config.getDouble("damage.chronos-shatter"),100.0)==0){config.set("damage.chronos-shatter",180.0);changed=true;}
+        config.set("internal.mythic-ice-balance-version",1);
+        return changed;
     }
     private com.example.advancemagic.item.MagicItemMenu itemMenu;
     private com.example.advancemagic.item.BedrockCreativeBridge creativeBridge;

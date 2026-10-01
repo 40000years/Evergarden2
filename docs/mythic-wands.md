@@ -19,8 +19,13 @@ with `-DskipTests`; no live consumption test was run for this revision.
 
 | Wand | Mana | Base cooldown | Timeline | Base damage on a target hit by every stage |
 | --- | ---: | ---: | --- | ---: |
-| Solar Apocalypse | 100 | 45 s | Five stacked suns with doubling diameters and wide gaps, golden glyph, five beams, simultaneous descent, shockwave and lava sea | 5 × 32 + 180 = 340, plus lava contact damage |
-| Chronos: Final Hour | 95 | 40 s | Five upright clocks beneath a floating horizontal dial, outer End Crystal beams converging downward on the central clock, inner lasers, reversed echoes and poison sea | 5 × 24 + 5 × 16.8 + 100 = 304, plus poison/contact damage |
+| Solar Apocalypse | 100 | 45 s | Five stacked suns with doubling diameters and wide gaps, golden glyph, five beams, simultaneous descent, shockwave and lava sea | 5 × 45 + 250 + 15 × 18 = 745 with full lava exposure, before fire damage |
+| Chronos: Final Hour | 95 | 40 s | Five upright clocks beneath a floating horizontal dial, outer End Crystal beams converging downward on the central clock, inner lasers, reversed echoes, blue ice and a second blast | 5 × 30 + 5 × 21 + 180 + 6 × 50 + 160 = 895 with full ice exposure |
+
+For comparison, Shulker Levitation deals up to 750 direct damage at its defaults
+when every pulse and follow-up hits, before Wither damage. Chronos is about 19%
+above that total; actual damage depends on where the target stands and how long
+it remains in the field.
 
 Solar's nominal sun radii are 4.4, 8.8, 17.6, 35.2 and 70.4 blocks: both radius
 and diameter double at every layer, preserving a **1:2:4:8:16** size ratio. Their
@@ -43,25 +48,30 @@ its hour positions and beam down into the central clock from tick 40 until shatt
 at tick 160. Inner clocks retain their coloured particle lasers into the ground
 target. Only the outer dial uses the End Crystal beam style.
 
-Solar impacts at 5.5 seconds; Chronos shatters at 8 seconds. Their temporary fields
-last 15 seconds from creation (Solar at impact; Chronos at 4.4 seconds). Aim at a mob
+Solar impacts at 5.5 seconds; Chronos shatters at 8 seconds. Solar's lava lasts
+15 seconds from impact. Chronos's ice appears at 4.4 seconds, recedes over 6 seconds,
+and releases a second blast when it vanishes at 10.4 seconds. Aim at a mob
 or block within 30 blocks. With no hit, the spell centers 16 blocks ahead. Solar's
-final burst has radius 16; Chronos attacks within radius 12. Damage uses the normal
+final burst has radius 16; Chronos clock attacks have radius 12, while the ice
+field uses the configured terrain radius. Damage uses the normal
 magic protection event, enemy/team/PVP filters and wand damage upgrades.
-High-health mobs (150+ maximum health), Wither, Warden and Ender Dragon receive
-Slowness II instead of a hard root. Players use the existing root compatibility policy.
-Native resistance to potion effects still applies. Closing a cast cancels remaining
-attacks and restores its terrain. Neither spell changes time, weather or the camera,
+Before the ice appears, high-health mobs (150+ maximum health), Wither, Warden and
+Ender Dragon receive Slowness II instead of a hard root. Players use the existing
+root compatibility policy for this opening stage. While touching Chronos ice,
+enemies are rooted in place. Native resistance to potion effects still applies.
+Closing a cast cancels remaining attacks and restores its terrain. Neither spell
+changes time, weather or the camera,
 and casts do not load or generate chunks.
 
-## Temporary seas
+## Temporary terrain
 
 Solar replaces exposed ground in a radius of 16 with native lava; Chronos replaces
-it with native water. Both clients therefore see the same terrain geometry and
-use the matching liquid physics. The field expands over one second, holds until
-halfway through its lifetime, then restores the ground from the outside inward.
-Poison-water contact applies **Poison V**, refreshed for five seconds, plus 12 magic
-damage per second. Solar contact deals 12 magic damage per second and ignites enemies.
+it with blue ice. Both clients see the same terrain geometry. Each field expands
+over one second, holds until halfway through its lifetime, then restores the ground
+from the outside inward. Chronos ice roots enemies standing on it and deals 50 magic
+damage per second. When the last ice disappears, a radius-12 blast deals 160 magic
+damage. Solar contact deals 18 magic damage per second and ignites enemies; the
+caster is protected from their own lava and its fire damage while touching the field.
 All contact attacks use the usual enemy/team/PVP filters and `MagicAffectEvent`.
 Native lava damage/combustion in the field is suppressed in favour of these owned attacks.
 Five clock lasers fire together; damage is charged once per volley, rather than once
@@ -69,18 +79,18 @@ per rendered beam. Base mana, cooldown and durability costs are unchanged.
 
 Only exposed full ground blocks or liquid surfaces within three blocks above to
 eight below the aim height are eligible. Containers, block entities, trees, portal
-frames, bedrock, barriers and floors supporting plants are skipped. Fluids cannot
+frames, bedrock, barriers and floors supporting plants are skipped. Managed lava cannot
 flow, be collected in buckets, form stone or ignite nearby builds. Managed cells
 are protected from breaking, placement, explosions and piston movement while active.
 Overlapping casts retain a shared original snapshot; each restores its own layer.
-External edits that replace the managed liquid are preserved.
+External edits that replace the managed terrain are preserved.
 Swimmers intersecting a returning solid floor are lifted to clear space above it.
 
 Original block data is written to `plugins/advance-magic/mythic-terrain-recovery.yml`
 before painting, using a staged atomic replacement. Cleanup covers completion,
 logout, death, world changes, chunk unload and plugin shutdown. Recovery entries
 are retained until a subsequent chunk/world save; after an interrupted session,
-remaining liquid cells are restored as their chunks load. The journal must remain
+remaining lava or ice cells are restored as their chunks load. The journal must remain
 beside the plugin data when restarting or recovering the world.
 
 They support the existing 30-use durability, repair, upgrades and mastery system.
@@ -101,10 +111,12 @@ bulk buttons occupy separate slots. Direct commands:
 ```
 
 Damage defaults can be overridden in Advance Magic's config:
-`damage.solar-beam`, `damage.solar-apocalypse`, `damage.chronos-blade`,
-`damage.chronos-shatter`, `damage.solar-lava`, `damage.chronos-poison`.
-`mythic-terrain.radius` defaults to 16 (range 6–18); `duration-seconds` defaults to
-15 (range 3–30); `poison-amplifier` defaults to 4 (Poison V).
+`damage.solar-beam`, `damage.solar-apocalypse`, `damage.solar-lava`,
+`damage.chronos-blade`, `damage.chronos-shatter`, `damage.chronos-ice-pulse`,
+`damage.chronos-final-burst`.
+`mythic-terrain.radius` defaults to 16 (range 6–18); `duration-seconds` controls
+Solar lava and defaults to 15 (range 3–30); `chronos-ice-duration-seconds` defaults
+to 6 (range 3–15).
 `mythic-max-active-per-world` defaults to 4 (range 1–16).
 The limit releases on normal completion, interruption, logout and plugin shutdown.
 

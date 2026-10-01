@@ -97,20 +97,18 @@ public final class MythicSpells {
         c.damage(p,target,damage*multiplier,DamageType.MAGIC);
     }
     private void terrainPulse(Player p,Location at,TemporaryTerrainService.Zone zone,int age,
-                              Spell spell,double power,double damage,boolean poison) {
+                              Spell spell,double power,double damage) {
         if(age%5==0)for(Location surface:zone.samples(14,age*7)){
-            dust(surface,poison?VIOLET:ORANGE,1.8f);
-            dust(surface.clone().add(0,.35,0),poison?CYAN:GOLD,1.2f);
-            spark(surface,poison?Particle.END_ROD:Particle.FLAME,2,.2);
+            dust(surface,ORANGE,1.8f);
+            dust(surface.clone().add(0,.35,0),GOLD,1.2f);
+            spark(surface,Particle.FLAME,2,.2);
         }
         if(age%20!=0)return;
         double radius=Math.clamp(c.plugin.getConfig().getInt("mythic-terrain.radius",16),6,18)+1;
         for(var e:targets(p,at,radius,spell))if(zone.touches(e)){
             hit(p,e,damage,power);
             if(e.isDead())continue;
-            if(poison)c.potion(e,PotionEffectType.POISON,100,
-                Math.clamp(c.plugin.getConfig().getInt("mythic-terrain.poison-amplifier",4),0,9));
-            else e.setFireTicks(Math.max(e.getFireTicks(),60));
+            e.setFireTicks(Math.max(e.getFireTicks(),60));
         }
     }
     public boolean solar(Player p) {
@@ -126,9 +124,9 @@ public final class MythicSpells {
         Location top=at.clone().add(0,(heights[4]+radii[4]+1.5)*scale,0);
         if(!c.loaded(high)||!c.loaded(top))return false;
         double power=c.getCastDamageMultiplier(p.getUniqueId());
-        double beamDamage=c.configuredDamage("damage.solar-beam",32);
-        double burstDamage=c.configuredDamage("damage.solar-apocalypse",180);
-        double lavaDamage=c.configuredDamage("damage.solar-lava",12);
+        double beamDamage=c.configuredDamage("damage.solar-beam",45);
+        double burstDamage=c.configuredDamage("damage.solar-apocalypse",250);
+        double lavaDamage=c.configuredDamage("damage.solar-lava",18);
         int lifetime=c.plugin.terrain().duration();
         TemporaryTerrainService.Zone[] sea={null};
         at.getWorld().playSound(at,Sound.ENTITY_ENDER_DRAGON_GROWL,2f,.65f);
@@ -179,7 +177,11 @@ public final class MythicSpells {
                     }
                 }
                 sea[0]=c.plugin.terrain().open(p,Spell.SOLAR_APOCALYPSE,at,Material.LAVA);
-                effect.onClose(sea[0]::close);
+                effect.onClose(()->{
+                    boolean ownerInLava=p.isOnline()&&sea[0].touches(p);
+                    sea[0].close();
+                    if(ownerInLava)p.setFireTicks(0);
+                });
             }
             if(age>=110&&age<=140&&age%2==0) {
                 double radius=1+(age-110)*.6;
@@ -188,7 +190,8 @@ public final class MythicSpells {
             }
             if(sea[0]!=null){
                 sea[0].tick(age-110,lifetime);
-                terrainPulse(p,at,sea[0],age-110,Spell.SOLAR_APOCALYPSE,power,lavaDamage,false);
+                if(sea[0].touches(p)&&p.getFireTicks()>0)p.setFireTicks(0);
+                terrainPulse(p,at,sea[0],age-110,Spell.SOLAR_APOCALYPSE,power,lavaDamage);
             }
             return true;
         });
@@ -261,11 +264,12 @@ public final class MythicSpells {
             emitters.add(source);
         }
         double power=c.getCastDamageMultiplier(p.getUniqueId());
-        double bladeDamage=c.configuredDamage("damage.chronos-blade",24);
-        double shatterDamage=c.configuredDamage("damage.chronos-shatter",100);
-        double poisonDamage=c.configuredDamage("damage.chronos-poison",12);
-        int lifetime=c.plugin.terrain().duration();
-        TemporaryTerrainService.Zone[] sea={null};
+        double bladeDamage=c.configuredDamage("damage.chronos-blade",30);
+        double shatterDamage=c.configuredDamage("damage.chronos-shatter",180);
+        double finalDamage=c.configuredDamage("damage.chronos-final-burst",160);
+        double iceDamage=c.configuredDamage("damage.chronos-ice-pulse",50);
+        int lifetime=Math.clamp(c.plugin.getConfig().getInt("mythic-terrain.chronos-ice-duration-seconds",6),3,15)*20;
+        TemporaryTerrainService.Zone[] ice={null};
         CrystalBeamVisuals.Projection[] projection={null};
         Set<UUID> firstRound=new HashSet<>();
         start(p,at,Math.max(191,88+lifetime+1),(effect,age)->{
@@ -306,8 +310,8 @@ public final class MythicSpells {
             }
             if(age==88){
                 at.getWorld().playSound(at,Sound.BLOCK_BEACON_DEACTIVATE,1.8f,.5f);
-                sea[0]=c.plugin.terrain().open(p,Spell.CHRONOS_FINAL_HOUR,at,Material.WATER);
-                effect.onClose(sea[0]::close);
+                ice[0]=c.plugin.terrain().open(p,Spell.CHRONOS_FINAL_HOUR,at,Material.BLUE_ICE);
+                effect.onClose(ice[0]::close);
             }
             if(age==160) {
                 if(projection[0]!=null)projection[0].close();
@@ -321,9 +325,30 @@ public final class MythicSpells {
                 ring(at.clone().add(0,.8,0),1+(age-160)*.5,VIOLET,2f,64,-age*.06);
                 ring(at.clone().add(0,1.5,0),1+(age-160)*.35,CYAN,1.6f,48,age*.06);
             }
-            if(sea[0]!=null){
-                sea[0].tick(age-88,lifetime);
-                terrainPulse(p,at,sea[0],age-88,Spell.CHRONOS_FINAL_HOUR,power,poisonDamage,true);
+            if(ice[0]!=null){
+                int iceAge=age-88;
+                ice[0].tick(iceAge,lifetime);
+                if(iceAge%5==0)for(Location surface:ice[0].samples(14,iceAge*7)){
+                    dust(surface,CYAN,1.8f);
+                    dust(surface.clone().add(0,.35,0),VIOLET,1.2f);
+                    spark(surface,Particle.SNOWFLAKE,2,.2);
+                }
+                double iceRadius=Math.clamp(c.plugin.getConfig().getInt("mythic-terrain.radius",16),6,18)+1;
+                if(iceAge<lifetime&&iceAge%10==0)for(var e:targets(p,at,iceRadius,Spell.CHRONOS_FINAL_HOUR))
+                    if(ice[0].touches(e)){
+                        c.plugin.statuses().timeLock(p,e,12);
+                        if(iceAge%20==0)hit(p,e,iceDamage,power);
+                    }
+                if(iceAge>=lifetime){
+                    ice[0].close();
+                    spark(at.clone().add(0,1,0),Particle.EXPLOSION_EMITTER,1,0);
+                    spark(at,Particle.SNOWFLAKE,120,5);
+                    ring(at.clone().add(0,1,0),12,VIOLET,2.5f,80,0);
+                    at.getWorld().playSound(at,Sound.BLOCK_BEACON_ACTIVATE,1.8f,.8f);
+                    at.getWorld().playSound(at,Sound.BLOCK_AMETHYST_BLOCK_CHIME,2f,1.2f);
+                    for(var e:targets(p,at,12,Spell.CHRONOS_FINAL_HOUR))hit(p,e,finalDamage,power);
+                    return false;
+                }
             }
             return true;
         });

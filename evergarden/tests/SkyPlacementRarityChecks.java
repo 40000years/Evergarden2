@@ -23,14 +23,14 @@ public final class SkyPlacementRarityChecks {
                 "A region overlapping two cells preserves both");
         var container=Files.createTempDirectory("sky-placement-world-");
         var overworld=container.resolve("world");
-        var paperRegion=overworld.resolve("dimensions/minecraft/evergarden2/region");
+        var paperRegion=overworld.resolve("dimensions/minecraft/evergarden/region");
         Files.createDirectories(paperRegion);
         Files.createFile(paperRegion.resolve("r.2.-1.mca"));
-        check(SkyPlacementHistory.captureWorld(container,overworld,"evergarden2",32)
+        check(SkyPlacementHistory.captureWorld(container,overworld,"evergarden",32)
                         .contains(SkyPlacementHistory.key(2,-1)),
                 "Paper custom dimension regions are preserved");
         check(SkyPlacementHistory.captureWorld(container,
-                        overworld.resolve("dimensions/minecraft/overworld"),"evergarden2",32)
+                        overworld.resolve("dimensions/minecraft/overworld"),"evergarden",32)
                         .contains(SkyPlacementHistory.key(2,-1)),
                 "Nested Paper overworld folders find the custom dimension");
         var saved=new YamlConfiguration();saved.set("sky-legacy-cells",oldCells.stream().sorted().toList());

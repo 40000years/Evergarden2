@@ -63,11 +63,19 @@ public final class WandService implements Listener {
             case CHRONOS_FINAL_HOUR -> "Time";
         };
     }
+    private static String coreDisplayName(Spell spell) {
+        return ChatColor.LIGHT_PURPLE+"✦ "+ChatColor.GOLD+"Core of "+coreTitle(spell)
+                +(spell.isMythic()?ChatColor.RED+" [MYTHIC]":"");
+    }
+    private static String wandDisplayName(Spell spell) {
+        return ChatColor.LIGHT_PURPLE+"✦ "+(spell.isMythic()?ChatColor.GOLD:ChatColor.LIGHT_PURPLE)
+                +spell.title+" Wand"+(spell.isMythic()?ChatColor.RED+" [MYTHIC]":"");
+    }
     public ItemStack createCore(Spell spell) {
         ItemStack item=new ItemStack(CORE_BASE);
         var meta=item.getItemMeta();
+        meta.setDisplayName(coreDisplayName(spell));
         if(spell==Spell.SHULKER_LEVITATION) {
-            meta.setDisplayName(ChatColor.LIGHT_PURPLE+"✦ "+ChatColor.GOLD+"Core of Levitation "+ChatColor.RED+"[MYTHIC]");
             meta.setLore(List.of(
                 ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC 0.5%]",
                 ChatColor.DARK_PURPLE+"§k||§r "+ChatColor.LIGHT_PURPLE+"Forbidden Dragon Heart "+ChatColor.DARK_PURPLE+"§k||",
@@ -76,13 +84,11 @@ public final class WandService implements Listener {
                 ChatColor.RED+"✦ หมวด Mythic ใน Vault รวม 0.5% · สุ่มหนึ่งในสามแกน"
             ));
         } else if(spell.isMythic()) {
-            meta.setDisplayName(ChatColor.GOLD+"✦ Core of "+coreTitle(spell)+ChatColor.RED+" [MYTHIC]");
             meta.setLore(List.of(ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC]",
                 ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+spell.title+" Wand",
                 ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
                 ChatColor.DARK_AQUA+"หมวด Mythic ใน Evergarden Vault: 0.5% · สุ่ม 1 ใน 3 แกน"));
         } else {
-            meta.setDisplayName(ChatColor.GOLD+"✦ Core of "+coreTitle(spell));
             meta.setLore(List.of(
                 ChatColor.AQUA+"Ancient Magic Core (แกนเวทมนตร์โบราณ)",
                 ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+spell.title+" Wand",
@@ -118,8 +124,8 @@ public final class WandService implements Listener {
     public ItemStack create(Spell spell) {
         ItemStack item=new ItemStack(BASE);
         var meta=item.getItemMeta();
+        meta.setDisplayName(wandDisplayName(spell));
         if(spell==Spell.SHULKER_LEVITATION) {
-            meta.setDisplayName(ChatColor.LIGHT_PURPLE+"✦ "+ChatColor.GOLD+"Shulker Levitation Wand "+ChatColor.RED+"[MYTHIC]");
             meta.setLore(List.of(
                 ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC 0.5%]",
                 ChatColor.DARK_PURPLE+"§k||§r "+ChatColor.LIGHT_PURPLE+"Ancient Dragon Singularity "+ChatColor.DARK_PURPLE+"§k||",
@@ -128,8 +134,6 @@ public final class WandService implements Listener {
                 ChatColor.YELLOW+"⚡ พายุฟ้าผ่า · มังกรจุติ · มหาหลุมดำกลืนมิติ · ดินแดน Sculk Wither III"
             ));
         } else {
-            meta.setDisplayName((spell.isMythic()?ChatColor.GOLD:ChatColor.LIGHT_PURPLE)+"✦ "+spell.title+" Wand"
-                +(spell.isMythic()?ChatColor.RED+" [MYTHIC]":""));
             meta.setLore(List.of(ChatColor.GRAY+"คลิกขวาเพื่อร่ายเวทมนตร์",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+spell.cooldown+"s"));
         }
         var lore=new ArrayList<>(meta.getLore());
@@ -232,20 +236,15 @@ public final class WandService implements Listener {
             item.setItemMeta(meta);return;
         }
         Spell spell=spell(item);if(spell==null||!item.hasItemMeta())return;
-        var meta=item.getItemMeta();int durability=durabilityLevel(item),damage=damageLevel(item),cooldown=cooldownLevel(item);
-        meta.setLore(List.of(ChatColor.GRAY+"Right-click to cast",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
-                ChatColor.AQUA+"Durability: "+usesLeft(item)+" / "+maxUses(item)+" uses",ChatColor.RED+"Damage: +"+(damage*3)+"%  "+ChatColor.YELLOW+"Cooldown: -"+(cooldown*3)+"%",
-                ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10"));
-        if(spell==Spell.SOLAR_APOCALYPSE||spell==Spell.CHRONOS_FINAL_HOUR) {
-            var mythicLore=new ArrayList<>(meta.getLore());
-            mythicLore.add(0,ChatColor.GOLD+"[MYTHIC · ระดับตำนานสูงสุด]");
-            mythicLore.add(ChatColor.YELLOW+(spell==Spell.SOLAR_APOCALYPSE
-                ?"สุริยัน 5 ชั้น ขนาดทวีคูณ · ทะเลลาวา"
-                :"นาฬิกา 5 เรือน · วงกาลเวลาลอยเหนือ · ทะเลพิษ"));
-            mythicLore.add(ChatColor.LIGHT_PURPLE+"Mastery: "+casts(item)+" casts");
-            meta.setLore(mythicLore);
-        }
+        var meta=item.getItemMeta();
+        meta.setLore(wandLore(item,spell));
         item.setItemMeta(meta);
+    }
+    private List<String> wandLore(ItemStack item,Spell spell) {
+        int durability=durabilityLevel(item),damage=damageLevel(item),cooldown=cooldownLevel(item);
+        return List.of(ChatColor.GRAY+"Right-click to cast",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
+                ChatColor.AQUA+"Durability: "+usesLeft(item)+" / "+maxUses(item)+" uses",ChatColor.RED+"Damage: +"+(damage*3)+"%  "+ChatColor.YELLOW+"Cooldown: -"+(cooldown*3)+"%",
+                ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10");
     }
     public double getEffectiveCooldown(ItemStack item,Spell spell) {
         if(spell==null)return 1.0;
@@ -316,16 +315,32 @@ public final class WandService implements Listener {
         if(spell!=null) {
             boolean stateChanged=ensureWandState(item);
             var meta=item.getItemMeta();var data=meta.getCustomModelDataComponent();
+            String displayName=wandDisplayName(spell);
+            boolean nameChanged=!Objects.equals(meta.getDisplayName(),displayName);
+            if(nameChanged)meta.setDisplayName(displayName);
+            List<String> expectedLore=(spell==Spell.SOLAR_APOCALYPSE||spell==Spell.CHRONOS_FINAL_HOUR)
+                    ?wandLore(item,spell):null;
+            boolean loreChanged=expectedLore!=null&&!Objects.equals(meta.getLore(),expectedLore);
+            if(loreChanged)meta.setLore(expectedLore);
             String key="advance_magic:"+spell.id();
-            if(new NamespacedKey("advance_magic",spell.id()).equals(meta.getItemModel())&&data.getStrings().equals(List.of(key)))return stateChanged;
+            if(new NamespacedKey("advance_magic",spell.id()).equals(meta.getItemModel())&&data.getStrings().equals(List.of(key))) {
+                if(nameChanged||loreChanged)item.setItemMeta(meta);
+                return stateChanged||nameChanged||loreChanged;
+            }
             meta.setItemModel(new NamespacedKey("advance_magic",spell.id()));data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
-            item.setItemMeta(meta);return true;
+            item.setItemMeta(meta);refreshLore(item);return true;
         }
         Spell core=coreSpell(item);
         if(core!=null) {
             var meta=item.getItemMeta();var data=meta.getCustomModelDataComponent();
+            String displayName=coreDisplayName(core);
+            boolean nameChanged=!Objects.equals(meta.getDisplayName(),displayName);
+            if(nameChanged)meta.setDisplayName(displayName);
             String key="advance_magic:core_"+core.id();
-            if(new NamespacedKey("advance_magic","core_"+core.id()).equals(meta.getItemModel())&&data.getStrings().equals(List.of(key)))return false;
+            if(new NamespacedKey("advance_magic","core_"+core.id()).equals(meta.getItemModel())&&data.getStrings().equals(List.of(key))) {
+                if(nameChanged)item.setItemMeta(meta);
+                return nameChanged;
+            }
             meta.setItemModel(new NamespacedKey("advance_magic","core_"+core.id()));data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
             item.setItemMeta(meta);return true;
         }

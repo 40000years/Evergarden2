@@ -25,6 +25,14 @@ public final class StatusService implements Listener {
         }
         roots.put(e.getUniqueId(),status(p,e,30));plugin.context().potion(e,PotionEffectType.SLOWNESS,30,127);
     }
+    public void timeLock(Player p,LivingEntity e,int ticks){
+        int duration=Math.clamp(ticks,2,40);
+        Status old=roots.get(e.getUniqueId());
+        Location anchor=old!=null&&old.caster.equals(p)&&old.target.equals(e)&&!expired(old)
+                ?old.anchor:e.getLocation();
+        roots.put(e.getUniqueId(),new Status(p,e,anchor,tick+duration));
+        plugin.context().potion(e,PotionEffectType.SLOWNESS,duration,127);
+    }
     public void armor(Player p){armor.put(p.getUniqueId(),status(p,p,1200));}
     public boolean armored(Player p){return armor.containsKey(p.getUniqueId());}
 

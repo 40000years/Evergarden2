@@ -1,7 +1,7 @@
 # Evergarden — Twilight Gardens / Advance Magic
 config-version: 2
 dimension:
-  world-name: evergarden2
+  world-name: evergarden
   seed: 72819345
   # ขอบเขตมิติ Evergarden (WorldBorder)
   # - 500000 = เส้นผ่านศูนย์กลาง 500,000 บล็อก (เดินทางได้ถึงพิกัด ±250,000)

@@ -2,7 +2,7 @@
 
 ซากวาฬลอยฟ้าออกแบบใหม่: กะโหลกเปิดเป็นห้องพัก กระดูกขากรรไกรโค้ง ซี่โครงที่ค่อย ๆ เรียวและมีรอยหัก กระดูกสันหลังยกไปสู่หางรูปพระจันทร์เสี้ยว ทางเดินไม้ ตะเกียง มอส และสวนเชอร์รีบนเกาะลอย
 
-This repository is the isolated Evergarden / Advance Magic experiment. The plugin names remain compatible with the original modules. The default test world is `evergarden2`. Evergarden build `3.0.0-e2.3` places the redesigned landmark rarely across that world. Each site's main route is at Y 100–124.
+This repository is the isolated Evergarden / Advance Magic experiment. The plugin names remain compatible with the original modules. The default test world is `evergarden`. Evergarden build `3.0.0-e2.3` places the redesigned landmark rarely across that world. Each site's main route is at Y 100–124.
 
 ## Two additional sky landmarks (3.0.0-e2.4)
 
@@ -64,7 +64,7 @@ These are renders of the **101,209 block positions** in `SkyWhale.blocks()`, inc
 
 ## Build and try
 
-Requires Java 25+ and Maven. Run `./build.sh` or `mvn -pl afterdeath,advance-magic,evergarden,7sins -am package -DskipTests`. This produces `afterdeath/target/afterdeath.jar`, `advance-magic/target/advance-magic.jar`, `evergarden/target/evergarden.jar`, and `7sins/target/7sins.jar`. `./build.sh` also copies them to `dist/`, without copying files to a server.
+Requires Java 25+ and Maven. Run `./build.sh` or `mvn -pl afterdeath,advance-magic,evergarden -am package -DskipTests`. This produces `afterdeath/target/afterdeath.jar`, `advance-magic/target/advance-magic.jar`, and `evergarden/target/evergarden.jar`. `./build.sh` also copies them to `dist/`, without copying files to a server. Seven Sins is paused and excluded from the default build; its existing source and JAR remain available.
 
 `7sins` includes Wrath, the Ashen Executioner: an original articulated model, an embedded Java resource pack, and a two-phase boss with telegraphed attacks. Summon it with `/7sins spawn wrath` (operator). Bedrock and players without the pack receive a vanilla armor fallback. See [7sins setup and combat guide](7sins/README.md).
 
@@ -124,10 +124,11 @@ pixel art, with shared cinematic geometry and dedicated Bedrock colour emitters.
 Their elemental cores are independent framed orbs: a solar-energy crystal inside
 amber glass, and a cyan hourglass inside violet glass.
 Solar summons five spaced suns stacked overhead, each twice the diameter of the
-one below, dropping together into a temporary lava sea. Chronos places a larger
-horizontal outer dial above five clocks, with End Crystal beams converging downward
-on the central clock and a Poison V water field.
-The ground gradually returns to its original blocks after 15 seconds.
+one below, dropping together into a temporary lava sea. Its caster is protected
+from the lava. Chronos places a larger horizontal outer dial above five clocks,
+with End Crystal beams converging downward on the central clock and a blue-ice
+field that locks enemies in place. Solar's lava lasts 15 seconds; Chronos's ice
+recedes over 6 seconds and ends in a second blast. Both restore the original ground.
 See [abilities, admin commands, drop rates and verification](docs/mythic-wands.md).
 The refreshed `/evergarden guide` includes restoration, ruined altar sites and
 flying staff instructions. [Current player guide and patch poster](docs/player-guide-update.md).

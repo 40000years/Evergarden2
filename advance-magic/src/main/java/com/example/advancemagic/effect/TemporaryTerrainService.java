@@ -16,7 +16,7 @@ import org.bukkit.util.BoundingBox;
 import java.nio.file.*;
 import java.util.*;
 
-/** Bounded, non-flowing native liquids. Originals are journaled before any edit. */
+/** Bounded temporary lava and ice. Originals are journaled before any edit. */
 public final class TemporaryTerrainService implements Listener, AutoCloseable {
     private record Pos(UUID world,int x,int y,int z) {
         static Pos of(Block b){return new Pos(b.getWorld().getUID(),b.getX(),b.getY(),b.getZ());}
@@ -56,6 +56,7 @@ public final class TemporaryTerrainService implements Listener, AutoCloseable {
     }
     public int duration(){return Math.clamp(plugin.getConfig().getInt("mythic-terrain.duration-seconds",15),3,30)*20;}
     private boolean liquid(Material m){return m==Material.WATER||m==Material.LAVA;}
+    private boolean painted(Material m){return liquid(m)||m==Material.BLUE_ICE;}
     private boolean save(){
         if(!available)return false;
         try{
@@ -75,7 +76,7 @@ public final class TemporaryTerrainService implements Listener, AutoCloseable {
     }
     private boolean surface(Block b){
         Material m=b.getType();
-        if(!liquid(m)&&(!m.isOccluding()||m==Material.BEDROCK||m==Material.BARRIER||m==Material.END_PORTAL_FRAME))return false;
+        if(!painted(m)&&(!m.isOccluding()||m==Material.BEDROCK||m==Material.BARRIER||m==Material.END_PORTAL_FRAME))return false;
         if(b.getState() instanceof TileState||Tag.LOGS.isTagged(m)||Tag.LEAVES.isTagged(m))return false;
         Block above=b.getRelative(0,1,0);
         return above.getType().isAir()||liquid(above.getType());
@@ -116,14 +117,14 @@ public final class TemporaryTerrainService implements Listener, AutoCloseable {
         public final Player owner;
         public final Spell spell;
         private final Location center;
-        private final BlockData fluid;
+        private final BlockData terrain;
         private final int radius;
         private final Map<Pos,Double> candidates=new LinkedHashMap<>();
         private final Set<Pos> active=new LinkedHashSet<>(),finished=new HashSet<>();
         private boolean closed;
         private Zone(Player owner,Spell spell,Location center,Material material){
-            if(!liquid(material))throw new IllegalArgumentException("Mythic terrain must be water or lava");
-            this.owner=owner;this.spell=spell;this.center=center.clone();fluid=material.createBlockData();
+            if(!painted(material))throw new IllegalArgumentException("Unsupported Mythic terrain material");
+            this.owner=owner;this.spell=spell;this.center=center.clone();terrain=material.createBlockData();
             radius=Math.clamp(plugin.getConfig().getInt("mythic-terrain.radius",16),6,18);
         }
         public void tick(int age,int lifetime){
@@ -135,13 +136,13 @@ public final class TemporaryTerrainService implements Listener, AutoCloseable {
                 if(cell==null||b==null||!cell.reservations.contains(this)||finished.contains(pos))continue;
                 boolean wanted=entry.getValue()<=extent;
                 if(wanted&&!active.contains(pos)){
-                    // Leave external edits alone; only managed liquids may replace one another.
+                    // Leave external edits alone; only managed terrain may replace one another.
                     if((cell.expected==null&&!b.getBlockData().equals(cell.original))
                         ||(cell.expected!=null&&b.getType()!=cell.expected.getMaterial())){
                         finished.add(pos);continue;
                     }
-                    cell.claims.put(this,fluid);cell.expected=fluid;
-                    b.setBlockData(fluid,false);active.add(pos);
+                    cell.claims.put(this,terrain);cell.expected=terrain;
+                    b.setBlockData(terrain,false);active.add(pos);
                 }else if(!wanted&&active.remove(pos)){
                     release(pos,cell,this);finished.add(pos);
                 }
@@ -174,13 +175,17 @@ public final class TemporaryTerrainService implements Listener, AutoCloseable {
         Block b=pos.loadedBlock();if(b==null)return;
         BlockData next=cell.original;for(BlockData data:cell.claims.values())next=data;
         if(cell.expected!=null&&b.getType()==cell.expected.getMaterial()){
-            liftOccupants(b,next);b.setBlockData(next,false);
+            if(liquid(b.getType()))liftOccupants(b,next);
+            b.setBlockData(next,false);
         }
         cell.expected=cell.claims.isEmpty()?null:next;
     }
     private void recover(Pos pos,Cell cell){
         Block b=pos.loadedBlock();if(b==null)return;
-        if(liquid(b.getType())){liftOccupants(b,cell.original);b.setBlockData(cell.original,false);}
+        if(painted(b.getType())){
+            if(liquid(b.getType()))liftOccupants(b,cell.original);
+            b.setBlockData(cell.original,false);
+        }
         cell.restored=true;
     }
     private void liftOccupants(Block block,BlockData floor){
@@ -273,13 +278,22 @@ public final class TemporaryTerrainService implements Listener, AutoCloseable {
         if(e.getEntity() instanceof LivingEntity living){
             Zone zone=contact(living);
             // Spell pulses own damage/fire and apply the normal protection/team/PVP rules.
-            if(zone!=null&&zone.fluid.getMaterial()==Material.LAVA)e.setCancelled(true);
+            if(zone!=null&&zone.terrain.getMaterial()==Material.LAVA){
+                e.setCancelled(true);
+                if(living==zone.owner)living.setFireTicks(0);
+            }
         }
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void damage(EntityDamageEvent e){
-        if(e.getCause()!=EntityDamageEvent.DamageCause.LAVA)return;
-        if(e.getEntity() instanceof LivingEntity living){Zone zone=contact(living);if(zone!=null&&zone.fluid.getMaterial()==Material.LAVA)e.setCancelled(true);}
+        if(!(e.getEntity() instanceof LivingEntity living))return;
+        Zone zone=contact(living);
+        if(zone==null||zone.terrain.getMaterial()!=Material.LAVA)return;
+        if(e.getCause()==EntityDamageEvent.DamageCause.LAVA)e.setCancelled(true);
+        else if(living==zone.owner&&(e.getCause()==EntityDamageEvent.DamageCause.FIRE
+                ||e.getCause()==EntityDamageEvent.DamageCause.FIRE_TICK)){
+            e.setCancelled(true);living.setFireTicks(0);
+        }
     }
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
     public void unload(ChunkUnloadEvent e){

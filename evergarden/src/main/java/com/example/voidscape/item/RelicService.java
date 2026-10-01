@@ -73,11 +73,12 @@ public final class RelicService implements Listener {
         new MagicCore("vex_legion", "Core of Evocation", "Vex Legion"),
         new MagicCore("guardian_beam", "Core of the Guardian", "Guardian Beam"),
         new MagicCore("solar_apocalypse", "Core of the Sun", "Solar Apocalypse"),
-        new MagicCore("chronos_final_hour", "Core of Time", "Chronos: Final Hour")
+        new MagicCore("chronos_final_hour", "Core of Time", "Chronos: Final Hour"),
+        new MagicCore("heavens_judgment", "Core of Judgment", "Heaven's Judgment")
     );
 
     private static boolean mythicCore(MagicCore core) {
-        return Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour").contains(core.id());
+        return Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment").contains(core.id());
     }
 
     public RelicService(VoidscapePlugin plugin) {
@@ -130,14 +131,14 @@ public final class RelicService implements Listener {
                 ChatColor.DARK_PURPLE+"§k||§r "+ChatColor.LIGHT_PURPLE+"Forbidden Dragon Heart "+ChatColor.DARK_PURPLE+"§k||",
                 ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+"Shulker Levitation Wand",
                 ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.RED+"✦ หมวด Mythic ใน Vault รวม 0.5% · สุ่มหนึ่งในสามแกน"
+                ChatColor.RED+"✦ หมวด Mythic ใน Vault รวม 0.5% · สุ่มหนึ่งในสี่แกน"
             ));
         } else if(mythicCore(core)) {
             meta.setDisplayName(ChatColor.GOLD+"✦ "+core.title()+ChatColor.RED+" [MYTHIC]");
             meta.setLore(List.of(ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC]",
                 ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+core.wandTitle()+" Wand",
                 ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.DARK_AQUA+"หมวด Mythic ใน Evergarden Vault: 0.5% · สุ่ม 1 ใน 3 แกน"));
+                ChatColor.DARK_AQUA+"หมวด Mythic ใน Evergarden Vault: 0.5% · สุ่ม 1 ใน 4 แกน"));
         } else {
             meta.setDisplayName(ChatColor.GOLD+"✦ "+core.title());
             meta.setLore(List.of(

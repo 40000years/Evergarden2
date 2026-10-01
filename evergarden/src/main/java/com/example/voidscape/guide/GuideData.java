@@ -104,15 +104,15 @@ public final class GuideData {
     public static final List<GuidePage> MAGIC_PAGES = List.of(
         new GuidePage(
             "สารบัญ: Advance Magic",
-            "§1§lคัมภีร์เวทมนตร์ Advance Magic§r\n§8เล่มที่ 3 · เวท 17 ธาตุ และระบบฟื้นฟูคทา§r\n\n§b§l[ สารบัญ ]§r\n§0 2. มานาและการคราฟต์คทา\n§0 3. Shulker Levitation [MYTHIC]\n§0 4–10. เวทมนตร์ 14 ธาตุทั่วไป\n§0 11. Solar Apocalypse [MYTHIC]\n§0 12. Chronos: Final Hour [MYTHIC]\n§0 13. ความทนทานและคทาพลังหมด\n§0 14. แกนอัปเกรดคทา\n§0 15. วิธีใช้แท่นฟื้นฟูและลานซาก\n§0 16. Wand of Restoration\n§0 17. ไม้เท้าบิน\n§0 18. แหล่ง Magic Core และแกน MYTHIC ใหม่"
+            "§1§lคัมภีร์เวทมนตร์ Advance Magic§r\n§8เล่มที่ 3 · เวท 18 ธาตุ และระบบฟื้นฟูคทา§r\n\n§b§l[ สารบัญ ]§r\n§0 2. มานาและการคราฟต์คทา\n§0 3. Shulker Levitation [MYTHIC]\n§0 4–10. เวทมนตร์ 14 ธาตุทั่วไป\n§0 11. Solar Apocalypse [MYTHIC]\n§0 12. Chronos: Final Hour [MYTHIC]\n§0 13. ความทนทานและคทาพลังหมด\n§0 14. แกนอัปเกรดคทา\n§0 15. วิธีใช้แท่นฟื้นฟูและลานซาก\n§0 16. Wand of Restoration\n§0 17. ไม้เท้าบิน\n§0 18. แหล่ง Magic Core และแกน MYTHIC ใหม่\n§0 19. Heaven's Judgment [MYTHIC]"
         ),
         new GuidePage(
             "ระบบเวทมนตร์และการคราฟต์",
-            "§b--- ระบบเวทมนตร์ Advance Magic ---§r\n\nคทาเวทมนตร์มีทั้งหมด 17 สาย แต่ละสายใช้ Magic Core ที่ได้รับจาก Evergarden Vault เป็นแกนกลาง\n\nการคราฟต์คทา:\nวาง Magic Core ตรงกลางโต๊ะคราฟต์ ล้อมด้วย Netherite Ingot 8 แท่ง หรือ Nether Star 8 ชิ้น\n\nการใช้งาน:\nถือคทาแล้วคลิกขวาเพื่อร่ายมหาเวท\n• ตรวจสอบระดับมานาปัจจุบันด้วย /magic mana\n• มานาจะฟื้นฟูอัตโนมัติตามเวลา\n• คทาแต่ละชนิดมีเอฟเฟกต์เฉพาะตัว ใช้ความทนทาน 1 ต่อการร่ายสำเร็จ ซ่อมและอัปเกรดได้"
+            "§b--- ระบบเวทมนตร์ Advance Magic ---§r\n\nคทาเวทมนตร์มีทั้งหมด 18 สาย แต่ละสายใช้ Magic Core ที่ได้รับจาก Evergarden Vault เป็นแกนกลาง\n\nการคราฟต์คทา:\nวาง Magic Core ตรงกลางโต๊ะคราฟต์ ล้อมด้วย Netherite Ingot 8 แท่ง หรือ Nether Star 8 ชิ้น\n\nการใช้งาน:\nถือคทาแล้วคลิกขวาเพื่อร่ายมหาเวท\n• ตรวจสอบระดับมานาปัจจุบันด้วย /magic mana\n• มานาจะฟื้นฟูอัตโนมัติตามเวลา\n• คทาแต่ละชนิดมีเอฟเฟกต์เฉพาะตัว ใช้ความทนทาน 1 ต่อการร่ายสำเร็จ ซ่อมและอัปเกรดได้"
         ),
         new GuidePage(
             "มหาเวท Shulker Levitation",
-            "§5--- มหาเวทต้องห้าม [MYTHIC] ---§r\n\n§d✦ Shulker Levitation (Core of Levitation)§r\n(มานา: 95 | คูลดาวน์: 35 วินาที)\n\nคทาต้องห้ามระดับตำนานสูงสุด เรียกพายุสายฟ้าและเสียงมังกรคำราม ดึงศัตรูทั้งหมดในระยะ 22 บล็อกลอยขึ้นสู่เวหาพร้อมดูดพลังชีวิต\n\nเมื่อเวทสิ้นสุด จะจุดชนวนระเบิดมิติ Singularity 120 ดาเมจผลักศัตรูกระเด็น และสาปพื้นดินเป็น Sculk Corruption ศัตรูที่เหยียบจะติด Wither III นาน 15 วินาที\n\nหมวด Mythic Core จาก Vault รวม 0.5% สุ่มหนึ่งในสามแกน"
+            "§5--- มหาเวทต้องห้าม [MYTHIC] ---§r\n\n§d✦ Shulker Levitation (Core of Levitation)§r\n(มานา: 95 | คูลดาวน์: 35 วินาที)\n\nคทาต้องห้ามระดับตำนานสูงสุด เรียกพายุสายฟ้าและเสียงมังกรคำราม ดึงศัตรูทั้งหมดในระยะ 22 บล็อกลอยขึ้นสู่เวหาพร้อมดูดพลังชีวิต\n\nเมื่อเวทสิ้นสุด จะจุดชนวนระเบิดมิติ Singularity 120 ดาเมจผลักศัตรูกระเด็น และสาปพื้นดินเป็น Sculk Corruption ศัตรูที่เหยียบจะติด Wither III นาน 15 วินาที\n\nหมวด Mythic Core จาก Vault รวม 0.5% สุ่มหนึ่งในสี่แกน"
         ),
         new GuidePage(
             "ธาตุสายฟ้า & น้ำแข็ง",
@@ -144,7 +144,7 @@ public final class GuideData {
         ),
         new GuidePage(
             "มหาเวทสุริยันล้างโลก [MYTHIC]",
-            "§6--- Solar Apocalypse ---§r\n\nCore of the Sun · มานา 100 · คูลดาวน์ 45 วินาที\n\nสุริยัน 5 ชั้นเว้นระยะ แต่ละลูกใหญ่เป็น 2 เท่าของลูกด้านล่าง ดึงศัตรูเข้าวงเวท ยิงลำแสง 5 ครั้ง ครั้งละ 32 แล้วทั้ง 5 ลูกร่วงพร้อมกัน กระแทก 180 ดาเมจ รัศมี 16 บล็อก\n\nพื้นกลายเป็นทะเลลาวา 15 วินาที เผาศัตรูและทำดาเมจเวท 12 ต่อวินาที แล้วคืนพื้นจากขอบเข้ากลาง\n\nใช้ความทนทาน 1 ซ่อมและอัปเกรดได้\n\nMythic Core ใน Vault รวม 0.5% สุ่มหนึ่งในสามแกน"
+            "§6--- Solar Apocalypse ---§r\n\nCore of the Sun · มานา 100 · คูลดาวน์ 45 วินาที\n\nสุริยัน 5 ชั้นเว้นระยะ แต่ละลูกใหญ่เป็น 2 เท่าของลูกด้านล่าง ดึงศัตรูเข้าวงเวท ยิงลำแสง 5 ครั้ง ครั้งละ 32 แล้วทั้ง 5 ลูกร่วงพร้อมกัน กระแทก 180 ดาเมจ รัศมี 16 บล็อก\n\nพื้นกลายเป็นทะเลลาวา 15 วินาที เผาศัตรูและทำดาเมจเวท 12 ต่อวินาที แล้วคืนพื้นจากขอบเข้ากลาง\n\nใช้ความทนทาน 1 ซ่อมและอัปเกรดได้\n\nMythic Core ใน Vault รวม 0.5% สุ่มหนึ่งในสี่แกน"
         ),
         new GuidePage(
             "มหาเวทราชันกาลเวลา [MYTHIC]",
@@ -172,7 +172,11 @@ public final class GuideData {
         ),
         new GuidePage(
             "แหล่งแกนเวทและ MYTHIC ใหม่",
-            "§6--- 17 Magic Cores ---§r\n\nรับ Evergarden Key จากวิหาร Dark / Astral / Time แล้วเปิด Evergarden Vault\n\nหมวด Core ธรรมดารวม 7% เลือกหนึ่งใน 14 ธาตุ หมวด Mythic Core รวม 0.5% เลือกหนึ่งใน Levitation / Sun / Time เท่า ๆ กัน ไม่ใช่ 0.5% ต่อแกน\n\n• Core of the Sun: ลูกแก้วทองส้ม มีผลึกพลังสุริยัน ใช้คราฟต์ Solar Apocalypse\n• Core of Time: ลูกแก้วม่วง มีนาฬิกาทรายสีฟ้า ใช้คราฟต์ Chronos: Final Hour\n\nวาง Core ตรงกลาง ล้อมด้วย Netherite Ingot หรือ Nether Star 8 ชิ้น ใช้ผสมกันได้ตามช่อง\n\nHeart of the Sea ธรรมดาและ Core of Restoration ใช้แทน Magic Core คราฟต์คทาไม่ได้"
+            "§6--- 18 Magic Cores ---§r\n\nรับ Evergarden Key จากวิหาร Dark / Astral / Time แล้วเปิด Evergarden Vault\n\nหมวด Core ธรรมดารวม 7% เลือกหนึ่งใน 14 ธาตุ หมวด Mythic Core รวม 0.5% เลือกหนึ่งใน Levitation / Sun / Time / Judgment เท่า ๆ กัน ไม่ใช่ 0.5% ต่อแกน\n\n• Core of the Sun: ลูกแก้วทองส้ม มีผลึกพลังสุริยัน ใช้คราฟต์ Solar Apocalypse\n• Core of Time: ลูกแก้วม่วง มีนาฬิกาทรายสีฟ้า ใช้คราฟต์ Chronos: Final Hour\n\nวาง Core ตรงกลาง ล้อมด้วย Netherite Ingot หรือ Nether Star 8 ชิ้น ใช้ผสมกันได้ตามช่อง\n\nHeart of the Sea ธรรมดาและ Core of Restoration ใช้แทน Magic Core คราฟต์คทาไม่ได้"
+        ),
+        new GuidePage(
+            "มหาเวท Heaven's Judgment",
+            "§6--- ลำแสงพิพากษา [MYTHIC] ---§r\n\n§eHeaven's Judgment (Core of Judgment)§r\nมานา 100 · คูลดาวน์ 45 วินาที\n\nเล็งแล้วคลิกขวาเพื่อสร้างวงเวทย์ทองแนวนอน 4 ชั้นเหนือเป้าหมาย วงเวทย์จะหมุนและลอยค้างอยู่กับที่\n\nชาร์จ 3 วินาที แล้วยิงลำแสงสีเหลืองขาวกว้าง 8 บล็อกลงมาต่อเนื่อง 4 วินาที ทำดาเมจ 85 ทุกครึ่งวินาที และปิดท้าย 80 รวม 760 หากโดนเต็มระยะ\n\nคราฟต์ด้วย Core of Judgment 1 ชิ้น + Netherite Ingot หรือ Nether Star รวม 8 ชิ้น\n\nCore อยู่ในหมวด Mythic Vault รวม 0.5% สุ่มหนึ่งในสี่แกน ซ่อมและอัปเกรดคทาได้"
         )
     );
 

@@ -18,6 +18,9 @@ damage:
   solar-beam: 45.0
   solar-apocalypse: 250.0
   solar-lava: 18.0
+  # Heaven's Judgment: eight 0.5-second pulses and one closing pulse = 760 damage.
+  heavens-judgment-pulse: 85.0
+  heavens-judgment-final: 80.0
   chronos-blade: 30.0
   chronos-shatter: 180.0
   chronos-final-burst: 160.0

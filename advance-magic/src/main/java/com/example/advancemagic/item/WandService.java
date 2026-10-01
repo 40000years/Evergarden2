@@ -61,6 +61,7 @@ public final class WandService implements Listener {
             case GUARDIAN_BEAM -> "the Guardian";
             case SOLAR_APOCALYPSE -> "the Sun";
             case CHRONOS_FINAL_HOUR -> "Time";
+            case HEAVENS_JUDGMENT -> "Judgment";
         };
     }
     private static String coreDisplayName(Spell spell) {
@@ -81,13 +82,13 @@ public final class WandService implements Listener {
                 ChatColor.DARK_PURPLE+"§k||§r "+ChatColor.LIGHT_PURPLE+"Forbidden Dragon Heart "+ChatColor.DARK_PURPLE+"§k||",
                 ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+"Shulker Levitation Wand",
                 ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.RED+"✦ หมวด Mythic ใน Vault รวม 0.5% · สุ่มหนึ่งในสามแกน"
+                ChatColor.RED+"✦ หมวด Mythic ใน Vault รวม 0.5% · สุ่มหนึ่งในสี่แกน"
             ));
         } else if(spell.isMythic()) {
             meta.setLore(List.of(ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC]",
                 ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+spell.title+" Wand",
                 ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.DARK_AQUA+"หมวด Mythic ใน Evergarden Vault: 0.5% · สุ่ม 1 ใน 3 แกน"));
+                ChatColor.DARK_AQUA+"หมวด Mythic ใน Evergarden Vault: 0.5% · สุ่ม 1 ใน 4 แกน"));
         } else {
             meta.setLore(List.of(
                 ChatColor.AQUA+"Ancient Magic Core (แกนเวทมนตร์โบราณ)",
@@ -242,9 +243,14 @@ public final class WandService implements Listener {
     }
     private List<String> wandLore(ItemStack item,Spell spell) {
         int durability=durabilityLevel(item),damage=damageLevel(item),cooldown=cooldownLevel(item);
-        return List.of(ChatColor.GRAY+"Right-click to cast",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
+        var lore=new ArrayList<>(List.of(ChatColor.GRAY+"Right-click to cast",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
                 ChatColor.AQUA+"Durability: "+usesLeft(item)+" / "+maxUses(item)+" uses",ChatColor.RED+"Damage: +"+(damage*3)+"%  "+ChatColor.YELLOW+"Cooldown: -"+(cooldown*3)+"%",
-                ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10");
+                ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10"));
+        if(spell==Spell.HEAVENS_JUDGMENT) {
+            lore.add(ChatColor.GOLD+"วงเวทย์ทอง 4 ชั้น · ชาร์จ 3 วินาที");
+            lore.add(ChatColor.YELLOW+"ลำแสงพิพากษากว้าง 8 บล็อก · ยิงต่อเนื่อง 4 วินาที");
+        }
+        return lore;
     }
     public double getEffectiveCooldown(ItemStack item,Spell spell) {
         if(spell==null)return 1.0;
@@ -318,7 +324,7 @@ public final class WandService implements Listener {
             String displayName=wandDisplayName(spell);
             boolean nameChanged=!Objects.equals(meta.getDisplayName(),displayName);
             if(nameChanged)meta.setDisplayName(displayName);
-            List<String> expectedLore=(spell==Spell.SOLAR_APOCALYPSE||spell==Spell.CHRONOS_FINAL_HOUR)
+            List<String> expectedLore=(spell.isMythic()&&spell!=Spell.SHULKER_LEVITATION)
                     ?wandLore(item,spell):null;
             boolean loreChanged=expectedLore!=null&&!Objects.equals(meta.getLore(),expectedLore);
             if(loreChanged)meta.setLore(expectedLore);

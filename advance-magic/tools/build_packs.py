@@ -20,14 +20,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent / 'tools'))
 import restoration_assets
 import mythic_particles
+import judgment_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [2, 3, 0]  # Independent orb designs for the Sun and Time cores.
+BEDROCK_PACK_VERSION = [2, 4, 0]  # Heaven's Judgment wand, core and world-space beam.
 
 
 def spells():
     source = (ROOT / 'src/main/java/com/example/advancemagic/spell/Spell.java').read_text(encoding='utf8')
     rows = re.findall(r'(\w+)\("([^"]+)", Material\.(\w+), (\d+), (\d+), 0x([0-9A-F]+)\)', source)
-    assert len(rows) == 17, 'The spell catalog must contain exactly 17 spells'
+    assert len(rows) == 18, 'The spell catalog must contain exactly 18 spells'
     return [(name.lower(), title, int(color, 16)) for name, title, core, mana, cd, color in rows]
 
 
@@ -112,10 +113,10 @@ def main():
     # A fresh staging tree prevents removed assets leaking into subsequent builds.
     with tempfile.TemporaryDirectory(prefix='packs-', dir=target) as temp:
         java, bedrock = Path(temp) / 'java', Path(temp) / 'bedrock'
-        write_java_json(java / 'pack.mcmeta', {'pack': {'description': 'Advance Magic | 17 Arcane Wands', 'min_format': [75, 0], 'max_format': [88, 0]}})
+        write_java_json(java / 'pack.mcmeta', {'pack': {'description': 'Advance Magic | 18 Arcane Wands', 'min_format': [75, 0], 'max_format': [88, 0]}})
         write_json(bedrock / 'manifest.json', {
             'format_version': 2,
-            'header': {'name': 'Advance Magic', 'description': '17 arcane wands for Geyser',
+            'header': {'name': 'Advance Magic', 'description': '18 arcane wands for Geyser',
                        'uuid': 'e8233d13-8c1f-4eb9-8275-4d1d32a9c193', 'version': BEDROCK_PACK_VERSION, 'min_engine_version': [1, 21, 80]},
             'modules': [{'type': 'resources', 'uuid': '540c6378-ed9a-4e3a-b121-8f5d10607f72', 'version': BEDROCK_PACK_VERSION}]})
         atlas, definitions, cases = {}, [], []
@@ -128,7 +129,8 @@ def main():
             'blaze_barrage': 'Core of the Blaze', 'wither_ray': 'Core of Wither',
             'shulker_levitation': 'Core of Levitation', 'meteor_strike': 'Core of Meteor',
             'iron_armor': 'Core of Iron', 'vex_legion': 'Core of Evocation', 'guardian_beam': 'Core of the Guardian',
-            'solar_apocalypse': 'Core of the Sun', 'chronos_final_hour': 'Core of Time'
+            'solar_apocalypse': 'Core of the Sun', 'chronos_final_hour': 'Core of Time',
+            'heavens_judgment': 'Core of Judgment'
         }
 
         # 1. Arcane Wands
@@ -149,7 +151,7 @@ def main():
                                 'bedrock_identifier': f'advance_magic:{name}', 'display_name': title + ' Wand',
                                 'bedrock_options': {'icon': f'advance_magic.{name}', 'allow_offhand': True, 'display_handheld': True, 'creative_category': 'equipment'}})
 
-        # 2. Magic Cores (17 Elemental Cores)
+        # 2. Magic Cores (18 Elemental Cores)
         for index, (name, title, color) in enumerate(spells()):
             core_source = ROOT / f'art/cores/core_{name}.png'
             if not core_source.is_file():
@@ -187,6 +189,8 @@ def main():
 
         restoration_assets.register_magic(java, bedrock, atlas, upgrade_definitions)
         mythic_particles.register(bedrock,write_json,png)
+        judgment_assets.register_java(java,write_java_json)
+        judgment_assets.register_bedrock(bedrock,write_json,png)
         # Include the authored staff resources in the real packs, not as a second
         # pack that could override the existing wand atlas or Geyser mappings.
         staff = ROOT / 'art/flying-staff'
@@ -244,9 +248,9 @@ def main():
             'main{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:40px}'
             'article{background:#221a30;border:1px solid #493758;border-radius:14px;padding:20px;text-align:center}'
             'img{width:128px;height:128px;image-rendering:pixelated}h2{font-size:17px}code{font-size:11px;color:#b9a8cd}'
-            '</style><h1>Advance Magic</h1><p>17 Arcane Wands &amp; 17 Elemental Cores · Java &amp; Bedrock Textures</p>'
-            '<h2>17 Arcane Wands</h2><main>' + ''.join(cards) + '</main>'
-            '<h2>17 Magic Cores (Void Vault Drops)</h2><main>' + ''.join(core_cards) + '</main></html>', encoding='utf8')
+            '</style><h1>Advance Magic</h1><p>18 Arcane Wands &amp; 18 Elemental Cores · Java &amp; Bedrock Textures</p>'
+            '<h2>18 Arcane Wands</h2><main>' + ''.join(cards) + '</main>'
+            '<h2>18 Magic Cores (Void Vault Drops)</h2><main>' + ''.join(core_cards) + '</main></html>', encoding='utf8')
         hashes = {name: hashlib.sha1((DIST / name).read_bytes()).hexdigest()
                   for name in ('advance-magic-java.zip', 'advance-magic-bedrock.mcpack')}
         write_json(DIST / 'pack-hashes.json', hashes)

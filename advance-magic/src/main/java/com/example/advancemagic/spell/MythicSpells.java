@@ -9,7 +9,7 @@ import com.example.advancemagic.effect.TemporaryTerrainService;
 import java.util.*;
 
 /** Shared world-space geometry with journaled, owned temporary terrain.
- * No displays, camera packets, world-time changes or unowned tasks.
+ * No camera packets, world-time changes or unowned tasks.
  * A single scope owns each complete cast, including its final attack and echoes.
  */
 public final class MythicSpells {
@@ -192,6 +192,92 @@ public final class MythicSpells {
                 sea[0].tick(age-110,lifetime);
                 if(sea[0].touches(p)&&p.getFireTicks()>0)p.setFireTicks(0);
                 terrainPulse(p,at,sea[0],age-110,Spell.SOLAR_APOCALYPSE,power,lavaDamage);
+            }
+            return true;
+        });
+        return true;
+    }
+
+    /** Stationary horizontal seals: only the light fires downward. */
+    private void judgmentSeal(Location at,double radius,int age,int layer) {
+        double turn=age*.009*(layer%2==0?1:-1)+layer*.3;
+        ring(at,radius,GOLD,2.3f,80,turn);
+        ring(at,radius*.83,WHITE,1.5f,64,-turn);
+        ring(at,radius*.56,GOLD,1.4f,48,turn);
+        for(int i=0;i<8;i++) {
+            double angle=TAU*i/8+turn;
+            Location inner=at.clone().add(Math.cos(angle)*radius*.83,0,Math.sin(angle)*radius*.83);
+            Location outer=at.clone().add(Math.cos(angle)*radius,0,Math.sin(angle)*radius);
+            line(inner,outer,WHITE,1.5f,3);
+            double next=angle+TAU*3/8;
+            line(at.clone().add(Math.cos(angle)*radius*.56,0,Math.sin(angle)*radius*.56),
+                at.clone().add(Math.cos(next)*radius*.56,0,Math.sin(next)*radius*.56),GOLD,1.3f,8);
+        }
+    }
+    private List<LivingEntity> judgmentTargets(Player p,Location at,double height) {
+        var bounds=new org.bukkit.util.BoundingBox(at.getX()-4,at.getY()-1,at.getZ()-4,
+            at.getX()+4,at.getY()+height,at.getZ()+4);
+        int limit=Math.clamp(c.plugin.getConfig().getInt("max-targets-per-effect",32),1,128);
+        return at.getWorld().getNearbyEntities(bounds).stream()
+            .filter(e->e instanceof LivingEntity&&c.enemy(p,e)).map(e->(LivingEntity)e)
+            .filter(e->{double x=e.getLocation().getX()-at.getX(),z=e.getLocation().getZ()-at.getZ();return x*x+z*z<=16;})
+            .sorted(Comparator.comparingDouble(e->e.getLocation().distanceSquared(at))).limit(limit)
+            .filter(e->c.affect(p,e,Spell.HEAVENS_JUDGMENT)).toList();
+    }
+    public boolean judgment(Player p) {
+        Location at=center(p);
+        if(at==null||!room(at))return false;
+        double scale=Math.min(1,(at.getWorld().getMaxHeight()-1-at.getY())/36.0);
+        if(scale<.25)return false;
+        double height=35*scale;
+        Location top=at.clone().add(0,height,0);
+        if(!c.loaded(top))return false;
+        double power=c.getCastDamageMultiplier(p.getUniqueId());
+        double pulse=c.configuredDamage("damage.heavens-judgment-pulse",85);
+        double finalDamage=c.configuredDamage("damage.heavens-judgment-final",80);
+        JudgmentBeamVisuals[] beam={null};
+        double[] levels={14,20,27,35},radii={7,10,13,16};
+        at.getWorld().playSound(at,Sound.BLOCK_BEACON_ACTIVATE,2f,.55f);
+        start(p,at,165,(effect,age)->{
+            if(!c.loaded(at)||!c.loaded(top))return false;
+            visuals.frame(at);
+            if(age%8==0&&age<148) {
+                double growth=age<40?.35+.65*age/40.0:1;
+                for(int layer=0;layer<4;layer++)
+                    judgmentSeal(at.clone().add(0,levels[layer]*scale,0),radii[layer]*scale*growth,age,layer);
+                ring(at.clone().add(0,.25,0),4,GOLD,1.8f,48,age*.012);
+            }
+            if(age<60&&age%12==0) {
+                spark(at.clone().add(0,1,0),Particle.END_ROD,12,2);
+                at.getWorld().playSound(at,Sound.BLOCK_AMETHYST_BLOCK_RESONATE,1f,.65f+age*.012f);
+            }
+            if(age==60) {
+                beam[0]=new JudgmentBeamVisuals(effect,at,height);
+                at.getWorld().playSound(at,Sound.BLOCK_BEACON_POWER_SELECT,2f,.65f);
+                at.getWorld().playSound(at,Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1.5f,1.45f);
+            }
+            if(age>=60&&age<140&&age%4==0) {
+                float growth=(float)Math.min(1,(age-60+4)/12.0);
+                beam[0].frame(visuals,age,growth);
+                visuals.judgmentBeam(at,height,8*growth);
+                // Visible even without the pack; also outlines the attack radius.
+                ring(at.clone().add(0,.4,0),4,GOLD,2.4f,48,age*.02);
+                spark(at.clone().add(0,.7,0),Particle.END_ROD,16,2);
+                if(age%20==0)at.getWorld().playSound(at,Sound.BLOCK_BEACON_AMBIENT,1.7f,.65f);
+            }
+            if(age>=60&&age<140&&age%10==0)for(var enemy:judgmentTargets(p,at,height)) {
+                hit(p,enemy,pulse,power);
+                if(!enemy.isDead())c.potion(enemy,PotionEffectType.SLOWNESS,15,1);
+            }
+            if(age==140) {
+                beam[0].close();
+                for(var enemy:judgmentTargets(p,at,height))hit(p,enemy,finalDamage,power);
+                spark(at.clone().add(0,1,0),Particle.END_ROD,60,3);
+                at.getWorld().playSound(at,Sound.BLOCK_BEACON_DEACTIVATE,2f,.7f);
+            }
+            if(age>=140&&age%4==0) {
+                ring(at.clone().add(0,.3,0),4+(age-140)*.4,GOLD,1.8f,64,0);
+                ring(at.clone().add(0,.8,0),3+(age-140)*.3,WHITE,1.4f,48,0);
             }
             return true;
         });

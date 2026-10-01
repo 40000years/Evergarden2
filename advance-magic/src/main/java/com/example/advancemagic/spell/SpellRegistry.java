@@ -26,6 +26,7 @@ public final class SpellRegistry {
         spells.put(Spell.GUARDIAN_BEAM,channel::guardianBeam);
         spells.put(Spell.SOLAR_APOCALYPSE,mythic::solar);
         spells.put(Spell.CHRONOS_FINAL_HOUR,mythic::chronos);
+        spells.put(Spell.HEAVENS_JUDGMENT,mythic::judgment);
         if(spells.size()!=Spell.values().length)throw new IllegalStateException("Missing spell implementation");
     }
     public boolean cast(Player player,Spell spell){return spells.get(spell).test(player);}

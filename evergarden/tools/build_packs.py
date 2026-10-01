@@ -339,11 +339,12 @@ def main():
   'blaze_barrage':'Core of the Blaze','wither_ray':'Core of Wither',
   'shulker_levitation':'Core of Levitation','meteor_strike':'Core of Meteor',
   'iron_armor':'Core of Iron','vex_legion':'Core of Evocation','guardian_beam':'Core of the Guardian',
-  'solar_apocalypse':'Core of the Sun','chronos_final_hour':'Core of Time'
+  'solar_apocalypse':'Core of the Sun','chronos_final_hour':'Core of Time',
+  'heavens_judgment':'Core of Judgment'
  }
  for c_id,c_title in core_items.items():
   source=ROOT/f'art/cores/core_{c_id}.png'
-  if c_id in ('solar_apocalypse','chronos_final_hour'):
+  if c_id in ('solar_apocalypse','chronos_final_hour','heavens_judgment'):
    source=ROOT.parent/f'advance-magic/art/cores/core_{c_id}.png'
   if source.is_file():
    data=source.read_bytes()
@@ -383,7 +384,10 @@ def main():
  manifest=json.loads((bedrock/'manifest.json').read_text(encoding='utf8'))
  import mythic_particles
  mythic_particles.register(bedrock,write_json,lambda path,pixels:png(path,pixels,len(pixels)))
- version=[3,10,0]
+ import judgment_assets
+ judgment_assets.register_java(java,write_json)
+ judgment_assets.register_bedrock(bedrock,write_json,lambda path,pixels:png(path,pixels,len(pixels)))
+ version=[3,11,0]
  manifest['header']['version']=version
  for module in manifest['modules']:module['version']=version
  write_json(bedrock/'manifest.json',manifest)

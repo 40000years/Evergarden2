@@ -118,6 +118,13 @@ Install the updated `dist/evergarden.jar` and restart the server.
 
 ## Resource packs
 
+**Heaven's Judgment** adds an eighteenth wand and a fourth Mythic core: four
+stationary horizontal golden seals charge above the target, then fire an
+eight-block-wide yellow-white beacon beam downward for four seconds. The ivory
+halo wand and crystal-seal core have separate new artwork. It uses the existing
+core crafting recipe and appears in both item menus and the Thai player guide.
+See [crafting, damage, installation and checks](docs/heavens-judgment.md).
+
 Advance Magic now includes **Solar Apocalypse** and **Chronos: Final Hour**,
 bringing the catalog to 17 wands and three Mythic cores. The new items use flat
 pixel art, with shared cinematic geometry and dedicated Bedrock colour emitters.

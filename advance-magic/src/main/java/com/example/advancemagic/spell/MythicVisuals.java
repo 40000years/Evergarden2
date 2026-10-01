@@ -2,6 +2,7 @@ package com.example.advancemagic.spell;
 
 import org.bukkit.*;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -51,6 +52,23 @@ final class MythicVisuals {
             }catch(ReflectiveOperationException|LinkageError e){disable(e);}
             viewer.player.spawnParticle(Particle.DUST,at,1,0,0,0,0,data,true);
         }
+    }
+    void hideBedrock(Entity entity) {
+        for(var viewer:viewers)if(viewer.session!=null&&!disabled&&viewer.player.canSee(entity))
+            viewer.player.hideEntity(c.plugin,entity);
+    }
+    /** Bedrock uses one tall beam billboard rather than translating a stretched item display. */
+    void judgmentBeam(Location base,double height,double width) {
+        if(bridge==null||disabled)return;
+        Location at=base.clone().add(0,height/2,0);
+        for(var viewer:viewers)if(viewer.session!=null&&viewer.player.isOnline())try {
+            Object packet=bridge.packet.newInstance();
+            bridge.identifier.invoke(packet,"advance_magic:judgment_beam");
+            bridge.position.invoke(packet,bridge.vector.invoke(null,at.getX(),at.getY(),at.getZ()));
+            bridge.setDimension.invoke(packet,viewer.dimension);
+            bridge.variables.invoke(packet,Optional.of("[{\"name\":\"variable.beam_height\",\"value\":{\"type\":\"float\",\"value\":"+height+"}},{\"name\":\"variable.beam_width\",\"value\":{\"type\":\"float\",\"value\":"+width+"}}]"));
+            bridge.send.invoke(viewer.session,packet);
+        }catch(ReflectiveOperationException|LinkageError e){disable(e);return;}
     }
     private String tint(Color color) {
         return switch(color.asRGB()) {

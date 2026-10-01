@@ -22,7 +22,7 @@ public enum GuideBookType {
         "Advance Magic Arcana",
         "มหาจอมเวทบรรพกาล",
         Material.BLAZE_ROD,
-        "§b17 ธาตุ, มานา, การซ่อมคทา และไม้เท้าบิน"
+        "§b18 ธาตุ, มานา, การซ่อมคทา และไม้เท้าบิน"
     );
 
     public final String bookTitle;

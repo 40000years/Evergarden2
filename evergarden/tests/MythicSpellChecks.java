@@ -61,7 +61,7 @@ public final class MythicSpellChecks implements Listener {
     public void keepOrdinaryMobAlive(EntityDamageByEntityEvent event){if(event.getEntity()==ordinary)event.setCancelled(true);}
     public static void run(org.bukkit.plugin.java.JavaPlugin host,AdvanceMagicPlugin magic,VoidscapePlugin garden)throws Exception {
         var test=new MythicSpellChecks(host,magic,garden);
-        try{test.begin();Files.writeString(Path.of("mythic-result.txt"),"PASS "+test.checks+" checks; complete Solar/Chronos timelines, damage, mana, durability, protection, cleanup, GUI and Geyser particle packets");}
+        try{test.begin();Files.writeString(Path.of("mythic-result.txt"),"PASS "+test.checks+" checks; complete Solar/Chronos/Judgment timelines, damage, mana, durability, protection, cleanup, GUI and Geyser particle packets");}
         finally{test.cleanup();}
     }
     LivingEntity mob(World w,double x,double z,double health) {
@@ -84,7 +84,12 @@ public final class MythicSpellChecks implements Listener {
         var team=Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam("mythic-test");team.addEntry(player.getName());team.addEntry(ally.getUniqueId().toString());
         Bukkit.getPluginManager().registerEvents(this,host);
         long time=world.getTime();boolean storm=world.hasStorm();int entities=world.getEntities().size();
-        for(Spell spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR)) {
+        for(Spell spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR,Spell.HEAVENS_JUDGMENT)) {
+            LivingEntity elevated=null,outsideBeam=null;
+            if(spell==Spell.HEAVENS_JUDGMENT) {
+                elevated=mob(world,.5,12.5,1000);elevated.teleport(elevated.getLocation().add(0,20,0));
+                outsideBeam=mob(world,6.5,12.5,1000);
+            }
             target.setHealth(1000);target.setFireTicks(0);hits.clear();connection.particles.clear();
             magic.casts().quit(player);magic.mana().account(player).setMana(100);
             var wand=magic.wands().create(spell);player.getInventory().setItemInMainHand(wand);
@@ -93,16 +98,33 @@ public final class MythicSpellChecks implements Listener {
             check(magic.wands().usesLeft(player.getInventory().getItemInMainHand())==29,"durability charged once");
             check(magic.mana().account(player).remaining(spell.id(),System.currentTimeMillis())>=(spell.cooldown-1)*1000,"cooldown starts");
             tick(31);
+            if(spell==Spell.HEAVENS_JUDGMENT) {
+                check(world.getEntities().stream().noneMatch(e->e instanceof ItemDisplay),"Judgment charges before its beam appears");
+                tick(30);
+                var beam=world.getEntities().stream().filter(e->e instanceof ItemDisplay).map(e->(ItemDisplay)e).findFirst().orElseThrow();
+                check(beam.getItemStack().getItemMeta().getItemModel().getKey().equals("judgment_beam"),"Judgment uses the beacon beam model");
+                check(!beam.isPersistent()&&beam.getBrightness().getBlockLight()==15,"beam is temporary and full brightness");
+                tick(12);
+                check(Math.abs(beam.getTransformation().getScale().x()-8)<.001,"beam grows to eight blocks wide");
+            }
             if(spell==Spell.CHRONOS_FINAL_HOUR) {
                 check(ordinary.hasPotionEffect(PotionEffectType.SLOWNESS)&&ordinary.getPotionEffect(PotionEffectType.SLOWNESS).getAmplifier()==127,"ordinary mobs are rooted");
                 check(target.getPotionEffect(PotionEffectType.SLOWNESS).getAmplifier()==1,"high-health bosses are slowed without a hard root");
             }
             tick(110+magic.terrain().duration()+1);
             check(magic.effects().size()==0,"full timeline finishes and cleans up");
-            check(hits.size()==(spell==Spell.SOLAR_APOCALYPSE?6:11),"all beams/blades, echo and finisher hit");
-            double expected=spell==Spell.SOLAR_APOCALYPSE?340:304;
+            check(hits.size()==(spell==Spell.SOLAR_APOCALYPSE?6:spell==Spell.HEAVENS_JUDGMENT?9:12),"all beams/blades, echo and finisher hit");
+            double expected=spell==Spell.SOLAR_APOCALYPSE
+                ?5*magic.getConfig().getDouble("damage.solar-beam")+magic.getConfig().getDouble("damage.solar-apocalypse")
+                :spell==Spell.HEAVENS_JUDGMENT?760
+                :8.5*magic.getConfig().getDouble("damage.chronos-blade")+magic.getConfig().getDouble("damage.chronos-shatter")+magic.getConfig().getDouble("damage.chronos-final-burst");
             check(Math.abs(hits.stream().mapToDouble(Double::doubleValue).sum()-expected)<.001,"complete damage budget "+expected);
             check(ally.getHealth()==1000&&protectedTarget.getHealth()==1000,"allies and protected targets untouched");
+            if(spell==Spell.HEAVENS_JUDGMENT) {
+                check(Math.abs(elevated.getHealth()-240)<.001,"Judgment damages the tall beam column, not just a ground sphere");
+                check(outsideBeam.getHealth()==1000,"targets outside the four-block beam radius remain unharmed");
+                elevated.remove();outsideBeam.remove();
+            }
             check(!connection.particles.isEmpty(),"Java receives actual particle packets");
             check(connection.particles.size()<65000,"per-cast particle work is bounded, including crystal-beam fallback");
             check(magic.wands().restore(player.getInventory().getItemInMainHand()),"restoration supports the new wand");
@@ -114,15 +136,21 @@ public final class MythicSpellChecks implements Listener {
         magic.context().setCastDamageMultiplier(player.getUniqueId(),1.3);
         check(magic.spells().cast(player,Spell.CHRONOS_FINAL_HOUR),"upgraded Chronos starts");
         magic.context().clearCastDamageMultiplier(player.getUniqueId());tick(88+magic.terrain().duration()+1);
-        check(Math.abs(hits.stream().mapToDouble(Double::doubleValue).sum()-395.2)<.001,"damage multiplier survives the delayed timeline");
+        double chronosDamage=8.5*magic.getConfig().getDouble("damage.chronos-blade")+magic.getConfig().getDouble("damage.chronos-shatter")+magic.getConfig().getDouble("damage.chronos-final-burst");
+        check(Math.abs(hits.stream().mapToDouble(Double::doubleValue).sum()-chronosDamage*1.3)<.001,"damage multiplier survives the delayed timeline");
         tick(1);
         blockAll=true;hits.clear();check(magic.spells().cast(player,Spell.SOLAR_APOCALYPSE),"protected solar still renders");tick(142);
         check(hits.isEmpty(),"cancelled affect events block every damage stage");blockAll=false;
-        for(var spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR)) {
+        for(var spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR,Spell.HEAVENS_JUDGMENT)) {
             check(magic.spells().cast(player,spell),"cancellable cast starts");tick(30);hits.clear();
             magic.effects().closeOwner(player.getUniqueId());tick(155);
             check(hits.isEmpty()&&magic.effects().size()==0,"early cleanup never detonates or echoes");
         }
+        check(magic.spells().cast(player,Spell.HEAVENS_JUDGMENT),"active Judgment cleanup starts");tick(75);hits.clear();
+        magic.effects().closeOwner(player.getUniqueId());tick(100);
+        check(hits.isEmpty()&&world.getEntities().stream().noneMatch(e->e instanceof ItemDisplay),"active beam disappears immediately on owner cleanup");
+        blockAll=true;hits.clear();check(magic.spells().cast(player,Spell.HEAVENS_JUDGMENT),"protected Judgment still renders");tick(166);
+        check(hits.isEmpty(),"Judgment honors cancelled affect events for every pulse");blockAll=false;
         for(int i=0;i<4;i++)check(magic.spells().cast(player,Spell.SOLAR_APOCALYPSE),"concurrent Mythic slot "+i);
         check(!magic.spells().cast(player,Spell.CHRONOS_FINAL_HOUR),"world cinematic limit refuses a fifth cast safely");
         magic.effects().closeOwner(player.getUniqueId());check(magic.spells().cast(player,Spell.CHRONOS_FINAL_HOUR),"cleanup releases cinematic slots");magic.effects().closeOwner(player.getUniqueId());
@@ -139,7 +167,7 @@ public final class MythicSpellChecks implements Listener {
             check(magic.wands().coreSpell(inventory.getItem(18+spell.ordinal()))==spell,"Evergarden GUI core "+spell.id());
         }
         check(magic.flyingStaff().isStaff(inventory.getItem(50)),"Evergarden GUI staff stays separate");
-        for(var spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR)) {
+        for(var spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR,Spell.HEAVENS_JUDGMENT)) {
             var recipe=(org.bukkit.inventory.ShapedRecipe)Bukkit.getRecipe(new NamespacedKey(magic,spell.id()+"_ni_c"));
             check(recipe!=null&&magic.wands().spell(recipe.getResult())==spell,"new recipe returns the matching wand");
             check(recipe.getChoiceMap().get(recipe.getShape()[1].charAt(1)).test(garden.relics().createMagicCore(spell.id())),"recipe accepts the Evergarden core");
@@ -150,7 +178,7 @@ public final class MythicSpellChecks implements Listener {
         var rarity=com.example.voidscape.item.RelicService.class.getDeclaredMethod("mythicCore",com.example.voidscape.item.RelicService.MagicCore.class);rarity.setAccessible(true);
         var mythicIds=new HashSet<String>();
         for(var core:com.example.voidscape.item.RelicService.MAGIC_CORES)if((boolean)rarity.invoke(null,core))mythicIds.add(core.id());
-        check(mythicIds.equals(Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour")),"Vault Mythic pool contains exactly all three cores");
+        check(mythicIds.equals(Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment")),"Vault Mythic pool contains exactly all four cores");
         check(com.example.voidscape.item.RelicService.MAGIC_CORES.size()-mythicIds.size()==14,"normal Vault pool retains fourteen cores");
         bedrockParticles();team.unregister();
     }
@@ -175,6 +203,11 @@ public final class MythicSpellChecks implements Listener {
                 check(pack.getEntry("particles/mythic_"+color.getKey()+".particle.json")!=null&&pack.getEntry("textures/particle/mythic_dot.png")!=null,"served pack contains "+packet.getIdentifier());
             }
         }
+        var beam=clazz.getDeclaredMethod("judgmentBeam",Location.class,double.class,double.class);beam.setAccessible(true);
+        beam.invoke(visuals,new Location(player.getWorld(),2,105,4),35.0,8.0);
+        var packet=session.particles.getLast();
+        check(packet.getIdentifier().equals("advance_magic:judgment_beam")&&packet.getPosition().getY()==122.5f,"Bedrock beam is centered on the same vertical column as Java");
+        check(packet.getMolangVariablesJson().orElseThrow().contains("35.0")&&packet.getMolangVariablesJson().orElseThrow().contains("8.0"),"Bedrock receives the full beam height and width");
     }
     void cleanup() {
         HandlerList.unregisterAll(this);

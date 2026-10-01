@@ -4,9 +4,12 @@ import json
 import zipfile
 import struct
 import re
+import sys
 from pathlib import Path
 
 root = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(root.parent / 'tools'))
+from release_jar_checks import check_jar
 dist = root / 'dist'
 mapping = json.loads((dist / 'geyser-mappings.json').read_text())
 other = json.loads((root.parent / 'advance-magic/dist/geyser-mappings.json').read_text())
@@ -161,6 +164,7 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
     assert json.loads(java.read('assets/minecraft/items/shield.json'))['model']['fallback']['on_false']['model']['type'] == 'minecraft:shield'
     assert json.loads(java.read('assets/minecraft/items/shield.json'))['model']['fallback']['on_true']['model']['type'] == 'minecraft:shield'
     assert json.loads(java.read('assets/minecraft/items/shield.json'))['model']['fallback']['transformation']['scale'] == [1.0, -1.0, -1.0]
+check_jar(root.parent / 'dist/evergarden.jar')
 with zipfile.ZipFile(root.parent / 'dist/evergarden.jar') as jar:
     for filename in (*hashes, 'geyser-mappings.json', 'pack-hashes.json'):
         assert jar.read('resource-packs/' + filename) == (dist / filename).read_bytes()

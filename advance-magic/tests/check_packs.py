@@ -219,6 +219,8 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
 guide = (dist / 'advance-magic-guide-th.png').read_bytes()
 assert guide[:8] == b'\x89PNG\r\n\x1a\n' and min(struct.unpack('>II', guide[16:24])) >= 900
 if '--assets-only' not in sys.argv:
+    from release_jar_checks import check_jar
+    check_jar(ROOT.parent / 'dist/advance-magic.jar')
     with zipfile.ZipFile(ROOT.parent / 'dist/advance-magic.jar') as jar:
         for name in (*hashes, 'geyser-mappings.json', 'pack-hashes.json', 'wand-preview.html', 'advance-magic-guide-th.png'):
             assert jar.read('resource-packs/' + name) == (dist / name).read_bytes(), f'Stale/missing embedded asset: {name}'

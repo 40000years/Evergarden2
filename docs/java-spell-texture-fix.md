@@ -38,6 +38,13 @@ visual rendering in the user's running game remains to be confirmed.
 
 ## Verification and rebuilding
 
+Build release JARs in a fresh checkout outside the editor's workspace. An editor
+compiler can put error stubs in `target/classes`; an incremental Maven build can
+then reuse those files despite reporting success. Both pack validation scripts
+now reject JARs containing these error stubs. `ReleaseLinkageChecks.java` also
+executes the MythicSpells constructor and resolves the effect classes and
+Evergarden's MagicCastEvent listener against the release JARs.
+
 Build the supplement with:
 
 ```powershell

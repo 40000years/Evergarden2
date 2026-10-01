@@ -22,6 +22,7 @@ import restoration_assets
 import mythic_particles
 import judgment_assets
 import mythic_line_assets
+import magic_java_atlas
 DIST = ROOT / 'dist'
 BEDROCK_PACK_VERSION = [2, 6, 0]  # Continuous Solar orbits and Chronos clockwork.
 
@@ -194,6 +195,7 @@ def main():
         judgment_assets.register_bedrock(bedrock,write_json,png)
         mythic_line_assets.register_java(java,write_java_json)
         mythic_line_assets.register_bedrock(bedrock,write_json)
+        magic_java_atlas.register(java,write_java_json)
         # Include the authored staff resources in the real packs, not as a second
         # pack that could override the existing wand atlas or Geyser mappings.
         staff = ROOT / 'art/flying-staff'

@@ -387,7 +387,10 @@ def main():
  import judgment_assets
  judgment_assets.register_java(java,write_json)
  judgment_assets.register_bedrock(bedrock,write_json,lambda path,pixels:png(path,pixels,len(pixels)))
- version=[3,12,0]
+ import mythic_line_assets
+ mythic_line_assets.register_java(java,write_json)
+ mythic_line_assets.register_bedrock(bedrock,write_json)
+ version=[3,13,0]
  manifest['header']['version']=version
  for module in manifest['modules']:module['version']=version
  write_json(bedrock/'manifest.json',manifest)

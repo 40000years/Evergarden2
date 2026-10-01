@@ -21,8 +21,9 @@ sys.path.insert(0, str(ROOT.parent / 'tools'))
 import restoration_assets
 import mythic_particles
 import judgment_assets
+import mythic_line_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [2, 5, 0]  # Continuous golden sigils and enlarged Judgment seals.
+BEDROCK_PACK_VERSION = [2, 6, 0]  # Continuous Solar orbits and Chronos clockwork.
 
 
 def spells():
@@ -191,6 +192,8 @@ def main():
         mythic_particles.register(bedrock,write_json,png)
         judgment_assets.register_java(java,write_java_json)
         judgment_assets.register_bedrock(bedrock,write_json,png)
+        mythic_line_assets.register_java(java,write_java_json)
+        mythic_line_assets.register_bedrock(bedrock,write_json)
         # Include the authored staff resources in the real packs, not as a second
         # pack that could override the existing wand atlas or Geyser mappings.
         staff = ROOT / 'art/flying-staff'

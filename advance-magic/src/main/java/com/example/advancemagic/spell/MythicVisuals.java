@@ -3,13 +3,11 @@ package com.example.advancemagic.spell;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Entity;
+import org.bukkit.util.Vector;
 import java.lang.reflect.*;
 import java.util.*;
 
-/** Optional Geyser adapter for the new spells' coloured points only.
- * Java keeps native DustOptions; Bedrock receives the same position, tint and size
- * through the five particle definitions bundled in both served resource packs.
- */
+/** Optional Geyser adapter for coloured dust and authored world-space line art. */
 final class MythicVisuals {
     private record Viewer(Player player,Object session,int dimension) {}
     private final MagicContext c;
@@ -98,6 +96,47 @@ final class MythicVisuals {
             bridge.variables.invoke(packet,Optional.of("[{\"name\":\"variable.beam_height\",\"value\":{\"type\":\"float\",\"value\":"+height+"}},{\"name\":\"variable.beam_width\",\"value\":{\"type\":\"float\",\"value\":"+width+"}}]"));
             bridge.send.invoke(viewer.session,packet);
         }catch(ReflectiveOperationException|LinkageError e){disable(e);return;}
+    }
+    void linePlane(String model,Location at,double width,double height,Vector right,Vector up) {
+        if(bridge==null||disabled)return;
+        for(var viewer:viewers)if(viewer.session!=null&&viewer.player.isOnline())
+            linePacket(viewer,model,at,width,height,right,up);
+    }
+    void lineRay(String model,Location at,double width,double height,Vector direction) {
+        if(bridge==null||disabled)return;
+        for(var viewer:viewers)if(viewer.session!=null&&viewer.player.isOnline()) {
+            // Rotate only around the ray's axis so the ribbon faces this viewer.
+            Vector normal=viewer.player.getEyeLocation().toVector().subtract(at.toVector());
+            normal.subtract(direction.clone().multiply(normal.dot(direction)));
+            if(normal.lengthSquared()<1e-6)normal=direction.clone().crossProduct(new Vector(1,0,0));
+            if(normal.lengthSquared()<1e-6)normal=direction.clone().crossProduct(new Vector(0,0,1));
+            normal.normalize();
+            Vector right=direction.clone().crossProduct(normal).normalize();
+            linePacket(viewer,model,at,width,height,right,direction);
+        }
+    }
+    private void linePacket(Viewer viewer,String model,Location at,double width,double height,Vector right,Vector up) {
+        Vector normal=right.clone().crossProduct(up).normalize();
+        boolean flat=Math.abs(normal.getY())>.9999;
+        double rotation;
+        if(flat)rotation=Math.toDegrees(Math.atan2(right.getZ(),right.getX()));
+        else {
+            Vector baseUp=new Vector(0,1,0).subtract(normal.clone().multiply(normal.getY()));
+            if(baseUp.lengthSquared()<1e-8)baseUp=new Vector(0,0,1);
+            baseUp.normalize();Vector baseRight=baseUp.clone().crossProduct(normal).normalize();
+            rotation=Math.toDegrees(Math.atan2(right.dot(baseUp),right.dot(baseRight)));
+        }
+        String[] names={"line_width","line_height","line_rotation","line_normal_x","line_normal_y","line_normal_z"};
+        double[] values={width,height,rotation,normal.getX(),normal.getY(),normal.getZ()};
+        StringJoiner json=new StringJoiner(",","[","]");
+        for(int i=0;i<names.length;i++)json.add("{\"name\":\"variable."+names[i]+"\",\"value\":{\"type\":\"float\",\"value\":"+values[i]+"}}");
+        try {
+            Object packet=bridge.packet.newInstance();
+            bridge.identifier.invoke(packet,"advance_magic:"+model+(flat?"_flat":""));
+            bridge.position.invoke(packet,bridge.vector.invoke(null,at.getX(),at.getY(),at.getZ()));
+            bridge.setDimension.invoke(packet,viewer.dimension);bridge.variables.invoke(packet,Optional.of(json.toString()));
+            bridge.send.invoke(viewer.session,packet);
+        }catch(ReflectiveOperationException|LinkageError e){disable(e);}
     }
     private String tint(Color color) {
         return switch(color.asRGB()) {

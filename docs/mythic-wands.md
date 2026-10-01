@@ -1,10 +1,10 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.3.5-player-guide`, Evergarden `3.0.0-e2.18-player-guide`.
+Release: Advance Magic `1.4.2-celestial-lines`, Evergarden `3.0.0-e2.21-celestial-lines`.
 Install both JARs from the root `dist` directory and restart the server. This revision
-bundles refreshed packs (Advance Magic 2.3.0 / Evergarden 3.10.0) with two newly
-designed elemental cores. Reconnect clients to download the updated artwork.
-The player guide now covers all 17 spells, wand durability/upgrades, both restoration
+bundles refreshed packs (Advance Magic 2.6.0 / Evergarden 3.13.0) with continuous
+Solar and Chronos line art. Reconnect clients to download the updated artwork.
+The player guide covers all 18 spells, wand durability/upgrades, both restoration
 methods, ruined altar sites, flying staff controls and current item sources.
 See [the guide and patch infographic](player-guide-update.md).
 Evergarden migrates official pack URLs to the immutable published Java pack;
@@ -37,7 +37,11 @@ its outer rays; casting is refused below 10% of normal headroom. For example, wi
 an aim point at Y=100 and a world ceiling of 320, the scale is about 0.633: diameters
 are approximately 5.57, 11.14, 22.27, 44.54 and 89.08 blocks. The doubling ratio is
 unchanged; apparent screen size also depends on the viewer's distance and angle.
-Geometry is redrawn every six ticks with 48–112 samples per great circle.
+With the pack loaded, each sun has three intersecting, authored solar coronas and
+five continuous latitude bands. Full-brightness ItemDisplay planes interpolate
+every four ticks on Java; Bedrock receives the identical textures on oriented
+world-space particle planes. The original sampled geometry remains a fallback
+for Java viewers whose resource pack has not loaded.
 
 Chronos keeps the five upright 8-block-radius clocks and places its outer dial
 **horizontally in the XZ plane**, with radius 22 (44 blocks across). The main clock
@@ -45,8 +49,18 @@ centre is 24 blocks above the aim point; the outer dial floats another 12 blocks
 above it, at a height of 36 blocks. Its outline, hour markers, hands and crystal
 positions all use the horizontal plane. Twelve native End Crystal emitters occupy
 its hour positions and beam down into the central clock from tick 40 until shatter
-at tick 160. Inner clocks retain their coloured particle lasers into the ground
+at tick 160. Inner clocks use continuous coloured light ribbons into the ground
 target. Only the outer dial uses the End Crystal beam style.
+
+The six clock faces now have Roman hour numerals, minute marks, interlocking
+gears and cyan/violet filigree. Separate minute/hour textures rotate over the
+stationary dials, including reversed motion after tick 88. Horizontal planes use
+an explicit Bedrock XZ basis; upright planes use their world normal. Solar's
+golden rays and Chronos's cyan/violet rays keep the original damage timeline.
+Temporary displays belong to the cast scope and are removed on cancellation.
+Source art is editable SVG alongside its PNG in `advance-magic/art/effects`;
+regenerate it with `python tools/mythic_line_art.py`.
+See [the artwork preview](../previews/solar-chronos-line-art.png).
 
 Solar impacts at 5.5 seconds; Chronos shatters at 8 seconds. Solar's lava lasts
 15 seconds from impact. Chronos's ice appears at 4.4 seconds, recedes over 6 seconds,
@@ -193,13 +207,21 @@ shaft, antique-gold clock head with cyan hands and violet/cyan magical highlight
 ## Verification
 
 `evergarden/tests/run_bedrock_items.py` creates an isolated Paper server using the
-local Geyser and Aeternum Seasons JARs. It verifies all item factories against three
+local Geyser and Aeternum Seasons JARs. It verifies all item factories against five
 Geyser protocol registries and runs `MythicSpellChecks`: complete spell timelines,
 mana, cooldown, durability/repair, exact damage stages, delayed upgrade multiplier,
 ally/protection filtering, early cleanup, concurrency limit, every GUI wand/core,
 and actual Geyser particle packet objects plus the bundled emitter files.
 Pack checks validate sprite transparency, routing, hashes and embedded resources.
 This does not launch or restart the live Minecraft server.
+
+The **1.4.2 / e2.21** release passed 226 Mythic checks and 1,115 item translations
+across 220 custom identifiers and five Bedrock protocol tables on isolated Paper.
+Checks cover the authored sphere planes, original doubling ratio, all six independent
+clock hands, animated rotations, continuous attack rays, resource-pack visibility,
+exact damage budgets, cancellation and complete display cleanup. Both pack checks
+passed and release bytecode contains no unresolved-compiler error stubs. The PNG
+preview was inspected; an interactive Java/Bedrock client render was not run.
 
 The **initial 1.3.0 release** was verified on Paper 26.2 build 121 and Geyser 2.11.3 build 1246:
 663 item translations across 218 custom identifiers / three protocol registries,

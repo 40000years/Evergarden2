@@ -92,6 +92,8 @@ public final class MythicSpellChecks implements Listener {
             }
             target.setHealth(1000);target.setFireTicks(0);hits.clear();connection.particles.clear();
             magic.casts().quit(player);magic.mana().account(player).setMana(100);
+            magic.packs().status(new org.bukkit.event.player.PlayerResourcePackStatusEvent(player,
+                com.example.advancemagic.pack.ResourcePackService.PACK_ID,org.bukkit.event.player.PlayerResourcePackStatusEvent.Status.DECLINED));
             var wand=magic.wands().create(spell);player.getInventory().setItemInMainHand(wand);
             if(spell==Spell.HEAVENS_JUDGMENT) {
                 check(wand.getItemMeta().getLore().size()==magic.wands().create(Spell.SOLAR_APOCALYPSE).getItemMeta().getLore().size(),"Judgment uses the same standard item lore as other wands");
@@ -105,6 +107,35 @@ public final class MythicSpellChecks implements Listener {
             check(magic.wands().usesLeft(player.getInventory().getItemInMainHand())==29,"durability charged once");
             check(magic.mana().account(player).remaining(spell.id(),System.currentTimeMillis())>=(spell.cooldown-1)*1000,"cooldown starts");
             tick(31);
+            if(spell!=Spell.HEAVENS_JUDGMENT) {
+                var art=world.getEntities().stream().filter(e->e instanceof ItemDisplay).map(e->(ItemDisplay)e)
+                    .filter(e->e.getTransformation().getScale().x()>0).toList();
+                check(art.size()==(spell==Spell.SOLAR_APOCALYPSE?41:19),"continuous celestial geometry replaces dotted outlines");
+                check(art.stream().noneMatch(player::canSee),"unloaded pack hides Solar and Chronos authored geometry");
+                check(art.stream().allMatch(e->!e.isPersistent()&&e.getBrightness().getBlockLight()==15),"celestial planes are temporary and glow at full brightness");
+                magic.packs().status(new org.bukkit.event.player.PlayerResourcePackStatusEvent(player,
+                    com.example.advancemagic.pack.ResourcePackService.PACK_ID,org.bukkit.event.player.PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
+                tick(4);
+                check(art.stream().allMatch(player::canSee),"Solar and Chronos line art appears after the pack loads");
+                if(spell==Spell.SOLAR_APOCALYPSE) {
+                    var orbs=art.stream().filter(e->e.getItemStack().getItemMeta().getItemModel().getKey().equals("solar_corona")&&e.getLocation().getY()>101).toList();
+                    check(orbs.size()==15,"five suns each have three intersecting celestial circles");
+                    double smallest=orbs.stream().mapToDouble(e->e.getTransformation().getScale().x()).min().orElseThrow();
+                    double largest=orbs.stream().mapToDouble(e->e.getTransformation().getScale().x()).max().orElseThrow();
+                    check(Math.abs(largest/smallest-16)<.001,"Solar retains the original doubling proportions");
+                    tick(28);
+                    check(world.getEntities().stream().anyMatch(e->e instanceof ItemDisplay d&&d.getItemStack().getItemMeta().getItemModel().getKey().equals("solar_ray")&&d.getTransformation().getScale().y()>0),"Solar fires a continuous gold ribbon during its pulse");
+                } else {
+                    var minute=art.stream().filter(e->e.getItemStack().getItemMeta().getItemModel().getKey().equals("chronos_minute")).toList();
+                    var hour=art.stream().filter(e->e.getItemStack().getItemMeta().getItemModel().getKey().equals("chronos_hour")).toList();
+                    check(minute.size()==6&&hour.size()==6,"all six Chronos clocks have independent minute and hour hands");
+                    var hand=minute.getFirst();var rotation=new org.joml.Quaternionf(hand.getTransformation().getLeftRotation());
+                    tick(4);
+                    check(!hand.getTransformation().getLeftRotation().equals(rotation),"clock hands animate independently of the detailed dial");
+                    tick(4);
+                    check(world.getEntities().stream().filter(e->e instanceof ItemDisplay d&&d.getItemStack().getItemMeta().getItemModel().getKey().equals("chronos_ray")&&d.getTransformation().getScale().y()>0).count()==5,"five clocks fire continuous cyan rays together");
+                }
+            }
             if(spell==Spell.HEAVENS_JUDGMENT) {
                 var sigils=world.getEntities().stream().filter(e->e instanceof ItemDisplay).map(e->(ItemDisplay)e).toList();
                 check(sigils.size()==4&&sigils.stream().allMatch(e->e.getItemStack().getItemMeta().getItemModel().getKey().startsWith("judgment_seal_")),"four textured horizontal seals charge before the beam appears");
@@ -229,6 +260,24 @@ public final class MythicSpellChecks implements Listener {
         packet=session.particles.getLast();
         check(packet.getIdentifier().equals("advance_magic:judgment_seal_1")&&packet.getPosition().getY()==140,"Bedrock receives the authored seal at the exact overhead height");
         check(packet.getMolangVariablesJson().orElseThrow().contains("56.0")&&packet.getMolangVariablesJson().orElseThrow().contains("-30.0"),"Bedrock seal receives the same diameter and counter-rotation");
+        var plane=clazz.getDeclaredMethod("linePlane",String.class,Location.class,double.class,double.class,org.bukkit.util.Vector.class,org.bukkit.util.Vector.class);plane.setAccessible(true);
+        var x=new org.bukkit.util.Vector(1,0,0);var y=new org.bukkit.util.Vector(0,1,0);var z=new org.bukkit.util.Vector(0,0,1);
+        plane.invoke(visuals,"chronos_dial",new Location(player.getWorld(),2,124,4),16.0,16.0,x,y);
+        packet=session.particles.getLast();
+        check(packet.getIdentifier().equals("advance_magic:chronos_dial")&&packet.getPosition().getY()==124,"Bedrock receives the upright authored Chronos clock at the same position");
+        check(packet.getMolangVariablesJson().orElseThrow().contains("line_normal_z")&&!packet.getMolangVariablesJson().orElseThrow().contains("NaN"),"upright Bedrock clocks receive a finite world normal");
+        plane.invoke(visuals,"solar_corona",new Location(player.getWorld(),2,140,4),44.0,44.0,x,z);
+        packet=session.particles.getLast();
+        check(packet.getIdentifier().equals("advance_magic:solar_corona_flat")&&packet.getPosition().getY()==140,"horizontal Solar circles use the explicit Bedrock XZ plane");
+        var ray=clazz.getDeclaredMethod("lineRay",String.class,Location.class,double.class,double.class,org.bukkit.util.Vector.class);ray.setAccessible(true);
+        ray.invoke(visuals,"chronos_echo",new Location(player.getWorld(),2,112,4),.75,24.0,y);
+        packet=session.particles.getLast();
+        check(packet.getIdentifier().equals("advance_magic:chronos_echo")&&packet.getMolangVariablesJson().orElseThrow().contains("24.0"),"Bedrock echo rays use continuous violet ribbons with the full attack length");
+        for(var owner:List.of(magic,garden))try(var pack=new java.util.zip.ZipFile(owner.getDataFolder().toPath().resolve("resource-packs/"+(owner==magic?"advance-magic":"evergarden")+"-bedrock.mcpack").toFile())) {
+            for(String name:List.of("solar_corona","solar_orbit","chronos_dial","chronos_minute","chronos_hour","chronos_ripple","solar_ray","chronos_ray","chronos_echo")) {
+                check(pack.getEntry("particles/"+name+".particle.json")!=null&&pack.getEntry("particles/"+name+"_flat.particle.json")!=null&&pack.getEntry("textures/particle/"+name+".png")!=null,"served Bedrock pack contains every orientation of "+name);
+            }
+        }
     }
     void cleanup() {
         HandlerList.unregisterAll(this);

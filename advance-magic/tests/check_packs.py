@@ -69,10 +69,14 @@ for name, digest in hashes.items():
                     image=z.read(file)
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
                     assert struct.unpack('>II',image[16:24]) in {(16,16),(64,64),(64,1024),(128,128)}
-                elif 'judgment_seal' in file:
+                elif any(name in file for name in ('judgment_seal','solar_corona','solar_orbit','chronos_dial','chronos_minute','chronos_hour','chronos_ripple')):
                     image=z.read(file)
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
                     assert struct.unpack('>II',image[16:24]) == (1024,1024)
+                elif any(name in file for name in ('solar_ray','chronos_ray','chronos_echo')):
+                    image=z.read(file)
+                    assert image[:8] == b'\x89PNG\r\n\x1a\n'
+                    assert struct.unpack('>II',image[16:24]) == (256,256)
                 elif 'judgment_beam' in file:
                     image=z.read(file)
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
@@ -100,6 +104,25 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as magic, zipfile.Zi
         assert all('variable.magic_size' in expression for expression in components['minecraft:particle_appearance_billboard']['size'])
 
 with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
+    names=('solar_corona','solar_orbit','chronos_dial','chronos_minute','chronos_hour','chronos_ripple','solar_ray','chronos_ray','chronos_echo')
+    with zipfile.ZipFile(ROOT.parent/'evergarden/dist/evergarden-java.zip') as garden_java, zipfile.ZipFile(dist/'advance-magic-bedrock.mcpack') as bedrock, zipfile.ZipFile(ROOT.parent/'evergarden/dist/evergarden-bedrock.mcpack') as garden_bedrock:
+        for name in names:
+            source=(ROOT/f'art/effects/{name}.png').read_bytes()
+            texture=f'assets/advance_magic/textures/effect/{name}.png'
+            assert z.read(texture)==garden_java.read(texture)==source
+            mesh=json.loads(z.read(f'assets/advance_magic/models/effect/{name}.json'))
+            assert all(not element['shade'] for element in mesh['elements'])
+            sides=set(mesh['elements'][0]['faces'])
+            assert sides==({'north','south','east','west'} if name.endswith(('_ray','_echo')) else {'north','south'})
+            assert bedrock.read(f'textures/particle/{name}.png')==garden_bedrock.read(f'textures/particle/{name}.png')==source
+            for suffix,mode in (('','direction_z'),('_flat','emitter_transform_xz')):
+                path=f'particles/{name}{suffix}.particle.json'
+                particle=json.loads(bedrock.read(path))
+                assert particle==json.loads(garden_bedrock.read(path))
+                effect=particle['particle_effect']
+                assert effect['description']['identifier']==f'advance_magic:{name}{suffix}'
+                assert effect['components']['minecraft:particle_appearance_billboard']['facing_camera_mode']==mode
+                assert effect['components']['minecraft:particle_lifetime_expression']['max_lifetime']<=.22
     for variant in range(2):
         name=f'judgment_seal_{variant}'
         mesh=json.loads(z.read(f'assets/advance_magic/models/effect/{name}.json'))
@@ -145,8 +168,8 @@ assert len(definitions) == len(catalog) == 18
 assert len({row['bedrock_identifier'] for row in definitions}) == 18
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [2, 5, 0]
-    assert manifest['modules'][0]['version'] == [2, 5, 0]
+    assert manifest['header']['version'] == [2, 6, 0]
+    assert manifest['modules'][0]['version'] == [2, 6, 0]
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     effect=json.loads(z.read('particles/judgment_beam.particle.json'))['particle_effect']

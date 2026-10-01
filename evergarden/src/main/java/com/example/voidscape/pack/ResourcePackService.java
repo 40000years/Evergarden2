@@ -16,8 +16,8 @@ import java.util.jar.JarFile;
 
 public final class ResourcePackService implements Listener, AutoCloseable {
     public static final UUID PACK_ID=UUID.fromString("c8f2b94e-4a35-4d1b-9b67-0d2a6ef4f821");
-    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/979728025250e124a6adb903251c429fbbf444cf/evergarden/dist/evergarden-java.zip";
-    private static final String CURRENT_SHA1 = "31f6ca5da7bff200dc521f603e446e8ddd8ac8da";
+    public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/196a8d2fcc984e6d795b9339e9154498501aecae/evergarden/dist/evergarden-java.zip";
+    private static final String CURRENT_SHA1 = "12afb1f5cd246e5af6f621a81b5a12864a40185e";
     public static final UUID AETERNUM_PACK_ID=UUID.fromString("8d2af8f1-f85c-4b4e-8a37-a55a359ce496");
     public static final String AETERNUM_PACK_URL="https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/evergarden/dist/Aeternum-Foods-26.x.zip";
     public static final String AETERNUM_PACK_SHA1="f7137350c381dfb933f96e869bfaced4a292bcff";

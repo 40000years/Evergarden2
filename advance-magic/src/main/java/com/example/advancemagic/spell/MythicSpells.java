@@ -58,33 +58,33 @@ public final class MythicSpells {
             dust(at.clone().add(Math.cos(a)*radius,0,Math.sin(a)*radius),color,size);
         }
     }
-    private void glyph(Location at,int age,Color color) {
-        ring(at,12,color,1.5f,64,0);
-        ring(at,9,color,1.2f,48,0);
+    private void glyphFallback(Location at,int age,Color color) {
+        sealRing(at,12,color,1.5f,64,0);
+        sealRing(at,9,color,1.2f,48,0);
         for(int i=0;i<10;i++) {
             double a=TAU*i/10+age*.012;
             Vector inner=new Vector(Math.cos(a)*9,0,Math.sin(a)*9);
             Vector outer=new Vector(Math.cos(a)*12,0,Math.sin(a)*12);
-            line(at.clone().add(inner),at.clone().add(outer),color,1.3f,4);
+            sealLine(at.clone().add(inner),at.clone().add(outer),color,1.3f,4);
         }
     }
-    private void sun(Location at,double radius,int age,int layer) {
+    private void sunFallback(Location at,double radius,int age,int layer) {
         // Three great circles give a recognizable 3D orb from either client's view.
         int points=48+layer*16;float size=2.8f+layer*.25f;
         for(int i=0;i<points;i++) {
             double a=TAU*i/points, x=Math.cos(a)*radius, y=Math.sin(a)*radius;
-            dust(at.clone().add(x,y,0),WHITE,size);
-            dust(at.clone().add(x,0,y),GOLD,size);
-            dust(at.clone().add(0,x,y),ORANGE,size-.2f);
+            visuals.dustFallback(at.clone().add(x,y,0),WHITE,size);
+            visuals.dustFallback(at.clone().add(x,0,y),GOLD,size);
+            visuals.dustFallback(at.clone().add(0,x,y),ORANGE,size-.2f);
         }
         for(int latitude=-2;latitude<=2;latitude++) {
             double y=radius*latitude/3, circle=Math.sqrt(radius*radius-y*y);
-            ring(at.clone().add(0,y,0),circle,latitude%2==0?GOLD:ORANGE,size-.4f,points/2,age*.015);
+            sealRing(at.clone().add(0,y,0),circle,latitude%2==0?GOLD:ORANGE,size-.4f,points/2,age*.015);
         }
         for(int i=0;i<12;i++) {
             double a=TAU*i/12+age*.018;
             Vector ray=new Vector(Math.cos(a),Math.sin(a),Math.sin(a*.5)*.3);
-            line(at.clone().add(ray.clone().multiply(radius)),at.clone().add(ray.multiply(radius+1.5)),GOLD,2f,3);
+            sealLine(at.clone().add(ray.clone().multiply(radius)),at.clone().add(ray.multiply(radius+1.5)),GOLD,2f,3);
         }
         spark(at,Particle.FLAME,32+layer*8,radius*.65);
         spark(at,Particle.END_ROD,10,radius*.35);
@@ -129,19 +129,22 @@ public final class MythicSpells {
         double lavaDamage=c.configuredDamage("damage.solar-lava",18);
         int lifetime=c.plugin.terrain().duration();
         TemporaryTerrainService.Zone[] sea={null};
+        SolarLineVisuals[] art={null};
         at.getWorld().playSound(at,Sound.ENTITY_ENDER_DRAGON_GROWL,2f,.65f);
         start(p,at,Math.max(141,110+lifetime+1),(effect,age)->{
             if(!c.loaded(at)||!c.loaded(top))return false;
             visuals.frame(at);
-            if(age%4==0&&age<110)glyph(at,age,GOLD);
+            if(age==0)art[0]=new SolarLineVisuals(effect,at,scale,radii,heights);
+            art[0].frame(visuals,age);
+            if(age%4==0&&age<110&&visuals.needsSealFallback())glyphFallback(at,age,GOLD);
             // Five larger orbs use a bounded 0.3-second redraw, not five full-rate effects.
-            if(age%6==0&&age<110) {
+            if(age%6==0&&age<110&&visuals.needsSealFallback()) {
                 double descent=age<90?0:Math.min(1,(age-90)/20.0);
                 double growth=age<40?.35+.65*age/40.0:1;
                 for(int i=0;i<5;i++){
                     // Every layer begins falling together and reaches the same impact at tick 110.
                     double height=(heights[i]*(1-descent)+descent)*scale;
-                    sun(at.clone().add(0,height,0),radii[i]*scale*growth*(1-descent*.25),age,i);
+                    sunFallback(at.clone().add(0,height,0),radii[i]*scale*growth*(1-descent*.25),age,i);
                 }
             }
             if(age<90&&age%10==0)for(var e:targets(p,at,14,Spell.SOLAR_APOCALYPSE)) {
@@ -153,9 +156,9 @@ public final class MythicSpells {
                 int beam=(age-40)/10;
                 double angle=TAU*beam/5;
                 Location impact=at.clone().add(Math.cos(angle)*4,0,Math.sin(angle)*4);
-                line(high,impact,WHITE,3.5f,40);
-                line(high.clone().add(.5,0,0),impact.clone().add(.5,0,0),ORANGE,2.5f,32);
-                ring(impact,5,GOLD,2f,40,0);
+                sealLine(high,impact,WHITE,3.5f,40);
+                sealLine(high.clone().add(.5,0,0),impact.clone().add(.5,0,0),ORANGE,2.5f,32);
+                sealRing(impact,5,GOLD,2f,40,0);
                 spark(impact,Particle.FLAME,60,1.8);
                 at.getWorld().playSound(impact,Sound.ENTITY_LIGHTNING_BOLT_THUNDER,1.5f,1.25f);
                 for(var e:targets(p,impact,7,Spell.SOLAR_APOCALYPSE)) {
@@ -164,7 +167,7 @@ public final class MythicSpells {
                 }
             }
             if(age==110) {
-                for(int i=0;i<5;i++)sun(at.clone().add(0,scale,0),radii[i]*scale*.75,age,i);
+                if(visuals.needsSealFallback())for(int i=0;i<5;i++)sunFallback(at.clone().add(0,scale,0),radii[i]*scale*.75,age,i);
                 spark(at.clone().add(0,1,0),Particle.EXPLOSION_EMITTER,1,0);
                 spark(at.clone().add(0,2,0),Particle.FLAME,120,4);
                 spark(at,Particle.END_ROD,60,3);
@@ -185,8 +188,8 @@ public final class MythicSpells {
             }
             if(age>=110&&age<=140&&age%2==0) {
                 double radius=1+(age-110)*.6;
-                ring(at.clone().add(0,.5,0),radius,ORANGE,2.5f,80,0);
-                ring(at.clone().add(0,1.2,0),radius*.9,GOLD,1.8f,48,0);
+                sealRing(at.clone().add(0,.5,0),radius,ORANGE,2.5f,80,0);
+                sealRing(at.clone().add(0,1.2,0),radius*.9,GOLD,1.8f,48,0);
             }
             if(sea[0]!=null){
                 sea[0].tick(age-110,lifetime);
@@ -301,7 +304,7 @@ public final class MythicSpells {
         return at.clone().add(right.clone().multiply(Math.cos(angle)*radius))
             .add(up.clone().multiply(Math.sin(angle)*radius));
     }
-    private void clock(Location at,Vector right,Vector up,int age,int offset,double radius) {
+    private void clockFallback(Location at,Vector right,Vector up,int age,int offset,double radius) {
         double turn=age<88?age*.055:-(age-88)*.12;
         turn+=offset*.35;
         // Static outlines persist for 0.8 seconds in Bedrock; redraw every 0.4 seconds.
@@ -309,21 +312,21 @@ public final class MythicSpells {
             int points=radius>8?120:72;
             for(int i=0;i<points;i++) {
                 double a=TAU*i/points;
-                dust(clockPoint(at,right,up,a,radius),GOLD,radius>8?2.8f:2f);
+                visuals.dustFallback(clockPoint(at,right,up,a,radius),GOLD,radius>8?2.8f:2f);
             }
             for(int i=0;i<12;i++) {
                 double a=TAU*i/12;
                 Location outer=clockPoint(at,right,up,a,radius*.9375);
                 Location inner=clockPoint(at,right,up,a,radius*.825);
-                line(inner,outer,i%3==0?CYAN:VIOLET,1.8f,3);
+                sealLine(inner,outer,i%3==0?CYAN:VIOLET,1.8f,3);
             }
             if(radius>8)for(int i=0;i<96;i++){
                 double a=TAU*i/96;
-                dust(clockPoint(at,right,up,a,radius+1),CYAN,2f);
+                visuals.dustFallback(clockPoint(at,right,up,a,radius+1),CYAN,2f);
             }
         }
-        line(at,clockPoint(at,right,up,turn,radius*.7875),CYAN,2.5f,20);
-        line(at,clockPoint(at,right,up,turn*.22+1,radius*.5),VIOLET,2.5f,14);
+        sealLine(at,clockPoint(at,right,up,turn,radius*.7875),CYAN,2.5f,20);
+        sealLine(at,clockPoint(at,right,up,turn*.22+1,radius*.5),VIOLET,2.5f,14);
         spark(at,Particle.END_ROD,4,.4);
     }
     private boolean boss(LivingEntity target) {
@@ -370,22 +373,29 @@ public final class MythicSpells {
         int lifetime=Math.clamp(c.plugin.getConfig().getInt("mythic-terrain.chronos-ice-duration-seconds",6),3,15)*20;
         TemporaryTerrainService.Zone[] ice={null};
         CrystalBeamVisuals.Projection[] projection={null};
+        ChronosLineVisuals[] art={null};
         Set<UUID> firstRound=new HashSet<>();
         start(p,at,Math.max(191,88+lifetime+1),(effect,age)->{
             if(!c.loaded(at)||!c.loaded(face)||!c.loaded(outerFace))return false;
             visuals.frame(at);
-            if(age==0)projection[0]=crystalBeams.open(effect,emitters,face);
-            if(age%4==0&&age<160) {
-                for(int i=0;i<faces.size();i++)clock(faces.get(i),axes.get(i),upright,age,i,8);
-                clock(outerFace,right,outerUp,age,5,22);
-                glyph(at,age,CYAN);
+            if(age==0){projection[0]=crystalBeams.open(effect,emitters,face);
+                art[0]=new ChronosLineVisuals(effect,at,faces,axes,outerFace,right,outerUp);}
+            boolean firing=(age>=40&&age<=86&&(age-40)%10<=6)
+                ||(age>=100&&age<=146&&(age-100)%10<=6);
+            art[0].frame(visuals,age,firing);
+            if(age%4==0&&age<160&&visuals.needsSealFallback()) {
+                for(int i=0;i<faces.size();i++)clockFallback(faces.get(i),axes.get(i),upright,age,i,8);
+                clockFallback(outerFace,right,outerUp,age,5,22);
+                glyphFallback(at,age,CYAN);
             }
             if(age%4==0&&projection[0]!=null){
                 projection[0].sync(at,age>=40&&age<160);
                 if(!projection[0].available()&&age>=40&&age<160)for(Location source:emitters){
-                    line(source.clone().add(0,-1,0),face,VIOLET,2.8f,30);
+                    sealLine(source.clone().add(0,-1,0),face,VIOLET,2.8f,30);
                 }
             }
+            if(age%2==0&&age>=40&&age<160&&projection[0]!=null&&!projection[0].available())
+                art[0].crystalFallback(visuals,emitters,face);
             if(age%10==0&&age<=60)for(var e:targets(p,at,12,Spell.CHRONOS_FINAL_HOUR)) {
                 if(boss(e))c.potion(e,PotionEffectType.SLOWNESS,25,1);
                 else c.plugin.statuses().root(p,e);
@@ -401,11 +411,9 @@ public final class MythicSpells {
                     if(first||firstRound.contains(e.getUniqueId()))hit(p,e,bladeDamage*(echo?.7:1),power);
                 }
             }
-            boolean firing=(age>=40&&age<=86&&(age-40)%10<=6)
-                ||(age>=100&&age<=146&&(age-100)%10<=6);
             if(firing&&age%2==0)for(Location source:faces){
-                line(source,at.clone().add(0,1,0),age>=100?VIOLET:CYAN,2.8f,36);
-                line(source.clone().add(0,.3,0),at.clone().add(0,1.3,0),WHITE,1.4f,24);
+                sealLine(source,at.clone().add(0,1,0),age>=100?VIOLET:CYAN,2.8f,36);
+                sealLine(source.clone().add(0,.3,0),at.clone().add(0,1.3,0),WHITE,1.4f,24);
             }
             if(age==88){
                 at.getWorld().playSound(at,Sound.BLOCK_BEACON_DEACTIVATE,1.8f,.5f);
@@ -421,8 +429,8 @@ public final class MythicSpells {
                 for(var e:targets(p,at,12,Spell.CHRONOS_FINAL_HOUR))hit(p,e,shatterDamage,power);
             }
             if(age>=160&&age<=190&&age%2==0) {
-                ring(at.clone().add(0,.8,0),1+(age-160)*.5,VIOLET,2f,64,-age*.06);
-                ring(at.clone().add(0,1.5,0),1+(age-160)*.35,CYAN,1.6f,48,age*.06);
+                sealRing(at.clone().add(0,.8,0),1+(age-160)*.5,VIOLET,2f,64,-age*.06);
+                sealRing(at.clone().add(0,1.5,0),1+(age-160)*.35,CYAN,1.6f,48,age*.06);
             }
             if(ice[0]!=null){
                 int iceAge=age-88;

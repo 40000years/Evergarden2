@@ -22,7 +22,7 @@ import restoration_assets
 import mythic_particles
 import judgment_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [2, 4, 0]  # Heaven's Judgment wand, core and world-space beam.
+BEDROCK_PACK_VERSION = [2, 5, 0]  # Continuous golden sigils and enlarged Judgment seals.
 
 
 def spells():

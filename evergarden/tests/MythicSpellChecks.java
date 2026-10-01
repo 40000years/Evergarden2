@@ -93,15 +93,31 @@ public final class MythicSpellChecks implements Listener {
             target.setHealth(1000);target.setFireTicks(0);hits.clear();connection.particles.clear();
             magic.casts().quit(player);magic.mana().account(player).setMana(100);
             var wand=magic.wands().create(spell);player.getInventory().setItemInMainHand(wand);
+            if(spell==Spell.HEAVENS_JUDGMENT) {
+                check(wand.getItemMeta().getLore().size()==magic.wands().create(Spell.SOLAR_APOCALYPSE).getItemMeta().getLore().size(),"Judgment uses the same standard item lore as other wands");
+                var legacy=wand.clone();var meta=legacy.getItemMeta();var lore=new ArrayList<>(meta.getLore());
+                lore.add("วงเวทย์ทอง 4 ชั้น · ชาร์จ 3 วินาที");lore.add("ลำแสงพิพากษากว้าง 8 บล็อก · ยิงต่อเนื่อง 4 วินาที");
+                meta.setLore(lore);legacy.setItemMeta(meta);
+                check(magic.wands().migrate(legacy)&&legacy.getItemMeta().getLore().equals(wand.getItemMeta().getLore()),"existing Judgment wands lose obsolete ability descriptions during migration");
+            }
             check(magic.casts().cast(player,spell,player.getInventory().getItemInMainHand()),spell.id()+" casts through the real listener");
             check(magic.mana().account(player).mana()==100-spell.mana,"mana charged once");
             check(magic.wands().usesLeft(player.getInventory().getItemInMainHand())==29,"durability charged once");
             check(magic.mana().account(player).remaining(spell.id(),System.currentTimeMillis())>=(spell.cooldown-1)*1000,"cooldown starts");
             tick(31);
             if(spell==Spell.HEAVENS_JUDGMENT) {
-                check(world.getEntities().stream().noneMatch(e->e instanceof ItemDisplay),"Judgment charges before its beam appears");
+                var sigils=world.getEntities().stream().filter(e->e instanceof ItemDisplay).map(e->(ItemDisplay)e).toList();
+                check(sigils.size()==4&&sigils.stream().allMatch(e->e.getItemStack().getItemMeta().getItemModel().getKey().startsWith("judgment_seal_")),"four textured horizontal seals charge before the beam appears");
+                check(sigils.stream().allMatch(e->!e.isPersistent()&&e.getBrightness().getBlockLight()==15),"every golden seal is temporary and full brightness");
+                check(sigils.stream().noneMatch(player::canSee),"unloaded resource pack never renders giant paper items");
+                magic.packs().status(new org.bukkit.event.player.PlayerResourcePackStatusEvent(player,
+                    com.example.advancemagic.pack.ResourcePackService.PACK_ID,org.bukkit.event.player.PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
                 tick(30);
-                var beam=world.getEntities().stream().filter(e->e instanceof ItemDisplay).map(e->(ItemDisplay)e).findFirst().orElseThrow();
+                check(sigils.stream().allMatch(player::canSee),"Java viewers see authored seals once the pack loads");
+                check(sigils.stream().mapToDouble(e->e.getTransformation().getScale().x()).max().orElseThrow()==56,"upper golden seal reaches fifty-six blocks across");
+                check(sigils.stream().allMatch(e->e.getTransformation().getScale().y()==1),"seal planes keep their horizontal thickness");
+                var beam=world.getEntities().stream().filter(e->e instanceof ItemDisplay).map(e->(ItemDisplay)e)
+                    .filter(e->e.getItemStack().getItemMeta().getItemModel().getKey().equals("judgment_beam")).findFirst().orElseThrow();
                 check(beam.getItemStack().getItemMeta().getItemModel().getKey().equals("judgment_beam"),"Judgment uses the beacon beam model");
                 check(!beam.isPersistent()&&beam.getBrightness().getBlockLight()==15,"beam is temporary and full brightness");
                 tick(12);
@@ -208,6 +224,11 @@ public final class MythicSpellChecks implements Listener {
         var packet=session.particles.getLast();
         check(packet.getIdentifier().equals("advance_magic:judgment_beam")&&packet.getPosition().getY()==122.5f,"Bedrock beam is centered on the same vertical column as Java");
         check(packet.getMolangVariablesJson().orElseThrow().contains("35.0")&&packet.getMolangVariablesJson().orElseThrow().contains("8.0"),"Bedrock receives the full beam height and width");
+        var seal=clazz.getDeclaredMethod("judgmentSeal",Location.class,double.class,double.class,int.class);seal.setAccessible(true);
+        seal.invoke(visuals,new Location(player.getWorld(),2,140,4),56.0,-30.0,1);
+        packet=session.particles.getLast();
+        check(packet.getIdentifier().equals("advance_magic:judgment_seal_1")&&packet.getPosition().getY()==140,"Bedrock receives the authored seal at the exact overhead height");
+        check(packet.getMolangVariablesJson().orElseThrow().contains("56.0")&&packet.getMolangVariablesJson().orElseThrow().contains("-30.0"),"Bedrock seal receives the same diameter and counter-rotation");
     }
     void cleanup() {
         HandlerList.unregisterAll(this);

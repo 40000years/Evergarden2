@@ -69,6 +69,10 @@ for name, digest in hashes.items():
                     image=z.read(file)
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
                     assert struct.unpack('>II',image[16:24]) in {(16,16),(64,64),(64,1024),(128,128)}
+                elif 'judgment_seal' in file:
+                    image=z.read(file)
+                    assert image[:8] == b'\x89PNG\r\n\x1a\n'
+                    assert struct.unpack('>II',image[16:24]) == (1024,1024)
                 elif 'judgment_beam' in file:
                     image=z.read(file)
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
@@ -96,6 +100,13 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as magic, zipfile.Zi
         assert all('variable.magic_size' in expression for expression in components['minecraft:particle_appearance_billboard']['size'])
 
 with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
+    for variant in range(2):
+        name=f'judgment_seal_{variant}'
+        mesh=json.loads(z.read(f'assets/advance_magic/models/effect/{name}.json'))
+        face=mesh['elements'][0]
+        assert set(face['faces'])=={'up','down'} and not face['shade']
+        assert abs(face['to'][1]-face['from'][1])<.03, 'Horizontal, visible from both sides'
+        assert z.read(f'assets/advance_magic/textures/effect/{name}.png')==(ROOT/f'art/effects/{name}.png').read_bytes()
     beam=json.loads(z.read('assets/advance_magic/items/judgment_beam.json'))['model']
     assert beam['model']=='advance_magic:effect/judgment_beam'
     mesh=json.loads(z.read('assets/advance_magic/models/effect/judgment_beam.json'))
@@ -134,8 +145,8 @@ assert len(definitions) == len(catalog) == 18
 assert len({row['bedrock_identifier'] for row in definitions}) == 18
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [2, 4, 0]
-    assert manifest['modules'][0]['version'] == [2, 4, 0]
+    assert manifest['header']['version'] == [2, 5, 0]
+    assert manifest['modules'][0]['version'] == [2, 5, 0]
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     effect=json.loads(z.read('particles/judgment_beam.particle.json'))['particle_effect']
@@ -146,6 +157,13 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     with zipfile.ZipFile(ROOT.parent/'evergarden/dist/evergarden-bedrock.mcpack') as garden:
         assert json.loads(garden.read('particles/judgment_beam.particle.json'))==json.loads(z.read('particles/judgment_beam.particle.json'))
         assert garden.read('textures/particle/judgment_beam.png')==z.read('textures/particle/judgment_beam.png')
+        for variant in range(2):
+            name=f'judgment_seal_{variant}'
+            particle=f'particles/{name}.particle.json'
+            seal=json.loads(z.read(particle))['particle_effect']
+            assert seal['components']['minecraft:particle_appearance_billboard']['facing_camera_mode']=='emitter_transform_xz'
+            assert json.loads(garden.read(particle))==json.loads(z.read(particle))
+            assert garden.read(f'textures/particle/{name}.png')==z.read(f'textures/particle/{name}.png')
     for definition, (name, _, _) in zip(definitions, catalog):
         assert definition['model'] == f'advance_magic:{name}'
         assert 'predicate' not in definition

@@ -243,14 +243,9 @@ public final class WandService implements Listener {
     }
     private List<String> wandLore(ItemStack item,Spell spell) {
         int durability=durabilityLevel(item),damage=damageLevel(item),cooldown=cooldownLevel(item);
-        var lore=new ArrayList<>(List.of(ChatColor.GRAY+"Right-click to cast",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
+        return List.of(ChatColor.GRAY+"Right-click to cast",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
                 ChatColor.AQUA+"Durability: "+usesLeft(item)+" / "+maxUses(item)+" uses",ChatColor.RED+"Damage: +"+(damage*3)+"%  "+ChatColor.YELLOW+"Cooldown: -"+(cooldown*3)+"%",
-                ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10"));
-        if(spell==Spell.HEAVENS_JUDGMENT) {
-            lore.add(ChatColor.GOLD+"วงเวทย์ทอง 4 ชั้น · ชาร์จ 3 วินาที");
-            lore.add(ChatColor.YELLOW+"ลำแสงพิพากษากว้าง 8 บล็อก · ยิงต่อเนื่อง 4 วินาที");
-        }
-        return lore;
+                ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10");
     }
     public double getEffectiveCooldown(ItemStack item,Spell spell) {
         if(spell==null)return 1.0;

@@ -199,18 +199,29 @@ public final class MythicSpells {
     }
 
     /** Stationary horizontal seals: only the light fires downward. */
-    private void judgmentSeal(Location at,double radius,int age,int layer) {
+    private void sealRing(Location at,double radius,Color color,float size,int count,double turn) {
+        for(int i=0;i<count;i++) {
+            double angle=TAU*i/count+turn;
+            visuals.dustFallback(at.clone().add(Math.cos(angle)*radius,0,Math.sin(angle)*radius),color,size);
+        }
+    }
+    private void sealLine(Location from,Location to,Color color,float size,int samples) {
+        Vector delta=to.toVector().subtract(from.toVector());
+        for(int i=0;i<=samples;i++)visuals.dustFallback(from.clone().add(delta.clone().multiply((double)i/samples)),color,size);
+    }
+    private void judgmentSealFallback(Location at,double radius,int age,int layer) {
         double turn=age*.009*(layer%2==0?1:-1)+layer*.3;
-        ring(at,radius,GOLD,2.3f,80,turn);
-        ring(at,radius*.83,WHITE,1.5f,64,-turn);
-        ring(at,radius*.56,GOLD,1.4f,48,turn);
+        int points=Math.clamp((int)(radius*8),80,192);
+        sealRing(at,radius,GOLD,2.8f,points,turn);
+        sealRing(at,radius*.83,WHITE,1.8f,points*3/4,-turn);
+        sealRing(at,radius*.56,GOLD,1.6f,points/2,turn);
         for(int i=0;i<8;i++) {
             double angle=TAU*i/8+turn;
             Location inner=at.clone().add(Math.cos(angle)*radius*.83,0,Math.sin(angle)*radius*.83);
             Location outer=at.clone().add(Math.cos(angle)*radius,0,Math.sin(angle)*radius);
-            line(inner,outer,WHITE,1.5f,3);
+            sealLine(inner,outer,WHITE,1.5f,3);
             double next=angle+TAU*3/8;
-            line(at.clone().add(Math.cos(angle)*radius*.56,0,Math.sin(angle)*radius*.56),
+            sealLine(at.clone().add(Math.cos(angle)*radius*.56,0,Math.sin(angle)*radius*.56),
                 at.clone().add(Math.cos(next)*radius*.56,0,Math.sin(next)*radius*.56),GOLD,1.3f,8);
         }
     }
@@ -236,15 +247,17 @@ public final class MythicSpells {
         double pulse=c.configuredDamage("damage.heavens-judgment-pulse",85);
         double finalDamage=c.configuredDamage("damage.heavens-judgment-final",80);
         JudgmentBeamVisuals[] beam={null};
-        double[] levels={14,20,27,35},radii={7,10,13,16};
+        JudgmentSealVisuals[] seals={null};
         at.getWorld().playSound(at,Sound.BLOCK_BEACON_ACTIVATE,2f,.55f);
         start(p,at,165,(effect,age)->{
             if(!c.loaded(at)||!c.loaded(top))return false;
             visuals.frame(at);
+            if(age==0)seals[0]=new JudgmentSealVisuals(effect,at,scale);
+            if(age%4==0)seals[0].frame(visuals,age);
             if(age%8==0&&age<148) {
                 double growth=age<40?.35+.65*age/40.0:1;
-                for(int layer=0;layer<4;layer++)
-                    judgmentSeal(at.clone().add(0,levels[layer]*scale,0),radii[layer]*scale*growth,age,layer);
+                if(visuals.needsSealFallback())for(int layer=0;layer<4;layer++)
+                    judgmentSealFallback(at.clone().add(0,JudgmentSealVisuals.HEIGHTS[layer]*scale,0),JudgmentSealVisuals.RADII[layer]*scale*growth,age,layer);
                 ring(at.clone().add(0,.25,0),4,GOLD,1.8f,48,age*.012);
             }
             if(age<60&&age%12==0) {

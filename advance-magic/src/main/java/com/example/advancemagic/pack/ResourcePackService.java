@@ -168,6 +168,7 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             event.getPlayer().sendMessage(ChatColor.YELLOW+"Advance Magic textures could not load. Wands still work; ask an admin to check /magic pack.");
         }
     }
+    public boolean hasApplied(Player player){return "SUCCESSFULLY_LOADED".equals(statuses.get(player.getUniqueId()));}
     @EventHandler public void quit(PlayerQuitEvent event){statuses.remove(event.getPlayer().getUniqueId());}
     public void describe(CommandSender sender) {
         sender.sendMessage(ChatColor.LIGHT_PURPLE+"Advance Magic resource pack");

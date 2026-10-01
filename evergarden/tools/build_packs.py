@@ -387,7 +387,7 @@ def main():
  import judgment_assets
  judgment_assets.register_java(java,write_json)
  judgment_assets.register_bedrock(bedrock,write_json,lambda path,pixels:png(path,pixels,len(pixels)))
- version=[3,11,0]
+ version=[3,12,0]
  manifest['header']['version']=version
  for module in manifest['modules']:module['version']=version
  write_json(bedrock/'manifest.json',manifest)

@@ -1,5 +1,5 @@
 name: advance-magic
-version: 1.4.0-heavens-judgment
+version: 1.4.1-judgment-seals
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
 description: Seventeen spells including three Mythic wands, mana and crafting.

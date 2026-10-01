@@ -37,10 +37,20 @@ final class MythicVisuals {
         viewers=list;
     }
     void dust(Location at,Color color,float size) {
+        dust(at,color,size,false);
+    }
+    void dustFallback(Location at,Color color,float size) {
+        dust(at,color,size,true);
+    }
+    boolean needsSealFallback() {
+        return viewers.stream().anyMatch(viewer->(viewer.session==null||disabled)&&!c.plugin.packs().hasApplied(viewer.player));
+    }
+    private void dust(Location at,Color color,float size,boolean fallbackOnly) {
         if(!c.loaded(at))return;
         var data=new Particle.DustOptions(color,size);
         for(var viewer:viewers) {
             if(!viewer.player.isOnline()||viewer.player.getWorld()!=at.getWorld())continue;
+            if(fallbackOnly&&((viewer.session!=null&&!disabled)||c.plugin.packs().hasApplied(viewer.player)))continue;
             if(viewer.session!=null&&!disabled)try {
                 Object packet=bridge.packet.newInstance();
                 bridge.identifier.invoke(packet,"advance_magic:mythic_"+tint(color));
@@ -56,6 +66,25 @@ final class MythicVisuals {
     void hideBedrock(Entity entity) {
         for(var viewer:viewers)if(viewer.session!=null&&!disabled&&viewer.player.canSee(entity))
             viewer.player.hideEntity(c.plugin,entity);
+    }
+    void showSeal(Entity entity) {
+        for(var viewer:viewers) {
+            boolean show=(viewer.session==null||disabled)&&c.plugin.packs().hasApplied(viewer.player);
+            if(show&&!viewer.player.canSee(entity))viewer.player.showEntity(c.plugin,entity);
+            else if(!show&&viewer.player.canSee(entity))viewer.player.hideEntity(c.plugin,entity);
+        }
+    }
+    /** The same authored sigil stays horizontal on Bedrock's emitter XZ plane. */
+    void judgmentSeal(Location at,double diameter,double rotation,int variant) {
+        if(bridge==null||disabled)return;
+        for(var viewer:viewers)if(viewer.session!=null&&viewer.player.isOnline())try {
+            Object packet=bridge.packet.newInstance();
+            bridge.identifier.invoke(packet,"advance_magic:judgment_seal_"+variant);
+            bridge.position.invoke(packet,bridge.vector.invoke(null,at.getX(),at.getY(),at.getZ()));
+            bridge.setDimension.invoke(packet,viewer.dimension);
+            bridge.variables.invoke(packet,Optional.of("[{\"name\":\"variable.seal_diameter\",\"value\":{\"type\":\"float\",\"value\":"+diameter+"}},{\"name\":\"variable.seal_rotation\",\"value\":{\"type\":\"float\",\"value\":"+rotation+"}}]"));
+            bridge.send.invoke(viewer.session,packet);
+        }catch(ReflectiveOperationException|LinkageError e){disable(e);return;}
     }
     /** Bedrock uses one tall beam billboard rather than translating a stretched item display. */
     void judgmentBeam(Location base,double height,double width) {

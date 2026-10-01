@@ -3,7 +3,9 @@
 Legendary / MYTHIC wand inspired by four horizontal golden magic seals floating
 above the target. The seals remain at their original heights (14, 20, 27 and 35
 blocks); they rotate in alternating directions and scale together near the world
-ceiling. After a three-second charge, an eight-block-wide yellow-white beam fires
+ceiling. Their diameters are 22, 32, 44 and 56 blocks. The continuous gold-and-ivory
+sigils contain eight concentric rings, twenty-four branched glyphs, an interlaced
+star and compass diamonds. After a three-second charge, an eight-block-wide yellow-white beam fires
 downward for four seconds. A final pulse releases a golden ground ripple.
 
 | Property | Default |
@@ -22,6 +24,17 @@ golden beacon-style particle ribbon with the same position, width and height.
 The beam display is hidden from Bedrock viewers while the particle adapter is
 available. Golden glass supplies the Java fallback when the pack is declined.
 The visual uses Paper's [display entity API](https://docs.papermc.io/paper/dev/display-entities/).
+
+The four horizontal seal displays are full-brightness and visible from both sides.
+They open smoothly during charging, rotate in alternating directions and retract
+after firing. Bedrock uses the identical 1024px artwork on the emitter's XZ plane,
+as documented in Microsoft's [billboard reference](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/particlesreference/particlecomponents/minecraftparticle_appearance_billboard?view=minecraft-bedrock-stable).
+Java clients see the authored displays after the pack loads; clients without the
+pack receive the particle fallback. Every display belongs to the original cast.
+
+The wand tooltip uses the same mana/cooldown/durability/upgrade lines as other
+wands. The extra lines about four seals and an eight-block beam have been removed;
+existing wands are migrated automatically when inventories are loaded.
 
 All damage uses the existing enemy/team/PvP rules and cancellable MagicAffectEvent.
 The beam and remaining cast stop on death, disconnect, world change, owner cleanup,
@@ -55,13 +68,14 @@ Admin commands:
 ```
 
 Install both `dist/advance-magic.jar` and `dist/evergarden.jar`, restart the server,
-and reconnect clients to refresh the packs. Advance Magic Bedrock pack is 2.4.0;
-Evergarden Bedrock pack is 3.11.0. Customized damage can be set through
+and reconnect clients to refresh the packs. Advance Magic Bedrock pack is 2.5.0;
+Evergarden Bedrock pack is 3.12.0. Customized damage can be set through
 `damage.heavens-judgment-pulse` and `damage.heavens-judgment-final`.
 
 ## Verification
 
 ```text
+python tools/judgment_seals.py
 python advance-magic/tools/build_packs.py
 python evergarden/tools/build_packs.py
 mvn -pl advance-magic,evergarden -am package -DskipTests

@@ -7,6 +7,8 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
 import java.util.*;
@@ -41,7 +43,7 @@ public final class ManaService {
 
     public void save(Player p) {
         CastAccount a=accounts.get(p.getUniqueId()); if(a==null)return;
-        var data=p.getPersistentDataContainer();
+        PersistentDataContainer data=((PersistentDataHolder)p).getPersistentDataContainer();
         data.set(key("mana"),PersistentDataType.DOUBLE,a.manaExact());
         data.set(key("max_mana"),PersistentDataType.DOUBLE,a.maxMana());
         data.set(key("mana_regen"),PersistentDataType.DOUBLE,a.regenRate());

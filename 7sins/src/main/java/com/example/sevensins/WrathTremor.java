@@ -29,7 +29,6 @@ public final class WrathTremor implements Listener, AutoCloseable {
         player.setSprinting(false);
         player.playHurtAnimation(0);
         player.playSound(player.getLocation(), Sound.ENTITY_IRON_GOLEM_STEP, 1.1f, 0.5f);
-        player.sendActionBar(net.kyori.adventure.text.Component.text("แรงสะเทือน! ตรึง 1 วิ → ช้า 80% อีก 2 วิ"));
     }
     private void modifier(Player player, Attribute type, NamespacedKey key, double amount) {
         AttributeInstance attribute = player.getAttribute(type);

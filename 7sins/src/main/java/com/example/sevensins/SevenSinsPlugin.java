@@ -81,11 +81,6 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             sender.sendMessage("§c7sins · บอสเจ็ดบาป");
             sender.sendMessage("§7/7sins pack §fดูสถานะแพ็ก 7sins | §7/7sins list §fดูบอสที่กำลังทำงาน");
             if (sender.hasPermission("7sins.admin")) sender.sendMessage("§7/7sins spawn <wrath|pride|greed|lust|envy|gluttony|sloth> §fเรียกบอสด้านหน้า | §7/7sins remove §fลบบอสที่ใกล้ที่สุด");
-            sender.sendMessage("§6ฟันกวาด: อ้อมหลัง | ทุบพื้น: กระโดด | พุ่งชน: ล่อชนกำแพง | วงไฟ: เข้าวงใน");
-            sender.sendMessage("§6กระทืบเท้า (โจมตีปกติ): กระโดดหรือถอย | ดาบจากพื้น: หลบวงแดง");
-            sender.sendMessage("§cตอนเกิดระเบิด 200 ดาเมจในระยะ 40 บล็อก | โดนค้อน: ตรึง 1 วิ แล้วช้า 80% อีก 2 วิ");
-            sender.sendMessage("§cโดนสกิลแล้วเกราะลด 60% นาน 8 วิ และเสียความทนทานเกราะ 25% — กระทืบปกติไม่มีผลนี้");
-            sender.sendMessage("§eเฟสสอง: ช่วงยืนดูดซับ หยุดตี! ดาเมจโจมตีจะกลายเป็นเลือดจนหมดเวลาบน BossBar");
             return true;
         }
         if (action.equals("list")) {
@@ -120,7 +115,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             return true;
         }
         try {
-            spawnSin(spawn.location(), type); player.sendMessage("§c" + type.title().toUpperCase(Locale.ROOT) + " ถูกปลุกแล้ว! §cระเบิดตอนเกิด 200 ดาเมจ! §7จากนั้นเริ่มไล่ใน 4 วินาที — ใช้ Survival เพื่อเข้าต่อสู้");
+            spawnSin(spawn.location(), type); player.sendMessage("§c" + type.title().toUpperCase(Locale.ROOT) + " ถูกปลุกแล้ว!");
         } catch (IllegalStateException error) { player.sendMessage("§c[7sins] " + error.getMessage()); }
         return true;
     }
@@ -139,7 +134,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
         if (bosses.containsKey(e.getEntity().getUniqueId())) e.setCancelled(true);
     }
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true) public void damage(EntityDamageEvent e) {
-        // Hidden native fangs provide the ground-spike base. Damage is handled once by the cast.
+        // Our visible fangs use encounter damage once per cast; cancel their native damage.
         Entity direct = e.getDamageSource().getDirectEntity();
         if (direct instanceof EvokerFangs && direct.getPersistentDataContainer().has(entityKey, PersistentDataType.STRING)
                 || e instanceof EntityDamageByEntityEvent hit && hit.getDamager() instanceof EvokerFangs

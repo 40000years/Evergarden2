@@ -2,30 +2,23 @@ package com.example.sevensins;
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
-import org.bukkit.util.EulerAngle;
 import org.bukkit.util.RayTraceResult;
-import org.bukkit.util.Transformation;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
 import java.util.*;
 
-/** Hidden Evoker fangs under original sword models; one hit per player per wave. */
+/** Vanilla Evoker fang visuals; encounter damage is applied once per player per wave. */
 final class WrathBlades {
     private static final class Spike {
         final Location floor;
         final int trigger;
         final EvokerFangs fang;
-        final ItemDisplay sword;
-        final ArmorStand fallback;
         int age;
         boolean struck;
-        Spike(Location floor, int trigger, EvokerFangs fang, ItemDisplay sword, ArmorStand fallback) {
-            this.floor=floor; this.trigger=trigger; this.fang=fang; this.sword=sword; this.fallback=fallback;
+        Spike(Location floor, int trigger, EvokerFangs fang) {
+            this.floor=floor; this.trigger=trigger; this.fang=fang;
         }
-        void remove() { fang.remove(); sword.remove(); fallback.remove(); }
+        void remove() { fang.remove(); }
     }
     private final SevenSinsPlugin plugin;
     private final WrathBoss boss;
@@ -59,7 +52,6 @@ final class WrathBlades {
                     Location ground=ground(point); if(ground!=null)add(ground,windup+count*2+step*6);
                 }
             }
-            for(Player p:Bukkit.getOnlinePlayers())refresh(p);
         } catch(RuntimeException error) {clear();throw error;}
     }
     private Location ground(Location point) {
@@ -72,41 +64,16 @@ final class WrathBlades {
         return floor;
     }
     private void add(Location floor,int trigger) {
-        EvokerFangs fang=null; ItemDisplay sword=null; ArmorStand fallback=null;
+        EvokerFangs fang=null;
         try {
             fang=floor.getWorld().spawn(floor,EvokerFangs.class,e->{
-                e.setOwner(boss.entity());e.setAttackDelay(Math.max(0,trigger-8));e.setVisibleByDefault(false);e.setPersistent(false);
+                e.setOwner(boss.entity());e.setAttackDelay(Math.max(0,trigger-8));e.setPersistent(false);
                 e.getPersistentDataContainer().set(plugin.entityKey(),PersistentDataType.STRING,boss.type().id()+"-fang");
             });
-            Location buried=floor.clone().add(0,-3,0);buried.setYaw(0);buried.setPitch(0);
-            ItemStack item=new ItemStack(Material.PAPER);var meta=item.getItemMeta();
-            meta.setItemModel(new NamespacedKey("sevensins",boss.type().id()+"/ground_sword"));item.setItemMeta(meta);
-            sword=floor.getWorld().spawn(buried,ItemDisplay.class,e->{
-                e.setItemStack(item);e.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.FIXED);
-                e.setPersistent(false);e.setVisibleByDefault(false);e.setInvulnerable(true);
-                e.setTeleportDuration(2);e.setDisplayWidth(4);e.setDisplayHeight(5);
-                e.setBrightness(new Display.Brightness(15,15));
-                e.setTransformation(new Transformation(new Vector3f(0,0.7f,0),new Quaternionf(),new Vector3f(1.4f),new Quaternionf()));
-                e.getPersistentDataContainer().set(plugin.entityKey(),PersistentDataType.STRING,"visual");
-            });
-            fallback=floor.getWorld().spawn(buried,ArmorStand.class,e->{
-                e.setVisible(false);e.setMarker(true);e.setArms(true);e.setGravity(false);e.setInvulnerable(true);
-                e.setVisibleByDefault(false);e.setPersistent(false);
-                e.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_SWORD));
-                e.setRightArmPose(new EulerAngle(-Math.PI,0,0));
-                e.getPersistentDataContainer().set(plugin.entityKey(),PersistentDataType.STRING,"visual");
-            });
-            if(!fang.isValid()||!sword.isValid()||!fallback.isValid())throw new IllegalStateException("Ground sword spawn was rejected");
-            spikes.add(new Spike(floor,trigger,fang,sword,fallback));
+            if(!fang.isValid())throw new IllegalStateException("Evoker fang spawn was rejected");
+            spikes.add(new Spike(floor,trigger,fang));
         } catch(RuntimeException error) {
-            if(fang!=null)fang.remove();if(sword!=null)sword.remove();if(fallback!=null)fallback.remove();throw error;
-        }
-    }
-    void refresh(Player p) {
-        boolean custom=plugin.packs().loaded(p);
-        for(Spike spike:spikes) {
-            if(custom){p.showEntity(plugin,spike.sword);p.hideEntity(plugin,spike.fallback);}
-            else{p.hideEntity(plugin,spike.sword);p.showEntity(plugin,spike.fallback);}
+            if(fang!=null)fang.remove();throw error;
         }
     }
     void tick() {
@@ -120,14 +87,8 @@ final class WrathBlades {
                             0,0,0,0,new Particle.DustOptions(boss.type().color(),1.2f));
                 }
             } else {
-                double height=Math.min(1,(s.age-riseAt)/8.0);
-                if(s.age>s.trigger+12)height=Math.max(0,1-(s.age-s.trigger-12)/8.0);
-                height=height*height*(3-2*height);
-                Location pose=s.floor.clone().add(0,-3+3*height,0);pose.setYaw(0);pose.setPitch(0);
-                s.sword.teleport(pose);s.fallback.teleport(pose.clone().add(0,-0.6,0));
                 if(!s.struck&&s.age>=s.trigger) {
-                    s.struck=true;s.floor.getWorld().playSound(s.floor,Sound.ENTITY_EVOKER_FANGS_ATTACK,0.8f,0.6f);
-                    s.floor.getWorld().spawnParticle(Particle.FLAME,s.floor.clone().add(0,0.2,0),8,0.3,0.1,0.3,0.02);
+                    s.struck=true;
                     for(Player p:boss.bladeTargets()) {
                         Vector d=p.getLocation().toVector().subtract(s.floor.toVector());
                         if(d.getY()>-0.5&&d.getY()<2.8&&Math.hypot(d.getX(),d.getZ())<=1.25&&boss.clearSight(p,s.floor))
@@ -138,7 +99,7 @@ final class WrathBlades {
             if(s.age>=s.trigger+22){s.remove();it.remove();}
         }
     }
-    List<Entity> entities() {List<Entity> result=new ArrayList<>();for(Spike s:spikes){result.add(s.fang);result.add(s.sword);result.add(s.fallback);}return result;}
+    List<Entity> entities() {List<Entity> result=new ArrayList<>();for(Spike s:spikes)result.add(s.fang);return result;}
     boolean active() { return !spikes.isEmpty(); }
     void clear() {spikes.forEach(Spike::remove);spikes.clear();hit.clear();}
 }

@@ -1,7 +1,5 @@
 package com.example.sevensins;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.attribute.*;
 import org.bukkit.entity.Player;
@@ -50,8 +48,6 @@ public final class WrathArmorBreak implements Listener, AutoCloseable {
         }
         expiry.put(player.getUniqueId(), Bukkit.getCurrentTick() + duration);
         wear(player);
-        player.sendActionBar(Component.text("เกราะแตก! เกราะลด " + Math.round(reduction*100)
-                + "% · " + duration/20 + " วินาที · ความทนทานเกราะ −" + Math.round(durability*100) + "%", NamedTextColor.RED));
     }
     private void wear(Player player) {
         ItemStack[] armor = player.getInventory().getArmorContents();

@@ -108,7 +108,7 @@ public final class WrathBoss {
     public int absorptionSecondsLeft() { return absorbing() ? (remaining+19)/20 : 0; }
     public Location home() { return home.clone(); }
     List<Entity> visuals() { return model.entities(); }
-    void refresh(Player player) { model.refresh(player); blades.refresh(player); }
+    void refresh(Player player) { model.refresh(player); }
 
     public void tick() {
         if (state == State.REMOVED) return;
@@ -135,8 +135,6 @@ public final class WrathBoss {
             case ENVY, GLUTTONY -> BarColor.GREEN;
             case SLOTH -> BarColor.PURPLE;
         });
-        bar.setTitle(absorbing() ? type.title().toUpperCase(Locale.ROOT) + " · ดูดซับดาเมจเป็นเลือด — หยุดตี! " + absorptionSecondsLeft() + "s"
-                : type.title().toUpperCase(Locale.ROOT) + " · " + (enraged ? "UNBOUND" : type.epithet().toUpperCase(Locale.ROOT)) + "  |  RAGE " + rage + "%");
         if (ticks % 20 == 0) rage = Math.max(0, rage - (state == State.STAGGER ? 8 : 2));
         if (players.isEmpty()) idle += 2; else idle = 0;
         if (idle >= idleLimit) { remove(); return; }
@@ -151,7 +149,6 @@ public final class WrathBoss {
         if (!enraged && base.getHealth() <= nativeMaxHealth * 0.5 + 0.0001) {
             enraged = true; rage = 0; change(State.TRANSITION, 60); halt();
             blades.clear();
-            announce("เกราะแตกแล้ว! " + type.title() + " เข้าสู่เฟสคลั่ง", NamedTextColor.RED);
             sound(Sound.ENTITY_WITHER_DEATH, 1.5f, 0.6f);
         }
         Player target = selectTarget(players);
@@ -162,7 +159,6 @@ public final class WrathBoss {
                     if (state == State.TRANSITION) {
                         anchor = base.getLocation().clone(); blades.clear();
                         change(State.ABSORB, absorptionDuration);
-                        announce(type.title() + " ดูดซับดาเมจเป็นเลือด! หยุดตี " + absorptionSecondsLeft() + " วินาที", NamedTextColor.YELLOW);
                         sound(Sound.BLOCK_BEACON_ACTIVATE,1.5f,0.6f);
                     } else { change(State.CHASE, 0); cooldown = 18; }
                 }
@@ -176,7 +172,6 @@ public final class WrathBoss {
                 }
                 if ((remaining -= 2) <= 0) {
                     change(State.CHASE,0); cooldown = 20; basicCooldown = 20;
-                    announce("ดูดซับสิ้นสุดแล้ว — โจมตี " + type.title() + " ได้!", NamedTextColor.AQUA);
                     sound(Sound.BLOCK_BEACON_DEACTIVATE,1.5f,0.8f);
                 }
             }
@@ -300,29 +295,6 @@ public final class WrathBoss {
         int duration = switch (attack) { case SWEEP -> 22; case SLAM -> 34; case CHARGE -> 22; case RING -> 40; case BLADES -> 24; case STOMP -> 16; };
         change(State.WINDUP, enraged ? duration - (attack == Attack.STOMP ? 2 : 6) : duration);
         if (attack == Attack.BLADES) blades.cast(anchor, target, remaining);
-        String cue = switch (attack) {
-            case SWEEP -> "ฟันกวาด — ถอยออกหรืออ้อมหลัง!";
-            case SLAM -> "ค้อนแรงสะเทือน — กระโดดตอนค้อนลง! โดนแล้วตรึงและช้า!";
-            case CHARGE -> "พุ่งชน — หลบด้านข้าง หรือล่อให้ชนกำแพง!";
-            case RING -> "วงไฟ — เข้าวงใน หรือหนีออกนอกวง!";
-            case BLADES -> "ดาบประหารจากพื้น — ออกจากรอยแดง!";
-            case STOMP -> "กระทืบเท้า — กระโดดหรือถอยออก!";
-        };
-        if (type != SinType.WRATH) cue = switch (attack) {
-            case SWEEP -> type.title() + " · ฟันกวาด — อ้อมหลังหรือถอยออก!";
-            case SLAM -> type.title() + " · ทุบพื้น — กระโดดตอนกระแทก!";
-            case CHARGE -> type.title() + " · พุ่งชน — หลบด้านข้าง!";
-            case BLADES -> type.title() + " · ดาบผุดจากพื้น — ออกจากรอยเตือน!";
-            case STOMP -> type.title() + " · กระทืบเท้า — กระโดดหรือถอย!";
-            case RING -> switch (type) {
-                case GREED -> "GREED · แม่เหล็กทอง — วงกำลังดึงเข้ากลาง!";
-                case GLUTTONY -> "GLUTTONY · ปากเหว — หนีแรงดูดออกนอกวง!";
-                case SLOTH -> "SLOTH · วงเวลาเชื่องช้า — ออกนอกวง!";
-                case LUST -> "LUST · วงหนามโลหิต — เข้าวงในหรือหนีออก!";
-                default -> type.title() + " · วงพิพากษา — เข้าวงในหรือหนีออก!";
-            };
-        };
-        announce(cue, NamedTextColor.GOLD);
         sound(attack == Attack.STOMP ? Sound.BLOCK_NETHERITE_BLOCK_STEP : Sound.ENTITY_IRON_GOLEM_REPAIR, 1, 0.6f);
     }
 
@@ -466,7 +438,6 @@ public final class WrathBoss {
 
     void stagger() {
         halt(); rage = 0; change(State.STAGGER, 80);
-        announce(type.title() + " เสียหลัก! โจมตีแกนอก — ดาเมจเพิ่ม 50%", NamedTextColor.AQUA);
         sound(Sound.BLOCK_ANVIL_LAND, 1.4f, 0.6f);
     }
     double damageScale() { return state == State.ARRIVAL || state == State.TRANSITION ? 0 : incomingMultiplier * nativeMaxHealth / maxHealth * (state == State.STAGGER ? 1.5 : 1); }
@@ -498,9 +469,6 @@ public final class WrathBoss {
         change(State.ARRIVAL, 60); cooldown = 40; hit.clear();
         shooter = null; shooterUntil = 0; pressureCooldown = 0;
         plugin.tremor().clearBoss(base.getUniqueId());
-    }
-    private void announce(String text, NamedTextColor color) {
-        for (Player p : bar.getPlayers()) p.sendActionBar(Component.text(text, color));
     }
     private void sound(Sound sound, float volume, float pitch) { base.getWorld().playSound(base.getLocation(), sound, volume, pitch); }
     private void dust(Location at, Color color, int count) { at.getWorld().spawnParticle(Particle.DUST, at, count, 0, 0, 0, 0, new Particle.DustOptions(color, 1.2f)); }

@@ -10,15 +10,12 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.*;
-import java.net.URI;
-import java.net.http.*;
 import java.nio.file.*;
 import java.util.*;
 
-/** Real Paper lifecycle, damage dispatch, model poses and pack hosting in a disposable world. */
+/** Real Paper lifecycle, damage dispatch, model poses and fang visuals in a disposable world. */
 public final class WrathProbe extends JavaPlugin {
     private final List<String> checks = new ArrayList<>();
     private void check(boolean value, String message) {
@@ -123,9 +120,16 @@ public final class WrathProbe extends JavaPlugin {
         Field bladeField=WrathBoss.class.getDeclaredField("blades");bladeField.setAccessible(true);
         Object blades=bladeField.get(boss);
         @SuppressWarnings("unchecked") List<Entity> bladeEntities=(List<Entity>)call(blades,"entities",new Class<?>[0]);
-        check(bladeEntities.stream().anyMatch(e->e instanceof EvokerFangs)&&bladeEntities.stream().anyMatch(e->e instanceof ItemDisplay),
-                "Distant attack creates hidden Evoker fangs and custom sword displays");
-        check(bladeEntities.stream().allMatch(e->!e.isPersistent()&&!e.isVisibleByDefault()),"Ground swords are temporary and native fangs are never visible");
+        check(!bladeEntities.isEmpty()&&bladeEntities.stream().allMatch(e->e instanceof EvokerFangs),
+                "Distant attack uses only vanilla Evoker fangs without sword displays or armor stands");
+        check(bladeEntities.stream().allMatch(e->!e.isPersistent()&&e.isVisibleByDefault()),
+                "Evoker fang animations are temporary and visible to every player");
+        Husk fangVictim=world.spawn(home.clone().add(10,0,0),Husk.class,e->{e.setAI(false);});
+        double fangVictimHealth=fangVictim.getHealth();
+        fangVictim.damage(6,org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.INDIRECT_MAGIC)
+                .withDirectEntity(bladeEntities.getFirst()).withCausingEntity(boss.entity()).build());
+        check(fangVictim.getHealth()==fangVictimHealth,"Our fangs cannot add native damage on top of encounter damage");
+        fangVictim.remove();
         // The swept charge detects a one-block wall without breaking it.
         world.getBlockAt(0,home.getBlockY(),1).setType(Material.STONE,false);
         call(boss,"charge",new Class<?>[]{List.class},List.of());
@@ -305,7 +309,8 @@ public final class WrathProbe extends JavaPlugin {
                 call(boss,"observeHit",new Class<?>[]{Player.class,boolean.class,double.class},p,accepted[0],effective);
                 yield null;
             }
-            case "setVelocity", "sendActionBar", "setSprinting", "playHurtAnimation", "playSound" -> null;
+            case "setVelocity", "setSprinting", "playHurtAnimation", "playSound" -> null;
+            case "sendActionBar" -> throw new AssertionError("Boss sent a combat explanation");
             case "getName", "toString" -> "WrathCombatTarget";
             case "hashCode" -> id.hashCode();
             case "equals" -> p==a[0];
@@ -438,6 +443,8 @@ public final class WrathProbe extends JavaPlugin {
         while(boss.state()==WrathBoss.State.TRANSITION) boss.tick();
         check(boss.state()==WrathBoss.State.ABSORB&&boss.absorptionSecondsLeft()==15&&!boss.entity().hasAI(),
                 "Phase two begins a stationary 15-second absorption window");
+        check(((org.bukkit.boss.BossBar)get(boss,"bar")).getTitle().equals(SinType.WRATH.display()),
+                "Boss bar keeps its name during absorption without hints or a stop-attacking message");
         Husk attacker=world.spawn(home.clone().add(10,0,0),Husk.class,e->{e.setAI(false);e.setSilent(true);});
         org.bukkit.event.Listener protection=new org.bukkit.event.Listener() {};
         Bukkit.getPluginManager().registerEvent(org.bukkit.event.entity.EntityDamageByEntityEvent.class,protection,
@@ -497,7 +504,7 @@ public final class WrathProbe extends JavaPlugin {
             case "isDead" -> false;
             case "getWorld" -> world;
             case "getLocation" -> home.clone();
-            case "sendActionBar" -> null;
+            case "sendActionBar" -> throw new AssertionError("Armor break sent a combat explanation");
             case "getName", "toString" -> "ArmorProbe";
             case "hashCode" -> id.hashCode();
             case "equals" -> p==a[0];

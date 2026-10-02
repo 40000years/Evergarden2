@@ -306,11 +306,11 @@ public final class MythicSpellChecks implements Listener {
         var x=new org.bukkit.util.Vector(1,0,0);var y=new org.bukkit.util.Vector(0,1,0);var z=new org.bukkit.util.Vector(0,0,1);
         plane.invoke(visuals,"chronos_dial",new Location(player.getWorld(),2,124,4),16.0,16.0,x,y);
         packet=session.particles.getLast();
-        check(packet.getIdentifier().equals("advance_magic:chronos_dial")&&packet.getPosition().getY()==124,"Bedrock receives the upright authored Chronos clock at the same position");
+        check(packet.getIdentifier().equals("advance_magic:chronos_dial")&&particleCenter(packet).distanceSquared(new Location(player.getWorld(),2,124,4))<1e-8,"Bedrock receives the upright authored Chronos clock at the same position");
         check(packet.getMolangVariablesJson().orElseThrow().contains("line_normal_z")&&!packet.getMolangVariablesJson().orElseThrow().contains("NaN"),"upright Bedrock clocks receive a finite world normal");
         plane.invoke(visuals,"solar_corona",new Location(player.getWorld(),2,140,4),44.0,44.0,x,z);
         packet=session.particles.getLast();
-        check(packet.getIdentifier().equals("advance_magic:solar_corona_flat")&&packet.getPosition().getY()==140,"horizontal Solar circles use the explicit Bedrock XZ plane");
+        check(packet.getIdentifier().equals("advance_magic:solar_corona_flat")&&particleCenter(packet).distanceSquared(new Location(player.getWorld(),2,140,4))<1e-8,"horizontal Solar circles use the explicit Bedrock XZ plane");
         var ray=clazz.getDeclaredMethod("lineRay",String.class,Location.class,double.class,double.class,org.bukkit.util.Vector.class);ray.setAccessible(true);
         ray.invoke(visuals,"chronos_echo",new Location(player.getWorld(),2,112,4),.75,24.0,y);
         packet=session.particles.getLast();
@@ -327,11 +327,61 @@ public final class MythicSpellChecks implements Listener {
         for(var row:variables){var entry=row.getAsJsonObject();values.put(entry.get("name").getAsString(),entry.getAsJsonObject("value").get("value").getAsDouble());}
         check(values.get("variable.line_rotation")==0&&Math.abs(values.get("variable.line_normal_y")-direction.getY())<1e-12,"Bedrock ray carries the endpoint direction and zero spin");
         player.teleport(saved);
+        chronosBedrockLayout(visuals,session);
         for(var owner:List.of(magic,garden))try(var pack=new java.util.zip.ZipFile(owner.getDataFolder().toPath().resolve("resource-packs/"+(owner==magic?"advance-magic":"evergarden")+"-bedrock.mcpack").toFile())) {
             for(String name:List.of("solar_corona","solar_orbit","chronos_dial","chronos_minute","chronos_hour","chronos_ripple","solar_ray","chronos_ray","chronos_echo")) {
                 check(pack.getEntry("particles/"+name+".particle.json")!=null&&pack.getEntry("particles/"+name+"_flat.particle.json")!=null&&pack.getEntry("textures/particle/"+name+".png")!=null,"served Bedrock pack contains every orientation of "+name);
             }
         }
+    }
+    Map<String,Double> particleVariables(SpawnParticleEffectPacket packet) {
+        var result=new HashMap<String,Double>();
+        for(var row:com.google.gson.JsonParser.parseString(packet.getMolangVariablesJson().orElseThrow()).getAsJsonArray()) {
+            var entry=row.getAsJsonObject();
+            result.put(entry.get("name").getAsString(),entry.getAsJsonObject("value").get("value").getAsDouble());
+        }
+        return result;
+    }
+    Location particleCenter(SpawnParticleEffectPacket packet) {
+        var vars=particleVariables(packet);var pos=packet.getPosition();
+        return new Location(player.getWorld(),pos.getX()+vars.getOrDefault("variable.line_offset_x",0d),
+            pos.getY()+vars.getOrDefault("variable.line_offset_y",0d),pos.getZ()+vars.getOrDefault("variable.line_offset_z",0d));
+    }
+    void chronosBedrockLayout(Object visuals,CaptureSession session)throws Exception {
+        var loader=magic.getClass().getClassLoader();
+        var type=loader.loadClass("com.example.advancemagic.spell.ChronosLineVisuals");
+        var ctor=type.getDeclaredConstructors()[0];ctor.setAccessible(true);
+        var frame=type.getDeclaredMethod("frame",visuals.getClass(),int.class,boolean.class);frame.setAccessible(true);
+        var x=new org.bukkit.util.Vector(1,0,0);var z=new org.bukkit.util.Vector(0,0,1);
+        Location base=player.getLocation().add(0,0,16),outer=base.clone().add(0,36,0);
+        var faces=new ArrayList<Location>();var axes=new ArrayList<org.bukkit.util.Vector>();
+        faces.add(base.clone().add(0,24,0));axes.add(x);
+        for(int i=0;i<4;i++) {
+            double a=Math.PI*2*i/4+Math.PI/4;
+            faces.add(base.clone().add(Math.cos(a)*14,25,Math.sin(a)*14));
+            axes.add(x.clone().multiply(-Math.sin(a)).add(z.clone().multiply(Math.cos(a))));
+        }
+        var expected=new ArrayList<Location>(faces);expected.add(outer);
+        var effect=magic.effects().start(player,1,(e,age)->false);
+        try {
+            Object clocks=ctor.newInstance(effect,base,faces,axes,outer,x,z);
+            for(int age:new int[]{0,40,84,88,100,156}) {
+                session.particles.clear();frame.invoke(clocks,visuals,age,false);
+                var dials=session.particles.stream().filter(p->p.getIdentifier().matches("advance_magic:chronos_dial(?:_flat)?")
+                    &&particleCenter(p).getY()>base.getY()+20).toList();
+                check(dials.size()==6,"Bedrock receives all six aerial Chronos clocks in one frame at age "+age);
+                for(int i=0;i<6;i++) {
+                    var packet=dials.get(i);var center=particleCenter(packet);var vars=particleVariables(packet);
+                    var javaDial=player.getWorld().getEntities().stream().filter(e->e instanceof ItemDisplay d
+                        &&d.getItemStack().getItemMeta().getItemModel().getKey().equals("chronos_dial")
+                        &&d.getLocation().distanceSquared(center)<1e-7).map(e->(ItemDisplay)e).findFirst().orElseThrow();
+                    check(center.distanceSquared(expected.get(i))<1e-8&&Math.abs(vars.get("variable.line_width")-javaDial.getTransformation().getScale().x())<1e-5,
+                        "Bedrock clock "+i+" keeps Java's world center and diameter");
+                    var pos=packet.getPosition();var emitter=new Location(player.getWorld(),pos.getX(),pos.getY(),pos.getZ());
+                    check(emitter.distanceSquared(player.getEyeLocation())<=144.001,"aerial clock "+i+" activates within twelve blocks of its viewer");
+                }
+            }
+        }finally{effect.close();}
     }
     void cleanup() {
         HandlerList.unregisterAll(this);

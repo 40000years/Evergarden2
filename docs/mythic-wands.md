@@ -1,6 +1,6 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.4.4-celestial-visibility`, Evergarden `3.0.0-e2.23-celestial-visibility`.
+Release: Advance Magic `1.4.5-bedrock-clocks`, Evergarden `3.0.0-e2.24-bedrock-clocks`.
 Install both JARs from the root `dist` directory and restart the server. This revision
 bundles refreshed packs (Advance Magic 2.6.0 / Evergarden 3.13.0) with continuous
 Solar and Chronos line art. Reconnect clients to download the updated artwork.
@@ -205,6 +205,38 @@ orange/crimson corona and jagged golden rays. Chronos variant: midnight-purple
 shaft, antique-gold clock head with cyan hands and violet/cyan magical highlights.
 
 ## Verification
+
+### Complete Bedrock clock layout (1.4.5 / e2.24)
+
+The user reported that Bedrock still showed one aerial clock after 1.4.4,
+while Java showed the full layout. The earlier single-plane packet fixture did
+not test all six aerial clocks in the same frame. The material rollback alone
+did not resolve that report.
+
+Celestial plane packets now place their **emitter** within twelve blocks of
+each viewer's eye position. The particle's emitter-shape offset places the
+**visible plane** back at its original world center. Diameters, plane normals,
+artwork, clock layout and Java displays retain their original values. This
+separates a distant/high emitter activation point from a large visible surface.
+It addresses the suspected emitter-distance/culling path; it does not assume
+or establish a fixed native Bedrock distance limit. Attack ray packets continue
+to use their true midpoints and zero offsets.
+
+The expanded real Paper/Geyser fixture runs the whole Chronos layout at six
+animation phases. It checks six aerial dial packets in each frame, reconstructs
+each center as packet position plus shape offset, compares every dial's diameter
+and center with its actual Java ItemDisplay, and bounds each emitter's distance
+from the viewer. Both Bedrock packs use the three shape-offset parameters sent
+alongside width, height, rotation and direction by the adapter.
+Content versions are Advance Magic **2.7.0** and Evergarden **3.14.0**. Client
+confirmation of all six aerial clocks remains required; packet and asset
+verification alone do not prove the final Bedrock render.
+
+Both pack checks passed. The isolated Paper/Geyser run passed **334 Mythic
+checks** and **1,115 item translations**. Both release JARs were built in a
+fresh checkout outside the editor workspace and passed the compiler-stub scan.
+
+The offsets follow the official [emitter shape point component](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/particlesreference/particlecomponents/minecraftemitter_shape_point?view=minecraft-bedrock-stable).
 
 ### Bedrock overhead visibility correction (1.4.4 / e2.23)
 

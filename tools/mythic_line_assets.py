@@ -40,7 +40,10 @@ def register_bedrock(bedrock,write_json):
                 'components':{
                     'minecraft:emitter_lifetime_once':{'active_time':.01},
                     'minecraft:emitter_rate_instant':{'num_particles':1},
-                    'minecraft:emitter_shape_point':{'offset':[0,0,0],'direction':[0,0,0]},
+                    # The packet's emitter stays near each viewer. The particle
+                    # itself is born at its real world-space plane/ray midpoint.
+                    'minecraft:emitter_shape_point':{'offset':[
+                        'variable.line_offset_x','variable.line_offset_y','variable.line_offset_z'],'direction':[0,0,0]},
                     # Redraw every four/two ticks. Longer lifetimes leave a second
                     # old dial/hand/ray on screen and make Bedrock look doubled.
                     'minecraft:particle_lifetime_expression':{'max_lifetime':.20 if name in PLANES else .10},

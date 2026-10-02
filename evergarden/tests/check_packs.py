@@ -77,7 +77,7 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
                 json.loads(archive.read(name))
     atlas = json.loads(bedrock.read('textures/item_texture.json'))['texture_data']
     manifest = json.loads(bedrock.read('manifest.json'))
-    expected_version = [3, 13, 2]
+    expected_version = [3, 14, 0]
     assert manifest['header']['version'] == expected_version
     assert manifest['modules'][0]['version'] == expected_version
     with zipfile.ZipFile(root.parent / 'advance-magic/dist/advance-magic-bedrock.mcpack') as magic:

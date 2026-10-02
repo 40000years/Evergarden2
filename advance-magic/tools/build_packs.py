@@ -24,7 +24,7 @@ import judgment_assets
 import mythic_line_assets
 import magic_java_atlas
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [2, 6, 2]  # Restore double-sided translucent overhead planes.
+BEDROCK_PACK_VERSION = [2, 7, 0]  # Nearby emitters preserve all world-space celestial planes.
 
 
 def spells():

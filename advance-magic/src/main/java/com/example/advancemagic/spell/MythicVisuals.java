@@ -9,6 +9,7 @@ import java.util.*;
 
 /** Optional Geyser adapter for coloured dust and authored world-space line art. */
 final class MythicVisuals {
+    private static final double LINE_EMITTER_DISTANCE=12;
     private record Viewer(Player player,Object session,int dimension) {}
     private final MagicContext c;
     private List<Viewer> viewers=List.of();
@@ -108,7 +109,7 @@ final class MythicVisuals {
             // Bedrock's direction_y aligns the LONG axis directly with the ray.
             // A viewer-dependent normal plus billboard spin can rotate that axis
             // away from the endpoint as the camera moves. Never spin attack rays.
-            sendLinePacket(viewer,model,at,width,height,0,direction);
+            sendLinePacket(viewer,model,at,width,height,0,direction,false);
         }
     }
     private void linePacket(Viewer viewer,String model,Location at,double width,double height,Vector right,Vector up) {
@@ -122,17 +123,29 @@ final class MythicVisuals {
             baseUp.normalize();Vector baseRight=baseUp.clone().crossProduct(normal).normalize();
             rotation=Math.toDegrees(Math.atan2(right.dot(baseUp),right.dot(baseRight)));
         }
-        sendLinePacket(viewer,model+(flat?"_flat":""),at,width,height,rotation,normal);
+        sendLinePacket(viewer,model+(flat?"_flat":""),at,width,height,rotation,normal,true);
     }
-    private void sendLinePacket(Viewer viewer,String model,Location at,double width,double height,double rotation,Vector normal) {
-        String[] names={"line_width","line_height","line_rotation","line_normal_x","line_normal_y","line_normal_z"};
-        double[] values={width,height,rotation,normal.getX(),normal.getY(),normal.getZ()};
+    private void sendLinePacket(Viewer viewer,String model,Location at,double width,double height,double rotation,Vector normal,boolean nearbyEmitter) {
+        // Keep a world plane's activation point near its viewer, including when
+        // the dial's center is high above/outside the view. The shape offset
+        // still places the particle at the unchanged world center and scale.
+        Location emitter=at.clone();
+        if(nearbyEmitter) {
+            Location eye=viewer.player.getEyeLocation();
+            Vector toward=at.toVector().subtract(eye.toVector());
+            double distance=toward.length();
+            if(distance>LINE_EMITTER_DISTANCE)emitter=eye.add(toward.multiply(LINE_EMITTER_DISTANCE/distance));
+        }
+        Vector offset=at.toVector().subtract(emitter.toVector());
+        String[] names={"line_width","line_height","line_rotation","line_normal_x","line_normal_y","line_normal_z",
+            "line_offset_x","line_offset_y","line_offset_z"};
+        double[] values={width,height,rotation,normal.getX(),normal.getY(),normal.getZ(),offset.getX(),offset.getY(),offset.getZ()};
         StringJoiner json=new StringJoiner(",","[","]");
         for(int i=0;i<names.length;i++)json.add("{\"name\":\"variable."+names[i]+"\",\"value\":{\"type\":\"float\",\"value\":"+values[i]+"}}");
         try {
             Object packet=bridge.packet.newInstance();
             bridge.identifier.invoke(packet,"advance_magic:"+model);
-            bridge.position.invoke(packet,bridge.vector.invoke(null,at.getX(),at.getY(),at.getZ()));
+            bridge.position.invoke(packet,bridge.vector.invoke(null,emitter.getX(),emitter.getY(),emitter.getZ()));
             bridge.setDimension.invoke(packet,viewer.dimension);bridge.variables.invoke(packet,Optional.of(json.toString()));
             bridge.send.invoke(viewer.session,packet);
         }catch(ReflectiveOperationException|LinkageError e){disable(e);}

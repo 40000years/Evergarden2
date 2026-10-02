@@ -1,6 +1,6 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.4.2-celestial-lines`, Evergarden `3.0.0-e2.21-celestial-lines`.
+Release: Advance Magic `1.4.3-celestial-aim`, Evergarden `3.0.0-e2.22-celestial-aim`.
 Install both JARs from the root `dist` directory and restart the server. This revision
 bundles refreshed packs (Advance Magic 2.6.0 / Evergarden 3.13.0) with continuous
 Solar and Chronos line art. Reconnect clients to download the updated artwork.
@@ -205,6 +205,40 @@ orange/crimson corona and jagged golden rays. Chronos variant: midnight-purple
 shaft, antique-gold clock head with cyan hands and violet/cyan magical highlights.
 
 ## Verification
+
+### Celestial aim correction (1.4.3 / e2.22)
+
+Solar and Chronos attack displays now use zero transformation and teleport
+interpolation. Previously hiding a pulse reset its quaternion to identity;
+reopening it interpolated a full-length ray through unrelated directions, while
+moving its midpoint separately. Hidden displays now retain their rotation, and
+both endpoints are placed immediately at the cast's source and impact.
+
+Bedrock attack ribbons use `direction_y` with their endpoint direction and zero
+spin. Their orientation no longer depends on a viewer's eye position. The
+`line_normal_*` packet variables carry the long-axis direction for rays and the
+surface normal for planes. Chronos hands also reverse continuously from their
+current angle at tick 88, and switching attack variants hides the old variant.
+
+Both editions continue to use the exact same authored PNGs, clock layout, plane
+centers and diameters. Bedrock circles use `particles_alpha` so colored strokes
+are opaque like Java item planes. Their redraw lifetimes are four ticks (planes)
+and two ticks (rays), avoiding overlap with a previous frame. Bedrock content
+versions are **2.6.1** (Advance Magic) and **3.13.1** (Evergarden). Java pack
+bytes and their existing pinned URLs are unchanged. Replace both plugin JARs,
+restart the server, and reconnect both clients so Geyser serves the updated packs.
+
+The corrected release passed **256 Mythic checks** and **1,115 item translations**
+on isolated Paper 26.2 with the real installed Geyser API. New checks cover nine
+ray directions, both exact world endpoints after hide/reopen, zero interpolation,
+camera-independent Bedrock ray variables and the Chronos reversal. The previous
+release fails the new Chronos reversal check. Both pack validators passed and
+both JARs passed the compiler-error-stub scan. Client rendering was not run;
+remaining differences in brightness, shaders or client particle culling must
+be evaluated with both clients viewing the same cast and phase.
+
+Bedrock definitions follow Mojang's [billboard direction modes](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/particlesreference/particlecomponents/minecraftparticle_appearance_billboard?view=minecraft-bedrock-stable)
+and [particle material definitions](https://learn.microsoft.com/en-us/minecraft/creator/documents/material-files?view=minecraft-bedrock-stable).
 
 `evergarden/tests/run_bedrock_items.py` creates an isolated Paper server using the
 local Geyser and Aeternum Seasons JARs. It verifies all item factories against five

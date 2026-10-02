@@ -30,8 +30,8 @@ final class MythicLineVisuals implements AutoCloseable {
     private static Location pose(Location at){Location pose=at.clone();pose.setYaw(0);pose.setPitch(0);return pose;}
     private void transform(MythicVisuals visuals,Location at,Quaternionf rotation,float x,float y,float z,int ticks) {
         if(!display.isValid())return;
-        if(display.getLocation().distanceSquared(at)>1e-8)display.teleport(pose(at));
         display.setTeleportDuration(ticks);display.setInterpolationDuration(ticks);display.setInterpolationDelay(0);
+        if(display.getLocation().distanceSquared(at)>1e-8)display.teleport(pose(at));
         display.setDisplayWidth(Math.max(x,Math.max(y,z))+2);display.setDisplayHeight(Math.max(x,Math.max(y,z))+2);
         display.setTransformation(new Transformation(new Vector3f(),rotation,new Vector3f(x,y,z),new Quaternionf()));
         visuals.showSeal(display);
@@ -56,13 +56,17 @@ final class MythicLineVisuals implements AutoCloseable {
         Location mid=from.clone().add(delta.multiply(.5));
         Quaternionf rotation=new Quaternionf().rotationTo(new Vector3f(0,1,0),
             new Vector3f((float)direction.getX(),(float)direction.getY(),(float)direction.getZ()));
-        transform(visuals,mid,rotation,(float)width,(float)length,(float)width,2);
+        // A pulsed beam must appear at its final orientation immediately. Slerping
+        // from the hidden pose sweeps a full-length ray sideways through the world.
+        // Teleport interpolation would also move its endpoints off the cast target.
+        transform(visuals,mid,rotation,(float)width,(float)length,(float)width,0);
         visuals.lineRay(model,mid,width,length,direction);
     }
     void hide() {
         if(display.isValid()) {
             display.setInterpolationDuration(0);display.setInterpolationDelay(0);
-            display.setTransformation(new Transformation(new Vector3f(),new Quaternionf(),new Vector3f(0),new Quaternionf()));
+            var hidden=display.getTransformation();hidden.getScale().zero();
+            display.setTransformation(hidden);
         }
     }
     @Override public void close(){if(display.isValid())display.remove();}

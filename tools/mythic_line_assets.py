@@ -33,18 +33,25 @@ def register_bedrock(bedrock,write_json):
         write_json(bedrock/f'particles/{name}.particle.json',{
             'format_version':'1.10.0','particle_effect':{
                 'description':{'identifier':f'advance_magic:{name}',
-                    'basic_render_parameters':{'material':'particles_blend','texture':f'textures/particle/{name}'}},
+                    # Java item planes use opaque strokes with transparent holes.
+                    # Alpha-tested Bedrock planes keep those strokes just as solid;
+                    # blended planes made the same antialiased PNG look much thinner.
+                    'basic_render_parameters':{'material':'particles_alpha' if name in PLANES else 'particles_blend','texture':f'textures/particle/{name}'}},
                 'components':{
                     'minecraft:emitter_lifetime_once':{'active_time':.01},
                     'minecraft:emitter_rate_instant':{'num_particles':1},
                     'minecraft:emitter_shape_point':{'offset':[0,0,0],'direction':[0,0,0]},
-                    'minecraft:particle_lifetime_expression':{'max_lifetime':.22 if name in PLANES else .11},
+                    # Redraw every four/two ticks. Longer lifetimes leave a second
+                    # old dial/hand/ray on screen and make Bedrock look doubled.
+                    'minecraft:particle_lifetime_expression':{'max_lifetime':.20 if name in PLANES else .10},
                     'minecraft:particle_initial_speed':0,
-                    'minecraft:particle_initial_spin':{'rotation':'variable.line_rotation','rotation_rate':0},
+                    'minecraft:particle_initial_spin':{'rotation':'variable.line_rotation' if name in PLANES else 0,'rotation_rate':0},
                     'minecraft:particle_motion_dynamic':{},
                     'minecraft:particle_appearance_billboard':{
                         'size':['variable.line_width * 0.5','variable.line_height * 0.5'],
-                        'facing_camera_mode':'direction_z',
+                        # For rays the custom vector is the long Y axis, not the
+                        # billboard normal. This anchors both ends for all viewers.
+                        'facing_camera_mode':'direction_z' if name in PLANES else 'direction_y',
                         'direction':{'mode':'custom_direction','custom_direction':[
                             'variable.line_normal_x','variable.line_normal_y','variable.line_normal_z']},
                         'uv':{'texture_width':size,'texture_height':size,'uv':[0,0],'uv_size':[size,size]}}}}})
@@ -54,6 +61,7 @@ def register_bedrock(bedrock,write_json):
         flat=copy.deepcopy(particle)
         flat['particle_effect']['description']['identifier']=f'advance_magic:{name}_flat'
         billboard=flat['particle_effect']['components']['minecraft:particle_appearance_billboard']
-        billboard['facing_camera_mode']='emitter_transform_xz'
-        del billboard['direction']
+        if name in PLANES:
+            billboard['facing_camera_mode']='emitter_transform_xz'
+            del billboard['direction']
         write_json(bedrock/f'particles/{name}_flat.particle.json',flat)

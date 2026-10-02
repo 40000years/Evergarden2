@@ -105,14 +105,10 @@ final class MythicVisuals {
     void lineRay(String model,Location at,double width,double height,Vector direction) {
         if(bridge==null||disabled)return;
         for(var viewer:viewers)if(viewer.session!=null&&viewer.player.isOnline()) {
-            // Rotate only around the ray's axis so the ribbon faces this viewer.
-            Vector normal=viewer.player.getEyeLocation().toVector().subtract(at.toVector());
-            normal.subtract(direction.clone().multiply(normal.dot(direction)));
-            if(normal.lengthSquared()<1e-6)normal=direction.clone().crossProduct(new Vector(1,0,0));
-            if(normal.lengthSquared()<1e-6)normal=direction.clone().crossProduct(new Vector(0,0,1));
-            normal.normalize();
-            Vector right=direction.clone().crossProduct(normal).normalize();
-            linePacket(viewer,model,at,width,height,right,direction);
+            // Bedrock's direction_y aligns the LONG axis directly with the ray.
+            // A viewer-dependent normal plus billboard spin can rotate that axis
+            // away from the endpoint as the camera moves. Never spin attack rays.
+            sendLinePacket(viewer,model,at,width,height,0,direction);
         }
     }
     private void linePacket(Viewer viewer,String model,Location at,double width,double height,Vector right,Vector up) {
@@ -126,13 +122,16 @@ final class MythicVisuals {
             baseUp.normalize();Vector baseRight=baseUp.clone().crossProduct(normal).normalize();
             rotation=Math.toDegrees(Math.atan2(right.dot(baseUp),right.dot(baseRight)));
         }
+        sendLinePacket(viewer,model+(flat?"_flat":""),at,width,height,rotation,normal);
+    }
+    private void sendLinePacket(Viewer viewer,String model,Location at,double width,double height,double rotation,Vector normal) {
         String[] names={"line_width","line_height","line_rotation","line_normal_x","line_normal_y","line_normal_z"};
         double[] values={width,height,rotation,normal.getX(),normal.getY(),normal.getZ()};
         StringJoiner json=new StringJoiner(",","[","]");
         for(int i=0;i<names.length;i++)json.add("{\"name\":\"variable."+names[i]+"\",\"value\":{\"type\":\"float\",\"value\":"+values[i]+"}}");
         try {
             Object packet=bridge.packet.newInstance();
-            bridge.identifier.invoke(packet,"advance_magic:"+model+(flat?"_flat":""));
+            bridge.identifier.invoke(packet,"advance_magic:"+model);
             bridge.position.invoke(packet,bridge.vector.invoke(null,at.getX(),at.getY(),at.getZ()));
             bridge.setDimension.invoke(packet,viewer.dimension);bridge.variables.invoke(packet,Optional.of(json.toString()));
             bridge.send.invoke(viewer.session,packet);

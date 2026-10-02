@@ -305,7 +305,7 @@ public final class MythicSpells {
             .add(up.clone().multiply(Math.sin(angle)*radius));
     }
     private void clockFallback(Location at,Vector right,Vector up,int age,int offset,double radius) {
-        double turn=age<88?age*.055:-(age-88)*.12;
+        double turn=age<88?age*.055:88*.055-(age-88)*.12;
         turn+=offset*.35;
         // Static outlines persist for 0.8 seconds in Bedrock; redraw every 0.4 seconds.
         if(age%8==0){

@@ -10,6 +10,7 @@ import uuid
 p = argparse.ArgumentParser()
 p.add_argument('--source-server', type=Path, required=True)
 p.add_argument('--garden-jar', type=Path)
+p.add_argument('--magic-jar', type=Path)
 p.add_argument('--aeternum-jar', type=Path)
 p.add_argument('--server', type=Path)
 args = p.parse_args()
@@ -26,7 +27,7 @@ for name in ('libraries', 'versions', 'cache'):
 plugins = server / 'plugins'
 plugins.mkdir(exist_ok=True)
 shutil.copy2(args.garden_jar or root / 'dist/evergarden.jar', plugins / 'evergarden.jar')
-shutil.copy2(root / 'dist/advance-magic.jar', plugins / 'advance-magic.jar')
+shutil.copy2(args.magic_jar or root / 'dist/advance-magic.jar', plugins / 'advance-magic.jar')
 for name in ('Geyser-Spigot.jar', 'AeternumSeasons-4.7.jar'):
     source = args.aeternum_jar if name.startswith('Aeternum') and args.aeternum_jar else args.source_server / 'plugins' / name
     shutil.copy2(source, plugins / name)

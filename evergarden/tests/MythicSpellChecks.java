@@ -157,6 +157,12 @@ public final class MythicSpellChecks implements Listener {
             if(spell==Spell.CHRONOS_FINAL_HOUR) {
                 check(ordinary.hasPotionEffect(PotionEffectType.SLOWNESS)&&ordinary.getPotionEffect(PotionEffectType.SLOWNESS).getAmplifier()==127,"ordinary mobs are rooted");
                 check(target.getPotionEffect(PotionEffectType.SLOWNESS).getAmplifier()==1,"high-health bosses are slowed without a hard root");
+                tick(42); // Last rendered frame is age 84, immediately before reversal.
+                var hand=world.getEntities().stream().filter(e->e instanceof ItemDisplay d&&d.getItemStack().getItemMeta().getItemModel().getKey().equals("chronos_minute"))
+                    .map(e->(ItemDisplay)e).findFirst().orElseThrow();
+                var before=new org.joml.Quaternionf(hand.getTransformation().getLeftRotation());
+                tick(4);
+                check(Math.abs(before.dot(hand.getTransformation().getLeftRotation()))>.99,"Chronos hands reverse without jumping to an unrelated angle");
             }
             tick(110+magic.terrain().duration()+1);
             check(magic.effects().size()==0,"full timeline finishes and cleans up");
@@ -227,7 +233,43 @@ public final class MythicSpellChecks implements Listener {
         for(var core:com.example.voidscape.item.RelicService.MAGIC_CORES)if((boolean)rarity.invoke(null,core))mythicIds.add(core.id());
         check(mythicIds.equals(Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment")),"Vault Mythic pool contains exactly all four cores");
         check(com.example.voidscape.item.RelicService.MAGIC_CORES.size()-mythicIds.size()==14,"normal Vault pool retains fourteen cores");
-        bedrockParticles();team.unregister();
+        lineGeometry();bedrockParticles();team.unregister();
+    }
+    void lineGeometry()throws Exception {
+        var loader=magic.getClass().getClassLoader();
+        var visualType=loader.loadClass("com.example.advancemagic.spell.MythicVisuals");
+        var visualCtor=visualType.getDeclaredConstructors()[0];visualCtor.setAccessible(true);
+        Object visuals=visualCtor.newInstance(magic.context());
+        var lineType=loader.loadClass("com.example.advancemagic.spell.MythicLineVisuals");
+        var ctor=lineType.getDeclaredConstructors()[0];ctor.setAccessible(true);
+        var ray=lineType.getDeclaredMethod("ray",visualType,Location.class,Location.class,double.class);ray.setAccessible(true);
+        var hide=lineType.getDeclaredMethod("hide");hide.setAccessible(true);
+        var field=lineType.getDeclaredField("display");field.setAccessible(true);
+        var effect=magic.effects().start(player,1,(e,age)->false);
+        try {
+            Location from=new Location(player.getWorld(),.5,125,12.5);
+            Object line=ctor.newInstance(effect,from,"solar_ray");
+            ItemDisplay display=(ItemDisplay)field.get(line);
+            var destinations=new ArrayList<Location>();
+            destinations.add(from.clone().add(0,-24,0));
+            for(int i=0;i<5;i++)destinations.add(from.clone().add(Math.cos(Math.PI*2*i/5)*4,-24,Math.sin(Math.PI*2*i/5)*4));
+            destinations.add(from.clone().add(14,-24,14));
+            destinations.add(from.clone().add(-14,-24,-14));
+            destinations.add(from.clone().add(0,24,0));
+            for(Location to:destinations) {
+                ray.invoke(line,visuals,from,to,.75);
+                var transform=display.getTransformation();
+                var halfAxis=transform.getLeftRotation().transform(new org.joml.Vector3f(0,transform.getScale().y()/2,0));
+                Location center=display.getLocation().add(transform.getTranslation().x(),transform.getTranslation().y(),transform.getTranslation().z());
+                Location start=center.clone().add(-halfAxis.x(),-halfAxis.y(),-halfAxis.z());
+                Location end=center.clone().add(halfAxis.x(),halfAxis.y(),halfAxis.z());
+                check(start.distanceSquared(from)<1e-8&&end.distanceSquared(to)<1e-8,"pulsed ray keeps both exact world endpoints: "+to.toVector());
+                check(display.getInterpolationDuration()==0&&display.getTeleportDuration()==0,"ray appears without a sideways interpolation sweep");
+                var rotation=new org.joml.Quaternionf(transform.getLeftRotation());
+                hide.invoke(line);
+                check(display.getTransformation().getScale().lengthSquared()==0&&display.getTransformation().getLeftRotation().equals(rotation),"hidden ray preserves its orientation for the next pulse");
+            }
+        } finally {effect.close();}
     }
     void bedrockParticles()throws Exception {
         var loader=magic.getClass().getClassLoader();
@@ -273,6 +315,18 @@ public final class MythicSpellChecks implements Listener {
         ray.invoke(visuals,"chronos_echo",new Location(player.getWorld(),2,112,4),.75,24.0,y);
         packet=session.particles.getLast();
         check(packet.getIdentifier().equals("advance_magic:chronos_echo")&&packet.getMolangVariablesJson().orElseThrow().contains("24.0"),"Bedrock echo rays use continuous violet ribbons with the full attack length");
+        Location saved=player.getLocation();
+        var direction=new org.bukkit.util.Vector(4,-24,-7).normalize();
+        ray.invoke(visuals,"solar_ray",new Location(player.getWorld(),2,112,4),1.1,25.0,direction);
+        String original=session.particles.getLast().getMolangVariablesJson().orElseThrow();
+        player.teleport(saved.clone().add(12,3,-10));
+        ray.invoke(visuals,"solar_ray",new Location(player.getWorld(),2,112,4),1.1,25.0,direction);
+        check(original.equals(session.particles.getLast().getMolangVariablesJson().orElseThrow()),"moving the viewer cannot change the Bedrock attack axis");
+        var variables=com.google.gson.JsonParser.parseString(original).getAsJsonArray();
+        var values=new HashMap<String,Double>();
+        for(var row:variables){var entry=row.getAsJsonObject();values.put(entry.get("name").getAsString(),entry.getAsJsonObject("value").get("value").getAsDouble());}
+        check(values.get("variable.line_rotation")==0&&Math.abs(values.get("variable.line_normal_y")-direction.getY())<1e-12,"Bedrock ray carries the endpoint direction and zero spin");
+        player.teleport(saved);
         for(var owner:List.of(magic,garden))try(var pack=new java.util.zip.ZipFile(owner.getDataFolder().toPath().resolve("resource-packs/"+(owner==magic?"advance-magic":"evergarden")+"-bedrock.mcpack").toFile())) {
             for(String name:List.of("solar_corona","solar_orbit","chronos_dial","chronos_minute","chronos_hour","chronos_ripple","solar_ray","chronos_ray","chronos_echo")) {
                 check(pack.getEntry("particles/"+name+".particle.json")!=null&&pack.getEntry("particles/"+name+"_flat.particle.json")!=null&&pack.getEntry("textures/particle/"+name+".png")!=null,"served Bedrock pack contains every orientation of "+name);

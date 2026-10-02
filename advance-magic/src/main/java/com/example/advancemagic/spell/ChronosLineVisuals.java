@@ -31,7 +31,8 @@ final class ChronosLineVisuals {
                 Location at=i<5?faces.get(i):outer;
                 Vector x=i<5?axes.get(i):right,y=i<5?MythicLineVisuals.Y:outerUp;
                 double diameter=(i<5?8:22)*2*512/480;
-                double turn=(age<88?age*.055:-(age-88)*.12)+i*.35;
+                // Reverse from the last angle, rather than jumping back to zero.
+                double turn=(age<88?age*.055:88*.055-(age-88)*.12)+i*.35;
                 dials[i][0].plane(visuals,at,x,y,diameter,0);
                 // Small offsets prevent coplanar depth flicker without changing the clock's position.
                 Vector normal=x.clone().crossProduct(y).normalize();
@@ -44,6 +45,7 @@ final class ChronosLineVisuals {
             int variant=age>=100?1:0;
             for(int i=0;i<5;i++) {
                 if(firing) {
+                    if(beams[1-variant][i]!=null)beams[1-variant][i].hide();
                     if(beams[variant][i]==null)beams[variant][i]=new MythicLineVisuals(effect,faces.get(i),variant==0?"chronos_ray":"chronos_echo");
                     beams[variant][i].ray(visuals,faces.get(i),base.clone().add(0,1,0),.75);
                 } else for(var group:beams)if(group[i]!=null)group[i].hide();

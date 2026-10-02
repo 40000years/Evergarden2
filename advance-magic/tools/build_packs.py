@@ -24,7 +24,7 @@ import judgment_assets
 import mythic_line_assets
 import magic_java_atlas
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [2, 6, 0]  # Continuous Solar orbits and Chronos clockwork.
+BEDROCK_PACK_VERSION = [2, 6, 1]  # Fixed attack axes and non-overlapping celestial redraws.
 
 
 def spells():

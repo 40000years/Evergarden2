@@ -55,7 +55,9 @@ def register_bedrock(bedrock,write_json):
                         # For rays the custom vector is the long Y axis, not the
                         # billboard normal. This anchors both ends for all viewers.
                         'facing_camera_mode':'direction_z' if name in PLANES else 'direction_y',
-                        'direction':{'mode':'custom_direction','custom_direction':[
+                        # The engine enum is "custom"; "custom_direction" names
+                        # the vector field only (see Mojang's schema and shriek).
+                        'direction':{'mode':'custom','custom_direction':[
                             'variable.line_normal_x','variable.line_normal_y','variable.line_normal_z']},
                         'uv':{'texture_width':size,'texture_height':size,'uv':[0,0],'uv_size':[size,size]}}}}})
         # A horizontal plane has no projected world-up vector. Give it an

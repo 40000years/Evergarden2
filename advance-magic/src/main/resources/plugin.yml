@@ -1,5 +1,5 @@
 name: advance-magic
-version: 1.4.5-bedrock-clocks
+version: 1.4.6-bedrock-direction
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
 description: Seventeen spells including three Mythic wands, mana and crafting.

@@ -392,7 +392,7 @@ def main():
  mythic_line_assets.register_bedrock(bedrock,write_json)
  import magic_java_atlas
  magic_java_atlas.register(java,write_json)
- version=[3,14,0]
+ version=[3,14,1]
  manifest['header']['version']=version
  for module in manifest['modules']:module['version']=version
  write_json(bedrock/'manifest.json',manifest)

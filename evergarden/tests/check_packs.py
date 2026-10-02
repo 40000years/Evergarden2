@@ -10,7 +10,9 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(root.parent / 'tools'))
 from release_jar_checks import check_jar
+from bedrock_particle_checks import check_direction_modes
 dist = root / 'dist'
+check_direction_modes(dist / 'evergarden-bedrock.mcpack')
 mapping = json.loads((dist / 'geyser-mappings.json').read_text())
 other = json.loads((root.parent / 'advance-magic/dist/geyser-mappings.json').read_text())
 
@@ -77,7 +79,7 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
                 json.loads(archive.read(name))
     atlas = json.loads(bedrock.read('textures/item_texture.json'))['texture_data']
     manifest = json.loads(bedrock.read('manifest.json'))
-    expected_version = [3, 14, 0]
+    expected_version = [3, 14, 1]
     assert manifest['header']['version'] == expected_version
     assert manifest['modules'][0]['version'] == expected_version
     with zipfile.ZipFile(root.parent / 'advance-magic/dist/advance-magic-bedrock.mcpack') as magic:

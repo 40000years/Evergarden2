@@ -10,6 +10,9 @@ import zlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT.parent / 'tools'))
+from bedrock_particle_checks import check_direction_modes
+check_direction_modes(ROOT / 'dist/advance-magic-bedrock.mcpack')
 catalog = runpy.run_path(str(ROOT / 'tools/build_packs.py'))['spells']()
 dist = ROOT / 'dist'
 hashes = json.loads((dist / 'pack-hashes.json').read_text())
@@ -130,7 +133,7 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
                 assert components['minecraft:particle_lifetime_expression']['max_lifetime']==(.10 if ray else .20)
                 if ray:
                     assert components['minecraft:particle_initial_spin']=={'rotation':0,'rotation_rate':0}
-                    assert components['minecraft:particle_appearance_billboard']['direction']['mode']=='custom_direction'
+                    assert components['minecraft:particle_appearance_billboard']['direction']['mode']=='custom'
     for variant in range(2):
         name=f'judgment_seal_{variant}'
         mesh=json.loads(z.read(f'assets/advance_magic/models/effect/{name}.json'))
@@ -176,8 +179,8 @@ assert len(definitions) == len(catalog) == 18
 assert len({row['bedrock_identifier'] for row in definitions}) == 18
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [2, 7, 0]
-    assert manifest['modules'][0]['version'] == [2, 7, 0]
+    assert manifest['header']['version'] == [2, 7, 1]
+    assert manifest['modules'][0]['version'] == manifest['header']['version']
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     effect=json.loads(z.read('particles/judgment_beam.particle.json'))['particle_effect']

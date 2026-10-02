@@ -1,8 +1,8 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.4.5-bedrock-clocks`, Evergarden `3.0.0-e2.24-bedrock-clocks`.
+Release: Advance Magic `1.4.6-bedrock-direction`, Evergarden `3.0.0-e2.25-bedrock-direction`.
 Install both JARs from the root `dist` directory and restart the server. This revision
-bundles refreshed packs (Advance Magic 2.6.0 / Evergarden 3.13.0) with continuous
+bundles refreshed packs (Advance Magic 2.7.1 / Evergarden 3.14.1) with continuous
 Solar and Chronos line art. Reconnect clients to download the updated artwork.
 The player guide covers all 18 spells, wand durability/upgrades, both restoration
 methods, ruined altar sites, flying staff controls and current item sources.
@@ -205,6 +205,43 @@ orange/crimson corona and jagged golden rays. Chronos variant: midnight-purple
 shaft, antique-gold clock head with cyan hands and violet/cyan magical highlights.
 
 ## Verification
+
+### Bedrock directional particle enum correction (1.4.6 / e2.25)
+
+The user confirmed 1.4.5 still displays only the horizontal overhead dial on
+Bedrock. Its twelve crystals identify that dial in the screenshot; the five
+upright faces are missing. The previous near-emitter change was insufficient.
+
+The generated billboard `direction.mode` was `custom_direction`, following the
+prose reference, but Mojang's [engine schema](https://github.com/Mojang/bedrock-samples/blob/46ba6ea985fb5a92d79a9419198f10dda14c199d/metadata/json_schemas/client/particles/1.21.10/particle_appearance_billboard%20direction_settings_mode.json)
+accepts only `derive_from_velocity` and `custom`. Mojang's format 1.10.0
+[shriek effect](https://github.com/Mojang/bedrock-samples/blob/46ba6ea985fb5a92d79a9419198f10dda14c199d/resource_pack/particles/shriek.json)
+also uses `custom`. `custom_direction` is the vector field, not the enum value.
+Change the mode to `custom` for every directional Solar/Chronos plane and ray in
+both packs. Horizontal planes use `emitter_transform_xz` without this direction
+component, explaining why their definitions were unaffected by the invalid enum.
+The expected effect of an ignored custom normal on a zero-speed directional
+billboard is an inference; an actual Bedrock client render remains unverified.
+
+Both pack validators now validate every billboard direction against the checked-in
+Mojang schema snapshot. This check rejects both previous 1.4.5 packs at
+`chronos_dial.particle.json`. Earlier tests asserted the wrong spelling for rays
+and only checked packets for the clock layout, so they missed this client-side
+definition error. Bedrock versions increase to **2.7.1** and **3.14.1** so Geyser
+offers the corrected definitions. Replace both plugin JARs and restart/reconnect;
+external Geyser installations need both updated Bedrock packs in their pack folder.
+
+The schema check passes all twelve directional definitions in each rebuilt pack;
+archive comparison confirms only those twelve modes and the manifest version
+changed. Both pack validators and embedded-resource byte checks pass, and both
+JARs pass the compiler-stub scan after an isolated clean javac build. The release
+JARs boot successfully on isolated Paper/Geyser and pass the existing 334 Mythic
+checks and 1,115 item translations. These server checks do not render particles.
+
+Clock count, centers, orientations, hand timing and PNGs are unchanged. Java packs
+retain their previous bytes and pinned URLs. This release requires a Bedrock play
+check of the five upright faces plus the horizontal master dial and of Solar's
+intersecting coronas/rays; a server packet fixture cannot establish visible parity.
 
 ### Complete Bedrock clock layout (1.4.5 / e2.24)
 

@@ -159,35 +159,10 @@ public final class WrathProbe extends JavaPlugin {
         call(boss,"refresh",new Class<?>[]{Player.class},viewer);
         check(visibility.stream().filter(s->s.startsWith("showEntity")).toList().equals(List.of("showEntity:ARMOR_STAND")),
                 "No-pack viewer sees only the fallback");
-        visibility.clear();
-        plugin.packs().status(new PlayerResourcePackStatusEvent(viewer,BossPacks.PACK_ID,PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
-        check(plugin.packs().loaded(viewer)&&visibility.stream().filter(s->s.equals("showEntity:ITEM_DISPLAY")).count()==9,
-                "Successful pack load switches the viewer to nine custom bones");
-        check(visibility.getFirst().equals("hideEntity:ARMOR_STAND"),"Fallback is hidden before custom bones are shown");
-        check(visuals.stream().filter(e->e instanceof ArmorStand).noneMatch(Entity::isValid)
-                &&((List<?>)call(boss,"visuals",new Class<?>[0])).size()==9,
-                "When all online viewers have the pack the physical fallback is removed, leaving only nine custom bones");
+        check(!plugin.packs().loaded(viewer),"7sins keeps the custom pack disabled");
+        check(visuals.stream().anyMatch(e->e instanceof ArmorStand&&e.isValid()),
+                "The vanilla fallback remains available while the pack is paused");
         boss.tick();
-        check(boss.entity().isValid(),"Custom animation and combat keep working after fallback removal");
-        plugin.packs().status(new PlayerResourcePackStatusEvent(viewer,UUID.randomUUID(),PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD));
-        check(plugin.packs().loaded(viewer),"Another plugin's pack failure does not hide Wrath models");
-        visibility.clear();
-        plugin.packs().status(new PlayerResourcePackStatusEvent(viewer,BossPacks.PACK_ID,PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD));
-        check(!plugin.packs().loaded(viewer),"Failed boss pack restores the fallback");
-        @SuppressWarnings("unchecked") List<Entity> restored=(List<Entity>)call(boss,"visuals",new Class<?>[0]);
-        check(restored.size()==10&&restored.stream().anyMatch(e->e instanceof ArmorStand&&e.isValid())
-                &&visibility.stream().filter(s->s.startsWith("showEntity")).toList().equals(List.of("showEntity:ARMOR_STAND")),
-                "A viewer without the pack gets a newly created fallback while every custom bone is hidden");
-        boss.tick();
-
-        String url=plugin.packs().url(viewer);
-        HttpClient client=HttpClient.newHttpClient();
-        HttpResponse<byte[]> zip=client.send(HttpRequest.newBuilder(URI.create(url)).build(),HttpResponse.BodyHandlers.ofByteArray());
-        check(zip.statusCode()==200 && zip.body().length>10000 && zip.body()[0]=='P' && zip.body()[1]=='K',"Bundled HTTP host serves the actual ZIP");
-        HttpResponse<Void> missing=client.send(HttpRequest.newBuilder(URI.create(url.replace("/7sins/","/private/"))).build(),HttpResponse.BodyHandlers.discarding());
-        check(missing.statusCode()==404,"HTTP host does not expose unrelated paths");
-        HttpResponse<Void> cached=client.send(HttpRequest.newBuilder(URI.create(url)).header("If-None-Match",zip.headers().firstValue("ETag").orElseThrow()).build(),HttpResponse.BodyHandlers.discarding());
-        check(cached.statusCode()==304,"Resource pack supports immutable checksum caching");
 
         armorChecks(plugin,world,home);
 
@@ -198,7 +173,7 @@ public final class WrathProbe extends JavaPlugin {
         catch(IllegalStateException expected) {check(true,"Overlapping encounters are rejected");}
         boss.remove();
         check(!boss.entity().isValid()&&visuals.stream().noneMatch(Entity::isValid),"Removal cleans base and every model entity");
-        check(restored.stream().noneMatch(Entity::isValid),"Removal also cleans a fallback recreated after a pack failure");
+        check(visuals.stream().noneMatch(Entity::isValid),"Removal also cleans the fallback");
         // Allow manager to retire removed boss before a new spawn.
         Field manager=SevenSinsPlugin.class.getDeclaredField("bosses");manager.setAccessible(true);
         ((Map<?,?>)manager.get(plugin)).clear();

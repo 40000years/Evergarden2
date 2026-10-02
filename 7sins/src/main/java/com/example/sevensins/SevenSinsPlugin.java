@@ -79,7 +79,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
         String action = args.length == 0 ? "help" : args[0].toLowerCase(Locale.ROOT);
         if (action.equals("help")) {
             sender.sendMessage("§c7sins · บอสเจ็ดบาป");
-            sender.sendMessage("§7/7sins pack §fรับแพ็กโมเดลบอส | §7/7sins list §fดูบอสที่กำลังทำงาน");
+            sender.sendMessage("§7/7sins pack §fดูสถานะแพ็ก 7sins | §7/7sins list §fดูบอสที่กำลังทำงาน");
             if (sender.hasPermission("7sins.admin")) sender.sendMessage("§7/7sins spawn <wrath|pride|greed|lust|envy|gluttony|sloth> §fเรียกบอสด้านหน้า | §7/7sins remove §fลบบอสที่ใกล้ที่สุด");
             sender.sendMessage("§6ฟันกวาด: อ้อมหลัง | ทุบพื้น: กระโดด | พุ่งชน: ล่อชนกำแพง | วงไฟ: เข้าวงใน");
             sender.sendMessage("§6กระทืบเท้า (โจมตีปกติ): กระโดดหรือถอย | ดาบจากพื้น: หลบวงแดง");
@@ -96,7 +96,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
             return true;
         }
         if (!(sender instanceof Player player)) { sender.sendMessage("คำสั่งนี้ต้องใช้ในเกม"); return true; }
-        if (action.equals("pack")) { packs.send(player); player.sendMessage("§6[7sins] " + packs.status(player)); return true; }
+        if (action.equals("pack")) { packs.send(player); return true; }
         if (!action.equals("spawn") && !action.equals("remove")) return false;
         if (!sender.hasPermission("7sins.admin")) { sender.sendMessage("§cต้องมีสิทธิ์ 7sins.admin"); return true; }
         if (action.equals("remove")) {

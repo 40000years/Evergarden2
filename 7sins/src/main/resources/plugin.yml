@@ -6,7 +6,7 @@ description: Seven custom two-phase deadly-sin boss encounters.
 softdepend: [floodgate]
 commands:
   7sins:
-    description: Summon a deadly-sin boss or load the boss resource pack.
+    description: Summon a deadly-sin boss or check its resource-pack status.
     usage: /7sins [spawn <wrath|pride|greed|lust|envy|gluttony|sloth>|remove|list|pack|help]
     aliases: [sevensins]
 permissions:

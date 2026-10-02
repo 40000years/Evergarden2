@@ -33,10 +33,10 @@ def register_bedrock(bedrock,write_json):
         write_json(bedrock/f'particles/{name}.particle.json',{
             'format_version':'1.10.0','particle_effect':{
                 'description':{'identifier':f'advance_magic:{name}',
-                    # Java item planes use opaque strokes with transparent holes.
-                    # Alpha-tested Bedrock planes keep those strokes just as solid;
-                    # blended planes made the same antialiased PNG look much thinner.
-                    'basic_render_parameters':{'material':'particles_alpha' if name in PLANES else 'particles_blend','texture':f'textures/particle/{name}'}},
+                    # Fixed world planes must be visible from below and behind.
+                    # particles_blend explicitly disables culling and preserves
+                    # the PNG's translucent strokes; keep the known working material.
+                    'basic_render_parameters':{'material':'particles_blend','texture':f'textures/particle/{name}'}},
                 'components':{
                     'minecraft:emitter_lifetime_once':{'active_time':.01},
                     'minecraft:emitter_rate_instant':{'num_particles':1},

@@ -1,6 +1,6 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.4.3-celestial-aim`, Evergarden `3.0.0-e2.22-celestial-aim`.
+Release: Advance Magic `1.4.4-celestial-visibility`, Evergarden `3.0.0-e2.23-celestial-visibility`.
 Install both JARs from the root `dist` directory and restart the server. This revision
 bundles refreshed packs (Advance Magic 2.6.0 / Evergarden 3.13.0) with continuous
 Solar and Chronos line art. Reconnect clients to download the updated artwork.
@@ -205,6 +205,26 @@ orange/crimson corona and jagged golden rays. Chronos variant: midnight-purple
 shaft, antique-gold clock head with cyan hands and violet/cyan magical highlights.
 
 ## Verification
+
+### Bedrock overhead visibility correction (1.4.4 / e2.23)
+
+The user confirmed Java works in 1.4.3, but Bedrock overhead circles disappeared.
+Restore the previous `particles_blend` material for every celestial plane in
+both bundled Bedrock packs. This material explicitly disables culling and keeps
+the authored translucent strokes. The attempted `particles_alpha` change in
+1.4.3 was verified only as a pack definition, not in a rendered Bedrock client;
+that check was insufficient to establish visibility or visual parity.
+
+Advance Magic Bedrock **2.6.2** and Evergarden Bedrock **3.13.2** retain the
+corrected ray axis, zero attack interpolation and continuous Chronos reversal.
+Java packs are unchanged. Install both updated plugin JARs and restart the server
+and Geyser, then reconnect Bedrock to receive the bumped pack versions. When
+Geyser runs externally, replace both Bedrock packs there as well. The pack
+validator now rejects an alpha-tested celestial material. Both pack checks and
+the compiler-error-stub scan passed. An isolated Paper/Geyser run passed 256
+Mythic checks and 1,115 item translations; it started with the previous Bedrock
+packs installed and both were replaced byte for byte with the new versions.
+Client verification of the restored overhead circles is still required.
 
 ### Celestial aim correction (1.4.3 / e2.22)
 

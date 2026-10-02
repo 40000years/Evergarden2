@@ -1,5 +1,5 @@
 name: advance-magic
-version: 1.4.3-celestial-aim
+version: 1.4.4-celestial-visibility
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
 description: Seventeen spells including three Mythic wands, mana and crafting.

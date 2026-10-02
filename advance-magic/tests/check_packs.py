@@ -123,7 +123,7 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
                 assert particle==json.loads(garden_bedrock.read(path))
                 effect=particle['particle_effect']
                 assert effect['description']['identifier']==f'advance_magic:{name}{suffix}'
-                assert effect['description']['basic_render_parameters']['material']==('particles_blend' if ray else 'particles_alpha')
+                assert effect['description']['basic_render_parameters']['material']=='particles_blend', 'World planes must support views from below/behind and translucent stroke alpha'
                 assert effect['components']['minecraft:particle_appearance_billboard']['facing_camera_mode']==mode
                 components=effect['components']
                 assert components['minecraft:particle_lifetime_expression']['max_lifetime']==(.10 if ray else .20)
@@ -175,8 +175,8 @@ assert len(definitions) == len(catalog) == 18
 assert len({row['bedrock_identifier'] for row in definitions}) == 18
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [2, 6, 1]
-    assert manifest['modules'][0]['version'] == [2, 6, 1]
+    assert manifest['header']['version'] == [2, 6, 2]
+    assert manifest['modules'][0]['version'] == [2, 6, 2]
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
     effect=json.loads(z.read('particles/judgment_beam.particle.json'))['particle_effect']

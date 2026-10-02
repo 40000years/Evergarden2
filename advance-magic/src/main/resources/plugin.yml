@@ -1,5 +1,5 @@
 name: advance-magic
-version: 1.4.6-bedrock-direction
+version: 1.5.0-celestial-casting
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
 description: Seventeen spells including three Mythic wands, mana and crafting.

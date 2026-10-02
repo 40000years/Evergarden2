@@ -1,6 +1,6 @@
 # Solar Apocalypse and Chronos: Final Hour
 
-Release: Advance Magic `1.4.6-bedrock-direction`, Evergarden `3.0.0-e2.25-bedrock-direction`.
+Release: Advance Magic `1.5.0-celestial-casting`, Evergarden `3.0.0-e2.26-celestial-casting`.
 Install both JARs from the root `dist` directory and restart the server. This revision
 bundles refreshed packs (Advance Magic 2.7.1 / Evergarden 3.14.1) with continuous
 Solar and Chronos line art. Reconnect clients to download the updated artwork.
@@ -26,6 +26,22 @@ For comparison, Shulker Levitation deals up to 750 direct damage at its defaults
 when every pulse and follow-up hits, before Wither damage. Chronos is about 19%
 above that total; actual damage depends on where the target stands and how long
 it remains in the field.
+
+Solar, Chronos and Heaven's Judgment begin with a single small upward/backward
+caster impulse (vertical 0.28 and horizontal 0.12 blocks/tick), accompanied by
+gold/white or cyan/white rings and End Rod sparks for the first 0.8 seconds.
+Retreat follows the caster's starting yaw even when aiming vertically. The cast
+target is captured first and stays fixed. Normal physics handles the short lift
+and landing; no flight, gravity, camera or potion state is changed. The existing
+player velocity compatibility switch, caps and vehicle/game-mode exclusions apply.
+
+Heaven's Judgment gently gathers eligible enemies toward its center every 0.5
+seconds throughout charge and beam firing (ticks 0–139), inside an eight-block
+horizontal radius and the beam's vertical column. Pull speed is capped at 0.24
+blocks/tick and tapers near the center, stopping within 0.65 blocks. Existing
+vertical velocity is preserved. Allies, protected targets and disabled PVP remain
+excluded, and target count follows the existing limit. The damage radius remains
+four blocks with the original charge timing, eight pulses and closing pulse.
 
 Solar's nominal sun radii are 4.4, 8.8, 17.6, 35.2 and 70.4 blocks: both radius
 and diameter double at every layer, preserving a **1:2:4:8:16** size ratio. Their
@@ -205,6 +221,24 @@ orange/crimson corona and jagged golden rays. Chronos variant: midnight-purple
 shaft, antique-gold clock head with cyan hands and violet/cyan magical highlights.
 
 ## Verification
+
+### Gentle Judgment gathering and caster entrance (1.5.0 / e2.26)
+
+An isolated clean javac build produced both release JARs, which passed the
+compiler-stub scan and both pack/embedded-resource validators. The release JARs
+passed **360 Mythic checks** and **1,115 item translations** on isolated Paper
+with Geyser. Added checks cover upward/backward impulses for all three spells
+even at vertical aim, subsequent player movement remaining untouched, unchanged
+gravity/flight flags, the player velocity compatibility switch, cancellation
+before the first frame, the cylindrical Judgment pull boundary, ally/protection
+exclusions, no added charge damage, active-beam pulls, and stopping at beam close
+or effect cancellation. Existing damage, target, geometry and cleanup checks pass.
+
+The fixture verifies server velocities and particle packets, not a client's
+rendering or displacement over real terrain. Actual lift/retreat distance depends
+on normal physics, collisions and server velocity settings. No pack artwork was
+changed: both Java and both Bedrock resource-pack archives retain their previous
+bytes, including the 1.4.6 directional enum correction.
 
 ### Bedrock directional particle enum correction (1.4.6 / e2.25)
 

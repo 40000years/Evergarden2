@@ -25,13 +25,31 @@ public final class MythicSpells {
         return c.plugin.effects().hasCapacity()&&activeByWorld.getOrDefault(at.getWorld().getUID(),0)
             <Math.clamp(c.plugin.getConfig().getInt("mythic-max-active-per-world",4),1,16);
     }
-    private void start(Player p,Location at,int duration,
+    private void start(Player p,Location at,int duration,Color accent,
             java.util.function.BiPredicate<com.example.advancemagic.effect.EffectEngine.Effect,Integer> body) {
         UUID world=at.getWorld().getUID();
-        var effect=c.plugin.effects().start(p,duration,body);
+        // Capture facing after targeting, before the player can turn during startup.
+        Location facing=p.getLocation();facing.setPitch(0);
+        Vector retreat=facing.getDirection().multiply(-.12).setY(.28);
+        var effect=c.plugin.effects().start(p,duration,(scope,age)->{
+            if(!body.test(scope,age))return false;
+            castingEntrance(p,retreat,accent,age);
+            return true;
+        });
         activeByWorld.merge(world,1,Integer::sum);
         effect.onClose(()->activeByWorld.computeIfPresent(world,(id,count)->count<=1?null:count-1));
         effect.onClose(visuals::clear);
+    }
+
+    private void castingEntrance(Player p,Vector retreat,Color accent,int age) {
+        // One small physical impulse; the existing player velocity policy applies.
+        // No flight/gravity flag, teleport or potion needs restoring on cancellation.
+        if(age==0)c.velocity(p,retreat);
+        if(age>=16||age%4!=0)return;
+        Location feet=p.getLocation().add(0,.08,0);
+        ring(feet,.5+age*.025,accent,1.1f,16,age*.15);
+        ring(feet.clone().add(0,.3,0),.35,WHITE,.8f,8,-age*.15);
+        spark(feet,Particle.END_ROD,4,.25);
     }
 
     private Location center(Player player) {
@@ -131,7 +149,7 @@ public final class MythicSpells {
         TemporaryTerrainService.Zone[] sea={null};
         SolarLineVisuals[] art={null};
         at.getWorld().playSound(at,Sound.ENTITY_ENDER_DRAGON_GROWL,2f,.65f);
-        start(p,at,Math.max(141,110+lifetime+1),(effect,age)->{
+        start(p,at,Math.max(141,110+lifetime+1),GOLD,(effect,age)->{
             if(!c.loaded(at)||!c.loaded(top))return false;
             visuals.frame(at);
             if(age==0)art[0]=new SolarLineVisuals(effect,at,scale,radii,heights);
@@ -229,12 +247,15 @@ public final class MythicSpells {
         }
     }
     private List<LivingEntity> judgmentTargets(Player p,Location at,double height) {
-        var bounds=new org.bukkit.util.BoundingBox(at.getX()-4,at.getY()-1,at.getZ()-4,
-            at.getX()+4,at.getY()+height,at.getZ()+4);
+        return judgmentTargets(p,at,height,4);
+    }
+    private List<LivingEntity> judgmentTargets(Player p,Location at,double height,double radius) {
+        var bounds=new org.bukkit.util.BoundingBox(at.getX()-radius,at.getY()-1,at.getZ()-radius,
+            at.getX()+radius,at.getY()+height,at.getZ()+radius);
         int limit=Math.clamp(c.plugin.getConfig().getInt("max-targets-per-effect",32),1,128);
         return at.getWorld().getNearbyEntities(bounds).stream()
             .filter(e->e instanceof LivingEntity&&c.enemy(p,e)).map(e->(LivingEntity)e)
-            .filter(e->{double x=e.getLocation().getX()-at.getX(),z=e.getLocation().getZ()-at.getZ();return x*x+z*z<=16;})
+            .filter(e->{double x=e.getLocation().getX()-at.getX(),z=e.getLocation().getZ()-at.getZ();return x*x+z*z<=radius*radius;})
             .sorted(Comparator.comparingDouble(e->e.getLocation().distanceSquared(at))).limit(limit)
             .filter(e->c.affect(p,e,Spell.HEAVENS_JUDGMENT)).toList();
     }
@@ -252,10 +273,18 @@ public final class MythicSpells {
         JudgmentBeamVisuals[] beam={null};
         JudgmentSealVisuals[] seals={null};
         at.getWorld().playSound(at,Sound.BLOCK_BEACON_ACTIVATE,2f,.55f);
-        start(p,at,165,(effect,age)->{
+        start(p,at,165,GOLD,(effect,age)->{
             if(!c.loaded(at)||!c.loaded(top))return false;
             visuals.frame(at);
             if(age==0)seals[0]=new JudgmentSealVisuals(effect,at,scale);
+            // Gently gather enemies into the existing beam column while charging
+            // and firing. Preserve height/fall velocity and taper near the center.
+            if(age<140&&age%10==0)for(var enemy:judgmentTargets(p,at,height,8)) {
+                Vector pull=at.toVector().subtract(enemy.getLocation().toVector()).setY(0);
+                double distance=pull.length();
+                if(distance>.65)c.velocity(enemy,pull.multiply(Math.min(.24,distance*.15)/distance)
+                    .setY(enemy.getVelocity().getY()));
+            }
             if(age%4==0)seals[0].frame(visuals,age);
             if(age%8==0&&age<148) {
                 double growth=age<40?.35+.65*age/40.0:1;
@@ -375,7 +404,7 @@ public final class MythicSpells {
         CrystalBeamVisuals.Projection[] projection={null};
         ChronosLineVisuals[] art={null};
         Set<UUID> firstRound=new HashSet<>();
-        start(p,at,Math.max(191,88+lifetime+1),(effect,age)->{
+        start(p,at,Math.max(191,88+lifetime+1),CYAN,(effect,age)->{
             if(!c.loaded(at)||!c.loaded(face)||!c.loaded(outerFace))return false;
             visuals.frame(at);
             if(age==0){projection[0]=crystalBeams.open(effect,emitters,face);

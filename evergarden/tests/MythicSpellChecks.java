@@ -233,7 +233,68 @@ public final class MythicSpellChecks implements Listener {
         for(var core:com.example.voidscape.item.RelicService.MAGIC_CORES)if((boolean)rarity.invoke(null,core))mythicIds.add(core.id());
         check(mythicIds.equals(Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment")),"Vault Mythic pool contains exactly all four cores");
         check(com.example.voidscape.item.RelicService.MAGIC_CORES.size()-mythicIds.size()==14,"normal Vault pool retains fourteen cores");
-        lineGeometry();bedrockParticles();team.unregister();
+        castingMotion();judgmentPull();lineGeometry();bedrockParticles();team.unregister();
+    }
+    void castingMotion() {
+        Location saved=player.getLocation();boolean gravity=player.hasGravity(),flight=player.getAllowFlight();
+        try {
+            // Looking straight up still retreats by yaw, and does not normalize a zero horizontal vector.
+            player.teleport(new Location(saved.getWorld(),.5,100,.5,45,-90));
+            Location facing=player.getLocation();facing.setPitch(0);
+            var forward=facing.getDirection();
+            for(var spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR,Spell.HEAVENS_JUDGMENT)) {
+                magic.context().clearPlayerVelocity(player.getUniqueId());player.setVelocity(new org.bukkit.util.Vector());
+                check(magic.spells().cast(player,spell),spell.id()+" entrance starts");tick(1);
+                var impulse=player.getVelocity();impulse.checkFinite();
+                check(impulse.getY()>0&&impulse.getY()<.4&&impulse.clone().setY(0).dot(forward)<0
+                    &&impulse.clone().setY(0).length()<.2,spell.id()+" gently lifts and retreats even at vertical pitch");
+                var movement=new org.bukkit.util.Vector(.03,0,0);player.setVelocity(movement);tick(8);
+                check(player.getVelocity().distanceSquared(movement)<1e-12,spell.id()+" entrance does not repeatedly override movement");
+                check(player.hasGravity()==gravity&&player.getAllowFlight()==flight,spell.id()+" entrance preserves gravity and flight flags");
+                magic.effects().closeOwner(player.getUniqueId());
+            }
+            magic.getConfig().set("compatibility.player-spell-velocity",false);
+            magic.context().clearPlayerVelocity(player.getUniqueId());player.setVelocity(new org.bukkit.util.Vector());
+            check(magic.spells().cast(player,Spell.HEAVENS_JUDGMENT),"entrance with disabled player velocity still casts");tick(1);
+            check(player.getVelocity().lengthSquared()==0,"caster entrance honors the player velocity compatibility switch");
+            magic.effects().closeOwner(player.getUniqueId());
+            magic.getConfig().set("compatibility.player-spell-velocity",true);
+            magic.context().clearPlayerVelocity(player.getUniqueId());player.setVelocity(new org.bukkit.util.Vector());
+            check(magic.spells().cast(player,Spell.SOLAR_APOCALYPSE),"entrance can be cancelled before startup");
+            magic.effects().closeOwner(player.getUniqueId());tick(1);
+            check(player.getVelocity().lengthSquared()==0,"cancellation before startup applies no caster displacement");
+        } finally {
+            magic.getConfig().set("compatibility.player-spell-velocity",true);
+            magic.effects().closeOwner(player.getUniqueId());magic.context().clearPlayerVelocity(player.getUniqueId());
+            player.teleport(saved);player.setVelocity(new org.bukkit.util.Vector());
+        }
+    }
+    void judgmentPull() {
+        var world=player.getWorld();
+        LivingEntity near=mob(world,6.5,12.5,1000),far=mob(world,9.5,12.5,1000),diagonal=mob(world,7,19,1000);
+        try {
+            for(var mob:List.of(near,far,diagonal,ally,protectedTarget,target))mob.setVelocity(new org.bukkit.util.Vector());
+            target.setHealth(1000);hits.clear();magic.context().clearPlayerVelocity(player.getUniqueId());
+            check(magic.spells().cast(player,Spell.HEAVENS_JUDGMENT),"Judgment gathering starts");tick(1);
+            check(near.getVelocity().getX()<0&&near.getVelocity().length()<.3&&near.getVelocity().getY()==0,
+                "Judgment gently draws enemies outside the damage column inward without lifting them");
+            check(far.getVelocity().lengthSquared()==0&&diagonal.getVelocity().lengthSquared()==0,
+                "Judgment pull stays inside its eight-block cylindrical radius");
+            check(ally.getVelocity().lengthSquared()==0&&protectedTarget.getVelocity().lengthSquared()==0,
+                "Judgment pull respects allied targets and cancelled protection events");
+            check(target.getVelocity().lengthSquared()==0,"Judgment does not jitter enemies already at the center");
+            check(hits.isEmpty()&&near.getHealth()==1000,"Judgment charge pull adds no early damage");
+            blockAll=true;near.setVelocity(new org.bukkit.util.Vector());tick(10);
+            check(near.getVelocity().lengthSquared()==0,"cancelled affect events stop subsequent Judgment pulls");
+            blockAll=false;tick(49);near.setVelocity(new org.bukkit.util.Vector());tick(1);
+            check(near.getVelocity().getX()<0,"Judgment keeps gathering enemies while the beam is active");
+            tick(79);near.setVelocity(new org.bukkit.util.Vector());tick(1);
+            check(near.getVelocity().lengthSquared()==0,"Judgment stops gathering when the beam closes");
+            magic.effects().closeOwner(player.getUniqueId());near.setVelocity(new org.bukkit.util.Vector());tick(20);
+            check(near.getVelocity().lengthSquared()==0,"cancelled Judgment leaves no pull task running");
+        } finally {
+            blockAll=false;magic.effects().closeOwner(player.getUniqueId());near.remove();far.remove();diagonal.remove();
+        }
     }
     void lineGeometry()throws Exception {
         var loader=magic.getClass().getClassLoader();

@@ -31,6 +31,12 @@ import java.util.*;
 public final class WorldBossManager implements Listener,AutoCloseable {
     private static final double SKY_CAST_HEIGHT=60;
     private enum Attack { SLAM, CROSS, RING, SKY_BEAMS, LANCES, JUDGMENT }
+    private enum StopReason {
+        EMPTY("ไม่มีผู้ร่วมสู้อยู่ในลานครบเวลารอ"), TIMEOUT("ครบเวลาสู้ที่กำหนด"),
+        DISABLED("ระบบบอสถูกปิดในการตั้งค่า"), ADMIN("แอดมินยุติไฟต์"),
+        SHUTDOWN("เซิร์ฟเวอร์หรือปลั๊กอินกำลังปิด"), ERROR("ระบบไฟต์เกิดข้อผิดพลาด");
+        final String text;StopReason(String text){this.text=text;}
+    }
     private record Target(Run run,JudgmentFight.Part part) {}
     private static final class Run {
         final Site site;final Location center;final JudgmentFight fight;
@@ -40,7 +46,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         final Map<UUID,Mob> summons=new LinkedHashMap<>();final Set<UUID> summonedFor=new HashSet<>();
         final BossBar bar;JudgmentBody body;
         final List<Location> marks=new ArrayList<>();
-        Attack attack,lastAttack;long resolveAt,nextAttack,nextJudgment,lastPresent,started;
+        Attack attack,lastAttack;long resolveAt,nextAttack,nextJudgment,lastPresent,started,nextEmptyWarning;
         double safeX,safeZ,ringRadius,crossAngle;int phase=1,pulsesLeft,warningTicks;
         JudgmentPattern.Tuning pattern=JudgmentPattern.forPhase(1);
         Run(Site site,Location center,JudgmentFight fight){
@@ -70,6 +76,9 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         double n=plugin.getConfig().getDouble("world-boss."+key,value);return Double.isFinite(n)?Math.clamp(n,min,max):value;
     }
     private int seconds(String key,int value,int min,int max){return plugin.integer("world-boss."+key,value,min,max)*20;}
+    private int emptyTicks(){return seconds("empty-reset-seconds",JudgeBalance.EMPTY_RESET_SECONDS,10,600);}
+    private int fightLimit(){return seconds("fight-timeout-seconds",0,0,86400);}
+    private String timeLimit(Run r){int limit=fightLimit();return limit==0?"":" · ไฟต์เหลือ "+Math.max(0,(r.started+limit-tick+19)/20)+" วิ";}
     private boolean playable(Player p){return p!=null&&p.isOnline()&&!p.isDead()
         &&(p.getGameMode()==GameMode.SURVIVAL||p.getGameMode()==GameMode.ADVENTURE);}
     private boolean inside(Run r,Player p){return playable(p)&&p.getWorld()==plugin.world()
@@ -88,10 +97,13 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         if(site==null)return "คุณยังไม่ได้อยู่ในวิหารใหญ่ · /evergarden tp boss-temple";
         Run r=active.get(id(site));
         if(r!=null)return "ผู้พิพากษาไร้ร่าง · เฟส "+r.fight.phase()+" · เลือด "+Math.round(r.fight.core()/r.fight.coreMax()*100)
-            +"% · ผู้ร่วมสู้ "+r.fight.roster().size()+" · สเกล ×"+String.format(Locale.ROOT,"%.2f",r.fight.scale());
+            +"% · ผู้ร่วมสู้ "+r.fight.roster().size()+" · สเกล ×"+String.format(Locale.ROOT,"%.2f",r.fight.scale())+timeLimit(r)
+            +(players(r).isEmpty()?" · รอผู้เล่นกลับอีก "+Math.max(0,(r.lastPresent+emptyTicks()-tick+19)/20)+" วิ":"");
         long remaining=ledger.getLong(path(site),0)-System.currentTimeMillis();
-        return remaining>0?"วิหารกำลังฟื้นตัว · อีก "+Math.max(1,(remaining+59999)/60000)+" นาที":
-            "พร้อมอัญเชิญ · ใช้มือเปล่าคลิกขวาบล็อก Amethyst ตรงกลางลาน";
+        if(remaining<=0)return "พร้อมอัญเชิญ · ใช้มือเปล่าคลิกขวาบล็อก Amethyst ตรงกลางลาน";
+        String stopped=ledger.getString("sites."+id(site)+".last-stop","");
+        String reason=Arrays.stream(StopReason.values()).filter(value->value.name().equals(stopped)).map(value->" · "+value.text).findFirst().orElse("");
+        return "วิหารกำลังฟื้นตัว · อีก "+(remaining<60000?Math.max(1,(remaining+999)/1000)+" วินาที":(remaining+59999)/60000+" นาที")+reason;
     }
     @EventHandler(priority=EventPriority.LOWEST)
     public void altar(PlayerInteractEvent e){
@@ -278,16 +290,21 @@ public final class WorldBossManager implements Listener,AutoCloseable {
                 p.sendActionBar(Component.text(status(p),NamedTextColor.LIGHT_PURPLE));
         }
         for(Run r:new ArrayList<>(active.values())){
-            try{update(r);}catch(Throwable error){plugin.getLogger().log(java.util.logging.Level.SEVERE,"World boss encounter stopped safely",error);abort(r);}
+            try{update(r);}catch(Throwable error){plugin.getLogger().log(java.util.logging.Level.SEVERE,"World boss encounter stopped safely",error);abort(r,StopReason.ERROR);}
         }
     }
     private void update(Run r){
-        if(!enabled()){abort(r);return;}
+        if(!enabled()){abort(r,StopReason.DISABLED);return;}
         List<Player> players=players(r);
         if(r.fight.phase()==3){summonTemples(r);if(tick%10==0)updateSummons(r,players);}
-        if(!players.isEmpty())r.lastPresent=tick;
-        if(tick-r.lastPresent>=seconds("empty-reset-seconds",30,10,300)
-            ||tick-r.started>=seconds("fight-timeout-seconds",1800,300,7200)){abort(r);return;}
+        if(!players.isEmpty()){r.lastPresent=tick;r.nextEmptyWarning=0;}
+        if(tick-r.lastPresent>=emptyTicks()){abort(r,StopReason.EMPTY);return;}
+        int limit=fightLimit();
+        if(limit>0&&tick-r.started>=limit){abort(r,StopReason.TIMEOUT);return;}
+        if(players.isEmpty()&&tick>=r.nextEmptyWarning){
+            notifyRoster(r,"ไม่มีผู้ร่วมสู้อยู่ในลาน · กลับภายใน "+Math.max(1,(r.lastPresent+emptyTicks()-tick+19)/20)+" วิ เพื่อสู้ต่อ");
+            r.nextEmptyWarning=tick+400;
+        }
         boolean wasExposed=r.fight.exposed(tick-2),opening=r.fight.tick(tick);
         if(opening){
             if(r.attack!=Attack.JUDGMENT){r.attack=null;r.marks.clear();r.body.clearSanctuaries();}
@@ -301,7 +318,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
             for(Player p:players)if(!r.bar.getPlayers().contains(p))r.bar.addPlayer(p);
             r.bar.setProgress(Math.clamp(r.fight.core()/r.fight.coreMax(),0,1));
             String state=r.attack==Attack.JUDGMENT?"☠ พิพากษาใน "+Math.max(0,(r.resolveAt-tick+19)/20)+" วิ · เข้าวงเขียว!":objective(r);
-            r.bar.setTitle("ผู้พิพากษาไร้ร่าง · เฟส "+r.fight.phase()+" · "+state);
+            r.bar.setTitle("ผู้พิพากษาไร้ร่าง · เฟส "+r.fight.phase()+" · "+state+timeLimit(r));
             r.bar.setColor(r.attack==Attack.JUDGMENT?BarColor.RED:r.fight.exposed(tick)?BarColor.GREEN:BarColor.PURPLE);
             for(Player p:players)p.sendActionBar(Component.text(r.attack==null?state:attackInstruction(r),r.attack==null&&r.fight.exposed(tick)?NamedTextColor.GREEN:NamedTextColor.RED));
         }
@@ -352,7 +369,10 @@ public final class WorldBossManager implements Listener,AutoCloseable {
             r.body.charge(r.attack==Attack.JUDGMENT?1-Math.clamp((r.resolveAt-tick)/(double)seconds("judgment-warning-seconds",8,8,20),0,1):0);
             r.body.update(r.fight,tick,left,right);
             for(var entry:r.targets.entrySet()){
-                Slime mob=entry.getValue();if(!mob.isValid()){abort(r);return;}
+                Slime mob=entry.getValue();if(!mob.isValid()){
+                    owners.remove(mob.getUniqueId());spawn(r,entry.getKey());mob=r.targets.get(entry.getKey());
+                    plugin.getLogger().warning("Restored missing world-boss hitbox "+entry.getKey()+" at "+id(r.site)+"; encounter HP retained");
+                }
                 if(entry.getKey()==JudgmentFight.Part.CORE){
                     int size=r.fight.exposed(tick)||r.fight.phase()==3?8:38;
                     if(mob.getSize()!=size){mob.setSize(size);mob.getAttribute(Attribute.MAX_HEALTH).setBaseValue(1024);mob.getAttribute(Attribute.ATTACK_DAMAGE).setBaseValue(0);}
@@ -566,6 +586,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
     }
     private void ticket(Run r,int x,int z){if(r.tickets.add(((long)x<<32)|(z&0xffffffffL)))plugin.world().addPluginChunkTicket(x,z,plugin);}
     private void message(Run r,String text){for(UUID uuid:r.fight.roster()){Player p=Bukkit.getPlayer(uuid);if(inside(r,p))plugin.message(p,text);}}
+    private void notifyRoster(Run r,String text){for(UUID uuid:r.fight.roster()){Player p=Bukkit.getPlayer(uuid);if(p!=null&&p.isOnline())plugin.message(p,text);}}
     private void sound(Run r,Sound sound,float volume,float pitch){for(Player p:players(r))p.playSound(p.getLocation(),sound,volume,pitch);}
     private boolean save(){
         try{
@@ -577,6 +598,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         }catch(IOException e){healthy=false;plugin.getLogger().log(java.util.logging.Level.SEVERE,"Cannot persist world-boss ledger; new encounters disabled",e);return false;}
     }
     private void victory(Run r){
+        ledger.set("sites."+id(r.site)+".last-stop",null);
         ledger.set(path(r.site),System.currentTimeMillis()+seconds("respawn-seconds",14400,60,604800)*50L);
         int keys=plugin.integer("world-boss.rewards.keys",2,0,16),xp=plugin.integer("world-boss.rewards.experience",1500,0,1000000);
         for(UUID uuid:r.fight.roster()){
@@ -631,12 +653,16 @@ public final class WorldBossManager implements Listener,AutoCloseable {
     @EventHandler public void join(PlayerJoinEvent e){Bukkit.getScheduler().runTaskLater(plugin,()->{if(e.getPlayer().isOnline())claim(e.getPlayer());},20);}
     @EventHandler public void respawn(PlayerRespawnEvent e){Bukkit.getScheduler().runTaskLater(plugin,()->{if(e.getPlayer().isOnline())claim(e.getPlayer());},20);}
     public void claimReward(Player p){claim(p);}
-    private void abort(Run r){message(r,"การพิพากษาสิ้นสุดลง · บอสจะพร้อมอัญเชิญใหม่ใน 30 วินาที");
-        ledger.set(path(r.site),System.currentTimeMillis()+30000);save();cleanup(r);}
+    private void abort(Run r,StopReason reason){
+        notifyRoster(r,"การพิพากษาสิ้นสุดลง · "+reason.text+" · บอสจะพร้อมอัญเชิญใหม่ใน 30 วินาที");
+        plugin.getLogger().info("World boss at "+id(r.site)+" ended: "+reason.name());
+        ledger.set("sites."+id(r.site)+".last-stop",reason.name());
+        ledger.set(path(r.site),System.currentTimeMillis()+30000);save();cleanup(r);
+    }
     public void stop(Player p){
         if(p.getWorld()!=plugin.world())return;
         Site site=plugin.bossTemples().at(p.getLocation().getBlockX(),p.getLocation().getBlockZ(),0);
-        Run r=site==null?null:active.get(id(site));if(r!=null)abort(r);else plugin.message(p,"ไม่มีบอสกำลังต่อสู้ที่นี่");
+        Run r=site==null?null:active.get(id(site));if(r!=null)abort(r,StopReason.ADMIN);else plugin.message(p,"ไม่มีบอสกำลังต่อสู้ที่นี่");
     }
     private void cleanup(Run r){
         active.remove(id(r.site));r.bar.removeAll();
@@ -647,5 +673,5 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         for(long chunk:r.tickets)plugin.world().removePluginChunkTicket((int)(chunk>>32),(int)chunk,plugin);
         r.tickets.clear();
     }
-    @Override public void close(){closed=true;for(Run r:new ArrayList<>(active.values()))abort(r);}
+    @Override public void close(){closed=true;for(Run r:new ArrayList<>(active.values()))abort(r,StopReason.SHUTDOWN);}
 }

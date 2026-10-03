@@ -38,6 +38,7 @@ public final class AncientJudgeProbe extends JavaPlugin {
     final List<ServerPlayer> actors=new ArrayList<>();
     void check(boolean value,String label){if(!value)throw new AssertionError(label);checks++;getLogger().info("PASS Judge: "+label);}
     Object field(Object target,String name)throws Exception{Field f=target.getClass().getDeclaredField(name);f.setAccessible(true);return f.get(target);}
+    void setField(Object target,String name,Object value)throws Exception{Field f=target.getClass().getDeclaredField(name);f.setAccessible(true);f.set(target,value);}
     @Override public void onEnable(){Bukkit.getScheduler().runTaskLater(this,()->{
         try{run();Files.writeString(Path.of("ancient-judge-result.txt"),"PASS "+checks+" real Paper checks + "+JudgmentRulesChecks.run()+" encounter rules checks");}
         catch(Throwable error){getLogger().log(java.util.logging.Level.SEVERE,"JUDGE CHECK FAILED",error);try{Files.writeString(Path.of("ancient-judge-result.txt"),"FAIL "+error);}catch(Exception ignored){}}
@@ -354,6 +355,7 @@ public final class AncientJudgeProbe extends JavaPlugin {
         check(garden.getDataFolder().toPath().resolve("world-bosses.yml").toFile().exists(),"cooldown and pending rewards are journaled");
         check(!boss.start(a,false),"defeated temple refuses an immediate normal restart");
         check(boss.start(a,true),"explicit admin restart is available for testing");boss.stop(a);
+        lifetimeChecks(a,world,site);
         // Preserve a real victory cooldown for the second boot after testing abort cleanup.
         ledger.set("sites."+site.x()+"_"+site.z()+".next-open",System.currentTimeMillis()+14400000);
         ledger.save(garden.getDataFolder().toPath().resolve("world-bosses.yml").toFile());
@@ -368,7 +370,8 @@ public final class AncientJudgeProbe extends JavaPlugin {
     void balanceConfigChecks(){
         var current=garden.getConfig();
         check(current.getDouble("world-boss.core-health")==20000&&current.getInt("world-boss.attack-power-percent")==130,"installed config uses half core HP and 130 percent red-spell power across restarts");
-        check(current.contains("world-boss.balance-version",true)&&current.getInt("world-boss.balance-version")==1,"balance migration records a persistent revision");
+        check(current.contains("world-boss.balance-version",true)&&current.getInt("world-boss.balance-version")==2,"balance migration records a persistent revision");
+        check(current.getInt("world-boss.fight-timeout-seconds")==0&&current.getInt("world-boss.empty-reset-seconds")==180,"legacy hard timer and empty-arena grace migrate and survive restart");
         var defaults=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(garden.getResource("config.yml"),java.nio.charset.StandardCharsets.UTF_8));
         var legacy=new org.bukkit.configuration.file.YamlConfiguration();legacy.setDefaults(defaults);
         legacy.set("world-boss.core-health",40000);legacy.set("world-boss.hand-health",9000);
@@ -379,6 +382,58 @@ public final class AncientJudgeProbe extends JavaPlugin {
         var custom=new org.bukkit.configuration.file.YamlConfiguration();custom.set("world-boss.core-health",26000);custom.set("world-boss.attack-power-percent",145);
         JudgeBalance.upgrade(custom);
         check(custom.getDouble("world-boss.core-health")==26000&&custom.getInt("world-boss.attack-power-percent")==145,"custom HP and skill-power settings survive the one-time migration");
+        var v1=new org.bukkit.configuration.file.YamlConfiguration();v1.setDefaults(defaults);
+        v1.set("world-boss.balance-version",1);v1.set("world-boss.core-health",40000);
+        v1.set("world-boss.empty-reset-seconds",30);v1.set("world-boss.fight-timeout-seconds",1800);
+        JudgeBalance.upgrade(v1);
+        check(v1.getDouble("world-boss.core-health")==40000&&v1.getInt("world-boss.empty-reset-seconds")==180&&v1.getInt("world-boss.fight-timeout-seconds")==0,"lifetime upgrade does not repeat the previous HP migration or overwrite later admin HP edits");
+        var customTimers=new org.bukkit.configuration.file.YamlConfiguration();customTimers.set("world-boss.empty-reset-seconds",240);customTimers.set("world-boss.fight-timeout-seconds",3600);
+        JudgeBalance.upgrade(customTimers);
+        check(customTimers.getInt("world-boss.empty-reset-seconds")==240&&customTimers.getInt("world-boss.fight-timeout-seconds")==3600,"explicit administrator timers survive the lifetime migration");
+        customTimers.set("world-boss.empty-reset-seconds",30);customTimers.set("world-boss.fight-timeout-seconds",1800);JudgeBalance.upgrade(customTimers);
+        check(customTimers.getInt("world-boss.empty-reset-seconds")==30&&customTimers.getInt("world-boss.fight-timeout-seconds")==1800,"subsequent startup leaves deliberate timer edits unchanged");
+    }
+    @SuppressWarnings("unchecked") void lifetimeChecks(Player p,World world,WorldBossTempleLayout.Site site)throws Exception{
+        Location center=new Location(world,site.x()+.5,101,site.z()+.5),outside=center.clone().add(100,0,0);p.teleport(center);
+        check(boss.start(p,true),"start an isolated long-fight regression encounter");
+        Object run=((Map<?,?>)field(boss,"active")).values().iterator().next();
+        var fight=(JudgmentFight)field(run,"fight");
+        var targets=(Map<JudgmentFight.Part,Slime>)field(run,"targets");
+        setField(run,"nextAttack",Long.MAX_VALUE);
+        magic.context().damage(p,targets.get(JudgmentFight.Part.LEFT),100,DamageType.MAGIC);
+        double hand=fight.hand(JudgmentFight.Part.LEFT),core=fight.core(),contribution=fight.contribution(p.getUniqueId());
+        setField(boss,"tick",(long)field(boss,"tick")+20*3600L);boss.tick();
+        check(boss.activeCount()==1&&fight.hand(JudgmentFight.Part.LEFT)==hand&&fight.core()==core,"an active hour-long fight survives the former 30-minute cutoff without resetting HP");
+        check(!boss.status(p).contains("ไฟต์เหลือ"),"unlimited fights show no misleading timeout countdown");
+        Slime removed=targets.get(JudgmentFight.Part.CORE);removed.remove();
+        for(int i=0;i<2;i++)boss.tick();Slime replacement=targets.get(JudgmentFight.Part.CORE);
+        check(boss.activeCount()==1&&replacement.isValid()&&!replacement.getUniqueId().equals(removed.getUniqueId())&&boss.owns(replacement)&&!boss.owns(removed),"removing a living hitbox recreates its owner mapping instead of deleting the boss");
+        check(fight.core()==core&&fight.hand(JudgmentFight.Part.LEFT)==hand&&fight.contribution(p.getUniqueId())==contribution,"hitbox repair preserves encounter HP, phase and player contribution");
+        p.teleport(outside);setField(boss,"tick",(long)field(boss,"tick")+20*60L);boss.tick();
+        check(boss.activeCount()==1&&boss.status(p).contains("รอผู้เล่นกลับ"),"a participant can spend a minute returning from outside the arena without losing the fight");
+        p.teleport(center);boss.tick();
+        check((long)field(run,"lastPresent")== (long)field(boss,"tick")&&fight.hand(JudgmentFight.Part.LEFT)==hand,"returning to the arena resets the absence timer and resumes the same damaged boss");
+        long lastPresent=(long)field(run,"lastPresent");p.teleport(outside);
+        setField(boss,"tick",lastPresent+20*180L-4);boss.tick();check(boss.activeCount()==1,"empty arena survives until the exact three-minute grace boundary");
+        boss.tick();var ledger=(org.bukkit.configuration.file.YamlConfiguration)field(boss,"ledger");String stop="sites."+site.x()+"_"+site.z()+".last-stop";
+        check(boss.activeCount()==0&&ledger.getString(stop).equals("EMPTY"),"a truly abandoned fight expires after the grace and records its reason");
+        check(!world.getPluginChunkTickets().values().stream().anyMatch(plugins->plugins.contains(garden)),"abandoned fights release chunk tickets with the hard timer disabled");
+        check(!ledger.contains("rewards."+p.getUniqueId()),"abandoning a long fight grants no victory rewards");
+        p.teleport(center);garden.getConfig().set("world-boss.fight-timeout-seconds",5);
+        try{
+            check(boss.start(p,true),"an administrator can still opt into a finite encounter duration");
+            run=((Map<?,?>)field(boss,"active")).values().iterator().next();long started=(long)field(run,"started");
+            check(boss.status(p).contains("ไฟต์เหลือ 5 วิ"),"configured finite duration is visible before expiry");
+            setField(run,"nextAttack",Long.MAX_VALUE);setField(boss,"tick",started+96);boss.tick();
+            check(boss.activeCount()==1,"configured finite duration does not terminate early");
+            boss.tick();check(boss.activeCount()==0&&ledger.getString(stop).equals("TIMEOUT"),"configured timeout expires exactly at its boundary and records TIMEOUT");
+            check(boss.status(p).contains("ครบเวลาสู้ที่กำหนด"),"cooldown status explains a configured timeout instead of silent disappearance");
+        }finally{garden.getConfig().set("world-boss.fight-timeout-seconds",0);}
+        check(boss.start(p,true),"boss remains summonable after a configured timeout");boss.stop(p);
+        check(ledger.getString(stop).equals("ADMIN"),"manual stop has its own distinct reason");
+        check(boss.start(p,true),"start configuration-disable cleanup regression");garden.getConfig().set("world-boss.enabled",false);
+        try{boss.tick();check(boss.activeCount()==0&&ledger.getString(stop).equals("DISABLED"),"disabling the feature cleans up with a distinct reason");}
+        finally{garden.getConfig().set("world-boss.enabled",true);}
     }
     void hotfixChecks(Player p,World world,WorldBossTempleLayout.Site site){
         for(int[] point:new int[][]{{40000,40000},{-40000,40000},{50000,0},{0,-50000},{250000,0},{499999,-499999}}){

@@ -133,6 +133,9 @@ values in `plugins/Evergarden/config.yml` after trying the server's actual gear.
 On first startup with this balance update, `world-boss.balance-version` migrates
 the old 40,000 core HP default to 20,000 and adds 130% spell power. Custom HP/power
 values are preserved, and subsequent startups leave administrator edits alone.
+Revision 2 also migrates the former 30-minute fight timeout to unlimited and the
+30-second empty-arena reset to a three-minute grace. It preserves custom timer
+values and does not repeat the previous health migration.
 
 The hitboxes carry the existing Evergarden LevelledMobs exclusions and encounter
 control-resistance marker. Damage events feed shared encounter health, so Java
@@ -151,8 +154,15 @@ The full default config is under `world-boss`. `enabled: false` stops active fig
 and disables summoning while retaining the temple. Exposure, HP, participant
 scaling, attack damage, judgment timing, safe radius and rewards are configurable.
 Safety clamps keep the lethal warning at least eight seconds and circles at
-least radius 16. At most two bosses can be active by default; empty fights reset
-after 30 seconds and encounters end after 30 minutes.
+least radius 16. At most two bosses can be active by default. Active encounters
+have no hard time limit (`fight-timeout-seconds: 0`). A positive value enables an
+optional admin limit, with remaining time shown on the boss bar and in `boss status`.
+If every participant is dead, disconnected or outside the arena, the fight waits
+three minutes (`empty-reset-seconds: 180`) before resetting. Online participants
+receive a return countdown, and returning preserves HP, phase and contributions.
+Missing living hitboxes are recreated with their current virtual encounter HP.
+All termination paths report a specific reason to online participants and the
+server log; `world-bosses.yml` also records the latest stop reason per temple.
 
 ## Commands, rewards and storage
 
@@ -222,7 +232,10 @@ transitions, visible final heart, missed final openings and a real sword attack
 after reopening, temple boss counts/species, late participant summons, no loot
 or respawns for defeated summons, one core per positive contributor, queued rewards
 for dead/offline players, inventory capacity, unchanged rolls after restart,
-repeated-claim prevention, entity/ticket cleanup and persisted cooldowns. Pure rule
+repeated-claim prevention, entity/ticket cleanup and persisted cooldowns.
+Long-fight regressions simulate an hour of active combat, remove a hitbox, leave
+and return after a minute, check the exact abandonment grace boundary and test
+an optional admin timeout plus manual/disabled cleanup reasons. Pure rule
 checks include sprint escape margins for each tuned area, rotated damage edges,
 deterministic DPS simulations and every angle around the arena
 edge for sanctuary reachability. The temple generation/protection suite remains

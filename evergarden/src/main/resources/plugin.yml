@@ -1,5 +1,5 @@
 name: Evergarden
-version: '3.0.0-e2.31-judge-balance'
+version: '3.0.0-e2.32-judge-lifetime'
 main: com.example.voidscape.VoidscapePlugin
 api-version: '26.2'
 description: Evergarden - Ancient world boss temples, sky landmarks, sanctums and trial vaults.

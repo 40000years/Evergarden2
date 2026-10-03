@@ -116,7 +116,7 @@ world-boss:
         public-url: ''
   # Virtual solo HP, separately scaled from LevelledMobs. No automatic DPS adaptation.
   # Upgrade the former 40,000 default once; custom HP values remain configurable.
-  balance-version: 1
+  balance-version: 2
   core-health: 20000
   hand-health: 8500
   health-per-extra-player: 0.65
@@ -144,8 +144,11 @@ world-boss:
   judgment-warning-seconds: 8
   judgment-cooldown-seconds: 130
   sanctuary-radius: 16
-  empty-reset-seconds: 30
-  fight-timeout-seconds: 1800
+  # Give defeated/disconnected players three minutes to return before resetting.
+  empty-reset-seconds: 180
+  # 0 disables the hard time limit; an active fight continues until victory.
+  # A positive value is an optional admin limit, shown on the boss bar.
+  fight-timeout-seconds: 0
   respawn-seconds: 14400
   rewards:
     # Every player who damaged a hand or the core also receives one random core

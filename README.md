@@ -4,6 +4,11 @@
 
 This repository is the isolated Evergarden / Advance Magic experiment. The plugin names remain compatible with the original modules. The default test world is `evergarden`. Evergarden build `3.0.0-e2.3` places the redesigned landmark rarely across that world. Each site's main route is at Y 100–124.
 
+Evergarden `3.0.0-e2.33-vault-security` preserves Vault claims when temple cooldowns
+are reset, removes the sneaking admin/Creative repeat-opening bypass, and stops
+reward delivery when claim storage fails. New claims record the player UUID and
+selected loot. See the [Vault audit and production update notes](docs/vault-security.md).
+
 ## Two additional sky landmarks (3.0.0-e2.4)
 
 The celestial observatory follows the reference's open blue/purple ribbed dome,

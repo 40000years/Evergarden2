@@ -1,0 +1,5 @@
+name: VaultSecurityProbe
+version: '1'
+main: VaultSecurityProbe
+api-version: '26.2'
+depend: [Evergarden, advance-magic]

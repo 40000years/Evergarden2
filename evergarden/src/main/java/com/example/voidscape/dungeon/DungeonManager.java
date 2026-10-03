@@ -194,8 +194,11 @@ public final class DungeonManager implements Listener {
     }
 
     private void openVault(Player p,Site site,Block block) {
+        if(!storageHealthy){plugin.message(p,"ระบบบันทึก Vault ไม่พร้อม · ยังไม่ใช้กุญแจ กรุณาแจ้งแอดมิน");return;}
         String openedPath=path(site)+".opened."+p.getUniqueId();
-        if(ledger.getBoolean(openedPath,false)&&!(p.isSneaking()&&(p.isOp()||p.hasPermission("voidscape.admin")||p.hasPermission("evergarden.admin")||p.getGameMode()==GameMode.CREATIVE))) {
+        // The production entitlement is once per UUID/site, including admins and Creative players.
+        // Explicit admin test menus provide test rolls without reopening real Vaults.
+        if(ledger.getBoolean(openedPath,false)) {
             plugin.message(p,"คุณเคยเปิดกล่องสมบัตินี้ไปแล้ว (เปิดได้คนละ 1 ครั้งต่อวิหาร)");
             p.playSound(p.getLocation(),Sound.BLOCK_CHEST_LOCKED,0.7f,1.0f);
             return;
@@ -222,14 +225,26 @@ public final class DungeonManager implements Listener {
             return;
         }
 
-        // Consume Evergarden Key
+        // Commit the entitlement and selected reward before consuming a key or delivering anything.
+        // A failed disk write must never leave a reward that can be claimed again after a restart.
+        ItemStack reward=plugin.relics().rollVaultReward();
+        String receiptPath=path(site)+".vault-claims."+p.getUniqueId();
+        Object previousOpened=ledger.get(openedPath),previousReceipt=ledger.get(receiptPath);
+        String coreId=reward.getPersistentDataContainer().get(plugin.key("magic_core"),PersistentDataType.STRING);
+        var relic=plugin.relics().type(reward);
+        String rewardId=coreId!=null?"core:"+coreId:relic!=null?relic.id():reward.getType().getKey().toString();
+        ledger.set(openedPath,true);
+        ledger.createSection(receiptPath,Map.of("player",p.getName(),"at",System.currentTimeMillis(),
+                "reward",rewardId,"amount",reward.getAmount()));
+        if(!save()) {
+            ledger.set(openedPath,previousOpened);
+            ledger.set(receiptPath,previousReceipt);
+            plugin.message(p,"บันทึกสิทธิ์ Vault ไม่สำเร็จ · ยังไม่ใช้กุญแจ กรุณาแจ้งแอดมิน");
+            return;
+        }
         keyItem.subtract(1);
         p.updateInventory();
-        ledger.set(openedPath,true);
-        save();
 
-        // Roll reward from 100% loot table
-        ItemStack reward=plugin.relics().rollVaultReward();
         var leftover=p.getInventory().addItem(reward.clone());
         if(!leftover.isEmpty()) {
             leftover.values().forEach(item->p.getWorld().dropItemNaturally(block.getLocation().add(0.5,1.2,0.5),item));
@@ -267,6 +282,8 @@ public final class DungeonManager implements Listener {
         String rewardName=reward.getItemMeta()!=null&&reward.getItemMeta().hasDisplayName()?
             net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(reward.getItemMeta().displayName()):
             reward.getType().name();
+        plugin.getLogger().info("[Vault-Claim] player="+p.getName()+" uuid="+p.getUniqueId()+" site="+site.id()
+                +" reward="+rewardId+" amount="+reward.getAmount());
         plugin.message(p,"✦ ปลดล็อก Evergarden Vault สำเร็จ! คุณได้รับ "+rewardName+" ×"+reward.getAmount());
     }
 
@@ -1281,9 +1298,19 @@ public final class DungeonManager implements Listener {
         clearWebs(enc.site);
         if(enc.bar!=null)enc.bar.removeAll();
     }
-    public void resetAllCooldowns() {
-        ledger.set("sites", null);
-        save();
+    public boolean resetAllCooldowns() {
+        if(!storageHealthy)return false;
+        // Cooldowns and lifetime Vault entitlements share the sites ledger. Never delete the sites.
+        Map<String,Object> previous=new LinkedHashMap<>();
+        var sites=ledger.getConfigurationSection("sites");
+        if(sites!=null)for(String siteId:sites.getKeys(false)) {
+            String cooldownPath="sites."+siteId+".next-open";
+            if(ledger.contains(cooldownPath))previous.put(cooldownPath,ledger.get(cooldownPath));
+        }
+        previous.keySet().forEach(key->ledger.set(key,null));
+        if(save())return true;
+        previous.forEach(ledger::set);
+        return false;
     }
     public void clearAllDungeonMobs() {
         for(Encounter enc : new ArrayList<>(active.values())) remove(enc);

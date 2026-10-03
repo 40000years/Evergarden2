@@ -139,7 +139,7 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         inv.setItem(47, createActionItem(Material.CLOCK, "§e§l⏳ วาร์ปไปวิหารกาลเวลา",
             List.of("§7Sanctum of Time (ผู้พิทักษ์กาลเวลา)", "§eคลิกเพื่อวาร์ปไปยังแท่น Lodestone ทันที")));
         inv.setItem(48, createActionItem(Material.RECOVERY_COMPASS, "§a§l🔄 รีเซ็ตคูลดาวน์วิหารทั้งหมด",
-            List.of("§7ล้างคูลดาวน์วิหารทั้งมิติ", "§aคลิกแล้วสามารถเริ่มสู้บอสใหม่ได้ทันที")));
+            List.of("§7ล้างคูลดาวน์วิหารทั้งมิติ", "§7เก็บประวัติเปิด Vault ไว้ เปิดซ้ำไม่ได้", "§aคลิกแล้วสามารถเริ่มสู้บอสใหม่ได้ทันที")));
         inv.setItem(49, createActionItem(Material.DRAGON_HEAD, "§4§l⚔️ เสกบอสทดสอบตรงหน้า (Spawn Boss)",
             List.of("§7เสก Sanctum Boss เลือด 3,500 HP ตรงหน้าทันที", "§cใช้ทดสอบดาเมจและระบบต่อสู้")));
         inv.setItem(50, createActionItem(Material.BLAZE_ROD, "§6§l🧙‍♂️ รับชุดแกนเวทมนตร์ 14 ธาตุ",
@@ -265,7 +265,10 @@ public final class AdminTestGui implements InventoryHolder, Listener {
             case 46 -> warpToSanctum(player, DungeonLayout.Kind.SANCTUM_ASTRAL);
             case 47 -> warpToSanctum(player, DungeonLayout.Kind.SANCTUM_TIME);
             case 48 -> { // Reset cooldowns
-                plugin.dungeons().resetAllCooldowns();
+                if(!plugin.dungeons().resetAllCooldowns()) {
+                    plugin.message(player,"รีเซ็ตคูลดาวน์ไม่สำเร็จ · ระบบบันทึกไม่พร้อม กรุณาตรวจ server log");
+                    return;
+                }
                 player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.4f);
                 plugin.message(player, "รีเซ็ตคูลดาวน์วิหารทั้งหมดเรียบร้อยแล้ว! สามารถคลิก Lodestone สู้บอสได้ทันที");
             }

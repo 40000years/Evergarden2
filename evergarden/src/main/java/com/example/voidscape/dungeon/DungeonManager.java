@@ -508,6 +508,7 @@ public final class DungeonManager implements Listener {
 
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void creature(CreatureSpawnEvent e) {
+        if(e.getEntity().getPersistentDataContainer().has(plugin.key("world_boss_entity"),PersistentDataType.BYTE))return;
         if(e.getEntity() instanceof ArmorStand && e.getEntity().getPersistentDataContainer()
                 .has(plugin.key("portal_visual"), PersistentDataType.STRING)) return;
         // CropService tags its stand in the pre-spawn consumer. Without this
@@ -1148,7 +1149,10 @@ public final class DungeonManager implements Listener {
         if (b == null || b.getWorld() != plugin.world()) return false;
         if (!plugin.getConfig().getBoolean("spawn-protection.enabled", true)) return false;
         double radius = plugin.getConfig().getDouble("spawn-protection.radius", 80.0);
-        return (b.getX() * b.getX() + b.getZ() * b.getZ()) <= (radius * radius);
+        // Dimension coordinates reach +/-500,000. int multiplication/addition overflows
+        // there and can make distant terrain look like it is inside the spawn island.
+        double x=b.getX(),z=b.getZ();
+        return x*x+z*z<=radius*radius;
     }
 
     public boolean canBypassProtection(Player p) {

@@ -400,6 +400,8 @@ def main():
  archive(java,DIST/'evergarden-java.zip');archive(bedrock,DIST/'evergarden-bedrock.mcpack')
  hashes={f.name:hashlib.sha1(f.read_bytes()).hexdigest() for f in [DIST/'evergarden-java.zip',DIST/'evergarden-bedrock.mcpack']}
  write_json(DIST/'pack-hashes.json',hashes)
+ import judge_assets
+ judge_assets.build()
  print(json.dumps(hashes,indent=2))
 
 if __name__=='__main__':main()

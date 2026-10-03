@@ -87,6 +87,7 @@ public final class MythicSpellChecks implements Listener {
         for(Spell spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR,Spell.HEAVENS_JUDGMENT)) {
             LivingEntity elevated=null,outsideBeam=null;
             if(spell==Spell.HEAVENS_JUDGMENT) {
+                world.getBlockAt(0,99,12).setType(Material.STONE);
                 elevated=mob(world,.5,12.5,1000);elevated.teleport(elevated.getLocation().add(0,20,0));
                 outsideBeam=mob(world,6.5,12.5,1000);
             }
@@ -177,6 +178,7 @@ public final class MythicSpellChecks implements Listener {
                 check(Math.abs(elevated.getHealth()-240)<.001,"Judgment damages the tall beam column, not just a ground sphere");
                 check(outsideBeam.getHealth()==1000,"targets outside the four-block beam radius remain unharmed");
                 elevated.remove();outsideBeam.remove();
+                world.getBlockAt(0,99,12).setType(Material.AIR);
             }
             check(!connection.particles.isEmpty(),"Java receives actual particle packets");
             check(connection.particles.size()<65000,"per-cast particle work is bounded, including crystal-beam fallback");
@@ -233,7 +235,83 @@ public final class MythicSpellChecks implements Listener {
         for(var core:com.example.voidscape.item.RelicService.MAGIC_CORES)if((boolean)rarity.invoke(null,core))mythicIds.add(core.id());
         check(mythicIds.equals(Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment")),"Vault Mythic pool contains exactly all four cores");
         check(com.example.voidscape.item.RelicService.MAGIC_CORES.size()-mythicIds.size()==14,"normal Vault pool retains fourteen cores");
-        castingMotion();judgmentPull();lineGeometry();bedrockParticles();team.unregister();
+        judgmentGrounding();castingMotion();judgmentPull();lineGeometry();bedrockParticles();team.unregister();
+    }
+    void judgmentGrounding()throws Exception {
+        var world=player.getWorld();Location saved=player.getLocation(),targetSaved=target.getLocation();
+        for(int x=-20;x<=20;x++)for(int z=-20;z<=30;z++)world.getBlockAt(x,99,z).setType(Material.STONE);
+        var spells=new com.example.advancemagic.spell.MythicSpells(magic.context());
+        var center=spells.getClass().getDeclaredMethod("judgmentCenter",Player.class);center.setAccessible(true);
+        try {
+            for(float pitch:new float[]{-90,-30,0,30,90}) {
+                player.teleport(new Location(world,10.5,110,-10.5,0,pitch));
+                var base=(Location)center.invoke(spells,player);
+                check(base!=null&&Math.abs(base.getY()-100)<1e-6,"Judgment finds the floor when aiming through air at pitch "+pitch+"; base="+base+"; hit="+magic.context().target(player,30));
+                check(base.getYaw()==0&&base.getPitch()==0,"Judgment ground anchor carries no camera rotation");
+            }
+            player.teleport(new Location(world,10.5,110,-10.5,0,-90));
+            check(magic.spells().cast(player,Spell.HEAVENS_JUDGMENT),"upward empty-air Judgment casts onto the floor");tick(73);
+            checkJudgmentColumn(100,35);
+            magic.effects().closeOwner(player.getUniqueId());
+            // The original entity target path used flying mob feet as the beam floor.
+            target.setHealth(1000);
+            target.teleport(targetSaved.clone().add(0,10,0));
+            player.teleport(new Location(world,.5,110,.5,0,0));
+            check(magic.context().target(player,30).getHitEntity()==target,"regression aims at an airborne target");
+            check(magic.spells().cast(player,Spell.HEAVENS_JUDGMENT),"airborne-target Judgment casts");tick(73);
+            checkJudgmentColumn(100,35);
+            magic.effects().closeOwner(player.getUniqueId());target.teleport(targetSaved);
+            player.teleport(new Location(world,10.5,110,-10.5,0,-90));
+            var floor=world.getBlockAt(10,99,-11);floor.setType(Material.STONE_SLAB);
+            var base=(Location)center.invoke(spells,player);
+            check(base!=null&&Math.abs(base.getY()-99.5)<1e-6,"Judgment follows the half-block collision surface of a slab");
+            floor.setType(Material.STONE_BRICK_STAIRS);
+            var stairs=(org.bukkit.block.data.type.Stairs)floor.getBlockData();stairs.setFacing(org.bukkit.block.BlockFace.EAST);floor.setBlockData(stairs);
+            player.teleport(new Location(world,10.25,110,-10.5,0,-90));
+            base=(Location)center.invoke(spells,player);
+            check(base!=null&&Math.abs(base.getY()-99.5)<1e-6,"Judgment follows the lower stair tread at the exact aimed X/Z");
+            player.teleport(new Location(world,10.75,110,-10.5,0,-90));
+            base=(Location)center.invoke(spells,player);
+            check(base!=null&&Math.abs(base.getY()-100)<1e-6,"Judgment follows the upper stair tread without using the block bounding-box height");
+            floor.setType(Material.STONE_SLAB);player.teleport(new Location(world,10.5,110,-10.5,0,-90));
+            var ceiling=world.getBlockAt(10,120,-11);ceiling.setType(Material.STONE);
+            base=(Location)center.invoke(spells,player);
+            check(base!=null&&Math.abs(base.getY()-99.5)<1e-6,"aiming at a ceiling underside still finds the cave floor");
+            ceiling.setType(Material.AIR);floor.setType(Material.STONE);
+            var wall=world.getBlockAt(10,105,-7);wall.setType(Material.STONE);
+            player.teleport(new Location(world,10.5,104,-10.5,0,0));
+            base=(Location)center.invoke(spells,player);
+            check(base!=null&&Math.abs(base.getY()-100)<1e-6,"wall-face aim resolves the floor outside the wall");wall.setType(Material.AIR);
+            // A roof above the aim must not replace the local floor with a heightmap surface.
+            ceiling.setType(Material.STONE);player.teleport(new Location(world,10.5,110,-10.5,0,90));
+            base=(Location)center.invoke(spells,player);
+            check(base!=null&&Math.abs(base.getY()-100)<1e-6,"Judgment uses the local floor beneath a roof");ceiling.setType(Material.AIR);
+            for(int y=world.getMinHeight();y<110;y++)world.getBlockAt(10,y,-11).setType(Material.AIR);
+            player.teleport(new Location(world,10.5,110,-10.5,0,-90));
+            check(center.invoke(spells,player)==null&&!magic.spells().cast(player,Spell.HEAVENS_JUDGMENT),"Judgment refuses a void column instead of creating a floating beam");
+            floor.setType(Material.STONE);
+            int surface=world.getMaxHeight()-15;
+            world.getBlockAt(10,surface-1,-11).setType(Material.STONE);
+            player.teleport(new Location(world,10.5,surface+2,-10.5,0,90));
+            check(magic.spells().cast(player,Spell.HEAVENS_JUDGMENT),"Judgment near the build ceiling still casts");tick(73);
+            checkJudgmentColumn(surface,35*(world.getMaxHeight()-1-surface)/36.0);
+            world.getBlockAt(10,surface-1,-11).setType(Material.AIR);
+        } finally {
+            magic.effects().closeOwner(player.getUniqueId());target.teleport(targetSaved);player.teleport(saved);
+            player.setVelocity(new org.bukkit.util.Vector());
+        }
+    }
+    void checkJudgmentColumn(double ground,double height) {
+        var displays=player.getWorld().getEntities().stream().filter(e->e instanceof ItemDisplay).map(e->(ItemDisplay)e).toList();
+        var beam=displays.stream().filter(e->e.getItemStack().getItemMeta().getItemModel().getKey().equals("judgment_beam")).findFirst().orElseThrow();
+        var transform=beam.getTransformation();
+        double bottom=beam.getY()+transform.getTranslation().y()-transform.getScale().y()/2;
+        double top=beam.getY()+transform.getTranslation().y()+transform.getScale().y()/2;
+        check(Math.abs(bottom-ground)<1e-5&&Math.abs(top-ground-height)<1e-5,"Java beam endpoints run from the collision floor to the highest seal");
+        check(displays.size()==5&&displays.stream().allMatch(e->e.getPitch()==0&&e.getYaw()==0),"all Judgment displays stay vertical/horizontal independently of aim rotation");
+        var highest=displays.stream().filter(e->e!=beam).mapToDouble(Entity::getY).max().orElseThrow();
+        check(Math.abs(highest-top)<1e-5,"beam top meets the highest seal even near the world ceiling");
+        check(Math.abs(transform.getScale().x()-8)<1e-5,"grounding preserves the eight-block attack width");
     }
     void castingMotion() {
         Location saved=player.getLocation();boolean gravity=player.hasGravity(),flight=player.getAllowFlight();
@@ -358,6 +436,16 @@ public final class MythicSpellChecks implements Listener {
         var packet=session.particles.getLast();
         check(packet.getIdentifier().equals("advance_magic:judgment_beam")&&packet.getPosition().getY()==122.5f,"Bedrock beam is centered on the same vertical column as Java");
         check(packet.getMolangVariablesJson().orElseThrow().contains("35.0")&&packet.getMolangVariablesJson().orElseThrow().contains("8.0"),"Bedrock receives the full beam height and width");
+        Location aimSaved=player.getLocation();
+        try {
+            player.teleport(new Location(player.getWorld(),10.5,110,-10.5,45,-90));
+            var spells=new com.example.advancemagic.spell.MythicSpells(magic.context());
+            var ground=spells.getClass().getDeclaredMethod("judgmentCenter",Player.class);ground.setAccessible(true);
+            Location base=(Location)ground.invoke(spells,player);
+            beam.invoke(visuals,base,35.0,8.0);packet=session.particles.getLast();
+            check(Math.abs(packet.getPosition().getY()-17.5-100)<1e-6,"Bedrock beam lower endpoint reaches the same resolved floor when aiming upward");
+            check(Math.abs(packet.getPosition().getY()+17.5-135)<1e-6,"Bedrock beam upper endpoint meets the same highest seal");
+        } finally {player.teleport(aimSaved);}
         var seal=clazz.getDeclaredMethod("judgmentSeal",Location.class,double.class,double.class,int.class);seal.setAccessible(true);
         seal.invoke(visuals,new Location(player.getWorld(),2,140,4),56.0,-30.0,1);
         packet=session.particles.getLast();

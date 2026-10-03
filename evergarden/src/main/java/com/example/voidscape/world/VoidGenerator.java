@@ -16,6 +16,8 @@ public final class VoidGenerator extends ChunkGenerator {
     private final SkyLandmarkLayout landmarks;
     private final boolean observatoryEnabled,gardenEnabled;
     private final RestorationLayout restoration;
+    private final WorldBossTempleLayout bossTemples;
+    private final boolean bossTempleEnabled;
     private final SimplexNoiseGenerator islands, detail;
     private final Blueprint[] sanctums={Blueprint.sanctumDark(),Blueprint.sanctumAstral(),Blueprint.sanctumTime()};
     public record Surface(boolean land,int top,int depth,int garden,boolean pond,boolean path) {}
@@ -32,9 +34,15 @@ public final class VoidGenerator extends ChunkGenerator {
     }
     public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
                          SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,restoration,null,false);
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
+                         WorldBossTempleLayout bossTemples,boolean bossTempleEnabled) {
         this.seed=seed;this.layout=layout;this.skyWhales=skyWhales;this.skyWhaleEnabled=skyWhaleEnabled;
         this.landmarks=landmarks;this.observatoryEnabled=observatoryEnabled;this.gardenEnabled=gardenEnabled;
         this.restoration=restoration;
+        this.bossTemples=bossTemples;this.bossTempleEnabled=bossTempleEnabled;
         islands=new SimplexNoiseGenerator(seed);detail=new SimplexNoiseGenerator(seed^721945L);
     }
     private boolean landmarkEnabled(SkyLandmarkLayout.Site site){
@@ -43,13 +51,17 @@ public final class VoidGenerator extends ChunkGenerator {
     private boolean landmarkReserved(int x,int z,int margin){
         return (observatoryEnabled||gardenEnabled)&&landmarkEnabled(landmarks.at(x,z,margin));
     }
+    private boolean bossTempleReserved(int x,int z,int margin){
+        return bossTempleEnabled&&bossTemples!=null&&bossTemples.at(x,z,margin)!=null;
+    }
     private static double smooth(double t){t=Math.clamp(t,0,1);return t*t*(3-2*t);}
     private long hash(int x,int z){return DungeonLayout.mix(seed^(long)x*341873128712L^(long)z*132897987541L);}
     public Surface surface(int x,int z){return surface(x,z,layout.nearby(x,z));}
     private Surface surface(int x,int z,List<DungeonLayout.Site> sites) {
         // The landmark supplies its own islands and empty spaces. Noise terrain here
         // would fill its rib cage, bury the approach, and spoil the floating silhouette.
-        if((skyWhaleEnabled&&skyWhales.at(x,z,0)!=null)||landmarkReserved(x,z,0))
+        if((skyWhaleEnabled&&skyWhales.at(x,z,0)!=null)||landmarkReserved(x,z,0)
+                ||bossTempleReserved(x,z,0))
             return new Surface(false,95,0,garden(x,z),false,false);
         double radial=Math.hypot(x,z);
         double density=islands.noise(x/155.0,z/155.0)+0.18*detail.noise(x/49.0,z/49.0);
@@ -117,6 +129,7 @@ public final class VoidGenerator extends ChunkGenerator {
             // A neighboring tree can reach across the reservation and across chunks.
             if(skyWhaleEnabled&&skyWhales.at(tx,tz,6)!=null)continue;
             if(landmarkReserved(tx,tz,6))continue;
+            if(bossTempleReserved(tx,tz,6))continue;
             Surface s=surface(tx,tz);
             if(!s.land()||s.pond()||s.path()||s.depth()<16||Math.hypot(tx,tz)<19||layout.at(tx,tz,13)!=null)continue;
             // Broad, deliberately empty home sites.
@@ -147,6 +160,10 @@ public final class VoidGenerator extends ChunkGenerator {
         if(observatoryEnabled||gardenEnabled)
             for(var site:landmarks.cell(Math.floorDiv(cx,landmarks.spacingChunks()),Math.floorDiv(cz,landmarks.spacingChunks())))
                 if(landmarkEnabled(site))site.kind().blueprint().render(data,cx,cz,site.x(),site.z());
+        if(bossTempleEnabled&&bossTemples!=null){
+            var site=bossTemples.cell(Math.floorDiv(cx,bossTemples.spacingChunks()),Math.floorDiv(cz,bossTemples.spacingChunks()));
+            if(site!=null)WorldBossTemple.blueprint().render(data,cx,cz,site.x(),site.z());
+        }
         if(restoration!=null)for(var site:restoration.cell(Math.floorDiv(cx*16,restoration.cellSize()),Math.floorDiv(cz*16,restoration.cellSize())))
             RestorationShrine.render(data,cx,cz,site);
     }

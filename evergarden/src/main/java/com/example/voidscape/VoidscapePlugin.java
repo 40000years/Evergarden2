@@ -20,13 +20,16 @@ public final class VoidscapePlugin extends JavaPlugin {
     private DungeonLayout layout;
     private SkyWhaleLayout skyWhales;
     private SkyLandmarkLayout skyLandmarks;
+    private WorldBossTempleLayout bossTemples;
     private RestorationLayout restorationLayout;
     private RestorationAltars restorationAltars;
     private RelicService relics;
     private DungeonManager dungeons;
+    private com.example.voidscape.boss.WorldBossManager worldBoss;
     private TravelListener travel;
 
     private com.example.voidscape.pack.ResourcePackService packs;
+    private com.example.voidscape.boss.JudgePackService judgePack;
     private com.example.voidscape.gui.AdminTestGui testGui;
     private com.example.voidscape.gui.WandShowcaseGui wandGui;
     private com.example.voidscape.gui.RelicShowcaseGui relicGui;
@@ -121,12 +124,29 @@ public final class VoidscapePlugin extends JavaPlugin {
             skyWhales=new SkyWhaleLayout(seed,layout,whaleSpacing,whaleChance,unexploredChance,oldCells,
                     repairOldCells,saved.getDouble("restoration-legacy-chance",.01));
             skyLandmarks=new SkyLandmarkLayout(seed,layout,skyWhales);
+            if(!saved.contains("world-boss-temple-spacing")){
+                int spacing=getConfig().isInt("structures.world-boss-temple.spacing-chunks")
+                    ?integer("structures.world-boss-temple.spacing-chunks",whaleSpacing,32,64):whaleSpacing;
+                double chance=getConfig().isSet("structures.world-boss-temple.chance")
+                    ?getConfig().getDouble("structures.world-boss-temple.chance",unexploredChance):unexploredChance;
+                saved.set("world-boss-temple-spacing",spacing);
+                saved.set("world-boss-temple-chance",Double.isFinite(chance)?Math.clamp(chance,0,1):0);
+                var explored=SkyPlacementHistory.captureWorld(Bukkit.getWorldContainer().toPath(),
+                    Bukkit.getWorlds().getFirst().getWorldFolder().toPath(),worldName,spacing);
+                saved.set("world-boss-temple-excluded-cells",explored.stream().sorted().toList());
+                saved.save(file);
+                getLogger().info("Ancient world boss temples enabled in unexplored cells; preserved "+explored.size()+" explored cells.");
+            }
+            bossTemples=new WorldBossTempleLayout(seed,layout,skyWhales,skyLandmarks,
+                saved.getInt("world-boss-temple-spacing"),saved.getDouble("world-boss-temple-chance"),
+                new HashSet<>(saved.getLongList("world-boss-temple-excluded-cells")));
             restorationLayout=new RestorationLayout(seed,skyWhales,skyLandmarks,repairOldCells,
                     saved.getDouble("restoration-altar-chance",.6),getConfig().getBoolean("structures.sky-whale.enabled",true),
                     getConfig().getBoolean("structures.hanging-garden.enabled",true),getConfig().getBoolean("structures.observatory.enabled",true));
             if(worldName.equals("the_void"))throw new IllegalStateException("Use a new world name for Evergarden; never replace the legacy world generator.");
             voidWorld=new WorldCreator(worldName).seed(seed).environment(World.Environment.NORMAL).generator(new VoidGenerator(seed,layout,skyWhales,getConfig().getBoolean("structures.sky-whale.enabled",true),
-                    skyLandmarks,getConfig().getBoolean("structures.observatory.enabled",true),getConfig().getBoolean("structures.hanging-garden.enabled",true),restorationLayout)).createWorld();
+                    skyLandmarks,getConfig().getBoolean("structures.observatory.enabled",true),getConfig().getBoolean("structures.hanging-garden.enabled",true),restorationLayout,
+                    bossTemples,getConfig().getBoolean("structures.world-boss-temple.enabled",true))).createWorld();
             if(voidWorld==null)throw new IllegalStateException("Cannot load Evergarden world");
             voidWorld.setSpawnLocation(0,97,0);voidWorld.setTime(integer("dimension.time",13000,0,23999));
             voidWorld.setGameRule(GameRule.DO_DAYLIGHT_CYCLE,false);
@@ -140,6 +160,8 @@ public final class VoidscapePlugin extends JavaPlugin {
             com.example.voidscape.compat.LevelledMobsCompat.register(this);
             relics=new RelicService(this);dungeons=new DungeonManager(this);travel=new TravelListener(this);
             var pm=getServer().getPluginManager();pm.registerEvents(relics,this);pm.registerEvents(dungeons,this);pm.registerEvents(travel,this);
+            worldBoss=new com.example.voidscape.boss.WorldBossManager(this);pm.registerEvents(worldBoss,this);
+            pm.registerEvents(new WorldBossTempleProtection(this),this);
             pm.registerEvents(new com.example.voidscape.guide.ChestGuideGui(this),this);
             pm.registerEvents(new com.example.voidscape.enchant.EnchantApplyListener(this,relics),this);
             abilities=new com.example.voidscape.enchant.UniqueAbilityListener(this);pm.registerEvents(abilities,this);
@@ -149,6 +171,7 @@ public final class VoidscapePlugin extends JavaPlugin {
             guideMenu=new com.example.voidscape.guide.GuideMenuGui(this);pm.registerEvents(guideMenu,this);
             if(packs==null){packs=new com.example.voidscape.pack.ResourcePackService(this);try{packs.extract();}catch(Throwable ignored){}}
             packs.start();pm.registerEvents(packs,this);
+            judgePack=new com.example.voidscape.boss.JudgePackService(this);judgePack.start();pm.registerEvents(judgePack,this);
             crops=new com.example.voidscape.crop.CropService(this);
             cropBuffs=new com.example.voidscape.crop.CropBuffListener(this,crops);
             cropGui=new com.example.voidscape.crop.CropShowcaseGui(this,crops);
@@ -159,6 +182,10 @@ public final class VoidscapePlugin extends JavaPlugin {
             var magicPlugin=pm.getPlugin("advance-magic");
             if(magicPlugin instanceof com.example.advancemagic.AdvanceMagicPlugin magic&&magic.isEnabled()){
                 restorationAltars=new RestorationAltars(this,magic);pm.registerEvents(restorationAltars,this);
+                try{
+                    magic.getClass().getClassLoader().loadClass("com.example.advancemagic.api.MagicTerrainEvent");
+                    pm.registerEvents(new WorldBossTempleMagicProtection(this),this);
+                }catch(ClassNotFoundException oldMagic){getLogger().warning("Update Advance Magic to protect world boss arena floors from temporary spell terrain.");}
             }else getLogger().warning("Advance Magic is unavailable; restoration altar interactions are disabled.");
             pm.registerEvents(whaleTreasure,this);
             for (Chunk chunk : voidWorld.getLoadedChunks()) whaleTreasure.populate(chunk);
@@ -177,7 +204,7 @@ public final class VoidscapePlugin extends JavaPlugin {
                     }
                 }
             } catch (Throwable ignored) {}
-            getServer().getOnlinePlayers().forEach(p->{relics.migrate(p.getInventory());relics.migrate(p.getEnderChest());packs.offer(p);});
+            getServer().getOnlinePlayers().forEach(p->{relics.migrate(p.getInventory());relics.migrate(p.getEnderChest());packs.offer(p);judgePack.offer(p);});
             pm.registerEvents(new com.example.voidscape.gui.ChestUpgradeGui(this),this);
             VoidCommand command=new VoidCommand(this);
             getCommand("evergarden").setExecutor(command);getCommand("evergarden").setTabCompleter(command);
@@ -186,21 +213,25 @@ public final class VoidscapePlugin extends JavaPlugin {
                 getCommand("upgrade").setTabCompleter(command);
             }
             getServer().getScheduler().runTaskTimer(this,()->{dungeons.tick();travel.tick();relics.tick();crops.tick();cropBuffs.tick();botanist.tick();},20,10);
+            getServer().getScheduler().runTaskTimer(this,()->worldBoss.tick(),20,2);
             getLogger().info("Evergarden 3.0 enabled in "+worldName);
         } catch(Exception e) {
             getLogger().log(java.util.logging.Level.SEVERE,"Evergarden failed to start safely",e);
             getServer().getPluginManager().disablePlugin(this);
         }
     }
-    @Override public void onDisable(){if(restorationAltars!=null)restorationAltars.close();if(travel!=null)travel.close();if(packs!=null)packs.close();if(dungeons!=null)dungeons.close();if(relics!=null)relics.close();if(crops!=null)crops.close();if(cropBuffs!=null)cropBuffs.close();if(botanist!=null)botanist.close();}
+    @Override public void onDisable(){if(worldBoss!=null)worldBoss.close();if(judgePack!=null)judgePack.close();if(restorationAltars!=null)restorationAltars.close();if(travel!=null)travel.close();if(packs!=null)packs.close();if(dungeons!=null)dungeons.close();if(relics!=null)relics.close();if(crops!=null)crops.close();if(cropBuffs!=null)cropBuffs.close();if(botanist!=null)botanist.close();}
 
     public NamespacedKey key(String value){return new NamespacedKey("voidscape",value);}
     public int integer(String path,int value,int min,int max){return Math.max(min,Math.min(max,getConfig().getInt(path,value)));}
     public void message(CommandSender sender,String text){sender.sendMessage(Component.text("✦ "+text,NamedTextColor.AQUA));}
     public com.example.voidscape.pack.ResourcePackService packs(){return packs;}
+    public com.example.voidscape.boss.JudgePackService judgePack(){return judgePack;}
     public World world(){return voidWorld;} public DungeonLayout layout(){return layout;}
+    public com.example.voidscape.boss.WorldBossManager worldBoss(){return worldBoss;}
     public SkyWhaleLayout skyWhales(){return skyWhales;}
     public SkyLandmarkLayout skyLandmarks(){return skyLandmarks;}
+    public WorldBossTempleLayout bossTemples(){return bossTemples;}
     public RestorationLayout restorationLayout(){return restorationLayout;}
     public RelicService relics(){return relics;} public DungeonManager dungeons(){return dungeons;} public TravelListener travel(){return travel;}
     public com.example.voidscape.gui.AdminTestGui testGui(){return testGui;}

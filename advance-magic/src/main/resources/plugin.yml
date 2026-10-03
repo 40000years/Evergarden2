@@ -1,8 +1,8 @@
 name: advance-magic
-version: 1.5.0-celestial-casting
+version: 1.5.1-temple-protection
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
-description: Seventeen spells including three Mythic wands, mana and crafting.
+description: Eighteen spells including four Mythic wands, mana and crafting.
 softdepend: [floodgate, GrimAC]
 loadbefore: [Geyser-Spigot]
 commands:

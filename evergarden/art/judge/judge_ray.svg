@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.0549">
+<polyline points="512.00,0.00 512.00,1024.00" stroke="#ffe0c5" stroke-width="33"/>
+<polyline points="488.00,0.00 488.00,1024.00" stroke="#ff6476" stroke-width="21"/>
+<polyline points="536.00,0.00 536.00,1024.00" stroke="#ff243e" stroke-width="21"/>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.1255">
+<polyline points="512.00,0.00 512.00,1024.00" stroke="#ffe0c5" stroke-width="26"/>
+<polyline points="488.00,0.00 488.00,1024.00" stroke="#ff6476" stroke-width="14"/>
+<polyline points="536.00,0.00 536.00,1024.00" stroke="#ff243e" stroke-width="14"/>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.2941">
+<polyline points="512.00,0.00 512.00,1024.00" stroke="#ffe0c5" stroke-width="21"/>
+<polyline points="488.00,0.00 488.00,1024.00" stroke="#ff6476" stroke-width="9"/>
+<polyline points="536.00,0.00 536.00,1024.00" stroke="#ff243e" stroke-width="9"/>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="1.0000">
+<polyline points="512.00,0.00 512.00,1024.00" stroke="#ffe0c5" stroke-width="18"/>
+<polyline points="488.00,0.00 488.00,1024.00" stroke="#ff6476" stroke-width="6"/>
+<polyline points="536.00,0.00 536.00,1024.00" stroke="#ff243e" stroke-width="6"/>
+</g>
+</svg>

@@ -19,6 +19,7 @@ final class JudgmentBeamVisuals {
         meta.setItemModel(new NamespacedKey("advance_magic","judgment_beam"));
         item.setItemMeta(meta);
         display=effect.track(base.getWorld().spawn(base,ItemDisplay.class,entity->{
+            entity.setRotation(0,0);
             entity.setItemStack(item);
             entity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
             entity.setGravity(false);entity.setInvulnerable(true);entity.setSilent(true);

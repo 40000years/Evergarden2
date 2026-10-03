@@ -1,0 +1,5 @@
+name: AncientJudgeProbe
+version: '1'
+main: AncientJudgeProbe
+api-version: '26.2'
+depend: [Evergarden, advance-magic]

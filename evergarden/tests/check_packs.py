@@ -59,7 +59,7 @@ relic_expected = {"voidscape:" + name for name in (
 )}
 assert len(definitions) == len(identifiers)
 assert relic_expected.issubset(identifiers), f"Missing relics: {relic_expected - identifiers}"
-assert len(identifiers) == 174, f"Expected 174 identifiers including the restoration altars, got {len(identifiers)}"
+assert len(identifiers) == 188, f"Expected 188 identifiers including the fourteen Judge models, got {len(identifiers)}"
 assert not identifiers & other_ids, 'Duplicate Geyser custom item IDs across plugins'
 hashes = json.loads((dist / 'pack-hashes.json').read_text())
 service_source = (root / 'src/main/java/com/example/voidscape/pack/ResourcePackService.java').read_text(encoding='utf8')
@@ -79,7 +79,7 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
                 json.loads(archive.read(name))
     atlas = json.loads(bedrock.read('textures/item_texture.json'))['texture_data']
     manifest = json.loads(bedrock.read('manifest.json'))
-    expected_version = [3, 14, 1]
+    expected_version = [3, 19, 0]
     assert manifest['header']['version'] == expected_version
     assert manifest['modules'][0]['version'] == expected_version
     with zipfile.ZipFile(root.parent / 'advance-magic/dist/advance-magic-bedrock.mcpack') as magic:
@@ -108,6 +108,9 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
             cases = {c['when'] for c in selector['cases']}
         for entry in entries:
             name = entry['bedrock_identifier'].split(':')[1]
+            if name.startswith('judge_'):
+                assert entry['model'] == entry['bedrock_identifier'] and 'predicate' not in entry
+                continue  # Dedicated addon; meshes and atlas are checked by check_judge_assets.py.
             # Crops and head models use direct item_model components; relics
             # additionally support the legacy custom-model-data selector.
             if name.startswith(('seed_', 'crop_')) or name == 'void_elixir' or name.endswith(('_mask', '_crown')):

@@ -40,6 +40,20 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
             return true;
         }
         switch(sub) {
+            case "boss" -> {
+                if(args.length>1&&args[1].equalsIgnoreCase("pack")){
+                    if(args.length>2&&args[2].equalsIgnoreCase("resend")&&p!=null)plugin.judgePack().offer(p);
+                    plugin.judgePack().describe(sender);return true;
+                }
+                if(p==null){plugin.message(sender,"ใช้คำสั่งนี้ในเกมภายในวิหารใหญ่");return true;}
+                String action=args.length>1?args[1].toLowerCase(Locale.ROOT):"status";
+                if(action.equals("status"))plugin.message(p,plugin.worldBoss().status(p));
+                else if(action.equals("claim"))plugin.worldBoss().claimReward(p);
+                else if(!isAdmin(sender))plugin.message(p,"อัญเชิญด้วยมือเปล่าคลิกขวา Amethyst กลางลาน · คำสั่งควบคุมสำหรับแอดมิน");
+                else if(action.equals("start"))plugin.worldBoss().start(p,true);
+                else if(action.equals("stop"))plugin.worldBoss().stop(p);
+                else plugin.message(p,"/evergarden boss status|claim|start|stop");
+            }
             case "upgrade", "up", "enchant", "forge" -> {
                 if(p==null){plugin.message(sender,"คำสั่งนี้ใช้ได้เฉพาะผู้เล่นในเกมเท่านั้น");return true;}
                 com.example.voidscape.gui.UpgradeMenuService.open(plugin, p);
@@ -68,8 +82,10 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                     Player target=args.length>2?Bukkit.getPlayerExact(args[2]):p;
                     if(target==null) {sender.sendMessage("Usage: /evergarden pack resend <online-player>");return true;}
                     plugin.packs().offer(target);
+                    plugin.judgePack().offer(target);
                 }
                 plugin.packs().describe(sender);
+                plugin.judgePack().describe(sender);
             }
             case "guide" -> {
                 if(p!=null) {
@@ -119,6 +135,23 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                         }
                         p.teleport(new Location(plugin.world(),tx+.5,kind.arrivalY,tz+.5));
                         plugin.message(p,kind.id+" X="+site.x()+" Z="+site.z());return true;
+                    }
+                    if(dest.equals("boss-temple")||dest.equals("world-boss-temple")){
+                        if(!plugin.getConfig().getBoolean("structures.world-boss-temple.enabled",true)){
+                            plugin.message(p,"World boss temples are disabled in config.");return true;
+                        }
+                        int x=p.getWorld()==plugin.world()?p.getLocation().getBlockX():0;
+                        int z=p.getWorld()==plugin.world()?p.getLocation().getBlockZ():0;
+                        var site=plugin.bossTemples().nearest(x,z,64);
+                        if(site==null){plugin.message(p,"No world boss temple found in the search radius.");return true;}
+                        int y=com.example.voidscape.world.WorldBossTemple.ARRIVAL_Y;
+                        int tx=site.x(),tz=site.z()+com.example.voidscape.world.WorldBossTemple.ARRIVAL_Z;
+                        if(plugin.world().getBlockAt(tx,y-1,tz).getType()!=Material.POLISHED_ANDESITE
+                            ||!plugin.world().getBlockAt(tx,y,tz).getType().isAir()||!plugin.world().getBlockAt(tx,y+1,tz).getType().isAir()){
+                            plugin.message(p,"This temple has no safe arrival; explore fresh chunks or restore the entrance.");return true;
+                        }
+                        p.teleport(new Location(plugin.world(),tx+.5,y,tz+.5,180,0));
+                        plugin.message(p,"วิหารโบราณ World Boss · X="+site.x()+" Z="+site.z()+" · ใช้มือเปล่าคลิกขวา Amethyst กลางลานเพื่ออัญเชิญ");return true;
                     }
                     if(dest.equals("whale")||dest.equals("skywhale")) {
                         if(!plugin.getConfig().getBoolean("structures.sky-whale.enabled",true)) {
@@ -273,7 +306,7 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
             default -> {
                 plugin.message(sender,"Evergarden 3.0 · พิมพ์ /evergarden guide เพื่อดูคู่มือมิติ");
                 plugin.message(sender,"สร้างกรอบประตู Block of Quartz (ขนาด 4x5) แล้วโยนดอกไม้เข้าไปในช่องว่างเพื่อเปิดประตู");
-                if(isAdmin(sender))plugin.message(sender,"แอดมิน: enter · leave · tp [dark|astral|time|spawn] · menu · test · crops · wands · relics · give · status · pregen · reload");
+                if(isAdmin(sender))plugin.message(sender,"แอดมิน: enter · leave · tp [dark|astral|time|whale|observatory|garden|boss-temple|spawn] · menu · test · crops · wands · relics · give · status · pregen · reload");
             }
         }
         return true;
@@ -501,13 +534,15 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
     @Override public List<String> onTabComplete(CommandSender sender,Command command,String alias,String[] args) {
         List<String> c=new ArrayList<>();
         if(args.length==1){
-            c.addAll(List.of("help","guide","upgrade"));
+            c.addAll(List.of("help","guide","upgrade","boss"));
             if(isAdmin(sender))c.addAll(List.of("enter","leave","tp","test","menu","crops","wands","magic","relics","items","give","status","reload","pregen","pack"));
         }
         if(args.length==2&&args[0].equalsIgnoreCase("guide")) {
             c.addAll(List.of("1","2","3","crops","relics","magic"));
         }
-        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","whale","observatory","garden","spawn"));
+        if(args.length==2&&args[0].equalsIgnoreCase("boss")){c.addAll(List.of("status","claim","pack"));if(isAdmin(sender))c.addAll(List.of("start","stop"));}
+        if(args.length==3&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("pack"))c.add("resend");
+        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","whale","observatory","garden","boss-temple","spawn"));
         if(args.length==2&&args[0].equalsIgnoreCase("give")&&isAdmin(sender)) {
             // Relics & Equipment
             for(Relic r:Relic.values()) c.add(r.id());

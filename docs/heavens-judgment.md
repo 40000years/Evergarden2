@@ -15,7 +15,7 @@ downward for four seconds. A final pulse releases a golden ground ripple.
 | Beam damage | 85 every 0.5 seconds, eight pulses |
 | Closing damage | 80 |
 | Full exposure | 760 damage before resistance and upgrades |
-| Damage area | Radius 4, from target level up to the highest seal |
+| Damage area | Radius 4, from the ground below the aim up to the highest seal |
 | Durability | 30 casts; existing repair and upgrade systems apply |
 
 The Java beam uses an enlarged `minecraft:entity/beacon_beam` texture, two gold
@@ -24,6 +24,12 @@ golden beacon-style particle ribbon with the same position, width and height.
 The beam display is hidden from Bedrock viewers while the particle adapter is
 available. Golden glass supplies the Java fallback when the pack is declined.
 The visual uses Paper's [display entity API](https://docs.papermc.io/paper/dev/display-entities/).
+
+The cast traces downward from the aimed block, mob feet, or empty-air aim to the
+first solid collision surface. Both clients use this exact ground anchor for the
+beam, seals and damage column, including slabs and floors beneath roofs. A column
+with no ground is refused. Java displays explicitly clear yaw and pitch so aiming
+upward or at a flying mob cannot tilt the beam or raise its lower endpoint.
 
 The four horizontal seal displays are full-brightness and visible from both sides.
 They open smoothly during charging, rotate in alternating directions and retract
@@ -90,3 +96,9 @@ the radius, protected targets, cancellation during charge and during firing,
 mana/durability/cooldown accounting, both GUIs, the new recipe, all four Mythic
 cores and Bedrock beam packet dimensions. These are server-side checks; visual
 appearance still needs an in-game client review.
+
+Grounding regressions cover upward and downward air aim, airborne mobs, both
+stair treads, slabs, wall faces, ceiling undersides, covered floors, void columns
+and reduced height near the build ceiling. Java model bounds and Bedrock UVs are
+checked for full vertical coverage; server checks compare both beam endpoints
+with the ground and highest seal.

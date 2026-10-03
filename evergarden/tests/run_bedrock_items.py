@@ -34,7 +34,7 @@ for name in ('Geyser-Spigot.jar', 'AeternumSeasons-4.7.jar'):
 for name in ('Evergarden', 'advance-magic'):
     folder = plugins / name
     folder.mkdir(exist_ok=True)
-    (folder / 'config.yml').write_text('config-version: 2\nresource-pack:\n  enabled: false\n  host:\n    enabled: false\n  geyser:\n    auto-install: true\n', encoding='utf-8')
+    (folder / 'config.yml').write_text('config-version: 2\nresource-pack:\n  enabled: false\n  host:\n    enabled: false\n  geyser:\n    auto-install: true\nworld-boss:\n  visuals:\n    pack:\n      host:\n        bind: 127.0.0.1\n        port: 0\n', encoding='utf-8')
 geyser = plugins / 'Geyser-Spigot'
 geyser.mkdir(exist_ok=True)
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
@@ -49,7 +49,8 @@ deps = [*plugins.glob('*.jar'), *(server / 'versions').rglob('*.jar'), *(server 
         *Path.home().joinpath('.m2/repository/org/jetbrains/annotations').rglob('*.jar')]
 subprocess.run(['javac', '-proc:none', '-encoding', 'UTF-8', '-cp', os.pathsep.join(map(str, deps)),
                 '-d', str(classes), str(Path(__file__).with_name('BedrockItemChecks.java')),
-                str(Path(__file__).with_name('MythicSpellChecks.java'))], check=True)
+                str(Path(__file__).with_name('MythicSpellChecks.java')),
+                str(root / 'tests/ancient-judge/JudgeBedrockChecks.java')], check=True)
 (classes / 'plugin.yml').write_text("name: BedrockItemChecks\nversion: '1.0'\nmain: BedrockItemChecks\napi-version: '26.2'\ndepend: [Evergarden, advance-magic, Geyser-Spigot]\n", encoding='utf-8')
 subprocess.run(['jar', '--create', '--file', str(plugins / 'bedrock-item-checks.jar'), '-C', str(classes), '.'], check=True)
 (server / 'eula.txt').write_text('eula=true\n')

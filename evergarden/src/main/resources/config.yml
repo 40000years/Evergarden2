@@ -14,6 +14,14 @@ structures:
     enabled: true
   hanging-garden:
     enabled: true
+  world-boss-temple:
+    enabled: true
+    # Ancient 241x241 temple with a clear 161-block combat arena; boss not added yet.
+    # Garden-style independent rarity roll; null inherits the Garden sky grid/rate.
+    spacing-chunks: null
+    chance: null
+    # Placement is persisted in world-layout.yml; only unexplored cells receive it.
+    # Creative admins may maintain the structure; all other edits are blocked.
   # Whale, observatory and hanging garden each roll the chance below.
   # Shared one-time chest rewards; weights are relative, one bonus is drawn.
   treasure:
@@ -92,6 +100,55 @@ combat:
     max-level: 5
     # ดาเมจคลื่นคำสาปต่อเลเวลเมื่อเลื่อนขั้นระดับ 1 ถึง 4 (ไม่บังคับตาย · Totem ช่วยชีวิตได้หากเลือดหมด)
     pulse-damage-per-level: 4.0
+world-boss:
+  enabled: true
+  visuals:
+    pack:
+      enabled: true
+      # Separate bundled addon; keep the existing relic pack/CDN intact.
+      # Leave empty to serve judge-java.zip automatically; an external URL must host these exact bytes.
+      url: ''
+      host:
+        bind: 0.0.0.0
+        port: 8189
+        public-host: ''
+        # Optional HTTPS reverse proxy base, followed by /evergarden/<sha1>.zip.
+        public-url: ''
+  # Virtual solo HP, separately scaled from LevelledMobs. No automatic DPS adaptation.
+  core-health: 40000
+  hand-health: 8500
+  health-per-extra-player: 0.65
+  max-participants: 16
+  max-active: 2
+  exposure-seconds: 12
+  # A core opening gives 3 seconds to approach, then ordinary attacks resume while it stays open.
+  # Phase pressure: 1/2/3-pulse combos, wider areas, and 2.4/1.8/1.4-second recovery gaps.
+  # Spell damage pierces armor/enchantments; resistance, absorption and life-saving effects still work.
+  # Ordinary hits are limited to this fraction of max HP. Sky beams add 15%, capped at 80%.
+  attack-damage: 56
+  attack-max-health-fraction: 0.70
+  # Final damage after all weapon bonuses, shared across hands/core/summons per player.
+  damage-caps:
+    melee: 100
+    projectile: 80
+    magic: 240
+    other: 80
+    per-player-per-second: 240
+  # Phase 2 only. First judgment 12 seconds after transition, then at least 130 seconds apart.
+  judgment-phase-two-delay-seconds: 12
+  # 8 seconds to reach a green sanctuary. Death outside bypasses Totem/Phoenix/Soul Ward.
+  judgment-warning-seconds: 8
+  judgment-cooldown-seconds: 130
+  sanctuary-radius: 16
+  empty-reset-seconds: 30
+  fight-timeout-seconds: 1800
+  respawn-seconds: 14400
+  rewards:
+    # Every player who damaged a hand or the core also receives one random core
+    # from all 18 Advance Magic types (including Solar, Chronos and other Mythics).
+    # The roll is stored for dead/offline players and when their inventory is full.
+    keys: 2
+    experience: 1500
 rewards:
   # Vault Loot Table Percentages:
   # One reward per vault; rates are defined in VaultLootTable.
@@ -99,7 +156,8 @@ rewards:
   # 15% Limit Break Scroll, 12% Unique Enchant Scroll
   # 7% Advance Magic Core (14 normal types, equal chance)
   # 5% Special Relic Equipment
-  # 0.5% Mythic Core of Levitation, 0.5% Scroll of Eternity
+  # 0.5% Mythic Core total: Levitation / Solar Apocalypse / Chronos: Final Hour / Heaven's Judgment
+  # Four equally likely Mythic cores: 0.125% each per vault. Scroll of Eternity: 0.5%.
   # Core total: 7.5%. These comments document VaultLootTable, not configurable weights.
 relics:
   allow-pvp: false

@@ -68,6 +68,11 @@ public final class BedrockItemChecks extends JavaPlugin {
                 for(String phase:List.of("summon","idle","flight","dismiss"))
                     verify((ItemStack)makeImage.invoke(magic.flyingStaff(),phase,0),"advance_magic:flying_staff_"+phase);
                 verify(new ItemStack(Material.HONEY_BOTTLE),null);
+                for(String name:List.of("mask","mask_light","left","left_light","right","right_light","heart","shard","wing_left","wing_left_light","wing_right","wing_right_light","mantle","mantle_light")){
+                    ItemStack item=new ItemStack(Material.IRON_HELMET);var judgeMeta=item.getItemMeta();
+                    judgeMeta.setItemModel(new NamespacedKey("voidscape","judge_"+name));item.setItemMeta(judgeMeta);
+                    verify(item,"voidscape:judge_"+name);
+                }
                 // These displays are constructed inline by their services, with a
                 // vanilla carrier plus a custom_model_data string and no item_model.
                 for(String id:List.of("azure_portal","restoration_altar_whale","restoration_altar_garden","restoration_altar_observatory")){
@@ -85,6 +90,7 @@ public final class BedrockItemChecks extends JavaPlugin {
                 expectedIds.removeAll(seen);
                 if(!expectedIds.isEmpty())throw new AssertionError("Missing coverage: "+expectedIds);
                 MythicSpellChecks.run(this,magic,garden);
+                JudgeBedrockChecks.run(this);
                 Files.writeString(Path.of("bedrock-items-result.txt"),"PASS "+checks+" translations / "+seen.size()+" custom identifiers / "+Registries.ITEMS.get().size()+" Bedrock protocol tables; vanilla honey bottle unchanged");
             }catch(Throwable error){
                 getLogger().log(java.util.logging.Level.SEVERE,"BEDROCK ITEM CHECK FAILED",error);

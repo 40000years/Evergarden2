@@ -737,7 +737,11 @@ public final class RelicService implements Listener {
     }
 
     public ItemStack rollVaultReward() {
-        var random=java.util.concurrent.ThreadLocalRandom.current();
+        return rollVaultReward(java.util.concurrent.ThreadLocalRandom.current());
+    }
+
+    /** Same production table and item factories, with a repeatable source for verifying every reward. */
+    public ItemStack rollVaultReward(java.util.random.RandomGenerator random) {
         return switch(VaultLootTable.reward(random.nextInt(10000))) {
             case FLYING_STAFF -> {
                 var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");

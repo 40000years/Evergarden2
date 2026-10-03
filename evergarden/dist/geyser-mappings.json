@@ -2241,6 +2241,160 @@
           "allow_offhand": false,
           "display_handheld": false
         }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_mask",
+        "bedrock_identifier": "voidscape:judge_mask",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_mask",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_mask_light",
+        "bedrock_identifier": "voidscape:judge_mask_light",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_mask_light",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_wing_left",
+        "bedrock_identifier": "voidscape:judge_wing_left",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_wing_left",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_wing_left_light",
+        "bedrock_identifier": "voidscape:judge_wing_left_light",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_wing_left_light",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_wing_right",
+        "bedrock_identifier": "voidscape:judge_wing_right",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_wing_right",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_wing_right_light",
+        "bedrock_identifier": "voidscape:judge_wing_right_light",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_wing_right_light",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_mantle",
+        "bedrock_identifier": "voidscape:judge_mantle",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_mantle",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_mantle_light",
+        "bedrock_identifier": "voidscape:judge_mantle_light",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_mantle_light",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_left",
+        "bedrock_identifier": "voidscape:judge_left",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_left",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_left_light",
+        "bedrock_identifier": "voidscape:judge_left_light",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_left_light",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_right",
+        "bedrock_identifier": "voidscape:judge_right",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_right",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_right_light",
+        "bedrock_identifier": "voidscape:judge_right_light",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_right_light",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_heart",
+        "bedrock_identifier": "voidscape:judge_heart",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_heart",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_shard",
+        "bedrock_identifier": "voidscape:judge_shard",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_shard",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
       }
     ]
   }

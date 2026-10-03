@@ -1,8 +1,8 @@
 name: Evergarden
-version: '3.0.0-e2.26-celestial-casting'
+version: '3.0.0-e2.30-judge-rewards'
 main: com.example.voidscape.VoidscapePlugin
 api-version: '26.2'
-description: Evergarden - Sky whale, celestial observatory, hanging garden, sanctums and trial vaults.
+description: Evergarden - Ancient world boss temples, sky landmarks, sanctums and trial vaults.
 softdepend: [floodgate, advance-magic]
 provides: [Voidscape]
 loadbefore: [Geyser-Spigot]

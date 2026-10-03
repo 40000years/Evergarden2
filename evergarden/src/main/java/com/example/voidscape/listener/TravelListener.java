@@ -519,7 +519,7 @@ public final class TravelListener implements Listener {
     public void leave(Player p,boolean rescued) {
         if(!rescued&&standing.getOrDefault(p.getUniqueId(),0L)>System.currentTimeMillis())return;
         if(pending.containsKey(p.getUniqueId()))return;
-        if(!rescued&&plugin.dungeons().inCombat(p)){plugin.message(p,"ยังอยู่ระหว่างต่อสู้ · ออกจากเขตดันแล้วรอ 10 วินาที");return;}
+        if(!rescued&&(plugin.dungeons().inCombat(p)||plugin.worldBoss()!=null&&plugin.worldBoss().inCombat(p))){plugin.message(p,"ยังอยู่ระหว่างต่อสู้ · ออกจากเขตดันแล้วรอ 10 วินาที");return;}
         Location to=returnLocation(p);
         teleport(p,to,()->{
             if(rescued){p.setHealth(Math.min(p.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue(),8));plugin.message(p,"มิติส่งคุณกลับ · เก็บอุปกรณ์ไว้ แต่การต่อสู้ยังไม่สำเร็จ");}

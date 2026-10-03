@@ -100,6 +100,9 @@ public final class TemporaryTerrainService implements Listener, AutoCloseable {
                     if(!b.isPassable())break;
                     continue;
                 }
+                var permission=new com.example.advancemagic.api.MagicTerrainEvent(owner,spell,b,material);
+                Bukkit.getPluginManager().callEvent(permission);
+                if(permission.isCancelled())break;
                 // Completed casts keep their journal until the chunk has been saved.
                 // A new cast snapshots eligible ground again, including later edits.
                 Cell cell=current==null||current.reservations.isEmpty()?new Cell(b.getBlockData()):current;
@@ -136,6 +139,9 @@ public final class TemporaryTerrainService implements Listener, AutoCloseable {
                 if(cell==null||b==null||!cell.reservations.contains(this)||finished.contains(pos))continue;
                 boolean wanted=entry.getValue()<=extent;
                 if(wanted&&!active.contains(pos)){
+                    var permission=new com.example.advancemagic.api.MagicTerrainEvent(owner,spell,b,terrain.getMaterial());
+                    Bukkit.getPluginManager().callEvent(permission);
+                    if(permission.isCancelled()){finished.add(pos);continue;}
                     // Leave external edits alone; only managed terrain may replace one another.
                     if((cell.expected==null&&!b.getBlockData().equals(cell.original))
                         ||(cell.expected!=null&&b.getType()!=cell.expected.getMaterial())){

@@ -16,16 +16,23 @@ public final class StatusService implements Listener {
     private final AdvanceMagicPlugin plugin;
     private final Map<UUID,Status> roots=new HashMap<>(),frozen=new HashMap<>(),armor=new HashMap<>();
     private long tick;
+    // Encounter-owned marker; ordinary mobs and players keep their normal control effects.
+    private static final NamespacedKey CONTROL_RESISTANT = new NamespacedKey("7sins", "control_resistant");
+    private boolean controlResistant(LivingEntity e) {
+        return e.getPersistentDataContainer().has(CONTROL_RESISTANT, org.bukkit.persistence.PersistentDataType.BYTE);
+    }
     public StatusService(AdvanceMagicPlugin plugin){this.plugin=plugin;}
     private Status status(Player p,LivingEntity e,int ticks){return new Status(p,e,e.getLocation(),tick+ticks);}
-    public void freeze(Player p,LivingEntity e){frozen.put(e.getUniqueId(),status(p,e,120));}
+    public void freeze(Player p,LivingEntity e){if(!controlResistant(e))frozen.put(e.getUniqueId(),status(p,e,120));}
     public void root(Player p,LivingEntity e){
+        if(controlResistant(e))return;
         if(e instanceof Player&&!plugin.getConfig().getBoolean("compatibility.hard-player-roots",false)) {
             plugin.context().potion(e,PotionEffectType.SLOWNESS,30,4);return;
         }
         roots.put(e.getUniqueId(),status(p,e,30));plugin.context().potion(e,PotionEffectType.SLOWNESS,30,127);
     }
     public void timeLock(Player p,LivingEntity e,int ticks){
+        if(controlResistant(e))return;
         int duration=Math.clamp(ticks,2,40);
         Status old=roots.get(e.getUniqueId());
         Location anchor=old!=null&&old.caster.equals(p)&&old.target.equals(e)&&!expired(old)

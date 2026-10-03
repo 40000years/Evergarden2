@@ -23,6 +23,7 @@ final class JudgmentSealVisuals {
             var meta=item.getItemMeta();meta.setItemModel(new NamespacedKey("advance_magic","judgment_seal_"+(i%2)));
             item.setItemMeta(meta);
             seals[i]=effect.track(base.getWorld().spawn(positions[i],ItemDisplay.class,entity->{
+                entity.setRotation(0,0);
                 entity.setVisibleByDefault(false);entity.setItemStack(item);
                 entity.setItemDisplayTransform(ItemDisplay.ItemDisplayTransform.NONE);
                 entity.setGravity(false);entity.setInvulnerable(true);entity.setSilent(true);

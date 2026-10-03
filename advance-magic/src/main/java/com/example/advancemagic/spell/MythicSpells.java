@@ -249,6 +249,30 @@ public final class MythicSpells {
     private List<LivingEntity> judgmentTargets(Player p,Location at,double height) {
         return judgmentTargets(p,at,height,4);
     }
+    /** Anchor the whole column to the collision surface below the aim, not its altitude. */
+    private Location judgmentCenter(Player player) {
+        var hit=c.target(player,30);
+        Location aim;
+        if(hit==null)aim=player.getEyeLocation().add(player.getEyeLocation().getDirection().multiply(16));
+        else if(hit.getHitEntity()!=null)aim=hit.getHitEntity().getLocation().add(0,.01,0);
+        else {
+            aim=hit.getHitPosition().toLocation(player.getWorld());
+            // Stay outside a hit wall/ceiling instead of starting the floor ray inside it.
+            if(hit.getHitBlockFace()!=null)aim.add(hit.getHitBlockFace().getDirection().multiply(.01));
+        }
+        if(!c.loaded(aim))return null;
+        var ground=aim.getWorld().rayTraceBlocks(aim,new Vector(0,-1,0),
+            aim.getY()-aim.getWorld().getMinHeight()+1,FluidCollisionMode.NEVER,true);
+        if(ground==null||ground.getHitBlock()==null)return null;
+        // A long ray starting just above a block can report an inside-hit point
+        // below its top. Re-trace only the selected block from above its shape
+        // to recover the exact surface, including slabs, stairs and tall fences.
+        Location above=new Location(aim.getWorld(),aim.getX(),ground.getHitBlock().getY()+2,aim.getZ());
+        var surface=ground.getHitBlock().rayTrace(above,new Vector(0,-1,0),3,FluidCollisionMode.NEVER);
+        if(surface==null)return null;
+        Location base=surface.getHitPosition().toLocation(aim.getWorld());
+        return c.loaded(base)?base:null;
+    }
     private List<LivingEntity> judgmentTargets(Player p,Location at,double height,double radius) {
         var bounds=new org.bukkit.util.BoundingBox(at.getX()-radius,at.getY()-1,at.getZ()-radius,
             at.getX()+radius,at.getY()+height,at.getZ()+radius);
@@ -260,7 +284,7 @@ public final class MythicSpells {
             .filter(e->c.affect(p,e,Spell.HEAVENS_JUDGMENT)).toList();
     }
     public boolean judgment(Player p) {
-        Location at=center(p);
+        Location at=judgmentCenter(p);
         if(at==null||!room(at))return false;
         double scale=Math.min(1,(at.getWorld().getMaxHeight()-1-at.getY())/36.0);
         if(scale<.25)return false;

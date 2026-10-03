@@ -146,6 +146,8 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
     mesh=json.loads(z.read('assets/advance_magic/models/effect/judgment_beam.json'))
     assert mesh['textures']['beam']=='minecraft:entity/beacon_beam'
     assert len(mesh['elements'])==2 and all(not element['shade'] for element in mesh['elements'])
+    assert all(element['from'][1]==0 and element['to'][1]==16 for element in mesh['elements']), 'Both beam layers must span the full centered item height to reach the ground'
+    assert not mesh.get('display'), 'The beam must not inherit an extra item transform that shifts its endpoints'
     pack = json.loads(z.read('pack.mcmeta'))['pack']
     assert pack['min_format'] == [75, 0] and pack['max_format'] == [88, 0]
     assert 'assets/minecraft/items/carrot_on_a_stick.json' not in z.namelist()
@@ -187,6 +189,9 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     assert effect['description']['identifier']=='advance_magic:judgment_beam'
     billboard=effect['components']['minecraft:particle_appearance_billboard']
     assert billboard['facing_camera_mode']=='lookat_y'
+    assert effect['components']['minecraft:emitter_shape_point']['offset']==[0,0,0]
+    assert effect['components']['minecraft:particle_initial_speed']==0, 'Bedrock beam stays fixed between its two endpoints'
+    assert billboard['uv']['uv'][1]==0 and billboard['uv']['uv_size'][1]==128, 'Beam texture must reach both vertical edges'
     assert 'variable.beam_width' in billboard['size'][0] and 'variable.beam_height' in billboard['size'][1]
     with zipfile.ZipFile(ROOT.parent/'evergarden/dist/evergarden-bedrock.mcpack') as garden:
         assert json.loads(garden.read('particles/judgment_beam.particle.json'))==json.loads(z.read('particles/judgment_beam.particle.json'))

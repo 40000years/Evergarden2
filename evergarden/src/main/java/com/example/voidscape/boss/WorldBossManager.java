@@ -121,7 +121,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
             }
         }
         Run r=new Run(site,new Location(plugin.world(),site.x()+.5,101,site.z()+.5),
-            new JudgmentFight(number("core-health",40000,1000,10000000),number("hand-health",8500,100,1000000),
+            new JudgmentFight(number("core-health",JudgeBalance.CORE_HEALTH,1000,10000000),number("hand-health",8500,100,1000000),
                 number("health-per-extra-player",.65,0,2),seconds("exposure-seconds",12,8,30),
                 plugin.integer("world-boss.max-participants",16,1,40)));
         r.fight.join(p.getUniqueId());r.started=r.lastPresent=tick;r.nextAttack=tick+100;
@@ -502,6 +502,8 @@ public final class WorldBossManager implements Listener,AutoCloseable {
                 double hp=p.getAttribute(Attribute.MAX_HEALTH).getValue();
                 double damage=Math.min(Math.max(base,hp*.55),hp*number("attack-max-health-fraction",.70,.25,.90));
                 if(attack==Attack.SKY_BEAMS)damage=Math.min(damage*1.15,hp*.80);
+                // Apply power after the old HP ceilings so +30% really increases every red spell.
+                damage*=number("attack-power-percent",JudgeBalance.ATTACK_POWER_PERCENT,10,500)/100.0;
                 p.setNoDamageTicks(0);
                 // sonic_boom has scaling=always. Undo vanilla's Easy/Hard multiplier so the
                 // configured HP fraction stays consistent; defensive effects still run normally.

@@ -28,7 +28,7 @@ shutil.copy2(args.garden_jar,plugins/'evergarden.jar');shutil.copy2(args.magic_j
 for folder in ('Evergarden','advance-magic'):
     target=plugins/folder;target.mkdir(exist_ok=True)
     config='config-version: 2\nresource-pack:\n  enabled: false\n  host:\n    enabled: false\n'
-    if folder=='Evergarden':config+='structures:\n  world-boss-temple:\n    chance: 1.0\nworld-boss:\n  visuals:\n    pack:\n      host:\n        bind: 127.0.0.1\n        port: 0\n        public-host: 127.0.0.1\n'
+    if folder=='Evergarden':config+='structures:\n  world-boss-temple:\n    chance: 1.0\nworld-boss:\n  core-health: 40000\n  visuals:\n    pack:\n      host:\n        bind: 127.0.0.1\n        port: 0\n        public-host: 127.0.0.1\n'
     (target/'config.yml').write_text(config,encoding='utf8')
 classes=server/'probe-classes';classes.mkdir(exist_ok=True)
 deps=[*plugins.glob('*.jar'),*(server/'versions').rglob('*.jar'),*(server/'libraries').rglob('*.jar'),

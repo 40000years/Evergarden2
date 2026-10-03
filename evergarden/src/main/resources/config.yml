@@ -115,7 +115,9 @@ world-boss:
         # Optional HTTPS reverse proxy base, followed by /evergarden/<sha1>.zip.
         public-url: ''
   # Virtual solo HP, separately scaled from LevelledMobs. No automatic DPS adaptation.
-  core-health: 40000
+  # Upgrade the former 40,000 default once; custom HP values remain configurable.
+  balance-version: 1
+  core-health: 20000
   hand-health: 8500
   health-per-extra-player: 0.65
   max-participants: 16
@@ -124,9 +126,11 @@ world-boss:
   # A core opening gives 3 seconds to approach, then ordinary attacks resume while it stays open.
   # Phase pressure: 1/2/3-pulse combos, wider areas, and 2.4/1.8/1.4-second recovery gaps.
   # Spell damage pierces armor/enchantments; resistance, absorption and life-saving effects still work.
-  # Ordinary hits are limited to this fraction of max HP. Sky beams add 15%, capped at 80%.
+  # Base hits use this max HP fraction. Sky beams add 15%, capped at 80% before power.
+  # All red-circle spells gain 30% after those base ceilings and before defenses.
   attack-damage: 56
   attack-max-health-fraction: 0.70
+  attack-power-percent: 130
   # Final damage after all weapon bonuses, shared across hands/core/summons per player.
   damage-caps:
     melee: 100

@@ -1,6 +1,7 @@
 import com.example.voidscape.boss.JudgmentFight;
 import com.example.voidscape.boss.JudgmentPattern;
 import com.example.voidscape.boss.JudgeDamageBudget;
+import com.example.voidscape.boss.JudgeBalance;
 import static com.example.voidscape.boss.JudgmentFight.Part.*;
 import java.util.UUID;
 
@@ -69,7 +70,7 @@ public final class JudgmentRulesChecks {
         }
         // A deterministic endgame DPS simulation. Test the promised target instead of guessing HP.
         for(int players:new int[]{1,4,6}){
-            JudgmentFight sim=new JudgmentFight(40000,8500,.65,240,16);
+            JudgmentFight sim=new JudgmentFight(JudgeBalance.CORE_HEALTH,8500,.65,240,16);
             UUID[] ids=new UUID[players];for(int i=0;i<players;i++){ids[i]=UUID.randomUUID();sim.join(ids[i]);}
             long ticks=0;
             for(;ticks<20*1800&&!sim.won();ticks+=20){
@@ -78,7 +79,7 @@ public final class JudgmentRulesChecks {
             }
             check(sim.won(),"endgame DPS simulation completes for "+players+" players");
             double minutes=ticks/1200.0;System.out.printf("%d players at 180 applied DPS each: %.2f minutes%n",players,minutes);
-            check(minutes>=4&&minutes<=15,"endgame simulation stays within a playable time range");
+            check(minutes>=3&&minutes<=8,"lower core HP keeps the capped endgame simulation within three to eight minutes");
         }
         return checks;
     }

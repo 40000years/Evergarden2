@@ -67,9 +67,13 @@ parts, floor warnings, sounds and Thai instructions explain the encounter.
   start, so warnings never chase a player. Spell damage uses sonic-boom damage
   to pierce vanilla armor and enchantments. Resistance, absorption and plugin
   defensive effects remain active. Raw difficulty scaling is compensated on
-  Easy/Hard; ordinary hits are capped at 70% of Max HP before defenses, with
-  sky beams adding 15% up to an 80% ceiling. This prevents full-health ordinary
-  hits from accidentally becoming the forced-death mechanic.
+  Easy/Hard. Ordinary base hits are capped at 70% of Max HP, with sky beams adding
+  15% up to an 80% base ceiling. `attack-power-percent: 130` then boosts all five
+  red-circle attacks by exactly 30%, after those ceilings and before defenses.
+  Their boosted ceilings are 91% and 104% of Max HP respectively. A sufficiently
+  strong sky beam can kill through normal damage; defensive and life-saving
+  effects still apply to red spells. The phase-two judgment uses its separate
+  forced-death mechanic.
 
 | Phase | Pulses per combo | Cross warning | Wave warning | Recovery after combo |
 | --- | --- | --- | --- | --- |
@@ -104,7 +108,7 @@ automatically enrolled. Joining during a charge means joining that live mechanic
 
 ## Balance and configuration
 
-Default solo health: **40,000 core HP**, **8,500 HP per hand**. Effective HP scales
+Default solo health: **20,000 core HP** (halved from 40,000), **8,500 HP per hand**. Effective HP scales
 by `1 + 0.65 × (participants − 1)`; four players get ×2.95 and six get ×4.25.
 Health is stored in solo units and damage is divided by that factor. Existing
 boss-bar progress never jumps when someone joins, dies, leaves or disconnects.
@@ -121,10 +125,14 @@ caps apply only to this World Boss encounter; other weapons and fights retain
 their existing rules. Tune `world-boss.damage-caps` to change them.
 
 At 180 applied damage per second per player, deterministic combat simulations
-give approximately 11.2 minutes solo, 7.1 minutes with four players and 6.6 minutes
+give approximately 6.3 minutes solo, 4.1 minutes with four players and 3.9 minutes
 with six. These estimates exclude movement and warning downtime, and are tuning
 targets rather than measurements of live server equipment. Tune `world-boss`
 values in `plugins/Evergarden/config.yml` after trying the server's actual gear.
+
+On first startup with this balance update, `world-boss.balance-version` migrates
+the old 40,000 core HP default to 20,000 and adds 130% spell power. Custom HP/power
+values are preserved, and subsequent startups leave administrator edits alone.
 
 The hitboxes carry the existing Evergarden LevelledMobs exclusions and encounter
 control-resistance marker. Damage events feed shared encounter health, so Java

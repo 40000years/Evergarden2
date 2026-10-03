@@ -48,6 +48,7 @@ public final class AncientJudgeProbe extends JavaPlugin {
         magic=(AdvanceMagicPlugin)Bukkit.getPluginManager().getPlugin("advance-magic");
         check(garden!=null&&garden.isEnabled()&&magic!=null&&magic.isEnabled(),"both release plugins boot");
         boss=garden.worldBoss();World world=garden.world();
+        balanceConfigChecks();
         var site=garden.bossTemples().nearest(0,0,12);check(site!=null,"new and previously generated arenas are located");
         Path checkpoint=Path.of("judge-checkpoint.txt");
         if(Files.exists(checkpoint)){
@@ -77,6 +78,7 @@ public final class AncientJudgeProbe extends JavaPlugin {
         check(boss.inCombat(a)&&!boss.inCombat(outsider),"only actual participants enter combat; nearby visitors do not scale HP");
         Object run=((Map<?,?>)field(boss,"active")).values().iterator().next();
         JudgmentFight fight=(JudgmentFight)field(run,"fight");
+        check(fight.coreMax()==20000,"an existing 40000 HP config starts the boss with the halved 20000 core HP");
         Map<JudgmentFight.Part,Slime> targets=(Map<JudgmentFight.Part,Slime>)field(run,"targets");
         Slime left=targets.get(JudgmentFight.Part.LEFT),right=targets.get(JudgmentFight.Part.RIGHT),core=targets.get(JudgmentFight.Part.CORE);
         check(targets.size()==3&&targets.values().stream().allMatch(Entity::isValid),"all three living hitboxes bypass the dimension spawn filter");
@@ -174,9 +176,9 @@ public final class AncientJudgeProbe extends JavaPlugin {
         check(warningTicks==40,"phase-one cross has a faster two-second warning");
         for(int i=0;i<warningTicks/2-1;i++)boss.tick();
         check(outsider.getHealth()==80,"ordinary attack never damages before its full warning");
-        boss.tick();check(outsider.getHealth()>0&&outsider.getHealth()<80,"ordinary attack hurts through good armor while leaving room to recover");
+        boss.tick();check(Math.abs(outsider.getHealth()-7.2)<.02,"red crossing lanes deal 72.8 HP through armor, exactly 30 percent above the old 56 HP");
         Object sky=Arrays.stream(attack.getEnumConstants()).filter(e->e.toString().equals("SKY_BEAMS")).findFirst().orElseThrow();
-        outsider.setHealth(80);outsider.setNoDamageTicks(0);
+        outsider.getAttribute(Attribute.MAX_HEALTH).setBaseValue(100);outsider.setHealth(100);outsider.setNoDamageTicks(0);
         begin.invoke(boss,run,sky,List.of(outsider));
         List<Location> skyMarks=new ArrayList<>((List<Location>)field(run,"marks"));
         check(skyMarks.size()==6,"phase-one aerial volley creates multiple separate magic circles");
@@ -184,16 +186,16 @@ public final class AncientJudgeProbe extends JavaPlugin {
         Object bodySky=field(run,"body");Map<?,?> planesSky=(Map<?,?>)field(field(bodySky,"sigils"),"planes");
         check(planesSky.entrySet().stream().filter(e->e.getKey().toString().startsWith("attack:sky-cast:")).map(e->(ItemDisplay)e.getValue()).allMatch(e->Math.abs(e.getY()+e.getTransformation().getTranslation().y()-161.1)<.01),"aerial circles share one height above the whole crown rather than stacking");
         outsider.teleport(skyMarks.getFirst());
-        for(int i=0;i<21;i++)boss.tick();check(outsider.getHealth()==80,"aerial beams wait the full warning");
-        boss.tick();check(outsider.getHealth()<=20&&outsider.getHealth()>0,"sky beams inflict strong damage through armor without forced death; HP="+outsider.getHealth());
+        for(int i=0;i<21;i++)boss.tick();check(outsider.getHealth()==100,"aerial beams wait the full warning");
+        boss.tick();check(Math.abs(outsider.getHealth()-16.28)<.02,"red aerial beams deal 83.72 HP, exactly 30 percent above the old 64.4 HP; HP="+outsider.getHealth());
         for(int i=0;i<2;i++)boss.tick();check(planesSky.keySet().stream().filter(k->k.toString().startsWith("fx:cast:")).count()==6,"sky beams keep every aerial casting circle visible while firing");
         for(int i=0;i<24;i++)boss.tick();check(field(run,"attack")!=sky,"attack dispatcher never repeats the previous pattern consecutively");
         Object lances=Arrays.stream(attack.getEnumConstants()).filter(e->e.toString().equals("LANCES")).findFirst().orElseThrow();
-        outsider.setHealth(80);outsider.setNoDamageTicks(0);outsider.teleport(new Location(world,site.x()+.5,101,site.z()+.5));
+        outsider.getAttribute(Attribute.MAX_HEALTH).setBaseValue(80);outsider.setHealth(80);outsider.setNoDamageTicks(0);outsider.teleport(new Location(world,site.x()+.5,101,site.z()+.5));
         begin.invoke(boss,run,lances,List.of(outsider));
         check(planesSky.keySet().stream().filter(k->k.toString().startsWith("attack:lance-lane:")).count()==3,"lance attack warns three separate parallel corridors");
         for(int i=0;i<20;i++)boss.tick();
-        check(outsider.getHealth()<=25&&outsider.getHealth()>0,"lance damage matches the marked corridor through armor");
+        check(Math.abs(outsider.getHealth()-7.2)<.02,"red lance corridors also receive the exact 30 percent damage boost");
         for(int i=0;i<2;i++)boss.tick();
         check(planesSky.keySet().stream().filter(k->k.toString().startsWith("fx:lance:")).count()==3,"lance attack fires three visible horizontal rays");
         Object slam=Arrays.stream(attack.getEnumConstants()).filter(e->e.toString().equals("SLAM")).findFirst().orElseThrow();
@@ -204,7 +206,12 @@ public final class AncientJudgeProbe extends JavaPlugin {
         a.teleport(mark.clone().add(0,0,15));
         for(int i=0;i<23;i++)boss.tick();
         check(((List<Location>)field(run,"marks")).getFirst().distanceSquared(mark)<.001&&outsider.getHealth()==80,"larger slam locks its warning position and retains the full escape time");
-        boss.tick();check(outsider.getHealth()<80&&outsider.getHealth()>0,"larger slam actually damages ten blocks from its center, beyond the old eight-block radius");
+        boss.tick();check(Math.abs(outsider.getHealth()-7.2)<.02,"red slam deals 30 percent more damage ten blocks from its locked center");
+        Object ring=Arrays.stream(attack.getEnumConstants()).filter(e->e.toString().equals("RING")).findFirst().orElseThrow();
+        outsider.setHealth(80);outsider.setNoDamageTicks(0);begin.invoke(boss,run,ring,List.of(outsider));
+        outsider.teleport(new Location(world,site.x()+.5+(double)field(run,"ringRadius"),101,site.z()+.5));
+        for(int i=0;i<20;i++)boss.tick();
+        check(Math.abs(outsider.getHealth()-7.2)<.02,"red ring-wave damage also rises by exactly 30 percent");
         outsider.setInvulnerable(true);
         // Only after testing real weapon caps, raise limits to drive phase transitions quickly in this fixture.
         for(String key:List.of("melee","projectile","magic","other","per-player-per-second"))garden.getConfig().set("world-boss.damage-caps."+key,1000000);
@@ -357,6 +364,21 @@ public final class AncientJudgeProbe extends JavaPlugin {
         BlockStateSnapshot(World world,int x,int z){this(snapshot(world,x,z));}
         static List<Material> snapshot(World world,int x,int z){var list=new ArrayList<Material>();for(int a=-35;a<=35;a++)for(int b=-35;b<=35;b++)list.add(world.getBlockAt(x+a,100,z+b).getType());return list;}
         boolean matches(World world){var site=((VoidscapePlugin)Bukkit.getPluginManager().getPlugin("Evergarden")).bossTemples().nearest(0,0,12);return floor.equals(snapshot(world,site.x(),site.z()));}
+    }
+    void balanceConfigChecks(){
+        var current=garden.getConfig();
+        check(current.getDouble("world-boss.core-health")==20000&&current.getInt("world-boss.attack-power-percent")==130,"installed config uses half core HP and 130 percent red-spell power across restarts");
+        check(current.contains("world-boss.balance-version",true)&&current.getInt("world-boss.balance-version")==1,"balance migration records a persistent revision");
+        var defaults=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(new java.io.InputStreamReader(garden.getResource("config.yml"),java.nio.charset.StandardCharsets.UTF_8));
+        var legacy=new org.bukkit.configuration.file.YamlConfiguration();legacy.setDefaults(defaults);
+        legacy.set("world-boss.core-health",40000);legacy.set("world-boss.hand-health",9000);
+        JudgeBalance.upgrade(legacy);
+        check(legacy.getDouble("world-boss.core-health")==20000&&legacy.getInt("world-boss.attack-power-percent")==130&&legacy.getDouble("world-boss.hand-health")==9000,"old defaults migrate even when the new revision exists in resource defaults");
+        legacy.set("world-boss.core-health",40000);JudgeBalance.upgrade(legacy);
+        check(legacy.getDouble("world-boss.core-health")==40000,"a later explicit admin HP edit is not overwritten on another startup");
+        var custom=new org.bukkit.configuration.file.YamlConfiguration();custom.set("world-boss.core-health",26000);custom.set("world-boss.attack-power-percent",145);
+        JudgeBalance.upgrade(custom);
+        check(custom.getDouble("world-boss.core-health")==26000&&custom.getInt("world-boss.attack-power-percent")==145,"custom HP and skill-power settings survive the one-time migration");
     }
     void hotfixChecks(Player p,World world,WorldBossTempleLayout.Site site){
         for(int[] point:new int[][]{{40000,40000},{-40000,40000},{50000,0},{0,-50000},{250000,0},{499999,-499999}}){

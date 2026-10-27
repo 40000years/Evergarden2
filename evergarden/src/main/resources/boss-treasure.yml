@@ -1,0 +1,345 @@
+# Boss structure treasure: 8 decorated chests per structure. Restart after editing.
+# End City 26.2 is the baseline; equipment levels deliberately exceed vanilla ceilings.
+# Chance is 0..1. Weights are relative within each pool. Incompatible enchants are excluded.
+mechanics:
+  # Only transfer a boss enchant's awarded level. Equal levels never grow beyond it.
+  anvil-transfer: true
+  # For each boss EPF point beyond native EPF 20, reduce the remaining damage by 4%.
+  protection-extra-point-reduction: 0.04
+  # Native water movement efficiency saturates at Depth Strider III.
+  depth-strider-extra-level-speed: 0.10
+  # Preserve the small movement overflow when Swift Sneak V reaches the attribute ceiling.
+  swift-sneak-overflow: true
+equipment:
+  rolls: {min: 1, max: 2}
+  entries:
+    diamond-sword:
+      material: DIAMOND_SWORD
+      weight: 12
+      enchantments:
+        sharpness: {min: 6, max: 8, chance: 1}
+        looting: {min: 3, max: 5, chance: 0.65}
+        fire_aspect: {min: 2, max: 3, chance: 0.35}
+        sweeping_edge: {min: 3, max: 5, chance: 0.4}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    diamond-spear:
+      material: DIAMOND_SPEAR
+      weight: 5
+      enchantments:
+        sharpness: {min: 6, max: 8, chance: 1}
+        looting: {min: 3, max: 5, chance: 0.45}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    diamond-axe:
+      material: DIAMOND_AXE
+      weight: 7
+      enchantments:
+        sharpness: {min: 6, max: 8, chance: 1}
+        efficiency: {min: 6, max: 8, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    fortune-pickaxe:
+      material: DIAMOND_PICKAXE
+      weight: 12
+      enchantments:
+        efficiency: {min: 6, max: 8, chance: 1}
+        fortune: {min: 4, max: 5, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    silk-pickaxe:
+      material: DIAMOND_PICKAXE
+      weight: 5
+      enchantments:
+        efficiency: {min: 6, max: 8, chance: 1}
+        silk_touch: {min: 1, max: 1, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    diamond-shovel:
+      material: DIAMOND_SHOVEL
+      weight: 4
+      enchantments:
+        efficiency: {min: 6, max: 8, chance: 1}
+        fortune: {min: 4, max: 5, chance: 0.65}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    diamond-hoe:
+      material: DIAMOND_HOE
+      weight: 3
+      enchantments:
+        efficiency: {min: 6, max: 8, chance: 1}
+        fortune: {min: 4, max: 5, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    diamond-helmet:
+      material: DIAMOND_HELMET
+      weight: 9
+      enchantments:
+        protection: {min: 6, max: 8, chance: 1}
+        respiration: {min: 3, max: 5, chance: 0.7}
+        aqua_affinity: {min: 1, max: 1, chance: 0.65}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    diamond-chestplate:
+      material: DIAMOND_CHESTPLATE
+      weight: 9
+      enchantments:
+        protection: {min: 6, max: 8, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    diamond-leggings:
+      material: DIAMOND_LEGGINGS
+      weight: 9
+      enchantments:
+        protection: {min: 6, max: 8, chance: 1}
+        swift_sneak: {min: 3, max: 5, chance: 0.4}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    diamond-boots:
+      material: DIAMOND_BOOTS
+      weight: 9
+      enchantments:
+        protection: {min: 6, max: 8, chance: 1}
+        feather_falling: {min: 5, max: 7, chance: 1}
+        depth_strider: {min: 3, max: 5, chance: 0.65}
+        soul_speed: {min: 3, max: 5, chance: 0.35}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    frost-boots:
+      material: DIAMOND_BOOTS
+      weight: 2
+      enchantments:
+        protection: {min: 6, max: 8, chance: 1}
+        feather_falling: {min: 5, max: 7, chance: 1}
+        frost_walker: {min: 2, max: 3, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    iron-sword:
+      material: IRON_SWORD
+      weight: 2
+      enchantments:
+        sharpness: {min: 6, max: 8, chance: 1}
+        looting: {min: 3, max: 5, chance: 0.6}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    iron-chestplate:
+      material: IRON_CHESTPLATE
+      weight: 2
+      enchantments:
+        protection: {min: 6, max: 8, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    bow:
+      material: BOW
+      weight: 7
+      enchantments:
+        power: {min: 6, max: 8, chance: 1}
+        punch: {min: 2, max: 3, chance: 0.7}
+        flame: {min: 1, max: 1, chance: 0.5}
+        infinity: {min: 1, max: 1, chance: 0.35}
+        unbreaking: {min: 3, max: 5, chance: 1}
+    mending-bow:
+      material: BOW
+      weight: 3
+      enchantments:
+        power: {min: 6, max: 8, chance: 1}
+        punch: {min: 2, max: 3, chance: 0.7}
+        flame: {min: 1, max: 1, chance: 0.5}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    piercing-crossbow:
+      material: CROSSBOW
+      weight: 5
+      enchantments:
+        quick_charge: {min: 3, max: 4, chance: 1}
+        piercing: {min: 4, max: 6, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    multishot-crossbow:
+      material: CROSSBOW
+      weight: 3
+      enchantments:
+        quick_charge: {min: 3, max: 4, chance: 1}
+        multishot: {min: 1, max: 1, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    loyalty-trident:
+      material: TRIDENT
+      weight: 4
+      enchantments:
+        impaling: {min: 6, max: 8, chance: 1}
+        loyalty: {min: 3, max: 4, chance: 1}
+        channeling: {min: 1, max: 1, chance: 0.5}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    riptide-trident:
+      material: TRIDENT
+      weight: 2
+      enchantments:
+        impaling: {min: 6, max: 8, chance: 1}
+        riptide: {min: 3, max: 4, chance: 1}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    density-mace:
+      material: MACE
+      weight: 3
+      enchantments:
+        density: {min: 5, max: 7, chance: 1}
+        wind_burst: {min: 1, max: 3, chance: 0.4}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    breach-mace:
+      material: MACE
+      weight: 2
+      enchantments:
+        breach: {min: 4, max: 5, chance: 1}
+        wind_burst: {min: 1, max: 3, chance: 0.35}
+        unbreaking: {min: 3, max: 5, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.18}
+    shield:
+      material: SHIELD
+      weight: 4
+      enchantments:
+        unbreaking: {min: 4, max: 6, chance: 1}
+        mending: {min: 1, max: 1, chance: 0.35}
+    book-sharpness:
+      material: ENCHANTED_BOOK
+      weight: 3
+      enchantments:
+        sharpness: {min: 6, max: 8, chance: 1}
+    book-protection:
+      material: ENCHANTED_BOOK
+      weight: 3
+      enchantments:
+        protection: {min: 6, max: 8, chance: 1}
+    book-fortune:
+      material: ENCHANTED_BOOK
+      weight: 3
+      enchantments:
+        fortune: {min: 4, max: 5, chance: 1}
+    book-efficiency:
+      material: ENCHANTED_BOOK
+      weight: 3
+      enchantments:
+        efficiency: {min: 6, max: 8, chance: 1}
+    book-power:
+      material: ENCHANTED_BOOK
+      weight: 3
+      enchantments:
+        power: {min: 6, max: 8, chance: 1}
+    book-mending:
+      material: ENCHANTED_BOOK
+      weight: 3
+      enchantments:
+        mending: {min: 1, max: 1, chance: 1}
+resources:
+  rolls: {min: 2, max: 4}
+  entries:
+    diamond:
+      material: DIAMOND
+      weight: 10
+      min: 2
+      max: 7
+    iron_ingot:
+      material: IRON_INGOT
+      weight: 12
+      min: 4
+      max: 12
+    gold_ingot:
+      material: GOLD_INGOT
+      weight: 15
+      min: 2
+      max: 10
+    emerald:
+      material: EMERALD
+      weight: 5
+      min: 2
+      max: 6
+    ender_pearl:
+      material: ENDER_PEARL
+      weight: 8
+      min: 2
+      max: 6
+    chorus_fruit:
+      material: CHORUS_FRUIT
+      weight: 7
+      min: 4
+      max: 12
+    experience_bottle:
+      material: EXPERIENCE_BOTTLE
+      weight: 9
+      min: 6
+      max: 16
+    arrow:
+      material: ARROW
+      weight: 8
+      min: 16
+      max: 48
+    spectral_arrow:
+      material: SPECTRAL_ARROW
+      weight: 4
+      min: 8
+      max: 24
+    golden_apple:
+      material: GOLDEN_APPLE
+      weight: 3
+      min: 1
+      max: 2
+    amethyst_shard:
+      material: AMETHYST_SHARD
+      weight: 6
+      min: 4
+      max: 12
+    beetroot_seeds:
+      material: BEETROOT_SEEDS
+      weight: 2
+      min: 2
+      max: 8
+rare:
+  chance: 0.15
+  entries:
+    spire_armor_trim_smithing_template:
+      material: SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE
+      weight: 6
+      min: 1
+      max: 1
+    saddle:
+      material: SADDLE
+      weight: 8
+      min: 1
+      max: 1
+    diamond_horse_armor:
+      material: DIAMOND_HORSE_ARMOR
+      weight: 5
+      min: 1
+      max: 1
+    golden_horse_armor:
+      material: GOLDEN_HORSE_ARMOR
+      weight: 5
+      min: 1
+      max: 1
+    shulker_shell:
+      material: SHULKER_SHELL
+      weight: 5
+      min: 1
+      max: 2
+    netherite_scrap:
+      material: NETHERITE_SCRAP
+      weight: 2
+      min: 1
+      max: 2
+    name_tag:
+      material: NAME_TAG
+      weight: 6
+      min: 1
+      max: 1
+    end_crystal:
+      material: END_CRYSTAL
+      weight: 4
+      min: 1
+      max: 2
+    enchanted_golden_apple:
+      material: ENCHANTED_GOLDEN_APPLE
+      weight: 1
+      min: 1
+      max: 1

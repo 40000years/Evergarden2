@@ -3,5 +3,13 @@
   "name": "Cathedral wings + suspended mantle",
   "models": 14,
   "components": 25,
-  "bedrock-version": "3.19.0"
+  "bedrock-version": "3.62.0",
+  "admin-preview": {
+    "revision": "seraph-celestial-v3",
+    "texture-size": 1024,
+    "poses": [
+      "judge_seraph_idle",
+      "judge_seraph_cast"
+    ]
+  }
 }

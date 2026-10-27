@@ -20,6 +20,7 @@ import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
+import org.bukkit.util.BoundingBox;
 import java.util.*;
 
 public final class TravelListener implements Listener {
@@ -27,6 +28,7 @@ public final class TravelListener implements Listener {
     private final Map<UUID,Long> standing=new HashMap<>(),pending=new HashMap<>(),fallGrace=new HashMap<>();
     private final Map<UUID,UUID> flowerOfferingOwners=new java.util.concurrent.ConcurrentHashMap<>();
     private final Map<UUID,Long> flowerOfferingExpires=new java.util.concurrent.ConcurrentHashMap<>();
+    private final Set<UUID> mustExitPortal = new HashSet<>();
     private final PortalVisuals visuals;
     public TravelListener(VoidscapePlugin plugin){
         this.plugin=plugin;visuals=new PortalVisuals(plugin);
@@ -243,9 +245,7 @@ public final class TravelListener implements Listener {
         Location loc=b.getLocation().add(0.5,0.5,0.5);
         p.getWorld().playSound(loc,Sound.BLOCK_RESPAWN_ANCHOR_SET_SPAWN,1.0f,0.8f);
         p.getWorld().playSound(loc,Sound.BLOCK_END_PORTAL_SPAWN,0.8f,1.2f);
-        p.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,loc,40,1.0,1.5,1.0,0.01);
-        p.getWorld().spawnParticle(Particle.SOUL_FIRE_FLAME,loc,20,0.5,1.0,0.5,0.03);
-        plugin.message(p,"ประตูมิติความว่างเปล่า (Evergarden Portal) เปิดออกแล้ว!");
+        p.getWorld().spawnParticle(Particle.PORTAL,loc,20,0.5,1.0,0.5,0.03);
     }
 
     private boolean checkAndFillPortal(Block start,Axis axis) {
@@ -342,7 +342,7 @@ public final class TravelListener implements Listener {
             for(BlockFace face:new BlockFace[]{BlockFace.NORTH,BlockFace.SOUTH,BlockFace.EAST,BlockFace.WEST,BlockFace.UP,BlockFace.DOWN}) {
                 Block adj=curr.getRelative(face);
                 if(adj.getType()==Material.QUARTZ_BLOCK)return true;
-                if(adj.getType()==Material.STRUCTURE_VOID&&visited.add(adj)) {
+                if(isPortalMaterial(adj)&&visited.add(adj)) {
                     queue.add(adj);
                 }
             }
@@ -350,26 +350,29 @@ public final class TravelListener implements Listener {
         return false;
     }
 
-    private Block findQuartzPortalBlock(Player p, Location from) {
-        if(from!=null&&from.getWorld()==p.getWorld()&&isPortalMaterial(from.getBlock())) {
-            if(isQuartzPortal(from.getBlock())) return from.getBlock();
-        }
-        Block feet=p.getLocation().getBlock();
-        if(isPortalMaterial(feet)&&isQuartzPortal(feet)) return feet;
-        Block eye=p.getEyeLocation().getBlock();
-        if(isPortalMaterial(eye)&&isQuartzPortal(eye)) return eye;
-        Location loc=p.getLocation();
-        int px=loc.getBlockX(),py=loc.getBlockY(),pz=loc.getBlockZ();
-        for(int dx=-1;dx<=1;dx++) {
-            for(int dy=-1;dy<=2;dy++) {
-                for(int dz=-1;dz<=1;dz++) {
-                    Block b=loc.getWorld().getBlockAt(px+dx,py+dy,pz+dz);
-                    if(isPortalMaterial(b)&&isQuartzPortal(b)) {
-                        return b;
-                    }
+    private Block findQuartzPortalBlock(Player p, Location location) {
+        if(location==null)location=p.getLocation();
+        Block feet=location.getBlock();
+        if(isPortalMaterial(feet)&&isQuartzPortal(feet))return feet;
+        Block head=location.clone().add(0,p.getEyeHeight(),0).getBlock();
+        if(isPortalMaterial(head)&&isQuartzPortal(head))return head;
+        return findQuartzPortalContact(p,location);
+    }
+
+    private Block findQuartzPortalContact(Entity entity,Location location) {
+        // Vanilla portal contact includes the entity's body, even when its feet/head
+        // remain in the adjacent air block. Use the event position for move events.
+        Location current=entity.getLocation();
+        BoundingBox body=entity.getBoundingBox().clone().shift(
+            location.getX()-current.getX(),location.getY()-current.getY(),location.getZ()-current.getZ());
+        World world=location.getWorld();
+        for(int x=(int)Math.floor(body.getMinX());x<Math.ceil(body.getMaxX());x++)
+            for(int y=(int)Math.floor(body.getMinY());y<Math.ceil(body.getMaxY());y++)
+                for(int z=(int)Math.floor(body.getMinZ());z<Math.ceil(body.getMaxZ());z++) {
+                    Block block=world.getBlockAt(x,y,z);
+                    if(isPortalMaterial(block)&&body.overlaps(new BoundingBox(x,y,z,x+1,y+1,z+1))
+                        &&isQuartzPortal(block))return block;
                 }
-            }
-        }
         return null;
     }
 
@@ -379,7 +382,7 @@ public final class TravelListener implements Listener {
 
     @EventHandler(priority=EventPriority.NORMAL,ignoreCancelled=true)
     public void blockPhysics(BlockPhysicsEvent e) {
-        if(e.getBlock().getType()==Material.STRUCTURE_VOID) {
+        if(isPortalMaterial(e.getBlock())) {
             if(isQuartzPortal(e.getBlock())) {
                 e.setCancelled(true);
             }
@@ -389,42 +392,30 @@ public final class TravelListener implements Listener {
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void portalEvent(PlayerPortalEvent e) {
         Player p=e.getPlayer();
-        if(p.getWorld()==plugin.world()&&visuals.contains(e.getFrom().getBlock())) {
-            e.setCancelled(true);
-            leave(p,false);
-            return;
-        }
         Block block=findQuartzPortalBlock(p,e.getFrom());
-        if(block!=null) {
-            e.setCancelled(true);
-            enter(p);
-        }
+        if(block==null)return;
+        e.setCancelled(true);
+        if(mustExitPortal.contains(p.getUniqueId()))return;
+        if(p.getWorld()==plugin.world())leave(p,false);
+        else if(allowedEntryWorld(p))enter(p);
+    }
+
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void entityPortal(org.bukkit.event.entity.EntityPortalEvent e) {
+        if(findQuartzPortalContact(e.getEntity(),e.getFrom())!=null)e.setCancelled(true);
     }
 
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
     public void move(PlayerMoveEvent e) {
-        if(!e.hasChangedBlock())return;
         Player p=e.getPlayer();
-        Block b=p.getLocation().getBlock();
-        if(!visuals.contains(b)) {
-            Block eye = p.getEyeLocation().getBlock();
-            if (visuals.contains(eye)) {
-                b = eye;
-            } else {
-                b = findQuartzPortalBlock(p, p.getLocation());
-                if (b == null) return;
-            }
+        Block block=findQuartzPortalBlock(p,e.getTo());
+        if(block==null) {
+            mustExitPortal.remove(p.getUniqueId());
+            return;
         }
-        if(p.getWorld()==plugin.world()) {
-            // Return portal at spawn island
-            if(Math.abs(b.getX())<=3&&b.getZ()<=-4&&b.getZ()>=-6) {
-                leave(p,false);
-            }
-        } else if(allowedEntryWorld(p)) {
-            if(findQuartzPortalBlock(p,b.getLocation())!=null) {
-                enter(p);
-            }
-        }
+        if(mustExitPortal.contains(p.getUniqueId()))return;
+        if(p.getWorld()==plugin.world())leave(p,false);
+        else if(allowedEntryWorld(p))enter(p);
     }
 
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
@@ -495,6 +486,7 @@ public final class TravelListener implements Listener {
     }
 
     public void enter(Player p) {
+        if(mustExitPortal.contains(p.getUniqueId()))return;
         if(standing.getOrDefault(p.getUniqueId(),0L)>System.currentTimeMillis())return;
         if(p.getWorld()==plugin.world()||pending.containsKey(p.getUniqueId()))return;
         Location from=p.getLocation();
@@ -509,21 +501,19 @@ public final class TravelListener implements Listener {
                     var leftover = p.getInventory().addItem(book);
                     if(!leftover.isEmpty()) p.getWorld().dropItemNaturally(p.getLocation(), book);
                 }
-                plugin.message(p,"ยินดีต้อนรับสู่ Evergarden! มอบชุดคู่มือแนะนำการเล่นครบทั้ง 3 เล่มให้แล้ว");
             }
-            plugin.message(p,"✦ เดินตามสะพานแสงหรือใช้ Elytra สำรวจเพื่อค้นหาวิหารทั้ง 3 · /evergarden guide");
             p.playSound(p.getLocation(),Sound.BLOCK_PORTAL_TRAVEL,0.7f,1.0f);
         });
     }
 
     public void leave(Player p,boolean rescued) {
+        if(!rescued&&mustExitPortal.contains(p.getUniqueId()))return;
         if(!rescued&&standing.getOrDefault(p.getUniqueId(),0L)>System.currentTimeMillis())return;
         if(pending.containsKey(p.getUniqueId()))return;
         if(!rescued&&(plugin.dungeons().inCombat(p)||plugin.worldBoss()!=null&&plugin.worldBoss().inCombat(p))){plugin.message(p,"ยังอยู่ระหว่างต่อสู้ · ออกจากเขตดันแล้วรอ 10 วินาที");return;}
         Location to=returnLocation(p);
         teleport(p,to,()->{
             if(rescued){p.setHealth(Math.min(p.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).getValue(),8));plugin.message(p,"มิติส่งคุณกลับ · เก็บอุปกรณ์ไว้ แต่การต่อสู้ยังไม่สำเร็จ");}
-            else plugin.message(p,"กลับจากมิติ Evergarden แล้ว");
         });
     }
 
@@ -546,7 +536,7 @@ public final class TravelListener implements Listener {
         p.teleportAsync(destination).whenComplete((success,error)->Bukkit.getScheduler().runTask(plugin,()->{
             pending.remove(id);
             if(!p.isOnline())return;
-            if(error==null&&Boolean.TRUE.equals(success)) {standing.put(id,System.currentTimeMillis()+3000);p.setFallDistance(0);p.setVelocity(new Vector());fallGrace.put(id,System.currentTimeMillis()+5000);done.run();}
+            if(error==null&&Boolean.TRUE.equals(success)) {standing.put(id,System.currentTimeMillis()+3000);mustExitPortal.add(id);p.setFallDistance(0);p.setVelocity(new Vector());fallGrace.put(id,System.currentTimeMillis()+5000);done.run();}
             else plugin.message(p,"วาร์ปไม่สำเร็จหรือถูกระบบอื่นปฏิเสธ");
         }));
     }
@@ -557,7 +547,7 @@ public final class TravelListener implements Listener {
         if(p.getWorld()!=plugin.world())return;
         if(p.getGameMode()==GameMode.CREATIVE||p.getGameMode()==GameMode.SPECTATOR)return;
         long now=System.currentTimeMillis();
-        if(plugin.relics().immune(p)||pending.getOrDefault(p.getUniqueId(),0L)>now){e.setCancelled(true);return;}
+        if(pending.getOrDefault(p.getUniqueId(),0L)>now){e.setCancelled(true);return;}
         // Void rescue: safe return if falling into the void
         if(e.getCause()==EntityDamageEvent.DamageCause.VOID || p.getLocation().getY() < 0) {
             e.setCancelled(true);
@@ -571,7 +561,12 @@ public final class TravelListener implements Listener {
         }
     }
 
-    @EventHandler public void quit(PlayerQuitEvent e){UUID id=e.getPlayer().getUniqueId();standing.remove(id);pending.remove(id);fallGrace.remove(id);}
+    @EventHandler public void quit(PlayerQuitEvent e){UUID id=e.getPlayer().getUniqueId();standing.remove(id);pending.remove(id);fallGrace.remove(id);mustExitPortal.remove(id);}
+
+    @EventHandler public void join(PlayerJoinEvent e) {
+        if(findQuartzPortalBlock(e.getPlayer(),e.getPlayer().getLocation())!=null)
+            mustExitPortal.add(e.getPlayer().getUniqueId());
+    }
 
     public void tick() {
         visuals.tick();

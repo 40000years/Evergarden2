@@ -122,9 +122,7 @@ public final class SkyLandmarkLayout {
             if (wx * wx + wz * wz <= 1) return null;
         }
 
-        // Avoid temples
-        for (DungeonLayout.Site temple : temples.nearby(x, z))
-            if (Math.abs(x - temple.x()) < 104 && Math.abs(z - temple.z()) < 104) return null;
+        // Sanctum dungeons give way to landmarks (DungeonLayout.reserve).
 
         return new Site(kind, x, z);
     }

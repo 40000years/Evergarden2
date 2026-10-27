@@ -1,0 +1,248 @@
+{
+  "acheron": {
+    "rare_materials": {
+      "gold_block": 2
+    },
+    "total": 2,
+    "aggregate_limit": 128,
+    "per_material_limits": {
+      "gold_block": 4,
+      "iron_block": 8,
+      "waxed_cut_copper": 12,
+      "anvil": 2,
+      "blast_furnace": 4,
+      "cauldron": 2,
+      "brewing_stand": 1,
+      "enchanting_table": 1,
+      "quartz_block": 24,
+      "quartz_pillar": 24,
+      "smooth_quartz": 24,
+      "quartz_bricks": 24,
+      "amethyst_block": 12,
+      "sea_lantern": 8,
+      "end_rod": 6,
+      "dark_prismarine": 24,
+      "blue_ice": 8
+    },
+    "construction_share_percent": 0.00054,
+    "furnished_spaces": 22,
+    "room_functions": {
+      "council": 1,
+      "study": 1,
+      "sitting": 3,
+      "bedchamber": 2,
+      "archive": 2,
+      "relics": 2,
+      "guestroom": 2,
+      "cartography": 2,
+      "music": 2,
+      "library": 2,
+      "infirmary": 2,
+      "dining": 1
+    }
+  },
+  "phlegethon": {
+    "rare_materials": {
+      "waxed_cut_copper": 5,
+      "blast_furnace": 2,
+      "anvil": 2
+    },
+    "total": 9,
+    "aggregate_limit": 128,
+    "per_material_limits": {
+      "gold_block": 4,
+      "iron_block": 8,
+      "waxed_cut_copper": 12,
+      "anvil": 2,
+      "blast_furnace": 4,
+      "cauldron": 2,
+      "brewing_stand": 1,
+      "enchanting_table": 1,
+      "quartz_block": 24,
+      "quartz_pillar": 24,
+      "smooth_quartz": 24,
+      "quartz_bricks": 24,
+      "amethyst_block": 12,
+      "sea_lantern": 8,
+      "end_rod": 6,
+      "dark_prismarine": 24,
+      "blue_ice": 8
+    },
+    "construction_share_percent": 0.00265,
+    "furnished_spaces": 12,
+    "room_functions": {
+      "toolroom": 1,
+      "workshop": 3,
+      "dining": 1,
+      "control": 1,
+      "archive": 1,
+      "study": 1,
+      "casting press": 4
+    }
+  },
+  "cocytus": {
+    "rare_materials": {
+      "gold_block": 1,
+      "quartz_pillar": 24,
+      "blue_ice": 5,
+      "sea_lantern": 2
+    },
+    "total": 32,
+    "aggregate_limit": 128,
+    "per_material_limits": {
+      "gold_block": 4,
+      "iron_block": 8,
+      "waxed_cut_copper": 12,
+      "anvil": 2,
+      "blast_furnace": 4,
+      "cauldron": 2,
+      "brewing_stand": 1,
+      "enchanting_table": 1,
+      "quartz_block": 24,
+      "quartz_pillar": 24,
+      "smooth_quartz": 24,
+      "quartz_bricks": 24,
+      "amethyst_block": 12,
+      "sea_lantern": 8,
+      "end_rod": 6,
+      "dark_prismarine": 24,
+      "blue_ice": 8
+    },
+    "construction_share_percent": 0.00885,
+    "furnished_spaces": 24,
+    "room_functions": {
+      "chapel": 3,
+      "music": 3,
+      "infirmary": 3,
+      "guestroom": 4,
+      "library": 2,
+      "dining": 2,
+      "study": 3,
+      "relics": 2,
+      "sitting": 2
+    }
+  },
+  "banshee": {
+    "rare_materials": {
+      "sea_lantern": 1,
+      "cauldron": 2
+    },
+    "total": 3,
+    "aggregate_limit": 128,
+    "per_material_limits": {
+      "gold_block": 4,
+      "iron_block": 8,
+      "waxed_cut_copper": 12,
+      "anvil": 2,
+      "blast_furnace": 4,
+      "cauldron": 2,
+      "brewing_stand": 1,
+      "enchanting_table": 1,
+      "quartz_block": 24,
+      "quartz_pillar": 24,
+      "smooth_quartz": 24,
+      "quartz_bricks": 24,
+      "amethyst_block": 12,
+      "sea_lantern": 8,
+      "end_rod": 6,
+      "dark_prismarine": 24,
+      "blue_ice": 8
+    },
+    "construction_share_percent": 0.00084,
+    "furnished_spaces": 28,
+    "room_functions": {
+      "kitchen": 3,
+      "dining": 4,
+      "sitting": 3,
+      "bedchamber": 4,
+      "music": 5,
+      "archive": 4,
+      "guestroom": 3,
+      "study": 2
+    }
+  },
+  "malefeasance": {
+    "rare_materials": {
+      "waxed_cut_copper": 3,
+      "gold_block": 2,
+      "amethyst_block": 4,
+      "quartz_pillar": 4,
+      "quartz_block": 4,
+      "end_rod": 4
+    },
+    "total": 21,
+    "aggregate_limit": 128,
+    "per_material_limits": {
+      "gold_block": 4,
+      "iron_block": 8,
+      "waxed_cut_copper": 12,
+      "anvil": 2,
+      "blast_furnace": 4,
+      "cauldron": 2,
+      "brewing_stand": 1,
+      "enchanting_table": 1,
+      "quartz_block": 24,
+      "quartz_pillar": 24,
+      "smooth_quartz": 24,
+      "quartz_bricks": 24,
+      "amethyst_block": 12,
+      "sea_lantern": 8,
+      "end_rod": 6,
+      "dark_prismarine": 24,
+      "blue_ice": 8
+    },
+    "construction_share_percent": 0.00683,
+    "furnished_spaces": 14,
+    "room_functions": {
+      "library": 1,
+      "study": 2,
+      "guestroom": 2,
+      "council": 1,
+      "archive": 1,
+      "relics": 1,
+      "sitting": 2,
+      "cartography": 2,
+      "laboratory": 2
+    }
+  },
+  "styx": {
+    "rare_materials": {
+      "gold_block": 2,
+      "iron_block": 2
+    },
+    "total": 4,
+    "aggregate_limit": 128,
+    "per_material_limits": {
+      "gold_block": 4,
+      "iron_block": 8,
+      "waxed_cut_copper": 12,
+      "anvil": 2,
+      "blast_furnace": 4,
+      "cauldron": 2,
+      "brewing_stand": 1,
+      "enchanting_table": 1,
+      "quartz_block": 24,
+      "quartz_pillar": 24,
+      "smooth_quartz": 24,
+      "quartz_bricks": 24,
+      "amethyst_block": 12,
+      "sea_lantern": 8,
+      "end_rod": 6,
+      "dark_prismarine": 24,
+      "blue_ice": 8
+    },
+    "construction_share_percent": 0.00124,
+    "furnished_spaces": 10,
+    "room_functions": {
+      "council": 1,
+      "toolroom": 1,
+      "bunks": 1,
+      "cartography": 1,
+      "dining": 1,
+      "archive": 1,
+      "guestroom": 1,
+      "study": 1,
+      "sitting": 2
+    }
+  }
+}

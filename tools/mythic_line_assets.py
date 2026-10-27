@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 ART=Path(__file__).resolve().parents[1]/'advance-magic/art/effects'
-PLANES=('solar_corona','solar_orbit','chronos_dial','chronos_minute','chronos_hour','chronos_ripple')
+PLANES=('solar_corona','solar_orbit','chronos_dial','chronos_minute','chronos_hour','chronos_ripple','shulker_prism')
 RAYS=('solar_ray','chronos_ray','chronos_echo')
 
 

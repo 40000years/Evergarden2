@@ -81,13 +81,14 @@ public final class JavaEffectAtlasChecks {
                 }
                 if(usedAtlases.size()>1)throw new AssertionError("Mixed atlases: "+entry.getKey());
             }
-            if(models!=12)throw new AssertionError("Expected all 12 spell effect models, got "+models);
+            int expectedModels=expectMissing?12:26;
+            if(models!=expectedModels)throw new AssertionError("Expected all "+expectedModels+" spell effect models, got "+models);
             if(expectMissing) {
                 if(missing.size()!=12)throw new AssertionError("Expected original 12 missing sprites, got "+missing);
                 System.out.println("REPRODUCED: Java cannot resolve all 12 effect sprites: "+missing);
             } else {
                 if(!missing.isEmpty())throw new AssertionError("Missing Java atlas sprites: "+missing);
-                System.out.println("PASS: actual client atlas loader resolves all 12 effect models to readable PNGs in one atlas per model");
+                System.out.println("PASS: actual client atlas loader resolves all 26 legacy and legendary effect models to readable PNGs in one atlas per model");
             }
         }
     }

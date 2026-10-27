@@ -8,6 +8,7 @@ public final class CastAccount {
     private double mana;
     private double maxMana = 100.0;
     private double regenRate = 2.0;
+    private double bonusMaxMana;
     private final Map<String, Long> cooldowns = new HashMap<>();
 
     public CastAccount(int mana) {
@@ -26,13 +27,15 @@ public final class CastAccount {
 
     public int mana() { return (int)Math.round(mana); }
     public double manaExact() { return mana; }
-    public int maxManaInt() { return (int)Math.round(maxMana); }
-    public double maxMana() { return maxMana; }
+    public int maxManaInt() { return (int)Math.round(maxMana()); }
+    public double maxMana() { return Math.min(300,maxMana+bonusMaxMana); }
+    public double baseMaxMana() { return maxMana; }
+    public void setBonusMaxMana(double bonus) { bonusMaxMana=Double.isFinite(bonus)?Math.max(0,bonus):0;mana=Math.min(mana,maxMana()); }
     public double regenRate() { return regenRate; }
 
     public void setMaxMana(double max) {
         this.maxMana = Math.max(10.0, Math.min(300.0, max));
-        this.mana = Math.min(this.maxMana, this.mana);
+        this.mana = Math.min(maxMana(), this.mana);
     }
 
     public void setRegenRate(double rate) {
@@ -40,12 +43,15 @@ public final class CastAccount {
     }
 
     public void setMana(double mana) {
-        this.mana = Math.max(0.0, Math.min(this.maxMana, mana));
+        this.mana = Math.max(0.0, Math.min(maxMana(), mana));
     }
 
     public boolean regenerate() {
-        if (mana >= maxMana) return false;
-        mana = Math.min(maxMana, mana + regenRate);
+        return regenerate(regenRate);
+    }
+    public boolean regenerate(double amount) {
+        if (!Double.isFinite(amount)||amount<=0||mana >= maxMana()) return false;
+        mana = Math.min(maxMana(), mana + amount);
         return true;
     }
 
@@ -65,7 +71,7 @@ public final class CastAccount {
     }
 
     public void refund(String spell, int cost) {
-        mana = Math.min(maxMana, mana + cost);
+        mana = Math.min(maxMana(), mana + cost);
         cooldowns.remove(spell);
     }
 

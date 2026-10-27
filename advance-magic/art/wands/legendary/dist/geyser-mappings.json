@@ -1,0 +1,43 @@
+{
+  "format_version": 2,
+  "items": {
+    "minecraft:carrot_on_a_stick": [
+      {
+        "type": "definition",
+        "model": "advance_magic:verdant_sovereign",
+        "bedrock_identifier": "advance_magic:verdant_sovereign",
+        "display_name": "Verdant Sovereign",
+        "bedrock_options": {
+          "icon": "advance_magic.verdant_sovereign",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:lunar_requiem",
+        "bedrock_identifier": "advance_magic:lunar_requiem",
+        "display_name": "Lunar Requiem",
+        "bedrock_options": {
+          "icon": "advance_magic.lunar_requiem",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:crimson_oblivion",
+        "bedrock_identifier": "advance_magic:crimson_oblivion",
+        "display_name": "Crimson Oblivion",
+        "bedrock_options": {
+          "icon": "advance_magic.crimson_oblivion",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      }
+    ]
+  }
+}

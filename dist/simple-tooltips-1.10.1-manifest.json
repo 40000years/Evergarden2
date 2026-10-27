@@ -1,0 +1,13 @@
+{
+  "version": "1.10.1-simple-tooltips",
+  "jar": "advance-magic-1.10.1.jar",
+  "sha256": "13f33694effb291a052954b2aed54df98f0ec58ee36130c5958aa79e9335c9cd",
+  "changes": [
+    "single-line weapon hint; hide attribute tooltip",
+    "single-line mana potion hint; remove numeric details and dose thresholds",
+    "automatically simplify existing tagged items"
+  ],
+  "paper_runtime_checks": 138,
+  "weapon_asset_checks": 236,
+  "packs": "unchanged from 1.10.0"
+}

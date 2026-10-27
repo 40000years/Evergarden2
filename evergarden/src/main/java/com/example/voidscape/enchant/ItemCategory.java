@@ -14,8 +14,8 @@ public enum ItemCategory {
             case HOE -> name.endsWith("_HOE");
             case AXE -> name.endsWith("_AXE");
             case TOOL -> name.endsWith("_PICKAXE") || name.endsWith("_AXE") || name.endsWith("_SHOVEL") || name.endsWith("_HOE");
-            case SWORD -> name.endsWith("_SWORD");
-            case MELEE -> name.endsWith("_SWORD") || name.endsWith("_AXE") || mat == Material.TRIDENT || mat == Material.MACE;
+            case SWORD -> name.endsWith("_SWORD") || name.endsWith("_SPEAR");
+            case MELEE -> name.endsWith("_SWORD") || name.endsWith("_SPEAR") || name.endsWith("_AXE") || mat == Material.TRIDENT || mat == Material.MACE;
             case MACE -> mat == Material.MACE;
             case TRIDENT -> mat == Material.TRIDENT;
             case HELMET -> name.endsWith("_HELMET") || mat == Material.TURTLE_HELMET;

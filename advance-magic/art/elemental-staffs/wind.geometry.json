@@ -1,0 +1,7060 @@
+{
+  "id": "wind",
+  "grip": [
+    8,
+    11.2,
+    8
+  ],
+  "cubes": [
+    {
+      "name": "ivory_000",
+      "from": [
+        7.59,
+        1.5,
+        7.55
+      ],
+      "to": [
+        8.41,
+        22,
+        8.45
+      ],
+      "mat": "ivory",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_light_001",
+      "from": [
+        7.61,
+        2,
+        7.39
+      ],
+      "to": [
+        7.83,
+        21.6,
+        8.61
+      ],
+      "mat": "silver_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_002",
+      "from": [
+        7.44,
+        9.4,
+        7.4
+      ],
+      "to": [
+        8.56,
+        13.0,
+        8.6
+      ],
+      "mat": "leather",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_003",
+      "from": [
+        7.35,
+        9.6,
+        7.31
+      ],
+      "to": [
+        8.65,
+        9.77,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_004",
+      "from": [
+        7.35,
+        10.2,
+        7.31
+      ],
+      "to": [
+        8.65,
+        10.37,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_005",
+      "from": [
+        7.35,
+        10.8,
+        7.31
+      ],
+      "to": [
+        8.65,
+        10.97,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_006",
+      "from": [
+        7.35,
+        11.4,
+        7.31
+      ],
+      "to": [
+        8.65,
+        11.57,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_007",
+      "from": [
+        7.35,
+        12.0,
+        7.31
+      ],
+      "to": [
+        8.65,
+        12.17,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_008",
+      "from": [
+        7.35,
+        12.6,
+        7.31
+      ],
+      "to": [
+        8.65,
+        12.77,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_009",
+      "from": [
+        7.175,
+        2.1,
+        7.175
+      ],
+      "to": [
+        8.825,
+        2.6,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_010",
+      "from": [
+        7.305,
+        2.47,
+        7.095
+      ],
+      "to": [
+        8.695,
+        2.66,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_011",
+      "from": [
+        7.175,
+        5.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        5.7,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_012",
+      "from": [
+        7.305,
+        5.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        5.76,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_013",
+      "from": [
+        7.175,
+        9.15,
+        7.175
+      ],
+      "to": [
+        8.825,
+        9.65,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_014",
+      "from": [
+        7.305,
+        9.52,
+        7.095
+      ],
+      "to": [
+        8.695,
+        9.71,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_015",
+      "from": [
+        7.175,
+        13.05,
+        7.175
+      ],
+      "to": [
+        8.825,
+        13.55,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_016",
+      "from": [
+        7.305,
+        13.42,
+        7.095
+      ],
+      "to": [
+        8.695,
+        13.61,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_017",
+      "from": [
+        7.175,
+        16.7,
+        7.175
+      ],
+      "to": [
+        8.825,
+        17.2,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_018",
+      "from": [
+        7.305,
+        17.07,
+        7.095
+      ],
+      "to": [
+        8.695,
+        17.26,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_019",
+      "from": [
+        7.175,
+        20.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        20.7,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_020",
+      "from": [
+        7.305,
+        20.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        20.76,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_dark_021",
+      "from": [
+        7.75,
+        1.25,
+        6.85
+      ],
+      "to": [
+        8.25,
+        1.5,
+        9.15
+      ],
+      "mat": "wind_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_dark_022",
+      "from": [
+        7.5,
+        1.5,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.0,
+        9.15
+      ],
+      "mat": "wind_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_dark_023",
+      "from": [
+        7.25,
+        2.0,
+        6.85
+      ],
+      "to": [
+        8.75,
+        2.25,
+        9.15
+      ],
+      "mat": "wind_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_dark_024",
+      "from": [
+        7.5,
+        2.25,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.75,
+        9.15
+      ],
+      "mat": "wind_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_dark_025",
+      "from": [
+        7.75,
+        2.75,
+        6.85
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.15
+      ],
+      "mat": "wind_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_026",
+      "from": [
+        7.75,
+        1.25,
+        6.67
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.33
+      ],
+      "mat": "wind",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_027",
+      "from": [
+        7.5,
+        1.75,
+        6.67
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.33
+      ],
+      "mat": "wind",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_028",
+      "from": [
+        7.75,
+        2.5,
+        6.67
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.33
+      ],
+      "mat": "wind",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_light_029",
+      "from": [
+        8.0,
+        1.25,
+        6.54
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.46
+      ],
+      "mat": "wind_light",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_light_030",
+      "from": [
+        8.0,
+        1.75,
+        6.54
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.46
+      ],
+      "mat": "wind_light",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_light_031",
+      "from": [
+        8.0,
+        2.5,
+        6.54
+      ],
+      "to": [
+        8.25,
+        2.75,
+        9.46
+      ],
+      "mat": "wind_light",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_core_032",
+      "from": [
+        7.75,
+        1.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        1.75,
+        9.45
+      ],
+      "mat": "wind_core",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_core_033",
+      "from": [
+        7.5,
+        1.75,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.5,
+        9.45
+      ],
+      "mat": "wind_core",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_core_034",
+      "from": [
+        7.75,
+        2.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.75,
+        9.45
+      ],
+      "mat": "wind_core",
+      "bone": "staff"
+    },
+    {
+      "name": "white_035",
+      "from": [
+        7.88,
+        1.746,
+        6.43
+      ],
+      "to": [
+        8.13,
+        2.506,
+        9.57
+      ],
+      "mat": "white",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_036",
+      "from": [
+        7.75,
+        0.75,
+        7.15
+      ],
+      "to": [
+        8.25,
+        1.5,
+        8.85
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_037",
+      "from": [
+        7.5,
+        1.5,
+        7.15
+      ],
+      "to": [
+        8.5,
+        1.75,
+        8.85
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_038",
+      "from": [
+        7.275,
+        1.5,
+        7.275
+      ],
+      "to": [
+        8.725,
+        1.88,
+        8.725
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_039",
+      "from": [
+        7.405,
+        1.75,
+        7.195
+      ],
+      "to": [
+        8.595,
+        1.94,
+        8.805
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_light_040",
+      "from": [
+        7.84,
+        6.7,
+        7.3
+      ],
+      "to": [
+        8.16,
+        7.5,
+        8.7
+      ],
+      "mat": "wind_light",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_light_041",
+      "from": [
+        7.84,
+        14.5,
+        7.3
+      ],
+      "to": [
+        8.16,
+        15.3,
+        8.7
+      ],
+      "mat": "wind_light",
+      "bone": "staff"
+    },
+    {
+      "name": "wind_light_042",
+      "from": [
+        7.84,
+        18,
+        7.3
+      ],
+      "to": [
+        8.16,
+        18.8,
+        8.7
+      ],
+      "mat": "wind_light",
+      "bone": "staff"
+    },
+    {
+      "name": "ivory_dark_043",
+      "from": [
+        7.75,
+        20.75,
+        6.85
+      ],
+      "to": [
+        8.5,
+        21.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_044",
+      "from": [
+        8.75,
+        20.75,
+        6.85
+      ],
+      "to": [
+        9.5,
+        21.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_045",
+      "from": [
+        8.5,
+        21.0,
+        6.85
+      ],
+      "to": [
+        9.5,
+        21.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_046",
+      "from": [
+        9.0,
+        21.5,
+        6.85
+      ],
+      "to": [
+        9.25,
+        21.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_047",
+      "from": [
+        9.5,
+        21.0,
+        6.85
+      ],
+      "to": [
+        10.25,
+        21.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_048",
+      "from": [
+        9.25,
+        21.5,
+        6.85
+      ],
+      "to": [
+        10.25,
+        21.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_049",
+      "from": [
+        9.75,
+        21.75,
+        6.85
+      ],
+      "to": [
+        10.0,
+        22.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_050",
+      "from": [
+        10.25,
+        21.25,
+        6.85
+      ],
+      "to": [
+        10.75,
+        21.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_051",
+      "from": [
+        10.25,
+        21.5,
+        6.85
+      ],
+      "to": [
+        11.0,
+        21.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_052",
+      "from": [
+        10.0,
+        21.75,
+        6.85
+      ],
+      "to": [
+        11.0,
+        22.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_053",
+      "from": [
+        10.25,
+        22.0,
+        6.85
+      ],
+      "to": [
+        10.75,
+        22.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_054",
+      "from": [
+        11.0,
+        21.75,
+        6.85
+      ],
+      "to": [
+        11.5,
+        22.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_055",
+      "from": [
+        10.75,
+        22.0,
+        6.85
+      ],
+      "to": [
+        11.75,
+        22.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_056",
+      "from": [
+        10.75,
+        22.25,
+        6.85
+      ],
+      "to": [
+        11.5,
+        22.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_057",
+      "from": [
+        11.0,
+        22.5,
+        6.85
+      ],
+      "to": [
+        11.25,
+        22.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_058",
+      "from": [
+        11.5,
+        22.25,
+        6.85
+      ],
+      "to": [
+        12.0,
+        22.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_059",
+      "from": [
+        11.25,
+        22.5,
+        6.85
+      ],
+      "to": [
+        12.0,
+        22.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_060",
+      "from": [
+        11.25,
+        22.75,
+        6.85
+      ],
+      "to": [
+        12.25,
+        23.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_061",
+      "from": [
+        11.5,
+        23.0,
+        6.85
+      ],
+      "to": [
+        12.0,
+        23.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_062",
+      "from": [
+        12.0,
+        23.0,
+        6.85
+      ],
+      "to": [
+        12.5,
+        23.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_063",
+      "from": [
+        11.75,
+        23.25,
+        6.85
+      ],
+      "to": [
+        12.5,
+        23.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_064",
+      "from": [
+        11.75,
+        23.5,
+        6.85
+      ],
+      "to": [
+        12.75,
+        23.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_065",
+      "from": [
+        12.0,
+        23.75,
+        6.85
+      ],
+      "to": [
+        12.25,
+        24.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_066",
+      "from": [
+        12.25,
+        23.75,
+        6.85
+      ],
+      "to": [
+        12.75,
+        24.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_067",
+      "from": [
+        12.0,
+        24.0,
+        6.85
+      ],
+      "to": [
+        13.0,
+        24.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_068",
+      "from": [
+        12.25,
+        24.5,
+        6.85
+      ],
+      "to": [
+        12.5,
+        24.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_069",
+      "from": [
+        12.25,
+        24.5,
+        6.85
+      ],
+      "to": [
+        13.0,
+        25.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_070",
+      "from": [
+        12.25,
+        25.25,
+        6.85
+      ],
+      "to": [
+        12.5,
+        25.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_071",
+      "from": [
+        12.25,
+        25.25,
+        6.85
+      ],
+      "to": [
+        13.0,
+        26.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_072",
+      "from": [
+        12.25,
+        26.0,
+        6.85
+      ],
+      "to": [
+        12.5,
+        26.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_073",
+      "from": [
+        12.25,
+        26.25,
+        6.85
+      ],
+      "to": [
+        13.0,
+        26.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_074",
+      "from": [
+        12.0,
+        26.5,
+        6.85
+      ],
+      "to": [
+        13.0,
+        26.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_075",
+      "from": [
+        12.25,
+        26.75,
+        6.85
+      ],
+      "to": [
+        13.0,
+        27.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_076",
+      "from": [
+        12.0,
+        26.75,
+        6.85
+      ],
+      "to": [
+        12.25,
+        27.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_077",
+      "from": [
+        12.0,
+        27.0,
+        6.85
+      ],
+      "to": [
+        12.75,
+        27.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_078",
+      "from": [
+        11.75,
+        27.25,
+        6.85
+      ],
+      "to": [
+        12.75,
+        27.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_079",
+      "from": [
+        12.0,
+        27.5,
+        6.85
+      ],
+      "to": [
+        12.5,
+        27.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_080",
+      "from": [
+        11.75,
+        27.5,
+        6.85
+      ],
+      "to": [
+        12.0,
+        27.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_081",
+      "from": [
+        11.5,
+        27.75,
+        6.85
+      ],
+      "to": [
+        12.5,
+        28.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_082",
+      "from": [
+        11.5,
+        28.0,
+        6.85
+      ],
+      "to": [
+        12.25,
+        28.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_083",
+      "from": [
+        11.75,
+        28.25,
+        6.85
+      ],
+      "to": [
+        12.25,
+        28.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_084",
+      "from": [
+        11.25,
+        28.0,
+        6.85
+      ],
+      "to": [
+        11.5,
+        28.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_085",
+      "from": [
+        11.0,
+        28.25,
+        6.85
+      ],
+      "to": [
+        11.75,
+        28.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_086",
+      "from": [
+        10.75,
+        28.5,
+        6.85
+      ],
+      "to": [
+        12.0,
+        28.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_087",
+      "from": [
+        11.0,
+        28.75,
+        6.85
+      ],
+      "to": [
+        11.75,
+        29.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_088",
+      "from": [
+        11.25,
+        29.0,
+        6.85
+      ],
+      "to": [
+        11.5,
+        29.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_089",
+      "from": [
+        10.75,
+        28.5,
+        6.85
+      ],
+      "to": [
+        11.0,
+        28.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_090",
+      "from": [
+        10.25,
+        28.75,
+        6.85
+      ],
+      "to": [
+        11.0,
+        29.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_091",
+      "from": [
+        10.25,
+        29.0,
+        6.85
+      ],
+      "to": [
+        11.25,
+        29.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_092",
+      "from": [
+        10.5,
+        29.25,
+        6.85
+      ],
+      "to": [
+        11.0,
+        29.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_093",
+      "from": [
+        9.75,
+        29.0,
+        6.85
+      ],
+      "to": [
+        10.25,
+        29.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_094",
+      "from": [
+        9.5,
+        29.25,
+        6.85
+      ],
+      "to": [
+        10.5,
+        29.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_095",
+      "from": [
+        9.75,
+        29.5,
+        6.85
+      ],
+      "to": [
+        10.5,
+        29.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_096",
+      "from": [
+        9.75,
+        29.75,
+        6.85
+      ],
+      "to": [
+        10.25,
+        30.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_097",
+      "from": [
+        9.0,
+        29.25,
+        6.85
+      ],
+      "to": [
+        9.75,
+        29.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_098",
+      "from": [
+        8.75,
+        29.5,
+        6.85
+      ],
+      "to": [
+        9.75,
+        29.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_099",
+      "from": [
+        9.0,
+        29.75,
+        6.85
+      ],
+      "to": [
+        9.75,
+        30.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_100",
+      "from": [
+        9.0,
+        30.0,
+        6.85
+      ],
+      "to": [
+        9.5,
+        30.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_101",
+      "from": [
+        8.0,
+        29.5,
+        6.85
+      ],
+      "to": [
+        9.0,
+        30.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_102",
+      "from": [
+        7.25,
+        29.5,
+        6.85
+      ],
+      "to": [
+        8.25,
+        29.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_103",
+      "from": [
+        7.25,
+        29.75,
+        6.85
+      ],
+      "to": [
+        8.0,
+        30.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_104",
+      "from": [
+        6.5,
+        29.25,
+        6.85
+      ],
+      "to": [
+        7.25,
+        30.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_105",
+      "from": [
+        7.0,
+        30.0,
+        6.85
+      ],
+      "to": [
+        7.25,
+        30.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_106",
+      "from": [
+        7.75,
+        21.0,
+        6.6
+      ],
+      "to": [
+        8.5,
+        21.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_107",
+      "from": [
+        8.75,
+        21.0,
+        6.6
+      ],
+      "to": [
+        9.5,
+        21.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_108",
+      "from": [
+        8.5,
+        21.25,
+        6.6
+      ],
+      "to": [
+        9.25,
+        21.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_109",
+      "from": [
+        8.75,
+        21.5,
+        6.6
+      ],
+      "to": [
+        9.25,
+        21.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_110",
+      "from": [
+        9.5,
+        21.25,
+        6.6
+      ],
+      "to": [
+        10.25,
+        21.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_111",
+      "from": [
+        9.25,
+        21.5,
+        6.6
+      ],
+      "to": [
+        10.0,
+        21.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_112",
+      "from": [
+        9.75,
+        21.75,
+        6.6
+      ],
+      "to": [
+        10.0,
+        22.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_113",
+      "from": [
+        10.0,
+        21.5,
+        6.6
+      ],
+      "to": [
+        10.5,
+        21.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_114",
+      "from": [
+        10.0,
+        21.75,
+        6.6
+      ],
+      "to": [
+        10.75,
+        22.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_115",
+      "from": [
+        10.25,
+        22.0,
+        6.6
+      ],
+      "to": [
+        10.75,
+        22.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_116",
+      "from": [
+        10.75,
+        22.0,
+        6.6
+      ],
+      "to": [
+        11.25,
+        22.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_117",
+      "from": [
+        10.5,
+        22.25,
+        6.6
+      ],
+      "to": [
+        11.5,
+        22.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_118",
+      "from": [
+        11.0,
+        22.5,
+        6.6
+      ],
+      "to": [
+        11.25,
+        22.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_119",
+      "from": [
+        11.25,
+        22.5,
+        6.6
+      ],
+      "to": [
+        11.75,
+        22.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_120",
+      "from": [
+        11.25,
+        22.75,
+        6.6
+      ],
+      "to": [
+        12.0,
+        23.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_121",
+      "from": [
+        12.0,
+        23.0,
+        6.6
+      ],
+      "to": [
+        12.25,
+        23.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_122",
+      "from": [
+        11.5,
+        23.25,
+        6.6
+      ],
+      "to": [
+        12.25,
+        23.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_123",
+      "from": [
+        11.75,
+        23.5,
+        6.6
+      ],
+      "to": [
+        12.5,
+        23.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_124",
+      "from": [
+        11.75,
+        23.75,
+        6.6
+      ],
+      "to": [
+        12.25,
+        24.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_125",
+      "from": [
+        12.25,
+        23.75,
+        6.6
+      ],
+      "to": [
+        12.5,
+        24.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_126",
+      "from": [
+        12.0,
+        24.0,
+        6.6
+      ],
+      "to": [
+        12.5,
+        24.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_127",
+      "from": [
+        12.0,
+        24.25,
+        6.6
+      ],
+      "to": [
+        12.75,
+        24.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_128",
+      "from": [
+        12.0,
+        24.5,
+        6.6
+      ],
+      "to": [
+        12.25,
+        24.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_129",
+      "from": [
+        12.25,
+        24.5,
+        6.6
+      ],
+      "to": [
+        12.75,
+        24.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_130",
+      "from": [
+        12.0,
+        24.75,
+        6.6
+      ],
+      "to": [
+        12.75,
+        25.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_131",
+      "from": [
+        12.25,
+        25.0,
+        6.6
+      ],
+      "to": [
+        12.75,
+        25.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_132",
+      "from": [
+        12.25,
+        25.25,
+        6.6
+      ],
+      "to": [
+        12.5,
+        25.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_133",
+      "from": [
+        12.25,
+        25.25,
+        6.6
+      ],
+      "to": [
+        12.75,
+        26.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_134",
+      "from": [
+        12.5,
+        26.0,
+        6.6
+      ],
+      "to": [
+        12.75,
+        26.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_135",
+      "from": [
+        12.25,
+        26.0,
+        6.6
+      ],
+      "to": [
+        12.5,
+        26.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_136",
+      "from": [
+        12.0,
+        26.25,
+        6.6
+      ],
+      "to": [
+        12.75,
+        26.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_137",
+      "from": [
+        12.25,
+        26.75,
+        6.6
+      ],
+      "to": [
+        12.5,
+        27.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_138",
+      "from": [
+        12.0,
+        26.75,
+        6.6
+      ],
+      "to": [
+        12.25,
+        27.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_139",
+      "from": [
+        11.75,
+        27.0,
+        6.6
+      ],
+      "to": [
+        12.5,
+        27.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_140",
+      "from": [
+        12.0,
+        27.5,
+        6.6
+      ],
+      "to": [
+        12.25,
+        27.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_141",
+      "from": [
+        11.5,
+        27.5,
+        6.6
+      ],
+      "to": [
+        12.0,
+        27.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_142",
+      "from": [
+        11.25,
+        27.75,
+        6.6
+      ],
+      "to": [
+        12.0,
+        28.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_143",
+      "from": [
+        11.5,
+        28.0,
+        6.6
+      ],
+      "to": [
+        12.0,
+        28.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_144",
+      "from": [
+        11.25,
+        28.0,
+        6.6
+      ],
+      "to": [
+        11.5,
+        28.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_145",
+      "from": [
+        11.0,
+        28.25,
+        6.6
+      ],
+      "to": [
+        11.75,
+        28.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_146",
+      "from": [
+        10.75,
+        28.5,
+        6.6
+      ],
+      "to": [
+        11.5,
+        28.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_147",
+      "from": [
+        11.0,
+        28.75,
+        6.6
+      ],
+      "to": [
+        11.25,
+        29.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_148",
+      "from": [
+        10.5,
+        28.5,
+        6.6
+      ],
+      "to": [
+        11.0,
+        28.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_149",
+      "from": [
+        10.25,
+        28.75,
+        6.6
+      ],
+      "to": [
+        11.0,
+        29.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_150",
+      "from": [
+        9.75,
+        29.0,
+        6.6
+      ],
+      "to": [
+        10.25,
+        29.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_151",
+      "from": [
+        9.5,
+        29.25,
+        6.6
+      ],
+      "to": [
+        10.5,
+        29.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_152",
+      "from": [
+        9.75,
+        29.5,
+        6.6
+      ],
+      "to": [
+        10.0,
+        29.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_153",
+      "from": [
+        9.0,
+        29.25,
+        6.6
+      ],
+      "to": [
+        9.5,
+        29.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_154",
+      "from": [
+        8.75,
+        29.5,
+        6.6
+      ],
+      "to": [
+        9.75,
+        29.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_155",
+      "from": [
+        9.0,
+        29.75,
+        6.6
+      ],
+      "to": [
+        9.5,
+        30.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_156",
+      "from": [
+        8.0,
+        29.5,
+        6.6
+      ],
+      "to": [
+        8.75,
+        29.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_157",
+      "from": [
+        8.0,
+        29.75,
+        6.6
+      ],
+      "to": [
+        9.0,
+        30.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_158",
+      "from": [
+        7.25,
+        29.25,
+        6.6
+      ],
+      "to": [
+        7.5,
+        29.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_159",
+      "from": [
+        7.25,
+        29.5,
+        6.6
+      ],
+      "to": [
+        8.0,
+        30.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_160",
+      "from": [
+        6.5,
+        29.25,
+        6.6
+      ],
+      "to": [
+        7.5,
+        29.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_161",
+      "from": [
+        6.5,
+        29.5,
+        6.6
+      ],
+      "to": [
+        7.25,
+        29.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_162",
+      "from": [
+        7.0,
+        29.75,
+        6.6
+      ],
+      "to": [
+        7.25,
+        30.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_163",
+      "from": [
+        7.75,
+        21.25,
+        6.43
+      ],
+      "to": [
+        8.5,
+        21.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_164",
+      "from": [
+        8.5,
+        21.25,
+        6.43
+      ],
+      "to": [
+        9.0,
+        21.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_165",
+      "from": [
+        9.25,
+        21.5,
+        6.43
+      ],
+      "to": [
+        9.75,
+        21.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_166",
+      "from": [
+        9.75,
+        21.75,
+        6.43
+      ],
+      "to": [
+        10.0,
+        22.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_167",
+      "from": [
+        10.0,
+        21.75,
+        6.43
+      ],
+      "to": [
+        10.25,
+        22.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_168",
+      "from": [
+        10.25,
+        22.0,
+        6.43
+      ],
+      "to": [
+        10.75,
+        22.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_169",
+      "from": [
+        10.75,
+        22.25,
+        6.43
+      ],
+      "to": [
+        11.0,
+        22.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_170",
+      "from": [
+        11.0,
+        22.5,
+        6.43
+      ],
+      "to": [
+        11.25,
+        22.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_171",
+      "from": [
+        11.25,
+        22.75,
+        6.43
+      ],
+      "to": [
+        11.5,
+        23.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_172",
+      "from": [
+        11.5,
+        23.0,
+        6.43
+      ],
+      "to": [
+        11.75,
+        23.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_173",
+      "from": [
+        11.5,
+        23.25,
+        6.43
+      ],
+      "to": [
+        11.75,
+        23.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_174",
+      "from": [
+        11.75,
+        23.5,
+        6.43
+      ],
+      "to": [
+        12.0,
+        24.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_175",
+      "from": [
+        12.0,
+        24.0,
+        6.43
+      ],
+      "to": [
+        12.25,
+        24.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_176",
+      "from": [
+        12.25,
+        25.25,
+        6.43
+      ],
+      "to": [
+        12.5,
+        25.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_177",
+      "from": [
+        12.0,
+        26.25,
+        6.43
+      ],
+      "to": [
+        12.25,
+        26.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_178",
+      "from": [
+        12.0,
+        26.75,
+        6.43
+      ],
+      "to": [
+        12.25,
+        27.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_179",
+      "from": [
+        11.75,
+        27.0,
+        6.43
+      ],
+      "to": [
+        12.0,
+        27.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_180",
+      "from": [
+        11.5,
+        27.5,
+        6.43
+      ],
+      "to": [
+        11.75,
+        28.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_181",
+      "from": [
+        11.25,
+        28.0,
+        6.43
+      ],
+      "to": [
+        11.5,
+        28.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_182",
+      "from": [
+        11.0,
+        28.25,
+        6.43
+      ],
+      "to": [
+        11.25,
+        28.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_183",
+      "from": [
+        10.75,
+        28.5,
+        6.43
+      ],
+      "to": [
+        11.0,
+        28.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_184",
+      "from": [
+        10.25,
+        28.75,
+        6.43
+      ],
+      "to": [
+        10.75,
+        29.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_185",
+      "from": [
+        9.75,
+        29.0,
+        6.43
+      ],
+      "to": [
+        10.25,
+        29.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_186",
+      "from": [
+        9.5,
+        29.25,
+        6.43
+      ],
+      "to": [
+        9.75,
+        29.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_187",
+      "from": [
+        9.0,
+        29.25,
+        6.43
+      ],
+      "to": [
+        9.5,
+        29.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_188",
+      "from": [
+        8.75,
+        29.5,
+        6.43
+      ],
+      "to": [
+        9.0,
+        29.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_189",
+      "from": [
+        8.0,
+        29.5,
+        6.43
+      ],
+      "to": [
+        8.75,
+        29.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_190",
+      "from": [
+        7.5,
+        29.5,
+        6.43
+      ],
+      "to": [
+        8.0,
+        29.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_191",
+      "from": [
+        6.75,
+        29.25,
+        6.43
+      ],
+      "to": [
+        7.25,
+        29.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_192",
+      "from": [
+        7.75,
+        30.0,
+        6.85
+      ],
+      "to": [
+        8.5,
+        30.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_193",
+      "from": [
+        7.0,
+        30.0,
+        6.85
+      ],
+      "to": [
+        7.75,
+        30.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_194",
+      "from": [
+        6.25,
+        29.75,
+        6.85
+      ],
+      "to": [
+        7.0,
+        30.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_195",
+      "from": [
+        6.5,
+        30.5,
+        6.85
+      ],
+      "to": [
+        7.0,
+        30.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_196",
+      "from": [
+        5.5,
+        29.5,
+        6.85
+      ],
+      "to": [
+        6.25,
+        30.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_197",
+      "from": [
+        5.25,
+        30.0,
+        6.85
+      ],
+      "to": [
+        6.25,
+        30.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_198",
+      "from": [
+        5.75,
+        30.25,
+        6.85
+      ],
+      "to": [
+        6.0,
+        30.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_199",
+      "from": [
+        5.0,
+        29.0,
+        6.85
+      ],
+      "to": [
+        5.25,
+        29.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_200",
+      "from": [
+        4.75,
+        29.25,
+        6.85
+      ],
+      "to": [
+        5.75,
+        29.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_201",
+      "from": [
+        4.5,
+        29.5,
+        6.85
+      ],
+      "to": [
+        5.5,
+        29.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_202",
+      "from": [
+        5.0,
+        29.75,
+        6.85
+      ],
+      "to": [
+        5.5,
+        30.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_203",
+      "from": [
+        4.5,
+        28.5,
+        6.85
+      ],
+      "to": [
+        4.75,
+        28.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_204",
+      "from": [
+        4.25,
+        28.75,
+        6.85
+      ],
+      "to": [
+        5.0,
+        29.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_205",
+      "from": [
+        4.0,
+        29.0,
+        6.85
+      ],
+      "to": [
+        5.0,
+        29.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_206",
+      "from": [
+        4.25,
+        29.25,
+        6.85
+      ],
+      "to": [
+        4.75,
+        29.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_207",
+      "from": [
+        3.75,
+        28.0,
+        6.85
+      ],
+      "to": [
+        4.25,
+        28.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_208",
+      "from": [
+        3.5,
+        28.25,
+        6.85
+      ],
+      "to": [
+        4.5,
+        28.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_209",
+      "from": [
+        3.75,
+        28.5,
+        6.85
+      ],
+      "to": [
+        4.5,
+        28.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_210",
+      "from": [
+        3.75,
+        28.75,
+        6.85
+      ],
+      "to": [
+        4.0,
+        29.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_211",
+      "from": [
+        3.5,
+        27.25,
+        6.85
+      ],
+      "to": [
+        4.0,
+        27.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_212",
+      "from": [
+        3.25,
+        27.5,
+        6.85
+      ],
+      "to": [
+        4.0,
+        27.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_213",
+      "from": [
+        3.25,
+        27.75,
+        6.85
+      ],
+      "to": [
+        4.25,
+        28.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_214",
+      "from": [
+        3.5,
+        28.0,
+        6.85
+      ],
+      "to": [
+        3.75,
+        28.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_215",
+      "from": [
+        3.25,
+        26.5,
+        6.85
+      ],
+      "to": [
+        3.75,
+        26.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_216",
+      "from": [
+        3.0,
+        26.75,
+        6.85
+      ],
+      "to": [
+        3.75,
+        27.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_217",
+      "from": [
+        3.0,
+        27.0,
+        6.85
+      ],
+      "to": [
+        4.0,
+        27.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_218",
+      "from": [
+        3.0,
+        27.25,
+        6.85
+      ],
+      "to": [
+        3.5,
+        27.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_219",
+      "from": [
+        3.0,
+        25.75,
+        6.85
+      ],
+      "to": [
+        3.75,
+        26.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_220",
+      "from": [
+        3.0,
+        25.0,
+        6.85
+      ],
+      "to": [
+        3.75,
+        25.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_221",
+      "from": [
+        3.25,
+        24.25,
+        6.85
+      ],
+      "to": [
+        4.0,
+        24.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_222",
+      "from": [
+        3.0,
+        24.5,
+        6.85
+      ],
+      "to": [
+        4.0,
+        25.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_223",
+      "from": [
+        3.5,
+        23.5,
+        6.85
+      ],
+      "to": [
+        4.0,
+        23.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_224",
+      "from": [
+        3.5,
+        23.75,
+        6.85
+      ],
+      "to": [
+        4.25,
+        24.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_225",
+      "from": [
+        3.25,
+        24.0,
+        6.85
+      ],
+      "to": [
+        4.25,
+        24.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_226",
+      "from": [
+        3.75,
+        24.25,
+        6.85
+      ],
+      "to": [
+        4.0,
+        24.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_227",
+      "from": [
+        4.0,
+        22.75,
+        6.85
+      ],
+      "to": [
+        4.5,
+        23.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_228",
+      "from": [
+        4.0,
+        23.0,
+        6.85
+      ],
+      "to": [
+        4.75,
+        23.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_229",
+      "from": [
+        3.75,
+        23.25,
+        6.85
+      ],
+      "to": [
+        4.75,
+        23.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_230",
+      "from": [
+        4.0,
+        23.5,
+        6.85
+      ],
+      "to": [
+        4.5,
+        23.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_231",
+      "from": [
+        4.5,
+        22.25,
+        6.85
+      ],
+      "to": [
+        5.0,
+        22.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_232",
+      "from": [
+        4.25,
+        22.5,
+        6.85
+      ],
+      "to": [
+        5.25,
+        22.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_233",
+      "from": [
+        4.5,
+        22.75,
+        6.85
+      ],
+      "to": [
+        5.25,
+        23.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_234",
+      "from": [
+        4.75,
+        23.0,
+        6.85
+      ],
+      "to": [
+        5.0,
+        23.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_235",
+      "from": [
+        5.25,
+        21.75,
+        6.85
+      ],
+      "to": [
+        5.75,
+        22.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_236",
+      "from": [
+        5.0,
+        22.0,
+        6.85
+      ],
+      "to": [
+        5.75,
+        22.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_237",
+      "from": [
+        5.0,
+        22.25,
+        6.85
+      ],
+      "to": [
+        6.0,
+        22.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_238",
+      "from": [
+        5.25,
+        22.5,
+        6.85
+      ],
+      "to": [
+        5.75,
+        22.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_239",
+      "from": [
+        5.75,
+        21.5,
+        6.85
+      ],
+      "to": [
+        6.5,
+        22.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_240",
+      "from": [
+        5.75,
+        22.0,
+        6.85
+      ],
+      "to": [
+        6.75,
+        22.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_241",
+      "from": [
+        6.0,
+        22.25,
+        6.85
+      ],
+      "to": [
+        6.25,
+        22.5,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_242",
+      "from": [
+        6.5,
+        21.25,
+        6.85
+      ],
+      "to": [
+        7.25,
+        21.75,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_243",
+      "from": [
+        6.5,
+        21.75,
+        6.85
+      ],
+      "to": [
+        7.5,
+        22.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_244",
+      "from": [
+        6.75,
+        22.0,
+        6.85
+      ],
+      "to": [
+        7.0,
+        22.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_245",
+      "from": [
+        7.25,
+        21.25,
+        6.85
+      ],
+      "to": [
+        8.25,
+        22.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_246",
+      "from": [
+        8.25,
+        21.25,
+        6.85
+      ],
+      "to": [
+        9.0,
+        22.0,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_dark_247",
+      "from": [
+        8.75,
+        22.0,
+        6.85
+      ],
+      "to": [
+        9.0,
+        22.25,
+        9.15
+      ],
+      "mat": "ivory_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_248",
+      "from": [
+        7.75,
+        30.0,
+        6.6
+      ],
+      "to": [
+        8.5,
+        30.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_249",
+      "from": [
+        7.0,
+        30.0,
+        6.6
+      ],
+      "to": [
+        7.75,
+        30.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_250",
+      "from": [
+        6.25,
+        29.75,
+        6.6
+      ],
+      "to": [
+        7.0,
+        30.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_251",
+      "from": [
+        6.5,
+        30.25,
+        6.6
+      ],
+      "to": [
+        7.0,
+        30.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_252",
+      "from": [
+        5.5,
+        29.5,
+        6.6
+      ],
+      "to": [
+        6.25,
+        30.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_253",
+      "from": [
+        5.75,
+        30.0,
+        6.6
+      ],
+      "to": [
+        6.25,
+        30.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_254",
+      "from": [
+        5.0,
+        29.0,
+        6.6
+      ],
+      "to": [
+        5.5,
+        29.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_255",
+      "from": [
+        4.75,
+        29.25,
+        6.6
+      ],
+      "to": [
+        5.75,
+        29.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_256",
+      "from": [
+        5.0,
+        29.5,
+        6.6
+      ],
+      "to": [
+        5.5,
+        29.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_257",
+      "from": [
+        4.5,
+        28.5,
+        6.6
+      ],
+      "to": [
+        4.75,
+        28.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_258",
+      "from": [
+        4.25,
+        28.75,
+        6.6
+      ],
+      "to": [
+        5.0,
+        29.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_259",
+      "from": [
+        4.5,
+        29.0,
+        6.6
+      ],
+      "to": [
+        5.0,
+        29.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_260",
+      "from": [
+        3.75,
+        28.0,
+        6.6
+      ],
+      "to": [
+        4.5,
+        28.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_261",
+      "from": [
+        4.0,
+        28.25,
+        6.6
+      ],
+      "to": [
+        4.75,
+        28.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_262",
+      "from": [
+        4.0,
+        28.5,
+        6.6
+      ],
+      "to": [
+        4.5,
+        28.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_263",
+      "from": [
+        3.5,
+        27.25,
+        6.6
+      ],
+      "to": [
+        4.0,
+        27.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_264",
+      "from": [
+        3.5,
+        27.5,
+        6.6
+      ],
+      "to": [
+        4.25,
+        28.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_265",
+      "from": [
+        3.25,
+        26.5,
+        6.6
+      ],
+      "to": [
+        3.75,
+        26.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_266",
+      "from": [
+        3.25,
+        26.75,
+        6.6
+      ],
+      "to": [
+        4.0,
+        27.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_267",
+      "from": [
+        3.25,
+        25.75,
+        6.6
+      ],
+      "to": [
+        3.75,
+        26.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_268",
+      "from": [
+        3.25,
+        25.0,
+        6.6
+      ],
+      "to": [
+        4.0,
+        25.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_269",
+      "from": [
+        3.25,
+        25.5,
+        6.6
+      ],
+      "to": [
+        3.75,
+        25.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_270",
+      "from": [
+        3.5,
+        24.25,
+        6.6
+      ],
+      "to": [
+        4.0,
+        24.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_271",
+      "from": [
+        3.25,
+        24.75,
+        6.6
+      ],
+      "to": [
+        4.0,
+        25.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_272",
+      "from": [
+        3.75,
+        25.0,
+        6.6
+      ],
+      "to": [
+        4.0,
+        25.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_273",
+      "from": [
+        3.75,
+        23.75,
+        6.6
+      ],
+      "to": [
+        4.5,
+        24.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_274",
+      "from": [
+        3.5,
+        24.0,
+        6.6
+      ],
+      "to": [
+        4.25,
+        24.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_275",
+      "from": [
+        4.0,
+        24.25,
+        6.6
+      ],
+      "to": [
+        4.25,
+        24.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_276",
+      "from": [
+        4.25,
+        23.0,
+        6.6
+      ],
+      "to": [
+        4.75,
+        23.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_277",
+      "from": [
+        4.0,
+        23.25,
+        6.6
+      ],
+      "to": [
+        4.75,
+        23.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_278",
+      "from": [
+        4.25,
+        23.5,
+        6.6
+      ],
+      "to": [
+        4.75,
+        23.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_279",
+      "from": [
+        4.75,
+        22.5,
+        6.6
+      ],
+      "to": [
+        5.25,
+        22.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_280",
+      "from": [
+        4.5,
+        22.75,
+        6.6
+      ],
+      "to": [
+        5.5,
+        23.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_281",
+      "from": [
+        4.75,
+        23.0,
+        6.6
+      ],
+      "to": [
+        5.0,
+        23.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_282",
+      "from": [
+        5.5,
+        22.0,
+        6.6
+      ],
+      "to": [
+        6.0,
+        22.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_283",
+      "from": [
+        5.25,
+        22.25,
+        6.6
+      ],
+      "to": [
+        6.0,
+        22.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_284",
+      "from": [
+        5.25,
+        22.5,
+        6.6
+      ],
+      "to": [
+        5.75,
+        22.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_285",
+      "from": [
+        5.75,
+        21.75,
+        6.6
+      ],
+      "to": [
+        6.5,
+        22.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_286",
+      "from": [
+        6.0,
+        22.0,
+        6.6
+      ],
+      "to": [
+        6.75,
+        22.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_287",
+      "from": [
+        6.0,
+        22.25,
+        6.6
+      ],
+      "to": [
+        6.25,
+        22.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_288",
+      "from": [
+        6.5,
+        21.5,
+        6.6
+      ],
+      "to": [
+        7.25,
+        21.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_289",
+      "from": [
+        6.75,
+        21.75,
+        6.6
+      ],
+      "to": [
+        7.5,
+        22.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_290",
+      "from": [
+        6.75,
+        22.0,
+        6.6
+      ],
+      "to": [
+        7.25,
+        22.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_291",
+      "from": [
+        7.5,
+        21.5,
+        6.6
+      ],
+      "to": [
+        8.25,
+        22.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_292",
+      "from": [
+        8.25,
+        21.5,
+        6.6
+      ],
+      "to": [
+        9.0,
+        22.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_293",
+      "from": [
+        8.5,
+        22.0,
+        6.6
+      ],
+      "to": [
+        8.75,
+        22.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_294",
+      "from": [
+        7.75,
+        30.0,
+        6.43
+      ],
+      "to": [
+        8.5,
+        30.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_295",
+      "from": [
+        7.0,
+        30.0,
+        6.43
+      ],
+      "to": [
+        7.75,
+        30.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_296",
+      "from": [
+        6.25,
+        29.75,
+        6.43
+      ],
+      "to": [
+        6.75,
+        30.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_297",
+      "from": [
+        5.75,
+        29.5,
+        6.43
+      ],
+      "to": [
+        6.25,
+        29.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_298",
+      "from": [
+        5.0,
+        29.0,
+        6.43
+      ],
+      "to": [
+        5.25,
+        29.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_299",
+      "from": [
+        5.25,
+        29.25,
+        6.43
+      ],
+      "to": [
+        5.75,
+        29.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_300",
+      "from": [
+        4.5,
+        28.5,
+        6.43
+      ],
+      "to": [
+        4.75,
+        28.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_301",
+      "from": [
+        4.75,
+        28.75,
+        6.43
+      ],
+      "to": [
+        5.0,
+        29.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_302",
+      "from": [
+        4.25,
+        28.0,
+        6.43
+      ],
+      "to": [
+        4.5,
+        28.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_303",
+      "from": [
+        3.75,
+        27.25,
+        6.43
+      ],
+      "to": [
+        4.0,
+        27.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_304",
+      "from": [
+        4.0,
+        27.5,
+        6.43
+      ],
+      "to": [
+        4.25,
+        28.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_305",
+      "from": [
+        3.75,
+        26.75,
+        6.43
+      ],
+      "to": [
+        4.0,
+        27.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_306",
+      "from": [
+        3.5,
+        25.75,
+        6.43
+      ],
+      "to": [
+        3.75,
+        26.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_307",
+      "from": [
+        3.75,
+        25.0,
+        6.43
+      ],
+      "to": [
+        4.0,
+        25.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_308",
+      "from": [
+        3.75,
+        24.5,
+        6.43
+      ],
+      "to": [
+        4.0,
+        25.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_309",
+      "from": [
+        4.25,
+        23.75,
+        6.43
+      ],
+      "to": [
+        4.5,
+        24.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_310",
+      "from": [
+        4.0,
+        24.0,
+        6.43
+      ],
+      "to": [
+        4.25,
+        24.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_311",
+      "from": [
+        4.5,
+        23.25,
+        6.43
+      ],
+      "to": [
+        4.75,
+        23.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_312",
+      "from": [
+        4.25,
+        23.5,
+        6.43
+      ],
+      "to": [
+        4.5,
+        23.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_313",
+      "from": [
+        5.0,
+        22.75,
+        6.43
+      ],
+      "to": [
+        5.25,
+        23.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_314",
+      "from": [
+        4.75,
+        23.0,
+        6.43
+      ],
+      "to": [
+        5.0,
+        23.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_315",
+      "from": [
+        5.75,
+        22.25,
+        6.43
+      ],
+      "to": [
+        6.0,
+        22.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_316",
+      "from": [
+        5.25,
+        22.5,
+        6.43
+      ],
+      "to": [
+        5.75,
+        22.75,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_317",
+      "from": [
+        6.25,
+        22.0,
+        6.43
+      ],
+      "to": [
+        6.75,
+        22.25,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_318",
+      "from": [
+        6.0,
+        22.25,
+        6.43
+      ],
+      "to": [
+        6.25,
+        22.5,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_319",
+      "from": [
+        7.0,
+        21.75,
+        6.43
+      ],
+      "to": [
+        7.5,
+        22.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_320",
+      "from": [
+        7.5,
+        21.75,
+        6.43
+      ],
+      "to": [
+        8.25,
+        22.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_light_321",
+      "from": [
+        8.25,
+        21.75,
+        6.43
+      ],
+      "to": [
+        8.5,
+        22.0,
+        9.57
+      ],
+      "mat": "ivory_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_322",
+      "from": [
+        10.0,
+        29.25,
+        6.6
+      ],
+      "to": [
+        11.25,
+        29.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_323",
+      "from": [
+        9.0,
+        29.5,
+        6.6
+      ],
+      "to": [
+        12.0,
+        29.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_324",
+      "from": [
+        8.5,
+        29.75,
+        6.6
+      ],
+      "to": [
+        11.25,
+        30.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_325",
+      "from": [
+        8.75,
+        30.0,
+        6.6
+      ],
+      "to": [
+        10.75,
+        30.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_326",
+      "from": [
+        8.75,
+        30.25,
+        6.6
+      ],
+      "to": [
+        10.25,
+        30.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_327",
+      "from": [
+        8.75,
+        30.5,
+        6.6
+      ],
+      "to": [
+        9.75,
+        30.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_328",
+      "from": [
+        9.0,
+        30.75,
+        6.6
+      ],
+      "to": [
+        9.75,
+        31.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_329",
+      "from": [
+        9.0,
+        31.0,
+        6.6
+      ],
+      "to": [
+        9.5,
+        31.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_330",
+      "from": [
+        9.25,
+        31.25,
+        6.6
+      ],
+      "to": [
+        9.5,
+        31.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_331",
+      "from": [
+        8.75,
+        30.25,
+        6.4
+      ],
+      "to": [
+        9.5,
+        30.5,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_332",
+      "from": [
+        10.75,
+        29.75,
+        6.4
+      ],
+      "to": [
+        11.0,
+        30.0,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_333",
+      "from": [
+        10.25,
+        30.0,
+        6.4
+      ],
+      "to": [
+        10.5,
+        30.25,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_334",
+      "from": [
+        9.75,
+        30.25,
+        6.4
+      ],
+      "to": [
+        10.0,
+        30.5,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "ivory_335",
+      "from": [
+        5.25,
+        21.0,
+        6.6
+      ],
+      "to": [
+        5.5,
+        21.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_336",
+      "from": [
+        4.5,
+        21.25,
+        6.6
+      ],
+      "to": [
+        6.25,
+        21.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_337",
+      "from": [
+        4.25,
+        21.5,
+        6.6
+      ],
+      "to": [
+        7.25,
+        21.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_338",
+      "from": [
+        4.75,
+        21.75,
+        6.6
+      ],
+      "to": [
+        7.5,
+        22.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_339",
+      "from": [
+        5.5,
+        22.0,
+        6.6
+      ],
+      "to": [
+        7.25,
+        22.25,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_340",
+      "from": [
+        6.0,
+        22.25,
+        6.6
+      ],
+      "to": [
+        7.25,
+        22.5,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_341",
+      "from": [
+        6.25,
+        22.5,
+        6.6
+      ],
+      "to": [
+        7.0,
+        22.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_342",
+      "from": [
+        6.5,
+        22.75,
+        6.6
+      ],
+      "to": [
+        7.0,
+        23.0,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "ivory_343",
+      "from": [
+        6.5,
+        23.0,
+        6.6
+      ],
+      "to": [
+        6.75,
+        23.75,
+        9.4
+      ],
+      "mat": "ivory",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_344",
+      "from": [
+        7.0,
+        22.0,
+        6.4
+      ],
+      "to": [
+        7.25,
+        22.25,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_345",
+      "from": [
+        6.5,
+        22.25,
+        6.4
+      ],
+      "to": [
+        7.0,
+        22.5,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_346",
+      "from": [
+        4.75,
+        21.5,
+        6.4
+      ],
+      "to": [
+        5.0,
+        21.75,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_347",
+      "from": [
+        5.25,
+        21.75,
+        6.4
+      ],
+      "to": [
+        5.5,
+        22.0,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_348",
+      "from": [
+        5.75,
+        22.0,
+        6.4
+      ],
+      "to": [
+        6.0,
+        22.25,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_349",
+      "from": [
+        6.25,
+        22.25,
+        6.4
+      ],
+      "to": [
+        6.5,
+        22.5,
+        9.6
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "wind_dark_350",
+      "from": [
+        7.75,
+        23.5,
+        6.15
+      ],
+      "to": [
+        8.25,
+        23.75,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_351",
+      "from": [
+        7.5,
+        23.75,
+        6.15
+      ],
+      "to": [
+        8.5,
+        24.25,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_352",
+      "from": [
+        7.25,
+        24.25,
+        6.15
+      ],
+      "to": [
+        8.75,
+        24.75,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_353",
+      "from": [
+        7.0,
+        24.75,
+        6.15
+      ],
+      "to": [
+        9.0,
+        25.0,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_354",
+      "from": [
+        6.75,
+        25.0,
+        6.15
+      ],
+      "to": [
+        9.25,
+        25.5,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_355",
+      "from": [
+        6.5,
+        25.5,
+        6.15
+      ],
+      "to": [
+        9.5,
+        26.25,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_356",
+      "from": [
+        6.75,
+        26.25,
+        6.15
+      ],
+      "to": [
+        9.25,
+        26.5,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_357",
+      "from": [
+        7.0,
+        26.5,
+        6.15
+      ],
+      "to": [
+        9.0,
+        27.0,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_358",
+      "from": [
+        7.25,
+        27.0,
+        6.15
+      ],
+      "to": [
+        8.75,
+        27.25,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_359",
+      "from": [
+        7.5,
+        27.25,
+        6.15
+      ],
+      "to": [
+        8.5,
+        27.5,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_dark_360",
+      "from": [
+        7.75,
+        27.5,
+        6.15
+      ],
+      "to": [
+        8.25,
+        27.75,
+        9.85
+      ],
+      "mat": "wind_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_361",
+      "from": [
+        7.75,
+        23.5,
+        5.97
+      ],
+      "to": [
+        8.25,
+        24.0,
+        10.03
+      ],
+      "mat": "wind",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_362",
+      "from": [
+        7.5,
+        24.0,
+        5.97
+      ],
+      "to": [
+        8.5,
+        24.5,
+        10.03
+      ],
+      "mat": "wind",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_363",
+      "from": [
+        7.25,
+        24.5,
+        5.97
+      ],
+      "to": [
+        8.75,
+        25.0,
+        10.03
+      ],
+      "mat": "wind",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_364",
+      "from": [
+        7.0,
+        25.0,
+        5.97
+      ],
+      "to": [
+        9.0,
+        25.5,
+        10.03
+      ],
+      "mat": "wind",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_365",
+      "from": [
+        6.75,
+        25.5,
+        5.97
+      ],
+      "to": [
+        9.25,
+        26.25,
+        10.03
+      ],
+      "mat": "wind",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_366",
+      "from": [
+        7.0,
+        26.25,
+        5.97
+      ],
+      "to": [
+        9.0,
+        26.5,
+        10.03
+      ],
+      "mat": "wind",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_367",
+      "from": [
+        7.25,
+        26.5,
+        5.97
+      ],
+      "to": [
+        8.75,
+        27.0,
+        10.03
+      ],
+      "mat": "wind",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_368",
+      "from": [
+        7.5,
+        27.0,
+        5.97
+      ],
+      "to": [
+        8.5,
+        27.25,
+        10.03
+      ],
+      "mat": "wind",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_369",
+      "from": [
+        7.75,
+        27.25,
+        5.97
+      ],
+      "to": [
+        8.25,
+        27.75,
+        10.03
+      ],
+      "mat": "wind",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_light_370",
+      "from": [
+        8.0,
+        23.75,
+        5.84
+      ],
+      "to": [
+        8.25,
+        24.25,
+        10.16
+      ],
+      "mat": "wind_light",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_light_371",
+      "from": [
+        8.0,
+        24.25,
+        5.84
+      ],
+      "to": [
+        8.5,
+        24.75,
+        10.16
+      ],
+      "mat": "wind_light",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_light_372",
+      "from": [
+        8.0,
+        24.75,
+        5.84
+      ],
+      "to": [
+        8.75,
+        25.25,
+        10.16
+      ],
+      "mat": "wind_light",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_light_373",
+      "from": [
+        8.0,
+        25.25,
+        5.84
+      ],
+      "to": [
+        9.0,
+        25.75,
+        10.16
+      ],
+      "mat": "wind_light",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_light_374",
+      "from": [
+        8.0,
+        25.75,
+        5.84
+      ],
+      "to": [
+        9.25,
+        26.0,
+        10.16
+      ],
+      "mat": "wind_light",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_light_375",
+      "from": [
+        8.0,
+        26.0,
+        5.84
+      ],
+      "to": [
+        9.0,
+        26.25,
+        10.16
+      ],
+      "mat": "wind_light",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_light_376",
+      "from": [
+        8.0,
+        26.25,
+        5.84
+      ],
+      "to": [
+        8.75,
+        26.75,
+        10.16
+      ],
+      "mat": "wind_light",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_light_377",
+      "from": [
+        8.0,
+        26.75,
+        5.84
+      ],
+      "to": [
+        8.5,
+        27.0,
+        10.16
+      ],
+      "mat": "wind_light",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_light_378",
+      "from": [
+        8.0,
+        27.0,
+        5.84
+      ],
+      "to": [
+        8.25,
+        27.5,
+        10.16
+      ],
+      "mat": "wind_light",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_core_379",
+      "from": [
+        7.75,
+        23.75,
+        5.85
+      ],
+      "to": [
+        8.0,
+        24.25,
+        10.15
+      ],
+      "mat": "wind_core",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_core_380",
+      "from": [
+        7.5,
+        24.25,
+        5.85
+      ],
+      "to": [
+        8.0,
+        24.75,
+        10.15
+      ],
+      "mat": "wind_core",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_core_381",
+      "from": [
+        7.25,
+        24.75,
+        5.85
+      ],
+      "to": [
+        8.0,
+        25.25,
+        10.15
+      ],
+      "mat": "wind_core",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_core_382",
+      "from": [
+        7.0,
+        25.25,
+        5.85
+      ],
+      "to": [
+        8.0,
+        25.75,
+        10.15
+      ],
+      "mat": "wind_core",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_core_383",
+      "from": [
+        6.75,
+        25.75,
+        5.85
+      ],
+      "to": [
+        8.0,
+        26.0,
+        10.15
+      ],
+      "mat": "wind_core",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_core_384",
+      "from": [
+        7.0,
+        26.0,
+        5.85
+      ],
+      "to": [
+        8.0,
+        26.25,
+        10.15
+      ],
+      "mat": "wind_core",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_core_385",
+      "from": [
+        7.25,
+        26.25,
+        5.85
+      ],
+      "to": [
+        8.0,
+        26.75,
+        10.15
+      ],
+      "mat": "wind_core",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_core_386",
+      "from": [
+        7.5,
+        26.75,
+        5.85
+      ],
+      "to": [
+        8.0,
+        27.0,
+        10.15
+      ],
+      "mat": "wind_core",
+      "bone": "focus"
+    },
+    {
+      "name": "wind_core_387",
+      "from": [
+        7.75,
+        27.0,
+        5.85
+      ],
+      "to": [
+        8.0,
+        27.5,
+        10.15
+      ],
+      "mat": "wind_core",
+      "bone": "focus"
+    },
+    {
+      "name": "white_388",
+      "from": [
+        7.88,
+        24.928,
+        5.73
+      ],
+      "to": [
+        8.13,
+        26.608,
+        10.27
+      ],
+      "mat": "white",
+      "bone": "focus"
+    },
+    {
+      "name": "gold_light_389",
+      "from": [
+        6.25,
+        26.0,
+        5.65
+      ],
+      "to": [
+        6.5,
+        26.25,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_390",
+      "from": [
+        6.5,
+        26.25,
+        5.65
+      ],
+      "to": [
+        6.75,
+        26.75,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_391",
+      "from": [
+        6.75,
+        26.75,
+        5.65
+      ],
+      "to": [
+        7.0,
+        27.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_392",
+      "from": [
+        6.75,
+        24.25,
+        5.65
+      ],
+      "to": [
+        7.0,
+        24.75,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_393",
+      "from": [
+        6.5,
+        24.75,
+        5.65
+      ],
+      "to": [
+        6.75,
+        25.25,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_394",
+      "from": [
+        6.25,
+        25.25,
+        5.65
+      ],
+      "to": [
+        6.5,
+        26.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_395",
+      "from": [
+        9.5,
+        26.0,
+        5.65
+      ],
+      "to": [
+        9.75,
+        26.25,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_396",
+      "from": [
+        9.25,
+        26.25,
+        5.65
+      ],
+      "to": [
+        9.5,
+        26.75,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_397",
+      "from": [
+        9.0,
+        26.75,
+        5.65
+      ],
+      "to": [
+        9.25,
+        27.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_398",
+      "from": [
+        9.0,
+        24.25,
+        5.65
+      ],
+      "to": [
+        9.25,
+        24.75,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_399",
+      "from": [
+        9.25,
+        24.75,
+        5.65
+      ],
+      "to": [
+        9.5,
+        25.25,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_400",
+      "from": [
+        9.5,
+        25.25,
+        5.65
+      ],
+      "to": [
+        9.75,
+        26.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "wind_dark_401",
+      "from": [
+        7.75,
+        18.75,
+        6.7
+      ],
+      "to": [
+        8.25,
+        19.0,
+        9.3
+      ],
+      "mat": "wind_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_dark_402",
+      "from": [
+        7.5,
+        19.0,
+        6.7
+      ],
+      "to": [
+        8.5,
+        19.75,
+        9.3
+      ],
+      "mat": "wind_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_dark_403",
+      "from": [
+        7.75,
+        19.75,
+        6.7
+      ],
+      "to": [
+        8.25,
+        20.0,
+        9.3
+      ],
+      "mat": "wind_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_404",
+      "from": [
+        7.75,
+        18.75,
+        6.52
+      ],
+      "to": [
+        8.25,
+        19.25,
+        9.48
+      ],
+      "mat": "wind",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_405",
+      "from": [
+        7.5,
+        19.25,
+        6.52
+      ],
+      "to": [
+        8.5,
+        19.5,
+        9.48
+      ],
+      "mat": "wind",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_406",
+      "from": [
+        7.75,
+        19.5,
+        6.52
+      ],
+      "to": [
+        8.25,
+        19.75,
+        9.48
+      ],
+      "mat": "wind",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_light_407",
+      "from": [
+        8.0,
+        18.75,
+        6.39
+      ],
+      "to": [
+        8.25,
+        19.25,
+        9.61
+      ],
+      "mat": "wind_light",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_light_408",
+      "from": [
+        8.0,
+        19.25,
+        6.39
+      ],
+      "to": [
+        8.5,
+        19.5,
+        9.61
+      ],
+      "mat": "wind_light",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_light_409",
+      "from": [
+        8.0,
+        19.5,
+        6.39
+      ],
+      "to": [
+        8.25,
+        19.75,
+        9.61
+      ],
+      "mat": "wind_light",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_core_410",
+      "from": [
+        7.75,
+        18.75,
+        6.4
+      ],
+      "to": [
+        8.0,
+        19.25,
+        9.6
+      ],
+      "mat": "wind_core",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_core_411",
+      "from": [
+        7.5,
+        19.25,
+        6.4
+      ],
+      "to": [
+        8.0,
+        19.5,
+        9.6
+      ],
+      "mat": "wind_core",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_core_412",
+      "from": [
+        7.75,
+        19.5,
+        6.4
+      ],
+      "to": [
+        8.0,
+        19.75,
+        9.6
+      ],
+      "mat": "wind_core",
+      "bone": "filigree"
+    },
+    {
+      "name": "white_413",
+      "from": [
+        7.88,
+        19.0504,
+        6.28
+      ],
+      "to": [
+        8.13,
+        19.6744,
+        9.72
+      ],
+      "mat": "white",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_dark_414",
+      "from": [
+        7.75,
+        15.5,
+        6.7
+      ],
+      "to": [
+        8.25,
+        16.0,
+        9.3
+      ],
+      "mat": "wind_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_dark_415",
+      "from": [
+        7.5,
+        16.0,
+        6.7
+      ],
+      "to": [
+        8.5,
+        16.5,
+        9.3
+      ],
+      "mat": "wind_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_dark_416",
+      "from": [
+        7.75,
+        16.5,
+        6.7
+      ],
+      "to": [
+        8.25,
+        16.75,
+        9.3
+      ],
+      "mat": "wind_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_417",
+      "from": [
+        7.75,
+        15.75,
+        6.52
+      ],
+      "to": [
+        8.25,
+        16.0,
+        9.48
+      ],
+      "mat": "wind",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_418",
+      "from": [
+        7.5,
+        16.0,
+        6.52
+      ],
+      "to": [
+        8.5,
+        16.5,
+        9.48
+      ],
+      "mat": "wind",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_419",
+      "from": [
+        7.75,
+        16.5,
+        6.52
+      ],
+      "to": [
+        8.25,
+        16.75,
+        9.48
+      ],
+      "mat": "wind",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_light_420",
+      "from": [
+        8.0,
+        15.75,
+        6.39
+      ],
+      "to": [
+        8.25,
+        16.75,
+        9.61
+      ],
+      "mat": "wind_light",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_core_421",
+      "from": [
+        7.75,
+        15.75,
+        6.4
+      ],
+      "to": [
+        8.0,
+        16.75,
+        9.6
+      ],
+      "mat": "wind_core",
+      "bone": "filigree"
+    },
+    {
+      "name": "white_422",
+      "from": [
+        7.88,
+        15.9504,
+        6.28
+      ],
+      "to": [
+        8.13,
+        16.5744,
+        9.72
+      ],
+      "mat": "white",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_dark_423",
+      "from": [
+        7.75,
+        5.5,
+        6.7
+      ],
+      "to": [
+        8.25,
+        5.75,
+        9.3
+      ],
+      "mat": "wind_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_dark_424",
+      "from": [
+        7.5,
+        5.75,
+        6.7
+      ],
+      "to": [
+        8.5,
+        6.5,
+        9.3
+      ],
+      "mat": "wind_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_dark_425",
+      "from": [
+        7.75,
+        6.5,
+        6.7
+      ],
+      "to": [
+        8.25,
+        6.75,
+        9.3
+      ],
+      "mat": "wind_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_426",
+      "from": [
+        7.75,
+        5.5,
+        6.52
+      ],
+      "to": [
+        8.25,
+        6.0,
+        9.48
+      ],
+      "mat": "wind",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_427",
+      "from": [
+        7.5,
+        6.0,
+        6.52
+      ],
+      "to": [
+        8.5,
+        6.25,
+        9.48
+      ],
+      "mat": "wind",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_428",
+      "from": [
+        7.75,
+        6.25,
+        6.52
+      ],
+      "to": [
+        8.25,
+        6.5,
+        9.48
+      ],
+      "mat": "wind",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_light_429",
+      "from": [
+        8.0,
+        5.5,
+        6.39
+      ],
+      "to": [
+        8.25,
+        6.0,
+        9.61
+      ],
+      "mat": "wind_light",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_light_430",
+      "from": [
+        8.0,
+        6.0,
+        6.39
+      ],
+      "to": [
+        8.5,
+        6.25,
+        9.61
+      ],
+      "mat": "wind_light",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_light_431",
+      "from": [
+        8.0,
+        6.25,
+        6.39
+      ],
+      "to": [
+        8.25,
+        6.5,
+        9.61
+      ],
+      "mat": "wind_light",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_core_432",
+      "from": [
+        7.75,
+        5.5,
+        6.4
+      ],
+      "to": [
+        8.0,
+        6.0,
+        9.6
+      ],
+      "mat": "wind_core",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_core_433",
+      "from": [
+        7.5,
+        6.0,
+        6.4
+      ],
+      "to": [
+        8.0,
+        6.25,
+        9.6
+      ],
+      "mat": "wind_core",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_core_434",
+      "from": [
+        7.75,
+        6.25,
+        6.4
+      ],
+      "to": [
+        8.0,
+        6.5,
+        9.6
+      ],
+      "mat": "wind_core",
+      "bone": "filigree"
+    },
+    {
+      "name": "white_435",
+      "from": [
+        7.88,
+        5.7504,
+        6.28
+      ],
+      "to": [
+        8.13,
+        6.3744,
+        9.72
+      ],
+      "mat": "white",
+      "bone": "filigree"
+    },
+    {
+      "name": "wind_light_436",
+      "from": [
+        3.5,
+        29.75,
+        6.9
+      ],
+      "to": [
+        4.25,
+        30.0,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_437",
+      "from": [
+        3.75,
+        30.0,
+        6.9
+      ],
+      "to": [
+        4.5,
+        30.25,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_438",
+      "from": [
+        4.0,
+        30.25,
+        6.9
+      ],
+      "to": [
+        4.75,
+        30.5,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_439",
+      "from": [
+        4.5,
+        30.5,
+        6.9
+      ],
+      "to": [
+        4.75,
+        30.75,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_440",
+      "from": [
+        12.5,
+        20.75,
+        6.9
+      ],
+      "to": [
+        12.75,
+        21.0,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_441",
+      "from": [
+        12.5,
+        21.0,
+        6.9
+      ],
+      "to": [
+        13.5,
+        21.25,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_442",
+      "from": [
+        12.75,
+        21.25,
+        6.9
+      ],
+      "to": [
+        13.5,
+        21.5,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_443",
+      "from": [
+        13.0,
+        21.5,
+        6.9
+      ],
+      "to": [
+        13.75,
+        21.75,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_444",
+      "from": [
+        10.5,
+        8.75,
+        6.9
+      ],
+      "to": [
+        11.25,
+        9.0,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_445",
+      "from": [
+        10.75,
+        9.0,
+        6.9
+      ],
+      "to": [
+        11.5,
+        9.25,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_446",
+      "from": [
+        11.0,
+        9.25,
+        6.9
+      ],
+      "to": [
+        11.75,
+        9.5,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_light_447",
+      "from": [
+        11.5,
+        9.5,
+        6.9
+      ],
+      "to": [
+        11.75,
+        9.75,
+        9.1
+      ],
+      "mat": "wind_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "wind_448",
+      "from": [
+        7.8,
+        4.0,
+        9.3
+      ],
+      "to": [
+        8.2,
+        4.55,
+        9.7
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_449",
+      "from": [
+        8.5964,
+        4.6714,
+        9.188
+      ],
+      "to": [
+        8.9964,
+        5.2214,
+        9.588
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_450",
+      "from": [
+        9.2738,
+        5.3429,
+        8.8686
+      ],
+      "to": [
+        9.6738,
+        5.8929,
+        9.2686
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_451",
+      "from": [
+        9.731,
+        6.0143,
+        8.3895
+      ],
+      "to": [
+        10.131,
+        6.5643,
+        8.7895
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_452",
+      "from": [
+        9.8998,
+        6.6857,
+        7.8224
+      ],
+      "to": [
+        10.2998,
+        7.2357,
+        8.2224
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_453",
+      "from": [
+        9.7548,
+        7.3571,
+        7.252
+      ],
+      "to": [
+        10.1548,
+        7.9071,
+        7.652
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_454",
+      "from": [
+        9.3179,
+        8.0286,
+        6.7634
+      ],
+      "to": [
+        9.7179,
+        8.5786,
+        7.1634
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_455",
+      "from": [
+        8.6541,
+        8.7,
+        6.4297
+      ],
+      "to": [
+        9.0541,
+        9.25,
+        6.8297
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_456",
+      "from": [
+        7.8628,
+        9.3714,
+        6.3007
+      ],
+      "to": [
+        8.2628,
+        9.9214,
+        6.7007
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_457",
+      "from": [
+        7.0621,
+        10.0429,
+        6.3956
+      ],
+      "to": [
+        7.4621,
+        10.5929,
+        6.7956
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_458",
+      "from": [
+        6.3716,
+        10.7143,
+        6.7004
+      ],
+      "to": [
+        6.7716,
+        11.2643,
+        7.1004
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_459",
+      "from": [
+        5.8945,
+        11.3857,
+        7.1695
+      ],
+      "to": [
+        6.2945,
+        11.9357,
+        7.5695
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_460",
+      "from": [
+        5.7021,
+        12.0571,
+        7.7327
+      ],
+      "to": [
+        6.1021,
+        12.6071,
+        8.1327
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_461",
+      "from": [
+        5.8231,
+        12.7286,
+        8.306
+      ],
+      "to": [
+        6.2231,
+        13.2786,
+        8.706
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_462",
+      "from": [
+        6.2394,
+        13.4,
+        8.8037
+      ],
+      "to": [
+        6.6394,
+        13.95,
+        9.2037
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_463",
+      "from": [
+        6.8888,
+        14.0714,
+        9.1515
+      ],
+      "to": [
+        7.2888,
+        14.6214,
+        9.5515
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_464",
+      "from": [
+        7.6744,
+        14.7429,
+        9.2973
+      ],
+      "to": [
+        8.0744,
+        15.2929,
+        9.6973
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_465",
+      "from": [
+        8.4787,
+        15.4143,
+        9.2195
+      ],
+      "to": [
+        8.8787,
+        15.9643,
+        9.6195
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_466",
+      "from": [
+        9.1817,
+        16.0857,
+        8.9296
+      ],
+      "to": [
+        9.5817,
+        16.6357,
+        9.3296
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_467",
+      "from": [
+        9.6782,
+        16.7571,
+        8.471
+      ],
+      "to": [
+        10.0782,
+        17.3071,
+        8.871
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_468",
+      "from": [
+        9.8941,
+        17.4286,
+        7.9121
+      ],
+      "to": [
+        10.2941,
+        17.9786,
+        8.3121
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    },
+    {
+      "name": "wind_469",
+      "from": [
+        9.7972,
+        18.1,
+        7.3365
+      ],
+      "to": [
+        10.1972,
+        18.65,
+        7.7365
+      ],
+      "mat": "wind",
+      "bone": "spiral"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "release": "1.9.12-longinus-melee",
+  "jar": "advance-magic-1.9.12.jar",
+  "sha256": "bba6b1fb108534465a6588055292bad5be9726055116f316df9b2a0257d47900",
+  "bedrock_pack_version": "2.12.12",
+  "packs": {
+    "advance-magic-java.zip": "1a4afc5027ef3d7fc4c1c4709f3e8fe6de3406ab",
+    "advance-magic-bedrock.mcpack": "10004ef53900e8fbeaf1255c8deebd7ba7b2ae6e"
+  },
+  "behavior": {
+    "longinus_throwable": false,
+    "longinus_melee_reach_blocks": 7,
+    "melee_damage_speed": "trident defaults",
+    "legacy_tagged_tridents": "automatic migration",
+    "approved_model_transforms": "unchanged"
+  },
+  "verification": {
+    "paper_runtime": 81,
+    "geyser_modelengine_integration": 48,
+    "weapon_assets": 230,
+    "hand_fit": 145,
+    "camera_approximation": 32,
+    "pack_archives_hashes_embedded": "PASS",
+    "real_game_client_test": false
+  }
+}

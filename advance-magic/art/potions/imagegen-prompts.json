@@ -1,0 +1,26 @@
+{
+  "tool": "Built-in image_gen via imagegen skill",
+  "transparent_background": true,
+  "outputs": {
+    "low": {
+      "prompt": "Use case: stylized-concept. Asset type: polished Minecraft fantasy mana potion inventory sprite. Create ONE beautiful hand-painted pixel-art bottle icon, square transparent canvas, bottle occupies central 75% height, large readable silhouette, deliberate crisp pixel clusters like a premium 64x64 RPG item enlarged cleanly. Elegant tall hexagonal cut-crystal glass flask with tapered shoulder and narrow neck, bevelled glass with white edge highlights, richly colored liquid, small inset amethyst crystal at the neck, metal neck collar, cork, restrained sparkle contained within silhouette. Orthographic front three-quarter sprite, no pedestal, no surrounding glow, no shadow outside bottle. No text, no labels, no symbols that look like text, no background, no checkerboard. Real transparent background. Matching art direction across a four-tier collection. Quality variation: LOW tier: smoked lavender glass, dusty violet liquid, simple pewter collar and small amethyst. Modest plain flask, clear readable outline.",
+      "generated_source": "source/low.png",
+      "game_texture": "mana_potion_low.png"
+    },
+    "medium": {
+      "prompt": "Use case: stylized-concept. Asset type: polished Minecraft fantasy mana potion inventory sprite. Create ONE beautiful hand-painted pixel-art bottle icon, square transparent canvas, bottle occupies central 75% height, large readable silhouette, deliberate crisp pixel clusters like a premium 64x64 RPG item enlarged cleanly. Elegant tall hexagonal cut-crystal glass flask with tapered shoulder and narrow neck, bevelled glass with white edge highlights, richly colored liquid, small inset amethyst crystal at the neck, metal neck collar, cork, restrained sparkle contained within silhouette. Orthographic front three-quarter sprite, no pedestal, no surrounding glow, no shadow outside bottle. No text, no labels, no symbols that look like text, no background, no checkerboard. Real transparent background. Matching art direction across a four-tier collection. Quality variation: MEDIUM tier: rich violet liquid, polished silver collar, small cut amethyst clasp. Elegant clean flask, restrained decoration.",
+      "generated_source": "source/medium.png",
+      "game_texture": "mana_potion_medium.png"
+    },
+    "good": {
+      "prompt": "Use case: stylized-concept. Asset type: polished Minecraft fantasy mana potion inventory sprite. Create ONE beautiful hand-painted pixel-art bottle icon, square transparent canvas, bottle occupies central 75% height, large readable silhouette, deliberate crisp pixel clusters like a premium 64x64 RPG item enlarged cleanly. Elegant tall hexagonal cut-crystal glass flask with tapered shoulder and narrow neck, bevelled glass with white edge highlights, richly colored liquid, small inset amethyst crystal at the neck, metal neck collar, cork, restrained sparkle contained within silhouette. Orthographic front three-quarter sprite, no pedestal, no surrounding glow, no shadow outside bottle. No text, no labels, no symbols that look like text, no background, no checkerboard. Real transparent background. Matching art direction across a four-tier collection. Quality variation: GOOD tier: luminous azure-violet liquid, intricate silver collar, larger amethyst neck gem, faceted clear glass, one small sparkle.",
+      "generated_source": "source/good.png",
+      "game_texture": "mana_potion_good.png"
+    },
+    "supreme": {
+      "prompt": "Use case: stylized-concept. Asset type: polished Minecraft fantasy mana potion inventory sprite. Create ONE beautiful hand-painted pixel-art bottle icon, square transparent canvas, bottle occupies central 75% height, large readable silhouette, deliberate crisp pixel clusters like a premium 64x64 RPG item enlarged cleanly. Elegant tall hexagonal cut-crystal glass flask with tapered shoulder and narrow neck, bevelled glass with white edge highlights, richly colored liquid, small inset amethyst crystal at the neck, metal neck collar, cork, restrained sparkle contained within silhouette. Orthographic front three-quarter sprite, no pedestal, no surrounding glow, no shadow outside bottle. No text, no labels, no symbols that look like text, no background, no checkerboard. Real transparent background. Matching art direction across a four-tier collection. Quality variation: SUPREME tier: luminous purple-magenta liquid, ornate slender gold filigree collar and faceted amethyst stopper, exquisite crystal-glass flask. Luxurious but readable, a tiny contained white highlight.",
+      "generated_source": "source/supreme.png",
+      "game_texture": "mana_potion_supreme.png"
+    }
+  }
+}

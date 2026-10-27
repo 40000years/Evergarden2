@@ -1,0 +1,7065 @@
+{
+  "acheron": {
+    "blocks": 369496,
+    "chests": [
+      {
+        "x": -18,
+        "y": 6,
+        "z": -77,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -18,
+        "y": 6,
+        "z": -43,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 18,
+        "y": 6,
+        "z": -77,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 18,
+        "y": 6,
+        "z": -43,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -47,
+        "y": 6,
+        "z": -65,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 59,
+        "y": 6,
+        "z": -65,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -72,
+        "y": 1,
+        "z": 62,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 72,
+        "y": 1,
+        "z": 62,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      }
+    ],
+    "rooms": [
+      {
+        "bounds": [
+          -25,
+          5,
+          -89,
+          27,
+          34,
+          -27
+        ],
+        "role": "throne",
+        "gallery": true
+      },
+      {
+        "bounds": [
+          -79,
+          5,
+          -83,
+          -34,
+          29,
+          -39
+        ],
+        "role": "guardroom",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          39,
+          5,
+          -84,
+          75,
+          23,
+          -51
+        ],
+        "role": "archive",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          -82,
+          0,
+          52,
+          -62,
+          11,
+          75
+        ],
+        "role": "guardroom",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          62,
+          0,
+          52,
+          82,
+          11,
+          75
+        ],
+        "role": "guardroom",
+        "gallery": false
+      }
+    ],
+    "design": {
+      "identity": "Asymmetric blood fortress / western keep, throne hall, eastern archive",
+      "interior_focus": "Layered furnished suites, central nave, functional rooms, upper galleries and wall artwork",
+      "cutaway": [
+        -25,
+        -89,
+        27,
+        -27,
+        5,
+        34
+      ],
+      "materials": {
+        "stone": 152853,
+        "deepslate_bricks": 57369,
+        "polished_blackstone_bricks": 51813,
+        "grass_block": 28018,
+        "deepslate_tiles": 20761,
+        "polished_andesite": 16916,
+        "dark_oak_planks": 9569,
+        "red_stained_glass": 9063,
+        "dark_oak_leaves": 5940,
+        "gray_terracotta": 5149,
+        "crimson_planks": 3156,
+        "stripped_dark_oak_log": 1854,
+        "red_carpet": 1469,
+        "red_nether_bricks": 1092,
+        "azalea_leaves": 864,
+        "coarse_dirt": 858,
+        "bookshelf": 412,
+        "dark_oak_log": 334,
+        "spruce_fence": 202,
+        "stone_bricks": 195,
+        "dark_oak_slab": 167,
+        "black_concrete": 147,
+        "gray_carpet": 140,
+        "spruce_slab": 139,
+        "rose_bush": 116,
+        "red_wool": 91,
+        "iron_chain": 86,
+        "spruce_stairs": 84,
+        "stone_brick_slab": 84,
+        "gray_concrete": 68,
+        "spruce_trapdoor": 61,
+        "light_gray_terracotta": 60,
+        "red_terracotta": 57,
+        "soul_lantern": 55,
+        "polished_blackstone_wall": 46,
+        "dark_oak_stairs": 30,
+        "potted_fern": 24,
+        "terracotta": 24,
+        "flowering_azalea_leaves": 24,
+        "bricks": 24,
+        "red_bed": 17,
+        "chiseled_stone_bricks": 16,
+        "white_candle": 12,
+        "flower_pot": 12,
+        "campfire": 9,
+        "chest": 8,
+        "lectern": 6,
+        "gold_block": 2,
+        "cauldron": 0
+      },
+      "routes": [
+        [
+          -10,
+          6,
+          -70
+        ],
+        [
+          -10,
+          6,
+          -54
+        ],
+        [
+          -10,
+          6,
+          -39
+        ],
+        [
+          12,
+          6,
+          -70
+        ],
+        [
+          12,
+          6,
+          -54
+        ],
+        [
+          12,
+          6,
+          -39
+        ],
+        [
+          -10,
+          15,
+          -70
+        ],
+        [
+          -10,
+          15,
+          -54
+        ],
+        [
+          -10,
+          15,
+          -39
+        ],
+        [
+          12,
+          15,
+          -70
+        ],
+        [
+          12,
+          15,
+          -54
+        ],
+        [
+          12,
+          15,
+          -39
+        ],
+        [
+          1,
+          15,
+          -84
+        ],
+        [
+          1,
+          6,
+          -32
+        ],
+        [
+          -68,
+          6,
+          -64
+        ],
+        [
+          -68,
+          6,
+          -50
+        ],
+        [
+          -46,
+          6,
+          -64
+        ],
+        [
+          -46,
+          6,
+          -50
+        ],
+        [
+          -68,
+          15,
+          -64
+        ],
+        [
+          -68,
+          15,
+          -50
+        ],
+        [
+          -46,
+          15,
+          -64
+        ],
+        [
+          -46,
+          15,
+          -50
+        ],
+        [
+          -57,
+          15,
+          -78
+        ],
+        [
+          -57,
+          6,
+          -44
+        ],
+        [
+          46,
+          6,
+          -74
+        ],
+        [
+          46,
+          6,
+          -62
+        ],
+        [
+          68,
+          6,
+          -74
+        ],
+        [
+          68,
+          6,
+          -62
+        ],
+        [
+          57,
+          6,
+          -56
+        ],
+        [
+          -72,
+          1,
+          71
+        ],
+        [
+          72,
+          1,
+          71
+        ]
+      ],
+      "occupied_rooms": [
+        {
+          "role": "council",
+          "bounds": [
+            -21,
+            5,
+            -76,
+            -8,
+            13,
+            -63
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            -21,
+            5,
+            -61,
+            -8,
+            13,
+            -47
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            -21,
+            5,
+            -45,
+            -8,
+            13,
+            -32
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "bedchamber",
+          "bounds": [
+            10,
+            5,
+            -76,
+            23,
+            13,
+            -63
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "archive",
+          "bounds": [
+            10,
+            5,
+            -61,
+            23,
+            13,
+            -47
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "relics",
+          "bounds": [
+            10,
+            5,
+            -45,
+            23,
+            13,
+            -32
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            -21,
+            14,
+            -76,
+            -8,
+            22,
+            -63
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "cartography",
+          "bounds": [
+            -21,
+            14,
+            -61,
+            -8,
+            22,
+            -47
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            -21,
+            14,
+            -45,
+            -8,
+            22,
+            -32
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "library",
+          "bounds": [
+            10,
+            14,
+            -76,
+            23,
+            22,
+            -63
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "infirmary",
+          "bounds": [
+            10,
+            14,
+            -61,
+            23,
+            22,
+            -47
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "dining",
+          "bounds": [
+            10,
+            14,
+            -45,
+            23,
+            22,
+            -32
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "bedchamber",
+          "bounds": [
+            -75,
+            5,
+            -70,
+            -66,
+            13,
+            -58
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "archive",
+          "bounds": [
+            -75,
+            5,
+            -56,
+            -66,
+            13,
+            -44
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "relics",
+          "bounds": [
+            -48,
+            5,
+            -70,
+            -38,
+            13,
+            -58
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            -48,
+            5,
+            -56,
+            -38,
+            13,
+            -44
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "cartography",
+          "bounds": [
+            -75,
+            14,
+            -70,
+            -66,
+            22,
+            -58
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            -75,
+            14,
+            -56,
+            -66,
+            22,
+            -44
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "library",
+          "bounds": [
+            -48,
+            14,
+            -70,
+            -38,
+            22,
+            -58
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "infirmary",
+          "bounds": [
+            -48,
+            14,
+            -56,
+            -38,
+            22,
+            -44
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            -79,
+            0,
+            55,
+            -65,
+            8,
+            72
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            65,
+            0,
+            55,
+            79,
+            8,
+            72
+          ],
+          "level": "ground"
+        }
+      ],
+      "rare_materials": {
+        "gold_block": 2
+      },
+      "rare_limits": {
+        "gold_block": 4,
+        "iron_block": 8,
+        "waxed_cut_copper": 12,
+        "anvil": 2,
+        "blast_furnace": 4,
+        "cauldron": 2,
+        "brewing_stand": 1,
+        "enchanting_table": 1,
+        "quartz_block": 24,
+        "quartz_pillar": 24,
+        "smooth_quartz": 24,
+        "quartz_bricks": 24,
+        "amethyst_block": 12,
+        "sea_lantern": 8,
+        "end_rod": 6,
+        "dark_prismarine": 24,
+        "blue_ice": 8
+      },
+      "rare_total": 2,
+      "artwork": "Framed permanent block mosaics, landscapes, portraits, moon/sun scenes",
+      "extended_ceiling_hangers": 28,
+      "small_detail_connections": [
+        {
+          "assembly_size": 13,
+          "ties": [
+            [
+              37,
+              14,
+              -74
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 13,
+          "ties": [
+            [
+              77,
+              14,
+              -54
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 13,
+          "ties": [
+            [
+              77,
+              16,
+              -64
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 13,
+          "ties": [
+            [
+              37,
+              14,
+              -64
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 11,
+          "ties": [
+            [
+              31,
+              5,
+              -50
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 11,
+          "ties": [
+            [
+              -28,
+              6,
+              -69
+            ],
+            [
+              -27,
+              6,
+              -69
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 11,
+          "ties": [
+            [
+              -28,
+              11,
+              -79
+            ],
+            [
+              -27,
+              11,
+              -79
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 11,
+          "ties": [
+            [
+              -28,
+              5,
+              -49
+            ],
+            [
+              -27,
+              5,
+              -49
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 11,
+          "ties": [
+            [
+              30,
+              13,
+              -69
+            ],
+            [
+              29,
+              13,
+              -69
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 11,
+          "ties": [
+            [
+              30,
+              13,
+              -79
+            ],
+            [
+              29,
+              13,
+              -79
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 11,
+          "ties": [
+            [
+              -28,
+              5,
+              -59
+            ],
+            [
+              -27,
+              5,
+              -59
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 10,
+          "ties": [
+            [
+              -31,
+              14,
+              -73
+            ],
+            [
+              -32,
+              14,
+              -73
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 10,
+          "ties": [
+            [
+              -82,
+              10,
+              -43
+            ],
+            [
+              -81,
+              10,
+              -43
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 10,
+          "ties": [
+            [
+              22,
+              19,
+              -76
+            ]
+          ],
+          "material": "spruce_slab[type=bottom]"
+        },
+        {
+          "assembly_size": 10,
+          "ties": [
+            [
+              -31,
+              14,
+              -63
+            ],
+            [
+              -32,
+              14,
+              -63
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 10,
+          "ties": [
+            [
+              -82,
+              7,
+              -63
+            ],
+            [
+              -81,
+              7,
+              -63
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 10,
+          "ties": [
+            [
+              -31,
+              14,
+              -53
+            ],
+            [
+              -32,
+              14,
+              -53
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 10,
+          "ties": [
+            [
+              -82,
+              7,
+              -53
+            ],
+            [
+              -81,
+              7,
+              -53
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 9,
+          "ties": [
+            [
+              -40,
+              19,
+              -69
+            ]
+          ],
+          "material": "spruce_slab[type=bottom]"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              20,
+              51,
+              -43
+            ],
+            [
+              20,
+              50,
+              -43
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -13,
+              50,
+              -57
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              17,
+              50,
+              -81
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              47,
+              37,
+              -64
+            ],
+            [
+              47,
+              36,
+              -64
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -16,
+              50,
+              -81
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -14,
+              51,
+              -43
+            ],
+            [
+              -14,
+              50,
+              -43
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              68,
+              36,
+              -63
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              43,
+              36,
+              -65
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              20,
+              51,
+              -82
+            ],
+            [
+              20,
+              50,
+              -82
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              46,
+              36,
+              -63
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              46,
+              36,
+              -76
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -16,
+              50,
+              -42
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -16,
+              50,
+              -55
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              17,
+              50,
+              -42
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              17,
+              50,
+              -55
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              19,
+              50,
+              -70
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              37,
+              14,
+              -54
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              20,
+              51,
+              -56
+            ],
+            [
+              20,
+              50,
+              -56
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              43,
+              36,
+              -78
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -13,
+              50,
+              -70
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              16,
+              50,
+              -44
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -14,
+              51,
+              -56
+            ],
+            [
+              -14,
+              50,
+              -56
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -18,
+              50,
+              -68
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              47,
+              37,
+              -77
+            ],
+            [
+              47,
+              36,
+              -77
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              71,
+              36,
+              -65
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -13,
+              50,
+              -44
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              17,
+              51,
+              -69
+            ],
+            [
+              17,
+              50,
+              -69
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -19,
+              51,
+              -82
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              20,
+              50,
+              -83
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              66,
+              37,
+              -64
+            ],
+            [
+              66,
+              36,
+              -64
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -14,
+              51,
+              -69
+            ],
+            [
+              -14,
+              50,
+              -69
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              21,
+              51,
+              -56
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -18,
+              51,
+              -82
+            ],
+            [
+              -18,
+              50,
+              -82
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              17,
+              50,
+              -68
+            ]
+          ],
+          "material": "deepslate_tiles"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              -27,
+              18,
+              -39
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              -27,
+              18,
+              -49
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              -27,
+              20,
+              -79
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              29,
+              19,
+              -59
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              29,
+              16,
+              -69
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              -27,
+              18,
+              -59
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              29,
+              16,
+              -79
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              -29,
+              12,
+              -38
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              -27,
+              20,
+              -69
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              29,
+              20,
+              -49
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -32,
+              17,
+              -53
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -11,
+              15,
+              -74
+            ]
+          ],
+          "material": "dark_oak_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              13,
+              6,
+              -74
+            ]
+          ],
+          "material": "dark_oak_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -81,
+              18,
+              -63
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              13,
+              15,
+              -59
+            ]
+          ],
+          "material": "dark_oak_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -32,
+              16,
+              -73
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -81,
+              15,
+              -53
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -32,
+              16,
+              -63
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -31,
+              14,
+              -43
+            ],
+            [
+              -32,
+              14,
+              -43
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -32,
+              15,
+              -43
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -81,
+              18,
+              -43
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -19,
+              15,
+              -74
+            ]
+          ],
+          "material": "dark_oak_planks"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              58,
+              21,
+              -56
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              30,
+              19,
+              -28
+            ],
+            [
+              30,
+              19,
+              -27
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              58,
+              21,
+              -69
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              56,
+              21,
+              -69
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              56,
+              21,
+              -56
+            ]
+          ],
+          "material": "polished_blackstone_bricks"
+        }
+      ],
+      "removed_detached_remnants": [],
+      "explicit_fence_wall_states": 248,
+      "polish": "Attached structure, proportionate furniture, supported ornaments and revised silhouettes"
+    },
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "z": 27,
+      "clear_radius": 30,
+      "clear_height": 28
+    },
+    "reachable_standing_positions": 40365
+  },
+  "phlegethon": {
+    "blocks": 339535,
+    "chests": [
+      {
+        "x": -27,
+        "y": 6,
+        "z": -66,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -27,
+        "y": 6,
+        "z": -42,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 27,
+        "y": 6,
+        "z": -66,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 27,
+        "y": 6,
+        "z": -42,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -57,
+        "y": 6,
+        "z": -68,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 71,
+        "y": 6,
+        "z": -68,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -65,
+        "y": 1,
+        "z": 74,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 65,
+        "y": 1,
+        "z": 74,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      }
+    ],
+    "rooms": [
+      {
+        "bounds": [
+          -79,
+          5,
+          -87,
+          79,
+          29,
+          -29
+        ],
+        "role": "workshop",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          -75,
+          0,
+          64,
+          -55,
+          11,
+          84
+        ],
+        "role": "workshop",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          55,
+          0,
+          64,
+          75,
+          11,
+          84
+        ],
+        "role": "workshop",
+        "gallery": false
+      }
+    ],
+    "design": {
+      "identity": "Long sawtooth foundry / clustered western chimneys, open casting yard",
+      "interior_focus": "Layered furnished suites, central nave, functional rooms, upper galleries and wall artwork",
+      "cutaway": [
+        -79,
+        -87,
+        79,
+        -29,
+        5,
+        29
+      ],
+      "materials": {
+        "terracotta": 153358,
+        "polished_basalt": 69179,
+        "polished_blackstone_bricks": 35901,
+        "red_sandstone": 29358,
+        "smooth_stone": 25826,
+        "orange_stained_glass": 7662,
+        "dark_oak_planks": 4003,
+        "gray_concrete": 3516,
+        "brown_terracotta": 2892,
+        "stripped_dark_oak_log": 2009,
+        "orange_terracotta": 1428,
+        "orange_carpet": 1267,
+        "red_terracotta": 812,
+        "magma_block": 450,
+        "bricks": 378,
+        "lava": 225,
+        "dark_oak_slab": 208,
+        "gray_terracotta": 192,
+        "white_carpet": 153,
+        "bookshelf": 142,
+        "spruce_trapdoor": 138,
+        "dark_oak_fence": 83,
+        "iron_chain": 52,
+        "soul_campfire": 50,
+        "yellow_terracotta": 42,
+        "spruce_slab": 40,
+        "black_concrete": 33,
+        "dark_oak_stairs": 26,
+        "polished_blackstone_wall": 24,
+        "lantern": 16,
+        "potted_allium": 10,
+        "stonecutter": 9,
+        "flower_pot": 8,
+        "chest": 8,
+        "white_candle": 6,
+        "spruce_stairs": 6,
+        "waxed_cut_copper": 5,
+        "grindstone": 5,
+        "campfire": 3,
+        "azalea_leaves": 3,
+        "flowering_azalea_leaves": 3,
+        "lectern": 2,
+        "blast_furnace": 2,
+        "anvil": 2,
+        "cauldron": 0
+      },
+      "routes": [
+        [
+          -48,
+          6,
+          -75
+        ],
+        [
+          -48,
+          6,
+          -58
+        ],
+        [
+          -48,
+          6,
+          -41
+        ],
+        [
+          -48,
+          17,
+          -75
+        ],
+        [
+          -48,
+          17,
+          -58
+        ],
+        [
+          -48,
+          17,
+          -41
+        ],
+        [
+          -45,
+          17,
+          -75
+        ],
+        [
+          0,
+          6,
+          -34
+        ],
+        [
+          -65,
+          1,
+          80
+        ],
+        [
+          65,
+          1,
+          80
+        ]
+      ],
+      "occupied_rooms": [
+        {
+          "role": "toolroom",
+          "bounds": [
+            -74,
+            5,
+            -81,
+            -47,
+            13,
+            -68
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "workshop",
+          "bounds": [
+            -74,
+            5,
+            -64,
+            -47,
+            13,
+            -51
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "dining",
+          "bounds": [
+            -74,
+            5,
+            -47,
+            -47,
+            13,
+            -34
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "control",
+          "bounds": [
+            -74,
+            16,
+            -81,
+            -47,
+            24,
+            -68
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "archive",
+          "bounds": [
+            -74,
+            16,
+            -64,
+            -47,
+            24,
+            -51
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            -74,
+            16,
+            -47,
+            -47,
+            24,
+            -34
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "casting press",
+          "bounds": [
+            6,
+            5,
+            -69,
+            18,
+            20,
+            -56
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "casting press",
+          "bounds": [
+            6,
+            5,
+            -47,
+            18,
+            20,
+            -34
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "casting press",
+          "bounds": [
+            52,
+            5,
+            -61,
+            64,
+            20,
+            -48
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "casting press",
+          "bounds": [
+            52,
+            5,
+            -45,
+            64,
+            20,
+            -32
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "workshop",
+          "bounds": [
+            -72,
+            0,
+            67,
+            -58,
+            8,
+            81
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "workshop",
+          "bounds": [
+            58,
+            0,
+            67,
+            72,
+            8,
+            81
+          ],
+          "level": "ground"
+        }
+      ],
+      "rare_materials": {
+        "waxed_cut_copper": 5,
+        "blast_furnace": 2,
+        "anvil": 2
+      },
+      "rare_limits": {
+        "gold_block": 4,
+        "iron_block": 8,
+        "waxed_cut_copper": 12,
+        "anvil": 2,
+        "blast_furnace": 4,
+        "cauldron": 2,
+        "brewing_stand": 1,
+        "enchanting_table": 1,
+        "quartz_block": 24,
+        "quartz_pillar": 24,
+        "smooth_quartz": 24,
+        "quartz_bricks": 24,
+        "amethyst_block": 12,
+        "sea_lantern": 8,
+        "end_rod": 6,
+        "dark_prismarine": 24,
+        "blue_ice": 8
+      },
+      "rare_total": 9,
+      "artwork": "Framed permanent block mosaics, landscapes, portraits, moon/sun scenes",
+      "extended_ceiling_hangers": 2,
+      "small_detail_connections": [
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -33,
+              34,
+              -81
+            ],
+            [
+              -33,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              6,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -3,
+              34,
+              -81
+            ],
+            [
+              -3,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              35,
+              36,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -25,
+              34,
+              -33
+            ],
+            [
+              -25,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              7,
+              34,
+              -81
+            ],
+            [
+              7,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -4,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              17,
+              34,
+              -81
+            ],
+            [
+              17,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              26,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -15,
+              34,
+              -81
+            ],
+            [
+              -15,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -4,
+              35,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -24,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              16,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -14,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -25,
+              34,
+              -81
+            ],
+            [
+              -25,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              34,
+              37,
+              -81
+            ],
+            [
+              35,
+              37,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -24,
+              35,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              25,
+              34,
+              -33
+            ],
+            [
+              25,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -34,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -33,
+              34,
+              -33
+            ],
+            [
+              -33,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -14,
+              35,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              26,
+              35,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -3,
+              34,
+              -33
+            ],
+            [
+              -3,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              35,
+              36,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              6,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -24,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              7,
+              34,
+              -33
+            ],
+            [
+              7,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              6,
+              35,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -14,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              17,
+              34,
+              -33
+            ],
+            [
+              17,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              26,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              16,
+              35,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -15,
+              34,
+              -33
+            ],
+            [
+              -15,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -4,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              25,
+              34,
+              -81
+            ],
+            [
+              25,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -34,
+              33,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -4,
+              35,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              26,
+              35,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              16,
+              33,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              34,
+              37,
+              -33
+            ],
+            [
+              35,
+              37,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              6,
+              35,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -24,
+              35,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              16,
+              35,
+              -81
+            ]
+          ],
+          "material": "polished_basalt"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -14,
+              35,
+              -33
+            ]
+          ],
+          "material": "polished_basalt"
+        }
+      ],
+      "removed_detached_remnants": [
+        {
+          "voxels": 1,
+          "bounds": [
+            24,
+            36,
+            -81,
+            24,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            19,
+            37,
+            -33,
+            19,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -2,
+            36,
+            -81,
+            -2,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            29,
+            37,
+            -33,
+            29,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            4,
+            36,
+            -81,
+            4,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -7,
+            37,
+            -33,
+            -7,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -32,
+            36,
+            -33,
+            -32,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            9,
+            37,
+            -81,
+            9,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            8,
+            36,
+            -81,
+            8,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            3,
+            37,
+            -33,
+            3,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -1,
+            37,
+            -81,
+            -1,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            13,
+            37,
+            -33,
+            13,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -12,
+            36,
+            -81,
+            -12,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -16,
+            36,
+            -81,
+            -16,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -6,
+            36,
+            -81,
+            -6,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -11,
+            37,
+            -33,
+            -11,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            23,
+            37,
+            -81,
+            23,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -31,
+            37,
+            -81,
+            -31,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -26,
+            36,
+            -81,
+            -26,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -27,
+            37,
+            -81,
+            -27,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -22,
+            36,
+            -81,
+            -22,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -21,
+            37,
+            -81,
+            -21,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            14,
+            36,
+            -33,
+            14,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            18,
+            36,
+            -33,
+            18,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -17,
+            37,
+            -81,
+            -17,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            24,
+            36,
+            -33,
+            24,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            28,
+            36,
+            -33,
+            28,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            19,
+            37,
+            -81,
+            19,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            4,
+            36,
+            -33,
+            4,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            9,
+            37,
+            -33,
+            9,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            8,
+            36,
+            -33,
+            8,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            29,
+            37,
+            -81,
+            29,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -1,
+            37,
+            -33,
+            -1,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -7,
+            37,
+            -81,
+            -7,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -32,
+            36,
+            -81,
+            -32,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            3,
+            37,
+            -81,
+            3,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -16,
+            36,
+            -33,
+            -16,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            13,
+            37,
+            -81,
+            13,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -6,
+            36,
+            -33,
+            -6,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            28,
+            36,
+            -81,
+            28,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            23,
+            37,
+            -33,
+            23,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -2,
+            36,
+            -33,
+            -2,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -31,
+            37,
+            -33,
+            -31,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -11,
+            37,
+            -81,
+            -11,
+            37,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -26,
+            36,
+            -33,
+            -26,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -27,
+            37,
+            -33,
+            -27,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -22,
+            36,
+            -33,
+            -22,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -21,
+            37,
+            -33,
+            -21,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -17,
+            37,
+            -33,
+            -17,
+            37,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            14,
+            36,
+            -81,
+            14,
+            36,
+            -81
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -12,
+            36,
+            -33,
+            -12,
+            36,
+            -33
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            18,
+            36,
+            -81,
+            18,
+            36,
+            -81
+          ]
+        }
+      ],
+      "explicit_fence_wall_states": 107,
+      "polish": "Attached structure, proportionate furniture, supported ornaments and revised silhouettes"
+    },
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "z": 27,
+      "clear_radius": 30,
+      "clear_height": 28
+    },
+    "reachable_standing_positions": 39597
+  },
+  "cocytus": {
+    "blocks": 364492,
+    "chests": [
+      {
+        "x": -18,
+        "y": 6,
+        "z": -77,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -18,
+        "y": 6,
+        "z": -43,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 18,
+        "y": 6,
+        "z": -77,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 18,
+        "y": 6,
+        "z": -43,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -47,
+        "y": 6,
+        "z": -65,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 59,
+        "y": 6,
+        "z": -65,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -72,
+        "y": 1,
+        "z": 62,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 72,
+        "y": 1,
+        "z": 62,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      }
+    ],
+    "rooms": [
+      {
+        "bounds": [
+          -25,
+          5,
+          -89,
+          25,
+          33,
+          -28
+        ],
+        "role": "chapel",
+        "gallery": true
+      },
+      {
+        "bounds": [
+          -79,
+          5,
+          -83,
+          -36,
+          20,
+          -49
+        ],
+        "role": "dormitory",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          36,
+          5,
+          -88,
+          79,
+          22,
+          -36
+        ],
+        "role": "refectory",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          -82,
+          0,
+          53,
+          -62,
+          12,
+          76
+        ],
+        "role": "chapel",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          62,
+          0,
+          53,
+          82,
+          12,
+          76
+        ],
+        "role": "chapel",
+        "gallery": false
+      }
+    ],
+    "design": {
+      "identity": "L-shaped snow abbey / offset bell tower, low refectory, eastern garden arcade",
+      "interior_focus": "Layered furnished suites, central nave, functional rooms, upper galleries and wall artwork",
+      "cutaway": [
+        -25,
+        -89,
+        25,
+        -28,
+        5,
+        33
+      ],
+      "materials": {
+        "stone": 152340,
+        "polished_diorite": 63328,
+        "blue_concrete": 50845,
+        "white_concrete": 31417,
+        "snow_block": 31154,
+        "spruce_planks": 10541,
+        "light_blue_stained_glass": 6982,
+        "white_terracotta": 4761,
+        "spruce_leaves": 3368,
+        "snow": 3293,
+        "stripped_spruce_log": 1921,
+        "blue_carpet": 1415,
+        "light_blue_concrete": 626,
+        "ice": 527,
+        "bookshelf": 305,
+        "black_concrete": 227,
+        "spruce_stairs": 144,
+        "white_carpet": 143,
+        "spruce_fence": 141,
+        "stone_bricks": 132,
+        "dark_oak_slab": 127,
+        "spruce_slab": 115,
+        "spruce_log": 108,
+        "iron_chain": 97,
+        "soul_lantern": 61,
+        "spruce_trapdoor": 59,
+        "stone_brick_slab": 56,
+        "potted_blue_orchid": 27,
+        "dark_oak_stairs": 26,
+        "terracotta": 25,
+        "azalea_leaves": 25,
+        "flowering_azalea_leaves": 25,
+        "polished_blackstone_wall": 24,
+        "blue_bed": 23,
+        "quartz_pillar": 20,
+        "bricks": 16,
+        "white_candle": 13,
+        "flower_pot": 8,
+        "chest": 8,
+        "campfire": 6,
+        "lectern": 5,
+        "blue_ice": 5,
+        "sea_lantern": 2,
+        "gold_block": 1,
+        "cauldron": 0
+      },
+      "routes": [
+        [
+          -11,
+          6,
+          -70
+        ],
+        [
+          -11,
+          6,
+          -55
+        ],
+        [
+          -11,
+          6,
+          -40
+        ],
+        [
+          11,
+          6,
+          -70
+        ],
+        [
+          11,
+          6,
+          -55
+        ],
+        [
+          11,
+          6,
+          -40
+        ],
+        [
+          -11,
+          15,
+          -70
+        ],
+        [
+          -11,
+          15,
+          -55
+        ],
+        [
+          -11,
+          15,
+          -40
+        ],
+        [
+          11,
+          15,
+          -70
+        ],
+        [
+          11,
+          15,
+          -55
+        ],
+        [
+          11,
+          15,
+          -40
+        ],
+        [
+          0,
+          15,
+          -84
+        ],
+        [
+          0,
+          6,
+          -33
+        ],
+        [
+          -69,
+          6,
+          -73
+        ],
+        [
+          -69,
+          6,
+          -60
+        ],
+        [
+          -47,
+          6,
+          -73
+        ],
+        [
+          -47,
+          6,
+          -60
+        ],
+        [
+          -58,
+          6,
+          -54
+        ],
+        [
+          46,
+          6,
+          -77
+        ],
+        [
+          46,
+          6,
+          -62
+        ],
+        [
+          46,
+          6,
+          -48
+        ],
+        [
+          68,
+          6,
+          -77
+        ],
+        [
+          68,
+          6,
+          -62
+        ],
+        [
+          68,
+          6,
+          -48
+        ],
+        [
+          57,
+          6,
+          -41
+        ],
+        [
+          -72,
+          1,
+          72
+        ],
+        [
+          72,
+          1,
+          72
+        ],
+        [
+          -79,
+          61,
+          -30
+        ]
+      ],
+      "occupied_rooms": [
+        {
+          "role": "chapel",
+          "bounds": [
+            -21,
+            5,
+            -76,
+            -9,
+            13,
+            -63
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            -21,
+            5,
+            -61,
+            -9,
+            13,
+            -48
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "infirmary",
+          "bounds": [
+            -21,
+            5,
+            -46,
+            -9,
+            13,
+            -33
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            9,
+            5,
+            -76,
+            21,
+            13,
+            -63
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "library",
+          "bounds": [
+            9,
+            5,
+            -61,
+            21,
+            13,
+            -48
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "dining",
+          "bounds": [
+            9,
+            5,
+            -46,
+            21,
+            13,
+            -33
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            -21,
+            14,
+            -76,
+            -9,
+            22,
+            -63
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "relics",
+          "bounds": [
+            -21,
+            14,
+            -61,
+            -9,
+            22,
+            -48
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "chapel",
+          "bounds": [
+            -21,
+            14,
+            -46,
+            -9,
+            22,
+            -33
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            9,
+            14,
+            -76,
+            21,
+            22,
+            -63
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "infirmary",
+          "bounds": [
+            9,
+            14,
+            -61,
+            21,
+            22,
+            -48
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            9,
+            14,
+            -46,
+            21,
+            22,
+            -33
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            -75,
+            5,
+            -78,
+            -67,
+            13,
+            -67
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "library",
+          "bounds": [
+            -75,
+            5,
+            -65,
+            -67,
+            13,
+            -54
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "dining",
+          "bounds": [
+            -49,
+            5,
+            -78,
+            -40,
+            13,
+            -67
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            -49,
+            5,
+            -65,
+            -40,
+            13,
+            -54
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            40,
+            5,
+            -83,
+            48,
+            13,
+            -70
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "relics",
+          "bounds": [
+            40,
+            5,
+            -68,
+            48,
+            13,
+            -56
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "chapel",
+          "bounds": [
+            40,
+            5,
+            -54,
+            48,
+            13,
+            -41
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            66,
+            5,
+            -83,
+            75,
+            13,
+            -70
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "infirmary",
+          "bounds": [
+            66,
+            5,
+            -68,
+            75,
+            13,
+            -56
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            66,
+            5,
+            -54,
+            75,
+            13,
+            -41
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            -79,
+            0,
+            56,
+            -65,
+            8,
+            73
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            65,
+            0,
+            56,
+            79,
+            8,
+            73
+          ],
+          "level": "ground"
+        }
+      ],
+      "rare_materials": {
+        "gold_block": 1,
+        "quartz_pillar": 20,
+        "blue_ice": 5,
+        "sea_lantern": 2
+      },
+      "rare_limits": {
+        "gold_block": 4,
+        "iron_block": 8,
+        "waxed_cut_copper": 12,
+        "anvil": 2,
+        "blast_furnace": 4,
+        "cauldron": 2,
+        "brewing_stand": 1,
+        "enchanting_table": 1,
+        "quartz_block": 24,
+        "quartz_pillar": 24,
+        "smooth_quartz": 24,
+        "quartz_bricks": 24,
+        "amethyst_block": 12,
+        "sea_lantern": 8,
+        "end_rod": 6,
+        "dark_prismarine": 24,
+        "blue_ice": 8
+      },
+      "rare_total": 28,
+      "artwork": "Framed permanent block mosaics, landscapes, portraits, moon/sun scenes",
+      "extended_ceiling_hangers": 22,
+      "small_detail_connections": [
+        {
+          "assembly_size": 9,
+          "ties": [
+            [
+              -82,
+              8,
+              -73
+            ],
+            [
+              -81,
+              8,
+              -73
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 9,
+          "ties": [
+            [
+              -33,
+              9,
+              -63
+            ],
+            [
+              -34,
+              9,
+              -63
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 9,
+          "ties": [
+            [
+              -82,
+              7,
+              -63
+            ],
+            [
+              -81,
+              7,
+              -63
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 9,
+          "ties": [
+            [
+              -33,
+              9,
+              -73
+            ],
+            [
+              -34,
+              9,
+              -73
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 9,
+          "ties": [
+            [
+              -82,
+              7,
+              -53
+            ],
+            [
+              -81,
+              7,
+              -53
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -19,
+              6,
+              -44
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -12,
+              6,
+              -44
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              20,
+              15,
+              -44
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              10,
+              6,
+              -74
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              10,
+              15,
+              -44
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              10,
+              15,
+              -59
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 3,
+          "ties": [
+            [
+              -33,
+              11,
+              -53
+            ],
+            [
+              -34,
+              11,
+              -53
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              56,
+              20,
+              -47
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -59,
+              18,
+              -55
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -57,
+              18,
+              -55
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              58,
+              20,
+              -73
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              56,
+              20,
+              -60
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -59,
+              18,
+              -68
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -57,
+              18,
+              -68
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              56,
+              20,
+              -73
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              58,
+              20,
+              -47
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              58,
+              20,
+              -60
+            ]
+          ],
+          "material": "polished_diorite"
+        }
+      ],
+      "removed_detached_remnants": [],
+      "explicit_fence_wall_states": 165,
+      "polish": "Attached structure, proportionate furniture, supported ornaments and revised silhouettes"
+    },
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "z": 27,
+      "clear_radius": 30,
+      "clear_height": 28
+    },
+    "reachable_standing_positions": 41235
+  },
+  "banshee": {
+    "blocks": 356523,
+    "chests": [
+      {
+        "x": -23,
+        "y": 5,
+        "z": -72,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -23,
+        "y": 5,
+        "z": -41,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 23,
+        "y": 5,
+        "z": -72,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 23,
+        "y": 5,
+        "z": -41,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -64,
+        "y": 5,
+        "z": -52,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 57,
+        "y": 5,
+        "z": -52,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -69,
+        "y": 5,
+        "z": 66,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 69,
+        "y": 5,
+        "z": 66,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      }
+    ],
+    "rooms": [
+      {
+        "bounds": [
+          -30,
+          4,
+          -87,
+          30,
+          27,
+          -26
+        ],
+        "role": "dining",
+        "gallery": true
+      },
+      {
+        "bounds": [
+          -80,
+          4,
+          -76,
+          -39,
+          22,
+          -30
+        ],
+        "role": "archive",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          39,
+          4,
+          -78,
+          78,
+          34,
+          -37
+        ],
+        "role": "study",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          -78,
+          4,
+          53,
+          -38,
+          16,
+          80
+        ],
+        "role": "guardroom",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          38,
+          4,
+          53,
+          78,
+          16,
+          80
+        ],
+        "role": "workshop",
+        "gallery": false
+      }
+    ],
+    "design": {
+      "identity": "Stilt manor / staggered roofs, connected verandas, boathouses, ritual deck",
+      "interior_focus": "Layered furnished suites, central nave, functional rooms, upper galleries and wall artwork",
+      "cutaway": [
+        -30,
+        -87,
+        30,
+        -26,
+        4,
+        27
+      ],
+      "materials": {
+        "green_terracotta": 96927,
+        "water": 82016,
+        "stripped_dark_oak_log": 45507,
+        "mud": 41137,
+        "spruce_planks": 33073,
+        "dark_oak_planks": 32419,
+        "cyan_stained_glass": 8483,
+        "brown_terracotta": 6822,
+        "dark_oak_leaves": 3912,
+        "cyan_carpet": 1842,
+        "dark_oak_log": 1314,
+        "bookshelf": 313,
+        "cyan_terracotta": 311,
+        "black_concrete": 268,
+        "spruce_fence": 211,
+        "dark_oak_slab": 203,
+        "dark_oak_fence": 202,
+        "stone_bricks": 184,
+        "white_carpet": 164,
+        "spruce_slab": 163,
+        "white_concrete": 154,
+        "vine": 128,
+        "iron_chain": 95,
+        "soul_lantern": 92,
+        "spruce_trapdoor": 92,
+        "bricks": 89,
+        "stone_brick_slab": 84,
+        "spruce_stairs": 71,
+        "dark_oak_stairs": 46,
+        "potted_fern": 33,
+        "terracotta": 26,
+        "azalea_leaves": 26,
+        "flowering_azalea_leaves": 26,
+        "flower_pot": 22,
+        "cyan_bed": 22,
+        "white_candle": 14,
+        "campfire": 8,
+        "chest": 8,
+        "furnace": 4,
+        "lectern": 4,
+        "hay_block": 3,
+        "composter": 2,
+        "cauldron": 2,
+        "sea_lantern": 1
+      },
+      "routes": [
+        [
+          -11,
+          5,
+          -68
+        ],
+        [
+          -11,
+          5,
+          -53
+        ],
+        [
+          -11,
+          5,
+          -38
+        ],
+        [
+          11,
+          5,
+          -68
+        ],
+        [
+          11,
+          5,
+          -53
+        ],
+        [
+          11,
+          5,
+          -38
+        ],
+        [
+          -11,
+          14,
+          -68
+        ],
+        [
+          -11,
+          14,
+          -53
+        ],
+        [
+          -11,
+          14,
+          -38
+        ],
+        [
+          11,
+          14,
+          -68
+        ],
+        [
+          11,
+          14,
+          -53
+        ],
+        [
+          11,
+          14,
+          -38
+        ],
+        [
+          0,
+          14,
+          -82
+        ],
+        [
+          0,
+          5,
+          -31
+        ],
+        [
+          -71,
+          5,
+          -63
+        ],
+        [
+          -71,
+          5,
+          -44
+        ],
+        [
+          -49,
+          5,
+          -63
+        ],
+        [
+          -49,
+          5,
+          -44
+        ],
+        [
+          -60,
+          5,
+          -35
+        ],
+        [
+          47,
+          5,
+          -60
+        ],
+        [
+          47,
+          5,
+          -48
+        ],
+        [
+          69,
+          5,
+          -60
+        ],
+        [
+          69,
+          5,
+          -48
+        ],
+        [
+          47,
+          14,
+          -60
+        ],
+        [
+          47,
+          14,
+          -48
+        ],
+        [
+          58,
+          14,
+          -73
+        ],
+        [
+          58,
+          5,
+          -42
+        ],
+        [
+          -69,
+          5,
+          62
+        ],
+        [
+          -69,
+          5,
+          71
+        ],
+        [
+          -47,
+          5,
+          62
+        ],
+        [
+          -47,
+          5,
+          71
+        ],
+        [
+          -58,
+          5,
+          75
+        ],
+        [
+          47,
+          5,
+          62
+        ],
+        [
+          47,
+          5,
+          71
+        ],
+        [
+          69,
+          5,
+          62
+        ],
+        [
+          69,
+          5,
+          71
+        ],
+        [
+          58,
+          5,
+          75
+        ]
+      ],
+      "occupied_rooms": [
+        {
+          "role": "kitchen",
+          "bounds": [
+            -26,
+            4,
+            -74,
+            -9,
+            12,
+            -61
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "dining",
+          "bounds": [
+            -26,
+            4,
+            -59,
+            -9,
+            12,
+            -46
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            -26,
+            4,
+            -44,
+            -9,
+            12,
+            -31
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "bedchamber",
+          "bounds": [
+            9,
+            4,
+            -74,
+            26,
+            12,
+            -61
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            9,
+            4,
+            -59,
+            26,
+            12,
+            -46
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "archive",
+          "bounds": [
+            9,
+            4,
+            -44,
+            26,
+            12,
+            -31
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            -26,
+            13,
+            -74,
+            -9,
+            21,
+            -61
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            -26,
+            13,
+            -59,
+            -9,
+            21,
+            -46
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "kitchen",
+          "bounds": [
+            -26,
+            13,
+            -44,
+            -9,
+            21,
+            -31
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "dining",
+          "bounds": [
+            9,
+            13,
+            -74,
+            26,
+            21,
+            -61
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            9,
+            13,
+            -59,
+            26,
+            21,
+            -46
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "bedchamber",
+          "bounds": [
+            9,
+            13,
+            -44,
+            26,
+            21,
+            -31
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "bedchamber",
+          "bounds": [
+            -76,
+            4,
+            -71,
+            -69,
+            12,
+            -54
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            -76,
+            4,
+            -52,
+            -69,
+            12,
+            -35
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "archive",
+          "bounds": [
+            -51,
+            4,
+            -71,
+            -43,
+            12,
+            -54
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            -51,
+            4,
+            -52,
+            -43,
+            12,
+            -35
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "kitchen",
+          "bounds": [
+            67,
+            4,
+            -65,
+            74,
+            12,
+            -55
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "dining",
+          "bounds": [
+            67,
+            4,
+            -53,
+            74,
+            12,
+            -42
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            67,
+            13,
+            -65,
+            74,
+            21,
+            -55
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "archive",
+          "bounds": [
+            67,
+            13,
+            -53,
+            74,
+            21,
+            -42
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "dining",
+          "bounds": [
+            -74,
+            4,
+            58,
+            -67,
+            12,
+            66
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            -74,
+            4,
+            68,
+            -67,
+            12,
+            75
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "bedchamber",
+          "bounds": [
+            -49,
+            4,
+            58,
+            -42,
+            12,
+            66
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            -49,
+            4,
+            68,
+            -42,
+            12,
+            75
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "music",
+          "bounds": [
+            42,
+            4,
+            58,
+            49,
+            12,
+            66
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "archive",
+          "bounds": [
+            42,
+            4,
+            68,
+            49,
+            12,
+            75
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            67,
+            4,
+            58,
+            74,
+            12,
+            66
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            67,
+            4,
+            68,
+            74,
+            12,
+            75
+          ],
+          "level": "ground"
+        }
+      ],
+      "rare_materials": {
+        "sea_lantern": 1,
+        "cauldron": 2
+      },
+      "rare_limits": {
+        "gold_block": 4,
+        "iron_block": 8,
+        "waxed_cut_copper": 12,
+        "anvil": 2,
+        "blast_furnace": 4,
+        "cauldron": 2,
+        "brewing_stand": 1,
+        "enchanting_table": 1,
+        "quartz_block": 24,
+        "quartz_pillar": 24,
+        "smooth_quartz": 24,
+        "quartz_bricks": 24,
+        "amethyst_block": 12,
+        "sea_lantern": 8,
+        "end_rod": 6,
+        "dark_prismarine": 24,
+        "blue_ice": 8
+      },
+      "rare_total": 3,
+      "artwork": "Framed permanent block mosaics, landscapes, portraits, moon/sun scenes",
+      "extended_ceiling_hangers": 14,
+      "small_detail_connections": [
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              48,
+              47,
+              -44
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              47,
+              48,
+              -71
+            ],
+            [
+              47,
+              47,
+              -71
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              43,
+              47,
+              -59
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              72,
+              47,
+              -44
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              47,
+              48,
+              -45
+            ],
+            [
+              47,
+              47,
+              -45
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              73,
+              47,
+              -57
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              42,
+              48,
+              -58
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              73,
+              48,
+              -58
+            ],
+            [
+              73,
+              47,
+              -58
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              70,
+              47,
+              -46
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              43,
+              47,
+              -72
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              44,
+              47,
+              -70
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              44,
+              48,
+              -58
+            ],
+            [
+              44,
+              47,
+              -58
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              71,
+              48,
+              -45
+            ],
+            [
+              71,
+              47,
+              -45
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              43,
+              47,
+              -46
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              70,
+              47,
+              -59
+            ]
+          ],
+          "material": "green_terracotta"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              -10,
+              4,
+              77
+            ],
+            [
+              -10,
+              3,
+              77
+            ],
+            [
+              -10,
+              2,
+              77
+            ],
+            [
+              -10,
+              1,
+              77
+            ],
+            [
+              -10,
+              0,
+              77
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              42,
+              4,
+              0
+            ],
+            [
+              42,
+              3,
+              0
+            ],
+            [
+              42,
+              2,
+              0
+            ],
+            [
+              42,
+              1,
+              0
+            ],
+            [
+              42,
+              0,
+              0
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              10,
+              4,
+              97
+            ],
+            [
+              10,
+              3,
+              97
+            ],
+            [
+              10,
+              2,
+              97
+            ],
+            [
+              10,
+              1,
+              97
+            ],
+            [
+              10,
+              0,
+              97
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              -42,
+              4,
+              0
+            ],
+            [
+              -42,
+              3,
+              0
+            ],
+            [
+              -42,
+              2,
+              0
+            ],
+            [
+              -42,
+              1,
+              0
+            ],
+            [
+              -42,
+              0,
+              0
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              -10,
+              4,
+              97
+            ],
+            [
+              -10,
+              3,
+              97
+            ],
+            [
+              -10,
+              2,
+              97
+            ],
+            [
+              -10,
+              1,
+              97
+            ],
+            [
+              -10,
+              0,
+              97
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 5,
+          "ties": [
+            [
+              10,
+              4,
+              77
+            ],
+            [
+              10,
+              3,
+              77
+            ],
+            [
+              10,
+              2,
+              77
+            ],
+            [
+              10,
+              1,
+              77
+            ],
+            [
+              10,
+              0,
+              77
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              23,
+              14,
+              -42
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              11,
+              5,
+              -72
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              11,
+              14,
+              -42
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -25,
+              14,
+              -72
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 4,
+          "ties": [
+            [
+              -10,
+              14,
+              -72
+            ]
+          ],
+          "material": "spruce_planks"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              57,
+              14,
+              68
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              59,
+              14,
+              68
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -59,
+              14,
+              68
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -57,
+              14,
+              68
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -59,
+              20,
+              -35
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -61,
+              20,
+              -48
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -59,
+              20,
+              -48
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -61,
+              20,
+              -61
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -59,
+              20,
+              -61
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -61,
+              20,
+              -35
+            ]
+          ],
+          "material": "stripped_dark_oak_log"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              9,
+              -62
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              8,
+              -73
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              32,
+              6,
+              -24
+            ],
+            [
+              32,
+              5,
+              -24
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              9,
+              -66
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              7,
+              -72
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              7,
+              -60
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              8,
+              -61
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              9,
+              -54
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              9,
+              -42
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              7,
+              -48
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              9,
+              -74
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              7,
+              -36
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              9,
+              -62
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              9,
+              -78
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              9,
+              -30
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              7,
+              -72
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -32,
+              6,
+              -24
+            ],
+            [
+              -32,
+              5,
+              -24
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              8,
+              -73
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              9,
+              -50
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              9,
+              -66
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              8,
+              -61
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              9,
+              -38
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              9,
+              -54
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              7,
+              -60
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              9,
+              -78
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              32,
+              6,
+              -48
+            ],
+            [
+              32,
+              5,
+              -48
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -31,
+              8,
+              -49
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              9,
+              -74
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -32,
+              9,
+              -43
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              31,
+              9,
+              -30
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        },
+        {
+          "assembly_size": 1,
+          "ties": [
+            [
+              -32,
+              6,
+              -36
+            ],
+            [
+              -32,
+              5,
+              -36
+            ]
+          ],
+          "material": "stripped_dark_oak_log[axis=y]"
+        }
+      ],
+      "removed_detached_remnants": [
+        {
+          "voxels": 1,
+          "bounds": [
+            32,
+            9,
+            -50,
+            32,
+            9,
+            -50
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -32,
+            9,
+            -38,
+            -32,
+            9,
+            -38
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            32,
+            8,
+            -49,
+            32,
+            8,
+            -49
+          ]
+        },
+        {
+          "voxels": 1,
+          "bounds": [
+            -32,
+            8,
+            -37,
+            -32,
+            8,
+            -37
+          ]
+        }
+      ],
+      "explicit_fence_wall_states": 413,
+      "polish": "Attached structure, proportionate furniture, supported ornaments and revised silhouettes"
+    },
+    "arena": {
+      "x": 0,
+      "y": 4,
+      "z": 27,
+      "clear_radius": 30,
+      "clear_height": 28
+    },
+    "reachable_standing_positions": 19524
+  },
+  "malefeasance": {
+    "blocks": 312024,
+    "chests": [
+      {
+        "x": -18,
+        "y": 6,
+        "z": -68,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -18,
+        "y": 6,
+        "z": -45,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 18,
+        "y": 6,
+        "z": -68,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 18,
+        "y": 6,
+        "z": -45,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -55,
+        "y": 6,
+        "z": -67,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 69,
+        "y": 6,
+        "z": -67,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -74,
+        "y": 1,
+        "z": 66,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 74,
+        "y": 1,
+        "z": 66,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      }
+    ],
+    "rooms": [
+      {
+        "bounds": [
+          -79,
+          5,
+          -85,
+          -40,
+          24,
+          -46
+        ],
+        "role": "archive",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          40,
+          5,
+          -83,
+          80,
+          19,
+          -51
+        ],
+        "role": "study",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          -84,
+          0,
+          54,
+          -64,
+          10,
+          79
+        ],
+        "role": "observatory",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          64,
+          0,
+          54,
+          84,
+          10,
+          79
+        ],
+        "role": "observatory",
+        "gallery": false
+      }
+    ],
+    "design": {
+      "identity": "Round observatory / ribbed turquoise dome, radial salon, split water gardens",
+      "interior_focus": "Layered furnished suites, central nave, functional rooms, upper galleries and wall artwork",
+      "cutaway": [
+        -32,
+        -91,
+        32,
+        -27,
+        5,
+        31
+      ],
+      "materials": {
+        "stone": 152680,
+        "polished_diorite": 34768,
+        "grass_block": 30872,
+        "calcite": 25031,
+        "cyan_terracotta": 24107,
+        "white_concrete": 14660,
+        "cyan_concrete": 9677,
+        "birch_planks": 8409,
+        "birch_leaves": 3960,
+        "purple_stained_glass": 2438,
+        "stripped_dark_oak_log": 878,
+        "azalea_leaves": 790,
+        "purple_terracotta": 634,
+        "purple_carpet": 599,
+        "bookshelf": 420,
+        "water": 308,
+        "birch_log": 248,
+        "yellow_terracotta": 221,
+        "birch_slab": 214,
+        "black_concrete": 168,
+        "birch_fence": 152,
+        "spruce_slab": 137,
+        "stone_bricks": 132,
+        "spruce_fence": 65,
+        "white_carpet": 63,
+        "stone_brick_slab": 56,
+        "dark_oak_slab": 55,
+        "soul_lantern": 31,
+        "spruce_stairs": 29,
+        "polished_blackstone_wall": 24,
+        "terracotta": 22,
+        "flowering_azalea_leaves": 22,
+        "dark_oak_stairs": 22,
+        "iron_chain": 21,
+        "spruce_trapdoor": 19,
+        "bricks": 16,
+        "allium": 12,
+        "flower_pot": 10,
+        "potted_allium": 9,
+        "chest": 8,
+        "white_candle": 6,
+        "campfire": 6,
+        "amethyst_block": 4,
+        "quartz_pillar": 4,
+        "quartz_block": 4,
+        "lectern": 4,
+        "end_rod": 4,
+        "red_bed": 3,
+        "gold_block": 2,
+        "cauldron": 0
+      },
+      "routes": [
+        [
+          -71,
+          6,
+          -67
+        ],
+        [
+          -71,
+          6,
+          -56
+        ],
+        [
+          -49,
+          6,
+          -67
+        ],
+        [
+          -49,
+          6,
+          -56
+        ],
+        [
+          -71,
+          15,
+          -67
+        ],
+        [
+          -71,
+          15,
+          -56
+        ],
+        [
+          -60,
+          15,
+          -80
+        ],
+        [
+          -60,
+          6,
+          -51
+        ],
+        [
+          49,
+          6,
+          -73
+        ],
+        [
+          49,
+          6,
+          -61
+        ],
+        [
+          71,
+          6,
+          -73
+        ],
+        [
+          71,
+          6,
+          -61
+        ],
+        [
+          60,
+          6,
+          -56
+        ],
+        [
+          -74,
+          1,
+          75
+        ],
+        [
+          74,
+          1,
+          75
+        ],
+        [
+          -26,
+          18,
+          -64
+        ]
+      ],
+      "occupied_rooms": [
+        {
+          "role": "library",
+          "bounds": [
+            -51,
+            5,
+            -72,
+            -44,
+            13,
+            -62
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            -51,
+            5,
+            -60,
+            -44,
+            13,
+            -51
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            -51,
+            14,
+            -72,
+            -44,
+            22,
+            -62
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "council",
+          "bounds": [
+            -51,
+            14,
+            -60,
+            -44,
+            22,
+            -51
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            44,
+            5,
+            -78,
+            51,
+            13,
+            -68
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "archive",
+          "bounds": [
+            44,
+            5,
+            -66,
+            51,
+            13,
+            -56
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "relics",
+          "bounds": [
+            69,
+            5,
+            -78,
+            76,
+            13,
+            -68
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            69,
+            5,
+            -66,
+            76,
+            13,
+            -56
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            -81,
+            0,
+            57,
+            -67,
+            8,
+            76
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            67,
+            0,
+            57,
+            81,
+            8,
+            76
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "cartography",
+          "bounds": [
+            -22,
+            5,
+            -81,
+            -12,
+            13,
+            -71
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "laboratory",
+          "bounds": [
+            -22,
+            5,
+            -47,
+            -12,
+            13,
+            -37
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "laboratory",
+          "bounds": [
+            12,
+            5,
+            -81,
+            22,
+            13,
+            -71
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "cartography",
+          "bounds": [
+            12,
+            5,
+            -47,
+            22,
+            13,
+            -37
+          ],
+          "level": "ground"
+        }
+      ],
+      "rare_materials": {
+        "amethyst_block": 4,
+        "quartz_pillar": 4,
+        "quartz_block": 4,
+        "end_rod": 4,
+        "gold_block": 2
+      },
+      "rare_limits": {
+        "gold_block": 4,
+        "iron_block": 8,
+        "waxed_cut_copper": 12,
+        "anvil": 2,
+        "blast_furnace": 4,
+        "cauldron": 2,
+        "brewing_stand": 1,
+        "enchanting_table": 1,
+        "quartz_block": 24,
+        "quartz_pillar": 24,
+        "smooth_quartz": 24,
+        "quartz_bricks": 24,
+        "amethyst_block": 12,
+        "sea_lantern": 8,
+        "end_rod": 6,
+        "dark_prismarine": 24,
+        "blue_ice": 8
+      },
+      "rare_total": 18,
+      "artwork": "Framed permanent block mosaics, landscapes, portraits, moon/sun scenes",
+      "extended_ceiling_hangers": 0,
+      "small_detail_connections": [
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -75,
+              38,
+              -78
+            ],
+            [
+              -75,
+              37,
+              -78
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -75,
+              37,
+              -53
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -46,
+              38,
+              -52
+            ],
+            [
+              -46,
+              37,
+              -52
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -74,
+              38,
+              -52
+            ],
+            [
+              -74,
+              37,
+              -52
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -50,
+              37,
+              -66
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -46,
+              38,
+              -65
+            ],
+            [
+              -46,
+              37,
+              -65
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -70,
+              37,
+              -77
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -73,
+              37,
+              -51
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -72,
+              37,
+              -66
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -44,
+              38,
+              -65
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -74,
+              38,
+              -65
+            ],
+            [
+              -74,
+              37,
+              -65
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -49,
+              38,
+              -78
+            ],
+            [
+              -49,
+              37,
+              -78
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -76,
+              38,
+              -65
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -47,
+              37,
+              -53
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -47,
+              37,
+              -77
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -72,
+              37,
+              -79
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -44,
+              38,
+              -52
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 7,
+          "ties": [
+            [
+              -44,
+              38,
+              -78
+            ]
+          ],
+          "material": "cyan_terracotta"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              59,
+              17,
+              -68
+            ]
+          ],
+          "material": "polished_diorite"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              61,
+              17,
+              -68
+            ]
+          ],
+          "material": "polished_diorite"
+        }
+      ],
+      "removed_detached_remnants": [],
+      "explicit_fence_wall_states": 241,
+      "polish": "Attached structure, proportionate furniture, supported ornaments and revised silhouettes"
+    },
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "z": 27,
+      "clear_radius": 30,
+      "clear_height": 28
+    },
+    "reachable_standing_positions": 40574
+  },
+  "styx": {
+    "blocks": 326624,
+    "chests": [
+      {
+        "x": -8,
+        "y": 6,
+        "z": -72,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 8,
+        "y": 6,
+        "z": -72,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -65,
+        "y": 6,
+        "z": -72,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -65,
+        "y": 6,
+        "z": -47,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 65,
+        "y": 6,
+        "z": -72,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 65,
+        "y": 6,
+        "z": -47,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": -72,
+        "y": 1,
+        "z": 69,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      },
+      {
+        "x": 72,
+        "y": 1,
+        "z": 69,
+        "hint": "Cabinet cache within furnished room / side pavilion"
+      }
+    ],
+    "rooms": [
+      {
+        "bounds": [
+          -20,
+          5,
+          -88,
+          20,
+          29,
+          -47
+        ],
+        "role": "guardroom",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          -81,
+          5,
+          -86,
+          -48,
+          20,
+          -29
+        ],
+        "role": "dormitory",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          48,
+          5,
+          -86,
+          81,
+          24,
+          -34
+        ],
+        "role": "archive",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          -82,
+          0,
+          55,
+          -62,
+          11,
+          80
+        ],
+        "role": "guardroom",
+        "gallery": false
+      },
+      {
+        "bounds": [
+          62,
+          0,
+          55,
+          82,
+          11,
+          80
+        ],
+        "role": "guardroom",
+        "gallery": false
+      }
+    ],
+    "design": {
+      "identity": "Triumphal sun gate / twin pylons, western tent market, eastern obelisk court",
+      "interior_focus": "Layered furnished suites, central nave, functional rooms, upper galleries and wall artwork",
+      "cutaway": [
+        -81,
+        -86,
+        -48,
+        -29,
+        5,
+        20
+      ],
+      "materials": {
+        "terracotta": 152108,
+        "chiseled_polished_blackstone": 49676,
+        "deepslate_bricks": 38389,
+        "grass_block": 30317,
+        "smooth_sandstone": 16630,
+        "polished_blackstone_bricks": 12805,
+        "acacia_planks": 8609,
+        "yellow_stained_glass": 5608,
+        "yellow_terracotta": 4688,
+        "white_wool": 1843,
+        "polished_andesite": 1323,
+        "stripped_dark_oak_log": 1058,
+        "acacia_leaves": 972,
+        "yellow_carpet": 872,
+        "polished_diorite": 288,
+        "stone_bricks": 218,
+        "spruce_fence": 164,
+        "bookshelf": 107,
+        "spruce_slab": 102,
+        "polished_blackstone": 100,
+        "black_concrete": 88,
+        "acacia_fence": 78,
+        "dark_oak_slab": 66,
+        "iron_chain": 62,
+        "stone_brick_slab": 56,
+        "yellow_wool": 46,
+        "polished_blackstone_wall": 40,
+        "lantern": 37,
+        "acacia_log": 36,
+        "white_concrete": 36,
+        "spruce_stairs": 30,
+        "spruce_trapdoor": 30,
+        "white_carpet": 23,
+        "dark_oak_stairs": 21,
+        "potted_allium": 21,
+        "bricks": 16,
+        "flower_pot": 10,
+        "azalea_leaves": 9,
+        "flowering_azalea_leaves": 9,
+        "chest": 8,
+        "white_candle": 6,
+        "smooth_stone": 6,
+        "campfire": 6,
+        "gold_block": 2,
+        "iron_block": 2,
+        "stonecutter": 1,
+        "grindstone": 1,
+        "lectern": 1,
+        "cauldron": 0
+      },
+      "routes": [
+        [
+          -11,
+          6,
+          -70
+        ],
+        [
+          -11,
+          6,
+          -58
+        ],
+        [
+          11,
+          6,
+          -70
+        ],
+        [
+          11,
+          6,
+          -58
+        ],
+        [
+          -11,
+          15,
+          -70
+        ],
+        [
+          -11,
+          15,
+          -58
+        ],
+        [
+          0,
+          15,
+          -83
+        ],
+        [
+          0,
+          6,
+          -52
+        ],
+        [
+          -76,
+          6,
+          -74
+        ],
+        [
+          -76,
+          6,
+          -58
+        ],
+        [
+          -76,
+          6,
+          -41
+        ],
+        [
+          -54,
+          6,
+          -74
+        ],
+        [
+          -54,
+          6,
+          -58
+        ],
+        [
+          -54,
+          6,
+          -41
+        ],
+        [
+          -65,
+          6,
+          -34
+        ],
+        [
+          53,
+          6,
+          -65
+        ],
+        [
+          53,
+          6,
+          -47
+        ],
+        [
+          75,
+          6,
+          -65
+        ],
+        [
+          75,
+          6,
+          -47
+        ],
+        [
+          53,
+          15,
+          -65
+        ],
+        [
+          53,
+          15,
+          -47
+        ],
+        [
+          75,
+          15,
+          -47
+        ],
+        [
+          64,
+          15,
+          -81
+        ],
+        [
+          64,
+          6,
+          -39
+        ],
+        [
+          -72,
+          1,
+          76
+        ],
+        [
+          72,
+          1,
+          76
+        ]
+      ],
+      "occupied_rooms": [
+        {
+          "role": "council",
+          "bounds": [
+            -16,
+            5,
+            -75,
+            -9,
+            13,
+            -65
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "toolroom",
+          "bounds": [
+            -16,
+            5,
+            -63,
+            -9,
+            13,
+            -52
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "bunks",
+          "bounds": [
+            9,
+            5,
+            -75,
+            16,
+            13,
+            -65
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "cartography",
+          "bounds": [
+            9,
+            5,
+            -63,
+            16,
+            13,
+            -52
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "dining",
+          "bounds": [
+            -16,
+            14,
+            -75,
+            -9,
+            22,
+            -65
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "archive",
+          "bounds": [
+            -16,
+            14,
+            -63,
+            -9,
+            22,
+            -52
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "guestroom",
+          "bounds": [
+            9,
+            14,
+            -75,
+            16,
+            22,
+            -65
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "study",
+          "bounds": [
+            9,
+            14,
+            -63,
+            16,
+            22,
+            -52
+          ],
+          "level": "upper"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            -79,
+            0,
+            58,
+            -65,
+            8,
+            77
+          ],
+          "level": "ground"
+        },
+        {
+          "role": "sitting",
+          "bounds": [
+            65,
+            0,
+            58,
+            79,
+            8,
+            77
+          ],
+          "level": "ground"
+        }
+      ],
+      "rare_materials": {
+        "gold_block": 2,
+        "iron_block": 2
+      },
+      "rare_limits": {
+        "gold_block": 4,
+        "iron_block": 8,
+        "waxed_cut_copper": 12,
+        "anvil": 2,
+        "blast_furnace": 4,
+        "cauldron": 2,
+        "brewing_stand": 1,
+        "enchanting_table": 1,
+        "quartz_block": 24,
+        "quartz_pillar": 24,
+        "smooth_quartz": 24,
+        "quartz_bricks": 24,
+        "amethyst_block": 12,
+        "sea_lantern": 8,
+        "end_rod": 6,
+        "dark_prismarine": 24,
+        "blue_ice": 8
+      },
+      "rare_total": 4,
+      "artwork": "Framed permanent block mosaics, landscapes, portraits, moon/sun scenes",
+      "axe": {
+        "bounds": [
+          -21,
+          39,
+          -48,
+          21,
+          83,
+          -36
+        ],
+        "blade_center": [
+          0,
+          64,
+          -44
+        ],
+        "profile": "connected crescent blades, bevel, forged socket, bound haft and stone plinth"
+      },
+      "extended_ceiling_hangers": 4,
+      "small_detail_connections": [
+        {
+          "assembly_size": 12,
+          "ties": [
+            [
+              55,
+              13,
+              -33
+            ]
+          ],
+          "material": "yellow_terracotta"
+        },
+        {
+          "assembly_size": 12,
+          "ties": [
+            [
+              75,
+              16,
+              -33
+            ]
+          ],
+          "material": "yellow_terracotta"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -64,
+              18,
+              -71
+            ]
+          ],
+          "material": "chiseled_polished_blackstone"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -66,
+              18,
+              -45
+            ]
+          ],
+          "material": "chiseled_polished_blackstone"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -64,
+              18,
+              -45
+            ]
+          ],
+          "material": "chiseled_polished_blackstone"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -64,
+              18,
+              -58
+            ]
+          ],
+          "material": "chiseled_polished_blackstone"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -66,
+              18,
+              -58
+            ]
+          ],
+          "material": "chiseled_polished_blackstone"
+        },
+        {
+          "assembly_size": 2,
+          "ties": [
+            [
+              -66,
+              18,
+              -71
+            ]
+          ],
+          "material": "chiseled_polished_blackstone"
+        }
+      ],
+      "removed_detached_remnants": [],
+      "explicit_fence_wall_states": 282,
+      "polish": "Attached structure, proportionate furniture, supported ornaments and revised silhouettes"
+    },
+    "arena": {
+      "x": 0,
+      "y": 0,
+      "z": 27,
+      "clear_radius": 30,
+      "clear_height": 28
+    },
+    "reachable_standing_positions": 41255
+  }
+}

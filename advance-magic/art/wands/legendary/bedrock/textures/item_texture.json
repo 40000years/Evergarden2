@@ -1,0 +1,15 @@
+{
+  "resource_pack_name": "advance_magic_legendary_preview",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "advance_magic.verdant_sovereign": {
+      "textures": "textures/items/verdant_sovereign"
+    },
+    "advance_magic.lunar_requiem": {
+      "textures": "textures/items/lunar_requiem"
+    },
+    "advance_magic.crimson_oblivion": {
+      "textures": "textures/items/crimson_oblivion"
+    }
+  }
+}

@@ -1,6 +1,7 @@
 package com.example.advancemagic.item;
 
 import com.example.advancemagic.spell.Spell;
+import com.example.advancemagic.elemental.StaffGemService;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.HumanEntity;
@@ -62,11 +63,24 @@ public final class WandService implements Listener {
             case SOLAR_APOCALYPSE -> "the Sun";
             case CHRONOS_FINAL_HOUR -> "Time";
             case HEAVENS_JUDGMENT -> "Judgment";
+            case VERDANT_SOVEREIGN -> "the Verdant Crown";
+            case LUNAR_REQUIEM -> "the Requiem Moon";
+            case CRIMSON_OBLIVION -> "Oblivion";
         };
     }
     private static String coreDisplayName(Spell spell) {
         return ChatColor.LIGHT_PURPLE+"✦ "+ChatColor.GOLD+"Core of "+coreTitle(spell)
-                +(spell.isMythic()?ChatColor.RED+" [MYTHIC]":"");
+                +ChatColor.DARK_GRAY+" [LEGACY]";
+    }
+    private static List<String> coreLore(Spell spell) {
+        return List.of(ChatColor.GRAY+"แกนคราฟต์ระบบเก่า · เลิกใช้คราฟต์คทาแล้ว",
+                ChatColor.DARK_AQUA+"เวทเดิม: "+spell.title,
+                ChatColor.YELLOW+"ยังใช้เป็นเชื้อเพลิงที่แท่นฟื้นฟูได้");
+    }
+    private static boolean retiredCoreSelector(String selector) {
+        if(selector==null)return false;
+        for(Spell spell:Spell.values())if(selector.equals("advance_magic:core_"+spell.id()))return true;
+        return false;
     }
     private static String wandDisplayName(Spell spell) {
         return ChatColor.LIGHT_PURPLE+"✦ "+(spell.isMythic()?ChatColor.GOLD:ChatColor.LIGHT_PURPLE)
@@ -76,31 +90,7 @@ public final class WandService implements Listener {
         ItemStack item=new ItemStack(CORE_BASE);
         var meta=item.getItemMeta();
         meta.setDisplayName(coreDisplayName(spell));
-        if(spell==Spell.SHULKER_LEVITATION) {
-            meta.setLore(List.of(
-                ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC 0.5%]",
-                ChatColor.DARK_PURPLE+"§k||§r "+ChatColor.LIGHT_PURPLE+"Forbidden Dragon Heart "+ChatColor.DARK_PURPLE+"§k||",
-                ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+"Shulker Levitation Wand",
-                ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.RED+"✦ หมวด Mythic ใน Vault รวม 0.5% · สุ่มหนึ่งในสี่แกน"
-            ));
-        } else if(spell.isMythic()) {
-            meta.setLore(List.of(ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC]",
-                ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+spell.title+" Wand",
-                ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.DARK_AQUA+"หมวด Mythic ใน Evergarden Vault: 0.5% · สุ่ม 1 ใน 4 แกน"));
-        } else {
-            meta.setLore(List.of(
-                ChatColor.AQUA+"Ancient Magic Core (แกนเวทมนตร์โบราณ)",
-                ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+spell.title+" Wand",
-                ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.DARK_AQUA+"หาได้จาก: Evergarden Vault"
-            ));
-        }
-        var modelData=meta.getCustomModelDataComponent();
-        modelData.setStrings(List.of("advance_magic:core_"+spell.id()));
-        meta.setCustomModelDataComponent(modelData);
-        meta.setItemModel(new NamespacedKey("advance_magic","core_"+spell.id()));
+        meta.setLore(coreLore(spell));
         meta.getPersistentDataContainer().set(coreKey,PersistentDataType.STRING,spell.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("advance_magic","core"),PersistentDataType.STRING,spell.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("voidscape","magic_core"),PersistentDataType.STRING,spell.id());
@@ -152,7 +142,7 @@ public final class WandService implements Listener {
         meta.getPersistentDataContainer().set(durabilityLevelKey,PersistentDataType.INTEGER,0);
         meta.getPersistentDataContainer().set(damageLevelKey,PersistentDataType.INTEGER,0);
         meta.getPersistentDataContainer().set(cooldownLevelKey,PersistentDataType.INTEGER,0);
-        item.setItemMeta(meta);refreshLore(item);return item;
+        item.setItemMeta(meta);refreshLore(item);staffs().migrate(item);return item;
     }
     public Spell spell(ItemStack item) {
         if(item==null||item.getType()!=BASE||!item.hasItemMeta())return null;
@@ -174,6 +164,7 @@ public final class WandService implements Listener {
     public enum Upgrade { DURABILITY("wand_repair"), DAMAGE("wand_damage"), COOLDOWN("wand_cooldown"); final String id; Upgrade(String id){this.id=id;} }
     public Upgrade upgrade(ItemStack item) {
         if(item==null||!item.hasItemMeta())return null;
+        if(StaffGemService.identify(item)==StaffGemService.Gem.MAX)return Upgrade.DURABILITY;
         String id=item.getItemMeta().getPersistentDataContainer().get(upgradeItemKey,PersistentDataType.STRING);
         for(Upgrade upgrade:Upgrade.values())if(upgrade.id.equals(id))return upgrade;
         return null;
@@ -187,15 +178,24 @@ public final class WandService implements Listener {
         return item!=null&&item.getType()==Material.BLAZE_ROD&&item.hasItemMeta()
                 &&item.getItemMeta().getPersistentDataContainer().has(flyingStaffKey,PersistentDataType.BYTE);
     }
-    public boolean isDurable(ItemStack item){return spell(item)!=null||isFlyingStaff(item);}
+    public boolean isDurable(ItemStack item){return spell(item)!=null||staffs().isStaff(item)||isFlyingStaff(item);}
     public int damageLevel(ItemStack item){return level(item,damageLevelKey);}
     public int cooldownLevel(ItemStack item){return level(item,cooldownLevelKey);}
-    public int maxUses(ItemStack item){return BASE_USES+durabilityLevel(item)*USES_PER_REPAIR;}
+    public int maxUses(ItemStack item){return baseUses(item)+(staffs().isStaff(item)?StaffGemService.capacityBonus(item):durabilityLevel(item)*usesPerUpgrade(item));}
+    // Elemental spells recast every few seconds, so staffs need far more uses than the old 30-cast wands.
+    private int baseUses(ItemStack item){
+        return staffs().isStaff(item)?Math.clamp(plugin.getConfig().getInt("elemental-system.staff-durability.base-uses",300),1,100000):BASE_USES;
+    }
+    private int usesPerUpgrade(ItemStack item){
+        return staffs().isStaff(item)?Math.clamp(plugin.getConfig().getInt("elemental-system.staff-durability.uses-per-repair-core",50),0,100000):USES_PER_REPAIR;
+    }
+    public double cooldownScale(ItemStack item){return staffs().isStaff(item)?1-StaffGemService.cooldownPercent(item)/100.0:1.0-cooldownLevel(item)*.03;}
     public int usesLeft(ItemStack item){
         if(item==null||!item.hasItemMeta())return 0;
-        return Math.max(0,item.getItemMeta().getPersistentDataContainer().getOrDefault(durabilityKey,PersistentDataType.INTEGER,maxUses(item)));
+        int left=Math.max(0,item.getItemMeta().getPersistentDataContainer().getOrDefault(durabilityKey,PersistentDataType.INTEGER,maxUses(item)));
+        return staffs().isStaff(item)?Math.min(left,maxUses(item)):left;
     }
-    public double damageMultiplier(ItemStack item){return 1.0+damageLevel(item)*.03;}
+    public double damageMultiplier(ItemStack item){return staffs().isStaff(item)?1+StaffGemService.damagePercent(item)/100.0:1.0+damageLevel(item)*.03;}
     /** Restores plugin uses only; preserves type, upgrades, mastery and all other metadata. */
     public boolean restore(ItemStack item){
         if(!isDurable(item)||item.getAmount()!=1||usesLeft(item)>=maxUses(item))return false;
@@ -210,30 +210,41 @@ public final class WandService implements Listener {
     private boolean ensureWandState(ItemStack item) {
         if(!isDurable(item)||!item.hasItemMeta())return false;
         var meta=item.getItemMeta();var data=meta.getPersistentDataContainer();boolean changed=false;
-        if(!data.has(durabilityKey,PersistentDataType.INTEGER)){data.set(durabilityKey,PersistentDataType.INTEGER,BASE_USES);changed=true;}
-        if(!data.has(durabilityLevelKey,PersistentDataType.INTEGER)){data.set(durabilityLevelKey,PersistentDataType.INTEGER,0);changed=true;}
+        if(!data.has(durabilityKey,PersistentDataType.INTEGER)){data.set(durabilityKey,PersistentDataType.INTEGER,baseUses(item));changed=true;}
+        if(staffs().isStaff(item)){
+            for(NamespacedKey old:List.of(durabilityLevelKey,damageLevelKey,cooldownLevelKey))if(data.has(old)){data.remove(old);changed=true;}
+        }else if(!data.has(durabilityLevelKey,PersistentDataType.INTEGER)){data.set(durabilityLevelKey,PersistentDataType.INTEGER,0);changed=true;}
         if(isFlyingStaff(item)){
             if(!meta.hasMaxStackSize()||meta.getMaxStackSize()!=1){meta.setMaxStackSize(1);changed=true;}
             if(data.has(damageLevelKey)){data.remove(damageLevelKey);changed=true;}
             if(data.has(cooldownLevelKey)){data.remove(cooldownLevelKey);changed=true;}
-        }else{
+        }else if(!staffs().isStaff(item)){
             if(!data.has(damageLevelKey,PersistentDataType.INTEGER)){data.set(damageLevelKey,PersistentDataType.INTEGER,0);changed=true;}
             if(!data.has(cooldownLevelKey,PersistentDataType.INTEGER)){data.set(cooldownLevelKey,PersistentDataType.INTEGER,0);changed=true;}
         }
         if(meta.hasEnchant(org.bukkit.enchantments.Enchantment.MENDING)){meta.removeEnchant(org.bukkit.enchantments.Enchantment.MENDING);changed=true;}
         if(changed){item.setItemMeta(meta);refreshLore(item);} return changed;
     }
+    private ElementalStaffService staffs(){return ((com.example.advancemagic.AdvanceMagicPlugin)plugin).staffs();}
     private void refreshLore(ItemStack item) {
+        if(staffs().isStaff(item)){
+            // Staff lore is owned by the loadout writer, which also renders durability and cores.
+            var spells=((com.example.advancemagic.AdvanceMagicPlugin)plugin).staffSpells();
+            if(spells!=null)spells.refresh(item);
+            return;
+        }
         if(isFlyingStaff(item)){
             var meta=item.getItemMeta();
-            meta.setLore(List.of(ChatColor.GRAY+"คลิกขวาเพื่อเรียกไม้เท้า · เรียกกลับได้ถ้าลืมไว้",
-                    ChatColor.GRAY+"คลิกที่ไม้เท้าเพื่อขึ้นขี่ · ย่องเพื่อลง",
-                    ChatColor.GRAY+"กระโดดขึ้น · มองลงแล้วเดินหน้าเพื่อลงระดับ",
-                    ChatColor.YELLOW+"Sprint เพื่อเร่ง · คลิกขวาขณะขี่เพื่อเปิด Turbo ค้าง",
-                    ChatColor.AQUA+"Turbo ใช้มานาเร็วกว่าการขี่ปกติ",
-                    ChatColor.AQUA+"Durability: "+usesLeft(item)+" / "+maxUses(item)+" uses",
-                    ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durabilityLevel(item)+"/10",
-                    ChatColor.GRAY+"เสก / เรียกกลับสำเร็จใช้ 1 · ซ่อมได้ด้วยคทาหรือแท่นฟื้นฟู"));
+            boolean tandem=meta.getPersistentDataContainer().getOrDefault(new NamespacedKey(plugin,"flying_staff_tier"),PersistentDataType.INTEGER,1)==2;
+            var lore=new ArrayList<String>();
+            if(tandem){
+                lore.add(ChatColor.GOLD+"ระดับ 2 · ผู้ขับ 1 คน + ผู้ซ้อน 1 คน");
+                lore.add(ChatColor.GRAY+"ความเร็ว 50% · ใช้มานา 150% ของรุ่นปกติ");
+                lore.add(ChatColor.GRAY+"คลิกไม้เท้าเพื่อขึ้นซ้อนหลังผู้ขับขึ้นขี่");
+            }
+            lore.add(ChatColor.AQUA+"Durability: "+usesLeft(item)+" / "+maxUses(item)+" uses");
+            lore.add(ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durabilityLevel(item)+"/10");
+            meta.setLore(lore);
             item.setItemMeta(meta);return;
         }
         Spell spell=spell(item);if(spell==null||!item.hasItemMeta())return;
@@ -243,9 +254,13 @@ public final class WandService implements Listener {
     }
     private List<String> wandLore(ItemStack item,Spell spell) {
         int durability=durabilityLevel(item),damage=damageLevel(item),cooldown=cooldownLevel(item);
-        return List.of(ChatColor.GRAY+"Right-click to cast",ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
+        var lore=new ArrayList<>(List.of(ChatColor.GRAY+"Use to cast (no sneaking required)",
+                ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",getEffectiveCooldown(item,spell))+"s",
                 ChatColor.AQUA+"Durability: "+usesLeft(item)+" / "+maxUses(item)+" uses",ChatColor.RED+"Damage: +"+(damage*3)+"%  "+ChatColor.YELLOW+"Cooldown: -"+(cooldown*3)+"%",
-                ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10");
+                ChatColor.LIGHT_PURPLE+"Upgrade: Durability "+durability+"/10 · Damage "+damage+"/10 · Cooldown "+cooldown+"/10"));
+        if(spell.isLegendary())lore.add(0,ChatColor.GOLD+"[MYTHIC]");
+        if(casts(item)>0)lore.add(ChatColor.LIGHT_PURPLE+"Mastery: "+casts(item)+" main casts");
+        return lore;
     }
     public double getEffectiveCooldown(ItemStack item,Spell spell) {
         if(spell==null)return 1.0;
@@ -259,91 +274,46 @@ public final class WandService implements Listener {
         int count=casts(item)+1;
         var meta=item.getItemMeta();
         meta.getPersistentDataContainer().set(castsKey,PersistentDataType.INTEGER,count);
-        double effectiveCd=Math.max(Math.max(1.0,spell.cooldown*0.2),(double)spell.cooldown-(count/5)*5.0);
-        double reduction=(count/5)*5.0;
-        if(spell==Spell.SHULKER_LEVITATION) {
-            meta.setLore(List.of(
-                ChatColor.DARK_GRAY+"[ระดับตำนาน - MYTHIC]",
-                ChatColor.DARK_PURPLE+""+ChatColor.MAGIC+"Ancient Dragon Singularity",
-                ChatColor.GRAY+"คลิกขวาเพื่อปลดปล่อยหายนะมิติบรรพกาล",
-                ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",effectiveCd)+"s"+ChatColor.DARK_GRAY+" (Base: "+spell.cooldown+"s)",
-                ChatColor.LIGHT_PURPLE+"Mastery: "+ChatColor.WHITE+count+" casts"+(reduction>0?ChatColor.YELLOW+" [-"+String.format(Locale.ROOT,"%.0f",reduction)+"s CD]":""),
-                ChatColor.RED+"⚡ พายุฟ้าผ่า · มังกรจุติ · มหาหลุมดำกลืนมิติ · ดินแดน Sculk Wither III"
-            ));
-        } else {
-            meta.setLore(List.of(
-                ChatColor.GRAY+"Right-click to cast",
-                ChatColor.AQUA+"Mana: "+spell.mana+" / Cooldown: "+String.format(Locale.ROOT,"%.1f",effectiveCd)+"s"+ChatColor.DARK_GRAY+" (Base: "+spell.cooldown+"s)",
-                ChatColor.LIGHT_PURPLE+"Mastery: "+ChatColor.WHITE+count+" casts"+(reduction>0?ChatColor.YELLOW+" [-"+String.format(Locale.ROOT,"%.0f",reduction)+"s CD]":"")
-            ));
-        }
-        var lore=new ArrayList<>(meta.getLore());
-        lore.add(ChatColor.GREEN+"เอฟเฟกต์ต่อเนื่องอัตโนมัติ · ไม่เสียมานาเพิ่ม");
-        meta.setLore(lore);
         item.setItemMeta(meta);
         refreshLore(item);
         return count;
     }
-    public void register() {
-        recipes.clear();
-        for(String suffix:List.of("ni_c","ni_b","ns_c","ns_b"))
-            Bukkit.removeRecipe(new NamespacedKey(plugin,"wand_gen_"+suffix));
-        for(Spell spell:Spell.values()) {
-            for(String suffix:List.of("","_bottom","_ni_c","_ni_b","_ns_c","_ns_b"))
-                Bukkit.removeRecipe(new NamespacedKey(plugin,spell.id()+suffix));
-            for(boolean bottom:List.of(false,true)) {
-                NamespacedKey key=new NamespacedKey(plugin,spell.id()+(bottom?"_ni_b":"_ni_c"));
-                ShapedRecipe recipe=new ShapedRecipe(key,create(spell));
-                if(bottom)recipe.shape("NNN","NNN","NCN");
-                else recipe.shape("NNN","NCN","NNN");
-                // A MaterialChoice animates each of the eight recipe-book slots
-                // independently, producing a confusing checkerboard preview.
-                // Keep one stable display item while accepting ingots, stars,
-                // and any mixture of the two in the real crafting grid.
-                recipe.setIngredient('N',RecipeChoice.predicateChoice(
-                        item -> item != null && (item.getType()==Material.NETHERITE_INGOT || item.getType()==Material.NETHER_STAR),
-                        new ItemStack(Material.NETHERITE_INGOT)));
-                recipe.setIngredient('C',RecipeChoice.predicateChoice(item->coreSpell(item)==spell,createCore(spell)));
-                Bukkit.addRecipe(recipe);
-                recipes.put(key,spell);
-            }
-        }
+    /** Remove every historical wand recipe, including already-discovered book entries. */
+    private Set<NamespacedKey> retiredRecipeKeys(){
+        Set<NamespacedKey> keys=new HashSet<>();
+        for(String suffix:List.of("ni_c","ni_b","ns_c","ns_b"))keys.add(new NamespacedKey(plugin,"wand_gen_"+suffix));
+        for(Spell spell:Spell.values())for(String suffix:List.of("","_bottom","_ni_c","_ni_b","_ns_c","_ns_b"))keys.add(new NamespacedKey(plugin,spell.id()+suffix));
+        return keys;
     }
-    public void discover(Player p) { if(canCraft(p))p.discoverRecipes(recipes.keySet()); }
+    public void register(){recipes.clear();retiredRecipeKeys().forEach(Bukkit::removeRecipe);}
+    public void discover(Player p){p.undiscoverRecipes(retiredRecipeKeys());}
     public boolean migrate(ItemStack item) {
-        if(isFlyingStaff(item))return ensureWandState(item);
-        Spell spell=spell(item);
-        if(spell!=null) {
-            boolean stateChanged=ensureWandState(item);
-            var meta=item.getItemMeta();var data=meta.getCustomModelDataComponent();
-            String displayName=wandDisplayName(spell);
-            boolean nameChanged=!Objects.equals(meta.getDisplayName(),displayName);
-            if(nameChanged)meta.setDisplayName(displayName);
-            List<String> expectedLore=(spell.isMythic()&&spell!=Spell.SHULKER_LEVITATION)
-                    ?wandLore(item,spell):null;
-            boolean loreChanged=expectedLore!=null&&!Objects.equals(meta.getLore(),expectedLore);
-            if(loreChanged)meta.setLore(expectedLore);
-            String key="advance_magic:"+spell.id();
-            if(new NamespacedKey("advance_magic",spell.id()).equals(meta.getItemModel())&&data.getStrings().equals(List.of(key))) {
-                if(nameChanged||loreChanged)item.setItemMeta(meta);
-                return stateChanged||nameChanged||loreChanged;
-            }
-            meta.setItemModel(new NamespacedKey("advance_magic",spell.id()));data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
-            item.setItemMeta(meta);refreshLore(item);return true;
+        if(isFlyingStaff(item)){
+            var before=item.getItemMeta();boolean changed=ensureWandState(item);refreshLore(item);
+            return changed||!Objects.equals(before,item.getItemMeta());
         }
+        if(staffs().isStaff(item))return false;
+        if(staffs().migrate(item))return true;
         Spell core=coreSpell(item);
         if(core!=null) {
-            var meta=item.getItemMeta();var data=meta.getCustomModelDataComponent();
+            var meta=item.getItemMeta();boolean changed=false;
             String displayName=coreDisplayName(core);
-            boolean nameChanged=!Objects.equals(meta.getDisplayName(),displayName);
-            if(nameChanged)meta.setDisplayName(displayName);
-            String key="advance_magic:core_"+core.id();
-            if(new NamespacedKey("advance_magic","core_"+core.id()).equals(meta.getItemModel())&&data.getStrings().equals(List.of(key))) {
-                if(nameChanged)item.setItemMeta(meta);
-                return nameChanged;
+            if(!Objects.equals(meta.getDisplayName(),displayName)){meta.setDisplayName(displayName);changed=true;}
+            List<String> lore=coreLore(core);
+            if(!Objects.equals(meta.getLore(),lore)){meta.setLore(lore);changed=true;}
+            if(meta.getItemModel()!=null&&retiredCoreSelector(meta.getItemModel().toString())){
+                meta.setItemModel(null);changed=true;
             }
-            meta.setItemModel(new NamespacedKey("advance_magic","core_"+core.id()));data.setStrings(List.of(key));meta.setCustomModelDataComponent(data);
-            item.setItemMeta(meta);return true;
+            var data=meta.getCustomModelDataComponent();
+            List<String> selectors=data.getStrings().stream().filter(selector->!retiredCoreSelector(selector)).toList();
+            if(!selectors.equals(data.getStrings())){
+                data.setStrings(selectors);
+                meta.setCustomModelDataComponent(selectors.isEmpty()&&data.getFloats().isEmpty()
+                        &&data.getFlags().isEmpty()&&data.getColors().isEmpty()?null:data);
+                changed=true;
+            }
+            if(changed)item.setItemMeta(meta);
+            return changed;
         }
         Upgrade upgrade=upgrade(item);
         if(upgrade!=null){
@@ -362,14 +332,14 @@ public final class WandService implements Listener {
         }
     }
     private ItemStack upgraded(ItemStack wand,ItemStack catalyst) {
-        if(!isDurable(wand))return null;
+        if(!isDurable(wand)||staffs().isStaff(wand))return null;
         Upgrade type=upgrade(catalyst);if(type==null)return null;
         if(isFlyingStaff(wand)&&(type!=Upgrade.DURABILITY||wand.getAmount()!=1))return null;
         NamespacedKey key=switch(type){case DURABILITY->durabilityLevelKey;case DAMAGE->damageLevelKey;case COOLDOWN->cooldownLevelKey;};
         int current=level(wand,key);if(current>=MAX_UPGRADE_LEVEL)return null;
         ItemStack result=wand.clone();var meta=result.getItemMeta();meta.getPersistentDataContainer().set(key,PersistentDataType.INTEGER,current+1);
         if(type==Upgrade.DURABILITY)meta.getPersistentDataContainer().set(durabilityKey,PersistentDataType.INTEGER,
-                Math.min(BASE_USES+(current+1)*USES_PER_REPAIR,usesLeft(wand)+USES_PER_REPAIR));
+                Math.min(baseUses(wand)+(current+1)*usesPerUpgrade(wand),usesLeft(wand)+usesPerUpgrade(wand)));
         result.setItemMeta(meta);refreshLore(result);return result;
     }
     @EventHandler(priority=EventPriority.HIGHEST)
@@ -386,6 +356,9 @@ public final class WandService implements Listener {
         boolean wandOnCursor=isDurable(cursor)&&upgrade(slot)!=null;
         if(!coreOnCursor&&!wandOnCursor)return;
         ItemStack target=coreOnCursor?slot:cursor,catalyst=coreOnCursor?cursor:slot;
+        if(staffs().isStaff(target)){
+            event.setCancelled(true);player.sendMessage(ChatColor.YELLOW+"คทาใช้ Gem 2 ช่องแล้ว · ใส่หรือถอดที่ /spell");return;
+        }
         if(isFlyingStaff(target)&&(upgrade(catalyst)!=Upgrade.DURABILITY||target.getAmount()!=1)){
             event.setCancelled(true);
             player.sendMessage(ChatColor.RED+"ไม้เท้าบินใช้ได้เฉพาะ Wand Repair Core และต้องแยกไม้เท้าทีละอัน");return;
@@ -432,153 +405,36 @@ public final class WandService implements Listener {
         return false;
     }
 
-    public boolean canCraft(HumanEntity player) {
-        if(player==null) return true;
-        return player.hasPermission("advance-magic.craft");
+    /** Retained API: crafting is deferred until elemental skill/loadout design is complete. */
+    public boolean canCraft(HumanEntity player){return false;}
+    public Spell craftingSpell(ItemStack[] matrix){return null;}
+    private boolean retiredCraftIngredients(ItemStack[] matrix){
+        if(containsCore(matrix))return true;
+        if(matrix!=null)for(ItemStack item:matrix)if(staffs().isRetiredOrStaff(item))return true;
+        return false;
     }
-
-    public Spell craftingSpell(ItemStack[] matrix) {
-        if(matrix==null||matrix.length!=9)return null;
-
-        Spell foundCore = null;
-        int coreCount = 0;
-        int ingredientCount = 0;
-        int coreSlot = -1;
-
-        for(int i=0;i<9;i++) {
-            ItemStack item = matrix[i];
-            if(item==null||item.getType().isAir()) return null;
-            Spell s = coreSpell(item);
-            if(s != null) {
-                foundCore = s;
-                coreCount++;
-                coreSlot = i;
-            } else if(item.getType() == Material.NETHERITE_INGOT || item.getType() == Material.NETHER_STAR) {
-                if(item.getAmount() >= 1) {
-                    ingredientCount++;
-                }
-            } else {
-                return null;
-            }
-        }
-
-        if(coreCount == 1 && ingredientCount == 8) {
-            // Support Core in Center (Slot 4) or Bottom-Center (Slot 7)
-            if(coreSlot == 4 || coreSlot == 7) {
-                return foundCore;
-            }
-        }
-        return null;
-    }
-
     @EventHandler(priority=EventPriority.HIGHEST)
-    public void prepare(PrepareItemCraftEvent e) {
-        CraftingInventory inv=e.getInventory();
-        ItemStack[] matrix=inv.getMatrix();
-        Spell s=craftingSpell(matrix);
-        HumanEntity viewer = e.getView().getPlayer();
-
-        if(s!=null) {
-            if(canCraft(viewer)) {
-                ItemStack wand = create(s);
-                inv.setResult(wand);
-                plugin.getLogger().info("[Craft-Prepare] Set result to " + s.title + " Wand for " + viewer.getName());
-            } else {
-                inv.setResult(null);
-                plugin.getLogger().warning("[Craft-Prepare] Denied wand craft for " + viewer.getName() + " (no permission)");
-            }
-            return;
-        }
-
-        // If the recipe was matched by vanilla as an advance-magic recipe or matrix contains a tagged core
-        // but it's not a valid wand recipe: clear the result!
-        if(ours(e.getRecipe())||containsCore(matrix)) {
-            inv.setResult(null);
-        }
+    public void prepare(PrepareItemCraftEvent e){
+        if(retiredCraftIngredients(e.getInventory().getMatrix())||ours(e.getRecipe()))e.getInventory().setResult(null);
     }
-
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void craft(CraftItemEvent e) {
-        CraftingInventory inv=e.getInventory();
-        Spell expected=craftingSpell(inv.getMatrix());
-        HumanEntity who = e.getWhoClicked();
-
-        // If not a wand craft, prevent vanilla from consuming wand ingredients
-        if(expected==null) {
-            if(ours(e.getRecipe())||containsCore(inv.getMatrix())) {
-                e.setCancelled(true);
-            }
-            return;
-        }
-
-        if(!canCraft(who)) {
-            e.setCancelled(true);
-            if(who instanceof Player p) {
-                p.sendMessage(ChatColor.RED+"คุณไม่มีสิทธิ์ในการสร้างคทาเวทมนตร์");
-            }
-            return;
-        }
-
-        // Authoritative output override:
-        // Solves Bedrock Edition client recipe collision where Bedrock client matched another spell's recipe ID
-        ItemStack wand=create(expected);
-        e.setCurrentItem(wand);
-        inv.setResult(wand);
-        plugin.getLogger().info("[Craft-Success] " + who.getName() + " crafted " + expected.title + " Wand!");
-
-        if(who instanceof Player p) {
-            p.playSound(p.getLocation(),Sound.BLOCK_BEACON_POWER_SELECT,1.0f,1.2f);
-            p.playSound(p.getLocation(),Sound.UI_TOAST_CHALLENGE_COMPLETE,0.7f,1.4f);
-            p.spawnParticle(Particle.TOTEM_OF_UNDYING,p.getLocation().add(0,1.2,0),25,0.35,0.35,0.35,0.1);
-            p.sendActionBar(net.kyori.adventure.text.Component.text("✦ ประกอบ " + expected.title + " Wand สำเร็จ!", net.kyori.adventure.text.format.NamedTextColor.GOLD));
-            Bukkit.getScheduler().runTask(plugin, p::updateInventory);
-        }
+    public void craft(CraftItemEvent e){
+        if(retiredCraftIngredients(e.getInventory().getMatrix())||ours(e.getRecipe()))e.setCancelled(true);
     }
-
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void onResultClick(InventoryClickEvent e) {
-        if(e instanceof CraftItemEvent) return; // Handled authoritatively by craft()
-        if(!(e.getWhoClicked() instanceof Player p)) return;
-        if(!(e.getInventory() instanceof CraftingInventory inv)) return;
-        if(e.getSlotType()!=InventoryType.SlotType.RESULT) return;
-
-        Spell expected=craftingSpell(inv.getMatrix());
-        if(expected==null && !ours(inv.getRecipe())) return;
-
-        // Prevent number-key swap, drop, or non-standard clicks from duping custom wands
-        if(e.getClick()==ClickType.NUMBER_KEY || e.getClick()==ClickType.DROP
-            || e.getClick()==ClickType.CONTROL_DROP || e.getClick()==ClickType.SWAP_OFFHAND) {
-            e.setCancelled(true);
-            return;
-        }
-
-        if(!canCraft(p)) {
-            e.setCancelled(true);
-            p.sendMessage(ChatColor.RED+"คุณไม่มีสิทธิ์ในการสร้างคทาเวทมนตร์");
-            return;
-        }
-
-        if(expected!=null) {
-            ItemStack wand=create(expected);
-            inv.setResult(wand);
-        }
-        Bukkit.getScheduler().runTask(plugin, p::updateInventory);
+    public void onResultClick(InventoryClickEvent e){
+        if(e.getInventory() instanceof CraftingInventory inv&&e.getSlotType()==InventoryType.SlotType.RESULT
+                &&(retiredCraftIngredients(inv.getMatrix())||ours(inv.getRecipe())))e.setCancelled(true);
     }
-
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void automatic(org.bukkit.event.block.CrafterCraftEvent e) {
-        if(!(e.getBlock().getState() instanceof org.bukkit.block.Crafter crafter)) return;
-        Spell s=craftingSpell(crafter.getInventory().getContents());
-        if(s!=null) {
-            e.setResult(create(s));
-        } else if(ours(e.getRecipe())||containsCore(crafter.getInventory().getContents())) {
-            e.setCancelled(true);
-        }
+    public void automatic(org.bukkit.event.block.CrafterCraftEvent e){
+        if(e.getBlock().getState() instanceof org.bukkit.block.Crafter crafter
+                &&(retiredCraftIngredients(crafter.getInventory().getContents())||ours(e.getRecipe())))e.setCancelled(true);
     }
 
     @EventHandler(priority=EventPriority.LOWEST,ignoreCancelled=true)
     public void onWandDamage(org.bukkit.event.player.PlayerItemDamageEvent event) {
-        if(spell(event.getItem())!=null) {
+        if(isDurable(event.getItem())) {
             event.setCancelled(true);
         }
     }

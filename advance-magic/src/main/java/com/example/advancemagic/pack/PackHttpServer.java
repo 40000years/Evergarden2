@@ -1,7 +1,9 @@
 package com.example.advancemagic.pack;
 
+import com.example.advancemagic.pack.delivery.ServerPortPackHost;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import org.bukkit.plugin.Plugin;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.*;
@@ -10,16 +12,22 @@ import java.util.concurrent.*;
 public final class PackHttpServer implements AutoCloseable {
     private final HttpServer server;
     private final ExecutorService workers;
+    private final ServerPortPackHost shared;
     private final byte[] pack;
     private final String path, etag;
 
     public PackHttpServer(String bind, int port, byte[] pack, String sha1) throws IOException {
-        this.pack=pack.clone();this.path="/advance-magic/"+sha1+".zip";this.etag="\""+sha1+"\"";
+        this.pack=pack.clone();this.path="/advance-magic/"+sha1+".zip";this.etag="\""+sha1+"\"";shared=null;
         server=HttpServer.create(new InetSocketAddress(bind,port),32);
         workers=new ThreadPoolExecutor(2,4,30,TimeUnit.SECONDS,new ArrayBlockingQueue<>(64),r->{
             Thread t=new Thread(r,"advance-magic-pack");t.setDaemon(true);return t;
         },new ThreadPoolExecutor.AbortPolicy());
         server.setExecutor(workers);server.createContext("/",this::serve);server.start();
+    }
+    /** Answers on the Minecraft port itself; fails when the server offers no hook for it. */
+    public PackHttpServer(Plugin plugin, byte[] pack, String sha1) throws IOException {
+        this.pack=pack.clone();this.path="/advance-magic/"+sha1+".zip";this.etag="\""+sha1+"\"";server=null;workers=null;
+        shared=ServerPortPackHost.install(plugin,requested->requested.equals(path)?this.pack:null);
     }
     private void serve(HttpExchange exchange) throws IOException {
         try(exchange) {
@@ -38,6 +46,8 @@ public final class PackHttpServer implements AutoCloseable {
         }
     }
     public String path(){return path;}
-    public int port(){return server.getAddress().getPort();}
-    @Override public void close(){server.stop(0);workers.shutdownNow();}
+    public boolean sharesServerPort(){return shared!=null;}
+    /** -1 while sharing the Minecraft port. */
+    public int port(){return server==null?-1:server.getAddress().getPort();}
+    @Override public void close(){if(shared!=null)shared.close();else{server.stop(0);workers.shutdownNow();}}
 }

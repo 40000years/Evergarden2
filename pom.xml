@@ -44,6 +44,13 @@
             <version>26.2.build.121-stable</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Netty ที่ Paper มีให้อยู่แล้ว ใช้ส่ง resource pack ผ่านพอร์ต Minecraft -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport</artifactId>
+            <version>4.2.16.Final</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>

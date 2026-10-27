@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /** Immutable, chunk-indexed vanilla block geometry shared by the two new landmarks. */
 public final class LandmarkBlueprint {
+    public static final int MIN_Y=32,MAX_Y=210;
     public record Point(int x,int y,int z) {}
     public record Block(int x,int y,int z,Material material,BlockFace facing) {}
     private record Style(Material material,BlockFace facing) {}
@@ -27,7 +28,7 @@ public final class LandmarkBlueprint {
     public void put(int x,int y,int z,Material m){put(x,y,z,m,null);}
     public void put(int x,int y,int z,Material m,BlockFace face){
         if(frozen)throw new IllegalStateException("Frozen blueprint");
-        if(Math.abs(x)>71||Math.abs(z)>71||y<32||y>210)throw new IllegalArgumentException("Landmark bounds: "+x+","+y+","+z);
+        if(Math.abs(x)>71||Math.abs(z)>71||y<MIN_Y||y>MAX_Y)throw new IllegalArgumentException("Landmark bounds: "+x+","+y+","+z);
         Point p=new Point(x,y,z);
         if(m==Material.AIR)voxels.remove(p);else voxels.put(p,new Block(x,y,z,m,face));
     }

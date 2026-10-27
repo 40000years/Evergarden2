@@ -4,6 +4,9 @@
   "texture_data": {
     "advance_magic.flying_staff": {
       "textures": "textures/items/flying_staff"
+    },
+    "advance_magic.flying_staff_tier2": {
+      "textures": "textures/items/flying_staff_tier2"
     }
   }
 }

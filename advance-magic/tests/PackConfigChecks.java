@@ -40,6 +40,28 @@ public final class PackConfigChecks {
         check(!ResourcePackService.migratePackConfig(customHost,SHA1),"custom public host is preserved");
         var changedPack=config();changedPack.set("resource-pack.url","");changedPack.set("resource-pack.host.enabled",true);
         check(!ResourcePackService.migratePackConfig(changedPack,"0000000000000000000000000000000000000000"),"stale published pack is not selected");
-        System.out.println("PASS: legacy pack delivery migrates to the published Java pack; custom hosts and CDNs are preserved");
+        var bundledDefaults=new YamlConfiguration();
+        bundledDefaults.set("resource-pack.url","");bundledDefaults.set("resource-pack.sha1","");
+        bundledDefaults.set("resource-pack.host.enabled",true);
+        var obsolete=new YamlConfiguration();obsolete.setDefaults(bundledDefaults);
+        obsolete.set("resource-pack.url",URL);obsolete.set("resource-pack.sha1",SHA1);
+        obsolete.set("resource-pack.host.enabled",false);obsolete.set("resource-pack.host.port",8297);
+        obsolete.set("resource-pack.host.public-url","https://packs.example.org/magic");
+        String newDigest="2222222222222222222222222222222222222222";
+        check(ResourcePackService.migratePackConfig(obsolete,newDigest),"obsolete official pack migrates to embedded legendary artwork");
+        check(obsolete.getString("resource-pack.url").isEmpty()&&obsolete.getString("resource-pack.sha1").isEmpty(),"embedded pack chooses its actual content hash");
+        check(obsolete.getBoolean("resource-pack.host.enabled")&&obsolete.getInt("resource-pack.host.port")==8297,"bundled migration preserves chosen port");
+        check("https://packs.example.org/magic".equals(obsolete.getString("resource-pack.host.public-url")),"bundled migration preserves reverse proxy");
+        check(!ResourcePackService.migratePackConfig(obsolete,newDigest),"bundled migration is idempotent");
+        obsolete.set("resource-pack.sha1",SHA1);
+        check(newDigest.equals(ResourcePackService.packDigest(obsolete,newDigest)),"bundled URL always uses the exact embedded hash");
+        check("1111111111111111111111111111111111111111".equals(ResourcePackService.packDigest(custom,newDigest)),"custom CDN uses its own digest");
+        custom.set("resource-pack.sha1","");
+        check(ResourcePackService.packDigest(custom,newDigest).isEmpty(),"unknown CDN hash never falls back to unrelated bundled bytes");
+        var privateCdn=new YamlConfiguration();privateCdn.setDefaults(bundledDefaults);
+        privateCdn.set("resource-pack.url","https://packs.example.org/custom.zip");privateCdn.set("resource-pack.sha1",SHA1);
+        check(!ResourcePackService.migratePackConfig(privateCdn,newDigest),"new bundled defaults preserve administrator CDN");
+        check(SHA1.equals(privateCdn.getString("resource-pack.sha1")),"new bundled defaults preserve administrator digest");
+        System.out.println("PASS: official pack upgrades select matching published or embedded artwork; custom ports, hosts and CDNs are preserved");
     }
 }

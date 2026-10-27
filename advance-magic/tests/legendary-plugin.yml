@@ -1,0 +1,6 @@
+name: LegendarySpellChecks
+version: 1.0.0-test
+main: LegendarySpellChecks
+api-version: '26.2'
+depend: [advance-magic]
+description: Disposable Paper-only legendary cinematic, protection and cleanup checks.

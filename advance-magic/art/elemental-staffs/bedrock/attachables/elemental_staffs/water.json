@@ -1,0 +1,39 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "advance_magic:staff_water",
+      "materials": {
+        "default": "entity_alphatest",
+        "glow": "entity_emissive_alpha"
+      },
+      "textures": {
+        "default": "textures/elemental_staffs/materials"
+      },
+      "geometry": {
+        "default": "geometry.advance_magic.staff_water",
+        "fx": "geometry.advance_magic.staff_water_fx"
+      },
+      "animations": {
+        "first": "animation.advance_magic.staff_water.first",
+        "third": "animation.advance_magic.staff_water.third",
+        "idle": "animation.advance_magic.staff_water.idle"
+      },
+      "scripts": {
+        "animate": [
+          {
+            "first": "context.is_first_person == 1.0"
+          },
+          {
+            "third": "context.is_first_person == 0.0"
+          },
+          "idle"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.advance_magic.elemental_staff_body",
+        "controller.render.advance_magic.staff_water_fx"
+      ]
+    }
+  }
+}

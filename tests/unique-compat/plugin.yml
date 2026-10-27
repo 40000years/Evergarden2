@@ -1,0 +1,5 @@
+name: UniqueCompatibilityProbe
+version: '1.0'
+main: UniqueCompatibilityProbe
+api-version: '26.2'
+depend: [Evergarden]

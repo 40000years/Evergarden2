@@ -1,0 +1,17 @@
+{
+  "version": "1.9.10-longinus-bedrock-pose-sync",
+  "bedrock_pack": "2.12.10",
+  "fixes": [
+    "Read latest pose when delayed spawn consumer executes",
+    "Retry unchanged final pose when the client entity becomes available",
+    "Track delivery per connection and entity instance",
+    "Refresh stationary pose every 40 ticks"
+  ],
+  "unchanged": "All Java pack bytes and all Bedrock assets except manifest version; no geometry or gameplay changes",
+  "runtime": "PASS 88",
+  "integration": "PASS 72 including actual Geyser entity cache and SetEntityDataPacket tests",
+  "before_fix_regression": "1.9.9 fails delayed-spawn pose test",
+  "assets": "PASS 744",
+  "real_client_rendering": "Not tested",
+  "sha256": "819de79005350f20f47e0acbca7107d67ca6252df8a0bfda0c6b3bde55f82acc"
+}

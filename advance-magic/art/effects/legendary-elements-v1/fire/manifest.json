@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "element": "FIRE",
+  "spell": "METEOR_RAIN",
+  "mode": "built-in image_gen",
+  "semantic_postprocessing": "none; selected generated PNG copied byte-identical",
+  "assets": [
+    {
+      "file": "meteor_rain_sigil.png",
+      "source_file": "source/meteor_rain_sigil-v2.png",
+      "role": "horizontal emissive ground sigil",
+      "generated_source": "C:/Users/User/.codex/generated_images/01a16e06-eeb0-7ce2-a4c2-c95a62b90778/exec-432f50a3-57c7-4fb6-a5ff-f2b8941fd5c8.png",
+      "generation": [
+        {
+          "kind": "generate",
+          "prompt": "Use case: stylized-concept.\nAsset type: one production RGBA emissive VFX texture for a Minecraft Java and Bedrock Legendary fire spell, Meteor Rain.\nPrimary request: a complete, extremely intricate volcanic celestial magic sigil, viewed exactly straight down, perfectly circular, centered.\nSubject: seven concentric rings of exquisite gold and molten amber geometric filigree, tiny invented rune strokes, radial sun teeth, interlocked triangular geometry and fine glowing lava-fissure tracery. A dark crimson ember-red inner ring gives the fire identity, with white-hot golden highlights. The central 35 percent remains predominantly open transparent negative space, with only a thin geometric star outline. Small ember sparks near the outer edge, restrained glow so individual fine lines stay sharp. Dense elegant detail comparable to an ornate legendary prismatic magic circle.\nStyle: polished high fantasy game VFX painted texture, precise intricate arcane line art, luminous translucent golden-orange energy, not pixel art.\nComposition: exact orthographic top-down disk, no tilt, full circle and small sparks fit completely inside frame with generous clean transparent padding, highest available detail.\nBackground: genuinely transparent alpha everywhere outside the rune strokes and in negative spaces. No filled stone floor, no opaque disk, no black backdrop, no painted checkerboard.\nNo readable language, letters, numbers, captions, UI, border, logo, watermark, characters, scenery, fireball, hand, portal or gate. One standalone reusable texture only.",
+          "transparent_background": true,
+          "generated_source": "C:/Users/User/.codex/generated_images/01a16e06-eeb0-7ce2-a4c2-c95a62b90778/exec-927770ce-2a26-4511-89a8-4889eacc3d4d.png"
+        },
+        {
+          "kind": "edit",
+          "prompt": "Edit the provided fire magic sigil texture only to fix framing. Preserve this exact elaborate golden-orange molten rune wheel, lava textures, open centre, all runic geometry, fine detail, emissive colours, transparency and square image. Reframe the whole wheel slightly smaller: keep every outer sun spike and every ember spark completely inside the canvas with a clean transparent margin at least 8 percent of the image width on ALL FOUR SIDES. No tip or glow may touch an image edge. The wheel should occupy no more than 82 percent of canvas width and height. Do not add objects, writing, labels, opaque backdrops, borders, scenery, perspective or checkerboard. Genuine transparent RGBA background and all internal negative space.",
+          "transparent_background": true,
+          "reference": "source/meteor_rain_sigil-v1.png"
+        }
+      ],
+      "sha256": "1c5650848cd7db595b7e7ebd87b52718c406db59b85d04c25bb05d7ebf44eec4",
+      "width": 1254,
+      "height": 1254,
+      "image_mode": "RGBA",
+      "file_bytes": 2498588,
+      "source_byte_identical": true,
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "alpha_bbox": [
+        0,
+        9,
+        1253,
+        1254
+      ],
+      "transparent_fraction": 0.331403,
+      "translucent_fraction": 0.668597,
+      "opaque_fraction": 0.0,
+      "visually_inspected": true
+    },
+    {
+      "file": "meteor_rain_meteor.png",
+      "source_file": "source/meteor_rain_meteor.png",
+      "role": "hero meteor sprite, flame tail upper-left and boulder lower-right",
+      "generated_source": "C:/Users/User/.codex/generated_images/01a16e06-eeb0-7ce2-a4c2-c95a62b90778/exec-2ae27bc3-1fef-4403-b11a-a60ae9b16a85.png",
+      "generation": [
+        {
+          "kind": "generate",
+          "prompt": "Use case: stylized-concept.\nAsset type: one standalone transparent RGBA emissive game VFX texture for the Legendary fire spell Meteor Rain, intended to be displayed as a camera-facing projectile in Minecraft Java and Bedrock.\nPrimary request: a huge isolated incandescent volcanic meteor falling DOWNWARD, long fiery tail flowing upward. Show the entire meteor and the full tail.\nSubject: dense spherical-to-irregular charred obsidian boulder at lower centre, with brilliant molten orange and yellow-white cracks, several small jagged orbiting fragments, and a magnificent asymmetric tapering plume of flame sweeping upward and slightly left. The boulder is clearly readable as massive stone, not merely a flame or an abstract glowing sphere. Fine translucent crimson filaments, golden tongues of fire, white-hot rim, abundant individually sharp ember sparks, realistic high fantasy VFX lighting and incredible small-scale detail.\nComposition: portrait-like subject in a square texture, full silhouette takes at most 78 percent of canvas height and 65 percent width. Large genuinely transparent empty margins on every side. Tail, sparks and boulder must not touch the image edge. Downward-pointing projectile, not horizontal, no ground explosion, no impact crater.\nBackground: actual transparent alpha, no black/white fill, no checkerboard painting.\nNo writing, UI, icons, logo, watermark, border, scenery, sky, characters, hands, planets, or rune circle. One complete isolated reusable VFX sprite, polished high-end fantasy game art, highest available detail.",
+          "transparent_background": true
+        }
+      ],
+      "sha256": "3e636ed0f458465f135112094b80b91fb09ee31afb7a8c26aab6e8a8a605e5b1",
+      "width": 1254,
+      "height": 1254,
+      "image_mode": "RGBA",
+      "file_bytes": 1259778,
+      "source_byte_identical": true,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1246,
+        1254
+      ],
+      "transparent_fraction": 0.693563,
+      "translucent_fraction": 0.306398,
+      "opaque_fraction": 3.9e-05,
+      "visually_inspected": true
+    }
+  ],
+  "framing": "Native image tool outputs are tightly alpha-cropped. Keep these originals unchanged; use uniform transparent-canvas padding when preparing future pack textures."
+}

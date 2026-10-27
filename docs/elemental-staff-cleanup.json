@@ -1,0 +1,839 @@
+{
+  "date": "2026-10-17",
+  "scope": "Elemental staff replacement; no shared spell/core/effect/legendary weapon/utility resource removal",
+  "new_active_wands": [
+    "staff_fire",
+    "staff_wind",
+    "staff_earth",
+    "staff_ice",
+    "staff_water",
+    "staff_lightning",
+    "staff_light",
+    "staff_dark"
+  ],
+  "removed": [
+    {
+      "path": "advance-magic/art/generated/dragons_breath.png",
+      "sha256": "cca22a4f1df2cc3708b2f3cead92b0a7c3f9dc14961f8fd9bb37d0f00f574b7e",
+      "bytes": 1572278
+    },
+    {
+      "path": "advance-magic/art/generated/earth_wall.png",
+      "sha256": "76b80877cdf59bc55a984d086138ba46f6ffce5c6764624805dce749cf9e27ba",
+      "bytes": 1675780
+    },
+    {
+      "path": "advance-magic/art/generated/frost_nova.png",
+      "sha256": "d372126d1a0a1a82151d65136b85017f92499848093a6b740cfcaae81128f481",
+      "bytes": 1898083
+    },
+    {
+      "path": "advance-magic/art/generated/invisibility_shroud.png",
+      "sha256": "876c45b4122ea411c41a999af8d7729fd6a91c1b9963c09abc11496b4cbeb84a",
+      "bytes": 1274592
+    },
+    {
+      "path": "advance-magic/art/generated/iron_armor.png",
+      "sha256": "ce26ac38990ab28f0a3ec866362ef1caf30d2e727b64e4d60e1c397dd53aab09",
+      "bytes": 1242707
+    },
+    {
+      "path": "advance-magic/art/generated/lightning_strike.png",
+      "sha256": "19a5bae16bc2cce59ec5abcfa9c3ff6a27ead9185a0a05e85882a486ff6b22ce",
+      "bytes": 1272565
+    },
+    {
+      "path": "advance-magic/art/generated/meteor_strike.png",
+      "sha256": "b71b3f151df9fc7ed28229a8d6e1dde2d06ced73af58e5834af54eaf97eb827a",
+      "bytes": 1227226
+    },
+    {
+      "path": "advance-magic/art/generated/natures_bloom.png",
+      "sha256": "f16c7d11ed4bf1563297457e40056f6573f5ce39d3e98500c8c4853ade3ae2f2",
+      "bytes": 1867450
+    },
+    {
+      "path": "advance-magic/art/generated/poison_spores.png",
+      "sha256": "ae83d32f781c02ec254f0d6a00cb9bf7f67e6ed0dd2461175e88d424d54fb3f3",
+      "bytes": 1230923
+    },
+    {
+      "path": "advance-magic/art/generated/shadow_step.png",
+      "sha256": "5da6ce5d692898521ec0e0dd5134a7d10a8a46302d32d3140a75d740e06d72bb",
+      "bytes": 2059969
+    },
+    {
+      "path": "advance-magic/art/generated/shulker_levitation.png",
+      "sha256": "2b7e5edf9c63ff978a8fc17d28bb0551b8331cf554a03d3f600c7ad6882ded21",
+      "bytes": 1567605
+    },
+    {
+      "path": "advance-magic/art/generated/soul_drain.png",
+      "sha256": "7235978ec2d8c8102898b6c9b3c3df0588a22c7a4a9f7d41998158ee6ea88292",
+      "bytes": 1289166
+    },
+    {
+      "path": "advance-magic/art/generated/time_dilation.png",
+      "sha256": "752b2a1e3736d446a5c7501066103a3dd25db23cac4008b4a7259390b72ef5a2",
+      "bytes": 1754442
+    },
+    {
+      "path": "advance-magic/art/generated/void_pull.png",
+      "sha256": "fa0f8a93c4273b120429743ef32b48f5dbbfa028bb41e5fcbedb0598a6c33717",
+      "bytes": 1951721
+    },
+    {
+      "path": "advance-magic/art/generated/wither_ray.png",
+      "sha256": "e72f8ba8e24bad9d7d9368848f10fbec95c72af7c34166f1eefa25b6e9f4ed7a",
+      "bytes": 1494777
+    },
+    {
+      "path": "advance-magic/art/generation-prompts.json",
+      "sha256": "e634bc201c129b7e8e33194643ab7fa60a82cd5138a6a2e5c6d0be89eccc1335",
+      "bytes": 23557
+    },
+    {
+      "path": "advance-magic/art/wands/blaze_barrage.png",
+      "sha256": "c715e25b58a9c69d0f25df2819db712e533436f9ff3ccf019225b36f9844816e",
+      "bytes": 3740
+    },
+    {
+      "path": "advance-magic/art/wands/dragons_breath.png",
+      "sha256": "be1f9a63f227c9e35a2419a7baad97093ccaa846af3d87cffb604082d438010a",
+      "bytes": 7121
+    },
+    {
+      "path": "advance-magic/art/wands/earth_wall.png",
+      "sha256": "63c3943b4163cd97fc5b642caf581ddc91ce9b23a51f10c01fbf2afb39e204bc",
+      "bytes": 7547
+    },
+    {
+      "path": "advance-magic/art/wands/frost_nova.png",
+      "sha256": "96726f3491b99526f9e317ca13e567262eed298de96d1bef0e2ae4602ed1b99f",
+      "bytes": 7072
+    },
+    {
+      "path": "advance-magic/art/wands/guardian_beam.png",
+      "sha256": "2c3a46fa924be7d4b49eecf4edb268b66a134e9dd9d50c9c3a4f710da1f2b9a5",
+      "bytes": 3781
+    },
+    {
+      "path": "advance-magic/art/wands/invisibility_shroud.png",
+      "sha256": "67fc98249f2a35f53ea033cc307833160eb73aedec49f4659e3384cd2525877e",
+      "bytes": 7234
+    },
+    {
+      "path": "advance-magic/art/wands/iron_armor.png",
+      "sha256": "17a8e528776c43c48034d3b727244b491818d54426e633783770c2eed073d698",
+      "bytes": 7177
+    },
+    {
+      "path": "advance-magic/art/wands/lightning_strike.png",
+      "sha256": "453a6b3a4897718c87aca45310842d4ef1680a45e134d7c59c524cd5e629017c",
+      "bytes": 6367
+    },
+    {
+      "path": "advance-magic/art/wands/meteor_strike.png",
+      "sha256": "32dd6d8c99ebe97aad4e5de4491eace480741dd62bc742e76f51009014cca7ee",
+      "bytes": 6511
+    },
+    {
+      "path": "advance-magic/art/wands/natures_bloom.png",
+      "sha256": "8c64b8dfd57f6a86dda4a52e2a650d5950eec1b878a1eb7c4382c1824e47d8e0",
+      "bytes": 7256
+    },
+    {
+      "path": "advance-magic/art/wands/poison_spores.png",
+      "sha256": "138a93059cee0b3dbcb52162476a569dddc3ba40e6cbf947a4ff9ecf8e8505b3",
+      "bytes": 6838
+    },
+    {
+      "path": "advance-magic/art/wands/shadow_step.png",
+      "sha256": "5f4e586508c9c5a1041582dfb588a991235a3ace6b4b39d692ada80275e2e36a",
+      "bytes": 7614
+    },
+    {
+      "path": "advance-magic/art/wands/shulker_levitation.png",
+      "sha256": "3fd14e405e1565eaa21a22d2db0be9854e5c5f688fbe3b4c41cf92d1d72d82c2",
+      "bytes": 6886
+    },
+    {
+      "path": "advance-magic/art/wands/sonic_boom.png",
+      "sha256": "9d40fe1fcd2374fc998fe1636d5745d68e58f69b354d6ec0256b53b47877bfc5",
+      "bytes": 4770
+    },
+    {
+      "path": "advance-magic/art/wands/soul_drain.png",
+      "sha256": "53ad30f7ebf1d850bf3c0b8368fec631aa55270fb2f9f83abf5bf0553e323849",
+      "bytes": 7788
+    },
+    {
+      "path": "advance-magic/art/wands/time_dilation.png",
+      "sha256": "6b635f7154ab46d47a683c64ba49d421ec71c8fdb9e671905a4f4a36a84336bd",
+      "bytes": 8171
+    },
+    {
+      "path": "advance-magic/art/wands/vex_legion.png",
+      "sha256": "eaca6a5b0b18b212bca1c47d9dd69d8b6e9cb8d00a6b22cab2aaac83a851f568",
+      "bytes": 3826
+    },
+    {
+      "path": "advance-magic/art/wands/void_pull.png",
+      "sha256": "360f272b2b44d0337656289cf896f56f4b2c3d1d86a0e4911157568421cc009f",
+      "bytes": 8683
+    },
+    {
+      "path": "advance-magic/art/wands/wither_ray.png",
+      "sha256": "40f1046094426edfd2eb7e3090fced2f2c60220ac96d4af1c3fdf903bcb9ad5e",
+      "bytes": 8987
+    },
+    {
+      "path": "advance-magic/dist/wand-preview.html",
+      "sha256": "3f0f3d81024dbf9a6863750201bdceaf6fef3b77d873d1aa7d8066a8a216996f",
+      "bytes": 335879
+    },
+    {
+      "path": "advance-magic/dist/wand-textures-preview.png",
+      "sha256": "b09e8dbe5cf8531f8f15a1eefc7f4df2b1eac33ec3deb05656c4d5db0b6465da",
+      "bytes": 164383
+    },
+    {
+      "path": "advance-magic/tools/generate_reworked_wands.py",
+      "sha256": "4eb28dc5879f03bafd3629f8214f6560988863468d2d0b6542edb9181cd88751",
+      "bytes": 17209
+    },
+    {
+      "path": "advance-magic/tools/prepare_wand_art.py",
+      "sha256": "79963ae52efca28aeba8f5fab7cc6b816926003ae188f87f194c4ba5ca8b1a20",
+      "bytes": 3492
+    }
+  ],
+  "preserved_sha256": [
+    {
+      "path": "advance-magic/art/wands/chronos_final_hour.png",
+      "sha256": "3f7fdd36686f6438d14a36361d82e695954d37f7d992e87b8d36a72dd72977ea"
+    },
+    {
+      "path": "advance-magic/art/wands/crimson_oblivion.png",
+      "sha256": "0af519e78ab73e55c141ae5c7b033c3cd59b29a9ca955727580b2d9203cfcb48"
+    },
+    {
+      "path": "advance-magic/art/wands/heavens_judgment.png",
+      "sha256": "e2308c995a28b0ddde097e1dcdae3f4b457fd808972e7191024c88fa07fda093"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/bedrock/manifest.json",
+      "sha256": "27f61d9fdb9bcdcda5ff47026fb3b44b804b30a8f679e0058ccdac1fc91c36dc"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/bedrock/pack_icon.png",
+      "sha256": "1633bf8b073be6a948d697712862444ca959631d816bd2adafdbbbea2ec88493"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/bedrock/texts/en_US.lang",
+      "sha256": "40eda3836e7bae8ccb0560ed19953fd3316a37e9a3bba8b18771c0f75824441a"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/bedrock/texts/languages.json",
+      "sha256": "94d712c03a9f189c2d4a579da62d0fa7151ebb9219e0e82655cbf84b3338f3ef"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/bedrock/texts/th_TH.lang",
+      "sha256": "c10117584c0b0450efe32614475dae71806a7a984bdebce3d1d00d0de40a24e9"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/bedrock/textures/item_texture.json",
+      "sha256": "400a111130b97408c3645b093a9d918f39b5d59e0042541938123e7c98ee488b"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/bedrock/textures/items/crimson_oblivion.png",
+      "sha256": "0af519e78ab73e55c141ae5c7b033c3cd59b29a9ca955727580b2d9203cfcb48"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/bedrock/textures/items/lunar_requiem.png",
+      "sha256": "88b55bad7c04b534a5ba9d32dcb24c14ddf222b7870e9bc01ee516565f3c9afa"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/bedrock/textures/items/verdant_sovereign.png",
+      "sha256": "a6ff43259e76c152e18bb4a5cf4abf0c5fc33a84b46fe236d8a6ddd351df59ef"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/catalog.json",
+      "sha256": "e55df8237f7cb199e7d622cc21f36774006189c430cd1177b224411de5655d2c"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/dist/advance-magic-legendary-bedrock-preview.mcpack",
+      "sha256": "f6e4db07ee6bbe6b5bbba9b74a9760828be5eeb7577a2bbb45a5d35affde4559"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/dist/advance-magic-legendary-java-preview.zip",
+      "sha256": "04db1c032d9d79dd9a44ab3cfc3e998c541cf5821e0f8ad8551d955517734e08"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/dist/geyser-mappings.json",
+      "sha256": "2291210854b849544d83ff749257943f5ff046801db783b7962952c1e210c865"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/dist/pack-hashes.json",
+      "sha256": "7be9cc277046436c73ad71f7c4970b3a57c002acc93de6c86113ae1e0aa46552"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/generated/crimson_oblivion.png",
+      "sha256": "e0c465b6f1e26cb9050327e6d6361df15db7b19366c7f3d695287e6075658d90"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/generated/lunar_requiem.png",
+      "sha256": "b559a577b7fc48a8fed8a50143b0a2c1fee73069446eaa80f6c7bb06cb9d1ecc"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/generated/verdant_sovereign.png",
+      "sha256": "5a8cd1ea184c0bcb4f0499382e9f9992f1c5e851a4921ce1948c7875c5bebf61"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/generation-prompts.json",
+      "sha256": "4f6f752b78d81ac7a70b8d9aa6dea8565f3c14ffea81c32282cbfa1628306cc4"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/geyser-mappings.json",
+      "sha256": "2291210854b849544d83ff749257943f5ff046801db783b7962952c1e210c865"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/items/crimson_oblivion.json",
+      "sha256": "8c1efaf4a128a08a6ca021ca457328c85e21da4f434871bd88ee198e33d0b2c5"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/items/lunar_requiem.json",
+      "sha256": "9270531e1c747c9062fe955b2a9cb51092d8fc3b65821fb594b982ced5997a4b"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/items/verdant_sovereign.json",
+      "sha256": "489a9281cd926ff0084e8a707504fa9ade608ae4ea3c095f613ef8f48693608f"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/lang/en_us.json",
+      "sha256": "a037ea98a1c65397e4ecaae1f34346404935811241ca5147c5f892e1bb189c94"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/lang/th_th.json",
+      "sha256": "b81315c3271d8c7855c0001646b0789b945c1489a8a31488859f8aca5682f2a8"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/models/item/crimson_oblivion.json",
+      "sha256": "4844f6414bc7a6138e8b0a9f411196c4f04902304c5a96fe4e3b335d2cb93adf"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/models/item/lunar_requiem.json",
+      "sha256": "b0b5ac921325d6b9aa8ece14ae726a69ce1d9825b9aa850b139bdf7f35eee99b"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/models/item/verdant_sovereign.json",
+      "sha256": "0a273069190bb6be446586baca78f860727ef95a01ae640f8d2b039111d66a4d"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/textures/item/crimson_oblivion.png",
+      "sha256": "0af519e78ab73e55c141ae5c7b033c3cd59b29a9ca955727580b2d9203cfcb48"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/textures/item/lunar_requiem.png",
+      "sha256": "88b55bad7c04b534a5ba9d32dcb24c14ddf222b7870e9bc01ee516565f3c9afa"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/advance_magic/textures/item/verdant_sovereign.png",
+      "sha256": "a6ff43259e76c152e18bb4a5cf4abf0c5fc33a84b46fe236d8a6ddd351df59ef"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/assets/minecraft/atlases/items.json",
+      "sha256": "9e905ca93e70857fcdf6325b52e6e0e546a6e93fec731d8f287e929e342788a2"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/pack.mcmeta",
+      "sha256": "ec0ca359a1934f8417375d9f4c2dc005ded8c19548312ad25a5b321236c3771c"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/java/pack.png",
+      "sha256": "1633bf8b073be6a948d697712862444ca959631d816bd2adafdbbbea2ec88493"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/README.md",
+      "sha256": "a206279ced7c1768d0b8851aea8fc6fffee063a61cb6563f4721da1ac5e518e4"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/reference.png",
+      "sha256": "b0f3db57cc770a5f65613ff66618294021abb9b254d20d6b265ae76893d10eb4"
+    },
+    {
+      "path": "advance-magic/art/wands/legendary/texture-preview.png",
+      "sha256": "42152c622b6d05cba5a998a4f27839008db354355889f9a62104ac0470feb558"
+    },
+    {
+      "path": "advance-magic/art/wands/lunar_requiem.png",
+      "sha256": "88b55bad7c04b534a5ba9d32dcb24c14ddf222b7870e9bc01ee516565f3c9afa"
+    },
+    {
+      "path": "advance-magic/art/wands/solar_apocalypse.png",
+      "sha256": "21df34adb502cf1deeefbe9819c0f61d9e20fae637ace1d4aa0d4d40a22ab160"
+    },
+    {
+      "path": "advance-magic/art/wands/verdant_sovereign.png",
+      "sha256": "a6ff43259e76c152e18bb4a5cf4abf0c5fc33a84b46fe236d8a6ddd351df59ef"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_dial.png",
+      "sha256": "b27e101d2c2c9850af8e7a48f66016229cf0cd35f03abb4e8a57875267c98a1a"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_dial.svg",
+      "sha256": "24f7be0b09b545f1d9654f53df89a53ac78432f84a3b540526f749777abe4373"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_echo.png",
+      "sha256": "0f6fe788d69c70301fb30e5e990a8b4f1bea074339719c51f3bf1e5ca7d06fb7"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_hour.png",
+      "sha256": "6b70d5b0846a4dfa8b6d95f866f79a241f9acae82936608ef43f2e08113d5c7a"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_hour.svg",
+      "sha256": "e6fa487e9b777f611c48806c157bcaea88ffa13b782db20c6fa62f7bad167f5c"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_minute.png",
+      "sha256": "33baeb983e98144f3b51a60c5f9b78ba7101b23068fdee6b3472fd0a6374553b"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_minute.svg",
+      "sha256": "de51ed743cc8b396d7f195efed91eb9f72688d6328c50ad8ec53def8412c386e"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_ray.png",
+      "sha256": "9e49acc985d85f92284b2ba2975fd90485854f382a136cbc4f75ef6b8ff8cead"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_ripple.png",
+      "sha256": "8331f65b778b37a2b46fa992603ee2f5b894c456388098dc26e3ef6ecf732a79"
+    },
+    {
+      "path": "advance-magic/art/effects/chronos_ripple.svg",
+      "sha256": "738dcb5bdb8d0a49d0731071bb1c710793e20e66376a47c4271f6ffc23905c3d"
+    },
+    {
+      "path": "advance-magic/art/effects/judgment_seal_0.png",
+      "sha256": "3e7c522f72d0ac6813cc8f0b89a189e224f361f5dedc93b5b71007600c99252b"
+    },
+    {
+      "path": "advance-magic/art/effects/judgment_seal_0.svg",
+      "sha256": "c8fd7905f17e14739030357c070c5dfb08d5f230c7bec4ac391278cafc2e3fcd"
+    },
+    {
+      "path": "advance-magic/art/effects/judgment_seal_1.png",
+      "sha256": "27357f3820bae305df2c1cde4e88d15016e8cdba4b97333b7c4e4fb478445a46"
+    },
+    {
+      "path": "advance-magic/art/effects/judgment_seal_1.svg",
+      "sha256": "b8bbf7c622758f5ea33e5b83c8c17a38278937aa26bc67ceb592a558d1891135"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/companion-gallery.png",
+      "sha256": "75ac39d9e4f589fa37a5f052d0211496b18be8664c2502af4bf660387aa802f6"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson-preservation-after.json",
+      "sha256": "327f5645521794764d244d0a7ff4b0c57f8305e909bda7114f92ca169e5bad43"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson-preservation-before.json",
+      "sha256": "327f5645521794764d244d0a7ff4b0c57f8305e909bda7114f92ca169e5bad43"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson_heart.png",
+      "sha256": "129f74b167cb6d8fba30d5bcf8f6b3ff454ce182c4a8e29305aed1be70fd1426"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson_heart.svg",
+      "sha256": "4461b01e3dc955d634e4f8a6ad1785b0b69d30ef69f37b172f02786f59602449"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson_ray.png",
+      "sha256": "d360733e5b1e3b97e8814aadee19f9c788904a5e8959c172c9a8cd997d50456f"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson_ray.svg",
+      "sha256": "3208787ef5075168e863d954e1e55e01fde4e8095313e671a390dad821c31fba"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson_seal.png",
+      "sha256": "04aa9d4e1e248b5c9dffb1126ac817cbace141cbb709c8b8f1ae8ec6c7394923"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson_seal.svg",
+      "sha256": "284eff52d615502379f2928196d5e85d3d5709696ccb8465b8a17b3ec2e7d4a9"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson_shard.png",
+      "sha256": "3395998173709ca78cdb0311688600086369379462e94171c306c045329a9ecd"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/crimson_shard.svg",
+      "sha256": "eaa8441f2f3be0face2df1b7f3c4eea73e6518ed265dc86320e46827f9b2e32b"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/gallery.png",
+      "sha256": "30531c215764ca631314a2f33368e2ba46e64a814f0f739151f7ae095f37dd24"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_constellation.png",
+      "sha256": "4d2983f5d4b3859ac741830ffa63eda13f560d404fb3e05da809443d1c99928c"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_constellation.svg",
+      "sha256": "77729a89237f541650b9080cfadb147cdf2bcf319bdf4096551e485c0257c8a0"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_crescent.png",
+      "sha256": "0f89a9c27b8934e7591bbaeb584cfb9a1f0f2093cfcd2bc828650d4835d48558"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_crescent.svg",
+      "sha256": "7893bb4b94ceb0593f40ecbeeae2478a2ec29b6fdc7e40e4b4a0a5504ff2da1d"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_orbit.png",
+      "sha256": "da10010bb8b3ef832a12dc80ad55831c1f73b1917ae696663a2ed0cee7aecb39"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_orbit.svg",
+      "sha256": "8a236b078d737c1c48bb43a6da1dee41b5cc1c31ae09409b03ac1fea0a102acd"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_ray.png",
+      "sha256": "36756564b244324a81db2b745048caedc29280cf514e8b4e56134bb92df0d965"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_ray.svg",
+      "sha256": "306b2808524a946560a16d7df3135ffd491c56a3aa23d0f72e5481a823403c3c"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_seal.png",
+      "sha256": "d8f2cf6e78293188f274c6849b52202992994dab66fe4eeea6848b71c4e26121"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/lunar_seal.svg",
+      "sha256": "0ba40501c27b6fd64bc5fd1341f01be4e425c7bdcc84a0cd31c7da7f2a8ae3d6"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/readability-32px.png",
+      "sha256": "1371a4d4fa675f64b1fdf9e9b665edf0fa33ccb7bd8ede32575a62f81085964a"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/README.md",
+      "sha256": "227988c75b6539e3ac16800c00c613da64cf4aec835ba0935cff3e9a5b82827b"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson-100.png",
+      "sha256": "ab46f3811c0134dd5724c0bafdd9b7390fac9146714d1145f350822c4bd0c64a"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson-108.png",
+      "sha256": "b65baf629193f36827911ff6475c3eede09699c3df35de323b63146aae3c95e0"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson-116.png",
+      "sha256": "29216df9a047a1b6c515a9fddbceffca665b62284e6879500e2eacdde65e1c30"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson-124.png",
+      "sha256": "422dcb8567e81b1dba66b5d3c24f493de54288098597e78d284b59cfcf5978f3"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson-132.png",
+      "sha256": "0d8543f2eaa17c993a18ef6107ea934ec8ccaafa17c3e9ef0369cf3e3d7be2b2"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson-140.png",
+      "sha256": "ef6d97ac56c3b2d4e418806d0fb92669015b7a0fce4bd4865148ac38fc6bd781"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson-148.png",
+      "sha256": "808c627dc6cbd9894f1da7174a40623bfaac9f526c48d18d124f77a66fb8c264"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson-156.png",
+      "sha256": "893db83110d12f10f20ab31a2ab9e61d9024f7d98b6dfbe27245f891567814c9"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson-sequence.gif",
+      "sha256": "3f6ec587c1613b4722299970d1af50f8d9a0a1b501d177a09931722578591a9d"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/crimson_oblivion.png",
+      "sha256": "b65baf629193f36827911ff6475c3eede09699c3df35de323b63146aae3c95e0"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/lunar_requiem-overhead.png",
+      "sha256": "46dfe007b208d6d5c33ee4c57626f248d8cd6f1096f61f45997c17a50649f1c5"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/lunar_requiem.png",
+      "sha256": "d8776789f9c891d86395908b2c5cb897c5769a769195077681601972f2403c8d"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/scenes.json",
+      "sha256": "f4e954b5dc54b2fb0b872aaf7b3056abb351d8199f3c0638a19ae97859df9ac4"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/verdant-caster-view.png",
+      "sha256": "592c39f5c90c3953cd2551855e8eb591fc4c6b7c8989be7705bd5e1e2bedbd28"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/runtime-preview/verdant_sovereign.png",
+      "sha256": "23f407108dfea14d8d9d191cf39ef77f5ba04aa54fefab1af799797bd0ad54d3"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/scene-layout.png",
+      "sha256": "7c42764f063a310540257325ba57fd911ce2a39890a87b28a32b1e9619cdc27d"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/storyboard.html",
+      "sha256": "03acb3e4a88ff4ca396c813c9e9a765a02a9bb46de971db6a185b141d03814b4"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_beam_core.png",
+      "sha256": "ef0e7ff021c6645e838b421ba2ba677ae643b5f59bfd0f5482b3bce9765de897"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_beam_core.svg",
+      "sha256": "80f0e11608fbd726a91f761781c3fec33f7b3ab24ceb7ddaa7a94a7068d5e377"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_crown.png",
+      "sha256": "92ed5fdb1a2de9067bfa769d748bc4253b12e2bfab829c7b550e5a3826350625"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_crown.svg",
+      "sha256": "404e62e29df61d67fb3444f09db0bb9a19e54393cda12843995b5e4240d87bc6"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_dragon.png",
+      "sha256": "902e2b0f3cb25949bc5067bf7f692ed10d0cecad9ed4d184345faf038dea9122"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_dragon.svg",
+      "sha256": "cc6b172bf87f61fa3857a1f5601fd15748a7a8a91bebbd618c7adc28a732fc16"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_halo.png",
+      "sha256": "04b93de8a2da4a375267a6590320282fad1c81a3225e041dbbdc5c71e251fc89"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_halo.svg",
+      "sha256": "2a3ee88e956bc12addce37a21e04f8f59a16f17a75e2c36a5e9bd1afc832a028"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_ray.png",
+      "sha256": "f64c3c2f0e8ccd31a90c4dcf55cb5768ad7dda4f2f3ed5f523ef243eb5026a6d"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_ray.svg",
+      "sha256": "e46c9970227a9638d959749ba00f4f6625084bfe29fa9d5325f50b0842b4faa7"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_seal.png",
+      "sha256": "e1536ce327d375be6a99668a1b1b4da03ec4b6cd15ac5f1ee59a7d87336d5f26"
+    },
+    {
+      "path": "advance-magic/art/effects/legendary/verdant_seal.svg",
+      "sha256": "200c877142efc3707912f87b88dbb09d7b137445d6de26095b94756d4b2d6912"
+    },
+    {
+      "path": "advance-magic/art/effects/shulker_prism.png",
+      "sha256": "2f6d22df0e56368cc2051a1a3153633787aba212b93e88834f550ccc1e657b1a"
+    },
+    {
+      "path": "advance-magic/art/effects/shulker_prism.svg",
+      "sha256": "4a0f8df1097f02461fdd41670ea34a8b77611ffd19da5c4b3ab0babde630b160"
+    },
+    {
+      "path": "advance-magic/art/effects/solar_corona.png",
+      "sha256": "60242e2dff8e072e1063db1586ca1c70a742166188d0f9b42f1a4c928f46b06e"
+    },
+    {
+      "path": "advance-magic/art/effects/solar_corona.svg",
+      "sha256": "6ed464545521b1b0f007e37beae110dbf5bbc88138d5894678a0f70f51aaf7ef"
+    },
+    {
+      "path": "advance-magic/art/effects/solar_orbit.png",
+      "sha256": "8465f8ef08e966340944af9f174c3cd3a85eabbfb1bf336728c1a9fd7d5496e3"
+    },
+    {
+      "path": "advance-magic/art/effects/solar_orbit.svg",
+      "sha256": "748115080ecd9d02cf467f16f00176b4ba58915b1b1abad5234b3e2434ae0f28"
+    },
+    {
+      "path": "advance-magic/art/effects/solar_ray.png",
+      "sha256": "39755831e5e47197805fada5405bc8392c80e7b5cd897f8e6fe6d4cb73d033a6"
+    },
+    {
+      "path": "advance-magic/art/cores/core_blaze_barrage.png",
+      "sha256": "198bd6ecf7ddff03633393a2bd1b8d6fc10325e0e09b193c963c4fd2f53dff22"
+    },
+    {
+      "path": "advance-magic/art/cores/core_chronos_final_hour.png",
+      "sha256": "8044db4b0b7a6562d72f33a97de736eec204d52493831be414600168d2098013"
+    },
+    {
+      "path": "advance-magic/art/cores/core_crimson_oblivion.png",
+      "sha256": "2baa3923a4389e3d1168c43b85d6314fc8878f78bce7ca143581be9ab054733d"
+    },
+    {
+      "path": "advance-magic/art/cores/core_dragons_breath.png",
+      "sha256": "2ca7fa893f03b07c76a37f434db06d028915e2e07d60e026467760acf2d4ec13"
+    },
+    {
+      "path": "advance-magic/art/cores/core_earth_wall.png",
+      "sha256": "7b14832767a7e9df7e0cd2aadd9fd4711b3b2f0f720aeee89b335b771b541067"
+    },
+    {
+      "path": "advance-magic/art/cores/core_frost_nova.png",
+      "sha256": "943b5891e7cc8c6cf887bf9bf143b2c206ed1cf478bc51dee4a0c9e66f522b06"
+    },
+    {
+      "path": "advance-magic/art/cores/core_guardian_beam.png",
+      "sha256": "bec03fb5aabcb1246026f4ee6a1858e16560c74f298f223b0412d68c30863998"
+    },
+    {
+      "path": "advance-magic/art/cores/core_heavens_judgment.png",
+      "sha256": "5dd205d0d6bf6ca54d5cc0d99041f51e791037961c7a2d24421127f722a2abbe"
+    },
+    {
+      "path": "advance-magic/art/cores/core_iron_armor.png",
+      "sha256": "b3f8327a2348495f2b286905bad76c86049e864a5b5e7e6b1618999b052443d5"
+    },
+    {
+      "path": "advance-magic/art/cores/core_lightning_strike.png",
+      "sha256": "34465eae63fc31bfb111d1f45b01e1b9e91e8bf81ddbbd103c31ed419fd4ad51"
+    },
+    {
+      "path": "advance-magic/art/cores/core_lunar_requiem.png",
+      "sha256": "6929916607003c1e7bb82c7ff93cc72208feda925f29fc4428981a6679db0b47"
+    },
+    {
+      "path": "advance-magic/art/cores/core_meteor_strike.png",
+      "sha256": "d83442e9a6fa23ebae2e496a231973a15453d9075f600ae861bf3912cfefe8fb"
+    },
+    {
+      "path": "advance-magic/art/cores/core_natures_bloom.png",
+      "sha256": "a1d8778afa854d11eff161a7d95ab7721e1950bd6dbec119bfdc627019e8f868"
+    },
+    {
+      "path": "advance-magic/art/cores/core_shadow_step.png",
+      "sha256": "8fe97ce08ffa32494fc3e70243ab83ec9f6d6063d65a816f3b76b11a54e1398a"
+    },
+    {
+      "path": "advance-magic/art/cores/core_shulker_levitation.png",
+      "sha256": "80097035b8a5cd9d5d8fbe376d2fe8b33b41b10ae25492eb410f6df738f8f88d"
+    },
+    {
+      "path": "advance-magic/art/cores/core_solar_apocalypse.png",
+      "sha256": "2cf86d0d65354598d5aa479509f8d923d816d1db91887377cb1d934c09f61f4c"
+    },
+    {
+      "path": "advance-magic/art/cores/core_sonic_boom.png",
+      "sha256": "5f0e829eb60be9835947b79edf9b29b68957561bf573eeed385013df99af47c9"
+    },
+    {
+      "path": "advance-magic/art/cores/core_verdant_sovereign.png",
+      "sha256": "a30bb695430e75d12bb97be560e98892e52ff594111ad143da7816f012cbbebe"
+    },
+    {
+      "path": "advance-magic/art/cores/core_vex_legion.png",
+      "sha256": "1cdefe1c19a7dca64fa64df8505a157ad1082ff07cc2dfc8f1ce0f8a8192682e"
+    },
+    {
+      "path": "advance-magic/art/cores/core_void_pull.png",
+      "sha256": "e16ab07b3315944e8ac49c2ee0d24add0e5f964920ca913a953b1b796a9e1dc0"
+    },
+    {
+      "path": "advance-magic/art/cores/core_wither_ray.png",
+      "sha256": "414bf3686341fa50d55abfbca3a6199bedd104ab52cee1a876c2a5911b515c3d"
+    },
+    {
+      "path": "advance-magic/art/cores/legendary/core-preview.png",
+      "sha256": "062cf8530db2f91c1b96209055bdb12d50233633e8bc026500b29e2e7d36df48"
+    },
+    {
+      "path": "advance-magic/art/cores/legendary/generated/core_crimson_oblivion.png",
+      "sha256": "79fce180e1ba7ba46f90dc3ce0b232212b2b5eaec851bb899d07a5a58857c52b"
+    },
+    {
+      "path": "advance-magic/art/cores/legendary/generated/core_lunar_requiem.png",
+      "sha256": "a97207479e091e666bfbdd26cce596ad9831f6dd7fb97942370b82da8e87b73c"
+    },
+    {
+      "path": "advance-magic/art/cores/legendary/generated/core_verdant_sovereign.png",
+      "sha256": "ce6be9a8d3ae806061d5e9bdd4b0cf50e01cca551b64b39d4419b80933220ba3"
+    },
+    {
+      "path": "advance-magic/art/cores/legendary/generation-prompts.json",
+      "sha256": "cca5bf993ff30caa14f00b0b9547443586b5f6332107385cad665ae328deb67b"
+    }
+  ],
+  "removed_bytes": 24051173,
+  "preserved_wand_ids": [
+    "chronos_final_hour",
+    "crimson_oblivion",
+    "heavens_judgment",
+    "lunar_requiem",
+    "solar_apocalypse",
+    "verdant_sovereign"
+  ],
+  "reference_audit": {
+    "searched_roots": [
+      "advance-magic",
+      "evergarden",
+      "tools",
+      "tests",
+      "docs",
+      "README.md",
+      ".github",
+      "build.sh"
+    ],
+    "searched_types": [
+      ".java",
+      ".py",
+      ".json",
+      ".yml",
+      ".xml",
+      ".md",
+      ".sh",
+      ".ps1"
+    ],
+    "ordinary_consumers": [
+      "advance-magic/tools/build_packs.py (updated to eight staff registration)",
+      "advance-magic/tools/prepare_wand_art.py (removed)",
+      "advance-magic/tools/generate_reworked_wands.py (removed)",
+      "advance-magic/tests/check_packs.py (updated)",
+      "advance-magic/tests/check_legendary_assets.py (updated)"
+    ],
+    "shared_consumers": [
+      "evergarden/tools/build_packs.py and VaultLootTable.java keep core identifiers",
+      "legendary_effect_assets.py, mythic_line_assets.py, judgment_assets.py keep effect identifiers",
+      "restoration_assets.py registers restoration utility wand/core",
+      "art/flying-staff/geyser-mappings.json registers flying staff",
+      "legendary_weapon_assets.py registers Excalibur/Longinus/Tyrfing/Mjolnir/Vajra"
+    ],
+    "notes": [
+      "Spell and core names remain valid spell API/data identifiers; they are not ordinary wand texture references.",
+      "No other production builder or runtime source referenced the removed ordinary PNG paths.",
+      "No calls or imports of either removed generator were found. The legendary preparation script mentioned the old workflow only in prose.",
+      "Old output/preview archives are historical artifacts, not merged into active resource packs."
+    ],
+    "evergarden_pack_audit": {
+      "old_wand_geyser_registrations": 0,
+      "direct_wand_java_models": 0,
+      "ordinary_wand_bedrock_sprites": 0,
+      "builder": "Only shared core_* resources; fresh tempfile staging prevents stale texture resurrection",
+      "action": "No Evergarden pack-source change required; regression assertions added to check_legendary_assets.py"
+    }
+  }
+}

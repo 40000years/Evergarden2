@@ -1,6 +1,7 @@
 """Bedrock counterpart of the new Mythic spells' Java DustOptions points."""
 TINTS = {'gold': 0xFFD34D, 'white': 0xFFF2AF, 'orange': 0xFF732D,
-         'cyan': 0x72EDFF, 'violet': 0xA36BFF}
+         'cyan': 0x72EDFF, 'violet': 0xA36BFF, 'emerald': 0x58FFB1,
+         'jade': 0x12B76A, 'silver': 0xD8F3FF, 'crimson': 0xFF315B, 'ruby': 0xA41B52}
 
 
 def register(bedrock, write_json, png):

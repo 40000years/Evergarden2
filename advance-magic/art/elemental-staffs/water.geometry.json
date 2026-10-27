@@ -1,0 +1,8530 @@
+{
+  "id": "water",
+  "grip": [
+    8,
+    10.8,
+    8
+  ],
+  "cubes": [
+    {
+      "name": "wood_000",
+      "from": [
+        7.59,
+        1.5,
+        7.55
+      ],
+      "to": [
+        8.41,
+        22,
+        8.45
+      ],
+      "mat": "wood",
+      "bone": "staff"
+    },
+    {
+      "name": "wood_light_001",
+      "from": [
+        7.61,
+        2,
+        7.39
+      ],
+      "to": [
+        7.83,
+        21.6,
+        8.61
+      ],
+      "mat": "wood_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_002",
+      "from": [
+        7.44,
+        9.0,
+        7.4
+      ],
+      "to": [
+        8.56,
+        12.6,
+        8.6
+      ],
+      "mat": "leather",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_003",
+      "from": [
+        7.35,
+        9.2,
+        7.31
+      ],
+      "to": [
+        8.65,
+        9.37,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_004",
+      "from": [
+        7.35,
+        9.8,
+        7.31
+      ],
+      "to": [
+        8.65,
+        9.97,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_005",
+      "from": [
+        7.35,
+        10.4,
+        7.31
+      ],
+      "to": [
+        8.65,
+        10.57,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_006",
+      "from": [
+        7.35,
+        11.0,
+        7.31
+      ],
+      "to": [
+        8.65,
+        11.17,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_007",
+      "from": [
+        7.35,
+        11.6,
+        7.31
+      ],
+      "to": [
+        8.65,
+        11.77,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_008",
+      "from": [
+        7.35,
+        12.2,
+        7.31
+      ],
+      "to": [
+        8.65,
+        12.37,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_009",
+      "from": [
+        7.175,
+        2.1,
+        7.175
+      ],
+      "to": [
+        8.825,
+        2.6,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_010",
+      "from": [
+        7.305,
+        2.47,
+        7.095
+      ],
+      "to": [
+        8.695,
+        2.66,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_011",
+      "from": [
+        7.175,
+        5.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        5.7,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_012",
+      "from": [
+        7.305,
+        5.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        5.76,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_013",
+      "from": [
+        7.175,
+        8.75,
+        7.175
+      ],
+      "to": [
+        8.825,
+        9.25,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_014",
+      "from": [
+        7.305,
+        9.12,
+        7.095
+      ],
+      "to": [
+        8.695,
+        9.31,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_015",
+      "from": [
+        7.175,
+        12.65,
+        7.175
+      ],
+      "to": [
+        8.825,
+        13.15,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_016",
+      "from": [
+        7.305,
+        13.02,
+        7.095
+      ],
+      "to": [
+        8.695,
+        13.21,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_017",
+      "from": [
+        7.175,
+        16.7,
+        7.175
+      ],
+      "to": [
+        8.825,
+        17.2,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_018",
+      "from": [
+        7.305,
+        17.07,
+        7.095
+      ],
+      "to": [
+        8.695,
+        17.26,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_019",
+      "from": [
+        7.175,
+        20.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        20.7,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_020",
+      "from": [
+        7.305,
+        20.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        20.76,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "water_dark_021",
+      "from": [
+        7.75,
+        1.25,
+        6.85
+      ],
+      "to": [
+        8.25,
+        1.5,
+        9.15
+      ],
+      "mat": "water_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "water_dark_022",
+      "from": [
+        7.5,
+        1.5,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.0,
+        9.15
+      ],
+      "mat": "water_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "water_dark_023",
+      "from": [
+        7.25,
+        2.0,
+        6.85
+      ],
+      "to": [
+        8.75,
+        2.25,
+        9.15
+      ],
+      "mat": "water_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "water_dark_024",
+      "from": [
+        7.5,
+        2.25,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.75,
+        9.15
+      ],
+      "mat": "water_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "water_dark_025",
+      "from": [
+        7.75,
+        2.75,
+        6.85
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.15
+      ],
+      "mat": "water_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "water_026",
+      "from": [
+        7.75,
+        1.25,
+        6.67
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.33
+      ],
+      "mat": "water",
+      "bone": "staff"
+    },
+    {
+      "name": "water_027",
+      "from": [
+        7.5,
+        1.75,
+        6.67
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.33
+      ],
+      "mat": "water",
+      "bone": "staff"
+    },
+    {
+      "name": "water_028",
+      "from": [
+        7.75,
+        2.5,
+        6.67
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.33
+      ],
+      "mat": "water",
+      "bone": "staff"
+    },
+    {
+      "name": "water_light_029",
+      "from": [
+        8.0,
+        1.25,
+        6.54
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.46
+      ],
+      "mat": "water_light",
+      "bone": "staff"
+    },
+    {
+      "name": "water_light_030",
+      "from": [
+        8.0,
+        1.75,
+        6.54
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.46
+      ],
+      "mat": "water_light",
+      "bone": "staff"
+    },
+    {
+      "name": "water_light_031",
+      "from": [
+        8.0,
+        2.5,
+        6.54
+      ],
+      "to": [
+        8.25,
+        2.75,
+        9.46
+      ],
+      "mat": "water_light",
+      "bone": "staff"
+    },
+    {
+      "name": "water_core_032",
+      "from": [
+        7.75,
+        1.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        1.75,
+        9.45
+      ],
+      "mat": "water_core",
+      "bone": "staff"
+    },
+    {
+      "name": "water_core_033",
+      "from": [
+        7.5,
+        1.75,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.5,
+        9.45
+      ],
+      "mat": "water_core",
+      "bone": "staff"
+    },
+    {
+      "name": "water_core_034",
+      "from": [
+        7.75,
+        2.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.75,
+        9.45
+      ],
+      "mat": "water_core",
+      "bone": "staff"
+    },
+    {
+      "name": "white_035",
+      "from": [
+        7.88,
+        1.746,
+        6.43
+      ],
+      "to": [
+        8.13,
+        2.506,
+        9.57
+      ],
+      "mat": "white",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_036",
+      "from": [
+        7.75,
+        0.75,
+        7.15
+      ],
+      "to": [
+        8.25,
+        1.5,
+        8.85
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_037",
+      "from": [
+        7.5,
+        1.5,
+        7.15
+      ],
+      "to": [
+        8.5,
+        1.75,
+        8.85
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_038",
+      "from": [
+        7.275,
+        1.5,
+        7.275
+      ],
+      "to": [
+        8.725,
+        1.88,
+        8.725
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_039",
+      "from": [
+        7.405,
+        1.75,
+        7.195
+      ],
+      "to": [
+        8.595,
+        1.94,
+        8.805
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "water_light_040",
+      "from": [
+        7.84,
+        6.7,
+        7.3
+      ],
+      "to": [
+        8.16,
+        7.5,
+        8.7
+      ],
+      "mat": "water_light",
+      "bone": "staff"
+    },
+    {
+      "name": "water_light_041",
+      "from": [
+        7.84,
+        14.5,
+        7.3
+      ],
+      "to": [
+        8.16,
+        15.3,
+        8.7
+      ],
+      "mat": "water_light",
+      "bone": "staff"
+    },
+    {
+      "name": "water_light_042",
+      "from": [
+        7.84,
+        18,
+        7.3
+      ],
+      "to": [
+        8.16,
+        18.8,
+        8.7
+      ],
+      "mat": "water_light",
+      "bone": "staff"
+    },
+    {
+      "name": "water_dark_043",
+      "from": [
+        11.0,
+        24.75,
+        6.4
+      ],
+      "to": [
+        11.75,
+        25.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_044",
+      "from": [
+        10.75,
+        25.0,
+        6.4
+      ],
+      "to": [
+        12.0,
+        25.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_045",
+      "from": [
+        11.0,
+        25.5,
+        6.4
+      ],
+      "to": [
+        11.5,
+        25.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_046",
+      "from": [
+        12.0,
+        25.25,
+        6.4
+      ],
+      "to": [
+        12.25,
+        25.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_047",
+      "from": [
+        11.5,
+        25.5,
+        6.4
+      ],
+      "to": [
+        12.25,
+        25.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_048",
+      "from": [
+        11.25,
+        25.75,
+        6.4
+      ],
+      "to": [
+        12.5,
+        26.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_049",
+      "from": [
+        11.5,
+        26.0,
+        6.4
+      ],
+      "to": [
+        12.5,
+        26.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_050",
+      "from": [
+        11.5,
+        26.25,
+        6.4
+      ],
+      "to": [
+        12.0,
+        26.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_051",
+      "from": [
+        11.75,
+        26.25,
+        6.4
+      ],
+      "to": [
+        12.5,
+        26.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_052",
+      "from": [
+        11.5,
+        26.5,
+        6.4
+      ],
+      "to": [
+        12.75,
+        27.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_053",
+      "from": [
+        11.75,
+        27.0,
+        6.4
+      ],
+      "to": [
+        12.0,
+        27.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_054",
+      "from": [
+        11.75,
+        27.0,
+        6.4
+      ],
+      "to": [
+        12.5,
+        27.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_055",
+      "from": [
+        11.75,
+        27.25,
+        6.4
+      ],
+      "to": [
+        12.75,
+        27.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_056",
+      "from": [
+        11.5,
+        27.5,
+        6.4
+      ],
+      "to": [
+        12.75,
+        27.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_057",
+      "from": [
+        12.0,
+        27.75,
+        6.4
+      ],
+      "to": [
+        12.75,
+        28.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_058",
+      "from": [
+        11.5,
+        27.75,
+        6.4
+      ],
+      "to": [
+        12.0,
+        28.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_059",
+      "from": [
+        11.5,
+        28.0,
+        6.4
+      ],
+      "to": [
+        12.5,
+        28.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_060",
+      "from": [
+        11.25,
+        28.25,
+        6.4
+      ],
+      "to": [
+        12.5,
+        28.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_061",
+      "from": [
+        11.75,
+        28.5,
+        6.4
+      ],
+      "to": [
+        12.5,
+        28.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_062",
+      "from": [
+        11.25,
+        28.25,
+        6.4
+      ],
+      "to": [
+        11.5,
+        28.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_063",
+      "from": [
+        11.25,
+        28.5,
+        6.4
+      ],
+      "to": [
+        11.75,
+        28.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_064",
+      "from": [
+        11.0,
+        28.75,
+        6.4
+      ],
+      "to": [
+        12.0,
+        29.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_065",
+      "from": [
+        11.25,
+        29.25,
+        6.4
+      ],
+      "to": [
+        12.0,
+        29.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_066",
+      "from": [
+        10.75,
+        29.0,
+        6.4
+      ],
+      "to": [
+        11.0,
+        29.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_067",
+      "from": [
+        10.5,
+        29.25,
+        6.4
+      ],
+      "to": [
+        11.25,
+        29.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_068",
+      "from": [
+        10.25,
+        29.5,
+        6.4
+      ],
+      "to": [
+        11.5,
+        29.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_069",
+      "from": [
+        10.5,
+        29.75,
+        6.4
+      ],
+      "to": [
+        11.5,
+        30.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_070",
+      "from": [
+        10.75,
+        30.0,
+        6.4
+      ],
+      "to": [
+        11.25,
+        30.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_071",
+      "from": [
+        10.0,
+        29.5,
+        6.4
+      ],
+      "to": [
+        10.5,
+        29.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_072",
+      "from": [
+        9.5,
+        29.75,
+        6.4
+      ],
+      "to": [
+        10.5,
+        30.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_073",
+      "from": [
+        9.5,
+        30.0,
+        6.4
+      ],
+      "to": [
+        10.75,
+        30.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_074",
+      "from": [
+        9.75,
+        30.25,
+        6.4
+      ],
+      "to": [
+        10.75,
+        30.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_075",
+      "from": [
+        9.75,
+        30.5,
+        6.4
+      ],
+      "to": [
+        10.25,
+        30.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_076",
+      "from": [
+        8.75,
+        30.0,
+        6.4
+      ],
+      "to": [
+        9.75,
+        31.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_077",
+      "from": [
+        8.75,
+        31.0,
+        6.4
+      ],
+      "to": [
+        9.0,
+        31.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_078",
+      "from": [
+        7.75,
+        30.25,
+        6.4
+      ],
+      "to": [
+        8.75,
+        31.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_079",
+      "from": [
+        6.75,
+        30.25,
+        6.4
+      ],
+      "to": [
+        7.75,
+        31.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_080",
+      "from": [
+        5.75,
+        30.0,
+        6.4
+      ],
+      "to": [
+        6.25,
+        30.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_081",
+      "from": [
+        5.75,
+        30.25,
+        6.4
+      ],
+      "to": [
+        6.75,
+        30.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_082",
+      "from": [
+        5.5,
+        30.75,
+        6.4
+      ],
+      "to": [
+        6.75,
+        31.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_083",
+      "from": [
+        6.0,
+        31.0,
+        6.4
+      ],
+      "to": [
+        6.5,
+        31.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_084",
+      "from": [
+        4.75,
+        29.75,
+        6.4
+      ],
+      "to": [
+        5.5,
+        30.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_085",
+      "from": [
+        4.75,
+        30.0,
+        6.4
+      ],
+      "to": [
+        5.75,
+        30.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_086",
+      "from": [
+        4.5,
+        30.5,
+        6.4
+      ],
+      "to": [
+        5.5,
+        30.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_087",
+      "from": [
+        5.25,
+        30.75,
+        6.4
+      ],
+      "to": [
+        5.5,
+        31.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_088",
+      "from": [
+        4.25,
+        29.25,
+        6.4
+      ],
+      "to": [
+        4.5,
+        29.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_089",
+      "from": [
+        4.0,
+        29.5,
+        6.4
+      ],
+      "to": [
+        5.0,
+        29.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_090",
+      "from": [
+        3.75,
+        29.75,
+        6.4
+      ],
+      "to": [
+        5.0,
+        30.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_091",
+      "from": [
+        3.75,
+        30.0,
+        6.4
+      ],
+      "to": [
+        4.75,
+        30.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_092",
+      "from": [
+        4.25,
+        30.25,
+        6.4
+      ],
+      "to": [
+        4.5,
+        30.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_093",
+      "from": [
+        3.5,
+        28.75,
+        6.4
+      ],
+      "to": [
+        4.0,
+        29.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_094",
+      "from": [
+        3.25,
+        29.0,
+        6.4
+      ],
+      "to": [
+        4.25,
+        29.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_095",
+      "from": [
+        3.0,
+        29.25,
+        6.4
+      ],
+      "to": [
+        4.25,
+        29.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_096",
+      "from": [
+        3.25,
+        29.5,
+        6.4
+      ],
+      "to": [
+        4.0,
+        29.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_097",
+      "from": [
+        3.5,
+        29.75,
+        6.4
+      ],
+      "to": [
+        3.75,
+        30.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_098",
+      "from": [
+        3.0,
+        28.0,
+        6.4
+      ],
+      "to": [
+        3.5,
+        28.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_099",
+      "from": [
+        2.75,
+        28.25,
+        6.4
+      ],
+      "to": [
+        3.75,
+        28.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_100",
+      "from": [
+        2.5,
+        28.5,
+        6.4
+      ],
+      "to": [
+        3.75,
+        28.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_101",
+      "from": [
+        2.75,
+        28.75,
+        6.4
+      ],
+      "to": [
+        3.5,
+        29.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_102",
+      "from": [
+        3.0,
+        27.25,
+        6.4
+      ],
+      "to": [
+        3.25,
+        27.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_103",
+      "from": [
+        2.25,
+        27.5,
+        6.4
+      ],
+      "to": [
+        3.5,
+        28.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_104",
+      "from": [
+        2.5,
+        28.0,
+        6.4
+      ],
+      "to": [
+        3.25,
+        28.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_105",
+      "from": [
+        2.25,
+        26.5,
+        6.4
+      ],
+      "to": [
+        3.25,
+        27.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_106",
+      "from": [
+        2.5,
+        27.25,
+        6.4
+      ],
+      "to": [
+        3.25,
+        27.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_107",
+      "from": [
+        2.5,
+        25.75,
+        6.4
+      ],
+      "to": [
+        3.25,
+        26.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_108",
+      "from": [
+        2.5,
+        26.0,
+        6.4
+      ],
+      "to": [
+        3.5,
+        26.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_109",
+      "from": [
+        3.0,
+        26.5,
+        6.4
+      ],
+      "to": [
+        3.5,
+        26.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_110",
+      "from": [
+        3.0,
+        25.0,
+        6.4
+      ],
+      "to": [
+        3.75,
+        25.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_111",
+      "from": [
+        2.75,
+        25.25,
+        6.4
+      ],
+      "to": [
+        4.0,
+        25.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_112",
+      "from": [
+        3.25,
+        25.75,
+        6.4
+      ],
+      "to": [
+        3.75,
+        26.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_113",
+      "from": [
+        11.0,
+        24.75,
+        6.1
+      ],
+      "to": [
+        11.5,
+        25.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_114",
+      "from": [
+        10.75,
+        25.0,
+        6.1
+      ],
+      "to": [
+        11.5,
+        25.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_115",
+      "from": [
+        10.75,
+        25.25,
+        6.1
+      ],
+      "to": [
+        11.75,
+        25.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_116",
+      "from": [
+        11.0,
+        25.5,
+        6.1
+      ],
+      "to": [
+        11.5,
+        25.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_117",
+      "from": [
+        11.5,
+        25.5,
+        6.1
+      ],
+      "to": [
+        12.0,
+        25.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_118",
+      "from": [
+        11.25,
+        25.75,
+        6.1
+      ],
+      "to": [
+        12.0,
+        26.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_119",
+      "from": [
+        11.25,
+        26.0,
+        6.1
+      ],
+      "to": [
+        12.25,
+        26.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_120",
+      "from": [
+        11.5,
+        26.25,
+        6.1
+      ],
+      "to": [
+        11.75,
+        26.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_121",
+      "from": [
+        11.75,
+        26.25,
+        6.1
+      ],
+      "to": [
+        12.25,
+        26.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_122",
+      "from": [
+        11.5,
+        26.5,
+        6.1
+      ],
+      "to": [
+        12.25,
+        26.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_123",
+      "from": [
+        11.5,
+        26.75,
+        6.1
+      ],
+      "to": [
+        12.5,
+        27.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_124",
+      "from": [
+        11.75,
+        27.0,
+        6.1
+      ],
+      "to": [
+        12.0,
+        27.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_125",
+      "from": [
+        11.75,
+        27.0,
+        6.1
+      ],
+      "to": [
+        12.25,
+        27.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_126",
+      "from": [
+        11.75,
+        27.25,
+        6.1
+      ],
+      "to": [
+        12.5,
+        27.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_127",
+      "from": [
+        11.5,
+        27.5,
+        6.1
+      ],
+      "to": [
+        12.25,
+        27.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_128",
+      "from": [
+        12.0,
+        27.75,
+        6.1
+      ],
+      "to": [
+        12.25,
+        28.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_129",
+      "from": [
+        11.5,
+        27.75,
+        6.1
+      ],
+      "to": [
+        12.0,
+        28.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_130",
+      "from": [
+        11.5,
+        28.0,
+        6.1
+      ],
+      "to": [
+        12.25,
+        28.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_131",
+      "from": [
+        11.25,
+        28.25,
+        6.1
+      ],
+      "to": [
+        12.25,
+        28.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_132",
+      "from": [
+        11.75,
+        28.5,
+        6.1
+      ],
+      "to": [
+        12.0,
+        28.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_133",
+      "from": [
+        11.25,
+        28.25,
+        6.1
+      ],
+      "to": [
+        11.5,
+        28.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_134",
+      "from": [
+        11.25,
+        28.5,
+        6.1
+      ],
+      "to": [
+        11.75,
+        28.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_135",
+      "from": [
+        11.0,
+        28.75,
+        6.1
+      ],
+      "to": [
+        12.0,
+        29.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_136",
+      "from": [
+        11.0,
+        29.0,
+        6.1
+      ],
+      "to": [
+        11.75,
+        29.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_137",
+      "from": [
+        11.25,
+        29.25,
+        6.1
+      ],
+      "to": [
+        11.5,
+        29.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_138",
+      "from": [
+        10.75,
+        29.0,
+        6.1
+      ],
+      "to": [
+        11.0,
+        29.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_139",
+      "from": [
+        10.5,
+        29.25,
+        6.1
+      ],
+      "to": [
+        11.25,
+        29.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_140",
+      "from": [
+        10.25,
+        29.5,
+        6.1
+      ],
+      "to": [
+        11.25,
+        29.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_141",
+      "from": [
+        10.5,
+        29.75,
+        6.1
+      ],
+      "to": [
+        11.0,
+        30.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_142",
+      "from": [
+        10.0,
+        29.5,
+        6.1
+      ],
+      "to": [
+        10.25,
+        29.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_143",
+      "from": [
+        9.5,
+        29.75,
+        6.1
+      ],
+      "to": [
+        10.5,
+        30.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_144",
+      "from": [
+        9.5,
+        30.0,
+        6.1
+      ],
+      "to": [
+        10.75,
+        30.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_145",
+      "from": [
+        9.75,
+        30.25,
+        6.1
+      ],
+      "to": [
+        10.25,
+        30.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_146",
+      "from": [
+        8.75,
+        30.0,
+        6.1
+      ],
+      "to": [
+        9.5,
+        30.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_147",
+      "from": [
+        8.75,
+        30.25,
+        6.1
+      ],
+      "to": [
+        9.75,
+        30.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_148",
+      "from": [
+        7.75,
+        30.25,
+        6.1
+      ],
+      "to": [
+        8.75,
+        31.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_149",
+      "from": [
+        6.75,
+        30.25,
+        6.1
+      ],
+      "to": [
+        7.75,
+        31.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_150",
+      "from": [
+        5.75,
+        30.0,
+        6.1
+      ],
+      "to": [
+        6.25,
+        30.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_151",
+      "from": [
+        5.75,
+        30.25,
+        6.1
+      ],
+      "to": [
+        6.75,
+        30.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_152",
+      "from": [
+        6.25,
+        30.75,
+        6.1
+      ],
+      "to": [
+        6.75,
+        31.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_153",
+      "from": [
+        5.0,
+        29.75,
+        6.1
+      ],
+      "to": [
+        5.5,
+        30.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_154",
+      "from": [
+        4.75,
+        30.0,
+        6.1
+      ],
+      "to": [
+        5.75,
+        30.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_155",
+      "from": [
+        5.25,
+        30.5,
+        6.1
+      ],
+      "to": [
+        5.5,
+        30.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_156",
+      "from": [
+        4.25,
+        29.25,
+        6.1
+      ],
+      "to": [
+        4.5,
+        29.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_157",
+      "from": [
+        4.0,
+        29.5,
+        6.1
+      ],
+      "to": [
+        5.0,
+        30.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_158",
+      "from": [
+        4.25,
+        30.0,
+        6.1
+      ],
+      "to": [
+        4.75,
+        30.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_159",
+      "from": [
+        3.5,
+        28.75,
+        6.1
+      ],
+      "to": [
+        4.0,
+        29.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_160",
+      "from": [
+        3.25,
+        29.0,
+        6.1
+      ],
+      "to": [
+        4.25,
+        29.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_161",
+      "from": [
+        3.5,
+        29.25,
+        6.1
+      ],
+      "to": [
+        4.25,
+        29.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_162",
+      "from": [
+        3.75,
+        29.5,
+        6.1
+      ],
+      "to": [
+        4.0,
+        29.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_163",
+      "from": [
+        3.25,
+        28.0,
+        6.1
+      ],
+      "to": [
+        3.5,
+        28.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_164",
+      "from": [
+        2.75,
+        28.25,
+        6.1
+      ],
+      "to": [
+        3.75,
+        28.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_165",
+      "from": [
+        3.0,
+        28.5,
+        6.1
+      ],
+      "to": [
+        3.75,
+        28.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_166",
+      "from": [
+        3.0,
+        28.75,
+        6.1
+      ],
+      "to": [
+        3.5,
+        29.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_167",
+      "from": [
+        3.0,
+        27.25,
+        6.1
+      ],
+      "to": [
+        3.25,
+        27.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_168",
+      "from": [
+        2.5,
+        27.5,
+        6.1
+      ],
+      "to": [
+        3.5,
+        27.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_169",
+      "from": [
+        2.75,
+        27.75,
+        6.1
+      ],
+      "to": [
+        3.5,
+        28.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_170",
+      "from": [
+        2.75,
+        28.0,
+        6.1
+      ],
+      "to": [
+        3.25,
+        28.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_171",
+      "from": [
+        2.75,
+        26.5,
+        6.1
+      ],
+      "to": [
+        3.0,
+        26.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_172",
+      "from": [
+        2.5,
+        26.75,
+        6.1
+      ],
+      "to": [
+        3.5,
+        27.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_173",
+      "from": [
+        2.5,
+        27.0,
+        6.1
+      ],
+      "to": [
+        3.25,
+        27.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_174",
+      "from": [
+        2.75,
+        27.25,
+        6.1
+      ],
+      "to": [
+        3.25,
+        27.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_175",
+      "from": [
+        3.0,
+        25.75,
+        6.1
+      ],
+      "to": [
+        3.25,
+        26.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_176",
+      "from": [
+        2.75,
+        26.0,
+        6.1
+      ],
+      "to": [
+        3.5,
+        26.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_177",
+      "from": [
+        3.0,
+        26.5,
+        6.1
+      ],
+      "to": [
+        3.5,
+        26.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_178",
+      "from": [
+        3.25,
+        25.0,
+        6.1
+      ],
+      "to": [
+        3.75,
+        25.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_179",
+      "from": [
+        3.25,
+        25.25,
+        6.1
+      ],
+      "to": [
+        4.0,
+        25.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_180",
+      "from": [
+        3.0,
+        25.5,
+        6.1
+      ],
+      "to": [
+        4.0,
+        25.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_181",
+      "from": [
+        3.25,
+        25.75,
+        6.1
+      ],
+      "to": [
+        3.75,
+        26.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_182",
+      "from": [
+        11.0,
+        24.75,
+        5.91
+      ],
+      "to": [
+        11.25,
+        25.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_183",
+      "from": [
+        11.0,
+        25.0,
+        5.91
+      ],
+      "to": [
+        11.5,
+        25.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_184",
+      "from": [
+        11.25,
+        25.25,
+        5.91
+      ],
+      "to": [
+        11.5,
+        25.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_185",
+      "from": [
+        11.5,
+        25.5,
+        5.91
+      ],
+      "to": [
+        11.75,
+        25.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_186",
+      "from": [
+        11.5,
+        25.75,
+        5.91
+      ],
+      "to": [
+        12.0,
+        26.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_187",
+      "from": [
+        11.75,
+        26.0,
+        5.91
+      ],
+      "to": [
+        12.0,
+        26.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_188",
+      "from": [
+        11.75,
+        26.25,
+        5.91
+      ],
+      "to": [
+        12.0,
+        26.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_189",
+      "from": [
+        11.75,
+        26.5,
+        5.91
+      ],
+      "to": [
+        12.25,
+        26.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_190",
+      "from": [
+        12.0,
+        26.75,
+        5.91
+      ],
+      "to": [
+        12.25,
+        27.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_191",
+      "from": [
+        12.0,
+        27.0,
+        5.91
+      ],
+      "to": [
+        12.25,
+        28.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_192",
+      "from": [
+        11.75,
+        27.75,
+        5.91
+      ],
+      "to": [
+        12.0,
+        28.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_193",
+      "from": [
+        11.5,
+        28.5,
+        5.91
+      ],
+      "to": [
+        11.75,
+        28.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_194",
+      "from": [
+        11.25,
+        28.75,
+        5.91
+      ],
+      "to": [
+        11.75,
+        29.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_195",
+      "from": [
+        11.25,
+        29.0,
+        5.91
+      ],
+      "to": [
+        11.5,
+        29.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_196",
+      "from": [
+        11.0,
+        29.25,
+        5.91
+      ],
+      "to": [
+        11.25,
+        29.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_197",
+      "from": [
+        10.75,
+        29.5,
+        5.91
+      ],
+      "to": [
+        11.0,
+        29.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_198",
+      "from": [
+        10.5,
+        29.75,
+        5.91
+      ],
+      "to": [
+        10.75,
+        30.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_199",
+      "from": [
+        10.25,
+        29.75,
+        5.91
+      ],
+      "to": [
+        10.5,
+        30.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_200",
+      "from": [
+        9.75,
+        30.0,
+        5.91
+      ],
+      "to": [
+        10.5,
+        30.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_201",
+      "from": [
+        9.75,
+        30.25,
+        5.91
+      ],
+      "to": [
+        10.0,
+        30.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_202",
+      "from": [
+        9.25,
+        30.25,
+        5.91
+      ],
+      "to": [
+        9.75,
+        30.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_203",
+      "from": [
+        8.75,
+        30.5,
+        5.91
+      ],
+      "to": [
+        9.25,
+        30.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_204",
+      "from": [
+        8.0,
+        30.5,
+        5.91
+      ],
+      "to": [
+        8.75,
+        30.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_205",
+      "from": [
+        7.75,
+        30.75,
+        5.91
+      ],
+      "to": [
+        8.25,
+        31.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_206",
+      "from": [
+        6.75,
+        30.5,
+        5.91
+      ],
+      "to": [
+        7.0,
+        30.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_207",
+      "from": [
+        6.75,
+        30.75,
+        5.91
+      ],
+      "to": [
+        7.75,
+        31.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_208",
+      "from": [
+        5.75,
+        30.5,
+        5.91
+      ],
+      "to": [
+        6.75,
+        30.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_209",
+      "from": [
+        4.75,
+        30.0,
+        5.91
+      ],
+      "to": [
+        5.25,
+        30.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_210",
+      "from": [
+        5.0,
+        30.25,
+        5.91
+      ],
+      "to": [
+        5.75,
+        30.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_211",
+      "from": [
+        5.5,
+        30.5,
+        5.91
+      ],
+      "to": [
+        5.75,
+        30.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_212",
+      "from": [
+        4.0,
+        29.5,
+        5.91
+      ],
+      "to": [
+        4.25,
+        29.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_213",
+      "from": [
+        4.25,
+        29.75,
+        5.91
+      ],
+      "to": [
+        4.75,
+        30.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_214",
+      "from": [
+        4.5,
+        30.0,
+        5.91
+      ],
+      "to": [
+        4.75,
+        30.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_215",
+      "from": [
+        3.5,
+        29.0,
+        5.91
+      ],
+      "to": [
+        3.75,
+        29.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_216",
+      "from": [
+        3.75,
+        29.25,
+        5.91
+      ],
+      "to": [
+        4.0,
+        29.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_217",
+      "from": [
+        3.0,
+        28.25,
+        5.91
+      ],
+      "to": [
+        3.25,
+        28.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_218",
+      "from": [
+        3.25,
+        28.5,
+        5.91
+      ],
+      "to": [
+        3.5,
+        29.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_219",
+      "from": [
+        2.75,
+        27.5,
+        5.91
+      ],
+      "to": [
+        3.0,
+        27.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_220",
+      "from": [
+        2.75,
+        27.75,
+        5.91
+      ],
+      "to": [
+        3.25,
+        28.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_221",
+      "from": [
+        3.0,
+        28.0,
+        5.91
+      ],
+      "to": [
+        3.25,
+        28.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_222",
+      "from": [
+        2.75,
+        26.5,
+        5.91
+      ],
+      "to": [
+        3.0,
+        27.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_223",
+      "from": [
+        3.0,
+        25.75,
+        5.91
+      ],
+      "to": [
+        3.25,
+        26.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_224",
+      "from": [
+        3.5,
+        25.0,
+        5.91
+      ],
+      "to": [
+        3.75,
+        25.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_225",
+      "from": [
+        3.25,
+        25.5,
+        5.91
+      ],
+      "to": [
+        3.5,
+        26.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_core_226",
+      "from": [
+        11.9271,
+        26.0736,
+        5.76
+      ],
+      "to": [
+        12.3671,
+        26.7236,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_227",
+      "from": [
+        11.6735,
+        28.4902,
+        5.76
+      ],
+      "to": [
+        12.1135,
+        29.1402,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_228",
+      "from": [
+        9.5335,
+        30.2669,
+        5.76
+      ],
+      "to": [
+        9.9735,
+        30.9169,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_229",
+      "from": [
+        6.4259,
+        30.641,
+        5.76
+      ],
+      "to": [
+        6.8659,
+        31.291,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_230",
+      "from": [
+        3.685,
+        29.4517,
+        5.76
+      ],
+      "to": [
+        4.125,
+        30.1017,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_231",
+      "from": [
+        2.4877,
+        27.2098,
+        5.76
+      ],
+      "to": [
+        2.9277,
+        27.8598,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_dark_232",
+      "from": [
+        4.5,
+        22.75,
+        6.4
+      ],
+      "to": [
+        5.0,
+        23.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_233",
+      "from": [
+        4.0,
+        23.0,
+        6.4
+      ],
+      "to": [
+        5.25,
+        23.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_234",
+      "from": [
+        4.25,
+        23.5,
+        6.4
+      ],
+      "to": [
+        5.0,
+        23.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_235",
+      "from": [
+        4.0,
+        22.0,
+        6.4
+      ],
+      "to": [
+        4.5,
+        22.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_236",
+      "from": [
+        3.5,
+        22.25,
+        6.4
+      ],
+      "to": [
+        4.5,
+        22.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_237",
+      "from": [
+        3.5,
+        22.5,
+        6.4
+      ],
+      "to": [
+        4.75,
+        22.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_238",
+      "from": [
+        3.75,
+        22.75,
+        6.4
+      ],
+      "to": [
+        4.5,
+        23.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_239",
+      "from": [
+        3.75,
+        23.0,
+        6.4
+      ],
+      "to": [
+        4.0,
+        23.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_240",
+      "from": [
+        4.0,
+        21.25,
+        6.4
+      ],
+      "to": [
+        4.25,
+        21.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_241",
+      "from": [
+        3.25,
+        21.5,
+        6.4
+      ],
+      "to": [
+        4.5,
+        22.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_242",
+      "from": [
+        3.5,
+        22.0,
+        6.4
+      ],
+      "to": [
+        4.25,
+        22.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_243",
+      "from": [
+        3.25,
+        20.5,
+        6.4
+      ],
+      "to": [
+        4.0,
+        20.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_244",
+      "from": [
+        3.25,
+        20.75,
+        6.4
+      ],
+      "to": [
+        4.5,
+        21.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_245",
+      "from": [
+        3.25,
+        21.0,
+        6.4
+      ],
+      "to": [
+        4.25,
+        21.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_246",
+      "from": [
+        3.5,
+        21.25,
+        6.4
+      ],
+      "to": [
+        4.25,
+        21.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_247",
+      "from": [
+        3.5,
+        19.75,
+        6.4
+      ],
+      "to": [
+        4.25,
+        20.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_248",
+      "from": [
+        3.5,
+        20.0,
+        6.4
+      ],
+      "to": [
+        4.75,
+        20.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_249",
+      "from": [
+        3.5,
+        20.25,
+        6.4
+      ],
+      "to": [
+        4.5,
+        20.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_250",
+      "from": [
+        4.0,
+        20.5,
+        6.4
+      ],
+      "to": [
+        4.5,
+        20.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_251",
+      "from": [
+        4.0,
+        19.0,
+        6.4
+      ],
+      "to": [
+        4.75,
+        19.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_252",
+      "from": [
+        4.0,
+        19.25,
+        6.4
+      ],
+      "to": [
+        5.0,
+        19.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_253",
+      "from": [
+        4.25,
+        19.75,
+        6.4
+      ],
+      "to": [
+        4.75,
+        20.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_254",
+      "from": [
+        4.5,
+        20.0,
+        6.4
+      ],
+      "to": [
+        4.75,
+        20.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_255",
+      "from": [
+        4.75,
+        18.25,
+        6.4
+      ],
+      "to": [
+        5.25,
+        18.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_256",
+      "from": [
+        4.5,
+        18.5,
+        6.4
+      ],
+      "to": [
+        5.5,
+        18.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_257",
+      "from": [
+        4.5,
+        18.75,
+        6.4
+      ],
+      "to": [
+        5.75,
+        19.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_258",
+      "from": [
+        4.75,
+        19.0,
+        6.4
+      ],
+      "to": [
+        5.5,
+        19.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_259",
+      "from": [
+        5.0,
+        19.25,
+        6.4
+      ],
+      "to": [
+        5.25,
+        19.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_260",
+      "from": [
+        5.75,
+        17.75,
+        6.4
+      ],
+      "to": [
+        6.25,
+        18.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_261",
+      "from": [
+        5.25,
+        18.0,
+        6.4
+      ],
+      "to": [
+        6.25,
+        18.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_262",
+      "from": [
+        5.25,
+        18.25,
+        6.4
+      ],
+      "to": [
+        6.5,
+        18.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_263",
+      "from": [
+        5.5,
+        18.5,
+        6.4
+      ],
+      "to": [
+        6.5,
+        18.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_264",
+      "from": [
+        5.5,
+        18.75,
+        6.4
+      ],
+      "to": [
+        6.0,
+        19.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_265",
+      "from": [
+        7.0,
+        17.25,
+        6.4
+      ],
+      "to": [
+        7.25,
+        17.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_266",
+      "from": [
+        6.25,
+        17.5,
+        6.4
+      ],
+      "to": [
+        7.25,
+        18.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_267",
+      "from": [
+        7.25,
+        17.25,
+        6.4
+      ],
+      "to": [
+        8.25,
+        18.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_268",
+      "from": [
+        8.25,
+        17.25,
+        6.4
+      ],
+      "to": [
+        9.25,
+        18.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_269",
+      "from": [
+        9.5,
+        17.25,
+        6.4
+      ],
+      "to": [
+        10.0,
+        17.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_270",
+      "from": [
+        9.25,
+        17.5,
+        6.4
+      ],
+      "to": [
+        10.5,
+        17.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_271",
+      "from": [
+        9.25,
+        17.75,
+        6.4
+      ],
+      "to": [
+        10.25,
+        18.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_272",
+      "from": [
+        9.75,
+        18.25,
+        6.4
+      ],
+      "to": [
+        10.25,
+        18.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_273",
+      "from": [
+        10.5,
+        17.5,
+        6.4
+      ],
+      "to": [
+        10.75,
+        17.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_274",
+      "from": [
+        10.5,
+        17.75,
+        6.4
+      ],
+      "to": [
+        11.5,
+        18.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_275",
+      "from": [
+        10.25,
+        18.0,
+        6.4
+      ],
+      "to": [
+        11.25,
+        18.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_276",
+      "from": [
+        10.5,
+        18.5,
+        6.4
+      ],
+      "to": [
+        11.25,
+        18.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_277",
+      "from": [
+        11.5,
+        18.0,
+        6.4
+      ],
+      "to": [
+        11.75,
+        18.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_278",
+      "from": [
+        11.25,
+        18.25,
+        6.4
+      ],
+      "to": [
+        12.25,
+        18.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_279",
+      "from": [
+        11.0,
+        18.5,
+        6.4
+      ],
+      "to": [
+        12.25,
+        18.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_280",
+      "from": [
+        11.0,
+        18.75,
+        6.4
+      ],
+      "to": [
+        12.0,
+        19.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_281",
+      "from": [
+        11.5,
+        19.0,
+        6.4
+      ],
+      "to": [
+        11.75,
+        19.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_282",
+      "from": [
+        12.25,
+        18.5,
+        6.4
+      ],
+      "to": [
+        12.5,
+        18.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_283",
+      "from": [
+        12.0,
+        18.75,
+        6.4
+      ],
+      "to": [
+        12.75,
+        19.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_284",
+      "from": [
+        11.75,
+        19.0,
+        6.4
+      ],
+      "to": [
+        13.0,
+        19.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_285",
+      "from": [
+        11.75,
+        19.25,
+        6.4
+      ],
+      "to": [
+        12.75,
+        19.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_286",
+      "from": [
+        12.0,
+        19.5,
+        6.4
+      ],
+      "to": [
+        12.5,
+        19.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_287",
+      "from": [
+        12.5,
+        19.5,
+        6.4
+      ],
+      "to": [
+        13.25,
+        19.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_288",
+      "from": [
+        12.25,
+        19.75,
+        6.4
+      ],
+      "to": [
+        13.5,
+        20.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_289",
+      "from": [
+        12.25,
+        20.0,
+        6.4
+      ],
+      "to": [
+        13.25,
+        20.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_290",
+      "from": [
+        12.5,
+        20.25,
+        6.4
+      ],
+      "to": [
+        13.0,
+        20.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_291",
+      "from": [
+        12.75,
+        20.25,
+        6.4
+      ],
+      "to": [
+        13.5,
+        20.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_292",
+      "from": [
+        12.5,
+        20.5,
+        6.4
+      ],
+      "to": [
+        13.75,
+        21.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_293",
+      "from": [
+        12.75,
+        21.0,
+        6.4
+      ],
+      "to": [
+        13.0,
+        21.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_294",
+      "from": [
+        12.75,
+        21.0,
+        6.4
+      ],
+      "to": [
+        13.5,
+        21.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_295",
+      "from": [
+        12.75,
+        21.25,
+        6.4
+      ],
+      "to": [
+        13.75,
+        22.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_296",
+      "from": [
+        12.5,
+        21.75,
+        6.4
+      ],
+      "to": [
+        13.0,
+        22.0,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_297",
+      "from": [
+        12.5,
+        22.0,
+        6.4
+      ],
+      "to": [
+        13.5,
+        22.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_298",
+      "from": [
+        12.75,
+        22.5,
+        6.4
+      ],
+      "to": [
+        13.5,
+        22.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_299",
+      "from": [
+        12.25,
+        22.5,
+        6.4
+      ],
+      "to": [
+        12.75,
+        22.75,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_300",
+      "from": [
+        12.0,
+        22.75,
+        6.4
+      ],
+      "to": [
+        13.25,
+        23.25,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_301",
+      "from": [
+        12.25,
+        23.25,
+        6.4
+      ],
+      "to": [
+        13.0,
+        23.5,
+        9.6
+      ],
+      "mat": "water_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "water_302",
+      "from": [
+        4.5,
+        22.75,
+        6.1
+      ],
+      "to": [
+        5.0,
+        23.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_303",
+      "from": [
+        4.25,
+        23.0,
+        6.1
+      ],
+      "to": [
+        5.25,
+        23.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_304",
+      "from": [
+        4.5,
+        23.25,
+        6.1
+      ],
+      "to": [
+        5.25,
+        23.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_305",
+      "from": [
+        4.5,
+        23.5,
+        6.1
+      ],
+      "to": [
+        5.0,
+        23.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_306",
+      "from": [
+        4.25,
+        22.0,
+        6.1
+      ],
+      "to": [
+        4.5,
+        22.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_307",
+      "from": [
+        3.75,
+        22.25,
+        6.1
+      ],
+      "to": [
+        4.75,
+        22.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_308",
+      "from": [
+        4.0,
+        22.5,
+        6.1
+      ],
+      "to": [
+        4.75,
+        22.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_309",
+      "from": [
+        4.0,
+        22.75,
+        6.1
+      ],
+      "to": [
+        4.5,
+        23.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_310",
+      "from": [
+        4.0,
+        21.25,
+        6.1
+      ],
+      "to": [
+        4.25,
+        21.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_311",
+      "from": [
+        3.5,
+        21.5,
+        6.1
+      ],
+      "to": [
+        4.5,
+        21.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_312",
+      "from": [
+        3.75,
+        21.75,
+        6.1
+      ],
+      "to": [
+        4.5,
+        22.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_313",
+      "from": [
+        3.75,
+        22.0,
+        6.1
+      ],
+      "to": [
+        4.25,
+        22.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_314",
+      "from": [
+        3.75,
+        20.5,
+        6.1
+      ],
+      "to": [
+        4.0,
+        20.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_315",
+      "from": [
+        3.75,
+        20.75,
+        6.1
+      ],
+      "to": [
+        4.5,
+        21.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_316",
+      "from": [
+        3.5,
+        21.0,
+        6.1
+      ],
+      "to": [
+        4.25,
+        21.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_317",
+      "from": [
+        3.75,
+        21.25,
+        6.1
+      ],
+      "to": [
+        4.25,
+        21.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_318",
+      "from": [
+        4.0,
+        19.75,
+        6.1
+      ],
+      "to": [
+        4.25,
+        20.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_319",
+      "from": [
+        3.75,
+        20.0,
+        6.1
+      ],
+      "to": [
+        4.75,
+        20.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_320",
+      "from": [
+        3.75,
+        20.25,
+        6.1
+      ],
+      "to": [
+        4.5,
+        20.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_321",
+      "from": [
+        4.0,
+        20.5,
+        6.1
+      ],
+      "to": [
+        4.5,
+        20.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_322",
+      "from": [
+        4.5,
+        19.0,
+        6.1
+      ],
+      "to": [
+        4.75,
+        19.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_323",
+      "from": [
+        4.25,
+        19.25,
+        6.1
+      ],
+      "to": [
+        5.0,
+        19.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_324",
+      "from": [
+        4.0,
+        19.5,
+        6.1
+      ],
+      "to": [
+        5.0,
+        19.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_325",
+      "from": [
+        4.25,
+        19.75,
+        6.1
+      ],
+      "to": [
+        4.75,
+        20.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_326",
+      "from": [
+        4.5,
+        20.0,
+        6.1
+      ],
+      "to": [
+        4.75,
+        20.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_327",
+      "from": [
+        5.0,
+        18.5,
+        6.1
+      ],
+      "to": [
+        5.5,
+        18.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_328",
+      "from": [
+        4.75,
+        18.75,
+        6.1
+      ],
+      "to": [
+        5.75,
+        19.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_329",
+      "from": [
+        4.75,
+        19.0,
+        6.1
+      ],
+      "to": [
+        5.5,
+        19.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_330",
+      "from": [
+        5.0,
+        19.25,
+        6.1
+      ],
+      "to": [
+        5.25,
+        19.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_331",
+      "from": [
+        5.75,
+        18.0,
+        6.1
+      ],
+      "to": [
+        6.25,
+        18.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_332",
+      "from": [
+        5.25,
+        18.25,
+        6.1
+      ],
+      "to": [
+        6.5,
+        18.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_333",
+      "from": [
+        5.5,
+        18.5,
+        6.1
+      ],
+      "to": [
+        6.5,
+        18.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_334",
+      "from": [
+        5.75,
+        18.75,
+        6.1
+      ],
+      "to": [
+        6.0,
+        19.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_335",
+      "from": [
+        6.25,
+        17.75,
+        6.1
+      ],
+      "to": [
+        7.25,
+        18.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_336",
+      "from": [
+        6.5,
+        18.25,
+        6.1
+      ],
+      "to": [
+        7.25,
+        18.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_337",
+      "from": [
+        7.25,
+        17.5,
+        6.1
+      ],
+      "to": [
+        8.25,
+        18.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_338",
+      "from": [
+        8.25,
+        17.5,
+        6.1
+      ],
+      "to": [
+        9.25,
+        18.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_339",
+      "from": [
+        9.25,
+        17.5,
+        6.1
+      ],
+      "to": [
+        9.75,
+        17.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_340",
+      "from": [
+        9.25,
+        17.75,
+        6.1
+      ],
+      "to": [
+        10.25,
+        18.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_341",
+      "from": [
+        9.75,
+        18.25,
+        6.1
+      ],
+      "to": [
+        10.25,
+        18.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_342",
+      "from": [
+        10.5,
+        17.75,
+        6.1
+      ],
+      "to": [
+        10.75,
+        18.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_343",
+      "from": [
+        10.25,
+        18.0,
+        6.1
+      ],
+      "to": [
+        11.25,
+        18.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_344",
+      "from": [
+        10.5,
+        18.5,
+        6.1
+      ],
+      "to": [
+        11.0,
+        18.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_345",
+      "from": [
+        11.25,
+        18.25,
+        6.1
+      ],
+      "to": [
+        11.75,
+        18.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_346",
+      "from": [
+        11.0,
+        18.5,
+        6.1
+      ],
+      "to": [
+        12.0,
+        19.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_347",
+      "from": [
+        11.5,
+        19.0,
+        6.1
+      ],
+      "to": [
+        11.75,
+        19.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_348",
+      "from": [
+        12.0,
+        18.75,
+        6.1
+      ],
+      "to": [
+        12.25,
+        19.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_349",
+      "from": [
+        11.75,
+        19.0,
+        6.1
+      ],
+      "to": [
+        12.5,
+        19.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_350",
+      "from": [
+        11.75,
+        19.25,
+        6.1
+      ],
+      "to": [
+        12.75,
+        19.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_351",
+      "from": [
+        12.0,
+        19.5,
+        6.1
+      ],
+      "to": [
+        12.5,
+        19.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_352",
+      "from": [
+        12.5,
+        19.5,
+        6.1
+      ],
+      "to": [
+        13.0,
+        19.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_353",
+      "from": [
+        12.25,
+        19.75,
+        6.1
+      ],
+      "to": [
+        13.0,
+        20.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_354",
+      "from": [
+        12.25,
+        20.0,
+        6.1
+      ],
+      "to": [
+        13.25,
+        20.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_355",
+      "from": [
+        12.5,
+        20.25,
+        6.1
+      ],
+      "to": [
+        12.75,
+        20.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_356",
+      "from": [
+        12.75,
+        20.25,
+        6.1
+      ],
+      "to": [
+        13.25,
+        20.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_357",
+      "from": [
+        12.5,
+        20.5,
+        6.1
+      ],
+      "to": [
+        13.25,
+        20.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_358",
+      "from": [
+        12.5,
+        20.75,
+        6.1
+      ],
+      "to": [
+        13.5,
+        21.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_359",
+      "from": [
+        12.75,
+        21.0,
+        6.1
+      ],
+      "to": [
+        13.0,
+        21.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_360",
+      "from": [
+        12.75,
+        21.0,
+        6.1
+      ],
+      "to": [
+        13.25,
+        21.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_361",
+      "from": [
+        12.75,
+        21.25,
+        6.1
+      ],
+      "to": [
+        13.5,
+        21.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_362",
+      "from": [
+        12.5,
+        21.5,
+        6.1
+      ],
+      "to": [
+        13.5,
+        21.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_363",
+      "from": [
+        13.0,
+        21.75,
+        6.1
+      ],
+      "to": [
+        13.25,
+        22.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_364",
+      "from": [
+        12.5,
+        21.75,
+        6.1
+      ],
+      "to": [
+        13.0,
+        22.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_365",
+      "from": [
+        12.5,
+        22.0,
+        6.1
+      ],
+      "to": [
+        13.25,
+        22.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_366",
+      "from": [
+        12.75,
+        22.5,
+        6.1
+      ],
+      "to": [
+        13.0,
+        22.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_367",
+      "from": [
+        12.25,
+        22.5,
+        6.1
+      ],
+      "to": [
+        12.75,
+        22.75,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_368",
+      "from": [
+        12.0,
+        22.75,
+        6.1
+      ],
+      "to": [
+        13.0,
+        23.0,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_369",
+      "from": [
+        12.0,
+        23.0,
+        6.1
+      ],
+      "to": [
+        12.75,
+        23.25,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_370",
+      "from": [
+        12.25,
+        23.25,
+        6.1
+      ],
+      "to": [
+        12.75,
+        23.5,
+        9.9
+      ],
+      "mat": "water",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_371",
+      "from": [
+        4.5,
+        23.0,
+        5.91
+      ],
+      "to": [
+        4.75,
+        23.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_372",
+      "from": [
+        4.5,
+        23.25,
+        5.91
+      ],
+      "to": [
+        5.0,
+        23.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_373",
+      "from": [
+        4.75,
+        23.5,
+        5.91
+      ],
+      "to": [
+        5.0,
+        23.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_374",
+      "from": [
+        4.0,
+        22.25,
+        5.91
+      ],
+      "to": [
+        4.25,
+        22.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_375",
+      "from": [
+        4.0,
+        22.5,
+        5.91
+      ],
+      "to": [
+        4.5,
+        22.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_376",
+      "from": [
+        4.25,
+        22.75,
+        5.91
+      ],
+      "to": [
+        4.5,
+        23.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_377",
+      "from": [
+        3.75,
+        21.5,
+        5.91
+      ],
+      "to": [
+        4.0,
+        21.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_378",
+      "from": [
+        3.75,
+        21.75,
+        5.91
+      ],
+      "to": [
+        4.25,
+        22.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_379",
+      "from": [
+        4.0,
+        22.0,
+        5.91
+      ],
+      "to": [
+        4.25,
+        22.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_380",
+      "from": [
+        3.75,
+        20.5,
+        5.91
+      ],
+      "to": [
+        4.0,
+        21.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_381",
+      "from": [
+        4.0,
+        20.0,
+        5.91
+      ],
+      "to": [
+        4.25,
+        20.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_382",
+      "from": [
+        4.5,
+        19.25,
+        5.91
+      ],
+      "to": [
+        4.75,
+        19.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_383",
+      "from": [
+        4.25,
+        19.5,
+        5.91
+      ],
+      "to": [
+        4.75,
+        19.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_384",
+      "from": [
+        4.25,
+        19.75,
+        5.91
+      ],
+      "to": [
+        4.5,
+        20.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_385",
+      "from": [
+        5.25,
+        18.5,
+        5.91
+      ],
+      "to": [
+        5.5,
+        18.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_386",
+      "from": [
+        5.0,
+        18.75,
+        5.91
+      ],
+      "to": [
+        5.25,
+        19.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_387",
+      "from": [
+        4.75,
+        19.0,
+        5.91
+      ],
+      "to": [
+        5.0,
+        19.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_388",
+      "from": [
+        6.0,
+        18.0,
+        5.91
+      ],
+      "to": [
+        6.25,
+        18.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_389",
+      "from": [
+        5.5,
+        18.25,
+        5.91
+      ],
+      "to": [
+        6.25,
+        18.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_390",
+      "from": [
+        5.5,
+        18.5,
+        5.91
+      ],
+      "to": [
+        5.75,
+        18.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_391",
+      "from": [
+        6.75,
+        17.75,
+        5.91
+      ],
+      "to": [
+        7.25,
+        18.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_392",
+      "from": [
+        6.25,
+        18.0,
+        5.91
+      ],
+      "to": [
+        6.75,
+        18.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_393",
+      "from": [
+        7.75,
+        17.5,
+        5.91
+      ],
+      "to": [
+        8.25,
+        17.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_394",
+      "from": [
+        7.25,
+        17.75,
+        5.91
+      ],
+      "to": [
+        8.0,
+        18.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_395",
+      "from": [
+        8.25,
+        17.5,
+        5.91
+      ],
+      "to": [
+        9.25,
+        17.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_396",
+      "from": [
+        9.0,
+        17.75,
+        5.91
+      ],
+      "to": [
+        9.25,
+        18.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_397",
+      "from": [
+        9.25,
+        17.75,
+        5.91
+      ],
+      "to": [
+        10.25,
+        18.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_398",
+      "from": [
+        10.25,
+        17.75,
+        5.91
+      ],
+      "to": [
+        10.5,
+        18.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_399",
+      "from": [
+        10.25,
+        18.0,
+        5.91
+      ],
+      "to": [
+        11.0,
+        18.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_400",
+      "from": [
+        10.75,
+        18.25,
+        5.91
+      ],
+      "to": [
+        11.25,
+        18.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_401",
+      "from": [
+        11.25,
+        18.25,
+        5.91
+      ],
+      "to": [
+        11.5,
+        18.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_402",
+      "from": [
+        11.25,
+        18.5,
+        5.91
+      ],
+      "to": [
+        11.75,
+        18.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_403",
+      "from": [
+        11.75,
+        18.75,
+        5.91
+      ],
+      "to": [
+        12.0,
+        19.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_404",
+      "from": [
+        12.0,
+        19.0,
+        5.91
+      ],
+      "to": [
+        12.25,
+        19.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_405",
+      "from": [
+        12.25,
+        19.25,
+        5.91
+      ],
+      "to": [
+        12.5,
+        19.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_406",
+      "from": [
+        12.5,
+        19.5,
+        5.91
+      ],
+      "to": [
+        12.75,
+        20.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_407",
+      "from": [
+        12.75,
+        20.0,
+        5.91
+      ],
+      "to": [
+        13.0,
+        20.25,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_408",
+      "from": [
+        12.75,
+        20.25,
+        5.91
+      ],
+      "to": [
+        13.0,
+        20.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_409",
+      "from": [
+        12.75,
+        20.5,
+        5.91
+      ],
+      "to": [
+        13.25,
+        20.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_410",
+      "from": [
+        13.0,
+        20.75,
+        5.91
+      ],
+      "to": [
+        13.25,
+        21.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_411",
+      "from": [
+        13.0,
+        21.0,
+        5.91
+      ],
+      "to": [
+        13.25,
+        22.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_412",
+      "from": [
+        12.75,
+        22.0,
+        5.91
+      ],
+      "to": [
+        13.0,
+        22.75,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_413",
+      "from": [
+        12.5,
+        22.5,
+        5.91
+      ],
+      "to": [
+        12.75,
+        23.0,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_light_414",
+      "from": [
+        12.25,
+        23.0,
+        5.91
+      ],
+      "to": [
+        12.5,
+        23.5,
+        10.09
+      ],
+      "mat": "water_light",
+      "bone": "crown"
+    },
+    {
+      "name": "water_core_415",
+      "from": [
+        3.6329,
+        22.0264,
+        5.76
+      ],
+      "to": [
+        4.0729,
+        22.6764,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_416",
+      "from": [
+        3.8865,
+        19.6098,
+        5.76
+      ],
+      "to": [
+        4.3265,
+        20.2598,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_417",
+      "from": [
+        6.0265,
+        17.8331,
+        5.76
+      ],
+      "to": [
+        6.4665,
+        18.4831,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_418",
+      "from": [
+        9.1341,
+        17.459,
+        5.76
+      ],
+      "to": [
+        9.5741,
+        18.109,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_419",
+      "from": [
+        11.875,
+        18.6483,
+        5.76
+      ],
+      "to": [
+        12.315,
+        19.2983,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "water_core_420",
+      "from": [
+        13.0723,
+        20.8902,
+        5.76
+      ],
+      "to": [
+        13.5123,
+        21.5402,
+        10.24
+      ],
+      "mat": "water_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_421",
+      "from": [
+        10.5,
+        25.25,
+        6.3
+      ],
+      "to": [
+        10.75,
+        25.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_422",
+      "from": [
+        10.25,
+        25.5,
+        6.3
+      ],
+      "to": [
+        10.75,
+        26.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_423",
+      "from": [
+        10.5,
+        26.0,
+        6.3
+      ],
+      "to": [
+        10.75,
+        26.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_424",
+      "from": [
+        10.25,
+        26.0,
+        6.3
+      ],
+      "to": [
+        10.5,
+        26.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_425",
+      "from": [
+        10.0,
+        26.25,
+        6.3
+      ],
+      "to": [
+        10.5,
+        26.75,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_426",
+      "from": [
+        9.75,
+        26.75,
+        6.3
+      ],
+      "to": [
+        10.25,
+        27.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_427",
+      "from": [
+        9.5,
+        27.0,
+        6.3
+      ],
+      "to": [
+        10.0,
+        27.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_428",
+      "from": [
+        9.5,
+        27.25,
+        6.3
+      ],
+      "to": [
+        9.75,
+        27.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_429",
+      "from": [
+        9.25,
+        27.25,
+        6.3
+      ],
+      "to": [
+        9.5,
+        27.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_430",
+      "from": [
+        8.75,
+        27.5,
+        6.3
+      ],
+      "to": [
+        9.5,
+        27.75,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_431",
+      "from": [
+        8.75,
+        27.75,
+        6.3
+      ],
+      "to": [
+        9.0,
+        28.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_432",
+      "from": [
+        8.5,
+        27.5,
+        6.3
+      ],
+      "to": [
+        8.75,
+        27.75,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_433",
+      "from": [
+        8.0,
+        27.75,
+        6.3
+      ],
+      "to": [
+        8.75,
+        28.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_434",
+      "from": [
+        7.25,
+        27.5,
+        6.3
+      ],
+      "to": [
+        7.5,
+        27.75,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_435",
+      "from": [
+        7.25,
+        27.75,
+        6.3
+      ],
+      "to": [
+        8.0,
+        28.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_436",
+      "from": [
+        6.5,
+        27.25,
+        6.3
+      ],
+      "to": [
+        6.75,
+        27.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_437",
+      "from": [
+        6.5,
+        27.5,
+        6.3
+      ],
+      "to": [
+        7.25,
+        27.75,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_438",
+      "from": [
+        7.0,
+        27.75,
+        6.3
+      ],
+      "to": [
+        7.25,
+        28.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_439",
+      "from": [
+        5.75,
+        26.75,
+        6.3
+      ],
+      "to": [
+        6.25,
+        27.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_440",
+      "from": [
+        6.0,
+        27.0,
+        6.3
+      ],
+      "to": [
+        6.5,
+        27.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_441",
+      "from": [
+        6.25,
+        27.25,
+        6.3
+      ],
+      "to": [
+        6.5,
+        27.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_442",
+      "from": [
+        5.5,
+        26.0,
+        6.3
+      ],
+      "to": [
+        5.75,
+        26.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_443",
+      "from": [
+        5.5,
+        26.25,
+        6.3
+      ],
+      "to": [
+        6.0,
+        26.75,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_444",
+      "from": [
+        5.25,
+        25.25,
+        6.3
+      ],
+      "to": [
+        5.5,
+        25.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_445",
+      "from": [
+        5.25,
+        25.5,
+        6.3
+      ],
+      "to": [
+        5.75,
+        26.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_446",
+      "from": [
+        5.25,
+        26.0,
+        6.3
+      ],
+      "to": [
+        5.5,
+        26.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_447",
+      "from": [
+        5.25,
+        24.5,
+        6.3
+      ],
+      "to": [
+        5.75,
+        25.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_448",
+      "from": [
+        5.5,
+        23.75,
+        6.3
+      ],
+      "to": [
+        6.0,
+        24.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_449",
+      "from": [
+        5.25,
+        24.25,
+        6.3
+      ],
+      "to": [
+        5.75,
+        24.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_450",
+      "from": [
+        6.25,
+        23.0,
+        6.3
+      ],
+      "to": [
+        6.5,
+        23.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_451",
+      "from": [
+        6.0,
+        23.25,
+        6.3
+      ],
+      "to": [
+        6.5,
+        23.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_452",
+      "from": [
+        5.75,
+        23.5,
+        6.3
+      ],
+      "to": [
+        6.25,
+        23.75,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_453",
+      "from": [
+        6.75,
+        22.75,
+        6.3
+      ],
+      "to": [
+        7.25,
+        23.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_454",
+      "from": [
+        6.5,
+        23.0,
+        6.3
+      ],
+      "to": [
+        7.0,
+        23.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_455",
+      "from": [
+        7.25,
+        22.5,
+        6.3
+      ],
+      "to": [
+        8.0,
+        23.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_456",
+      "from": [
+        8.0,
+        22.5,
+        6.3
+      ],
+      "to": [
+        8.75,
+        23.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_457",
+      "from": [
+        8.75,
+        22.75,
+        6.3
+      ],
+      "to": [
+        9.25,
+        23.0,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_458",
+      "from": [
+        9.0,
+        23.0,
+        6.3
+      ],
+      "to": [
+        9.5,
+        23.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_459",
+      "from": [
+        9.5,
+        23.0,
+        6.3
+      ],
+      "to": [
+        9.75,
+        23.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_460",
+      "from": [
+        9.5,
+        23.25,
+        6.3
+      ],
+      "to": [
+        10.0,
+        23.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_461",
+      "from": [
+        9.75,
+        23.5,
+        6.3
+      ],
+      "to": [
+        10.25,
+        23.75,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_462",
+      "from": [
+        10.0,
+        23.75,
+        6.3
+      ],
+      "to": [
+        10.5,
+        24.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_463",
+      "from": [
+        10.25,
+        24.25,
+        6.3
+      ],
+      "to": [
+        10.75,
+        24.5,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_464",
+      "from": [
+        10.25,
+        24.5,
+        6.3
+      ],
+      "to": [
+        10.75,
+        25.25,
+        9.7
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "water_dark_465",
+      "from": [
+        7.75,
+        23.25,
+        6.05
+      ],
+      "to": [
+        8.25,
+        23.5,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_466",
+      "from": [
+        7.25,
+        23.5,
+        6.05
+      ],
+      "to": [
+        8.75,
+        23.75,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_467",
+      "from": [
+        6.75,
+        23.75,
+        6.05
+      ],
+      "to": [
+        9.25,
+        24.0,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_468",
+      "from": [
+        6.5,
+        24.0,
+        6.05
+      ],
+      "to": [
+        9.5,
+        24.25,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_469",
+      "from": [
+        6.25,
+        24.25,
+        6.05
+      ],
+      "to": [
+        9.75,
+        24.75,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_470",
+      "from": [
+        6.0,
+        24.75,
+        6.05
+      ],
+      "to": [
+        10.0,
+        25.75,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_471",
+      "from": [
+        6.25,
+        25.75,
+        6.05
+      ],
+      "to": [
+        9.75,
+        26.25,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_472",
+      "from": [
+        6.5,
+        26.25,
+        6.05
+      ],
+      "to": [
+        9.5,
+        26.75,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_473",
+      "from": [
+        7.0,
+        26.75,
+        6.05
+      ],
+      "to": [
+        9.0,
+        27.0,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_474",
+      "from": [
+        7.5,
+        27.0,
+        6.05
+      ],
+      "to": [
+        8.5,
+        27.25,
+        9.95
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_475",
+      "from": [
+        7.75,
+        23.75,
+        5.72
+      ],
+      "to": [
+        8.25,
+        24.0,
+        10.28
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_476",
+      "from": [
+        7.5,
+        24.0,
+        5.72
+      ],
+      "to": [
+        8.5,
+        24.5,
+        10.28
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_477",
+      "from": [
+        7.25,
+        24.5,
+        5.72
+      ],
+      "to": [
+        8.75,
+        24.75,
+        10.28
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_478",
+      "from": [
+        7.0,
+        24.75,
+        5.72
+      ],
+      "to": [
+        9.0,
+        25.25,
+        10.28
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_479",
+      "from": [
+        6.75,
+        25.25,
+        5.72
+      ],
+      "to": [
+        9.25,
+        26.0,
+        10.28
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_480",
+      "from": [
+        7.0,
+        26.0,
+        5.72
+      ],
+      "to": [
+        9.0,
+        26.25,
+        10.28
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_481",
+      "from": [
+        7.25,
+        26.25,
+        5.72
+      ],
+      "to": [
+        8.75,
+        26.5,
+        10.28
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_482",
+      "from": [
+        7.5,
+        26.5,
+        5.72
+      ],
+      "to": [
+        8.5,
+        26.75,
+        10.28
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_dark_483",
+      "from": [
+        7.75,
+        26.75,
+        5.72
+      ],
+      "to": [
+        8.25,
+        27.0,
+        10.28
+      ],
+      "mat": "water_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "water_484",
+      "from": [
+        7.75,
+        23.75,
+        5.54
+      ],
+      "to": [
+        8.25,
+        24.25,
+        10.46
+      ],
+      "mat": "water",
+      "bone": "focus"
+    },
+    {
+      "name": "water_485",
+      "from": [
+        7.5,
+        24.25,
+        5.54
+      ],
+      "to": [
+        8.5,
+        24.75,
+        10.46
+      ],
+      "mat": "water",
+      "bone": "focus"
+    },
+    {
+      "name": "water_486",
+      "from": [
+        7.25,
+        24.75,
+        5.54
+      ],
+      "to": [
+        8.75,
+        25.25,
+        10.46
+      ],
+      "mat": "water",
+      "bone": "focus"
+    },
+    {
+      "name": "water_487",
+      "from": [
+        7.0,
+        25.25,
+        5.54
+      ],
+      "to": [
+        9.0,
+        25.5,
+        10.46
+      ],
+      "mat": "water",
+      "bone": "focus"
+    },
+    {
+      "name": "water_488",
+      "from": [
+        6.75,
+        25.5,
+        5.54
+      ],
+      "to": [
+        9.25,
+        25.75,
+        10.46
+      ],
+      "mat": "water",
+      "bone": "focus"
+    },
+    {
+      "name": "water_489",
+      "from": [
+        7.0,
+        25.75,
+        5.54
+      ],
+      "to": [
+        9.0,
+        26.0,
+        10.46
+      ],
+      "mat": "water",
+      "bone": "focus"
+    },
+    {
+      "name": "water_490",
+      "from": [
+        7.25,
+        26.0,
+        5.54
+      ],
+      "to": [
+        8.75,
+        26.25,
+        10.46
+      ],
+      "mat": "water",
+      "bone": "focus"
+    },
+    {
+      "name": "water_491",
+      "from": [
+        7.5,
+        26.25,
+        5.54
+      ],
+      "to": [
+        8.5,
+        26.75,
+        10.46
+      ],
+      "mat": "water",
+      "bone": "focus"
+    },
+    {
+      "name": "water_492",
+      "from": [
+        7.75,
+        26.75,
+        5.54
+      ],
+      "to": [
+        8.25,
+        27.0,
+        10.46
+      ],
+      "mat": "water",
+      "bone": "focus"
+    },
+    {
+      "name": "water_light_493",
+      "from": [
+        8.0,
+        24.0,
+        5.41
+      ],
+      "to": [
+        8.25,
+        24.5,
+        10.59
+      ],
+      "mat": "water_light",
+      "bone": "focus"
+    },
+    {
+      "name": "water_light_494",
+      "from": [
+        8.0,
+        24.5,
+        5.41
+      ],
+      "to": [
+        8.5,
+        25.0,
+        10.59
+      ],
+      "mat": "water_light",
+      "bone": "focus"
+    },
+    {
+      "name": "water_light_495",
+      "from": [
+        8.0,
+        25.0,
+        5.41
+      ],
+      "to": [
+        8.75,
+        25.25,
+        10.59
+      ],
+      "mat": "water_light",
+      "bone": "focus"
+    },
+    {
+      "name": "water_light_496",
+      "from": [
+        8.0,
+        25.25,
+        5.41
+      ],
+      "to": [
+        9.0,
+        25.75,
+        10.59
+      ],
+      "mat": "water_light",
+      "bone": "focus"
+    },
+    {
+      "name": "water_light_497",
+      "from": [
+        8.0,
+        25.75,
+        5.41
+      ],
+      "to": [
+        8.75,
+        26.0,
+        10.59
+      ],
+      "mat": "water_light",
+      "bone": "focus"
+    },
+    {
+      "name": "water_light_498",
+      "from": [
+        8.0,
+        26.0,
+        5.41
+      ],
+      "to": [
+        8.5,
+        26.5,
+        10.59
+      ],
+      "mat": "water_light",
+      "bone": "focus"
+    },
+    {
+      "name": "water_light_499",
+      "from": [
+        8.0,
+        26.5,
+        5.41
+      ],
+      "to": [
+        8.25,
+        26.75,
+        10.59
+      ],
+      "mat": "water_light",
+      "bone": "focus"
+    },
+    {
+      "name": "water_core_500",
+      "from": [
+        7.75,
+        24.0,
+        5.42
+      ],
+      "to": [
+        8.0,
+        24.5,
+        10.58
+      ],
+      "mat": "water_core",
+      "bone": "focus"
+    },
+    {
+      "name": "water_core_501",
+      "from": [
+        7.5,
+        24.5,
+        5.42
+      ],
+      "to": [
+        8.0,
+        25.0,
+        10.58
+      ],
+      "mat": "water_core",
+      "bone": "focus"
+    },
+    {
+      "name": "water_core_502",
+      "from": [
+        7.25,
+        25.0,
+        5.42
+      ],
+      "to": [
+        8.0,
+        25.25,
+        10.58
+      ],
+      "mat": "water_core",
+      "bone": "focus"
+    },
+    {
+      "name": "water_core_503",
+      "from": [
+        7.0,
+        25.25,
+        5.42
+      ],
+      "to": [
+        8.0,
+        25.75,
+        10.58
+      ],
+      "mat": "water_core",
+      "bone": "focus"
+    },
+    {
+      "name": "water_core_504",
+      "from": [
+        7.25,
+        25.75,
+        5.42
+      ],
+      "to": [
+        8.0,
+        26.0,
+        10.58
+      ],
+      "mat": "water_core",
+      "bone": "focus"
+    },
+    {
+      "name": "water_core_505",
+      "from": [
+        7.5,
+        26.0,
+        5.42
+      ],
+      "to": [
+        8.0,
+        26.5,
+        10.58
+      ],
+      "mat": "water_core",
+      "bone": "focus"
+    },
+    {
+      "name": "water_core_506",
+      "from": [
+        7.75,
+        26.5,
+        5.42
+      ],
+      "to": [
+        8.0,
+        26.75,
+        10.58
+      ],
+      "mat": "water_core",
+      "bone": "focus"
+    },
+    {
+      "name": "white_507",
+      "from": [
+        7.88,
+        24.774,
+        5.3
+      ],
+      "to": [
+        8.13,
+        26.214,
+        10.7
+      ],
+      "mat": "white",
+      "bone": "focus"
+    },
+    {
+      "name": "water_508",
+      "from": [
+        7.25,
+        19.25,
+        7
+      ],
+      "to": [
+        7.75,
+        19.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_509",
+      "from": [
+        7.25,
+        19.5,
+        7
+      ],
+      "to": [
+        8.0,
+        19.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_510",
+      "from": [
+        7.5,
+        19.75,
+        7
+      ],
+      "to": [
+        8.0,
+        20.25,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_511",
+      "from": [
+        7.75,
+        20.25,
+        7
+      ],
+      "to": [
+        8.25,
+        20.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_512",
+      "from": [
+        8.25,
+        17.5,
+        7
+      ],
+      "to": [
+        8.5,
+        17.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_513",
+      "from": [
+        8.0,
+        17.75,
+        7
+      ],
+      "to": [
+        8.75,
+        18.0,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_514",
+      "from": [
+        8.0,
+        18.0,
+        7
+      ],
+      "to": [
+        8.5,
+        18.25,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_515",
+      "from": [
+        7.75,
+        18.25,
+        7
+      ],
+      "to": [
+        8.25,
+        18.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_516",
+      "from": [
+        7.5,
+        18.75,
+        7
+      ],
+      "to": [
+        8.0,
+        19.0,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_517",
+      "from": [
+        7.25,
+        19.0,
+        7
+      ],
+      "to": [
+        8.0,
+        19.25,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_518",
+      "from": [
+        7.5,
+        19.25,
+        7
+      ],
+      "to": [
+        7.75,
+        19.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_519",
+      "from": [
+        8.75,
+        16.0,
+        7
+      ],
+      "to": [
+        9.25,
+        16.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_520",
+      "from": [
+        8.5,
+        16.5,
+        7
+      ],
+      "to": [
+        9.25,
+        16.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_521",
+      "from": [
+        8.5,
+        16.75,
+        7
+      ],
+      "to": [
+        9.0,
+        17.25,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_522",
+      "from": [
+        8.25,
+        17.25,
+        7
+      ],
+      "to": [
+        9.0,
+        17.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_523",
+      "from": [
+        8.25,
+        17.5,
+        7
+      ],
+      "to": [
+        8.75,
+        17.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_524",
+      "from": [
+        7.0,
+        14.5,
+        7
+      ],
+      "to": [
+        7.5,
+        14.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_525",
+      "from": [
+        7.0,
+        14.75,
+        7
+      ],
+      "to": [
+        7.75,
+        15.0,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_526",
+      "from": [
+        7.25,
+        15.0,
+        7
+      ],
+      "to": [
+        8.25,
+        15.25,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_527",
+      "from": [
+        7.75,
+        15.25,
+        7
+      ],
+      "to": [
+        8.5,
+        15.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_528",
+      "from": [
+        8.0,
+        15.5,
+        7
+      ],
+      "to": [
+        9.0,
+        15.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_529",
+      "from": [
+        8.5,
+        15.75,
+        7
+      ],
+      "to": [
+        9.25,
+        16.0,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_530",
+      "from": [
+        8.75,
+        16.0,
+        7
+      ],
+      "to": [
+        9.0,
+        16.25,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_531",
+      "from": [
+        6.5,
+        6.75,
+        7
+      ],
+      "to": [
+        6.75,
+        7.0,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_532",
+      "from": [
+        6.25,
+        7.0,
+        7
+      ],
+      "to": [
+        6.75,
+        7.25,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_533",
+      "from": [
+        6.25,
+        7.25,
+        7
+      ],
+      "to": [
+        7.0,
+        7.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_534",
+      "from": [
+        6.5,
+        7.5,
+        7
+      ],
+      "to": [
+        7.0,
+        7.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_535",
+      "from": [
+        6.5,
+        7.75,
+        7
+      ],
+      "to": [
+        7.25,
+        8.0,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_536",
+      "from": [
+        6.75,
+        8.0,
+        7
+      ],
+      "to": [
+        7.25,
+        8.25,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_537",
+      "from": [
+        7.75,
+        5.5,
+        7
+      ],
+      "to": [
+        8.5,
+        5.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_538",
+      "from": [
+        7.5,
+        5.75,
+        7
+      ],
+      "to": [
+        8.25,
+        6.0,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_539",
+      "from": [
+        7.0,
+        6.0,
+        7
+      ],
+      "to": [
+        8.0,
+        6.25,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_540",
+      "from": [
+        6.75,
+        6.25,
+        7
+      ],
+      "to": [
+        7.5,
+        6.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_541",
+      "from": [
+        6.25,
+        6.5,
+        7
+      ],
+      "to": [
+        7.25,
+        6.75,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_542",
+      "from": [
+        6.5,
+        6.75,
+        7
+      ],
+      "to": [
+        6.75,
+        7.0,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_543",
+      "from": [
+        8.5,
+        3.75,
+        7
+      ],
+      "to": [
+        9.0,
+        4.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_544",
+      "from": [
+        8.25,
+        4.5,
+        7
+      ],
+      "to": [
+        8.75,
+        5.5,
+        9
+      ],
+      "mat": "water",
+      "bone": "spiral"
+    },
+    {
+      "name": "water_dark_545",
+      "from": [
+        3.25,
+        18.5,
+        7.2
+      ],
+      "to": [
+        3.75,
+        19.25,
+        8.8
+      ],
+      "mat": "water_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_546",
+      "from": [
+        3.25,
+        18.5,
+        7.02
+      ],
+      "to": [
+        3.75,
+        19.0,
+        8.98
+      ],
+      "mat": "water",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_light_547",
+      "from": [
+        3.5,
+        18.5,
+        6.89
+      ],
+      "to": [
+        3.75,
+        19.0,
+        9.11
+      ],
+      "mat": "water_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_core_548",
+      "from": [
+        3.25,
+        18.5,
+        6.9
+      ],
+      "to": [
+        3.5,
+        19.0,
+        9.1
+      ],
+      "mat": "water_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_549",
+      "from": [
+        3.38,
+        18.656,
+        6.78
+      ],
+      "to": [
+        3.63,
+        19.016,
+        9.22
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_dark_550",
+      "from": [
+        12.5,
+        22.25,
+        7.2
+      ],
+      "to": [
+        12.75,
+        22.5,
+        8.8
+      ],
+      "mat": "water_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_dark_551",
+      "from": [
+        12.5,
+        22.5,
+        7.2
+      ],
+      "to": [
+        13.0,
+        23.0,
+        8.8
+      ],
+      "mat": "water_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_552",
+      "from": [
+        12.5,
+        22.25,
+        7.02
+      ],
+      "to": [
+        12.75,
+        22.5,
+        8.98
+      ],
+      "mat": "water",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_553",
+      "from": [
+        12.5,
+        22.5,
+        7.02
+      ],
+      "to": [
+        13.0,
+        22.75,
+        8.98
+      ],
+      "mat": "water",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_554",
+      "from": [
+        12.5,
+        22.75,
+        7.02
+      ],
+      "to": [
+        12.75,
+        23.0,
+        8.98
+      ],
+      "mat": "water",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_light_555",
+      "from": [
+        12.75,
+        22.5,
+        6.89
+      ],
+      "to": [
+        13.0,
+        22.75,
+        9.11
+      ],
+      "mat": "water_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_core_556",
+      "from": [
+        12.5,
+        22.25,
+        6.9
+      ],
+      "to": [
+        12.75,
+        23.0,
+        9.1
+      ],
+      "mat": "water_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_557",
+      "from": [
+        12.58,
+        22.456,
+        6.78
+      ],
+      "to": [
+        12.83,
+        22.816,
+        9.22
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_dark_558",
+      "from": [
+        11.25,
+        15.0,
+        7.2
+      ],
+      "to": [
+        11.75,
+        15.75,
+        8.8
+      ],
+      "mat": "water_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_559",
+      "from": [
+        11.25,
+        15.25,
+        7.02
+      ],
+      "to": [
+        11.75,
+        15.75,
+        8.98
+      ],
+      "mat": "water",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_light_560",
+      "from": [
+        11.5,
+        15.25,
+        6.89
+      ],
+      "to": [
+        11.75,
+        15.75,
+        9.11
+      ],
+      "mat": "water_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_core_561",
+      "from": [
+        11.25,
+        15.25,
+        6.9
+      ],
+      "to": [
+        11.5,
+        15.75,
+        9.1
+      ],
+      "mat": "water_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_562",
+      "from": [
+        11.38,
+        15.256,
+        6.78
+      ],
+      "to": [
+        11.63,
+        15.616,
+        9.22
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_dark_563",
+      "from": [
+        4.75,
+        5.75,
+        7.2
+      ],
+      "to": [
+        5.25,
+        6.25,
+        8.8
+      ],
+      "mat": "water_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_564",
+      "from": [
+        4.75,
+        5.75,
+        7.02
+      ],
+      "to": [
+        5.25,
+        6.25,
+        8.98
+      ],
+      "mat": "water",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_light_565",
+      "from": [
+        5.0,
+        5.75,
+        6.89
+      ],
+      "to": [
+        5.25,
+        6.25,
+        9.11
+      ],
+      "mat": "water_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "water_core_566",
+      "from": [
+        4.75,
+        5.75,
+        6.9
+      ],
+      "to": [
+        5.0,
+        6.25,
+        9.1
+      ],
+      "mat": "water_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_567",
+      "from": [
+        4.88,
+        5.856,
+        6.78
+      ],
+      "to": [
+        5.13,
+        6.216,
+        9.22
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    }
+  ]
+}

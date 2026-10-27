@@ -1,7 +1,6 @@
 import com.example.advancemagic.AdvanceMagicPlugin;
 import com.example.advancemagic.spell.Spell;
 import com.example.voidscape.VoidscapePlugin;
-import com.example.voidscape.crop.CropType;
 import com.example.voidscape.dungeon.GuardianAppearance;
 import com.example.voidscape.item.RelicService.Relic;
 import com.example.voidscape.world.DungeonLayout;
@@ -33,18 +32,10 @@ public final class BedrockItemChecks extends JavaPlugin {
                 var unsafeType=Class.forName("sun.misc.Unsafe");
                 var field=unsafeType.getDeclaredField("theUnsafe");field.setAccessible(true);
                 context=(GeyserSession)unsafeType.getMethod("allocateInstance",Class.class).invoke(field.get(null),GeyserSession.class);
-                verify(garden.relics().createVoidElixir(1),"voidscape:void_elixir");
-                // Existing elixirs are migrated to the same direct model, preserving count.
-                var legacy=garden.relics().createVoidElixir(4);
-                var meta=legacy.getItemMeta();meta.setItemModel(null);legacy.setItemMeta(meta);
-                if(!garden.relics().migrate(legacy)||legacy.getAmount()!=4)throw new AssertionError("Legacy elixir migration");
-                verify(legacy,"voidscape:void_elixir");
+                for(var quality:com.example.advancemagic.mana.ManaPotionService.Quality.values())verify(magic.manaPotions().create(quality),"advance_magic:mana_potion_"+quality.name().toLowerCase(Locale.ROOT));
+                RetiredRelicChecks.run(garden);
+                RecipeMenuChecks.files(garden);
                 for(var relic:Relic.values())verify(garden.relics().create(relic,1),"voidscape:"+relic.id());
-                for(var crop:CropType.values()){
-                    verify(garden.crops().factory().createSeed(crop,1),"voidscape:seed_"+crop.id);
-                    verify(garden.crops().factory().createFood(crop,1),"voidscape:crop_"+crop.id);
-                    for(int stage=0;stage<3;stage++)verify(garden.crops().factory().createPlantDisplay(crop,stage),"voidscape:crop_"+crop.id+"_stage_"+stage);
-                }
                 for(var kind:DungeonLayout.Kind.values())for(boolean boss:new boolean[]{false,true}){
                     var item=GuardianAppearance.mask(kind,boss);
                     verify(item,item.getItemMeta().getCustomModelDataComponent().getStrings().getFirst());
@@ -68,14 +59,20 @@ public final class BedrockItemChecks extends JavaPlugin {
                 for(String phase:List.of("summon","idle","flight","dismiss"))
                     verify((ItemStack)makeImage.invoke(magic.flyingStaff(),phase,0),"advance_magic:flying_staff_"+phase);
                 verify(new ItemStack(Material.HONEY_BOTTLE),null);
-                for(String name:List.of("mask","mask_light","left","left_light","right","right_light","heart","shard","wing_left","wing_left_light","wing_right","wing_right_light","mantle","mantle_light")){
+                for(String name:List.of("mask","mask_light","left","left_light","right","right_light","heart","shard","wing_left","wing_left_light","wing_right","wing_right_light","mantle","mantle_light","seraph_idle","seraph_cast")){
                     ItemStack item=new ItemStack(Material.IRON_HELMET);var judgeMeta=item.getItemMeta();
                     judgeMeta.setItemModel(new NamespacedKey("voidscape","judge_"+name));item.setItemMeta(judgeMeta);
                     verify(item,"voidscape:judge_"+name);
                 }
                 // These displays are constructed inline by their services, with a
+                for(String boss:List.of("seraphon","arkhaia"))for(String pose:List.of("idle","cast")){
+                    ItemStack item=new ItemStack(Material.IRON_HELMET);var meta=item.getItemMeta();
+                    String id="voidscape:boss_"+boss+"_"+pose;meta.setItemModel(NamespacedKey.fromString(id));item.setItemMeta(meta);
+                    verify(item,id);
+                }
+                // These displays are constructed inline by their services, with a
                 // vanilla carrier plus a custom_model_data string and no item_model.
-                for(String id:List.of("azure_portal","restoration_altar_whale","restoration_altar_garden","restoration_altar_observatory")){
+                for(String id:List.of("restoration_altar_whale","restoration_altar_garden","restoration_altar_observatory")){
                     var item=new ItemStack(Material.IRON_HELMET);var displayMeta=item.getItemMeta();
                     var data=displayMeta.getCustomModelDataComponent();data.setStrings(List.of("voidscape:"+id));
                     displayMeta.setCustomModelDataComponent(data);item.setItemMeta(displayMeta);
@@ -89,6 +86,7 @@ public final class BedrockItemChecks extends JavaPlugin {
                 }
                 expectedIds.removeAll(seen);
                 if(!expectedIds.isEmpty())throw new AssertionError("Missing coverage: "+expectedIds);
+                PortalTravelChecks.run(garden);
                 MythicSpellChecks.run(this,magic,garden);
                 JudgeBedrockChecks.run(this);
                 Files.writeString(Path.of("bedrock-items-result.txt"),"PASS "+checks+" translations / "+seen.size()+" custom identifiers / "+Registries.ITEMS.get().size()+" Bedrock protocol tables; vanilla honey bottle unchanged");

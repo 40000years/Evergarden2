@@ -1,0 +1,5375 @@
+{
+  "id": "mistcaller",
+  "cubes": [
+    {
+      "name": "silver_000",
+      "from": [
+        7.75,
+        0.25,
+        7.51
+      ],
+      "to": [
+        8.25,
+        0.75,
+        8.49
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_001",
+      "from": [
+        7.5,
+        0.75,
+        7.51
+      ],
+      "to": [
+        7.75,
+        1.25,
+        8.49
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_002",
+      "from": [
+        8.25,
+        0.75,
+        7.51
+      ],
+      "to": [
+        8.5,
+        1.25,
+        8.49
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_003",
+      "from": [
+        7.75,
+        1.25,
+        7.51
+      ],
+      "to": [
+        8.25,
+        1.5,
+        8.49
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_004",
+      "from": [
+        7.75,
+        0.75,
+        7.2748
+      ],
+      "to": [
+        8.25,
+        1.25,
+        8.7252
+      ],
+      "mat": "frost",
+      "bone": "weapon"
+    },
+    {
+      "name": "white_005",
+      "from": [
+        7.6808,
+        1.0868,
+        7.0984
+      ],
+      "to": [
+        7.9308,
+        1.3368,
+        8.9016
+      ],
+      "mat": "white",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_006",
+      "from": [
+        7.4,
+        1.6,
+        7.64
+      ],
+      "to": [
+        8.6,
+        2.1,
+        8.36
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_007",
+      "from": [
+        7.64,
+        1.6,
+        8.36
+      ],
+      "to": [
+        8.36,
+        2.1,
+        8.6
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_008",
+      "from": [
+        7.64,
+        1.6,
+        7.4
+      ],
+      "to": [
+        8.36,
+        2.1,
+        7.64
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_009",
+      "from": [
+        7.59,
+        2.1,
+        7.754
+      ],
+      "to": [
+        8.41,
+        22.2,
+        8.246
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_010",
+      "from": [
+        7.754,
+        2.1,
+        8.246
+      ],
+      "to": [
+        8.246,
+        22.2,
+        8.41
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_011",
+      "from": [
+        7.754,
+        2.1,
+        7.59
+      ],
+      "to": [
+        8.246,
+        22.2,
+        7.754
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_012",
+      "from": [
+        7.57,
+        7.0,
+        7.742
+      ],
+      "to": [
+        8.43,
+        11.2,
+        8.258
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_013",
+      "from": [
+        7.742,
+        7.0,
+        8.258
+      ],
+      "to": [
+        8.258,
+        11.2,
+        8.43
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_014",
+      "from": [
+        7.742,
+        7.0,
+        7.57
+      ],
+      "to": [
+        8.258,
+        11.2,
+        7.742
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_015",
+      "from": [
+        7.47,
+        7.2,
+        7.682
+      ],
+      "to": [
+        8.53,
+        7.5,
+        8.318
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_016",
+      "from": [
+        7.682,
+        7.2,
+        8.318
+      ],
+      "to": [
+        8.318,
+        7.5,
+        8.53
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_017",
+      "from": [
+        7.682,
+        7.2,
+        7.47
+      ],
+      "to": [
+        8.318,
+        7.5,
+        7.682
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_dark_018",
+      "from": [
+        7.47,
+        7.8,
+        7.682
+      ],
+      "to": [
+        8.53,
+        8.1,
+        8.318
+      ],
+      "mat": "frost_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_dark_019",
+      "from": [
+        7.682,
+        7.8,
+        8.318
+      ],
+      "to": [
+        8.318,
+        8.1,
+        8.53
+      ],
+      "mat": "frost_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_dark_020",
+      "from": [
+        7.682,
+        7.8,
+        7.47
+      ],
+      "to": [
+        8.318,
+        8.1,
+        7.682
+      ],
+      "mat": "frost_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_021",
+      "from": [
+        7.47,
+        8.4,
+        7.682
+      ],
+      "to": [
+        8.53,
+        8.7,
+        8.318
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_022",
+      "from": [
+        7.682,
+        8.4,
+        8.318
+      ],
+      "to": [
+        8.318,
+        8.7,
+        8.53
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_023",
+      "from": [
+        7.682,
+        8.4,
+        7.47
+      ],
+      "to": [
+        8.318,
+        8.7,
+        7.682
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_dark_024",
+      "from": [
+        7.47,
+        9.0,
+        7.682
+      ],
+      "to": [
+        8.53,
+        9.3,
+        8.318
+      ],
+      "mat": "frost_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_dark_025",
+      "from": [
+        7.682,
+        9.0,
+        8.318
+      ],
+      "to": [
+        8.318,
+        9.3,
+        8.53
+      ],
+      "mat": "frost_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_dark_026",
+      "from": [
+        7.682,
+        9.0,
+        7.47
+      ],
+      "to": [
+        8.318,
+        9.3,
+        7.682
+      ],
+      "mat": "frost_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_027",
+      "from": [
+        7.47,
+        9.6,
+        7.682
+      ],
+      "to": [
+        8.53,
+        9.9,
+        8.318
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_028",
+      "from": [
+        7.682,
+        9.6,
+        8.318
+      ],
+      "to": [
+        8.318,
+        9.9,
+        8.53
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_029",
+      "from": [
+        7.682,
+        9.6,
+        7.47
+      ],
+      "to": [
+        8.318,
+        9.9,
+        7.682
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_dark_030",
+      "from": [
+        7.47,
+        10.2,
+        7.682
+      ],
+      "to": [
+        8.53,
+        10.5,
+        8.318
+      ],
+      "mat": "frost_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_dark_031",
+      "from": [
+        7.682,
+        10.2,
+        8.318
+      ],
+      "to": [
+        8.318,
+        10.5,
+        8.53
+      ],
+      "mat": "frost_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_dark_032",
+      "from": [
+        7.682,
+        10.2,
+        7.47
+      ],
+      "to": [
+        8.318,
+        10.5,
+        7.682
+      ],
+      "mat": "frost_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_033",
+      "from": [
+        7.42,
+        2.1,
+        7.652
+      ],
+      "to": [
+        8.58,
+        2.55,
+        8.348
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_034",
+      "from": [
+        7.652,
+        2.1,
+        8.348
+      ],
+      "to": [
+        8.348,
+        2.55,
+        8.58
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_035",
+      "from": [
+        7.652,
+        2.1,
+        7.42
+      ],
+      "to": [
+        8.348,
+        2.55,
+        7.652
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_036",
+      "from": [
+        7.42,
+        6.55,
+        7.652
+      ],
+      "to": [
+        8.58,
+        7.0,
+        8.348
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_037",
+      "from": [
+        7.652,
+        6.55,
+        8.348
+      ],
+      "to": [
+        8.348,
+        7.0,
+        8.58
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_038",
+      "from": [
+        7.652,
+        6.55,
+        7.42
+      ],
+      "to": [
+        8.348,
+        7.0,
+        7.652
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_039",
+      "from": [
+        7.42,
+        11.25,
+        7.652
+      ],
+      "to": [
+        8.58,
+        11.7,
+        8.348
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_040",
+      "from": [
+        7.652,
+        11.25,
+        8.348
+      ],
+      "to": [
+        8.348,
+        11.7,
+        8.58
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_041",
+      "from": [
+        7.652,
+        11.25,
+        7.42
+      ],
+      "to": [
+        8.348,
+        11.7,
+        7.652
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_042",
+      "from": [
+        7.42,
+        15.0,
+        7.652
+      ],
+      "to": [
+        8.58,
+        15.45,
+        8.348
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_043",
+      "from": [
+        7.652,
+        15.0,
+        8.348
+      ],
+      "to": [
+        8.348,
+        15.45,
+        8.58
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_044",
+      "from": [
+        7.652,
+        15.0,
+        7.42
+      ],
+      "to": [
+        8.348,
+        15.45,
+        7.652
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_045",
+      "from": [
+        7.42,
+        18.4,
+        7.652
+      ],
+      "to": [
+        8.58,
+        18.85,
+        8.348
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_046",
+      "from": [
+        7.652,
+        18.4,
+        8.348
+      ],
+      "to": [
+        8.348,
+        18.85,
+        8.58
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_047",
+      "from": [
+        7.652,
+        18.4,
+        7.42
+      ],
+      "to": [
+        8.348,
+        18.85,
+        7.652
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_048",
+      "from": [
+        7.44,
+        20.9,
+        7.664
+      ],
+      "to": [
+        8.56,
+        22.4,
+        8.336
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_049",
+      "from": [
+        7.664,
+        20.9,
+        8.336
+      ],
+      "to": [
+        8.336,
+        22.4,
+        8.56
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_050",
+      "from": [
+        7.664,
+        20.9,
+        7.44
+      ],
+      "to": [
+        8.336,
+        22.4,
+        7.664
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_051",
+      "from": [
+        6.25,
+        23.0,
+        7.5
+      ],
+      "to": [
+        9.75,
+        23.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_052",
+      "from": [
+        5.5,
+        23.25,
+        7.5
+      ],
+      "to": [
+        6.5,
+        23.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_053",
+      "from": [
+        9.5,
+        23.25,
+        7.5
+      ],
+      "to": [
+        10.5,
+        23.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_054",
+      "from": [
+        5.0,
+        23.5,
+        7.5
+      ],
+      "to": [
+        5.75,
+        23.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_055",
+      "from": [
+        10.25,
+        23.5,
+        7.5
+      ],
+      "to": [
+        11.0,
+        23.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_056",
+      "from": [
+        5.0,
+        23.75,
+        7.5
+      ],
+      "to": [
+        5.25,
+        24.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_057",
+      "from": [
+        10.75,
+        23.75,
+        7.5
+      ],
+      "to": [
+        11.0,
+        24.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_058",
+      "from": [
+        4.75,
+        24.0,
+        7.5
+      ],
+      "to": [
+        5.25,
+        24.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_059",
+      "from": [
+        6.25,
+        24.0,
+        7.5
+      ],
+      "to": [
+        9.75,
+        24.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_060",
+      "from": [
+        10.75,
+        24.0,
+        7.5
+      ],
+      "to": [
+        11.25,
+        24.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_061",
+      "from": [
+        4.75,
+        24.25,
+        7.5
+      ],
+      "to": [
+        5.0,
+        24.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_062",
+      "from": [
+        6.0,
+        24.25,
+        7.5
+      ],
+      "to": [
+        6.5,
+        24.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_063",
+      "from": [
+        7.75,
+        24.25,
+        7.5
+      ],
+      "to": [
+        8.25,
+        24.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_064",
+      "from": [
+        9.5,
+        24.25,
+        7.5
+      ],
+      "to": [
+        10.0,
+        24.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_065",
+      "from": [
+        11.0,
+        24.25,
+        7.5
+      ],
+      "to": [
+        11.25,
+        24.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_066",
+      "from": [
+        4.5,
+        24.5,
+        7.5
+      ],
+      "to": [
+        5.0,
+        24.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_067",
+      "from": [
+        5.75,
+        24.5,
+        7.5
+      ],
+      "to": [
+        6.25,
+        24.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_068",
+      "from": [
+        9.75,
+        24.5,
+        7.5
+      ],
+      "to": [
+        10.25,
+        24.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_069",
+      "from": [
+        11.0,
+        24.5,
+        7.5
+      ],
+      "to": [
+        11.5,
+        24.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_070",
+      "from": [
+        4.25,
+        24.75,
+        7.5
+      ],
+      "to": [
+        4.75,
+        25.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_071",
+      "from": [
+        5.5,
+        24.75,
+        7.5
+      ],
+      "to": [
+        6.0,
+        25.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_072",
+      "from": [
+        10.0,
+        24.75,
+        7.5
+      ],
+      "to": [
+        10.5,
+        25.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_073",
+      "from": [
+        11.25,
+        24.75,
+        7.5
+      ],
+      "to": [
+        11.75,
+        25.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_074",
+      "from": [
+        5.25,
+        25.0,
+        7.5
+      ],
+      "to": [
+        5.75,
+        25.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_075",
+      "from": [
+        10.25,
+        25.0,
+        7.5
+      ],
+      "to": [
+        10.75,
+        25.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_076",
+      "from": [
+        5.25,
+        25.25,
+        7.5
+      ],
+      "to": [
+        5.5,
+        26.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_077",
+      "from": [
+        10.5,
+        25.25,
+        7.5
+      ],
+      "to": [
+        10.75,
+        26.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_078",
+      "from": [
+        5.0,
+        26.0,
+        7.5
+      ],
+      "to": [
+        5.5,
+        26.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_079",
+      "from": [
+        10.5,
+        26.0,
+        7.5
+      ],
+      "to": [
+        11.0,
+        26.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_080",
+      "from": [
+        4.25,
+        25.0,
+        7.5
+      ],
+      "to": [
+        4.5,
+        27.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_081",
+      "from": [
+        5.0,
+        26.25,
+        7.5
+      ],
+      "to": [
+        5.25,
+        27.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_082",
+      "from": [
+        10.75,
+        26.25,
+        7.5
+      ],
+      "to": [
+        11.0,
+        27.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_083",
+      "from": [
+        11.5,
+        25.0,
+        7.5
+      ],
+      "to": [
+        11.75,
+        27.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_084",
+      "from": [
+        4.25,
+        27.25,
+        7.5
+      ],
+      "to": [
+        4.75,
+        27.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_085",
+      "from": [
+        5.0,
+        27.25,
+        7.5
+      ],
+      "to": [
+        5.5,
+        27.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_086",
+      "from": [
+        10.5,
+        27.25,
+        7.5
+      ],
+      "to": [
+        11.0,
+        27.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_087",
+      "from": [
+        11.25,
+        27.25,
+        7.5
+      ],
+      "to": [
+        11.75,
+        27.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_088",
+      "from": [
+        4.5,
+        27.5,
+        7.5
+      ],
+      "to": [
+        4.75,
+        27.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_089",
+      "from": [
+        11.25,
+        27.5,
+        7.5
+      ],
+      "to": [
+        11.5,
+        27.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_090",
+      "from": [
+        4.5,
+        27.75,
+        7.5
+      ],
+      "to": [
+        5.0,
+        28.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_091",
+      "from": [
+        5.25,
+        27.5,
+        7.5
+      ],
+      "to": [
+        5.5,
+        28.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_092",
+      "from": [
+        10.5,
+        27.5,
+        7.5
+      ],
+      "to": [
+        10.75,
+        28.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_093",
+      "from": [
+        11.0,
+        27.75,
+        7.5
+      ],
+      "to": [
+        11.5,
+        28.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_094",
+      "from": [
+        4.75,
+        28.0,
+        7.5
+      ],
+      "to": [
+        5.5,
+        28.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_095",
+      "from": [
+        10.5,
+        28.0,
+        7.5
+      ],
+      "to": [
+        11.25,
+        28.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_096",
+      "from": [
+        5.0,
+        28.25,
+        7.5
+      ],
+      "to": [
+        5.75,
+        28.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_097",
+      "from": [
+        10.25,
+        28.25,
+        7.5
+      ],
+      "to": [
+        11.0,
+        28.75,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_098",
+      "from": [
+        5.25,
+        28.75,
+        7.5
+      ],
+      "to": [
+        6.0,
+        29.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_099",
+      "from": [
+        10.0,
+        28.75,
+        7.5
+      ],
+      "to": [
+        10.75,
+        29.0,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_100",
+      "from": [
+        5.5,
+        29.0,
+        7.5
+      ],
+      "to": [
+        6.25,
+        29.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_101",
+      "from": [
+        9.75,
+        29.0,
+        7.5
+      ],
+      "to": [
+        10.5,
+        29.25,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_102",
+      "from": [
+        6.0,
+        29.25,
+        7.5
+      ],
+      "to": [
+        6.25,
+        29.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_103",
+      "from": [
+        9.75,
+        29.25,
+        7.5
+      ],
+      "to": [
+        10.0,
+        29.5,
+        8.5
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_104",
+      "from": [
+        6.5,
+        23.25,
+        7.38
+      ],
+      "to": [
+        9.5,
+        23.5,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_105",
+      "from": [
+        5.75,
+        23.5,
+        7.38
+      ],
+      "to": [
+        6.5,
+        23.75,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_106",
+      "from": [
+        9.5,
+        23.5,
+        7.38
+      ],
+      "to": [
+        10.25,
+        23.75,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_107",
+      "from": [
+        5.25,
+        23.75,
+        7.38
+      ],
+      "to": [
+        5.75,
+        24.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_108",
+      "from": [
+        6.25,
+        23.75,
+        7.38
+      ],
+      "to": [
+        9.75,
+        24.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_109",
+      "from": [
+        10.25,
+        23.75,
+        7.38
+      ],
+      "to": [
+        10.75,
+        24.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_110",
+      "from": [
+        5.25,
+        24.0,
+        7.38
+      ],
+      "to": [
+        5.5,
+        24.25,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_111",
+      "from": [
+        6.0,
+        24.0,
+        7.38
+      ],
+      "to": [
+        6.25,
+        24.25,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_112",
+      "from": [
+        9.75,
+        24.0,
+        7.38
+      ],
+      "to": [
+        10.0,
+        24.25,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_113",
+      "from": [
+        10.5,
+        24.0,
+        7.38
+      ],
+      "to": [
+        10.75,
+        24.25,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_114",
+      "from": [
+        5.75,
+        24.25,
+        7.38
+      ],
+      "to": [
+        6.0,
+        24.5,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_115",
+      "from": [
+        10.0,
+        24.25,
+        7.38
+      ],
+      "to": [
+        10.25,
+        24.5,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_116",
+      "from": [
+        5.0,
+        24.25,
+        7.38
+      ],
+      "to": [
+        5.25,
+        24.75,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_117",
+      "from": [
+        5.5,
+        24.5,
+        7.38
+      ],
+      "to": [
+        5.75,
+        24.75,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_118",
+      "from": [
+        10.25,
+        24.5,
+        7.38
+      ],
+      "to": [
+        10.5,
+        24.75,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_119",
+      "from": [
+        10.75,
+        24.25,
+        7.38
+      ],
+      "to": [
+        11.0,
+        24.75,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_120",
+      "from": [
+        4.75,
+        24.75,
+        7.38
+      ],
+      "to": [
+        5.0,
+        25.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_121",
+      "from": [
+        5.25,
+        24.75,
+        7.38
+      ],
+      "to": [
+        5.5,
+        25.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_122",
+      "from": [
+        10.5,
+        24.75,
+        7.38
+      ],
+      "to": [
+        10.75,
+        25.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_123",
+      "from": [
+        11.0,
+        24.75,
+        7.38
+      ],
+      "to": [
+        11.25,
+        25.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_124",
+      "from": [
+        4.5,
+        25.0,
+        7.38
+      ],
+      "to": [
+        4.75,
+        26.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_125",
+      "from": [
+        5.0,
+        25.0,
+        7.38
+      ],
+      "to": [
+        5.25,
+        26.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_126",
+      "from": [
+        10.75,
+        25.0,
+        7.38
+      ],
+      "to": [
+        11.0,
+        26.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_127",
+      "from": [
+        11.25,
+        25.0,
+        7.38
+      ],
+      "to": [
+        11.5,
+        26.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_128",
+      "from": [
+        4.5,
+        26.0,
+        7.38
+      ],
+      "to": [
+        5.0,
+        27.25,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_129",
+      "from": [
+        11.0,
+        26.0,
+        7.38
+      ],
+      "to": [
+        11.5,
+        27.25,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_130",
+      "from": [
+        4.75,
+        27.25,
+        7.38
+      ],
+      "to": [
+        5.0,
+        27.5,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_131",
+      "from": [
+        11.0,
+        27.25,
+        7.38
+      ],
+      "to": [
+        11.25,
+        27.5,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_132",
+      "from": [
+        4.75,
+        27.5,
+        7.38
+      ],
+      "to": [
+        5.25,
+        27.75,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_133",
+      "from": [
+        10.75,
+        27.5,
+        7.38
+      ],
+      "to": [
+        11.25,
+        27.75,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_134",
+      "from": [
+        5.0,
+        27.75,
+        7.38
+      ],
+      "to": [
+        5.25,
+        28.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_135",
+      "from": [
+        10.75,
+        27.75,
+        7.38
+      ],
+      "to": [
+        11.0,
+        28.0,
+        8.62
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_136",
+      "from": [
+        6.5,
+        23.5,
+        7.3
+      ],
+      "to": [
+        9.5,
+        23.75,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_137",
+      "from": [
+        5.75,
+        23.75,
+        7.3
+      ],
+      "to": [
+        6.25,
+        24.0,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_138",
+      "from": [
+        9.75,
+        23.75,
+        7.3
+      ],
+      "to": [
+        10.25,
+        24.0,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_139",
+      "from": [
+        5.5,
+        24.0,
+        7.3
+      ],
+      "to": [
+        6.0,
+        24.25,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_140",
+      "from": [
+        10.0,
+        24.0,
+        7.3
+      ],
+      "to": [
+        10.5,
+        24.25,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_141",
+      "from": [
+        5.25,
+        24.25,
+        7.3
+      ],
+      "to": [
+        5.75,
+        24.5,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_142",
+      "from": [
+        10.25,
+        24.25,
+        7.3
+      ],
+      "to": [
+        10.75,
+        24.5,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_143",
+      "from": [
+        5.25,
+        24.5,
+        7.3
+      ],
+      "to": [
+        5.5,
+        24.75,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_144",
+      "from": [
+        10.5,
+        24.5,
+        7.3
+      ],
+      "to": [
+        10.75,
+        24.75,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_145",
+      "from": [
+        5.0,
+        24.75,
+        7.3
+      ],
+      "to": [
+        5.25,
+        25.0,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_146",
+      "from": [
+        10.75,
+        24.75,
+        7.3
+      ],
+      "to": [
+        11.0,
+        25.0,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_147",
+      "from": [
+        4.75,
+        25.0,
+        7.3
+      ],
+      "to": [
+        5.0,
+        26.0,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_148",
+      "from": [
+        11.0,
+        25.0,
+        7.3
+      ],
+      "to": [
+        11.25,
+        26.0,
+        8.7
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_149",
+      "from": [
+        6.75,
+        21.75,
+        7.18
+      ],
+      "to": [
+        9.25,
+        22.0,
+        8.82
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_150",
+      "from": [
+        6.25,
+        22.0,
+        7.18
+      ],
+      "to": [
+        7.0,
+        22.25,
+        8.82
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_151",
+      "from": [
+        9.0,
+        22.0,
+        7.18
+      ],
+      "to": [
+        9.75,
+        22.25,
+        8.82
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_152",
+      "from": [
+        6.25,
+        22.25,
+        7.18
+      ],
+      "to": [
+        6.75,
+        22.5,
+        8.82
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_153",
+      "from": [
+        9.25,
+        22.25,
+        7.18
+      ],
+      "to": [
+        9.75,
+        22.5,
+        8.82
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_154",
+      "from": [
+        6.5,
+        22.5,
+        7.18
+      ],
+      "to": [
+        9.5,
+        22.75,
+        8.82
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_155",
+      "from": [
+        7.75,
+        22.75,
+        7.18
+      ],
+      "to": [
+        8.25,
+        23.0,
+        8.82
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_156",
+      "from": [
+        7.0,
+        22.0,
+        7.05
+      ],
+      "to": [
+        9.0,
+        22.25,
+        8.95
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_157",
+      "from": [
+        6.75,
+        22.25,
+        7.05
+      ],
+      "to": [
+        9.25,
+        22.5,
+        8.95
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "frost_light_158",
+      "from": [
+        6.25,
+        25.5,
+        7.5
+      ],
+      "to": [
+        7.0,
+        25.75,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_159",
+      "from": [
+        6.25,
+        25.75,
+        7.25
+      ],
+      "to": [
+        7.0,
+        26.0,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_160",
+      "from": [
+        6.25,
+        25.75,
+        7.5
+      ],
+      "to": [
+        6.75,
+        27.25,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_161",
+      "from": [
+        6.25,
+        25.75,
+        8.5
+      ],
+      "to": [
+        7.0,
+        26.0,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_162",
+      "from": [
+        6.25,
+        26.0,
+        7.25
+      ],
+      "to": [
+        6.75,
+        27.0,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_163",
+      "from": [
+        6.25,
+        26.0,
+        8.5
+      ],
+      "to": [
+        6.75,
+        27.0,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_164",
+      "from": [
+        6.25,
+        26.25,
+        7.0
+      ],
+      "to": [
+        7.0,
+        26.5,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_165",
+      "from": [
+        6.25,
+        26.25,
+        8.75
+      ],
+      "to": [
+        7.0,
+        26.5,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_166",
+      "from": [
+        6.5,
+        25.25,
+        7.25
+      ],
+      "to": [
+        7.5,
+        25.5,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_167",
+      "from": [
+        6.5,
+        25.25,
+        7.5
+      ],
+      "to": [
+        7.25,
+        25.5,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_168",
+      "from": [
+        6.5,
+        25.5,
+        7.0
+      ],
+      "to": [
+        7.25,
+        25.75,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_169",
+      "from": [
+        6.5,
+        25.5,
+        7.25
+      ],
+      "to": [
+        7.0,
+        25.75,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_170",
+      "from": [
+        6.5,
+        25.5,
+        8.5
+      ],
+      "to": [
+        7.0,
+        25.75,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_171",
+      "from": [
+        6.5,
+        25.75,
+        7.0
+      ],
+      "to": [
+        7.0,
+        26.25,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_172",
+      "from": [
+        6.5,
+        25.75,
+        8.75
+      ],
+      "to": [
+        7.0,
+        26.25,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_173",
+      "from": [
+        6.5,
+        26.0,
+        6.75
+      ],
+      "to": [
+        7.25,
+        27.0,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_174",
+      "from": [
+        6.5,
+        26.0,
+        9.0
+      ],
+      "to": [
+        7.25,
+        27.0,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_175",
+      "from": [
+        6.5,
+        26.5,
+        7.0
+      ],
+      "to": [
+        7.0,
+        27.25,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_176",
+      "from": [
+        6.5,
+        26.5,
+        8.75
+      ],
+      "to": [
+        7.0,
+        27.25,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_177",
+      "from": [
+        6.5,
+        27.0,
+        7.25
+      ],
+      "to": [
+        7.0,
+        27.25,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_178",
+      "from": [
+        6.5,
+        27.0,
+        8.5
+      ],
+      "to": [
+        7.0,
+        27.25,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_179",
+      "from": [
+        6.5,
+        27.25,
+        7.25
+      ],
+      "to": [
+        8.5,
+        27.5,
+        8.75
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_180",
+      "from": [
+        6.5,
+        27.5,
+        7.75
+      ],
+      "to": [
+        8.5,
+        27.75,
+        8.25
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_181",
+      "from": [
+        6.75,
+        25.0,
+        7.25
+      ],
+      "to": [
+        9.25,
+        25.25,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_182",
+      "from": [
+        6.75,
+        25.0,
+        7.5
+      ],
+      "to": [
+        7.75,
+        25.25,
+        7.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_183",
+      "from": [
+        6.75,
+        25.0,
+        7.75
+      ],
+      "to": [
+        7.5,
+        25.25,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_184",
+      "from": [
+        6.75,
+        25.25,
+        7.0
+      ],
+      "to": [
+        9.25,
+        25.5,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_185",
+      "from": [
+        6.75,
+        25.25,
+        8.75
+      ],
+      "to": [
+        9.25,
+        25.5,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_186",
+      "from": [
+        6.75,
+        25.5,
+        6.75
+      ],
+      "to": [
+        9.25,
+        25.75,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_187",
+      "from": [
+        6.75,
+        25.5,
+        9.0
+      ],
+      "to": [
+        9.25,
+        25.75,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_188",
+      "from": [
+        6.75,
+        25.75,
+        6.75
+      ],
+      "to": [
+        7.5,
+        26.0,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_189",
+      "from": [
+        6.75,
+        25.75,
+        7.5
+      ],
+      "to": [
+        9.25,
+        27.0,
+        8.5
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_190",
+      "from": [
+        6.75,
+        25.75,
+        9.0
+      ],
+      "to": [
+        7.5,
+        26.0,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_191",
+      "from": [
+        6.75,
+        26.0,
+        6.5
+      ],
+      "to": [
+        9.25,
+        27.0,
+        6.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_192",
+      "from": [
+        6.75,
+        26.0,
+        7.25
+      ],
+      "to": [
+        9.25,
+        26.75,
+        7.5
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_193",
+      "from": [
+        6.75,
+        26.0,
+        8.5
+      ],
+      "to": [
+        9.25,
+        26.75,
+        8.75
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_194",
+      "from": [
+        6.75,
+        26.0,
+        9.25
+      ],
+      "to": [
+        9.25,
+        27.0,
+        9.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_195",
+      "from": [
+        6.75,
+        26.75,
+        7.25
+      ],
+      "to": [
+        7.0,
+        27.0,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_196",
+      "from": [
+        6.75,
+        26.75,
+        8.5
+      ],
+      "to": [
+        7.0,
+        27.0,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_197",
+      "from": [
+        6.75,
+        27.0,
+        6.75
+      ],
+      "to": [
+        7.75,
+        27.25,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_198",
+      "from": [
+        6.75,
+        27.0,
+        7.5
+      ],
+      "to": [
+        7.0,
+        27.25,
+        7.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_199",
+      "from": [
+        6.75,
+        27.0,
+        7.75
+      ],
+      "to": [
+        9.25,
+        27.25,
+        8.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_200",
+      "from": [
+        6.75,
+        27.0,
+        8.25
+      ],
+      "to": [
+        7.0,
+        27.25,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_201",
+      "from": [
+        6.75,
+        27.0,
+        9.0
+      ],
+      "to": [
+        7.75,
+        27.25,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_202",
+      "from": [
+        6.75,
+        27.25,
+        7.0
+      ],
+      "to": [
+        8.5,
+        27.5,
+        7.25
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_203",
+      "from": [
+        6.75,
+        27.25,
+        8.75
+      ],
+      "to": [
+        8.5,
+        27.5,
+        9.0
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_204",
+      "from": [
+        6.75,
+        27.5,
+        7.25
+      ],
+      "to": [
+        8.5,
+        27.75,
+        7.75
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_205",
+      "from": [
+        6.75,
+        27.5,
+        8.25
+      ],
+      "to": [
+        8.5,
+        27.75,
+        8.75
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_206",
+      "from": [
+        7.0,
+        24.75,
+        7.5
+      ],
+      "to": [
+        9.0,
+        25.0,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_207",
+      "from": [
+        7.0,
+        25.0,
+        7.0
+      ],
+      "to": [
+        9.0,
+        25.25,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_208",
+      "from": [
+        7.0,
+        25.0,
+        8.75
+      ],
+      "to": [
+        9.0,
+        25.25,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_209",
+      "from": [
+        7.0,
+        25.25,
+        6.75
+      ],
+      "to": [
+        9.0,
+        25.5,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_210",
+      "from": [
+        7.0,
+        25.25,
+        9.0
+      ],
+      "to": [
+        9.0,
+        25.5,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_211",
+      "from": [
+        7.0,
+        25.5,
+        6.5
+      ],
+      "to": [
+        9.0,
+        26.0,
+        6.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_212",
+      "from": [
+        7.0,
+        25.5,
+        7.25
+      ],
+      "to": [
+        9.0,
+        26.0,
+        7.5
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_213",
+      "from": [
+        7.0,
+        25.5,
+        7.5
+      ],
+      "to": [
+        9.0,
+        25.75,
+        8.75
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_214",
+      "from": [
+        7.0,
+        25.5,
+        8.75
+      ],
+      "to": [
+        7.25,
+        25.75,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_215",
+      "from": [
+        7.0,
+        25.5,
+        9.25
+      ],
+      "to": [
+        9.0,
+        26.0,
+        9.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_216",
+      "from": [
+        7.0,
+        25.75,
+        7.0
+      ],
+      "to": [
+        9.0,
+        27.0,
+        7.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_217",
+      "from": [
+        7.0,
+        25.75,
+        8.5
+      ],
+      "to": [
+        9.0,
+        26.0,
+        9.0
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_218",
+      "from": [
+        7.0,
+        26.0,
+        8.75
+      ],
+      "to": [
+        9.0,
+        27.0,
+        9.0
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_219",
+      "from": [
+        7.0,
+        26.25,
+        6.25
+      ],
+      "to": [
+        9.0,
+        26.5,
+        6.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_220",
+      "from": [
+        7.0,
+        26.25,
+        9.5
+      ],
+      "to": [
+        9.0,
+        26.5,
+        9.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_221",
+      "from": [
+        7.0,
+        26.75,
+        7.25
+      ],
+      "to": [
+        9.0,
+        27.25,
+        7.5
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_222",
+      "from": [
+        7.0,
+        26.75,
+        8.5
+      ],
+      "to": [
+        9.0,
+        27.25,
+        8.75
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_223",
+      "from": [
+        7.0,
+        27.0,
+        6.5
+      ],
+      "to": [
+        9.0,
+        27.25,
+        6.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_224",
+      "from": [
+        7.0,
+        27.0,
+        7.0
+      ],
+      "to": [
+        7.25,
+        27.25,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_225",
+      "from": [
+        7.0,
+        27.0,
+        7.5
+      ],
+      "to": [
+        9.0,
+        27.25,
+        7.75
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_226",
+      "from": [
+        7.0,
+        27.0,
+        8.25
+      ],
+      "to": [
+        9.0,
+        27.25,
+        8.5
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_227",
+      "from": [
+        7.0,
+        27.0,
+        8.75
+      ],
+      "to": [
+        7.25,
+        27.25,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_228",
+      "from": [
+        7.0,
+        27.0,
+        9.25
+      ],
+      "to": [
+        9.0,
+        27.25,
+        9.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_229",
+      "from": [
+        7.0,
+        27.25,
+        6.75
+      ],
+      "to": [
+        8.5,
+        27.5,
+        7.0
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_230",
+      "from": [
+        7.0,
+        27.25,
+        9.0
+      ],
+      "to": [
+        8.5,
+        27.5,
+        9.25
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_231",
+      "from": [
+        7.0,
+        27.5,
+        7.0
+      ],
+      "to": [
+        8.5,
+        27.75,
+        7.25
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_232",
+      "from": [
+        7.0,
+        27.5,
+        8.75
+      ],
+      "to": [
+        8.5,
+        27.75,
+        9.0
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_233",
+      "from": [
+        7.0,
+        27.75,
+        7.25
+      ],
+      "to": [
+        8.5,
+        28.0,
+        8.75
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_234",
+      "from": [
+        7.25,
+        24.75,
+        7.25
+      ],
+      "to": [
+        8.75,
+        25.0,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_235",
+      "from": [
+        7.25,
+        24.75,
+        8.5
+      ],
+      "to": [
+        8.75,
+        25.0,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_236",
+      "from": [
+        7.25,
+        25.0,
+        6.75
+      ],
+      "to": [
+        8.75,
+        25.25,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_237",
+      "from": [
+        7.25,
+        25.0,
+        9.0
+      ],
+      "to": [
+        8.75,
+        25.25,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_238",
+      "from": [
+        7.25,
+        25.25,
+        6.5
+      ],
+      "to": [
+        8.75,
+        25.5,
+        6.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_239",
+      "from": [
+        7.25,
+        25.25,
+        7.5
+      ],
+      "to": [
+        8.75,
+        25.5,
+        8.5
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_240",
+      "from": [
+        7.25,
+        25.25,
+        8.5
+      ],
+      "to": [
+        7.5,
+        25.5,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_241",
+      "from": [
+        7.25,
+        25.25,
+        9.25
+      ],
+      "to": [
+        8.75,
+        25.5,
+        9.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_242",
+      "from": [
+        7.25,
+        25.5,
+        7.0
+      ],
+      "to": [
+        8.75,
+        25.75,
+        7.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_243",
+      "from": [
+        7.25,
+        25.5,
+        8.75
+      ],
+      "to": [
+        8.75,
+        25.75,
+        9.0
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_244",
+      "from": [
+        7.25,
+        25.75,
+        6.25
+      ],
+      "to": [
+        8.75,
+        26.25,
+        6.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_245",
+      "from": [
+        7.25,
+        25.75,
+        9.5
+      ],
+      "to": [
+        8.75,
+        26.25,
+        9.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_246",
+      "from": [
+        7.25,
+        26.0,
+        6.75
+      ],
+      "to": [
+        8.75,
+        26.75,
+        7.0
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_247",
+      "from": [
+        7.25,
+        26.0,
+        9.0
+      ],
+      "to": [
+        8.75,
+        26.75,
+        9.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_248",
+      "from": [
+        7.25,
+        26.5,
+        6.25
+      ],
+      "to": [
+        8.75,
+        27.0,
+        6.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_249",
+      "from": [
+        7.25,
+        26.5,
+        9.5
+      ],
+      "to": [
+        8.75,
+        27.0,
+        9.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_250",
+      "from": [
+        7.25,
+        26.75,
+        6.75
+      ],
+      "to": [
+        7.5,
+        27.0,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_251",
+      "from": [
+        7.25,
+        26.75,
+        9.0
+      ],
+      "to": [
+        7.5,
+        27.0,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_252",
+      "from": [
+        7.25,
+        27.0,
+        7.0
+      ],
+      "to": [
+        8.75,
+        27.25,
+        7.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_253",
+      "from": [
+        7.25,
+        27.0,
+        8.75
+      ],
+      "to": [
+        8.75,
+        27.25,
+        9.0
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_254",
+      "from": [
+        7.25,
+        27.25,
+        6.5
+      ],
+      "to": [
+        8.5,
+        27.5,
+        6.75
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_255",
+      "from": [
+        7.25,
+        27.25,
+        9.25
+      ],
+      "to": [
+        8.5,
+        27.5,
+        9.5
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_256",
+      "from": [
+        7.25,
+        27.5,
+        6.75
+      ],
+      "to": [
+        8.5,
+        27.75,
+        7.0
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_257",
+      "from": [
+        7.25,
+        27.5,
+        9.0
+      ],
+      "to": [
+        8.5,
+        27.75,
+        9.25
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_258",
+      "from": [
+        7.25,
+        27.75,
+        7.0
+      ],
+      "to": [
+        8.5,
+        28.0,
+        7.25
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_259",
+      "from": [
+        7.25,
+        27.75,
+        8.75
+      ],
+      "to": [
+        8.5,
+        28.0,
+        9.0
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_260",
+      "from": [
+        7.25,
+        28.0,
+        7.75
+      ],
+      "to": [
+        8.5,
+        28.25,
+        8.25
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_261",
+      "from": [
+        7.5,
+        24.5,
+        7.75
+      ],
+      "to": [
+        8.5,
+        24.75,
+        8.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_262",
+      "from": [
+        7.5,
+        24.75,
+        7.0
+      ],
+      "to": [
+        8.5,
+        25.0,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_263",
+      "from": [
+        7.5,
+        24.75,
+        8.75
+      ],
+      "to": [
+        8.5,
+        25.0,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_264",
+      "from": [
+        7.5,
+        25.0,
+        7.75
+      ],
+      "to": [
+        8.5,
+        25.25,
+        8.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_265",
+      "from": [
+        7.5,
+        25.0,
+        8.25
+      ],
+      "to": [
+        7.75,
+        25.25,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_266",
+      "from": [
+        7.5,
+        25.25,
+        7.25
+      ],
+      "to": [
+        8.5,
+        25.5,
+        7.5
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_267",
+      "from": [
+        7.5,
+        25.25,
+        8.5
+      ],
+      "to": [
+        8.5,
+        25.5,
+        8.75
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_268",
+      "from": [
+        7.5,
+        25.5,
+        6.25
+      ],
+      "to": [
+        8.5,
+        25.75,
+        6.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_269",
+      "from": [
+        7.5,
+        25.5,
+        9.5
+      ],
+      "to": [
+        8.5,
+        25.75,
+        9.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_270",
+      "from": [
+        7.5,
+        25.75,
+        6.75
+      ],
+      "to": [
+        8.5,
+        26.0,
+        7.0
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_271",
+      "from": [
+        7.5,
+        25.75,
+        9.0
+      ],
+      "to": [
+        8.5,
+        26.0,
+        9.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_272",
+      "from": [
+        7.5,
+        26.75,
+        6.75
+      ],
+      "to": [
+        8.5,
+        27.0,
+        7.0
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_273",
+      "from": [
+        7.5,
+        26.75,
+        9.0
+      ],
+      "to": [
+        8.5,
+        27.0,
+        9.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_274",
+      "from": [
+        7.5,
+        27.0,
+        6.25
+      ],
+      "to": [
+        8.5,
+        27.25,
+        6.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_275",
+      "from": [
+        7.5,
+        27.0,
+        9.5
+      ],
+      "to": [
+        8.5,
+        27.25,
+        9.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_276",
+      "from": [
+        7.5,
+        28.0,
+        7.5
+      ],
+      "to": [
+        8.5,
+        28.25,
+        7.75
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_277",
+      "from": [
+        7.5,
+        28.0,
+        8.25
+      ],
+      "to": [
+        8.5,
+        28.25,
+        8.5
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_278",
+      "from": [
+        7.75,
+        24.5,
+        7.5
+      ],
+      "to": [
+        8.25,
+        24.75,
+        7.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_279",
+      "from": [
+        7.75,
+        24.5,
+        8.25
+      ],
+      "to": [
+        8.25,
+        24.75,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_280",
+      "from": [
+        7.75,
+        25.0,
+        7.5
+      ],
+      "to": [
+        8.25,
+        25.25,
+        7.75
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_281",
+      "from": [
+        7.75,
+        25.0,
+        8.25
+      ],
+      "to": [
+        8.25,
+        25.25,
+        8.5
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_282",
+      "from": [
+        7.75,
+        25.0,
+        8.5
+      ],
+      "to": [
+        9.25,
+        25.25,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_283",
+      "from": [
+        7.75,
+        27.0,
+        6.75
+      ],
+      "to": [
+        8.25,
+        27.25,
+        7.0
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_284",
+      "from": [
+        7.75,
+        27.0,
+        9.0
+      ],
+      "to": [
+        8.25,
+        27.25,
+        9.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_285",
+      "from": [
+        7.75,
+        27.5,
+        6.5
+      ],
+      "to": [
+        8.25,
+        27.75,
+        6.75
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_286",
+      "from": [
+        7.75,
+        27.5,
+        9.25
+      ],
+      "to": [
+        8.25,
+        27.75,
+        9.5
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_287",
+      "from": [
+        7.75,
+        28.0,
+        7.25
+      ],
+      "to": [
+        8.25,
+        28.25,
+        7.5
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_core_288",
+      "from": [
+        7.75,
+        28.0,
+        8.5
+      ],
+      "to": [
+        8.25,
+        28.25,
+        8.75
+      ],
+      "mat": "frost_core",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_289",
+      "from": [
+        8.25,
+        25.0,
+        7.5
+      ],
+      "to": [
+        9.25,
+        25.25,
+        7.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_290",
+      "from": [
+        8.25,
+        25.0,
+        8.25
+      ],
+      "to": [
+        9.25,
+        25.25,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_291",
+      "from": [
+        8.25,
+        27.0,
+        6.75
+      ],
+      "to": [
+        9.25,
+        27.25,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_292",
+      "from": [
+        8.25,
+        27.0,
+        9.0
+      ],
+      "to": [
+        9.25,
+        27.25,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_293",
+      "from": [
+        8.5,
+        25.0,
+        7.75
+      ],
+      "to": [
+        9.25,
+        25.25,
+        8.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_294",
+      "from": [
+        8.5,
+        25.25,
+        7.25
+      ],
+      "to": [
+        9.5,
+        25.5,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_295",
+      "from": [
+        8.5,
+        25.25,
+        8.5
+      ],
+      "to": [
+        9.5,
+        25.5,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_296",
+      "from": [
+        8.5,
+        25.75,
+        6.75
+      ],
+      "to": [
+        9.25,
+        26.0,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_297",
+      "from": [
+        8.5,
+        25.75,
+        9.0
+      ],
+      "to": [
+        9.25,
+        26.0,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_298",
+      "from": [
+        8.5,
+        26.75,
+        6.75
+      ],
+      "to": [
+        9.5,
+        27.0,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_299",
+      "from": [
+        8.5,
+        26.75,
+        9.0
+      ],
+      "to": [
+        9.5,
+        27.0,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_300",
+      "from": [
+        8.5,
+        27.25,
+        6.5
+      ],
+      "to": [
+        8.75,
+        27.5,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_301",
+      "from": [
+        8.5,
+        27.25,
+        7.25
+      ],
+      "to": [
+        8.75,
+        27.5,
+        8.75
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_302",
+      "from": [
+        8.5,
+        27.25,
+        8.75
+      ],
+      "to": [
+        9.25,
+        27.5,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_303",
+      "from": [
+        8.5,
+        27.25,
+        9.0
+      ],
+      "to": [
+        9.0,
+        27.5,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_304",
+      "from": [
+        8.5,
+        27.25,
+        9.25
+      ],
+      "to": [
+        8.75,
+        27.5,
+        9.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_305",
+      "from": [
+        8.5,
+        27.5,
+        6.75
+      ],
+      "to": [
+        8.75,
+        27.75,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_306",
+      "from": [
+        8.5,
+        27.75,
+        7.0
+      ],
+      "to": [
+        8.75,
+        28.0,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_307",
+      "from": [
+        8.5,
+        28.0,
+        7.75
+      ],
+      "to": [
+        8.75,
+        28.25,
+        8.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_308",
+      "from": [
+        8.75,
+        25.25,
+        7.5
+      ],
+      "to": [
+        9.5,
+        25.5,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_309",
+      "from": [
+        8.75,
+        25.5,
+        7.0
+      ],
+      "to": [
+        9.5,
+        25.75,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_310",
+      "from": [
+        8.75,
+        25.5,
+        8.75
+      ],
+      "to": [
+        9.5,
+        25.75,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_311",
+      "from": [
+        8.75,
+        26.0,
+        6.75
+      ],
+      "to": [
+        9.5,
+        26.75,
+        7.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_312",
+      "from": [
+        8.75,
+        26.0,
+        9.0
+      ],
+      "to": [
+        9.5,
+        26.75,
+        9.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_313",
+      "from": [
+        8.75,
+        27.0,
+        7.0
+      ],
+      "to": [
+        9.5,
+        27.25,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_314",
+      "from": [
+        8.75,
+        27.0,
+        8.75
+      ],
+      "to": [
+        9.5,
+        27.25,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_315",
+      "from": [
+        8.75,
+        27.25,
+        6.75
+      ],
+      "to": [
+        9.0,
+        27.5,
+        7.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_316",
+      "from": [
+        8.75,
+        27.25,
+        7.75
+      ],
+      "to": [
+        9.0,
+        27.5,
+        8.25
+      ],
+      "mat": "frost",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_317",
+      "from": [
+        8.75,
+        27.25,
+        8.25
+      ],
+      "to": [
+        9.5,
+        27.5,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_318",
+      "from": [
+        8.75,
+        27.5,
+        7.0
+      ],
+      "to": [
+        9.0,
+        27.75,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_319",
+      "from": [
+        8.75,
+        27.75,
+        7.25
+      ],
+      "to": [
+        9.0,
+        28.0,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_320",
+      "from": [
+        9.0,
+        25.5,
+        7.25
+      ],
+      "to": [
+        9.5,
+        26.0,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_321",
+      "from": [
+        9.0,
+        25.5,
+        7.5
+      ],
+      "to": [
+        9.75,
+        25.75,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_322",
+      "from": [
+        9.0,
+        25.5,
+        8.5
+      ],
+      "to": [
+        9.5,
+        26.0,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_323",
+      "from": [
+        9.0,
+        25.75,
+        7.0
+      ],
+      "to": [
+        9.5,
+        27.0,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_324",
+      "from": [
+        9.0,
+        25.75,
+        8.75
+      ],
+      "to": [
+        9.5,
+        27.0,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_325",
+      "from": [
+        9.0,
+        26.75,
+        7.25
+      ],
+      "to": [
+        9.75,
+        27.0,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_326",
+      "from": [
+        9.0,
+        26.75,
+        8.5
+      ],
+      "to": [
+        9.75,
+        27.0,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_327",
+      "from": [
+        9.0,
+        27.0,
+        7.25
+      ],
+      "to": [
+        9.5,
+        27.5,
+        7.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_328",
+      "from": [
+        9.0,
+        27.0,
+        8.25
+      ],
+      "to": [
+        9.75,
+        27.25,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_329",
+      "from": [
+        9.0,
+        27.0,
+        8.5
+      ],
+      "to": [
+        9.5,
+        27.25,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_330",
+      "from": [
+        9.0,
+        27.25,
+        7.0
+      ],
+      "to": [
+        9.25,
+        27.5,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_331",
+      "from": [
+        9.0,
+        27.25,
+        7.75
+      ],
+      "to": [
+        9.5,
+        27.75,
+        8.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_332",
+      "from": [
+        9.0,
+        27.5,
+        7.25
+      ],
+      "to": [
+        9.25,
+        27.75,
+        7.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_333",
+      "from": [
+        9.0,
+        27.5,
+        8.25
+      ],
+      "to": [
+        9.25,
+        27.75,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_334",
+      "from": [
+        9.25,
+        25.75,
+        7.5
+      ],
+      "to": [
+        9.75,
+        27.0,
+        8.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_335",
+      "from": [
+        9.25,
+        26.0,
+        7.25
+      ],
+      "to": [
+        9.75,
+        26.75,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_336",
+      "from": [
+        9.25,
+        26.0,
+        8.5
+      ],
+      "to": [
+        9.75,
+        26.75,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_337",
+      "from": [
+        9.25,
+        27.0,
+        7.75
+      ],
+      "to": [
+        9.75,
+        27.25,
+        8.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_338",
+      "from": [
+        9.5,
+        25.75,
+        7.25
+      ],
+      "to": [
+        9.75,
+        26.0,
+        7.5
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_339",
+      "from": [
+        9.5,
+        25.75,
+        8.5
+      ],
+      "to": [
+        9.75,
+        26.0,
+        8.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_340",
+      "from": [
+        9.5,
+        26.25,
+        7.0
+      ],
+      "to": [
+        9.75,
+        26.5,
+        7.25
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_341",
+      "from": [
+        9.5,
+        26.25,
+        8.75
+      ],
+      "to": [
+        9.75,
+        26.5,
+        9.0
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "frost_light_342",
+      "from": [
+        9.5,
+        27.0,
+        7.5
+      ],
+      "to": [
+        9.75,
+        27.25,
+        7.75
+      ],
+      "mat": "frost_light",
+      "bone": "focus"
+    },
+    {
+      "name": "silver_light_343",
+      "from": [
+        9.5,
+        17.5,
+        7.92
+      ],
+      "to": [
+        9.75,
+        20.75,
+        8.08
+      ],
+      "mat": "silver_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "silver_light_344",
+      "from": [
+        9.25,
+        21.0,
+        7.92
+      ],
+      "to": [
+        9.5,
+        21.5,
+        8.08
+      ],
+      "mat": "silver_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "silver_light_345",
+      "from": [
+        9.0,
+        21.75,
+        7.92
+      ],
+      "to": [
+        9.25,
+        22.0,
+        8.08
+      ],
+      "mat": "silver_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "frost_346",
+      "from": [
+        9.5,
+        20.25,
+        7.63
+      ],
+      "to": [
+        9.75,
+        20.75,
+        8.37
+      ],
+      "mat": "frost",
+      "bone": "ribbon"
+    },
+    {
+      "name": "white_347",
+      "from": [
+        9.4656,
+        20.6076,
+        7.54
+      ],
+      "to": [
+        9.7156,
+        20.8576,
+        8.46
+      ],
+      "mat": "white",
+      "bone": "ribbon"
+    },
+    {
+      "name": "frost_348",
+      "from": [
+        9.5,
+        18.75,
+        7.63
+      ],
+      "to": [
+        9.75,
+        19.0,
+        8.37
+      ],
+      "mat": "frost",
+      "bone": "ribbon"
+    },
+    {
+      "name": "frost_349",
+      "from": [
+        9.25,
+        19.0,
+        7.63
+      ],
+      "to": [
+        9.75,
+        19.25,
+        8.37
+      ],
+      "mat": "frost",
+      "bone": "ribbon"
+    },
+    {
+      "name": "frost_350",
+      "from": [
+        9.5,
+        19.25,
+        7.63
+      ],
+      "to": [
+        9.75,
+        19.5,
+        8.37
+      ],
+      "mat": "frost",
+      "bone": "ribbon"
+    },
+    {
+      "name": "white_351",
+      "from": [
+        9.4488,
+        19.2148,
+        7.54
+      ],
+      "to": [
+        9.6988,
+        19.4648,
+        8.46
+      ],
+      "mat": "white",
+      "bone": "ribbon"
+    },
+    {
+      "name": "silver_352",
+      "from": [
+        9.5,
+        17.0,
+        7.75
+      ],
+      "to": [
+        9.75,
+        17.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "ribbon"
+    },
+    {
+      "name": "silver_353",
+      "from": [
+        9.25,
+        17.25,
+        7.75
+      ],
+      "to": [
+        9.5,
+        17.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "ribbon"
+    },
+    {
+      "name": "silver_354",
+      "from": [
+        9.75,
+        17.25,
+        7.75
+      ],
+      "to": [
+        10.0,
+        17.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "ribbon"
+    },
+    {
+      "name": "silver_355",
+      "from": [
+        9.5,
+        17.5,
+        7.75
+      ],
+      "to": [
+        9.75,
+        18.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "ribbon"
+    },
+    {
+      "name": "frost_356",
+      "from": [
+        9.5,
+        17.25,
+        7.63
+      ],
+      "to": [
+        9.75,
+        17.5,
+        8.37
+      ],
+      "mat": "frost",
+      "bone": "ribbon"
+    },
+    {
+      "name": "white_357",
+      "from": [
+        9.4152,
+        17.5292,
+        7.54
+      ],
+      "to": [
+        9.6652,
+        17.7792,
+        8.46
+      ],
+      "mat": "white",
+      "bone": "ribbon"
+    }
+  ]
+}

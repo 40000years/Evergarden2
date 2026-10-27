@@ -4,6 +4,8 @@ import com.example.voidscape.VoidscapePlugin;
 import com.example.voidscape.enchant.EnchantApplyListener;
 import com.example.voidscape.enchant.LimitBreakType;
 import com.example.voidscape.enchant.UniqueEnchant;
+import com.example.voidscape.enchant.UniqueCompatibility;
+import com.example.voidscape.enchant.LegacyEnchantResolution;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -28,6 +30,34 @@ import java.util.function.Consumer;
 
 public final class FloodgateUpgradeForm {
     private FloodgateUpgradeForm() {}
+
+    public static boolean sendLegacyResolution(VoidscapePlugin plugin,Player player) {
+        return sendLegacyResolution(plugin,player,player.getInventory().getHeldItemSlot());
+    }
+
+    public static boolean sendLegacyResolution(VoidscapePlugin plugin,Player player,int targetSlot) {
+        ItemStack held=player.getInventory().getItem(targetSlot);
+        List<String> choices=UniqueCompatibility.choices(held,plugin.relics());
+        if(choices.isEmpty())return false;
+        ItemStack expected=held.clone();
+        SimpleForm.Builder builder=SimpleForm.builder();
+        builder.title("§6เลือกมนตราที่จะเก็บไว้");
+        builder.content("§fอุปกรณ์ในมือมีมนตราที่ใช้ร่วมกันไม่ได้\n§7เลือกพลังที่จะเก็บ ส่วนที่ขัดกันจะคืนเป็นคัมภีร์ ต้องมีช่องว่างในกระเป๋า");
+        for(String choice:choices) {
+            String label=choice.equals("relic")?"พลังประจำยุทธภัณฑ์":choice.equals("eternity")?"Scroll of Eternity":UniqueEnchant.parse(choice).title();
+            builder.button("§e"+label+"\n§7เก็บพลังนี้");
+        }
+        builder.validResultHandler(response->{
+            int index=response.clickedButtonId();
+            if(index<0||index>=choices.size())return;
+            Bukkit.getScheduler().runTask(plugin,()->{
+                if(!player.isOnline())return;
+                if(LegacyEnchantResolution.resolveSlot(plugin,player,targetSlot,expected,choices.get(index)))
+                    sendUpgradeOptions(plugin,player,targetSlot);
+            });
+        });
+        return FloodgateApi.getInstance().sendForm(player.getUniqueId(),builder.build());
+    }
 
     /**
      * Opens the Bedrock Upgrade / Enchanting Form for a player.
@@ -153,6 +183,8 @@ public final class FloodgateUpgradeForm {
         if (!isEquipment(target)) {
             return sendEquipmentSelector(plugin, player);
         }
+        if (UniqueCompatibility.needsResolution(target,plugin.relics()))
+            return sendLegacyResolution(plugin,player,targetSlot);
 
         String targetName = getItemName(target);
         int maxDur = target.getType().getMaxDurability();
@@ -172,14 +204,14 @@ public final class FloodgateUpgradeForm {
         if (isUnbreakable) {
             content.append(" §6[✦ สถิตนิรันดร์: ไม่มีวันพัง]");
         }
-        content.append("\n§7เลือกคัมภีร์หรือศิลาในกระเป๋าของคุณด้านล่างเพื่อใช้งาน:");
+        content.append("\n§7เลือกคัมภีร์ในกระเป๋าของคุณด้านล่างเพื่อใช้งาน:");
 
         List<Consumer<Player>> buttonActions = new ArrayList<>();
         int availableOptions = 0;
 
         // 1. Scroll of Eternity
         int eternityCount = countScrollEternity(plugin, player);
-        if (eternityCount > 0 && !isUnbreakable) {
+        if (eternityCount > 0 && UniqueCompatibility.canApplyEternity(target,plugin.relics())) {
             availableOptions++;
             builder.button("📜 ปลุกเสกศิลานิรันดร์ (มี " + eternityCount + " ชิ้น)\n§aทำให้อุปกรณ์ไม่มีวันพังถาวร 100% [Unbreakable]");
             buttonActions.add(p -> applyEternity(plugin, p, targetSlot));
@@ -204,7 +236,7 @@ public final class FloodgateUpgradeForm {
         // 3. Unique Enchant Scrolls
         for (UniqueEnchant ue : UniqueEnchant.values()) {
             int count = countUnique(plugin, player, ue);
-            if (count > 0 && ue.category().matches(target.getType())) {
+            if (count > 0 && UniqueCompatibility.canApply(target,ue,plugin.relics())) {
                 if (!EnchantApplyListener.hasUnique(target, ue)) {
                     availableOptions++;
                     builder.button("📜 มนตราโบราณ: " + ue.title() + " (มี " + count + " ชิ้น)\n§d" + ue.thaiTitle() + " - " + ue.description());
@@ -213,16 +245,8 @@ public final class FloodgateUpgradeForm {
             }
         }
 
-        // 4. Vault Repair Stone
-        int repairCount = countRepairStone(plugin, player);
-        if (repairCount > 0 && currentDmg > 0) {
-            availableOptions++;
-            builder.button("💎 ศิลาฟื้นฟูมิติ (มี " + repairCount + " ชิ้น)\n§aซ่อมแซมความทนทาน 500 หน่วย (ชำรุด " + currentDmg + ")");
-            buttonActions.add(p -> applyRepairStone(plugin, p, targetSlot));
-        }
-
         if (availableOptions == 0) {
-            content.append("\n\n§c⚠ ไม่พบคัมภีร์หรือศิลาในกระเป๋าที่สามารถใช้กับอุปกรณ์ชิ้นนี้ได้!");
+            content.append("\n\n§c⚠ ไม่พบคัมภีร์ในกระเป๋าที่สามารถใช้กับอุปกรณ์ชิ้นนี้ได้!");
         }
 
         builder.content(content.toString());
@@ -250,6 +274,10 @@ public final class FloodgateUpgradeForm {
     private static void applyEternity(VoidscapePlugin plugin, Player player, int targetSlot) {
         ItemStack target = player.getInventory().getItem(targetSlot);
         if (!isEquipment(target)) return;
+        if (!UniqueCompatibility.canApplyEternity(target,plugin.relics())) {
+            player.sendMessage("§cSoulbound ใช้ร่วมกับ Scroll of Eternity ไม่ได้ หรืออุปกรณ์นี้สถิตนิรันดร์แล้ว");
+            return;
+        }
 
         if (!consumeOne(player, it -> plugin.relics().isScrollEternity(it))) {
             player.sendMessage("§cไม่พบคัมภีร์ศิลานิรันดร์ในกระเป๋าของคุณ");
@@ -292,6 +320,10 @@ public final class FloodgateUpgradeForm {
     private static void applyUnique(VoidscapePlugin plugin, Player player, int targetSlot, UniqueEnchant ue) {
         ItemStack target = player.getInventory().getItem(targetSlot);
         if (!isEquipment(target)) return;
+        if (!UniqueCompatibility.canApply(target,ue,plugin.relics())) {
+            player.sendMessage("§cอุปกรณ์นี้มีมนตราที่ใช้ร่วมกับ " + ue.title() + " ไม่ได้");
+            return;
+        }
 
         ItemMeta meta = target.getItemMeta();
         if (meta == null) return;
@@ -315,31 +347,6 @@ public final class FloodgateUpgradeForm {
 
         player.getInventory().setItem(targetSlot, target);
         playSuccessEffects(player, "✦ สลักมนตราสำเร็จ! ได้รับ " + ue.title());
-        sendUpgradeOptions(plugin, player, targetSlot);
-    }
-
-    private static void applyRepairStone(VoidscapePlugin plugin, Player player, int targetSlot) {
-        ItemStack target = player.getInventory().getItem(targetSlot);
-        if (!isEquipment(target)) return;
-
-        ItemMeta meta = target.getItemMeta();
-        if (!(meta instanceof Damageable dmg) || dmg.getDamage() <= 0) return;
-
-        if (!consumeOne(player, it -> plugin.relics().isRepairStone(it))) {
-            player.sendMessage("§cไม่พบศิลาฟื้นฟูมิติในกระเป๋า");
-            return;
-        }
-
-        int restored = Math.min(500, dmg.getDamage());
-        dmg.setDamage(Math.max(0, dmg.getDamage() - 500));
-        target.setItemMeta(dmg);
-
-        player.getInventory().setItem(targetSlot, target);
-        player.playSound(player.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1.0f, 1.2f);
-        player.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, player.getLocation().add(0, 1, 0), 15, 0.3, 0.3, 0.3, 0.05);
-        player.sendActionBar(Component.text("✦ ศิลาฟื้นฟูมิติ ซ่อมแซมความทนทาน " + restored + " หน่วย!", NamedTextColor.GREEN));
-        player.sendMessage("§a[Evergarden] §fศิลาฟื้นฟูมิติซ่อมแซมความทนทาน " + restored + " หน่วยเรียบร้อยแล้ว!");
-        player.updateInventory();
         sendUpgradeOptions(plugin, player, targetSlot);
     }
 
@@ -397,11 +404,4 @@ public final class FloodgateUpgradeForm {
         return count;
     }
 
-    private static int countRepairStone(VoidscapePlugin plugin, Player player) {
-        int count = 0;
-        for (ItemStack it : player.getInventory().getContents()) {
-            if (it != null && plugin.relics().isRepairStone(it)) count += it.getAmount();
-        }
-        return count;
-    }
 }

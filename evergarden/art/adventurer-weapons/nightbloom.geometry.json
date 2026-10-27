@@ -1,0 +1,3635 @@
+{
+  "id": "nightbloom",
+  "cubes": [
+    {
+      "name": "obsidian_edge_000",
+      "from": [
+        7.75,
+        0.0,
+        7.5
+      ],
+      "to": [
+        8.25,
+        0.5,
+        8.5
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_001",
+      "from": [
+        7.5,
+        0.5,
+        7.5
+      ],
+      "to": [
+        7.75,
+        1.25,
+        8.5
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_002",
+      "from": [
+        8.25,
+        0.5,
+        7.5
+      ],
+      "to": [
+        8.5,
+        1.25,
+        8.5
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_003",
+      "from": [
+        7.25,
+        1.25,
+        7.5
+      ],
+      "to": [
+        7.5,
+        1.5,
+        8.5
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_004",
+      "from": [
+        8.5,
+        1.25,
+        7.5
+      ],
+      "to": [
+        8.75,
+        1.5,
+        8.5
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_005",
+      "from": [
+        7.25,
+        1.5,
+        7.5
+      ],
+      "to": [
+        8.75,
+        1.75,
+        8.5
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_006",
+      "from": [
+        7.75,
+        0.5,
+        7.4
+      ],
+      "to": [
+        8.25,
+        1.25,
+        8.6
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_007",
+      "from": [
+        7.5,
+        1.25,
+        7.4
+      ],
+      "to": [
+        8.5,
+        1.5,
+        8.6
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_008",
+      "from": [
+        7.39,
+        1.6,
+        7.634
+      ],
+      "to": [
+        8.61,
+        2.1,
+        8.366
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_009",
+      "from": [
+        7.634,
+        1.6,
+        8.366
+      ],
+      "to": [
+        8.366,
+        2.1,
+        8.61
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_010",
+      "from": [
+        7.634,
+        1.6,
+        7.39
+      ],
+      "to": [
+        8.366,
+        2.1,
+        7.634
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_011",
+      "from": [
+        7.57,
+        2.1,
+        7.742
+      ],
+      "to": [
+        8.43,
+        26.4,
+        8.258
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_012",
+      "from": [
+        7.742,
+        2.1,
+        8.258
+      ],
+      "to": [
+        8.258,
+        26.4,
+        8.43
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_013",
+      "from": [
+        7.742,
+        2.1,
+        7.57
+      ],
+      "to": [
+        8.258,
+        26.4,
+        7.742
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "black_014",
+      "from": [
+        7.56,
+        7.0,
+        7.736
+      ],
+      "to": [
+        8.44,
+        11.4,
+        8.264
+      ],
+      "mat": "black",
+      "bone": "weapon"
+    },
+    {
+      "name": "black_015",
+      "from": [
+        7.736,
+        7.0,
+        8.264
+      ],
+      "to": [
+        8.264,
+        11.4,
+        8.44
+      ],
+      "mat": "black",
+      "bone": "weapon"
+    },
+    {
+      "name": "black_016",
+      "from": [
+        7.736,
+        7.0,
+        7.56
+      ],
+      "to": [
+        8.264,
+        11.4,
+        7.736
+      ],
+      "mat": "black",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_017",
+      "from": [
+        7.46,
+        7.2,
+        7.676
+      ],
+      "to": [
+        8.54,
+        7.5,
+        8.324
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_018",
+      "from": [
+        7.676,
+        7.2,
+        8.324
+      ],
+      "to": [
+        8.324,
+        7.5,
+        8.54
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_019",
+      "from": [
+        7.676,
+        7.2,
+        7.46
+      ],
+      "to": [
+        8.324,
+        7.5,
+        7.676
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_020",
+      "from": [
+        7.46,
+        7.8,
+        7.676
+      ],
+      "to": [
+        8.54,
+        8.1,
+        8.324
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_021",
+      "from": [
+        7.676,
+        7.8,
+        8.324
+      ],
+      "to": [
+        8.324,
+        8.1,
+        8.54
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_022",
+      "from": [
+        7.676,
+        7.8,
+        7.46
+      ],
+      "to": [
+        8.324,
+        8.1,
+        7.676
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_023",
+      "from": [
+        7.46,
+        8.4,
+        7.676
+      ],
+      "to": [
+        8.54,
+        8.7,
+        8.324
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_024",
+      "from": [
+        7.676,
+        8.4,
+        8.324
+      ],
+      "to": [
+        8.324,
+        8.7,
+        8.54
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_025",
+      "from": [
+        7.676,
+        8.4,
+        7.46
+      ],
+      "to": [
+        8.324,
+        8.7,
+        7.676
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_026",
+      "from": [
+        7.46,
+        9.0,
+        7.676
+      ],
+      "to": [
+        8.54,
+        9.3,
+        8.324
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_027",
+      "from": [
+        7.676,
+        9.0,
+        8.324
+      ],
+      "to": [
+        8.324,
+        9.3,
+        8.54
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_028",
+      "from": [
+        7.676,
+        9.0,
+        7.46
+      ],
+      "to": [
+        8.324,
+        9.3,
+        7.676
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_029",
+      "from": [
+        7.46,
+        9.6,
+        7.676
+      ],
+      "to": [
+        8.54,
+        9.9,
+        8.324
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_030",
+      "from": [
+        7.676,
+        9.6,
+        8.324
+      ],
+      "to": [
+        8.324,
+        9.9,
+        8.54
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_031",
+      "from": [
+        7.676,
+        9.6,
+        7.46
+      ],
+      "to": [
+        8.324,
+        9.9,
+        7.676
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_032",
+      "from": [
+        7.46,
+        10.2,
+        7.676
+      ],
+      "to": [
+        8.54,
+        10.5,
+        8.324
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_033",
+      "from": [
+        7.676,
+        10.2,
+        8.324
+      ],
+      "to": [
+        8.324,
+        10.5,
+        8.54
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_034",
+      "from": [
+        7.676,
+        10.2,
+        7.46
+      ],
+      "to": [
+        8.324,
+        10.5,
+        7.676
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_035",
+      "from": [
+        7.46,
+        10.8,
+        7.676
+      ],
+      "to": [
+        8.54,
+        11.1,
+        8.324
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_036",
+      "from": [
+        7.676,
+        10.8,
+        8.324
+      ],
+      "to": [
+        8.324,
+        11.1,
+        8.54
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_037",
+      "from": [
+        7.676,
+        10.8,
+        7.46
+      ],
+      "to": [
+        8.324,
+        11.1,
+        7.676
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_038",
+      "from": [
+        7.41,
+        2.1,
+        7.646
+      ],
+      "to": [
+        8.59,
+        2.55,
+        8.354
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_039",
+      "from": [
+        7.646,
+        2.1,
+        8.354
+      ],
+      "to": [
+        8.354,
+        2.55,
+        8.59
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_040",
+      "from": [
+        7.646,
+        2.1,
+        7.41
+      ],
+      "to": [
+        8.354,
+        2.55,
+        7.646
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_041",
+      "from": [
+        7.41,
+        6.55,
+        7.646
+      ],
+      "to": [
+        8.59,
+        7.0,
+        8.354
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_042",
+      "from": [
+        7.646,
+        6.55,
+        8.354
+      ],
+      "to": [
+        8.354,
+        7.0,
+        8.59
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_043",
+      "from": [
+        7.646,
+        6.55,
+        7.41
+      ],
+      "to": [
+        8.354,
+        7.0,
+        7.646
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_044",
+      "from": [
+        7.41,
+        11.45,
+        7.646
+      ],
+      "to": [
+        8.59,
+        11.9,
+        8.354
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_045",
+      "from": [
+        7.646,
+        11.45,
+        8.354
+      ],
+      "to": [
+        8.354,
+        11.9,
+        8.59
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_046",
+      "from": [
+        7.646,
+        11.45,
+        7.41
+      ],
+      "to": [
+        8.354,
+        11.9,
+        7.646
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_047",
+      "from": [
+        7.41,
+        15.6,
+        7.646
+      ],
+      "to": [
+        8.59,
+        16.05,
+        8.354
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_048",
+      "from": [
+        7.646,
+        15.6,
+        8.354
+      ],
+      "to": [
+        8.354,
+        16.05,
+        8.59
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_049",
+      "from": [
+        7.646,
+        15.6,
+        7.41
+      ],
+      "to": [
+        8.354,
+        16.05,
+        7.646
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_050",
+      "from": [
+        7.41,
+        19.8,
+        7.646
+      ],
+      "to": [
+        8.59,
+        20.25,
+        8.354
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_051",
+      "from": [
+        7.646,
+        19.8,
+        8.354
+      ],
+      "to": [
+        8.354,
+        20.25,
+        8.59
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_052",
+      "from": [
+        7.646,
+        19.8,
+        7.41
+      ],
+      "to": [
+        8.354,
+        20.25,
+        7.646
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_053",
+      "from": [
+        7.41,
+        23.6,
+        7.646
+      ],
+      "to": [
+        8.59,
+        24.05,
+        8.354
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_054",
+      "from": [
+        7.646,
+        23.6,
+        8.354
+      ],
+      "to": [
+        8.354,
+        24.05,
+        8.59
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_055",
+      "from": [
+        7.646,
+        23.6,
+        7.41
+      ],
+      "to": [
+        8.354,
+        24.05,
+        7.646
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_056",
+      "from": [
+        0.25,
+        24.0,
+        7.76
+      ],
+      "to": [
+        0.5,
+        24.5,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_057",
+      "from": [
+        0.25,
+        24.5,
+        7.76
+      ],
+      "to": [
+        0.75,
+        24.75,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_058",
+      "from": [
+        0.25,
+        24.75,
+        7.76
+      ],
+      "to": [
+        1.0,
+        25.0,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_059",
+      "from": [
+        0.5,
+        25.0,
+        7.76
+      ],
+      "to": [
+        1.25,
+        25.25,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_060",
+      "from": [
+        0.5,
+        25.25,
+        7.76
+      ],
+      "to": [
+        0.75,
+        25.5,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_061",
+      "from": [
+        1.0,
+        25.25,
+        7.76
+      ],
+      "to": [
+        1.75,
+        25.5,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_062",
+      "from": [
+        0.5,
+        25.5,
+        7.76
+      ],
+      "to": [
+        1.0,
+        25.75,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_063",
+      "from": [
+        1.5,
+        25.5,
+        7.76
+      ],
+      "to": [
+        2.0,
+        25.75,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_064",
+      "from": [
+        8.25,
+        25.5,
+        7.76
+      ],
+      "to": [
+        8.75,
+        25.75,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_065",
+      "from": [
+        0.75,
+        25.75,
+        7.76
+      ],
+      "to": [
+        1.0,
+        26.0,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_066",
+      "from": [
+        1.75,
+        25.75,
+        7.76
+      ],
+      "to": [
+        2.5,
+        26.0,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_067",
+      "from": [
+        7.75,
+        25.75,
+        7.76
+      ],
+      "to": [
+        8.75,
+        26.0,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_068",
+      "from": [
+        0.75,
+        26.0,
+        7.76
+      ],
+      "to": [
+        1.25,
+        26.25,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_069",
+      "from": [
+        2.25,
+        26.0,
+        7.76
+      ],
+      "to": [
+        3.0,
+        26.25,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_070",
+      "from": [
+        7.25,
+        26.0,
+        7.76
+      ],
+      "to": [
+        8.0,
+        26.25,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_071",
+      "from": [
+        1.0,
+        26.25,
+        7.76
+      ],
+      "to": [
+        1.5,
+        26.5,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_072",
+      "from": [
+        2.75,
+        26.25,
+        7.76
+      ],
+      "to": [
+        4.0,
+        26.5,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_073",
+      "from": [
+        6.75,
+        26.25,
+        7.76
+      ],
+      "to": [
+        7.5,
+        26.5,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_074",
+      "from": [
+        1.25,
+        26.5,
+        7.76
+      ],
+      "to": [
+        1.5,
+        26.75,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_075",
+      "from": [
+        3.75,
+        26.5,
+        7.76
+      ],
+      "to": [
+        7.0,
+        26.75,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_076",
+      "from": [
+        1.25,
+        26.75,
+        7.76
+      ],
+      "to": [
+        1.75,
+        27.0,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_077",
+      "from": [
+        1.5,
+        27.0,
+        7.76
+      ],
+      "to": [
+        2.0,
+        27.25,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_078",
+      "from": [
+        1.75,
+        27.25,
+        7.76
+      ],
+      "to": [
+        2.5,
+        27.5,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_079",
+      "from": [
+        2.25,
+        27.5,
+        7.76
+      ],
+      "to": [
+        2.75,
+        27.75,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_080",
+      "from": [
+        8.5,
+        26.0,
+        7.76
+      ],
+      "to": [
+        8.75,
+        27.75,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_081",
+      "from": [
+        2.5,
+        27.75,
+        7.76
+      ],
+      "to": [
+        3.0,
+        28.0,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_082",
+      "from": [
+        7.75,
+        27.75,
+        7.76
+      ],
+      "to": [
+        8.75,
+        28.0,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_083",
+      "from": [
+        2.75,
+        28.0,
+        7.76
+      ],
+      "to": [
+        3.75,
+        28.25,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_084",
+      "from": [
+        7.25,
+        28.0,
+        7.76
+      ],
+      "to": [
+        8.0,
+        28.25,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_085",
+      "from": [
+        3.5,
+        28.25,
+        7.76
+      ],
+      "to": [
+        4.75,
+        28.5,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_086",
+      "from": [
+        6.0,
+        28.25,
+        7.76
+      ],
+      "to": [
+        7.5,
+        28.5,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_087",
+      "from": [
+        4.5,
+        28.5,
+        7.76
+      ],
+      "to": [
+        6.25,
+        28.75,
+        8.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_088",
+      "from": [
+        0.75,
+        25.25,
+        7.56
+      ],
+      "to": [
+        1.0,
+        25.5,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_089",
+      "from": [
+        1.0,
+        25.5,
+        7.56
+      ],
+      "to": [
+        1.5,
+        25.75,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_090",
+      "from": [
+        1.0,
+        25.75,
+        7.56
+      ],
+      "to": [
+        1.75,
+        26.0,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_091",
+      "from": [
+        1.25,
+        26.0,
+        7.56
+      ],
+      "to": [
+        2.25,
+        26.25,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_092",
+      "from": [
+        8.0,
+        26.0,
+        7.56
+      ],
+      "to": [
+        8.5,
+        26.25,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_093",
+      "from": [
+        1.5,
+        26.25,
+        7.56
+      ],
+      "to": [
+        1.75,
+        26.5,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_094",
+      "from": [
+        2.0,
+        26.25,
+        7.56
+      ],
+      "to": [
+        2.75,
+        26.5,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_095",
+      "from": [
+        7.5,
+        26.25,
+        7.56
+      ],
+      "to": [
+        8.5,
+        26.5,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_096",
+      "from": [
+        1.5,
+        26.5,
+        7.56
+      ],
+      "to": [
+        2.0,
+        26.75,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_097",
+      "from": [
+        2.5,
+        26.5,
+        7.56
+      ],
+      "to": [
+        3.75,
+        26.75,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_098",
+      "from": [
+        7.0,
+        26.5,
+        7.56
+      ],
+      "to": [
+        7.75,
+        26.75,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_099",
+      "from": [
+        1.75,
+        26.75,
+        7.56
+      ],
+      "to": [
+        2.25,
+        27.0,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_100",
+      "from": [
+        3.5,
+        26.75,
+        7.56
+      ],
+      "to": [
+        7.25,
+        27.0,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_101",
+      "from": [
+        2.0,
+        27.0,
+        7.56
+      ],
+      "to": [
+        2.75,
+        27.25,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_102",
+      "from": [
+        2.5,
+        27.25,
+        7.56
+      ],
+      "to": [
+        3.0,
+        27.5,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_103",
+      "from": [
+        8.25,
+        26.5,
+        7.56
+      ],
+      "to": [
+        8.5,
+        27.5,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_104",
+      "from": [
+        2.75,
+        27.5,
+        7.56
+      ],
+      "to": [
+        3.25,
+        27.75,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_105",
+      "from": [
+        7.5,
+        27.5,
+        7.56
+      ],
+      "to": [
+        8.5,
+        27.75,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_106",
+      "from": [
+        3.0,
+        27.75,
+        7.56
+      ],
+      "to": [
+        4.0,
+        28.0,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_107",
+      "from": [
+        7.0,
+        27.75,
+        7.56
+      ],
+      "to": [
+        7.75,
+        28.0,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_108",
+      "from": [
+        3.75,
+        28.0,
+        7.56
+      ],
+      "to": [
+        5.0,
+        28.25,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_109",
+      "from": [
+        5.75,
+        28.0,
+        7.56
+      ],
+      "to": [
+        7.25,
+        28.25,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_110",
+      "from": [
+        4.75,
+        28.25,
+        7.56
+      ],
+      "to": [
+        6.0,
+        28.5,
+        8.44
+      ],
+      "mat": "obsidian_edge",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_111",
+      "from": [
+        1.75,
+        26.25,
+        7.5
+      ],
+      "to": [
+        2.0,
+        26.5,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_112",
+      "from": [
+        2.0,
+        26.5,
+        7.5
+      ],
+      "to": [
+        2.5,
+        26.75,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_113",
+      "from": [
+        7.75,
+        26.5,
+        7.5
+      ],
+      "to": [
+        8.25,
+        26.75,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_114",
+      "from": [
+        2.25,
+        26.75,
+        7.5
+      ],
+      "to": [
+        3.5,
+        27.0,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_115",
+      "from": [
+        7.25,
+        26.75,
+        7.5
+      ],
+      "to": [
+        8.25,
+        27.0,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_116",
+      "from": [
+        2.75,
+        27.0,
+        7.5
+      ],
+      "to": [
+        8.25,
+        27.25,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_117",
+      "from": [
+        3.0,
+        27.25,
+        7.5
+      ],
+      "to": [
+        8.25,
+        27.5,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_118",
+      "from": [
+        3.25,
+        27.5,
+        7.5
+      ],
+      "to": [
+        7.5,
+        27.75,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_119",
+      "from": [
+        4.0,
+        27.75,
+        7.5
+      ],
+      "to": [
+        7.0,
+        28.0,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_120",
+      "from": [
+        5.0,
+        28.0,
+        7.5
+      ],
+      "to": [
+        5.75,
+        28.25,
+        8.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_121",
+      "from": [
+        7.425,
+        25.1,
+        7.655
+      ],
+      "to": [
+        8.575,
+        28.3,
+        8.345
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_122",
+      "from": [
+        7.655,
+        25.1,
+        8.345
+      ],
+      "to": [
+        8.345,
+        28.3,
+        8.575
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_123",
+      "from": [
+        7.655,
+        25.1,
+        7.425
+      ],
+      "to": [
+        8.345,
+        28.3,
+        7.655
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_124",
+      "from": [
+        8.0,
+        26.75,
+        6.8
+      ],
+      "to": [
+        8.5,
+        27.0,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_125",
+      "from": [
+        8.25,
+        27.0,
+        6.8
+      ],
+      "to": [
+        8.5,
+        27.25,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_126",
+      "from": [
+        8.5,
+        27.25,
+        6.8
+      ],
+      "to": [
+        8.75,
+        27.75,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_127",
+      "from": [
+        7.75,
+        27.0,
+        6.8
+      ],
+      "to": [
+        8.0,
+        28.0,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_128",
+      "from": [
+        8.25,
+        27.75,
+        6.8
+      ],
+      "to": [
+        8.5,
+        28.0,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_129",
+      "from": [
+        8.0,
+        28.0,
+        6.8
+      ],
+      "to": [
+        8.25,
+        28.25,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_130",
+      "from": [
+        8.0,
+        27.0,
+        6.76
+      ],
+      "to": [
+        8.25,
+        27.25,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_131",
+      "from": [
+        8.0,
+        27.25,
+        6.76
+      ],
+      "to": [
+        8.5,
+        27.75,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_132",
+      "from": [
+        8.0,
+        27.75,
+        6.76
+      ],
+      "to": [
+        8.25,
+        28.0,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_133",
+      "from": [
+        8.0,
+        26.75,
+        8.8
+      ],
+      "to": [
+        8.5,
+        27.0,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_134",
+      "from": [
+        8.25,
+        27.0,
+        8.8
+      ],
+      "to": [
+        8.5,
+        27.25,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_135",
+      "from": [
+        8.5,
+        27.25,
+        8.8
+      ],
+      "to": [
+        8.75,
+        27.75,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_136",
+      "from": [
+        7.75,
+        27.0,
+        8.8
+      ],
+      "to": [
+        8.0,
+        28.0,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_137",
+      "from": [
+        8.25,
+        27.75,
+        8.8
+      ],
+      "to": [
+        8.5,
+        28.0,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_138",
+      "from": [
+        8.0,
+        28.0,
+        8.8
+      ],
+      "to": [
+        8.25,
+        28.25,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_139",
+      "from": [
+        8.0,
+        27.0,
+        8.76
+      ],
+      "to": [
+        8.25,
+        27.25,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_140",
+      "from": [
+        8.0,
+        27.25,
+        8.76
+      ],
+      "to": [
+        8.5,
+        27.75,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_141",
+      "from": [
+        8.0,
+        27.75,
+        8.76
+      ],
+      "to": [
+        8.25,
+        28.0,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_142",
+      "from": [
+        7.0,
+        26.5,
+        6.8
+      ],
+      "to": [
+        8.0,
+        26.75,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_143",
+      "from": [
+        8.0,
+        26.75,
+        6.8
+      ],
+      "to": [
+        8.25,
+        27.0,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_144",
+      "from": [
+        6.75,
+        26.75,
+        6.8
+      ],
+      "to": [
+        7.0,
+        27.25,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_145",
+      "from": [
+        7.75,
+        27.0,
+        6.8
+      ],
+      "to": [
+        8.0,
+        27.25,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_146",
+      "from": [
+        7.0,
+        27.25,
+        6.8
+      ],
+      "to": [
+        7.75,
+        27.5,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_147",
+      "from": [
+        7.0,
+        26.75,
+        6.76
+      ],
+      "to": [
+        8.0,
+        27.0,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_148",
+      "from": [
+        7.0,
+        27.0,
+        6.76
+      ],
+      "to": [
+        7.75,
+        27.25,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_149",
+      "from": [
+        7.0,
+        26.5,
+        8.8
+      ],
+      "to": [
+        8.0,
+        26.75,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_150",
+      "from": [
+        8.0,
+        26.75,
+        8.8
+      ],
+      "to": [
+        8.25,
+        27.0,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_151",
+      "from": [
+        6.75,
+        26.75,
+        8.8
+      ],
+      "to": [
+        7.0,
+        27.25,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_152",
+      "from": [
+        7.75,
+        27.0,
+        8.8
+      ],
+      "to": [
+        8.0,
+        27.25,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_153",
+      "from": [
+        7.0,
+        27.25,
+        8.8
+      ],
+      "to": [
+        7.75,
+        27.5,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_154",
+      "from": [
+        7.0,
+        26.75,
+        8.76
+      ],
+      "to": [
+        8.0,
+        27.0,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_155",
+      "from": [
+        7.0,
+        27.0,
+        8.76
+      ],
+      "to": [
+        7.75,
+        27.25,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_156",
+      "from": [
+        7.25,
+        25.5,
+        6.8
+      ],
+      "to": [
+        8.0,
+        25.75,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_157",
+      "from": [
+        7.25,
+        25.75,
+        6.8
+      ],
+      "to": [
+        7.5,
+        26.25,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_158",
+      "from": [
+        7.25,
+        26.25,
+        6.8
+      ],
+      "to": [
+        7.75,
+        26.5,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_159",
+      "from": [
+        8.0,
+        25.75,
+        6.8
+      ],
+      "to": [
+        8.25,
+        26.5,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_160",
+      "from": [
+        7.75,
+        26.5,
+        6.8
+      ],
+      "to": [
+        8.25,
+        26.75,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_161",
+      "from": [
+        7.5,
+        25.75,
+        6.76
+      ],
+      "to": [
+        8.0,
+        26.25,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_162",
+      "from": [
+        7.75,
+        26.25,
+        6.76
+      ],
+      "to": [
+        8.0,
+        26.5,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_163",
+      "from": [
+        7.25,
+        25.5,
+        8.8
+      ],
+      "to": [
+        8.0,
+        25.75,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_164",
+      "from": [
+        7.25,
+        25.75,
+        8.8
+      ],
+      "to": [
+        7.5,
+        26.25,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_165",
+      "from": [
+        7.25,
+        26.25,
+        8.8
+      ],
+      "to": [
+        7.75,
+        26.5,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_166",
+      "from": [
+        8.0,
+        25.75,
+        8.8
+      ],
+      "to": [
+        8.25,
+        26.5,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_167",
+      "from": [
+        7.75,
+        26.5,
+        8.8
+      ],
+      "to": [
+        8.25,
+        26.75,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_168",
+      "from": [
+        7.5,
+        25.75,
+        8.76
+      ],
+      "to": [
+        8.0,
+        26.25,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_169",
+      "from": [
+        7.75,
+        26.25,
+        8.76
+      ],
+      "to": [
+        8.0,
+        26.5,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_170",
+      "from": [
+        8.5,
+        25.5,
+        6.8
+      ],
+      "to": [
+        9.25,
+        25.75,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_171",
+      "from": [
+        9.0,
+        25.75,
+        6.8
+      ],
+      "to": [
+        9.25,
+        26.25,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_172",
+      "from": [
+        8.25,
+        25.75,
+        6.8
+      ],
+      "to": [
+        8.5,
+        26.5,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_173",
+      "from": [
+        8.75,
+        26.25,
+        6.8
+      ],
+      "to": [
+        9.0,
+        26.5,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_174",
+      "from": [
+        8.25,
+        26.5,
+        6.8
+      ],
+      "to": [
+        8.75,
+        26.75,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_175",
+      "from": [
+        8.5,
+        25.75,
+        6.76
+      ],
+      "to": [
+        9.0,
+        26.25,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_176",
+      "from": [
+        8.5,
+        26.25,
+        6.76
+      ],
+      "to": [
+        8.75,
+        26.5,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_177",
+      "from": [
+        8.5,
+        25.5,
+        8.8
+      ],
+      "to": [
+        9.25,
+        25.75,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_178",
+      "from": [
+        9.0,
+        25.75,
+        8.8
+      ],
+      "to": [
+        9.25,
+        26.25,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_179",
+      "from": [
+        8.25,
+        25.75,
+        8.8
+      ],
+      "to": [
+        8.5,
+        26.5,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_180",
+      "from": [
+        8.75,
+        26.25,
+        8.8
+      ],
+      "to": [
+        9.0,
+        26.5,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_181",
+      "from": [
+        8.25,
+        26.5,
+        8.8
+      ],
+      "to": [
+        8.75,
+        26.75,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_182",
+      "from": [
+        8.5,
+        25.75,
+        8.76
+      ],
+      "to": [
+        9.0,
+        26.25,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_183",
+      "from": [
+        8.5,
+        26.25,
+        8.76
+      ],
+      "to": [
+        8.75,
+        26.5,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_184",
+      "from": [
+        8.25,
+        26.5,
+        6.8
+      ],
+      "to": [
+        9.25,
+        26.75,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_185",
+      "from": [
+        8.25,
+        26.75,
+        6.8
+      ],
+      "to": [
+        8.5,
+        27.0,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_186",
+      "from": [
+        9.25,
+        26.75,
+        6.8
+      ],
+      "to": [
+        9.5,
+        27.0,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_187",
+      "from": [
+        8.5,
+        27.0,
+        6.8
+      ],
+      "to": [
+        8.75,
+        27.25,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_188",
+      "from": [
+        9.25,
+        27.0,
+        6.8
+      ],
+      "to": [
+        9.75,
+        27.25,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_189",
+      "from": [
+        8.75,
+        27.25,
+        6.8
+      ],
+      "to": [
+        9.25,
+        27.5,
+        7.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_190",
+      "from": [
+        8.5,
+        26.75,
+        6.76
+      ],
+      "to": [
+        9.25,
+        27.0,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_191",
+      "from": [
+        8.75,
+        27.0,
+        6.76
+      ],
+      "to": [
+        9.25,
+        27.25,
+        7.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_192",
+      "from": [
+        8.25,
+        26.5,
+        8.8
+      ],
+      "to": [
+        9.25,
+        26.75,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_193",
+      "from": [
+        8.25,
+        26.75,
+        8.8
+      ],
+      "to": [
+        8.5,
+        27.0,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_194",
+      "from": [
+        9.25,
+        26.75,
+        8.8
+      ],
+      "to": [
+        9.5,
+        27.0,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_195",
+      "from": [
+        8.5,
+        27.0,
+        8.8
+      ],
+      "to": [
+        8.75,
+        27.25,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_196",
+      "from": [
+        9.25,
+        27.0,
+        8.8
+      ],
+      "to": [
+        9.75,
+        27.25,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_197",
+      "from": [
+        8.75,
+        27.25,
+        8.8
+      ],
+      "to": [
+        9.25,
+        27.5,
+        9.2
+      ],
+      "mat": "magenta",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_198",
+      "from": [
+        8.5,
+        26.75,
+        8.76
+      ],
+      "to": [
+        9.25,
+        27.0,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_light_199",
+      "from": [
+        8.75,
+        27.0,
+        8.76
+      ],
+      "to": [
+        9.25,
+        27.25,
+        9.24
+      ],
+      "mat": "magenta_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_200",
+      "from": [
+        8.0,
+        26.25,
+        7.34
+      ],
+      "to": [
+        8.5,
+        26.5,
+        8.66
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_201",
+      "from": [
+        8.5,
+        26.5,
+        7.34
+      ],
+      "to": [
+        8.75,
+        26.75,
+        8.66
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_202",
+      "from": [
+        7.75,
+        26.5,
+        7.34
+      ],
+      "to": [
+        8.0,
+        27.0,
+        8.66
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_203",
+      "from": [
+        8.25,
+        26.75,
+        7.34
+      ],
+      "to": [
+        8.5,
+        27.0,
+        8.66
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_204",
+      "from": [
+        8.0,
+        27.0,
+        7.34
+      ],
+      "to": [
+        8.25,
+        27.25,
+        8.66
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "void_205",
+      "from": [
+        8.0,
+        26.5,
+        7.0232
+      ],
+      "to": [
+        8.5,
+        26.75,
+        8.9768
+      ],
+      "mat": "void",
+      "bone": "weapon"
+    },
+    {
+      "name": "void_206",
+      "from": [
+        8.0,
+        26.75,
+        7.0232
+      ],
+      "to": [
+        8.25,
+        27.0,
+        8.9768
+      ],
+      "mat": "void",
+      "bone": "weapon"
+    },
+    {
+      "name": "white_207",
+      "from": [
+        8.0152,
+        26.7792,
+        6.7856
+      ],
+      "to": [
+        8.2652,
+        27.0292,
+        9.2144
+      ],
+      "mat": "white",
+      "bone": "weapon"
+    },
+    {
+      "name": "magenta_208",
+      "from": [
+        9.75,
+        19.5,
+        8.59
+      ],
+      "to": [
+        10.0,
+        19.75,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_209",
+      "from": [
+        10.5,
+        19.5,
+        8.59
+      ],
+      "to": [
+        10.75,
+        19.75,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_210",
+      "from": [
+        10.0,
+        19.75,
+        8.59
+      ],
+      "to": [
+        10.75,
+        20.0,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_211",
+      "from": [
+        10.5,
+        20.0,
+        8.59
+      ],
+      "to": [
+        10.75,
+        20.25,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_212",
+      "from": [
+        10.0,
+        20.0,
+        8.59
+      ],
+      "to": [
+        10.25,
+        20.75,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_213",
+      "from": [
+        10.25,
+        20.75,
+        8.59
+      ],
+      "to": [
+        10.5,
+        21.25,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_214",
+      "from": [
+        10.75,
+        20.25,
+        8.59
+      ],
+      "to": [
+        11.0,
+        22.5,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_215",
+      "from": [
+        10.0,
+        21.25,
+        8.59
+      ],
+      "to": [
+        10.25,
+        23.0,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_216",
+      "from": [
+        9.75,
+        23.0,
+        8.59
+      ],
+      "to": [
+        10.0,
+        23.5,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_217",
+      "from": [
+        10.5,
+        22.5,
+        8.59
+      ],
+      "to": [
+        10.75,
+        23.5,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_218",
+      "from": [
+        9.5,
+        23.5,
+        8.59
+      ],
+      "to": [
+        9.75,
+        24.0,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_219",
+      "from": [
+        10.25,
+        23.5,
+        8.59
+      ],
+      "to": [
+        10.5,
+        24.0,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_220",
+      "from": [
+        9.25,
+        24.0,
+        8.59
+      ],
+      "to": [
+        9.5,
+        24.5,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_221",
+      "from": [
+        10.0,
+        24.0,
+        8.59
+      ],
+      "to": [
+        10.25,
+        24.5,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_222",
+      "from": [
+        9.0,
+        24.5,
+        8.59
+      ],
+      "to": [
+        9.25,
+        24.75,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_223",
+      "from": [
+        9.75,
+        24.5,
+        8.59
+      ],
+      "to": [
+        10.0,
+        24.75,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_224",
+      "from": [
+        9.5,
+        24.75,
+        8.59
+      ],
+      "to": [
+        9.75,
+        25.0,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_225",
+      "from": [
+        8.75,
+        24.75,
+        8.59
+      ],
+      "to": [
+        9.0,
+        25.25,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_226",
+      "from": [
+        9.25,
+        25.0,
+        8.59
+      ],
+      "to": [
+        9.5,
+        25.25,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_227",
+      "from": [
+        8.5,
+        25.25,
+        8.59
+      ],
+      "to": [
+        8.75,
+        25.5,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_228",
+      "from": [
+        9.0,
+        25.25,
+        8.59
+      ],
+      "to": [
+        9.25,
+        25.5,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_229",
+      "from": [
+        8.75,
+        25.5,
+        8.59
+      ],
+      "to": [
+        9.0,
+        25.75,
+        8.91
+      ],
+      "mat": "magenta",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_230",
+      "from": [
+        10.25,
+        20.0,
+        8.55
+      ],
+      "to": [
+        10.5,
+        20.25,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_231",
+      "from": [
+        10.25,
+        20.25,
+        8.55
+      ],
+      "to": [
+        10.75,
+        20.75,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_232",
+      "from": [
+        10.5,
+        20.75,
+        8.55
+      ],
+      "to": [
+        10.75,
+        21.25,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_233",
+      "from": [
+        10.25,
+        21.25,
+        8.55
+      ],
+      "to": [
+        10.75,
+        22.5,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_234",
+      "from": [
+        10.25,
+        22.5,
+        8.55
+      ],
+      "to": [
+        10.5,
+        23.0,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_235",
+      "from": [
+        10.0,
+        23.0,
+        8.55
+      ],
+      "to": [
+        10.5,
+        23.5,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_236",
+      "from": [
+        9.75,
+        23.5,
+        8.55
+      ],
+      "to": [
+        10.25,
+        24.0,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_237",
+      "from": [
+        9.5,
+        24.0,
+        8.55
+      ],
+      "to": [
+        10.0,
+        24.5,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_238",
+      "from": [
+        9.25,
+        24.5,
+        8.55
+      ],
+      "to": [
+        9.75,
+        24.75,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_239",
+      "from": [
+        9.0,
+        24.75,
+        8.55
+      ],
+      "to": [
+        9.5,
+        25.0,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_240",
+      "from": [
+        9.0,
+        25.0,
+        8.55
+      ],
+      "to": [
+        9.25,
+        25.25,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    },
+    {
+      "name": "magenta_light_241",
+      "from": [
+        8.75,
+        25.25,
+        8.55
+      ],
+      "to": [
+        9.0,
+        25.5,
+        8.95
+      ],
+      "mat": "magenta_light",
+      "bone": "ribbon"
+    }
+  ]
+}

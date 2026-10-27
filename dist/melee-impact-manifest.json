@@ -1,0 +1,15 @@
+{
+  "version": "3.0.0-e2.103-melee-impact",
+  "jar_sha256": "d17a2891f1afd92711eb4e124c79433e88a55ce5ddd093a87d1ef6a8edcfac7e",
+  "previous_jar_sha256": "4567004812aea704165887397975ab762d45dbc54435253be81aededf46c0358",
+  "native_result": "PASS 193 Paper checks",
+  "preserved_resource_entries": 101,
+  "pet_model_count": 51,
+  "resource_pack_changed": false,
+  "inherited_current_workspace_resources": [
+    "config.yml"
+  ],
+  "live_server_modified": false,
+  "connected_client_audio_review": false,
+  "runtime": "output\\melee-impact-paper-v5-20261021"
+}

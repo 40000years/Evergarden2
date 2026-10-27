@@ -1,0 +1,5320 @@
+{
+  "id": "fire",
+  "grip": [
+    8,
+    10.6,
+    8
+  ],
+  "cubes": [
+    {
+      "name": "wood_000",
+      "from": [
+        7.59,
+        1.5,
+        7.55
+      ],
+      "to": [
+        8.41,
+        22,
+        8.45
+      ],
+      "mat": "wood",
+      "bone": "staff"
+    },
+    {
+      "name": "wood_light_001",
+      "from": [
+        7.61,
+        2,
+        7.39
+      ],
+      "to": [
+        7.83,
+        21.6,
+        8.61
+      ],
+      "mat": "wood_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_002",
+      "from": [
+        7.44,
+        8.8,
+        7.4
+      ],
+      "to": [
+        8.56,
+        12.4,
+        8.6
+      ],
+      "mat": "leather",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_003",
+      "from": [
+        7.35,
+        9.0,
+        7.31
+      ],
+      "to": [
+        8.65,
+        9.17,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_004",
+      "from": [
+        7.35,
+        9.6,
+        7.31
+      ],
+      "to": [
+        8.65,
+        9.77,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_005",
+      "from": [
+        7.35,
+        10.2,
+        7.31
+      ],
+      "to": [
+        8.65,
+        10.37,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_006",
+      "from": [
+        7.35,
+        10.8,
+        7.31
+      ],
+      "to": [
+        8.65,
+        10.97,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_007",
+      "from": [
+        7.35,
+        11.4,
+        7.31
+      ],
+      "to": [
+        8.65,
+        11.57,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_008",
+      "from": [
+        7.35,
+        12.0,
+        7.31
+      ],
+      "to": [
+        8.65,
+        12.17,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_009",
+      "from": [
+        7.175,
+        2.1,
+        7.175
+      ],
+      "to": [
+        8.825,
+        2.6,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_010",
+      "from": [
+        7.305,
+        2.47,
+        7.095
+      ],
+      "to": [
+        8.695,
+        2.66,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_011",
+      "from": [
+        7.175,
+        5.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        5.7,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_012",
+      "from": [
+        7.305,
+        5.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        5.76,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_013",
+      "from": [
+        7.175,
+        8.55,
+        7.175
+      ],
+      "to": [
+        8.825,
+        9.05,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_014",
+      "from": [
+        7.305,
+        8.92,
+        7.095
+      ],
+      "to": [
+        8.695,
+        9.11,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_015",
+      "from": [
+        7.175,
+        12.45,
+        7.175
+      ],
+      "to": [
+        8.825,
+        12.95,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_016",
+      "from": [
+        7.305,
+        12.82,
+        7.095
+      ],
+      "to": [
+        8.695,
+        13.01,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_017",
+      "from": [
+        7.175,
+        16.7,
+        7.175
+      ],
+      "to": [
+        8.825,
+        17.2,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_018",
+      "from": [
+        7.305,
+        17.07,
+        7.095
+      ],
+      "to": [
+        8.695,
+        17.26,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_019",
+      "from": [
+        7.175,
+        20.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        20.7,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_020",
+      "from": [
+        7.305,
+        20.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        20.76,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_dark_021",
+      "from": [
+        7.75,
+        1.25,
+        6.85
+      ],
+      "to": [
+        8.25,
+        1.5,
+        9.15
+      ],
+      "mat": "fire_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_dark_022",
+      "from": [
+        7.5,
+        1.5,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.0,
+        9.15
+      ],
+      "mat": "fire_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_dark_023",
+      "from": [
+        7.25,
+        2.0,
+        6.85
+      ],
+      "to": [
+        8.75,
+        2.25,
+        9.15
+      ],
+      "mat": "fire_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_dark_024",
+      "from": [
+        7.5,
+        2.25,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.75,
+        9.15
+      ],
+      "mat": "fire_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_dark_025",
+      "from": [
+        7.75,
+        2.75,
+        6.85
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.15
+      ],
+      "mat": "fire_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_026",
+      "from": [
+        7.75,
+        1.25,
+        6.67
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.33
+      ],
+      "mat": "fire",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_027",
+      "from": [
+        7.5,
+        1.75,
+        6.67
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.33
+      ],
+      "mat": "fire",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_028",
+      "from": [
+        7.75,
+        2.5,
+        6.67
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.33
+      ],
+      "mat": "fire",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_light_029",
+      "from": [
+        8.0,
+        1.25,
+        6.54
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.46
+      ],
+      "mat": "fire_light",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_light_030",
+      "from": [
+        8.0,
+        1.75,
+        6.54
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.46
+      ],
+      "mat": "fire_light",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_light_031",
+      "from": [
+        8.0,
+        2.5,
+        6.54
+      ],
+      "to": [
+        8.25,
+        2.75,
+        9.46
+      ],
+      "mat": "fire_light",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_core_032",
+      "from": [
+        7.75,
+        1.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        1.75,
+        9.45
+      ],
+      "mat": "fire_core",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_core_033",
+      "from": [
+        7.5,
+        1.75,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.5,
+        9.45
+      ],
+      "mat": "fire_core",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_core_034",
+      "from": [
+        7.75,
+        2.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.75,
+        9.45
+      ],
+      "mat": "fire_core",
+      "bone": "staff"
+    },
+    {
+      "name": "white_035",
+      "from": [
+        7.88,
+        1.746,
+        6.43
+      ],
+      "to": [
+        8.13,
+        2.506,
+        9.57
+      ],
+      "mat": "white",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_036",
+      "from": [
+        7.75,
+        0.75,
+        7.15
+      ],
+      "to": [
+        8.25,
+        1.5,
+        8.85
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_037",
+      "from": [
+        7.5,
+        1.5,
+        7.15
+      ],
+      "to": [
+        8.5,
+        1.75,
+        8.85
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_038",
+      "from": [
+        7.275,
+        1.5,
+        7.275
+      ],
+      "to": [
+        8.725,
+        1.88,
+        8.725
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_039",
+      "from": [
+        7.405,
+        1.75,
+        7.195
+      ],
+      "to": [
+        8.595,
+        1.94,
+        8.805
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_light_040",
+      "from": [
+        7.84,
+        6.7,
+        7.3
+      ],
+      "to": [
+        8.16,
+        7.5,
+        8.7
+      ],
+      "mat": "fire_light",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_light_041",
+      "from": [
+        7.84,
+        14.5,
+        7.3
+      ],
+      "to": [
+        8.16,
+        15.3,
+        8.7
+      ],
+      "mat": "fire_light",
+      "bone": "staff"
+    },
+    {
+      "name": "fire_light_042",
+      "from": [
+        7.84,
+        18,
+        7.3
+      ],
+      "to": [
+        8.16,
+        18.8,
+        8.7
+      ],
+      "mat": "fire_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_dark_043",
+      "from": [
+        7.75,
+        20.25,
+        6.5
+      ],
+      "to": [
+        8.0,
+        20.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_044",
+      "from": [
+        7.5,
+        20.5,
+        6.5
+      ],
+      "to": [
+        7.75,
+        20.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_045",
+      "from": [
+        7.25,
+        20.75,
+        6.5
+      ],
+      "to": [
+        7.75,
+        21.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_046",
+      "from": [
+        7.0,
+        21.25,
+        6.5
+      ],
+      "to": [
+        7.75,
+        21.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_047",
+      "from": [
+        6.5,
+        21.5,
+        6.5
+      ],
+      "to": [
+        7.5,
+        21.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_048",
+      "from": [
+        6.0,
+        21.75,
+        6.5
+      ],
+      "to": [
+        7.5,
+        22.0,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_049",
+      "from": [
+        5.25,
+        22.0,
+        6.5
+      ],
+      "to": [
+        7.5,
+        22.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_050",
+      "from": [
+        4.75,
+        22.25,
+        6.5
+      ],
+      "to": [
+        7.5,
+        22.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_051",
+      "from": [
+        4.0,
+        22.5,
+        6.5
+      ],
+      "to": [
+        7.25,
+        22.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_052",
+      "from": [
+        3.5,
+        22.75,
+        6.5
+      ],
+      "to": [
+        6.75,
+        23.0,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_053",
+      "from": [
+        3.0,
+        23.0,
+        6.5
+      ],
+      "to": [
+        6.0,
+        23.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_054",
+      "from": [
+        3.0,
+        23.25,
+        6.5
+      ],
+      "to": [
+        5.25,
+        23.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_055",
+      "from": [
+        3.0,
+        23.5,
+        6.5
+      ],
+      "to": [
+        4.5,
+        23.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_056",
+      "from": [
+        2.75,
+        23.75,
+        6.5
+      ],
+      "to": [
+        4.0,
+        24.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_057",
+      "from": [
+        2.75,
+        24.25,
+        6.5
+      ],
+      "to": [
+        3.75,
+        24.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_058",
+      "from": [
+        2.5,
+        24.5,
+        6.5
+      ],
+      "to": [
+        3.75,
+        24.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_059",
+      "from": [
+        2.5,
+        24.75,
+        6.5
+      ],
+      "to": [
+        3.5,
+        25.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_060",
+      "from": [
+        2.25,
+        25.5,
+        6.5
+      ],
+      "to": [
+        3.5,
+        26.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_061",
+      "from": [
+        2.5,
+        26.75,
+        6.5
+      ],
+      "to": [
+        3.5,
+        27.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_062",
+      "from": [
+        2.5,
+        27.25,
+        6.5
+      ],
+      "to": [
+        3.25,
+        27.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_063",
+      "from": [
+        2.5,
+        27.5,
+        6.5
+      ],
+      "to": [
+        3.0,
+        27.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_064",
+      "from": [
+        6.75,
+        21.0,
+        6.1
+      ],
+      "to": [
+        7.25,
+        21.25,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_065",
+      "from": [
+        6.5,
+        21.25,
+        6.1
+      ],
+      "to": [
+        7.5,
+        21.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_066",
+      "from": [
+        6.0,
+        21.5,
+        6.1
+      ],
+      "to": [
+        7.25,
+        21.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_067",
+      "from": [
+        5.5,
+        21.75,
+        6.1
+      ],
+      "to": [
+        6.75,
+        22.0,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_068",
+      "from": [
+        5.25,
+        22.0,
+        6.1
+      ],
+      "to": [
+        6.5,
+        22.25,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_069",
+      "from": [
+        4.75,
+        22.25,
+        6.1
+      ],
+      "to": [
+        6.0,
+        22.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_070",
+      "from": [
+        4.5,
+        22.5,
+        6.1
+      ],
+      "to": [
+        5.5,
+        22.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_071",
+      "from": [
+        4.0,
+        22.75,
+        6.1
+      ],
+      "to": [
+        5.25,
+        23.0,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_072",
+      "from": [
+        3.5,
+        23.0,
+        6.1
+      ],
+      "to": [
+        4.75,
+        23.25,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_073",
+      "from": [
+        3.5,
+        23.25,
+        6.1
+      ],
+      "to": [
+        4.5,
+        23.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_074",
+      "from": [
+        3.75,
+        23.5,
+        6.1
+      ],
+      "to": [
+        4.0,
+        23.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_075",
+      "from": [
+        3.25,
+        23.5,
+        6.1
+      ],
+      "to": [
+        4.0,
+        23.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_076",
+      "from": [
+        3.0,
+        23.75,
+        6.1
+      ],
+      "to": [
+        3.75,
+        24.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_077",
+      "from": [
+        2.75,
+        24.5,
+        6.1
+      ],
+      "to": [
+        3.5,
+        25.0,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_078",
+      "from": [
+        2.75,
+        25.0,
+        6.1
+      ],
+      "to": [
+        3.25,
+        25.25,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_079",
+      "from": [
+        2.5,
+        25.25,
+        6.1
+      ],
+      "to": [
+        3.25,
+        25.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_080",
+      "from": [
+        3.0,
+        25.5,
+        6.1
+      ],
+      "to": [
+        3.25,
+        25.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_081",
+      "from": [
+        2.75,
+        25.5,
+        6.1
+      ],
+      "to": [
+        3.25,
+        25.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_082",
+      "from": [
+        2.5,
+        25.75,
+        6.1
+      ],
+      "to": [
+        3.25,
+        26.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_083",
+      "from": [
+        2.75,
+        26.5,
+        6.1
+      ],
+      "to": [
+        3.25,
+        27.0,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_084",
+      "from": [
+        2.75,
+        27.0,
+        6.1
+      ],
+      "to": [
+        3.5,
+        27.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_085",
+      "from": [
+        6.5,
+        21.75,
+        5.95
+      ],
+      "to": [
+        7.0,
+        22.0,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_086",
+      "from": [
+        6.25,
+        22.0,
+        5.95
+      ],
+      "to": [
+        6.75,
+        22.25,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_087",
+      "from": [
+        5.75,
+        22.25,
+        5.95
+      ],
+      "to": [
+        6.25,
+        22.5,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_088",
+      "from": [
+        5.5,
+        22.5,
+        5.95
+      ],
+      "to": [
+        5.75,
+        22.75,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_089",
+      "from": [
+        5.0,
+        22.75,
+        5.95
+      ],
+      "to": [
+        5.5,
+        23.0,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_090",
+      "from": [
+        4.5,
+        23.0,
+        5.95
+      ],
+      "to": [
+        5.0,
+        23.25,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_091",
+      "from": [
+        4.25,
+        23.25,
+        5.95
+      ],
+      "to": [
+        4.75,
+        23.5,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_092",
+      "from": [
+        3.75,
+        23.5,
+        5.95
+      ],
+      "to": [
+        4.25,
+        23.75,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_093",
+      "from": [
+        3.75,
+        23.75,
+        5.95
+      ],
+      "to": [
+        4.0,
+        24.0,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_094",
+      "from": [
+        3.75,
+        23.75,
+        5.95
+      ],
+      "to": [
+        4.0,
+        24.0,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_095",
+      "from": [
+        3.5,
+        24.0,
+        5.95
+      ],
+      "to": [
+        3.75,
+        24.75,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_096",
+      "from": [
+        3.25,
+        24.75,
+        5.95
+      ],
+      "to": [
+        3.5,
+        25.25,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_097",
+      "from": [
+        3.0,
+        25.25,
+        5.95
+      ],
+      "to": [
+        3.5,
+        25.5,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_dark_098",
+      "from": [
+        7.25,
+        21.0,
+        6.15
+      ],
+      "to": [
+        7.5,
+        21.25,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_099",
+      "from": [
+        7.0,
+        21.25,
+        6.15
+      ],
+      "to": [
+        7.5,
+        21.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_100",
+      "from": [
+        6.75,
+        21.5,
+        6.15
+      ],
+      "to": [
+        7.5,
+        21.75,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_101",
+      "from": [
+        6.25,
+        21.75,
+        6.15
+      ],
+      "to": [
+        7.5,
+        22.25,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_102",
+      "from": [
+        6.25,
+        22.25,
+        6.15
+      ],
+      "to": [
+        7.25,
+        22.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_103",
+      "from": [
+        6.0,
+        22.5,
+        6.15
+      ],
+      "to": [
+        7.25,
+        23.0,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_104",
+      "from": [
+        6.0,
+        23.0,
+        6.15
+      ],
+      "to": [
+        6.75,
+        23.25,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_105",
+      "from": [
+        5.75,
+        23.25,
+        6.15
+      ],
+      "to": [
+        6.25,
+        23.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_106",
+      "from": [
+        5.75,
+        23.5,
+        6.15
+      ],
+      "to": [
+        6.0,
+        23.75,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_107",
+      "from": [
+        3.25,
+        21.0,
+        7.1
+      ],
+      "to": [
+        3.5,
+        21.5,
+        8.9
+      ],
+      "mat": "gold",
+      "bone": "filigree"
+    },
+    {
+      "name": "gold_108",
+      "from": [
+        3.5,
+        21.75,
+        7.1
+      ],
+      "to": [
+        3.75,
+        22.5,
+        8.9
+      ],
+      "mat": "gold",
+      "bone": "filigree"
+    },
+    {
+      "name": "gold_109",
+      "from": [
+        3.25,
+        20.0,
+        7.1
+      ],
+      "to": [
+        3.5,
+        21.0,
+        8.9
+      ],
+      "mat": "gold",
+      "bone": "filigree"
+    },
+    {
+      "name": "fire_dark_110",
+      "from": [
+        3.25,
+        18.75,
+        7.15
+      ],
+      "to": [
+        3.5,
+        19.0,
+        8.85
+      ],
+      "mat": "fire_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_dark_111",
+      "from": [
+        3.0,
+        19.0,
+        7.15
+      ],
+      "to": [
+        3.5,
+        19.25,
+        8.85
+      ],
+      "mat": "fire_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_dark_112",
+      "from": [
+        3.0,
+        19.25,
+        7.15
+      ],
+      "to": [
+        3.75,
+        19.5,
+        8.85
+      ],
+      "mat": "fire_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_dark_113",
+      "from": [
+        3.25,
+        19.5,
+        7.15
+      ],
+      "to": [
+        3.5,
+        19.75,
+        8.85
+      ],
+      "mat": "fire_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_114",
+      "from": [
+        3.25,
+        18.75,
+        6.97
+      ],
+      "to": [
+        3.5,
+        19.0,
+        9.03
+      ],
+      "mat": "fire",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_115",
+      "from": [
+        3.0,
+        19.0,
+        6.97
+      ],
+      "to": [
+        3.5,
+        19.5,
+        9.03
+      ],
+      "mat": "fire",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_light_116",
+      "from": [
+        3.25,
+        19.0,
+        6.84
+      ],
+      "to": [
+        3.5,
+        19.5,
+        9.16
+      ],
+      "mat": "fire_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_core_117",
+      "from": [
+        3.0,
+        19.0,
+        6.85
+      ],
+      "to": [
+        3.25,
+        19.5,
+        9.15
+      ],
+      "mat": "fire_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_118",
+      "from": [
+        3.18,
+        19.0304,
+        6.73
+      ],
+      "to": [
+        3.43,
+        19.4544,
+        9.27
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    },
+    {
+      "name": "gold_dark_119",
+      "from": [
+        8.0,
+        20.25,
+        6.5
+      ],
+      "to": [
+        8.25,
+        20.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_120",
+      "from": [
+        8.25,
+        20.5,
+        6.5
+      ],
+      "to": [
+        8.5,
+        20.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_121",
+      "from": [
+        8.25,
+        20.75,
+        6.5
+      ],
+      "to": [
+        8.75,
+        21.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_122",
+      "from": [
+        8.25,
+        21.25,
+        6.5
+      ],
+      "to": [
+        9.0,
+        21.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_123",
+      "from": [
+        8.5,
+        21.5,
+        6.5
+      ],
+      "to": [
+        9.5,
+        21.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_124",
+      "from": [
+        8.5,
+        21.75,
+        6.5
+      ],
+      "to": [
+        10.0,
+        22.0,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_125",
+      "from": [
+        8.5,
+        22.0,
+        6.5
+      ],
+      "to": [
+        10.75,
+        22.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_126",
+      "from": [
+        8.5,
+        22.25,
+        6.5
+      ],
+      "to": [
+        11.25,
+        22.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_127",
+      "from": [
+        8.75,
+        22.5,
+        6.5
+      ],
+      "to": [
+        12.0,
+        22.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_128",
+      "from": [
+        9.25,
+        22.75,
+        6.5
+      ],
+      "to": [
+        12.5,
+        23.0,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_129",
+      "from": [
+        10.0,
+        23.0,
+        6.5
+      ],
+      "to": [
+        13.0,
+        23.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_130",
+      "from": [
+        10.75,
+        23.25,
+        6.5
+      ],
+      "to": [
+        13.0,
+        23.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_131",
+      "from": [
+        11.5,
+        23.5,
+        6.5
+      ],
+      "to": [
+        13.0,
+        23.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_132",
+      "from": [
+        12.0,
+        23.75,
+        6.5
+      ],
+      "to": [
+        13.25,
+        24.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_133",
+      "from": [
+        12.25,
+        24.25,
+        6.5
+      ],
+      "to": [
+        13.25,
+        24.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_134",
+      "from": [
+        12.25,
+        24.5,
+        6.5
+      ],
+      "to": [
+        13.5,
+        24.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_135",
+      "from": [
+        12.5,
+        24.75,
+        6.5
+      ],
+      "to": [
+        13.5,
+        25.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_136",
+      "from": [
+        12.5,
+        25.5,
+        6.5
+      ],
+      "to": [
+        13.75,
+        26.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_137",
+      "from": [
+        12.5,
+        26.75,
+        6.5
+      ],
+      "to": [
+        13.5,
+        27.25,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_138",
+      "from": [
+        12.75,
+        27.25,
+        6.5
+      ],
+      "to": [
+        13.5,
+        27.5,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_139",
+      "from": [
+        13.0,
+        27.5,
+        6.5
+      ],
+      "to": [
+        13.5,
+        27.75,
+        9.5
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_140",
+      "from": [
+        8.75,
+        21.0,
+        6.1
+      ],
+      "to": [
+        9.25,
+        21.25,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_141",
+      "from": [
+        8.5,
+        21.25,
+        6.1
+      ],
+      "to": [
+        9.5,
+        21.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_142",
+      "from": [
+        8.75,
+        21.5,
+        6.1
+      ],
+      "to": [
+        10.0,
+        21.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_143",
+      "from": [
+        9.25,
+        21.75,
+        6.1
+      ],
+      "to": [
+        10.5,
+        22.0,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_144",
+      "from": [
+        9.5,
+        22.0,
+        6.1
+      ],
+      "to": [
+        10.75,
+        22.25,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_145",
+      "from": [
+        10.0,
+        22.25,
+        6.1
+      ],
+      "to": [
+        11.25,
+        22.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_146",
+      "from": [
+        10.5,
+        22.5,
+        6.1
+      ],
+      "to": [
+        11.5,
+        22.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_147",
+      "from": [
+        10.75,
+        22.75,
+        6.1
+      ],
+      "to": [
+        12.0,
+        23.0,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_148",
+      "from": [
+        11.25,
+        23.0,
+        6.1
+      ],
+      "to": [
+        12.5,
+        23.25,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_149",
+      "from": [
+        11.5,
+        23.25,
+        6.1
+      ],
+      "to": [
+        12.5,
+        23.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_150",
+      "from": [
+        12.0,
+        23.5,
+        6.1
+      ],
+      "to": [
+        12.25,
+        23.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_151",
+      "from": [
+        12.0,
+        23.5,
+        6.1
+      ],
+      "to": [
+        12.75,
+        23.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_152",
+      "from": [
+        12.25,
+        23.75,
+        6.1
+      ],
+      "to": [
+        13.0,
+        24.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_153",
+      "from": [
+        12.5,
+        24.5,
+        6.1
+      ],
+      "to": [
+        13.25,
+        25.0,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_154",
+      "from": [
+        12.75,
+        25.0,
+        6.1
+      ],
+      "to": [
+        13.25,
+        25.25,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_155",
+      "from": [
+        12.75,
+        25.25,
+        6.1
+      ],
+      "to": [
+        13.5,
+        25.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_156",
+      "from": [
+        12.75,
+        25.5,
+        6.1
+      ],
+      "to": [
+        13.0,
+        25.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_157",
+      "from": [
+        12.75,
+        25.5,
+        6.1
+      ],
+      "to": [
+        13.25,
+        25.75,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_158",
+      "from": [
+        12.75,
+        25.75,
+        6.1
+      ],
+      "to": [
+        13.5,
+        26.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_159",
+      "from": [
+        12.75,
+        26.5,
+        6.1
+      ],
+      "to": [
+        13.25,
+        27.0,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_160",
+      "from": [
+        12.5,
+        27.0,
+        6.1
+      ],
+      "to": [
+        13.25,
+        27.5,
+        9.9
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_161",
+      "from": [
+        9.0,
+        21.75,
+        5.95
+      ],
+      "to": [
+        9.5,
+        22.0,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_162",
+      "from": [
+        9.25,
+        22.0,
+        5.95
+      ],
+      "to": [
+        9.75,
+        22.25,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_163",
+      "from": [
+        9.75,
+        22.25,
+        5.95
+      ],
+      "to": [
+        10.25,
+        22.5,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_164",
+      "from": [
+        10.25,
+        22.5,
+        5.95
+      ],
+      "to": [
+        10.5,
+        22.75,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_165",
+      "from": [
+        10.5,
+        22.75,
+        5.95
+      ],
+      "to": [
+        11.0,
+        23.0,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_166",
+      "from": [
+        11.0,
+        23.0,
+        5.95
+      ],
+      "to": [
+        11.5,
+        23.25,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_167",
+      "from": [
+        11.25,
+        23.25,
+        5.95
+      ],
+      "to": [
+        11.75,
+        23.5,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_168",
+      "from": [
+        11.75,
+        23.5,
+        5.95
+      ],
+      "to": [
+        12.25,
+        23.75,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_169",
+      "from": [
+        12.0,
+        23.75,
+        5.95
+      ],
+      "to": [
+        12.25,
+        24.0,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_170",
+      "from": [
+        12.0,
+        23.75,
+        5.95
+      ],
+      "to": [
+        12.25,
+        24.0,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_171",
+      "from": [
+        12.25,
+        24.0,
+        5.95
+      ],
+      "to": [
+        12.5,
+        24.75,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_172",
+      "from": [
+        12.5,
+        24.75,
+        5.95
+      ],
+      "to": [
+        12.75,
+        25.25,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_173",
+      "from": [
+        12.5,
+        25.25,
+        5.95
+      ],
+      "to": [
+        13.0,
+        25.5,
+        10.05
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_dark_174",
+      "from": [
+        8.5,
+        21.0,
+        6.15
+      ],
+      "to": [
+        8.75,
+        21.25,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_175",
+      "from": [
+        8.5,
+        21.25,
+        6.15
+      ],
+      "to": [
+        9.0,
+        21.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_176",
+      "from": [
+        8.5,
+        21.5,
+        6.15
+      ],
+      "to": [
+        9.25,
+        21.75,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_177",
+      "from": [
+        8.5,
+        21.75,
+        6.15
+      ],
+      "to": [
+        9.75,
+        22.25,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_178",
+      "from": [
+        8.75,
+        22.25,
+        6.15
+      ],
+      "to": [
+        9.75,
+        22.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_179",
+      "from": [
+        8.75,
+        22.5,
+        6.15
+      ],
+      "to": [
+        10.0,
+        23.0,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_180",
+      "from": [
+        9.25,
+        23.0,
+        6.15
+      ],
+      "to": [
+        10.0,
+        23.25,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_181",
+      "from": [
+        9.75,
+        23.25,
+        6.15
+      ],
+      "to": [
+        10.25,
+        23.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "fire_dark_182",
+      "from": [
+        10.0,
+        23.5,
+        6.15
+      ],
+      "to": [
+        10.25,
+        23.75,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_183",
+      "from": [
+        12.5,
+        21.0,
+        7.1
+      ],
+      "to": [
+        12.75,
+        21.5,
+        8.9
+      ],
+      "mat": "gold",
+      "bone": "filigree"
+    },
+    {
+      "name": "gold_184",
+      "from": [
+        12.25,
+        21.75,
+        7.1
+      ],
+      "to": [
+        12.5,
+        22.5,
+        8.9
+      ],
+      "mat": "gold",
+      "bone": "filigree"
+    },
+    {
+      "name": "gold_185",
+      "from": [
+        12.5,
+        20.0,
+        7.1
+      ],
+      "to": [
+        12.75,
+        21.0,
+        8.9
+      ],
+      "mat": "gold",
+      "bone": "filigree"
+    },
+    {
+      "name": "fire_dark_186",
+      "from": [
+        12.5,
+        18.75,
+        7.15
+      ],
+      "to": [
+        12.75,
+        19.0,
+        8.85
+      ],
+      "mat": "fire_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_dark_187",
+      "from": [
+        12.5,
+        19.0,
+        7.15
+      ],
+      "to": [
+        13.0,
+        19.25,
+        8.85
+      ],
+      "mat": "fire_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_dark_188",
+      "from": [
+        12.25,
+        19.25,
+        7.15
+      ],
+      "to": [
+        13.0,
+        19.5,
+        8.85
+      ],
+      "mat": "fire_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_dark_189",
+      "from": [
+        12.5,
+        19.5,
+        7.15
+      ],
+      "to": [
+        12.75,
+        19.75,
+        8.85
+      ],
+      "mat": "fire_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_190",
+      "from": [
+        12.5,
+        18.75,
+        6.97
+      ],
+      "to": [
+        12.75,
+        19.0,
+        9.03
+      ],
+      "mat": "fire",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_191",
+      "from": [
+        12.5,
+        19.0,
+        6.97
+      ],
+      "to": [
+        13.0,
+        19.5,
+        9.03
+      ],
+      "mat": "fire",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_light_192",
+      "from": [
+        12.75,
+        19.0,
+        6.84
+      ],
+      "to": [
+        13.0,
+        19.5,
+        9.16
+      ],
+      "mat": "fire_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_core_193",
+      "from": [
+        12.5,
+        19.0,
+        6.85
+      ],
+      "to": [
+        12.75,
+        19.5,
+        9.15
+      ],
+      "mat": "fire_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_194",
+      "from": [
+        12.58,
+        19.0304,
+        6.73
+      ],
+      "to": [
+        12.83,
+        19.4544,
+        9.27
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    },
+    {
+      "name": "fire_dark_195",
+      "from": [
+        7.75,
+        22.5,
+        6.15
+      ],
+      "to": [
+        8.25,
+        23.0,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_196",
+      "from": [
+        7.5,
+        23.0,
+        6.15
+      ],
+      "to": [
+        8.5,
+        23.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_197",
+      "from": [
+        7.25,
+        23.5,
+        6.15
+      ],
+      "to": [
+        8.75,
+        24.0,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_198",
+      "from": [
+        7.0,
+        24.0,
+        6.15
+      ],
+      "to": [
+        9.0,
+        24.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_199",
+      "from": [
+        6.75,
+        24.5,
+        6.15
+      ],
+      "to": [
+        9.25,
+        25.0,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_200",
+      "from": [
+        6.5,
+        25.0,
+        6.15
+      ],
+      "to": [
+        9.5,
+        25.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_201",
+      "from": [
+        6.25,
+        25.5,
+        6.15
+      ],
+      "to": [
+        9.75,
+        26.0,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_202",
+      "from": [
+        6.5,
+        26.0,
+        6.15
+      ],
+      "to": [
+        9.5,
+        26.25,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_203",
+      "from": [
+        6.75,
+        26.25,
+        6.15
+      ],
+      "to": [
+        9.25,
+        26.75,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_204",
+      "from": [
+        7.0,
+        26.75,
+        6.15
+      ],
+      "to": [
+        9.0,
+        27.25,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_205",
+      "from": [
+        7.25,
+        27.25,
+        6.15
+      ],
+      "to": [
+        8.75,
+        27.5,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_206",
+      "from": [
+        7.5,
+        27.5,
+        6.15
+      ],
+      "to": [
+        8.5,
+        28.0,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_dark_207",
+      "from": [
+        7.75,
+        28.0,
+        6.15
+      ],
+      "to": [
+        8.25,
+        28.25,
+        9.85
+      ],
+      "mat": "fire_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_208",
+      "from": [
+        7.75,
+        22.75,
+        5.97
+      ],
+      "to": [
+        8.25,
+        23.25,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_209",
+      "from": [
+        7.5,
+        23.25,
+        5.97
+      ],
+      "to": [
+        8.5,
+        23.75,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_210",
+      "from": [
+        7.25,
+        23.75,
+        5.97
+      ],
+      "to": [
+        8.75,
+        24.5,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_211",
+      "from": [
+        7.0,
+        24.5,
+        5.97
+      ],
+      "to": [
+        9.0,
+        25.0,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_212",
+      "from": [
+        6.75,
+        25.0,
+        5.97
+      ],
+      "to": [
+        9.25,
+        25.5,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_213",
+      "from": [
+        6.5,
+        25.5,
+        5.97
+      ],
+      "to": [
+        9.5,
+        25.75,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_214",
+      "from": [
+        6.75,
+        25.75,
+        5.97
+      ],
+      "to": [
+        9.25,
+        26.25,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_215",
+      "from": [
+        7.0,
+        26.25,
+        5.97
+      ],
+      "to": [
+        9.0,
+        26.75,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_216",
+      "from": [
+        7.25,
+        26.75,
+        5.97
+      ],
+      "to": [
+        8.75,
+        27.25,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_217",
+      "from": [
+        7.5,
+        27.25,
+        5.97
+      ],
+      "to": [
+        8.5,
+        27.5,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_218",
+      "from": [
+        7.75,
+        27.5,
+        5.97
+      ],
+      "to": [
+        8.25,
+        28.0,
+        10.03
+      ],
+      "mat": "fire",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_light_219",
+      "from": [
+        8.0,
+        23.0,
+        5.84
+      ],
+      "to": [
+        8.25,
+        23.5,
+        10.16
+      ],
+      "mat": "fire_light",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_light_220",
+      "from": [
+        8.0,
+        23.5,
+        5.84
+      ],
+      "to": [
+        8.5,
+        24.25,
+        10.16
+      ],
+      "mat": "fire_light",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_light_221",
+      "from": [
+        8.0,
+        24.25,
+        5.84
+      ],
+      "to": [
+        8.75,
+        24.75,
+        10.16
+      ],
+      "mat": "fire_light",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_light_222",
+      "from": [
+        8.0,
+        24.75,
+        5.84
+      ],
+      "to": [
+        9.0,
+        25.25,
+        10.16
+      ],
+      "mat": "fire_light",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_light_223",
+      "from": [
+        8.0,
+        25.25,
+        5.84
+      ],
+      "to": [
+        9.25,
+        26.0,
+        10.16
+      ],
+      "mat": "fire_light",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_light_224",
+      "from": [
+        8.0,
+        26.0,
+        5.84
+      ],
+      "to": [
+        9.0,
+        26.25,
+        10.16
+      ],
+      "mat": "fire_light",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_light_225",
+      "from": [
+        8.0,
+        26.25,
+        5.84
+      ],
+      "to": [
+        8.75,
+        26.75,
+        10.16
+      ],
+      "mat": "fire_light",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_light_226",
+      "from": [
+        8.0,
+        26.75,
+        5.84
+      ],
+      "to": [
+        8.5,
+        27.25,
+        10.16
+      ],
+      "mat": "fire_light",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_light_227",
+      "from": [
+        8.0,
+        27.25,
+        5.84
+      ],
+      "to": [
+        8.25,
+        27.75,
+        10.16
+      ],
+      "mat": "fire_light",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_core_228",
+      "from": [
+        7.75,
+        23.0,
+        5.85
+      ],
+      "to": [
+        8.0,
+        23.5,
+        10.15
+      ],
+      "mat": "fire_core",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_core_229",
+      "from": [
+        7.5,
+        23.5,
+        5.85
+      ],
+      "to": [
+        8.0,
+        24.25,
+        10.15
+      ],
+      "mat": "fire_core",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_core_230",
+      "from": [
+        7.25,
+        24.25,
+        5.85
+      ],
+      "to": [
+        8.0,
+        24.75,
+        10.15
+      ],
+      "mat": "fire_core",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_core_231",
+      "from": [
+        7.0,
+        24.75,
+        5.85
+      ],
+      "to": [
+        8.0,
+        25.25,
+        10.15
+      ],
+      "mat": "fire_core",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_core_232",
+      "from": [
+        6.75,
+        25.25,
+        5.85
+      ],
+      "to": [
+        8.0,
+        25.75,
+        10.15
+      ],
+      "mat": "fire_core",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_core_233",
+      "from": [
+        7.0,
+        25.75,
+        5.85
+      ],
+      "to": [
+        8.0,
+        26.25,
+        10.15
+      ],
+      "mat": "fire_core",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_core_234",
+      "from": [
+        7.25,
+        26.25,
+        5.85
+      ],
+      "to": [
+        8.0,
+        26.75,
+        10.15
+      ],
+      "mat": "fire_core",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_core_235",
+      "from": [
+        7.5,
+        26.75,
+        5.85
+      ],
+      "to": [
+        8.0,
+        27.25,
+        10.15
+      ],
+      "mat": "fire_core",
+      "bone": "focus"
+    },
+    {
+      "name": "fire_core_236",
+      "from": [
+        7.75,
+        27.25,
+        5.85
+      ],
+      "to": [
+        8.0,
+        27.75,
+        10.15
+      ],
+      "mat": "fire_core",
+      "bone": "focus"
+    },
+    {
+      "name": "white_237",
+      "from": [
+        7.88,
+        24.63,
+        5.73
+      ],
+      "to": [
+        8.13,
+        26.43,
+        10.27
+      ],
+      "mat": "white",
+      "bone": "focus"
+    },
+    {
+      "name": "gold_light_238",
+      "from": [
+        6.0,
+        25.75,
+        5.65
+      ],
+      "to": [
+        6.25,
+        26.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_239",
+      "from": [
+        6.25,
+        26.0,
+        5.65
+      ],
+      "to": [
+        6.5,
+        26.5,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_240",
+      "from": [
+        6.5,
+        26.5,
+        5.65
+      ],
+      "to": [
+        6.75,
+        26.75,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_241",
+      "from": [
+        6.5,
+        26.75,
+        5.65
+      ],
+      "to": [
+        7.0,
+        27.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_242",
+      "from": [
+        6.75,
+        23.5,
+        5.65
+      ],
+      "to": [
+        7.0,
+        24.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_243",
+      "from": [
+        6.5,
+        24.0,
+        5.65
+      ],
+      "to": [
+        6.75,
+        24.5,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_244",
+      "from": [
+        6.25,
+        24.75,
+        5.65
+      ],
+      "to": [
+        6.5,
+        25.25,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_245",
+      "from": [
+        6.0,
+        25.25,
+        5.65
+      ],
+      "to": [
+        6.25,
+        25.75,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_246",
+      "from": [
+        9.75,
+        25.75,
+        5.65
+      ],
+      "to": [
+        10.0,
+        26.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_247",
+      "from": [
+        9.5,
+        26.0,
+        5.65
+      ],
+      "to": [
+        9.75,
+        26.5,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_248",
+      "from": [
+        9.25,
+        26.5,
+        5.65
+      ],
+      "to": [
+        9.5,
+        26.75,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_249",
+      "from": [
+        9.0,
+        26.75,
+        5.65
+      ],
+      "to": [
+        9.5,
+        27.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_250",
+      "from": [
+        9.0,
+        23.5,
+        5.65
+      ],
+      "to": [
+        9.25,
+        24.0,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_251",
+      "from": [
+        9.25,
+        24.0,
+        5.65
+      ],
+      "to": [
+        9.5,
+        24.5,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_252",
+      "from": [
+        9.5,
+        24.75,
+        5.65
+      ],
+      "to": [
+        9.75,
+        25.25,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_253",
+      "from": [
+        9.75,
+        25.25,
+        5.65
+      ],
+      "to": [
+        10.0,
+        25.75,
+        10.35
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_254",
+      "from": [
+        8.75,
+        26.75,
+        7.1
+      ],
+      "to": [
+        9.25,
+        27.0,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_255",
+      "from": [
+        7.75,
+        27.0,
+        7.1
+      ],
+      "to": [
+        9.5,
+        27.25,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_256",
+      "from": [
+        7.25,
+        27.25,
+        7.1
+      ],
+      "to": [
+        9.5,
+        27.5,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_257",
+      "from": [
+        7.0,
+        27.5,
+        7.1
+      ],
+      "to": [
+        9.75,
+        27.75,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_258",
+      "from": [
+        6.75,
+        27.75,
+        7.1
+      ],
+      "to": [
+        9.75,
+        28.0,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_259",
+      "from": [
+        6.75,
+        28.0,
+        7.1
+      ],
+      "to": [
+        10.0,
+        28.25,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_260",
+      "from": [
+        6.5,
+        28.25,
+        7.1
+      ],
+      "to": [
+        10.0,
+        28.5,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_261",
+      "from": [
+        6.5,
+        28.5,
+        7.1
+      ],
+      "to": [
+        9.75,
+        28.75,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_262",
+      "from": [
+        6.5,
+        28.75,
+        7.1
+      ],
+      "to": [
+        9.25,
+        29.0,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_263",
+      "from": [
+        6.5,
+        29.0,
+        7.1
+      ],
+      "to": [
+        7.25,
+        29.25,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_264",
+      "from": [
+        7.5,
+        29.0,
+        7.1
+      ],
+      "to": [
+        9.25,
+        29.25,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_265",
+      "from": [
+        6.75,
+        29.25,
+        7.1
+      ],
+      "to": [
+        7.0,
+        29.5,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_266",
+      "from": [
+        7.75,
+        29.25,
+        7.1
+      ],
+      "to": [
+        9.25,
+        29.5,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_267",
+      "from": [
+        6.75,
+        29.5,
+        7.1
+      ],
+      "to": [
+        7.0,
+        29.75,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_268",
+      "from": [
+        8.0,
+        29.5,
+        7.1
+      ],
+      "to": [
+        9.25,
+        29.75,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_269",
+      "from": [
+        6.75,
+        29.75,
+        7.1
+      ],
+      "to": [
+        7.0,
+        30.0,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_270",
+      "from": [
+        8.25,
+        29.75,
+        7.1
+      ],
+      "to": [
+        9.25,
+        30.0,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_271",
+      "from": [
+        8.5,
+        30.0,
+        7.1
+      ],
+      "to": [
+        9.5,
+        30.25,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_272",
+      "from": [
+        8.25,
+        30.25,
+        7.1
+      ],
+      "to": [
+        9.5,
+        30.75,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_273",
+      "from": [
+        8.25,
+        30.75,
+        7.1
+      ],
+      "to": [
+        9.25,
+        31.0,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_274",
+      "from": [
+        8.25,
+        31.0,
+        7.1
+      ],
+      "to": [
+        9.0,
+        31.25,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_275",
+      "from": [
+        8.25,
+        31.25,
+        7.1
+      ],
+      "to": [
+        8.75,
+        31.5,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_276",
+      "from": [
+        8.25,
+        31.5,
+        7.1
+      ],
+      "to": [
+        8.5,
+        31.75,
+        8.9
+      ],
+      "mat": "fire",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_277",
+      "from": [
+        8.0,
+        27.25,
+        6.95
+      ],
+      "to": [
+        8.5,
+        27.5,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_278",
+      "from": [
+        7.5,
+        27.5,
+        6.95
+      ],
+      "to": [
+        8.75,
+        27.75,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_279",
+      "from": [
+        7.5,
+        27.75,
+        6.95
+      ],
+      "to": [
+        9.0,
+        28.0,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_280",
+      "from": [
+        7.25,
+        28.0,
+        6.95
+      ],
+      "to": [
+        9.0,
+        28.25,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_281",
+      "from": [
+        7.25,
+        28.25,
+        6.95
+      ],
+      "to": [
+        8.75,
+        28.5,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_282",
+      "from": [
+        7.25,
+        28.5,
+        6.95
+      ],
+      "to": [
+        8.5,
+        29.0,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_283",
+      "from": [
+        7.5,
+        29.0,
+        6.95
+      ],
+      "to": [
+        8.5,
+        29.25,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_284",
+      "from": [
+        8.0,
+        29.25,
+        6.95
+      ],
+      "to": [
+        8.75,
+        29.5,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_285",
+      "from": [
+        8.25,
+        29.5,
+        6.95
+      ],
+      "to": [
+        8.75,
+        29.75,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_light_286",
+      "from": [
+        8.5,
+        29.75,
+        6.95
+      ],
+      "to": [
+        8.75,
+        30.25,
+        9.05
+      ],
+      "mat": "fire_light",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_core_287",
+      "from": [
+        8.0,
+        27.25,
+        6.8
+      ],
+      "to": [
+        8.5,
+        27.5,
+        9.2
+      ],
+      "mat": "fire_core",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_core_288",
+      "from": [
+        7.75,
+        27.5,
+        6.8
+      ],
+      "to": [
+        8.25,
+        28.5,
+        9.2
+      ],
+      "mat": "fire_core",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_core_289",
+      "from": [
+        8.0,
+        28.5,
+        6.8
+      ],
+      "to": [
+        8.25,
+        28.75,
+        9.2
+      ],
+      "mat": "fire_core",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_core_290",
+      "from": [
+        8.25,
+        28.75,
+        6.8
+      ],
+      "to": [
+        8.5,
+        29.0,
+        9.2
+      ],
+      "mat": "fire_core",
+      "bone": "flame"
+    },
+    {
+      "name": "fire_dark_291",
+      "from": [
+        7.75,
+        19.75,
+        6.35
+      ],
+      "to": [
+        8.25,
+        20.0,
+        9.65
+      ],
+      "mat": "fire_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_dark_292",
+      "from": [
+        7.5,
+        20.0,
+        6.35
+      ],
+      "to": [
+        8.5,
+        20.5,
+        9.65
+      ],
+      "mat": "fire_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_dark_293",
+      "from": [
+        7.25,
+        20.5,
+        6.35
+      ],
+      "to": [
+        8.75,
+        20.75,
+        9.65
+      ],
+      "mat": "fire_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_dark_294",
+      "from": [
+        7.5,
+        20.75,
+        6.35
+      ],
+      "to": [
+        8.5,
+        21.0,
+        9.65
+      ],
+      "mat": "fire_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_dark_295",
+      "from": [
+        7.75,
+        21.0,
+        6.35
+      ],
+      "to": [
+        8.25,
+        21.25,
+        9.65
+      ],
+      "mat": "fire_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_296",
+      "from": [
+        7.75,
+        19.75,
+        6.17
+      ],
+      "to": [
+        8.25,
+        20.25,
+        9.83
+      ],
+      "mat": "fire",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_297",
+      "from": [
+        7.5,
+        20.25,
+        6.17
+      ],
+      "to": [
+        8.5,
+        21.0,
+        9.83
+      ],
+      "mat": "fire",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_298",
+      "from": [
+        7.75,
+        21.0,
+        6.17
+      ],
+      "to": [
+        8.25,
+        21.25,
+        9.83
+      ],
+      "mat": "fire",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_light_299",
+      "from": [
+        8.0,
+        20.0,
+        6.04
+      ],
+      "to": [
+        8.25,
+        20.25,
+        9.96
+      ],
+      "mat": "fire_light",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_light_300",
+      "from": [
+        8.0,
+        20.25,
+        6.04
+      ],
+      "to": [
+        8.5,
+        20.75,
+        9.96
+      ],
+      "mat": "fire_light",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_light_301",
+      "from": [
+        8.0,
+        20.75,
+        6.04
+      ],
+      "to": [
+        8.25,
+        21.25,
+        9.96
+      ],
+      "mat": "fire_light",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_core_302",
+      "from": [
+        7.75,
+        20.0,
+        6.05
+      ],
+      "to": [
+        8.0,
+        20.25,
+        9.95
+      ],
+      "mat": "fire_core",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_core_303",
+      "from": [
+        7.5,
+        20.25,
+        6.05
+      ],
+      "to": [
+        8.0,
+        20.75,
+        9.95
+      ],
+      "mat": "fire_core",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_core_304",
+      "from": [
+        7.75,
+        20.75,
+        6.05
+      ],
+      "to": [
+        8.0,
+        21.25,
+        9.95
+      ],
+      "mat": "fire_core",
+      "bone": "crown"
+    },
+    {
+      "name": "white_305",
+      "from": [
+        7.88,
+        20.196,
+        5.93
+      ],
+      "to": [
+        8.13,
+        20.956,
+        10.07
+      ],
+      "mat": "white",
+      "bone": "crown"
+    },
+    {
+      "name": "fire_dark_306",
+      "from": [
+        5.5,
+        12.25,
+        6.95
+      ],
+      "to": [
+        5.75,
+        12.75,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_307",
+      "from": [
+        5.5,
+        12.75,
+        6.95
+      ],
+      "to": [
+        6.0,
+        13.25,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_308",
+      "from": [
+        5.25,
+        13.25,
+        6.95
+      ],
+      "to": [
+        6.25,
+        13.5,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_309",
+      "from": [
+        5.25,
+        13.5,
+        6.95
+      ],
+      "to": [
+        6.5,
+        14.0,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_310",
+      "from": [
+        5.25,
+        14.0,
+        6.95
+      ],
+      "to": [
+        6.75,
+        14.5,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_311",
+      "from": [
+        5.5,
+        14.5,
+        6.95
+      ],
+      "to": [
+        6.75,
+        14.75,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_312",
+      "from": [
+        5.75,
+        14.75,
+        6.95
+      ],
+      "to": [
+        7.0,
+        15.25,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_313",
+      "from": [
+        6.0,
+        15.25,
+        6.95
+      ],
+      "to": [
+        7.25,
+        15.75,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_314",
+      "from": [
+        6.25,
+        15.75,
+        6.95
+      ],
+      "to": [
+        7.25,
+        16.0,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_315",
+      "from": [
+        6.25,
+        16.0,
+        6.95
+      ],
+      "to": [
+        7.5,
+        16.25,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_316",
+      "from": [
+        6.5,
+        16.25,
+        6.95
+      ],
+      "to": [
+        7.5,
+        16.5,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_317",
+      "from": [
+        6.75,
+        16.5,
+        6.95
+      ],
+      "to": [
+        7.5,
+        17.0,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_318",
+      "from": [
+        6.5,
+        17.0,
+        6.95
+      ],
+      "to": [
+        7.5,
+        17.25,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_319",
+      "from": [
+        6.5,
+        17.25,
+        6.95
+      ],
+      "to": [
+        7.25,
+        18.75,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_320",
+      "from": [
+        6.75,
+        18.75,
+        6.95
+      ],
+      "to": [
+        7.25,
+        19.0,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_321",
+      "from": [
+        7.0,
+        19.0,
+        6.95
+      ],
+      "to": [
+        7.5,
+        19.25,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_322",
+      "from": [
+        7.25,
+        19.25,
+        6.95
+      ],
+      "to": [
+        7.5,
+        19.5,
+        7.37
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_323",
+      "from": [
+        7.0,
+        17.25,
+        6.89
+      ],
+      "to": [
+        7.25,
+        19.0,
+        7.44
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_324",
+      "from": [
+        5.75,
+        14.25,
+        6.89
+      ],
+      "to": [
+        6.0,
+        14.5,
+        7.44
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_325",
+      "from": [
+        6.0,
+        14.5,
+        6.89
+      ],
+      "to": [
+        6.25,
+        15.0,
+        7.44
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_326",
+      "from": [
+        6.25,
+        15.0,
+        6.89
+      ],
+      "to": [
+        6.5,
+        15.5,
+        7.44
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_327",
+      "from": [
+        6.5,
+        15.75,
+        6.89
+      ],
+      "to": [
+        6.75,
+        16.25,
+        7.44
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_328",
+      "from": [
+        6.75,
+        16.25,
+        6.89
+      ],
+      "to": [
+        7.0,
+        16.75,
+        7.44
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_329",
+      "from": [
+        5.75,
+        13.0,
+        6.89
+      ],
+      "to": [
+        6.0,
+        14.25,
+        7.44
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_330",
+      "from": [
+        10.25,
+        12.25,
+        8.65
+      ],
+      "to": [
+        10.5,
+        12.75,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_331",
+      "from": [
+        10.0,
+        12.75,
+        8.65
+      ],
+      "to": [
+        10.5,
+        13.25,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_332",
+      "from": [
+        9.75,
+        13.25,
+        8.65
+      ],
+      "to": [
+        10.75,
+        13.5,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_333",
+      "from": [
+        9.5,
+        13.5,
+        8.65
+      ],
+      "to": [
+        10.75,
+        14.0,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_334",
+      "from": [
+        9.25,
+        14.0,
+        8.65
+      ],
+      "to": [
+        10.75,
+        14.5,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_335",
+      "from": [
+        9.25,
+        14.5,
+        8.65
+      ],
+      "to": [
+        10.5,
+        14.75,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_336",
+      "from": [
+        9.0,
+        14.75,
+        8.65
+      ],
+      "to": [
+        10.25,
+        15.25,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_337",
+      "from": [
+        8.75,
+        15.25,
+        8.65
+      ],
+      "to": [
+        10.0,
+        15.75,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_338",
+      "from": [
+        8.75,
+        15.75,
+        8.65
+      ],
+      "to": [
+        9.75,
+        16.0,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_339",
+      "from": [
+        8.5,
+        16.0,
+        8.65
+      ],
+      "to": [
+        9.75,
+        16.25,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_340",
+      "from": [
+        8.5,
+        16.25,
+        8.65
+      ],
+      "to": [
+        9.5,
+        16.5,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_341",
+      "from": [
+        8.5,
+        16.5,
+        8.65
+      ],
+      "to": [
+        9.25,
+        17.0,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_342",
+      "from": [
+        8.5,
+        17.0,
+        8.65
+      ],
+      "to": [
+        9.5,
+        17.25,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_343",
+      "from": [
+        8.75,
+        17.25,
+        8.65
+      ],
+      "to": [
+        9.5,
+        18.75,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_344",
+      "from": [
+        8.75,
+        18.75,
+        8.65
+      ],
+      "to": [
+        9.25,
+        19.0,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_345",
+      "from": [
+        8.5,
+        19.0,
+        8.65
+      ],
+      "to": [
+        9.0,
+        19.25,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "fire_dark_346",
+      "from": [
+        8.5,
+        19.25,
+        8.65
+      ],
+      "to": [
+        8.75,
+        19.5,
+        9.07
+      ],
+      "mat": "fire_dark",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_347",
+      "from": [
+        8.75,
+        17.25,
+        8.59
+      ],
+      "to": [
+        9.0,
+        19.0,
+        9.14
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_348",
+      "from": [
+        10.0,
+        14.25,
+        8.59
+      ],
+      "to": [
+        10.25,
+        14.5,
+        9.14
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_349",
+      "from": [
+        9.75,
+        14.5,
+        8.59
+      ],
+      "to": [
+        10.0,
+        15.0,
+        9.14
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_350",
+      "from": [
+        9.5,
+        15.0,
+        8.59
+      ],
+      "to": [
+        9.75,
+        15.5,
+        9.14
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_351",
+      "from": [
+        9.25,
+        15.75,
+        8.59
+      ],
+      "to": [
+        9.5,
+        16.25,
+        9.14
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_352",
+      "from": [
+        9.0,
+        16.25,
+        8.59
+      ],
+      "to": [
+        9.25,
+        16.75,
+        9.14
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    },
+    {
+      "name": "gold_353",
+      "from": [
+        10.0,
+        13.0,
+        8.59
+      ],
+      "to": [
+        10.25,
+        14.25,
+        9.14
+      ],
+      "mat": "gold",
+      "bone": "ribbon"
+    }
+  ]
+}

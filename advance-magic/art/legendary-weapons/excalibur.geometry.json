@@ -1,0 +1,3365 @@
+{
+  "id": "excalibur",
+  "cubes": [
+    {
+      "name": "gold_dark_000",
+      "from": [
+        7.25,
+        0.0,
+        7.18
+      ],
+      "to": [
+        8.75,
+        0.25,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_001",
+      "from": [
+        7.0,
+        0.25,
+        7.18
+      ],
+      "to": [
+        7.5,
+        0.5,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_002",
+      "from": [
+        8.5,
+        0.25,
+        7.18
+      ],
+      "to": [
+        9.0,
+        0.5,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_003",
+      "from": [
+        6.75,
+        0.5,
+        7.18
+      ],
+      "to": [
+        7.25,
+        0.75,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_004",
+      "from": [
+        8.75,
+        0.5,
+        7.18
+      ],
+      "to": [
+        9.25,
+        0.75,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_005",
+      "from": [
+        6.75,
+        0.75,
+        7.18
+      ],
+      "to": [
+        7.0,
+        1.75,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_006",
+      "from": [
+        9.0,
+        0.75,
+        7.18
+      ],
+      "to": [
+        9.25,
+        1.75,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_007",
+      "from": [
+        6.75,
+        1.75,
+        7.18
+      ],
+      "to": [
+        7.25,
+        2.0,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_008",
+      "from": [
+        8.75,
+        1.75,
+        7.18
+      ],
+      "to": [
+        9.25,
+        2.0,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_009",
+      "from": [
+        7.0,
+        2.0,
+        7.18
+      ],
+      "to": [
+        7.5,
+        2.25,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_010",
+      "from": [
+        8.5,
+        2.0,
+        7.18
+      ],
+      "to": [
+        9.0,
+        2.25,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_011",
+      "from": [
+        7.25,
+        2.25,
+        7.18
+      ],
+      "to": [
+        8.75,
+        2.5,
+        8.82
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_012",
+      "from": [
+        7.5,
+        0.25,
+        7.0
+      ],
+      "to": [
+        8.5,
+        0.5,
+        9.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_013",
+      "from": [
+        7.25,
+        0.5,
+        7.0
+      ],
+      "to": [
+        8.75,
+        0.75,
+        9.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_014",
+      "from": [
+        7.0,
+        0.75,
+        7.0
+      ],
+      "to": [
+        9.0,
+        1.75,
+        9.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_015",
+      "from": [
+        7.25,
+        1.75,
+        7.0
+      ],
+      "to": [
+        8.75,
+        2.0,
+        9.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_016",
+      "from": [
+        7.5,
+        2.0,
+        7.0
+      ],
+      "to": [
+        8.5,
+        2.25,
+        9.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_017",
+      "from": [
+        7.5,
+        0.5,
+        7.35
+      ],
+      "to": [
+        8.5,
+        0.75,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_018",
+      "from": [
+        7.25,
+        0.75,
+        7.35
+      ],
+      "to": [
+        7.75,
+        1.0,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_019",
+      "from": [
+        8.25,
+        0.75,
+        7.35
+      ],
+      "to": [
+        8.75,
+        1.0,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_020",
+      "from": [
+        7.25,
+        1.0,
+        7.35
+      ],
+      "to": [
+        7.5,
+        1.5,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_021",
+      "from": [
+        8.5,
+        1.0,
+        7.35
+      ],
+      "to": [
+        8.75,
+        1.5,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_022",
+      "from": [
+        7.25,
+        1.5,
+        7.35
+      ],
+      "to": [
+        7.75,
+        1.75,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_023",
+      "from": [
+        8.25,
+        1.5,
+        7.35
+      ],
+      "to": [
+        8.75,
+        1.75,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_024",
+      "from": [
+        7.5,
+        1.75,
+        7.35
+      ],
+      "to": [
+        8.5,
+        2.0,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_025",
+      "from": [
+        7.75,
+        0.75,
+        7.038
+      ],
+      "to": [
+        8.25,
+        1.0,
+        8.962
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_026",
+      "from": [
+        7.5,
+        1.0,
+        7.038
+      ],
+      "to": [
+        7.75,
+        1.5,
+        8.962
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_027",
+      "from": [
+        8.25,
+        1.0,
+        7.038
+      ],
+      "to": [
+        8.5,
+        1.5,
+        8.962
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_028",
+      "from": [
+        7.75,
+        1.5,
+        7.038
+      ],
+      "to": [
+        8.25,
+        1.75,
+        8.962
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_029",
+      "from": [
+        7.75,
+        1.0,
+        6.882
+      ],
+      "to": [
+        8.25,
+        1.5,
+        9.118
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "white_030",
+      "from": [
+        7.6724,
+        1.3904,
+        6.804
+      ],
+      "to": [
+        7.9224,
+        1.6404,
+        9.196
+      ],
+      "mat": "white",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_031",
+      "from": [
+        7.25,
+        2.45,
+        7.55
+      ],
+      "to": [
+        8.75,
+        2.9,
+        8.45
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_032",
+      "from": [
+        7.55,
+        2.45,
+        8.45
+      ],
+      "to": [
+        8.45,
+        2.9,
+        8.75
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_033",
+      "from": [
+        7.55,
+        2.45,
+        7.25
+      ],
+      "to": [
+        8.45,
+        2.9,
+        7.55
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_034",
+      "from": [
+        7.475,
+        2.9,
+        7.685
+      ],
+      "to": [
+        8.525,
+        6.6,
+        8.315
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_035",
+      "from": [
+        7.685,
+        2.9,
+        8.315
+      ],
+      "to": [
+        8.315,
+        6.6,
+        8.525
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_036",
+      "from": [
+        7.685,
+        2.9,
+        7.475
+      ],
+      "to": [
+        8.315,
+        6.6,
+        7.685
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_037",
+      "from": [
+        7.375,
+        3.1,
+        7.625
+      ],
+      "to": [
+        8.625,
+        3.4,
+        8.375
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_038",
+      "from": [
+        7.625,
+        3.1,
+        8.375
+      ],
+      "to": [
+        8.375,
+        3.4,
+        8.625
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_039",
+      "from": [
+        7.625,
+        3.1,
+        7.375
+      ],
+      "to": [
+        8.375,
+        3.4,
+        7.625
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_040",
+      "from": [
+        7.375,
+        3.7,
+        7.625
+      ],
+      "to": [
+        8.625,
+        4.0,
+        8.375
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_041",
+      "from": [
+        7.625,
+        3.7,
+        8.375
+      ],
+      "to": [
+        8.375,
+        4.0,
+        8.625
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_042",
+      "from": [
+        7.625,
+        3.7,
+        7.375
+      ],
+      "to": [
+        8.375,
+        4.0,
+        7.625
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_043",
+      "from": [
+        7.375,
+        4.3,
+        7.625
+      ],
+      "to": [
+        8.625,
+        4.6,
+        8.375
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_044",
+      "from": [
+        7.625,
+        4.3,
+        8.375
+      ],
+      "to": [
+        8.375,
+        4.6,
+        8.625
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_045",
+      "from": [
+        7.625,
+        4.3,
+        7.375
+      ],
+      "to": [
+        8.375,
+        4.6,
+        7.625
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_046",
+      "from": [
+        7.375,
+        4.9,
+        7.625
+      ],
+      "to": [
+        8.625,
+        5.2,
+        8.375
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_047",
+      "from": [
+        7.625,
+        4.9,
+        8.375
+      ],
+      "to": [
+        8.375,
+        5.2,
+        8.625
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_048",
+      "from": [
+        7.625,
+        4.9,
+        7.375
+      ],
+      "to": [
+        8.375,
+        5.2,
+        7.625
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_049",
+      "from": [
+        7.375,
+        5.5,
+        7.625
+      ],
+      "to": [
+        8.625,
+        5.8,
+        8.375
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_050",
+      "from": [
+        7.625,
+        5.5,
+        8.375
+      ],
+      "to": [
+        8.375,
+        5.8,
+        8.625
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_051",
+      "from": [
+        7.625,
+        5.5,
+        7.375
+      ],
+      "to": [
+        8.375,
+        5.8,
+        7.625
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_052",
+      "from": [
+        7.375,
+        6.1,
+        7.625
+      ],
+      "to": [
+        8.625,
+        6.4,
+        8.375
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_053",
+      "from": [
+        7.625,
+        6.1,
+        8.375
+      ],
+      "to": [
+        8.375,
+        6.4,
+        8.625
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_054",
+      "from": [
+        7.625,
+        6.1,
+        7.375
+      ],
+      "to": [
+        8.375,
+        6.4,
+        7.625
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_055",
+      "from": [
+        7.25,
+        6.6,
+        7.55
+      ],
+      "to": [
+        8.75,
+        7.05,
+        8.45
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_056",
+      "from": [
+        7.55,
+        6.6,
+        8.45
+      ],
+      "to": [
+        8.45,
+        7.05,
+        8.75
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_057",
+      "from": [
+        7.55,
+        6.6,
+        7.25
+      ],
+      "to": [
+        8.45,
+        7.05,
+        7.55
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_058",
+      "from": [
+        7.5,
+        6.5,
+        7.08
+      ],
+      "to": [
+        8.5,
+        6.75,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_059",
+      "from": [
+        7.25,
+        6.75,
+        7.08
+      ],
+      "to": [
+        7.75,
+        7.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_060",
+      "from": [
+        8.25,
+        6.75,
+        7.08
+      ],
+      "to": [
+        8.75,
+        7.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_061",
+      "from": [
+        6.75,
+        7.0,
+        7.08
+      ],
+      "to": [
+        7.5,
+        7.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_062",
+      "from": [
+        8.5,
+        7.0,
+        7.08
+      ],
+      "to": [
+        9.25,
+        7.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_063",
+      "from": [
+        6.5,
+        7.25,
+        7.08
+      ],
+      "to": [
+        7.0,
+        7.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_064",
+      "from": [
+        9.0,
+        7.25,
+        7.08
+      ],
+      "to": [
+        9.5,
+        7.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_065",
+      "from": [
+        5.75,
+        7.5,
+        7.08
+      ],
+      "to": [
+        6.75,
+        7.75,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_066",
+      "from": [
+        9.25,
+        7.5,
+        7.08
+      ],
+      "to": [
+        10.25,
+        7.75,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_067",
+      "from": [
+        2.75,
+        7.75,
+        7.08
+      ],
+      "to": [
+        6.0,
+        8.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_068",
+      "from": [
+        10.0,
+        7.75,
+        7.08
+      ],
+      "to": [
+        13.25,
+        8.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_069",
+      "from": [
+        2.0,
+        8.0,
+        7.08
+      ],
+      "to": [
+        3.0,
+        8.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_070",
+      "from": [
+        13.0,
+        8.0,
+        7.08
+      ],
+      "to": [
+        14.0,
+        8.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_071",
+      "from": [
+        1.5,
+        8.25,
+        7.08
+      ],
+      "to": [
+        2.25,
+        8.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_072",
+      "from": [
+        13.75,
+        8.25,
+        7.08
+      ],
+      "to": [
+        14.5,
+        8.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_073",
+      "from": [
+        1.25,
+        8.5,
+        7.08
+      ],
+      "to": [
+        1.75,
+        8.75,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_074",
+      "from": [
+        14.25,
+        8.5,
+        7.08
+      ],
+      "to": [
+        14.75,
+        8.75,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_075",
+      "from": [
+        1.0,
+        8.75,
+        7.08
+      ],
+      "to": [
+        1.5,
+        9.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_076",
+      "from": [
+        2.5,
+        8.75,
+        7.08
+      ],
+      "to": [
+        6.0,
+        9.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_077",
+      "from": [
+        10.0,
+        8.75,
+        7.08
+      ],
+      "to": [
+        13.5,
+        9.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_078",
+      "from": [
+        14.5,
+        8.75,
+        7.08
+      ],
+      "to": [
+        15.0,
+        9.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_079",
+      "from": [
+        1.0,
+        9.0,
+        7.08
+      ],
+      "to": [
+        1.25,
+        9.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_080",
+      "from": [
+        1.75,
+        9.0,
+        7.08
+      ],
+      "to": [
+        2.75,
+        9.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_081",
+      "from": [
+        5.75,
+        9.0,
+        7.08
+      ],
+      "to": [
+        6.5,
+        9.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_082",
+      "from": [
+        9.5,
+        9.0,
+        7.08
+      ],
+      "to": [
+        10.25,
+        9.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_083",
+      "from": [
+        13.25,
+        9.0,
+        7.08
+      ],
+      "to": [
+        14.25,
+        9.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_084",
+      "from": [
+        14.75,
+        9.0,
+        7.08
+      ],
+      "to": [
+        15.0,
+        9.25,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_085",
+      "from": [
+        0.75,
+        9.25,
+        7.08
+      ],
+      "to": [
+        1.25,
+        9.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_086",
+      "from": [
+        1.5,
+        9.25,
+        7.08
+      ],
+      "to": [
+        2.0,
+        9.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_087",
+      "from": [
+        6.25,
+        9.25,
+        7.08
+      ],
+      "to": [
+        7.0,
+        9.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_088",
+      "from": [
+        9.0,
+        9.25,
+        7.08
+      ],
+      "to": [
+        9.75,
+        9.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_089",
+      "from": [
+        14.0,
+        9.25,
+        7.08
+      ],
+      "to": [
+        14.5,
+        9.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_090",
+      "from": [
+        14.75,
+        9.25,
+        7.08
+      ],
+      "to": [
+        15.25,
+        9.5,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_091",
+      "from": [
+        1.0,
+        9.5,
+        7.08
+      ],
+      "to": [
+        1.75,
+        9.75,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_092",
+      "from": [
+        6.75,
+        9.5,
+        7.08
+      ],
+      "to": [
+        7.75,
+        9.75,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_093",
+      "from": [
+        8.25,
+        9.5,
+        7.08
+      ],
+      "to": [
+        9.25,
+        9.75,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_094",
+      "from": [
+        14.25,
+        9.5,
+        7.08
+      ],
+      "to": [
+        15.0,
+        9.75,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_095",
+      "from": [
+        1.0,
+        9.75,
+        7.08
+      ],
+      "to": [
+        1.5,
+        10.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_096",
+      "from": [
+        7.5,
+        9.75,
+        7.08
+      ],
+      "to": [
+        8.5,
+        10.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_dark_097",
+      "from": [
+        14.5,
+        9.75,
+        7.08
+      ],
+      "to": [
+        15.0,
+        10.0,
+        8.92
+      ],
+      "mat": "gold_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_098",
+      "from": [
+        7.75,
+        6.75,
+        6.88
+      ],
+      "to": [
+        8.25,
+        7.0,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_099",
+      "from": [
+        7.5,
+        7.0,
+        6.88
+      ],
+      "to": [
+        8.5,
+        7.25,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_100",
+      "from": [
+        7.0,
+        7.25,
+        6.88
+      ],
+      "to": [
+        7.75,
+        7.5,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_101",
+      "from": [
+        8.25,
+        7.25,
+        6.88
+      ],
+      "to": [
+        9.0,
+        7.5,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_102",
+      "from": [
+        6.75,
+        7.5,
+        6.88
+      ],
+      "to": [
+        7.25,
+        7.75,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_103",
+      "from": [
+        8.75,
+        7.5,
+        6.88
+      ],
+      "to": [
+        9.25,
+        7.75,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_104",
+      "from": [
+        6.0,
+        7.75,
+        6.88
+      ],
+      "to": [
+        7.0,
+        8.0,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_105",
+      "from": [
+        9.0,
+        7.75,
+        6.88
+      ],
+      "to": [
+        10.0,
+        8.0,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_106",
+      "from": [
+        3.0,
+        8.0,
+        6.88
+      ],
+      "to": [
+        6.25,
+        8.25,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_107",
+      "from": [
+        9.75,
+        8.0,
+        6.88
+      ],
+      "to": [
+        13.0,
+        8.25,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_108",
+      "from": [
+        2.25,
+        8.25,
+        6.88
+      ],
+      "to": [
+        3.25,
+        8.5,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_109",
+      "from": [
+        12.75,
+        8.25,
+        6.88
+      ],
+      "to": [
+        13.75,
+        8.5,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_110",
+      "from": [
+        1.75,
+        8.5,
+        6.88
+      ],
+      "to": [
+        6.25,
+        8.75,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_111",
+      "from": [
+        9.75,
+        8.5,
+        6.88
+      ],
+      "to": [
+        14.25,
+        8.75,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_112",
+      "from": [
+        1.5,
+        8.75,
+        6.88
+      ],
+      "to": [
+        2.5,
+        9.0,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_113",
+      "from": [
+        6.0,
+        8.75,
+        6.88
+      ],
+      "to": [
+        6.75,
+        9.0,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_114",
+      "from": [
+        9.25,
+        8.75,
+        6.88
+      ],
+      "to": [
+        10.0,
+        9.0,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_115",
+      "from": [
+        13.5,
+        8.75,
+        6.88
+      ],
+      "to": [
+        14.5,
+        9.0,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_116",
+      "from": [
+        1.25,
+        9.0,
+        6.88
+      ],
+      "to": [
+        1.75,
+        9.25,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_117",
+      "from": [
+        6.5,
+        9.0,
+        6.88
+      ],
+      "to": [
+        7.25,
+        9.25,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_118",
+      "from": [
+        8.75,
+        9.0,
+        6.88
+      ],
+      "to": [
+        9.5,
+        9.25,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_119",
+      "from": [
+        14.25,
+        9.0,
+        6.88
+      ],
+      "to": [
+        14.75,
+        9.25,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_120",
+      "from": [
+        1.25,
+        9.25,
+        6.88
+      ],
+      "to": [
+        1.5,
+        9.5,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_121",
+      "from": [
+        7.0,
+        9.25,
+        6.88
+      ],
+      "to": [
+        9.0,
+        9.5,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_122",
+      "from": [
+        14.5,
+        9.25,
+        6.88
+      ],
+      "to": [
+        14.75,
+        9.5,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_123",
+      "from": [
+        7.75,
+        9.5,
+        6.88
+      ],
+      "to": [
+        8.25,
+        9.75,
+        9.12
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_124",
+      "from": [
+        7.75,
+        7.25,
+        6.78
+      ],
+      "to": [
+        8.25,
+        7.5,
+        9.22
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_125",
+      "from": [
+        7.25,
+        7.5,
+        6.78
+      ],
+      "to": [
+        8.75,
+        7.75,
+        9.22
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_126",
+      "from": [
+        7.0,
+        7.75,
+        6.78
+      ],
+      "to": [
+        9.0,
+        8.0,
+        9.22
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_127",
+      "from": [
+        6.25,
+        8.0,
+        6.78
+      ],
+      "to": [
+        9.75,
+        8.25,
+        9.22
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_128",
+      "from": [
+        3.25,
+        8.25,
+        6.78
+      ],
+      "to": [
+        12.75,
+        8.5,
+        9.22
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_129",
+      "from": [
+        6.25,
+        8.5,
+        6.78
+      ],
+      "to": [
+        9.75,
+        8.75,
+        9.22
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_130",
+      "from": [
+        6.75,
+        8.75,
+        6.78
+      ],
+      "to": [
+        9.25,
+        9.0,
+        9.22
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_131",
+      "from": [
+        7.25,
+        9.0,
+        6.78
+      ],
+      "to": [
+        8.75,
+        9.25,
+        9.22
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_132",
+      "from": [
+        7.5,
+        7.75,
+        7.24
+      ],
+      "to": [
+        8.5,
+        8.0,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_133",
+      "from": [
+        7.25,
+        8.0,
+        7.24
+      ],
+      "to": [
+        7.75,
+        8.25,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_134",
+      "from": [
+        8.25,
+        8.0,
+        7.24
+      ],
+      "to": [
+        8.75,
+        8.25,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_135",
+      "from": [
+        7.25,
+        8.25,
+        7.24
+      ],
+      "to": [
+        7.5,
+        8.75,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_136",
+      "from": [
+        8.5,
+        8.25,
+        7.24
+      ],
+      "to": [
+        8.75,
+        8.75,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_137",
+      "from": [
+        7.0,
+        8.75,
+        7.24
+      ],
+      "to": [
+        7.5,
+        9.0,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_138",
+      "from": [
+        8.5,
+        8.75,
+        7.24
+      ],
+      "to": [
+        9.0,
+        9.0,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_139",
+      "from": [
+        7.25,
+        9.0,
+        7.24
+      ],
+      "to": [
+        7.75,
+        9.25,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_140",
+      "from": [
+        8.25,
+        9.0,
+        7.24
+      ],
+      "to": [
+        8.75,
+        9.25,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_141",
+      "from": [
+        7.5,
+        9.25,
+        7.24
+      ],
+      "to": [
+        8.5,
+        9.5,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_142",
+      "from": [
+        7.75,
+        9.5,
+        7.24
+      ],
+      "to": [
+        8.25,
+        9.75,
+        8.76
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_143",
+      "from": [
+        7.75,
+        8.0,
+        6.8752
+      ],
+      "to": [
+        8.25,
+        8.25,
+        9.1248
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_144",
+      "from": [
+        7.5,
+        8.25,
+        6.8752
+      ],
+      "to": [
+        8.5,
+        9.0,
+        9.1248
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_145",
+      "from": [
+        7.75,
+        9.0,
+        6.8752
+      ],
+      "to": [
+        8.25,
+        9.25,
+        9.1248
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "white_146",
+      "from": [
+        7.5464,
+        8.7944,
+        6.6016
+      ],
+      "to": [
+        7.7964,
+        9.0444,
+        9.3984
+      ],
+      "mat": "white",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_147",
+      "from": [
+        2.0,
+        8.5,
+        7.35
+      ],
+      "to": [
+        2.5,
+        8.75,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_148",
+      "from": [
+        1.75,
+        8.75,
+        7.35
+      ],
+      "to": [
+        2.0,
+        9.0,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_149",
+      "from": [
+        2.0,
+        9.0,
+        7.35
+      ],
+      "to": [
+        2.25,
+        9.25,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_150",
+      "from": [
+        2.5,
+        8.75,
+        7.35
+      ],
+      "to": [
+        2.75,
+        9.25,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_151",
+      "from": [
+        2.25,
+        9.25,
+        7.35
+      ],
+      "to": [
+        2.5,
+        9.5,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_152",
+      "from": [
+        2.0,
+        8.75,
+        7.038
+      ],
+      "to": [
+        2.5,
+        9.0,
+        8.962
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_153",
+      "from": [
+        2.25,
+        9.0,
+        7.038
+      ],
+      "to": [
+        2.5,
+        9.25,
+        8.962
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "white_154",
+      "from": [
+        2.1152,
+        9.0392,
+        6.804
+      ],
+      "to": [
+        2.3652,
+        9.2892,
+        9.196
+      ],
+      "mat": "white",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_155",
+      "from": [
+        13.5,
+        8.5,
+        7.35
+      ],
+      "to": [
+        14.0,
+        8.75,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_156",
+      "from": [
+        14.0,
+        8.75,
+        7.35
+      ],
+      "to": [
+        14.25,
+        9.0,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_157",
+      "from": [
+        13.25,
+        8.75,
+        7.35
+      ],
+      "to": [
+        13.5,
+        9.25,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_158",
+      "from": [
+        13.75,
+        9.0,
+        7.35
+      ],
+      "to": [
+        14.0,
+        9.25,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_159",
+      "from": [
+        13.5,
+        9.25,
+        7.35
+      ],
+      "to": [
+        13.75,
+        9.5,
+        8.65
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_160",
+      "from": [
+        13.5,
+        8.75,
+        7.038
+      ],
+      "to": [
+        14.0,
+        9.0,
+        8.962
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_161",
+      "from": [
+        13.5,
+        9.0,
+        7.038
+      ],
+      "to": [
+        13.75,
+        9.25,
+        8.962
+      ],
+      "mat": "blue",
+      "bone": "weapon"
+    },
+    {
+      "name": "white_162",
+      "from": [
+        13.5152,
+        9.0392,
+        6.804
+      ],
+      "to": [
+        13.7652,
+        9.2892,
+        9.196
+      ],
+      "mat": "white",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_163",
+      "from": [
+        6.75,
+        9.5,
+        7.73
+      ],
+      "to": [
+        9.25,
+        9.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_164",
+      "from": [
+        7.25,
+        10.5,
+        7.73
+      ],
+      "to": [
+        8.75,
+        10.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_165",
+      "from": [
+        6.75,
+        9.75,
+        7.73
+      ],
+      "to": [
+        7.0,
+        11.0,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_166",
+      "from": [
+        9.0,
+        9.75,
+        7.73
+      ],
+      "to": [
+        9.25,
+        11.0,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_167",
+      "from": [
+        6.5,
+        11.0,
+        7.73
+      ],
+      "to": [
+        7.0,
+        11.25,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_168",
+      "from": [
+        9.0,
+        11.0,
+        7.73
+      ],
+      "to": [
+        9.5,
+        11.25,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_169",
+      "from": [
+        6.25,
+        11.25,
+        7.73
+      ],
+      "to": [
+        6.75,
+        11.5,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_170",
+      "from": [
+        9.25,
+        11.25,
+        7.73
+      ],
+      "to": [
+        9.75,
+        11.5,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_171",
+      "from": [
+        6.25,
+        11.5,
+        7.73
+      ],
+      "to": [
+        6.5,
+        22.5,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_172",
+      "from": [
+        9.5,
+        11.5,
+        7.73
+      ],
+      "to": [
+        9.75,
+        22.5,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_173",
+      "from": [
+        6.25,
+        22.5,
+        7.73
+      ],
+      "to": [
+        6.75,
+        22.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_174",
+      "from": [
+        9.25,
+        22.5,
+        7.73
+      ],
+      "to": [
+        9.75,
+        22.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_175",
+      "from": [
+        6.5,
+        22.75,
+        7.73
+      ],
+      "to": [
+        6.75,
+        26.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_176",
+      "from": [
+        9.25,
+        22.75,
+        7.73
+      ],
+      "to": [
+        9.5,
+        26.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_177",
+      "from": [
+        6.5,
+        26.75,
+        7.73
+      ],
+      "to": [
+        7.0,
+        27.0,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_178",
+      "from": [
+        7.25,
+        10.75,
+        7.73
+      ],
+      "to": [
+        7.5,
+        27.0,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_179",
+      "from": [
+        8.5,
+        10.75,
+        7.73
+      ],
+      "to": [
+        8.75,
+        27.0,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_180",
+      "from": [
+        9.0,
+        26.75,
+        7.73
+      ],
+      "to": [
+        9.5,
+        27.0,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_181",
+      "from": [
+        7.25,
+        27.0,
+        7.73
+      ],
+      "to": [
+        8.75,
+        27.25,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_182",
+      "from": [
+        6.75,
+        27.0,
+        7.73
+      ],
+      "to": [
+        7.0,
+        27.5,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_183",
+      "from": [
+        9.0,
+        27.0,
+        7.73
+      ],
+      "to": [
+        9.25,
+        27.5,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_184",
+      "from": [
+        6.75,
+        27.5,
+        7.73
+      ],
+      "to": [
+        7.25,
+        27.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_185",
+      "from": [
+        8.75,
+        27.5,
+        7.73
+      ],
+      "to": [
+        9.25,
+        27.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_186",
+      "from": [
+        7.0,
+        27.75,
+        7.73
+      ],
+      "to": [
+        7.25,
+        28.25,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_187",
+      "from": [
+        8.75,
+        27.75,
+        7.73
+      ],
+      "to": [
+        9.0,
+        28.25,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_188",
+      "from": [
+        7.0,
+        28.25,
+        7.73
+      ],
+      "to": [
+        7.5,
+        28.5,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_189",
+      "from": [
+        8.5,
+        28.25,
+        7.73
+      ],
+      "to": [
+        9.0,
+        28.5,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_190",
+      "from": [
+        7.25,
+        28.5,
+        7.73
+      ],
+      "to": [
+        7.5,
+        29.0,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_191",
+      "from": [
+        8.5,
+        28.5,
+        7.73
+      ],
+      "to": [
+        8.75,
+        29.0,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_192",
+      "from": [
+        7.25,
+        29.0,
+        7.73
+      ],
+      "to": [
+        7.75,
+        29.25,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_193",
+      "from": [
+        8.25,
+        29.0,
+        7.73
+      ],
+      "to": [
+        8.75,
+        29.25,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_194",
+      "from": [
+        7.5,
+        29.25,
+        7.73
+      ],
+      "to": [
+        7.75,
+        29.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_195",
+      "from": [
+        8.25,
+        29.25,
+        7.73
+      ],
+      "to": [
+        8.5,
+        29.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_196",
+      "from": [
+        7.5,
+        29.75,
+        7.73
+      ],
+      "to": [
+        8.5,
+        30.0,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_197",
+      "from": [
+        7.75,
+        30.0,
+        7.73
+      ],
+      "to": [
+        8.25,
+        30.75,
+        8.27
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_198",
+      "from": [
+        7.0,
+        9.75,
+        7.42
+      ],
+      "to": [
+        9.0,
+        10.5,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_199",
+      "from": [
+        7.0,
+        10.5,
+        7.42
+      ],
+      "to": [
+        7.25,
+        11.25,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_200",
+      "from": [
+        8.75,
+        10.5,
+        7.42
+      ],
+      "to": [
+        9.0,
+        11.25,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_201",
+      "from": [
+        6.75,
+        11.25,
+        7.42
+      ],
+      "to": [
+        7.25,
+        11.5,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_202",
+      "from": [
+        8.75,
+        11.25,
+        7.42
+      ],
+      "to": [
+        9.25,
+        11.5,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_203",
+      "from": [
+        6.5,
+        11.5,
+        7.42
+      ],
+      "to": [
+        7.25,
+        22.5,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_204",
+      "from": [
+        8.75,
+        11.5,
+        7.42
+      ],
+      "to": [
+        9.5,
+        22.5,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_205",
+      "from": [
+        6.75,
+        22.5,
+        7.42
+      ],
+      "to": [
+        7.25,
+        26.75,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_206",
+      "from": [
+        8.75,
+        22.5,
+        7.42
+      ],
+      "to": [
+        9.25,
+        26.75,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_207",
+      "from": [
+        7.0,
+        26.75,
+        7.42
+      ],
+      "to": [
+        7.25,
+        27.25,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_208",
+      "from": [
+        8.75,
+        26.75,
+        7.42
+      ],
+      "to": [
+        9.0,
+        27.25,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_209",
+      "from": [
+        7.0,
+        27.25,
+        7.42
+      ],
+      "to": [
+        9.0,
+        27.5,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_210",
+      "from": [
+        7.25,
+        27.5,
+        7.42
+      ],
+      "to": [
+        8.75,
+        28.25,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_211",
+      "from": [
+        7.5,
+        28.25,
+        7.42
+      ],
+      "to": [
+        8.5,
+        29.0,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_212",
+      "from": [
+        7.75,
+        29.0,
+        7.42
+      ],
+      "to": [
+        8.25,
+        29.75,
+        8.58
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_dark_213",
+      "from": [
+        7.5,
+        10.75,
+        7.64
+      ],
+      "to": [
+        8.5,
+        27.0,
+        8.36
+      ],
+      "mat": "silver_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_214",
+      "from": [
+        7.75,
+        10.75,
+        7.58
+      ],
+      "to": [
+        8.25,
+        27.0,
+        8.42
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_215",
+      "from": [
+        7.82,
+        12.4,
+        7.54
+      ],
+      "to": [
+        8.18,
+        13.1,
+        8.46
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_216",
+      "from": [
+        7.62,
+        14.82,
+        7.54
+      ],
+      "to": [
+        8.38,
+        15.08,
+        8.46
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_217",
+      "from": [
+        7.82,
+        14.6,
+        7.54
+      ],
+      "to": [
+        8.18,
+        15.3,
+        8.46
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_218",
+      "from": [
+        7.82,
+        16.8,
+        7.54
+      ],
+      "to": [
+        8.18,
+        17.5,
+        8.46
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_219",
+      "from": [
+        7.62,
+        19.22,
+        7.54
+      ],
+      "to": [
+        8.38,
+        19.48,
+        8.46
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_220",
+      "from": [
+        7.82,
+        19.0,
+        7.54
+      ],
+      "to": [
+        8.18,
+        19.7,
+        8.46
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_221",
+      "from": [
+        7.82,
+        21.2,
+        7.54
+      ],
+      "to": [
+        8.18,
+        21.9,
+        8.46
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_222",
+      "from": [
+        7.62,
+        23.62,
+        7.54
+      ],
+      "to": [
+        8.38,
+        23.88,
+        8.46
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "blue_light_223",
+      "from": [
+        7.82,
+        23.4,
+        7.54
+      ],
+      "to": [
+        8.18,
+        24.1,
+        8.46
+      ],
+      "mat": "blue_light",
+      "bone": "weapon"
+    }
+  ]
+}

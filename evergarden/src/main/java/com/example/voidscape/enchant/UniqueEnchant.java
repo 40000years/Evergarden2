@@ -4,24 +4,23 @@ import java.util.Locale;
 
 public enum UniqueEnchant {
     // Bows & Ranged
-    COLOSSUS_SLAYER("Colossus Slayer", "ล่าไททัน", "ยิงแรงขึ้นตาม % Max HP ของบอสและมอนสเตอร์", ItemCategory.BOW),
-    RICOCHET("Ricochet", "กระสุนชิ่งสายฟ้า", "ลูกธนูชิ่งหามอนสเตอร์รอบข้าง 3 ตัวพร้อมปล่อยสายฟ้า", ItemCategory.BOW),
+    COLOSSUS_SLAYER("Colossus Slayer", "ล่าไททัน", "โอกาส 33%: ยิงแรงขึ้น 8% ของ Max HP (สูงสุด +150)", ItemCategory.BOW),
+    RICOCHET("Ricochet", "กระสุนชิ่งสายฟ้า", "โอกาส 33%: ลูกธนูชิ่งสายฟ้าหามอนสเตอร์รอบข้าง 3 ตัว", ItemCategory.BOW),
     KINETIC_GRAPPLE("Kinetic Grapple", "ฮุกช็อตเวหา", "ยิงปักบล็อกแล้วดึงตัวผู้เล่นพุ่งไปหาจุดปักทันที", ItemCategory.BOW),
-    ABSOLUTE_ZERO("Absolute Zero", "เยือกแข็งสัมบูรณ์", "สตัฟฟ์แช่แข็งศัตรูในระยะหยุดนิ่ง 3.5 วินาที", ItemCategory.BOW),
-    SINGULARITY("Singularity", "หลุมดำกลืนมิติ", "ลูกธนูปักแล้วสร้างหลุมดำดูดรวบมอนสเตอร์ 3 วินาที", ItemCategory.BOW),
-    METEOR_ARROW("Meteor Arrow", "ศรดาวตกวินาศ", "เมื่อลูกธนูปักพื้น 1 วิ อุกกาบาตยักษ์จะตกลงมาเผาพื้นที่ 5x5", ItemCategory.BOW),
+    ABSOLUTE_ZERO("Absolute Zero", "เยือกแข็งสัมบูรณ์", "โอกาส 33%: แช่แข็งศัตรูรอบจุดปัก 3.5 วินาที (คูลดาวน์ 6 วิ, บอสโดนแค่ดาเมจ)", ItemCategory.BOW),
+    SINGULARITY("Singularity", "หลุมดำกลืนมิติ", "โอกาส 33%: หลุมดำดูดรวบมอนสเตอร์ 3 วินาที (คูลดาวน์ 8 วิ, ไม่ดูดบอส)", ItemCategory.BOW),
+    METEOR_ARROW("Meteor Arrow", "ศรดาวตกวินาศ", "โอกาส 33%: 1 วิหลังปัก อุกกาบาตตกเผาพื้นที่ 5x5 (คูลดาวน์ 5 วิ)", ItemCategory.BOW),
 
     // Mining & Tools
     SEISMIC_SLAM("Seismic Slam", "ขุดทลาย 3x3", "ขุด 1 ครั้งระเบิดเปิดโพรง 3×3×1 ทันที", ItemCategory.PICKAXE),
     VEIN_SMELTER("Vein Smelter", "หลอมสายแร่คู่", "ขุดทั้งสายแร่ + เผาเป็นแท่งโลหะ + โบนัสแร่ทันที", ItemCategory.PICKAXE),
     ADVANCE_TOOL("Advance Tool", "เครื่องมือสารพัดช่าง", "ขุดบล็อกทุกประเภท (ดิน, ทราย, กรวด, ไม้, หิน) ด้วยความเร็วสูงระดับ 5 เท่ากันทั้งหมด", ItemCategory.TOOL),
-    DEMETER_SCYTHE("Demeter's Scythe", "เคียวเทพกสิกรรม", "เก็บเกี่ยวและปลูกคืนพืช 9×9 บล็อกอัตโนมัติ", ItemCategory.HOE),
-    TITAN_BREACH("Titan Breach", "ขวานเจาะเกราะ (Breach)", "ฟันโจมตีทะลุทะลวงเกราะศัตรู (Breach) ลดเกราะและทำ True Damage", ItemCategory.AXE),
+    TITAN_BREACH("Titan Breach", "ขวานเจาะเกราะ (Breach)", "โอกาส 33%: ฟันทะลวงเกราะ ดาเมจเพิ่มที่ไม่ถูกเกราะลด", ItemCategory.AXE),
     TELEPATHY("Telepathy", "จิตสื่อสาร", "แร่และของที่ขุดได้ทุกชิ้นวาร์ปเข้าตัวผู้เล่น 100%", ItemCategory.TOOL),
 
     // Melee Combat
-    GUILLOTINE("Guillotine", "กิโยตินปลิดชีพ", "ฟันสังหารมอนสเตอร์เลือดต่ำกว่า 15% ทันที (Execute)", ItemCategory.MELEE),
-    ECHO_STRIKE("Echo Strike", "เงาดาบซ้ำสอง", "โอกาส 35% เงาฟันซ้ำดาเมจเดิม 100% ภายใน 0.2 วิ", ItemCategory.SWORD),
+    GUILLOTINE("Guillotine", "กิโยตินปลิดชีพ", "ฟันสังหารมอนสเตอร์เลือดต่ำกว่า 15% ทันที (ไม่มีผลกับบอส)", ItemCategory.MELEE),
+    ECHO_STRIKE("Echo Strike", "เงาดาบซ้ำสอง", "โอกาส 33% เงาฟันซ้ำดาเมจเดิม 100% ภายใน 0.2 วิ", ItemCategory.SWORD),
     BLADE_VORTEX("Blade Vortex", "คลื่นดาบสุญญากาศ", "ฟันโจมตีปล่อยคลื่นดาบตัดอากาศทะลวงศัตรูด้านหน้า 7 บล็อก", ItemCategory.SWORD),
     SOUL_HARVEST("Soul Harvest", "เกี่ยววิญญาณ", "สะสมวิญญาณรอบตัวเพิ่มเดินไว +10% และดูดเลือด 5%", ItemCategory.MELEE),
     THUNDERLORD("Thunderlord", "สายฟ้าทัณฑ์สวรรค์", "ฟันเป้าหมายเดิมครบ 3 ครั้ง ผ่าสายฟ้า True Damage", ItemCategory.MELEE),

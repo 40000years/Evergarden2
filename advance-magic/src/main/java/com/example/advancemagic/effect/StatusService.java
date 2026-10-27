@@ -76,6 +76,14 @@ public final class StatusService implements Listener {
             Location fixed=s.anchor.clone();fixed.setYaw(to.getYaw());fixed.setPitch(to.getPitch());e.setTo(fixed);
         }
     }
+    /** Player-chosen escapes (Ender Pearl, Chorus Fruit) may not break a root or freeze; plugin teleports still may. */
+    public static boolean escapeTeleport(PlayerTeleportEvent.TeleportCause cause){
+        // Chorus Fruit reports CONSUMABLE_EFFECT since 1.21.5.
+        return cause==PlayerTeleportEvent.TeleportCause.ENDER_PEARL||cause==PlayerTeleportEvent.TeleportCause.CONSUMABLE_EFFECT;
+    }
+    @EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true) public void escape(PlayerTeleportEvent e){
+        if(escapeTeleport(e.getCause())&&roots.containsKey(e.getPlayer().getUniqueId()))e.setCancelled(true);
+    }
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true) public void teleport(PlayerTeleportEvent e){roots.remove(e.getPlayer().getUniqueId());}
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true) public void reflect(EntityDamageByEntityEvent e) {
         if(!(e.getEntity() instanceof Player p)||!armored(p)||!(e.getDamager() instanceof LivingEntity attacker))return;

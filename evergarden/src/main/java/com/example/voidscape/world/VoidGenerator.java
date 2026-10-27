@@ -18,6 +18,10 @@ public final class VoidGenerator extends ChunkGenerator {
     private final RestorationLayout restoration;
     private final WorldBossTempleLayout bossTemples;
     private final boolean bossTempleEnabled;
+    private final BossStructureLayout bossStructures;
+    private final BiomeTerrain terrain;
+    private final StructureTerrain structureTerrain;
+    private final ExplorationLayout exploration;
     private final SimplexNoiseGenerator islands, detail;
     private final Blueprint[] sanctums={Blueprint.sanctumDark(),Blueprint.sanctumAstral(),Blueprint.sanctumTime()};
     public record Surface(boolean land,int top,int depth,int garden,boolean pond,boolean path) {}
@@ -39,11 +43,60 @@ public final class VoidGenerator extends ChunkGenerator {
     public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
                          SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
                          WorldBossTempleLayout bossTemples,boolean bossTempleEnabled) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,restoration,bossTemples,bossTempleEnabled,null);
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
+                         WorldBossTempleLayout bossTemples,boolean bossTempleEnabled,BossStructureLayout bossStructures) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,restoration,bossTemples,bossTempleEnabled,bossStructures,null);
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
+                         WorldBossTempleLayout bossTemples,boolean bossTempleEnabled,BossStructureLayout bossStructures,BiomeTerrain terrain) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,restoration,
+            bossTemples,bossTempleEnabled,bossStructures,terrain,true,.35);
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
+                         WorldBossTempleLayout bossTemples,boolean bossTempleEnabled,BossStructureLayout bossStructures,BiomeTerrain terrain,
+                         boolean explorationEnabled,double explorationChance) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,restoration,
+            bossTemples,bossTempleEnabled,bossStructures,terrain,explorationEnabled,explorationChance,Set.of());
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
+                         WorldBossTempleLayout bossTemples,boolean bossTempleEnabled,BossStructureLayout bossStructures,BiomeTerrain terrain,
+                         boolean explorationEnabled,double explorationChance,Set<Long> explorationLegacyCells) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,restoration,
+            bossTemples,bossTempleEnabled,bossStructures,terrain,explorationEnabled,explorationChance,explorationLegacyCells,Set.of());
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
+                         WorldBossTempleLayout bossTemples,boolean bossTempleEnabled,BossStructureLayout bossStructures,BiomeTerrain terrain,
+                         boolean explorationEnabled,double explorationChance,Set<Long> explorationLegacyCells,Set<Long> explorationPreviousCells) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,restoration,
+            bossTemples,bossTempleEnabled,bossStructures,terrain,explorationEnabled,explorationChance,explorationLegacyCells,explorationPreviousCells,Set.of());
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
+                         WorldBossTempleLayout bossTemples,boolean bossTempleEnabled,BossStructureLayout bossStructures,BiomeTerrain terrain,
+                         boolean explorationEnabled,double explorationChance,Set<Long> explorationLegacyCells,Set<Long> explorationPreviousCells,Set<Long> explorationDetailedCells) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,restoration,
+            bossTemples,bossTempleEnabled,bossStructures,terrain,explorationEnabled,explorationChance,explorationLegacyCells,explorationPreviousCells,explorationDetailedCells,Set.of());
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
+                         WorldBossTempleLayout bossTemples,boolean bossTempleEnabled,BossStructureLayout bossStructures,BiomeTerrain terrain,
+                         boolean explorationEnabled,double explorationChance,Set<Long> explorationLegacyCells,Set<Long> explorationPreviousCells,Set<Long> explorationDetailedCells,Set<Long> explorationMediumCells) {
         this.seed=seed;this.layout=layout;this.skyWhales=skyWhales;this.skyWhaleEnabled=skyWhaleEnabled;
         this.landmarks=landmarks;this.observatoryEnabled=observatoryEnabled;this.gardenEnabled=gardenEnabled;
         this.restoration=restoration;
         this.bossTemples=bossTemples;this.bossTempleEnabled=bossTempleEnabled;
+        this.bossStructures=bossStructures;
+        this.terrain=terrain;
+        structureTerrain=terrain==null?null:new StructureTerrain(seed,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,bossTemples,bossTempleEnabled,bossStructures);
         islands=new SimplexNoiseGenerator(seed);detail=new SimplexNoiseGenerator(seed^721945L);
+        exploration=new ExplorationLayout(this,terrain,explorationEnabled,explorationChance,explorationLegacyCells,explorationPreviousCells,explorationDetailedCells,explorationMediumCells);
     }
     private boolean landmarkEnabled(SkyLandmarkLayout.Site site){
         return site!=null&&(site.kind()==SkyLandmarkLayout.Kind.OBSERVATORY?observatoryEnabled:gardenEnabled);
@@ -54,14 +107,60 @@ public final class VoidGenerator extends ChunkGenerator {
     private boolean bossTempleReserved(int x,int z,int margin){
         return bossTempleEnabled&&bossTemples!=null&&bossTemples.at(x,z,margin)!=null;
     }
+    private boolean bossStructureReserved(int x,int z,int margin){
+        if(bossStructures==null)return false;
+        var site=bossStructures.at(x,z,margin);
+        return site!=null&&bossStructures.enabled(site.kind());
+    }
     private static double smooth(double t){t=Math.clamp(t,0,1);return t*t*(3-2*t);}
     private long hash(int x,int z){return DungeonLayout.mix(seed^(long)x*341873128712L^(long)z*132897987541L);}
-    public Surface surface(int x,int z){return surface(x,z,layout.nearby(x,z));}
-    private Surface surface(int x,int z,List<DungeonLayout.Site> sites) {
+    public BiomeTerrain terrain(){return terrain;}
+    public StructureTerrain structureTerrain(){return structureTerrain;}
+    public ExplorationLayout exploration(){return exploration;}
+    public Surface surface(int x,int z){return surface(x,z,layout.nearby(x,z),
+            structureTerrain==null?List.of():structureTerrain.nearby(x,z,0));}
+    private Surface surface(int x,int z,List<DungeonLayout.Site> sites,List<StructureTerrain.Anchor> anchors){
+        double weight=terrain==null?0:terrain.newWeight(x,z);
+        if(weight==0)return legacySurface(x,z,sites);
+        var natural=terrain.sample(x,z);
+        int top=natural.top(),depth=natural.depth();boolean land=natural.land();
+        // Shrines keep their established elevations and approaches, surrounded by a gradual valley.
+        for(var site:sites){
+            double distance=Math.max(Math.abs(x-site.x()),Math.abs(z-site.z()));
+            double influence=1-smooth((distance-29)/96);
+            top=(int)Math.round(top+(95-top)*influence);
+            if(distance<62){land=true;depth=Math.max(depth,24);}
+        }
+        var shape=structureTerrain.shape(x,z,top,depth,anchors);
+        top=shape.top();depth=shape.depth();if(shape.footprint())land=true;
+        if(weight<1){
+            var old=legacySurface(x,z,sites);
+            top=(int)Math.round(old.top()+(top-old.top())*weight);
+            depth=(int)Math.round(old.depth()+(depth-old.depth())*weight);
+            land=old.land()||land&&weight>.04;
+            if(!old.land())depth=Math.max(1,(int)Math.round(depth*smooth(weight)));
+            // A migration blend must never raise terrain back into fixed-height geometry.
+            if(shape.footprint())top=Math.min(top,shape.top());
+        }
+        return new Surface(land,top,depth,garden(x,z),false,false);
+    }
+    /** Full feature bounds must fit in new terrain and clear every existing landmark and shrine. */
+    public boolean canDecorate(int x,int z,int radius){
+        return canDecorateTerrain(x,z,radius)&&!exploration.reserved(x,z,radius+8);
+    }
+    boolean canDecorateTerrain(int x,int z,int radius){
+        if(terrain==null||Math.hypot(x,z)<384+radius)return false;
+        for(int dx:new int[]{-radius,0,radius})for(int dz:new int[]{-radius,0,radius})
+            if(terrain.newWeight(x+dx,z+dz)<.5)return false;
+        if(structureTerrain.reserved(x,z,radius+8,structureTerrain.nearby(x,z,radius+8)))return false;
+        for(var site:layout.within(x,z,radius+72))if(site.contains(x,z,radius+18))return false;
+        return true;
+    }
+    private Surface legacySurface(int x,int z,List<DungeonLayout.Site> sites) {
         // The landmark supplies its own islands and empty spaces. Noise terrain here
         // would fill its rib cage, bury the approach, and spoil the floating silhouette.
         if((skyWhaleEnabled&&skyWhales.at(x,z,0)!=null)||landmarkReserved(x,z,0)
-                ||bossTempleReserved(x,z,0))
+                ||bossTempleReserved(x,z,0)||bossStructureReserved(x,z,0))
             return new Surface(false,95,0,garden(x,z),false,false);
         double radial=Math.hypot(x,z);
         double density=islands.noise(x/155.0,z/155.0)+0.18*detail.noise(x/49.0,z/49.0);
@@ -94,19 +193,28 @@ public final class VoidGenerator extends ChunkGenerator {
     private int garden(int x,int z){return Math.floorMod((int)Math.floor((islands.noise(x/380.0+50,z/380.0-20)+1)*2.5),3);}
     @Override public BiomeProvider getDefaultBiomeProvider(WorldInfo info) {
         return new BiomeProvider() {
-            @Override public Biome getBiome(WorldInfo w,int x,int y,int z){return switch(garden(x,z)){case 0->Biome.CHERRY_GROVE;case 1->Biome.FLOWER_FOREST;default->Biome.MEADOW;};}
-            @Override public List<Biome> getBiomes(WorldInfo w){return List.of(Biome.CHERRY_GROVE,Biome.FLOWER_FOREST,Biome.MEADOW);}
+            @Override public Biome getBiome(WorldInfo w,int x,int y,int z){
+                if(terrain!=null&&terrain.newWeight(x,z)>=.5)return terrain.kind(x,z).vanilla();
+                return switch(garden(x,z)){case 0->Biome.CHERRY_GROVE;case 1->Biome.FLOWER_FOREST;default->Biome.MEADOW;};
+            }
+            @Override public List<Biome> getBiomes(WorldInfo w){return terrain==null?List.of(Biome.CHERRY_GROVE,Biome.FLOWER_FOREST,Biome.MEADOW):
+                List.of(Biome.CHERRY_GROVE,Biome.FLOWER_FOREST,Biome.MEADOW,Biome.FROZEN_PEAKS,Biome.OLD_GROWTH_SPRUCE_TAIGA,Biome.PALE_GARDEN);}
         };
     }
     @Override public void generateNoise(WorldInfo info,Random ignored,int cx,int cz,ChunkData data) {
         List<DungeonLayout.Site> sites=layout.nearby(cx*16+8,cz*16+8);
+        List<StructureTerrain.Anchor> anchors=structureTerrain==null?List.of():structureTerrain.nearby(cx*16+8,cz*16+8,16);
         for(int x=0;x<16;x++)for(int z=0;z<16;z++) {
-            int wx=cx*16+x,wz=cz*16+z;Surface s=surface(wx,wz,sites);if(!s.land())continue;
+            int wx=cx*16+x,wz=cz*16+z;Surface s=surface(wx,wz,sites,anchors);if(!s.land())continue;
+            boolean modern=terrain!=null&&terrain.newWeight(wx,wz)>=.5;
+            BiomeTerrain.Kind biome=modern?terrain.kind(wx,wz):null;
             for(int y=Math.max(data.getMinHeight(),s.top()-s.depth());y<=s.top();y++) {
                 int down=s.top()-y;
                 Material m=down==0?Material.GRASS_BLOCK:down<4?Material.DIRT:down<9?Material.CALCITE:Material.DEEPSLATE;
                 if(down>=9&&Math.floorMod(y+Math.floorDiv(wx,5)+Math.floorDiv(wz,5),13)<2)m=Material.TUFF;
                 if(down==s.depth()&&(hash(wx,wz)&31)==0)m=Material.SEA_LANTERN;
+                if(modern)m=terrain.material(biome,wx,y,wz,s.top(),s.depth());
+                if(modern&&down==0&&terrain.richScenery(wx,wz,0))m=BiomeScenery.surfaceMaterial(terrain,biome,wx,wz,m);
                 data.setBlock(x,y,z,m);
             }
             if(s.pond()) {
@@ -115,7 +223,24 @@ public final class VoidGenerator extends ChunkGenerator {
                 if((hash(wx,wz)&15)==0)data.setBlock(x,92,z,Material.SEA_LANTERN);
                 if((hash(wx,wz)&31)==1)data.setBlock(x,96,z,Material.LILY_PAD);
             } else if(s.path())data.setBlock(x,s.top(),z,Math.floorMod(wx+wz,13)==0?Material.SEA_LANTERN:Material.SMOOTH_QUARTZ);
-            else if(Math.hypot(wx,wz)>13&&sites.stream().noneMatch(site->site.contains(wx,wz,8))) {
+            else if(modern&&sites.stream().noneMatch(site->site.contains(wx,wz,14))
+                    &&!structureTerrain.reserved(wx,wz,12,anchors)){
+                long h=hash(wx,wz);
+                if(biome==BiomeTerrain.Kind.LUNAR_CITY){
+                    int road=Math.min(Math.min(Math.floorMod(wx,128),128-Math.floorMod(wx,128)),
+                        Math.min(Math.floorMod(wz,128),128-Math.floorMod(wz,128)));
+                    if(road<=4&&(h&31)>2)data.setBlock(x,s.top(),z,road==4?Material.POLISHED_DEEPSLATE:
+                        ((Math.floorDiv(wx,4)+Math.floorDiv(wz,4))&1)==0?Material.CALCITE:Material.SMOOTH_STONE);
+                    else if((h&63)==1)data.setBlock(x,s.top()+1,z,Material.PALE_MOSS_CARPET);
+                }else if(biome==BiomeTerrain.Kind.ANCIENT_FOREST){
+                    if((h&15)==0)data.setBlock(x,s.top()+1,z,Material.FERN);
+                    else if((h&31)==1)data.setBlock(x,s.top()+1,z,Material.BROWN_MUSHROOM);
+                }else if(biome==BiomeTerrain.Kind.GARDENS){
+                    if((h&31)==0)data.setBlock(x,s.top()+1,z,Material.ALLIUM);
+                    else if((h&31)==1)data.setBlock(x,s.top()+1,z,Material.SHORT_GRASS);
+                }
+            }
+            else if(!modern&&Math.hypot(wx,wz)>13&&sites.stream().noneMatch(site->site.contains(wx,wz,8))) {
                 long h=hash(wx,wz);
                 if((h&31)==0) {
                     Material[] flowers={Material.ALLIUM,Material.AZURE_BLUET,Material.WHITE_TULIP,Material.PINK_TULIP,Material.BLUE_ORCHID,Material.OXEYE_DAISY};
@@ -126,10 +251,13 @@ public final class VoidGenerator extends ChunkGenerator {
         // Neighboring candidate cells are evaluated identically regardless of generation order.
         for(int gx=Math.floorDiv(cx*16-7,19);gx<=Math.floorDiv(cx*16+22,19);gx++)for(int gz=Math.floorDiv(cz*16-7,19);gz<=Math.floorDiv(cz*16+22,19);gz++) {
             long h=hash(gx*19,gz*19);int tx=gx*19+4+Math.floorMod((int)h,11),tz=gz*19+4+Math.floorMod((int)(h>>>20),11);
+            // The old garden trees run until the new biome scenery takes over at half blend.
+            if(terrain!=null&&terrain.newWeight(tx,tz)>=.5)continue;
             // A neighboring tree can reach across the reservation and across chunks.
             if(skyWhaleEnabled&&skyWhales.at(tx,tz,6)!=null)continue;
             if(landmarkReserved(tx,tz,6))continue;
             if(bossTempleReserved(tx,tz,6))continue;
+            if(bossStructureReserved(tx,tz,6))continue;
             Surface s=surface(tx,tz);
             if(!s.land()||s.pond()||s.path()||s.depth()<16||Math.hypot(tx,tz)<19||layout.at(tx,tz,13)!=null)continue;
             // Broad, deliberately empty home sites.
@@ -144,6 +272,8 @@ public final class VoidGenerator extends ChunkGenerator {
             else if((h&7)==5)crystal(data,cx,cz,tx,s.top()+1,tz);
             else if((h&7)==6)ruin(data,cx,cz,tx,s.top()+1,tz);
         }
+        if(terrain!=null)BiomeDecorations.render(terrain,this,data,cx,cz);
+        for(var site:exploration.nearby(cx*16+8,cz*16+8,16))ExplorationBlueprint.render(this,data,cx,cz,site);
         for(int x=-12;x<=12;x++)for(int z=-12;z<=12;z++) {
             double r=Math.hypot(x,z);if(r>12)continue;
             put(data,cx,cz,x,96,z,r>10?Material.CHISELED_QUARTZ_BLOCK:Material.SMOOTH_QUARTZ);
@@ -164,6 +294,9 @@ public final class VoidGenerator extends ChunkGenerator {
             var site=bossTemples.cell(Math.floorDiv(cx,bossTemples.spacingChunks()),Math.floorDiv(cz,bossTemples.spacingChunks()));
             if(site!=null)WorldBossTemple.blueprint().render(data,cx,cz,site.x(),site.z());
         }
+        if(bossStructures!=null)
+            for(var site:bossStructures.cell(Math.floorDiv(cx,bossStructures.spacingChunks()),Math.floorDiv(cz,bossStructures.spacingChunks())))
+                if(bossStructures.enabled(site.kind()))site.blueprint().render(data,cx,cz,site.x(),site.z());
         if(restoration!=null)for(var site:restoration.cell(Math.floorDiv(cx*16,restoration.cellSize()),Math.floorDiv(cz*16,restoration.cellSize())))
             RestorationShrine.render(data,cx,cz,site);
     }

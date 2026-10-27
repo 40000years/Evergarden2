@@ -29,8 +29,7 @@ public final class SkyLandmarkProbe extends JavaPlugin {
         World world=plugin.world();world.setGameRule(GameRule.RANDOM_TICK_SPEED,0);
         // The same config must affect every structure. Keep only the guaranteed upgrade.
         plugin.getConfig().set("structures.treasure.second-chest-chance",1.0);
-        plugin.getConfig().set("structures.treasure.crop-stacks",0);
-        for(String key:List.of("key-shard","astral-dust","nether-star","limit-break","unique-scroll"))
+        for(String key:List.of("key-shard","nether-star","limit-break","unique-scroll"))
             plugin.getConfig().set("structures.treasure.bonus-weights."+key,0);
         var generator=new VoidGenerator(world.getSeed(),plugin.layout(),plugin.skyWhales(),true,plugin.skyLandmarks(),true,true);
         var disabled=new VoidGenerator(world.getSeed(),plugin.layout(),plugin.skyWhales(),true,plugin.skyLandmarks(),false,false);

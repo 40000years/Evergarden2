@@ -1,0 +1,5 @@
+name: VaultArenaProbe
+version: '1'
+main: VaultArenaProbe
+api-version: '26.2'
+depend: [Evergarden, advance-magic]

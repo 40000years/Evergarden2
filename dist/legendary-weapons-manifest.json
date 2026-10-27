@@ -1,0 +1,43 @@
+{
+  "release": "1.9.1-legendary-grip-fix",
+  "date": "2026-10-16",
+  "scope": "Local workspace build only; no production deployment or real game client rendering test.",
+  "runtime": "PASS 58",
+  "geyser_modelengine": "PASS 41",
+  "asset_checks": 225,
+  "native_hand_fit_checks": 145,
+  "client_behavior": {
+    "java": "3D held model, 8-frame held VFX and animated GUI icon",
+    "bedrock": "Native 3D attachable, 8-frame held VFX, static effect-bearing GUI icon"
+  },
+  "sha256": {
+    "dist/advance-magic.jar": "652536c03e820f886b2599b4818cc0c501042522eeab2abbb56e7e4c4a79c340",
+    "docs/legendary-weapons.md": "1ae7cd601b6bd7b00d7d527658936dcb8abf509f2a666ac0934f620cd3f42c46",
+    "tools/legendary_weapon_assets.py": "790bf49357d86f1a147f9da7c74c53c2635141a8420e5db08ff8b518fd73f988",
+    "tools/legendary_weapon_preview.py": "674b3ef252a3b96c59167d7dd4019c1350a52388a1f5082f52837ca8a25179e6",
+    "advance-magic/art/legendary-weapons/excalibur.bbmodel": "27fc78c2c8944515f4d3ecf8722094e8fb3b641858ce83faf18374dfbd4311c2",
+    "advance-magic/art/legendary-weapons/excalibur.geometry.json": "76a7a4115117550e76a56ad8d7711b9dcde6e23a181f610112a88b1ae928ebd4",
+    "advance-magic/art/legendary-weapons/excalibur_icon.png": "6fe56b7d841f035e43d1da94d716dc7ce2546f0d79fab858e73871d34a7bc873",
+    "advance-magic/art/legendary-weapons/longinus.bbmodel": "a2953e49c0d9df664aefaa0cc6fe5d942d1e067de6b289890d222f1dae4037d8",
+    "advance-magic/art/legendary-weapons/longinus.geometry.json": "e7342aae0c177357e770c2f72296c61cf69a50188a808111e4e3d9ca42a2c604",
+    "advance-magic/art/legendary-weapons/longinus_icon.png": "bc6592ddb0a9cea480c4f4ef537b30f0214d32c83e66ba8d7b798e6cf4a6f1f0",
+    "advance-magic/art/legendary-weapons/mjolnir.bbmodel": "4356b431bddf12221dd34eb6eef390ba997c719d8921feebb28b09c0d4e35ebe",
+    "advance-magic/art/legendary-weapons/mjolnir.geometry.json": "28509b275391f44e403104089eee76e061939f1138acac044d11cc98c9021681",
+    "advance-magic/art/legendary-weapons/mjolnir_icon.png": "63b8bddca04d474d136d4fc7d31c96541b4ddb626f608b75402f875345b07d1c",
+    "advance-magic/art/legendary-weapons/tyrfing.bbmodel": "0443e8bdeca1e7e6948341f8e7a57600992e3c0215fa188bf74397e454f49920",
+    "advance-magic/art/legendary-weapons/tyrfing.geometry.json": "1c1ee766a0f66f5c363559f33fbe8092498fefa164d9ff7fb58e66d1ab5370fc",
+    "advance-magic/art/legendary-weapons/tyrfing_icon.png": "36bf2d49efac128e94cab865ca77b33cf6393f6ac7502bab5eec7f3c4c689710",
+    "advance-magic/art/legendary-weapons/vajra.bbmodel": "386f8e0cb0bfb48de3266ac0a50a4c01530bcdc136db7e787ffc89eb6b31d44e",
+    "advance-magic/art/legendary-weapons/vajra.geometry.json": "c95605cfc19990c619176a0b43c4595427a8c3a3e638f60c2f47d3dad8ec9505",
+    "advance-magic/art/legendary-weapons/vajra_icon.png": "ff4843308cf7ceb062f82a053a12084ddf8aae983d10bbbb66e4a197cc0e5113",
+    "previews/legendary-weapons/excalibur.png": "cae209b26435d8a5b977556c8f5f4eefc2bc92c72920ce2394626725c769cd77",
+    "previews/legendary-weapons/grip-fix-icons.png": "5f6c6b3280b3b84af11ac75e1fed41831250f490c131549d8597764462d7eae4",
+    "previews/legendary-weapons/index.html": "ae66d79eb693ef1ce2fd45b268700e66f83938c3dd1dbfceb472075b5262a64d",
+    "previews/legendary-weapons/legendary-weapons.gif": "4a1864a25a755438e0abed40fc5a1734574a8a7bbb6cf83fc63c8741d7076f5d",
+    "previews/legendary-weapons/legendary-weapons.png": "7e30e8fd4a4d6ff1a1be598282af038a8636adbd815d985b8a791fec9e8ac070",
+    "previews/legendary-weapons/longinus.png": "44e886bef8fe7016717c36c0ebe3b8d6c6ca74bd8837130bcfdc4a72bfddc467",
+    "previews/legendary-weapons/mjolnir.png": "9dd95afe7a4429b0543555553c29261c7ab9f7b8ccae6d36ef553c43a5947b11",
+    "previews/legendary-weapons/tyrfing.png": "70e4ba8b9d5cc8eca748e67c5e436134655b6703828f250ecc31c10117757828",
+    "previews/legendary-weapons/vajra.png": "9b41a6a67bc03aea4c1eb1fbc400237b99f6574bf82914936f4e8c715e00d3bd"
+  }
+}

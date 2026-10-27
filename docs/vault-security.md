@@ -65,8 +65,8 @@ Successful delivery also logs:
 [Vault-Claim] player=<name> uuid=<UUID> site=<site ID> reward=core:heavens_judgment amount=1
 ```
 
-Receipts record the selected primary loot when its entitlement is committed;
-the two bonus dust and optional crop seed remain as before. Committing before
+Receipts record the selected primary loot when its entitlement is committed.
+Committing before
 delivery prevents duplicate grants but does not make disk state and player
 inventory one atomic transaction: a crash between commit and delivery can leave
 a committed claim without delivery. The receipt retains its selected loot for

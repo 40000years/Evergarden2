@@ -1,0 +1,6940 @@
+{
+  "id": "dark",
+  "grip": [
+    8,
+    10.7,
+    8
+  ],
+  "cubes": [
+    {
+      "name": "obsidian_000",
+      "from": [
+        7.59,
+        1.5,
+        7.55
+      ],
+      "to": [
+        8.41,
+        22,
+        8.45
+      ],
+      "mat": "obsidian",
+      "bone": "staff"
+    },
+    {
+      "name": "obsidian_light_001",
+      "from": [
+        7.61,
+        2,
+        7.39
+      ],
+      "to": [
+        7.83,
+        21.6,
+        8.61
+      ],
+      "mat": "obsidian_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_002",
+      "from": [
+        7.44,
+        8.9,
+        7.4
+      ],
+      "to": [
+        8.56,
+        12.5,
+        8.6
+      ],
+      "mat": "leather",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_003",
+      "from": [
+        7.35,
+        9.1,
+        7.31
+      ],
+      "to": [
+        8.65,
+        9.27,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_004",
+      "from": [
+        7.35,
+        9.7,
+        7.31
+      ],
+      "to": [
+        8.65,
+        9.87,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_005",
+      "from": [
+        7.35,
+        10.3,
+        7.31
+      ],
+      "to": [
+        8.65,
+        10.47,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_006",
+      "from": [
+        7.35,
+        10.9,
+        7.31
+      ],
+      "to": [
+        8.65,
+        11.07,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_007",
+      "from": [
+        7.35,
+        11.5,
+        7.31
+      ],
+      "to": [
+        8.65,
+        11.67,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_008",
+      "from": [
+        7.35,
+        12.1,
+        7.31
+      ],
+      "to": [
+        8.65,
+        12.27,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_009",
+      "from": [
+        7.175,
+        2.1,
+        7.175
+      ],
+      "to": [
+        8.825,
+        2.6,
+        8.825
+      ],
+      "mat": "silver",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_light_010",
+      "from": [
+        7.305,
+        2.47,
+        7.095
+      ],
+      "to": [
+        8.695,
+        2.66,
+        8.905
+      ],
+      "mat": "silver_light",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_011",
+      "from": [
+        7.175,
+        5.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        5.7,
+        8.825
+      ],
+      "mat": "silver",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_light_012",
+      "from": [
+        7.305,
+        5.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        5.76,
+        8.905
+      ],
+      "mat": "silver_light",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_013",
+      "from": [
+        7.175,
+        8.65,
+        7.175
+      ],
+      "to": [
+        8.825,
+        9.15,
+        8.825
+      ],
+      "mat": "silver",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_light_014",
+      "from": [
+        7.305,
+        9.02,
+        7.095
+      ],
+      "to": [
+        8.695,
+        9.21,
+        8.905
+      ],
+      "mat": "silver_light",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_015",
+      "from": [
+        7.175,
+        12.55,
+        7.175
+      ],
+      "to": [
+        8.825,
+        13.05,
+        8.825
+      ],
+      "mat": "silver",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_light_016",
+      "from": [
+        7.305,
+        12.92,
+        7.095
+      ],
+      "to": [
+        8.695,
+        13.11,
+        8.905
+      ],
+      "mat": "silver_light",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_017",
+      "from": [
+        7.175,
+        16.7,
+        7.175
+      ],
+      "to": [
+        8.825,
+        17.2,
+        8.825
+      ],
+      "mat": "silver",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_light_018",
+      "from": [
+        7.305,
+        17.07,
+        7.095
+      ],
+      "to": [
+        8.695,
+        17.26,
+        8.905
+      ],
+      "mat": "silver_light",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_019",
+      "from": [
+        7.175,
+        20.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        20.7,
+        8.825
+      ],
+      "mat": "silver",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_light_020",
+      "from": [
+        7.305,
+        20.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        20.76,
+        8.905
+      ],
+      "mat": "silver_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_dark_021",
+      "from": [
+        7.75,
+        1.25,
+        6.85
+      ],
+      "to": [
+        8.25,
+        1.5,
+        9.15
+      ],
+      "mat": "dark_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_dark_022",
+      "from": [
+        7.5,
+        1.5,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.0,
+        9.15
+      ],
+      "mat": "dark_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_dark_023",
+      "from": [
+        7.25,
+        2.0,
+        6.85
+      ],
+      "to": [
+        8.75,
+        2.25,
+        9.15
+      ],
+      "mat": "dark_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_dark_024",
+      "from": [
+        7.5,
+        2.25,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.75,
+        9.15
+      ],
+      "mat": "dark_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_dark_025",
+      "from": [
+        7.75,
+        2.75,
+        6.85
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.15
+      ],
+      "mat": "dark_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_026",
+      "from": [
+        7.75,
+        1.25,
+        6.67
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.33
+      ],
+      "mat": "dark",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_027",
+      "from": [
+        7.5,
+        1.75,
+        6.67
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.33
+      ],
+      "mat": "dark",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_028",
+      "from": [
+        7.75,
+        2.5,
+        6.67
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.33
+      ],
+      "mat": "dark",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_029",
+      "from": [
+        8.0,
+        1.25,
+        6.54
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.46
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_030",
+      "from": [
+        8.0,
+        1.75,
+        6.54
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.46
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_031",
+      "from": [
+        8.0,
+        2.5,
+        6.54
+      ],
+      "to": [
+        8.25,
+        2.75,
+        9.46
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_core_032",
+      "from": [
+        7.75,
+        1.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        1.75,
+        9.45
+      ],
+      "mat": "dark_core",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_core_033",
+      "from": [
+        7.5,
+        1.75,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.5,
+        9.45
+      ],
+      "mat": "dark_core",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_core_034",
+      "from": [
+        7.75,
+        2.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.75,
+        9.45
+      ],
+      "mat": "dark_core",
+      "bone": "staff"
+    },
+    {
+      "name": "white_035",
+      "from": [
+        7.88,
+        1.746,
+        6.43
+      ],
+      "to": [
+        8.13,
+        2.506,
+        9.57
+      ],
+      "mat": "white",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_036",
+      "from": [
+        7.75,
+        0.75,
+        7.15
+      ],
+      "to": [
+        8.25,
+        1.5,
+        8.85
+      ],
+      "mat": "silver",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_037",
+      "from": [
+        7.5,
+        1.5,
+        7.15
+      ],
+      "to": [
+        8.5,
+        1.75,
+        8.85
+      ],
+      "mat": "silver",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_038",
+      "from": [
+        7.275,
+        1.5,
+        7.275
+      ],
+      "to": [
+        8.725,
+        1.88,
+        8.725
+      ],
+      "mat": "silver",
+      "bone": "staff"
+    },
+    {
+      "name": "silver_light_039",
+      "from": [
+        7.405,
+        1.75,
+        7.195
+      ],
+      "to": [
+        8.595,
+        1.94,
+        8.805
+      ],
+      "mat": "silver_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_040",
+      "from": [
+        7.84,
+        6.7,
+        7.3
+      ],
+      "to": [
+        8.16,
+        7.5,
+        8.7
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_041",
+      "from": [
+        7.84,
+        14.5,
+        7.3
+      ],
+      "to": [
+        8.16,
+        15.3,
+        8.7
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_042",
+      "from": [
+        7.84,
+        18,
+        7.3
+      ],
+      "to": [
+        8.16,
+        18.8,
+        8.7
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "obsidian_edge_043",
+      "from": [
+        10.0,
+        30.0,
+        6.4
+      ],
+      "to": [
+        10.5,
+        30.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_044",
+      "from": [
+        9.5,
+        30.25,
+        6.4
+      ],
+      "to": [
+        10.5,
+        30.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_045",
+      "from": [
+        9.75,
+        30.75,
+        6.4
+      ],
+      "to": [
+        10.75,
+        31.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_046",
+      "from": [
+        8.5,
+        30.25,
+        6.4
+      ],
+      "to": [
+        9.5,
+        30.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_047",
+      "from": [
+        8.5,
+        30.5,
+        6.4
+      ],
+      "to": [
+        9.75,
+        30.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_048",
+      "from": [
+        8.75,
+        30.75,
+        6.4
+      ],
+      "to": [
+        9.75,
+        31.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_049",
+      "from": [
+        7.75,
+        30.25,
+        6.4
+      ],
+      "to": [
+        8.75,
+        30.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_050",
+      "from": [
+        7.5,
+        30.75,
+        6.4
+      ],
+      "to": [
+        8.75,
+        31.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_051",
+      "from": [
+        7.5,
+        31.0,
+        6.4
+      ],
+      "to": [
+        8.5,
+        31.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_052",
+      "from": [
+        8.0,
+        31.25,
+        6.4
+      ],
+      "to": [
+        8.5,
+        31.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_053",
+      "from": [
+        6.75,
+        30.0,
+        6.4
+      ],
+      "to": [
+        7.75,
+        30.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_054",
+      "from": [
+        6.5,
+        30.5,
+        6.4
+      ],
+      "to": [
+        7.75,
+        30.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_055",
+      "from": [
+        6.5,
+        30.75,
+        6.4
+      ],
+      "to": [
+        7.5,
+        31.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_056",
+      "from": [
+        7.0,
+        31.0,
+        6.4
+      ],
+      "to": [
+        7.5,
+        31.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_057",
+      "from": [
+        6.0,
+        29.5,
+        6.4
+      ],
+      "to": [
+        6.75,
+        29.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_058",
+      "from": [
+        5.75,
+        29.75,
+        6.4
+      ],
+      "to": [
+        7.0,
+        30.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_059",
+      "from": [
+        5.75,
+        30.0,
+        6.4
+      ],
+      "to": [
+        6.75,
+        30.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_060",
+      "from": [
+        6.0,
+        30.5,
+        6.4
+      ],
+      "to": [
+        6.5,
+        30.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_061",
+      "from": [
+        5.25,
+        28.75,
+        6.4
+      ],
+      "to": [
+        5.75,
+        29.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_062",
+      "from": [
+        5.0,
+        29.0,
+        6.4
+      ],
+      "to": [
+        6.0,
+        29.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_063",
+      "from": [
+        4.75,
+        29.25,
+        6.4
+      ],
+      "to": [
+        6.25,
+        29.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_064",
+      "from": [
+        4.75,
+        29.5,
+        6.4
+      ],
+      "to": [
+        6.0,
+        29.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_065",
+      "from": [
+        5.0,
+        29.75,
+        6.4
+      ],
+      "to": [
+        5.75,
+        30.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_066",
+      "from": [
+        5.25,
+        30.0,
+        6.4
+      ],
+      "to": [
+        5.5,
+        30.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_067",
+      "from": [
+        4.75,
+        28.0,
+        6.4
+      ],
+      "to": [
+        5.25,
+        28.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_068",
+      "from": [
+        4.25,
+        28.25,
+        6.4
+      ],
+      "to": [
+        5.25,
+        28.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_069",
+      "from": [
+        4.25,
+        28.5,
+        6.4
+      ],
+      "to": [
+        5.5,
+        29.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_070",
+      "from": [
+        4.5,
+        29.0,
+        6.4
+      ],
+      "to": [
+        5.0,
+        29.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_071",
+      "from": [
+        4.5,
+        27.0,
+        6.4
+      ],
+      "to": [
+        4.75,
+        27.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_072",
+      "from": [
+        3.75,
+        27.25,
+        6.4
+      ],
+      "to": [
+        4.75,
+        27.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_073",
+      "from": [
+        3.75,
+        27.5,
+        6.4
+      ],
+      "to": [
+        5.0,
+        28.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_074",
+      "from": [
+        4.0,
+        28.0,
+        6.4
+      ],
+      "to": [
+        4.75,
+        28.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_075",
+      "from": [
+        4.0,
+        28.25,
+        6.4
+      ],
+      "to": [
+        4.25,
+        28.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_076",
+      "from": [
+        4.25,
+        26.0,
+        6.4
+      ],
+      "to": [
+        4.5,
+        26.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_077",
+      "from": [
+        3.5,
+        26.25,
+        6.4
+      ],
+      "to": [
+        4.5,
+        26.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_078",
+      "from": [
+        3.5,
+        26.75,
+        6.4
+      ],
+      "to": [
+        4.75,
+        27.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_079",
+      "from": [
+        3.25,
+        25.25,
+        6.4
+      ],
+      "to": [
+        4.5,
+        26.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_080",
+      "from": [
+        3.5,
+        24.0,
+        6.4
+      ],
+      "to": [
+        4.25,
+        24.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_081",
+      "from": [
+        3.5,
+        24.25,
+        6.4
+      ],
+      "to": [
+        4.75,
+        24.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_082",
+      "from": [
+        3.5,
+        24.5,
+        6.4
+      ],
+      "to": [
+        4.5,
+        25.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_083",
+      "from": [
+        3.75,
+        25.0,
+        6.4
+      ],
+      "to": [
+        4.5,
+        25.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_084",
+      "from": [
+        3.75,
+        23.0,
+        6.4
+      ],
+      "to": [
+        4.5,
+        23.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_085",
+      "from": [
+        3.75,
+        23.25,
+        6.4
+      ],
+      "to": [
+        5.0,
+        23.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_086",
+      "from": [
+        3.5,
+        23.75,
+        6.4
+      ],
+      "to": [
+        4.75,
+        24.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_087",
+      "from": [
+        4.25,
+        24.0,
+        6.4
+      ],
+      "to": [
+        4.75,
+        24.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_088",
+      "from": [
+        4.5,
+        22.0,
+        6.4
+      ],
+      "to": [
+        5.0,
+        22.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_089",
+      "from": [
+        4.25,
+        22.25,
+        6.4
+      ],
+      "to": [
+        5.25,
+        22.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_090",
+      "from": [
+        4.0,
+        22.5,
+        6.4
+      ],
+      "to": [
+        5.5,
+        22.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_091",
+      "from": [
+        4.0,
+        22.75,
+        6.4
+      ],
+      "to": [
+        5.25,
+        23.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_092",
+      "from": [
+        4.5,
+        23.0,
+        6.4
+      ],
+      "to": [
+        5.25,
+        23.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_093",
+      "from": [
+        5.25,
+        21.0,
+        6.4
+      ],
+      "to": [
+        5.5,
+        21.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_094",
+      "from": [
+        5.0,
+        21.25,
+        6.4
+      ],
+      "to": [
+        5.75,
+        21.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_095",
+      "from": [
+        4.75,
+        21.5,
+        6.4
+      ],
+      "to": [
+        6.0,
+        21.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_096",
+      "from": [
+        4.75,
+        21.75,
+        6.4
+      ],
+      "to": [
+        6.25,
+        22.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_097",
+      "from": [
+        5.0,
+        22.0,
+        6.4
+      ],
+      "to": [
+        6.0,
+        22.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_098",
+      "from": [
+        5.25,
+        22.25,
+        6.4
+      ],
+      "to": [
+        5.75,
+        22.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_099",
+      "from": [
+        6.0,
+        20.5,
+        6.4
+      ],
+      "to": [
+        6.5,
+        20.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_100",
+      "from": [
+        5.5,
+        20.75,
+        6.4
+      ],
+      "to": [
+        6.5,
+        21.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_101",
+      "from": [
+        5.5,
+        21.0,
+        6.4
+      ],
+      "to": [
+        6.75,
+        21.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_102",
+      "from": [
+        5.75,
+        21.25,
+        6.4
+      ],
+      "to": [
+        7.0,
+        21.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_103",
+      "from": [
+        5.75,
+        21.5,
+        6.4
+      ],
+      "to": [
+        6.5,
+        21.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_104",
+      "from": [
+        6.0,
+        21.75,
+        6.4
+      ],
+      "to": [
+        6.25,
+        22.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_105",
+      "from": [
+        7.0,
+        20.0,
+        6.4
+      ],
+      "to": [
+        7.25,
+        20.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_106",
+      "from": [
+        6.25,
+        20.25,
+        6.4
+      ],
+      "to": [
+        7.5,
+        20.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_107",
+      "from": [
+        6.5,
+        20.5,
+        6.4
+      ],
+      "to": [
+        7.5,
+        20.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_108",
+      "from": [
+        6.5,
+        20.75,
+        6.4
+      ],
+      "to": [
+        7.75,
+        21.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_109",
+      "from": [
+        6.75,
+        21.0,
+        6.4
+      ],
+      "to": [
+        7.5,
+        21.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_110",
+      "from": [
+        6.75,
+        21.25,
+        6.4
+      ],
+      "to": [
+        7.0,
+        21.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_111",
+      "from": [
+        7.75,
+        19.75,
+        6.4
+      ],
+      "to": [
+        8.5,
+        20.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_112",
+      "from": [
+        7.5,
+        20.0,
+        6.4
+      ],
+      "to": [
+        8.5,
+        21.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_113",
+      "from": [
+        8.5,
+        19.75,
+        6.4
+      ],
+      "to": [
+        9.5,
+        21.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_114",
+      "from": [
+        9.5,
+        19.75,
+        6.4
+      ],
+      "to": [
+        10.0,
+        20.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_115",
+      "from": [
+        9.5,
+        20.0,
+        6.4
+      ],
+      "to": [
+        10.5,
+        21.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_116",
+      "from": [
+        10.75,
+        20.0,
+        6.4
+      ],
+      "to": [
+        11.0,
+        20.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_117",
+      "from": [
+        10.5,
+        20.25,
+        6.4
+      ],
+      "to": [
+        11.5,
+        20.75,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_118",
+      "from": [
+        10.25,
+        20.75,
+        6.4
+      ],
+      "to": [
+        11.5,
+        21.0,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_119",
+      "from": [
+        10.25,
+        21.0,
+        6.4
+      ],
+      "to": [
+        11.25,
+        21.25,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_edge_120",
+      "from": [
+        10.75,
+        21.25,
+        6.4
+      ],
+      "to": [
+        11.25,
+        21.5,
+        9.6
+      ],
+      "mat": "obsidian_edge",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_121",
+      "from": [
+        10.0,
+        30.0,
+        6.1
+      ],
+      "to": [
+        10.5,
+        30.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_122",
+      "from": [
+        9.75,
+        30.25,
+        6.1
+      ],
+      "to": [
+        10.75,
+        30.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_123",
+      "from": [
+        9.75,
+        30.75,
+        6.1
+      ],
+      "to": [
+        10.5,
+        31.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_124",
+      "from": [
+        8.75,
+        30.25,
+        6.1
+      ],
+      "to": [
+        9.75,
+        31.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_125",
+      "from": [
+        8.75,
+        31.0,
+        6.1
+      ],
+      "to": [
+        9.0,
+        31.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_126",
+      "from": [
+        7.75,
+        30.0,
+        6.1
+      ],
+      "to": [
+        8.0,
+        30.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_127",
+      "from": [
+        7.75,
+        30.25,
+        6.1
+      ],
+      "to": [
+        8.75,
+        31.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_128",
+      "from": [
+        8.5,
+        31.0,
+        6.1
+      ],
+      "to": [
+        8.75,
+        31.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_129",
+      "from": [
+        7.0,
+        29.75,
+        6.1
+      ],
+      "to": [
+        7.25,
+        30.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_130",
+      "from": [
+        7.0,
+        30.0,
+        6.1
+      ],
+      "to": [
+        8.0,
+        30.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_131",
+      "from": [
+        6.75,
+        30.25,
+        6.1
+      ],
+      "to": [
+        7.75,
+        30.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_132",
+      "from": [
+        7.5,
+        30.75,
+        6.1
+      ],
+      "to": [
+        7.75,
+        31.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_133",
+      "from": [
+        6.25,
+        29.25,
+        6.1
+      ],
+      "to": [
+        6.5,
+        29.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_134",
+      "from": [
+        6.0,
+        29.5,
+        6.1
+      ],
+      "to": [
+        6.75,
+        29.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_135",
+      "from": [
+        6.0,
+        29.75,
+        6.1
+      ],
+      "to": [
+        7.0,
+        30.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_136",
+      "from": [
+        6.25,
+        30.25,
+        6.1
+      ],
+      "to": [
+        6.75,
+        30.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_137",
+      "from": [
+        5.5,
+        28.75,
+        6.1
+      ],
+      "to": [
+        6.0,
+        29.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_138",
+      "from": [
+        5.25,
+        29.0,
+        6.1
+      ],
+      "to": [
+        6.25,
+        29.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_139",
+      "from": [
+        5.5,
+        29.5,
+        6.1
+      ],
+      "to": [
+        6.0,
+        29.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_140",
+      "from": [
+        4.75,
+        28.0,
+        6.1
+      ],
+      "to": [
+        5.25,
+        28.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_141",
+      "from": [
+        4.5,
+        28.25,
+        6.1
+      ],
+      "to": [
+        5.5,
+        28.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_142",
+      "from": [
+        4.5,
+        28.5,
+        6.1
+      ],
+      "to": [
+        5.75,
+        28.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_143",
+      "from": [
+        4.75,
+        28.75,
+        6.1
+      ],
+      "to": [
+        5.5,
+        29.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_144",
+      "from": [
+        4.5,
+        27.0,
+        6.1
+      ],
+      "to": [
+        5.0,
+        27.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_145",
+      "from": [
+        4.0,
+        27.25,
+        6.1
+      ],
+      "to": [
+        5.0,
+        27.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_146",
+      "from": [
+        4.25,
+        27.5,
+        6.1
+      ],
+      "to": [
+        5.0,
+        27.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_147",
+      "from": [
+        4.25,
+        27.75,
+        6.1
+      ],
+      "to": [
+        5.25,
+        28.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_148",
+      "from": [
+        4.25,
+        28.0,
+        6.1
+      ],
+      "to": [
+        4.75,
+        28.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_149",
+      "from": [
+        4.5,
+        26.0,
+        6.1
+      ],
+      "to": [
+        4.75,
+        26.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_150",
+      "from": [
+        3.75,
+        26.25,
+        6.1
+      ],
+      "to": [
+        4.75,
+        26.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_151",
+      "from": [
+        4.0,
+        26.75,
+        6.1
+      ],
+      "to": [
+        4.75,
+        27.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_152",
+      "from": [
+        3.75,
+        25.25,
+        6.1
+      ],
+      "to": [
+        4.75,
+        26.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_153",
+      "from": [
+        4.0,
+        24.0,
+        6.1
+      ],
+      "to": [
+        4.25,
+        24.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_154",
+      "from": [
+        4.0,
+        24.25,
+        6.1
+      ],
+      "to": [
+        4.75,
+        24.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_155",
+      "from": [
+        3.75,
+        24.5,
+        6.1
+      ],
+      "to": [
+        4.75,
+        25.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_156",
+      "from": [
+        4.0,
+        25.0,
+        6.1
+      ],
+      "to": [
+        4.75,
+        25.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_157",
+      "from": [
+        4.25,
+        23.0,
+        6.1
+      ],
+      "to": [
+        4.5,
+        23.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_158",
+      "from": [
+        4.25,
+        23.25,
+        6.1
+      ],
+      "to": [
+        5.25,
+        23.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_159",
+      "from": [
+        4.0,
+        23.5,
+        6.1
+      ],
+      "to": [
+        5.0,
+        24.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_160",
+      "from": [
+        4.25,
+        24.0,
+        6.1
+      ],
+      "to": [
+        5.0,
+        24.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_161",
+      "from": [
+        4.75,
+        22.25,
+        6.1
+      ],
+      "to": [
+        5.25,
+        22.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_162",
+      "from": [
+        4.5,
+        22.5,
+        6.1
+      ],
+      "to": [
+        5.75,
+        22.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_163",
+      "from": [
+        4.5,
+        22.75,
+        6.1
+      ],
+      "to": [
+        5.5,
+        23.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_164",
+      "from": [
+        4.75,
+        23.0,
+        6.1
+      ],
+      "to": [
+        5.25,
+        23.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_165",
+      "from": [
+        5.0,
+        23.25,
+        6.1
+      ],
+      "to": [
+        5.25,
+        23.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_166",
+      "from": [
+        5.5,
+        21.25,
+        6.1
+      ],
+      "to": [
+        5.75,
+        21.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_167",
+      "from": [
+        5.25,
+        21.5,
+        6.1
+      ],
+      "to": [
+        6.0,
+        21.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_168",
+      "from": [
+        5.25,
+        21.75,
+        6.1
+      ],
+      "to": [
+        6.25,
+        22.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_169",
+      "from": [
+        5.0,
+        22.0,
+        6.1
+      ],
+      "to": [
+        6.25,
+        22.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_170",
+      "from": [
+        5.25,
+        22.25,
+        6.1
+      ],
+      "to": [
+        6.0,
+        22.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_171",
+      "from": [
+        5.5,
+        22.5,
+        6.1
+      ],
+      "to": [
+        5.75,
+        22.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_172",
+      "from": [
+        6.25,
+        20.75,
+        6.1
+      ],
+      "to": [
+        6.75,
+        21.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_173",
+      "from": [
+        6.0,
+        21.0,
+        6.1
+      ],
+      "to": [
+        6.75,
+        21.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_174",
+      "from": [
+        5.75,
+        21.25,
+        6.1
+      ],
+      "to": [
+        7.0,
+        21.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_175",
+      "from": [
+        6.0,
+        21.5,
+        6.1
+      ],
+      "to": [
+        6.75,
+        21.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_176",
+      "from": [
+        6.25,
+        21.75,
+        6.1
+      ],
+      "to": [
+        6.5,
+        22.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_177",
+      "from": [
+        7.25,
+        20.25,
+        6.1
+      ],
+      "to": [
+        7.5,
+        20.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_178",
+      "from": [
+        6.75,
+        20.5,
+        6.1
+      ],
+      "to": [
+        7.75,
+        21.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_179",
+      "from": [
+        7.0,
+        21.25,
+        6.1
+      ],
+      "to": [
+        7.25,
+        21.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_180",
+      "from": [
+        8.25,
+        20.0,
+        6.1
+      ],
+      "to": [
+        8.5,
+        20.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_181",
+      "from": [
+        7.5,
+        20.25,
+        6.1
+      ],
+      "to": [
+        8.5,
+        20.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_182",
+      "from": [
+        7.75,
+        20.5,
+        6.1
+      ],
+      "to": [
+        8.75,
+        21.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_183",
+      "from": [
+        8.75,
+        20.0,
+        6.1
+      ],
+      "to": [
+        9.5,
+        20.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_184",
+      "from": [
+        8.5,
+        20.5,
+        6.1
+      ],
+      "to": [
+        9.5,
+        21.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_185",
+      "from": [
+        9.5,
+        20.25,
+        6.1
+      ],
+      "to": [
+        10.5,
+        21.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_186",
+      "from": [
+        10.0,
+        21.0,
+        6.1
+      ],
+      "to": [
+        10.5,
+        21.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_187",
+      "from": [
+        10.5,
+        20.5,
+        6.1
+      ],
+      "to": [
+        11.25,
+        20.75,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_188",
+      "from": [
+        10.5,
+        20.75,
+        6.1
+      ],
+      "to": [
+        11.5,
+        21.0,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_189",
+      "from": [
+        10.25,
+        21.0,
+        6.1
+      ],
+      "to": [
+        11.5,
+        21.25,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_light_190",
+      "from": [
+        10.75,
+        21.25,
+        6.1
+      ],
+      "to": [
+        11.25,
+        21.5,
+        9.9
+      ],
+      "mat": "obsidian_light",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_191",
+      "from": [
+        10.0,
+        30.0,
+        5.9
+      ],
+      "to": [
+        10.75,
+        30.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_192",
+      "from": [
+        9.75,
+        30.25,
+        5.9
+      ],
+      "to": [
+        10.75,
+        30.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_193",
+      "from": [
+        9.75,
+        30.5,
+        5.9
+      ],
+      "to": [
+        10.5,
+        30.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_194",
+      "from": [
+        8.75,
+        30.25,
+        5.9
+      ],
+      "to": [
+        9.75,
+        30.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_195",
+      "from": [
+        8.0,
+        30.25,
+        5.9
+      ],
+      "to": [
+        9.0,
+        30.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_196",
+      "from": [
+        8.0,
+        30.5,
+        5.9
+      ],
+      "to": [
+        8.75,
+        30.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_197",
+      "from": [
+        7.25,
+        29.75,
+        5.9
+      ],
+      "to": [
+        7.5,
+        30.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_198",
+      "from": [
+        7.0,
+        30.0,
+        5.9
+      ],
+      "to": [
+        8.0,
+        30.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_199",
+      "from": [
+        6.25,
+        29.25,
+        5.9
+      ],
+      "to": [
+        6.5,
+        29.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_200",
+      "from": [
+        6.25,
+        29.5,
+        5.9
+      ],
+      "to": [
+        7.0,
+        29.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_201",
+      "from": [
+        6.25,
+        29.75,
+        5.9
+      ],
+      "to": [
+        7.25,
+        30.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_202",
+      "from": [
+        6.75,
+        30.0,
+        5.9
+      ],
+      "to": [
+        7.0,
+        30.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_203",
+      "from": [
+        5.5,
+        28.75,
+        5.9
+      ],
+      "to": [
+        6.0,
+        29.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_204",
+      "from": [
+        5.5,
+        29.0,
+        5.9
+      ],
+      "to": [
+        6.25,
+        29.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_205",
+      "from": [
+        5.75,
+        29.25,
+        5.9
+      ],
+      "to": [
+        6.5,
+        29.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_206",
+      "from": [
+        6.0,
+        29.5,
+        5.9
+      ],
+      "to": [
+        6.25,
+        29.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_207",
+      "from": [
+        5.0,
+        28.0,
+        5.9
+      ],
+      "to": [
+        5.5,
+        28.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_208",
+      "from": [
+        5.0,
+        28.25,
+        5.9
+      ],
+      "to": [
+        5.75,
+        28.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_209",
+      "from": [
+        5.25,
+        28.75,
+        5.9
+      ],
+      "to": [
+        5.5,
+        29.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_210",
+      "from": [
+        4.75,
+        27.0,
+        5.9
+      ],
+      "to": [
+        5.0,
+        27.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_211",
+      "from": [
+        4.5,
+        27.25,
+        5.9
+      ],
+      "to": [
+        5.0,
+        27.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_212",
+      "from": [
+        4.5,
+        27.5,
+        5.9
+      ],
+      "to": [
+        5.25,
+        27.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_213",
+      "from": [
+        4.75,
+        27.75,
+        5.9
+      ],
+      "to": [
+        5.25,
+        28.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_214",
+      "from": [
+        4.25,
+        26.25,
+        5.9
+      ],
+      "to": [
+        4.75,
+        26.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_215",
+      "from": [
+        4.25,
+        26.75,
+        5.9
+      ],
+      "to": [
+        5.0,
+        27.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_216",
+      "from": [
+        4.5,
+        27.0,
+        5.9
+      ],
+      "to": [
+        4.75,
+        27.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_217",
+      "from": [
+        4.25,
+        25.25,
+        5.9
+      ],
+      "to": [
+        4.75,
+        26.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_218",
+      "from": [
+        4.25,
+        24.25,
+        5.9
+      ],
+      "to": [
+        5.0,
+        24.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_219",
+      "from": [
+        4.25,
+        24.5,
+        5.9
+      ],
+      "to": [
+        4.75,
+        25.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_220",
+      "from": [
+        4.75,
+        23.25,
+        5.9
+      ],
+      "to": [
+        5.25,
+        23.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_221",
+      "from": [
+        4.5,
+        23.5,
+        5.9
+      ],
+      "to": [
+        5.25,
+        23.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_222",
+      "from": [
+        4.5,
+        23.75,
+        5.9
+      ],
+      "to": [
+        5.0,
+        24.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_223",
+      "from": [
+        5.25,
+        22.25,
+        5.9
+      ],
+      "to": [
+        5.5,
+        22.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_224",
+      "from": [
+        5.0,
+        22.5,
+        5.9
+      ],
+      "to": [
+        5.75,
+        22.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_225",
+      "from": [
+        5.0,
+        22.75,
+        5.9
+      ],
+      "to": [
+        5.5,
+        23.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_226",
+      "from": [
+        4.75,
+        23.0,
+        5.9
+      ],
+      "to": [
+        5.5,
+        23.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_227",
+      "from": [
+        5.75,
+        21.75,
+        5.9
+      ],
+      "to": [
+        6.25,
+        22.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_228",
+      "from": [
+        5.5,
+        22.0,
+        5.9
+      ],
+      "to": [
+        6.25,
+        22.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_229",
+      "from": [
+        5.5,
+        22.25,
+        5.9
+      ],
+      "to": [
+        6.0,
+        22.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_230",
+      "from": [
+        6.5,
+        21.0,
+        5.9
+      ],
+      "to": [
+        7.0,
+        21.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_231",
+      "from": [
+        6.25,
+        21.25,
+        5.9
+      ],
+      "to": [
+        7.0,
+        21.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_232",
+      "from": [
+        6.0,
+        21.5,
+        5.9
+      ],
+      "to": [
+        6.75,
+        21.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_233",
+      "from": [
+        6.25,
+        21.75,
+        5.9
+      ],
+      "to": [
+        6.5,
+        22.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_234",
+      "from": [
+        7.5,
+        20.5,
+        5.9
+      ],
+      "to": [
+        7.75,
+        20.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_235",
+      "from": [
+        7.0,
+        20.75,
+        5.9
+      ],
+      "to": [
+        7.75,
+        21.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_236",
+      "from": [
+        7.0,
+        21.0,
+        5.9
+      ],
+      "to": [
+        8.0,
+        21.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_237",
+      "from": [
+        7.0,
+        21.25,
+        5.9
+      ],
+      "to": [
+        7.25,
+        21.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_238",
+      "from": [
+        7.75,
+        20.5,
+        5.9
+      ],
+      "to": [
+        8.75,
+        21.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_239",
+      "from": [
+        7.75,
+        21.0,
+        5.9
+      ],
+      "to": [
+        8.0,
+        21.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_240",
+      "from": [
+        8.75,
+        20.5,
+        5.9
+      ],
+      "to": [
+        9.75,
+        21.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_241",
+      "from": [
+        9.75,
+        20.5,
+        5.9
+      ],
+      "to": [
+        10.75,
+        20.75,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_242",
+      "from": [
+        9.5,
+        20.75,
+        5.9
+      ],
+      "to": [
+        10.5,
+        21.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_243",
+      "from": [
+        10.25,
+        21.0,
+        5.9
+      ],
+      "to": [
+        10.5,
+        21.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_244",
+      "from": [
+        10.5,
+        20.75,
+        5.9
+      ],
+      "to": [
+        11.25,
+        21.0,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_245",
+      "from": [
+        10.5,
+        21.0,
+        5.9
+      ],
+      "to": [
+        11.5,
+        21.25,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "obsidian_246",
+      "from": [
+        11.0,
+        21.25,
+        5.9
+      ],
+      "to": [
+        11.5,
+        21.5,
+        10.1
+      ],
+      "mat": "obsidian",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_247",
+      "from": [
+        8.75,
+        30.0,
+        5.72
+      ],
+      "to": [
+        9.5,
+        30.25,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_248",
+      "from": [
+        8.0,
+        30.0,
+        5.72
+      ],
+      "to": [
+        8.75,
+        30.25,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_249",
+      "from": [
+        7.25,
+        29.75,
+        5.72
+      ],
+      "to": [
+        7.75,
+        30.0,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_250",
+      "from": [
+        6.5,
+        29.25,
+        5.72
+      ],
+      "to": [
+        6.75,
+        29.5,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_251",
+      "from": [
+        7.0,
+        29.5,
+        5.72
+      ],
+      "to": [
+        7.25,
+        29.75,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_252",
+      "from": [
+        6.0,
+        28.75,
+        5.72
+      ],
+      "to": [
+        6.25,
+        29.0,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_253",
+      "from": [
+        6.25,
+        29.0,
+        5.72
+      ],
+      "to": [
+        6.5,
+        29.25,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_254",
+      "from": [
+        5.5,
+        28.25,
+        5.72
+      ],
+      "to": [
+        5.75,
+        28.5,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_255",
+      "from": [
+        5.75,
+        28.5,
+        5.72
+      ],
+      "to": [
+        6.0,
+        28.75,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_256",
+      "from": [
+        5.25,
+        27.75,
+        5.72
+      ],
+      "to": [
+        5.5,
+        28.0,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_257",
+      "from": [
+        5.0,
+        27.0,
+        5.72
+      ],
+      "to": [
+        5.25,
+        27.5,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_258",
+      "from": [
+        4.75,
+        25.75,
+        5.72
+      ],
+      "to": [
+        5.0,
+        26.75,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_259",
+      "from": [
+        4.75,
+        25.0,
+        5.72
+      ],
+      "to": [
+        5.0,
+        25.75,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_260",
+      "from": [
+        4.75,
+        24.5,
+        5.72
+      ],
+      "to": [
+        5.0,
+        25.0,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_261",
+      "from": [
+        5.0,
+        23.75,
+        5.72
+      ],
+      "to": [
+        5.25,
+        24.25,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_262",
+      "from": [
+        5.5,
+        22.75,
+        5.72
+      ],
+      "to": [
+        5.75,
+        23.0,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_263",
+      "from": [
+        5.25,
+        23.25,
+        5.72
+      ],
+      "to": [
+        5.5,
+        23.5,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_264",
+      "from": [
+        6.0,
+        22.25,
+        5.72
+      ],
+      "to": [
+        6.25,
+        22.5,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_265",
+      "from": [
+        5.75,
+        22.5,
+        5.72
+      ],
+      "to": [
+        6.0,
+        22.75,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_266",
+      "from": [
+        6.5,
+        21.75,
+        5.72
+      ],
+      "to": [
+        6.75,
+        22.0,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_267",
+      "from": [
+        6.25,
+        22.0,
+        5.72
+      ],
+      "to": [
+        6.5,
+        22.25,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_268",
+      "from": [
+        7.25,
+        21.25,
+        5.72
+      ],
+      "to": [
+        7.5,
+        21.5,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_269",
+      "from": [
+        6.75,
+        21.5,
+        5.72
+      ],
+      "to": [
+        7.25,
+        21.75,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_270",
+      "from": [
+        7.75,
+        21.0,
+        5.72
+      ],
+      "to": [
+        8.25,
+        21.25,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_271",
+      "from": [
+        7.5,
+        21.25,
+        5.72
+      ],
+      "to": [
+        7.75,
+        21.5,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_272",
+      "from": [
+        8.25,
+        21.0,
+        5.72
+      ],
+      "to": [
+        8.75,
+        21.25,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_273",
+      "from": [
+        9.5,
+        21.0,
+        5.72
+      ],
+      "to": [
+        9.75,
+        21.25,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_274",
+      "from": [
+        9.75,
+        21.0,
+        5.72
+      ],
+      "to": [
+        10.25,
+        21.25,
+        10.28
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_dark_275",
+      "from": [
+        9.0,
+        23.25,
+        5.8
+      ],
+      "to": [
+        9.25,
+        23.5,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_276",
+      "from": [
+        9.0,
+        23.5,
+        5.8
+      ],
+      "to": [
+        9.5,
+        23.75,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_277",
+      "from": [
+        8.75,
+        23.75,
+        5.8
+      ],
+      "to": [
+        9.5,
+        24.0,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_278",
+      "from": [
+        8.75,
+        24.0,
+        5.8
+      ],
+      "to": [
+        9.75,
+        24.25,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_279",
+      "from": [
+        8.5,
+        24.25,
+        5.8
+      ],
+      "to": [
+        9.75,
+        24.5,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_280",
+      "from": [
+        8.5,
+        24.5,
+        5.8
+      ],
+      "to": [
+        10.0,
+        24.75,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_281",
+      "from": [
+        8.25,
+        24.75,
+        5.8
+      ],
+      "to": [
+        10.0,
+        25.0,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_282",
+      "from": [
+        8.25,
+        25.0,
+        5.8
+      ],
+      "to": [
+        10.25,
+        25.25,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_283",
+      "from": [
+        8.0,
+        25.25,
+        5.8
+      ],
+      "to": [
+        10.25,
+        25.5,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_284",
+      "from": [
+        8.0,
+        25.5,
+        5.8
+      ],
+      "to": [
+        10.5,
+        25.75,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_285",
+      "from": [
+        7.75,
+        25.75,
+        5.8
+      ],
+      "to": [
+        10.75,
+        26.25,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_286",
+      "from": [
+        8.0,
+        26.25,
+        5.8
+      ],
+      "to": [
+        10.5,
+        26.5,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_287",
+      "from": [
+        8.0,
+        26.5,
+        5.8
+      ],
+      "to": [
+        10.25,
+        26.75,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_288",
+      "from": [
+        8.25,
+        26.75,
+        5.8
+      ],
+      "to": [
+        10.25,
+        27.0,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_289",
+      "from": [
+        8.5,
+        27.0,
+        5.8
+      ],
+      "to": [
+        10.0,
+        27.25,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_290",
+      "from": [
+        8.5,
+        27.25,
+        5.8
+      ],
+      "to": [
+        9.75,
+        27.5,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_291",
+      "from": [
+        8.75,
+        27.5,
+        5.8
+      ],
+      "to": [
+        9.5,
+        27.75,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_292",
+      "from": [
+        9.0,
+        27.75,
+        5.8
+      ],
+      "to": [
+        9.5,
+        28.0,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_dark_293",
+      "from": [
+        9.0,
+        28.0,
+        5.8
+      ],
+      "to": [
+        9.25,
+        28.25,
+        10.2
+      ],
+      "mat": "dark_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_294",
+      "from": [
+        9.0,
+        23.5,
+        5.62
+      ],
+      "to": [
+        9.25,
+        23.75,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_295",
+      "from": [
+        9.0,
+        23.75,
+        5.62
+      ],
+      "to": [
+        9.5,
+        24.0,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_296",
+      "from": [
+        8.75,
+        24.0,
+        5.62
+      ],
+      "to": [
+        9.5,
+        24.25,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_297",
+      "from": [
+        8.75,
+        24.25,
+        5.62
+      ],
+      "to": [
+        9.75,
+        24.5,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_298",
+      "from": [
+        8.5,
+        24.5,
+        5.62
+      ],
+      "to": [
+        9.75,
+        24.75,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_299",
+      "from": [
+        8.5,
+        24.75,
+        5.62
+      ],
+      "to": [
+        10.0,
+        25.0,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_300",
+      "from": [
+        8.25,
+        25.0,
+        5.62
+      ],
+      "to": [
+        10.0,
+        25.25,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_301",
+      "from": [
+        8.25,
+        25.25,
+        5.62
+      ],
+      "to": [
+        10.25,
+        25.75,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_302",
+      "from": [
+        8.0,
+        25.75,
+        5.62
+      ],
+      "to": [
+        10.5,
+        26.25,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_303",
+      "from": [
+        8.25,
+        26.25,
+        5.62
+      ],
+      "to": [
+        10.25,
+        26.5,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_304",
+      "from": [
+        8.25,
+        26.5,
+        5.62
+      ],
+      "to": [
+        10.0,
+        26.75,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_305",
+      "from": [
+        8.5,
+        26.75,
+        5.62
+      ],
+      "to": [
+        10.0,
+        27.0,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_306",
+      "from": [
+        8.75,
+        27.0,
+        5.62
+      ],
+      "to": [
+        9.75,
+        27.25,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_307",
+      "from": [
+        8.75,
+        27.25,
+        5.62
+      ],
+      "to": [
+        9.5,
+        27.5,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_308",
+      "from": [
+        9.0,
+        27.5,
+        5.62
+      ],
+      "to": [
+        9.5,
+        27.75,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_309",
+      "from": [
+        9.0,
+        27.75,
+        5.62
+      ],
+      "to": [
+        9.25,
+        28.0,
+        10.38
+      ],
+      "mat": "dark",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_light_310",
+      "from": [
+        9.25,
+        24.0,
+        5.49
+      ],
+      "to": [
+        9.5,
+        24.5,
+        10.51
+      ],
+      "mat": "dark_light",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_light_311",
+      "from": [
+        9.25,
+        24.5,
+        5.49
+      ],
+      "to": [
+        9.75,
+        25.0,
+        10.51
+      ],
+      "mat": "dark_light",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_light_312",
+      "from": [
+        9.25,
+        25.0,
+        5.49
+      ],
+      "to": [
+        10.0,
+        25.5,
+        10.51
+      ],
+      "mat": "dark_light",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_light_313",
+      "from": [
+        9.25,
+        25.5,
+        5.49
+      ],
+      "to": [
+        10.25,
+        26.25,
+        10.51
+      ],
+      "mat": "dark_light",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_light_314",
+      "from": [
+        9.25,
+        26.25,
+        5.49
+      ],
+      "to": [
+        10.0,
+        26.75,
+        10.51
+      ],
+      "mat": "dark_light",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_light_315",
+      "from": [
+        9.25,
+        26.75,
+        5.49
+      ],
+      "to": [
+        9.75,
+        27.0,
+        10.51
+      ],
+      "mat": "dark_light",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_light_316",
+      "from": [
+        9.25,
+        27.0,
+        5.49
+      ],
+      "to": [
+        9.5,
+        27.5,
+        10.51
+      ],
+      "mat": "dark_light",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_core_317",
+      "from": [
+        9.0,
+        23.75,
+        5.5
+      ],
+      "to": [
+        9.25,
+        24.25,
+        10.5
+      ],
+      "mat": "dark_core",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_core_318",
+      "from": [
+        8.75,
+        24.25,
+        5.5
+      ],
+      "to": [
+        9.25,
+        24.75,
+        10.5
+      ],
+      "mat": "dark_core",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_core_319",
+      "from": [
+        8.5,
+        24.75,
+        5.5
+      ],
+      "to": [
+        9.25,
+        25.5,
+        10.5
+      ],
+      "mat": "dark_core",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_core_320",
+      "from": [
+        8.25,
+        25.5,
+        5.5
+      ],
+      "to": [
+        9.25,
+        26.5,
+        10.5
+      ],
+      "mat": "dark_core",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_core_321",
+      "from": [
+        8.5,
+        26.5,
+        5.5
+      ],
+      "to": [
+        9.25,
+        26.75,
+        10.5
+      ],
+      "mat": "dark_core",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_core_322",
+      "from": [
+        8.75,
+        26.75,
+        5.5
+      ],
+      "to": [
+        9.25,
+        27.25,
+        10.5
+      ],
+      "mat": "dark_core",
+      "bone": "focus"
+    },
+    {
+      "name": "dark_core_323",
+      "from": [
+        9.0,
+        27.25,
+        5.5
+      ],
+      "to": [
+        9.25,
+        27.75,
+        10.5
+      ],
+      "mat": "dark_core",
+      "bone": "focus"
+    },
+    {
+      "name": "white_324",
+      "from": [
+        9.08,
+        25.076,
+        5.38
+      ],
+      "to": [
+        9.33,
+        26.636,
+        10.62
+      ],
+      "mat": "white",
+      "bone": "focus"
+    },
+    {
+      "name": "obsidian_325",
+      "from": [
+        9.75,
+        28.75,
+        6.3
+      ],
+      "to": [
+        10.0,
+        29.0,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_326",
+      "from": [
+        9.75,
+        29.0,
+        6.3
+      ],
+      "to": [
+        10.25,
+        29.25,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_327",
+      "from": [
+        9.75,
+        29.25,
+        6.3
+      ],
+      "to": [
+        10.5,
+        29.5,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_328",
+      "from": [
+        9.75,
+        29.5,
+        6.3
+      ],
+      "to": [
+        10.75,
+        30.5,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_329",
+      "from": [
+        10.0,
+        30.5,
+        6.3
+      ],
+      "to": [
+        10.75,
+        30.75,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_330",
+      "from": [
+        10.25,
+        30.75,
+        6.3
+      ],
+      "to": [
+        10.75,
+        31.0,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_331",
+      "from": [
+        10.5,
+        31.0,
+        6.3
+      ],
+      "to": [
+        10.75,
+        31.5,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_332",
+      "from": [
+        9.75,
+        19.25,
+        6.3
+      ],
+      "to": [
+        10.25,
+        19.5,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_333",
+      "from": [
+        9.75,
+        19.5,
+        6.3
+      ],
+      "to": [
+        10.5,
+        19.75,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_334",
+      "from": [
+        9.5,
+        19.75,
+        6.3
+      ],
+      "to": [
+        10.5,
+        20.0,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_335",
+      "from": [
+        9.25,
+        20.0,
+        6.3
+      ],
+      "to": [
+        10.75,
+        20.25,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_336",
+      "from": [
+        9.0,
+        20.25,
+        6.3
+      ],
+      "to": [
+        10.5,
+        20.5,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_337",
+      "from": [
+        8.75,
+        20.5,
+        6.3
+      ],
+      "to": [
+        10.25,
+        20.75,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_338",
+      "from": [
+        8.5,
+        20.75,
+        6.3
+      ],
+      "to": [
+        10.0,
+        21.0,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_339",
+      "from": [
+        8.75,
+        21.0,
+        6.3
+      ],
+      "to": [
+        9.75,
+        21.25,
+        9.7
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_edge_340",
+      "from": [
+        6.0,
+        18.75,
+        6.9
+      ],
+      "to": [
+        6.25,
+        19.0,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_341",
+      "from": [
+        6.0,
+        19.0,
+        6.9
+      ],
+      "to": [
+        6.5,
+        19.25,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_342",
+      "from": [
+        6.25,
+        19.25,
+        6.9
+      ],
+      "to": [
+        7.0,
+        19.5,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_343",
+      "from": [
+        6.75,
+        19.5,
+        6.9
+      ],
+      "to": [
+        7.25,
+        19.75,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_344",
+      "from": [
+        7.0,
+        19.75,
+        6.9
+      ],
+      "to": [
+        7.5,
+        20.0,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_345",
+      "from": [
+        5.75,
+        17.0,
+        6.9
+      ],
+      "to": [
+        6.0,
+        18.5,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_346",
+      "from": [
+        5.75,
+        18.5,
+        6.9
+      ],
+      "to": [
+        6.25,
+        19.0,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_347",
+      "from": [
+        6.25,
+        15.25,
+        6.9
+      ],
+      "to": [
+        6.5,
+        15.5,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_348",
+      "from": [
+        6.0,
+        15.5,
+        6.9
+      ],
+      "to": [
+        6.5,
+        15.75,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_349",
+      "from": [
+        6.0,
+        15.75,
+        6.9
+      ],
+      "to": [
+        6.25,
+        16.25,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_350",
+      "from": [
+        5.75,
+        16.25,
+        6.9
+      ],
+      "to": [
+        6.25,
+        16.5,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_351",
+      "from": [
+        5.75,
+        16.5,
+        6.9
+      ],
+      "to": [
+        6.0,
+        17.0,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "silver_dark_352",
+      "from": [
+        5.8,
+        17.1,
+        6.6
+      ],
+      "to": [
+        6.2,
+        17.55,
+        9.4
+      ],
+      "mat": "silver_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "silver_dark_353",
+      "from": [
+        5.8,
+        18.1,
+        6.6
+      ],
+      "to": [
+        6.2,
+        18.55,
+        9.4
+      ],
+      "mat": "silver_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "silver_dark_354",
+      "from": [
+        5.8,
+        19.1,
+        6.6
+      ],
+      "to": [
+        6.2,
+        19.55,
+        9.4
+      ],
+      "mat": "silver_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "dark_dark_355",
+      "from": [
+        6.25,
+        14.0,
+        6.65
+      ],
+      "to": [
+        6.5,
+        14.5,
+        9.35
+      ],
+      "mat": "dark_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_dark_356",
+      "from": [
+        6.0,
+        14.5,
+        6.65
+      ],
+      "to": [
+        6.75,
+        15.25,
+        9.35
+      ],
+      "mat": "dark_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_dark_357",
+      "from": [
+        6.25,
+        15.25,
+        6.65
+      ],
+      "to": [
+        6.5,
+        15.5,
+        9.35
+      ],
+      "mat": "dark_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_358",
+      "from": [
+        6.25,
+        14.25,
+        6.47
+      ],
+      "to": [
+        6.5,
+        14.5,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_359",
+      "from": [
+        6.25,
+        14.5,
+        6.47
+      ],
+      "to": [
+        6.75,
+        14.75,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_360",
+      "from": [
+        6.0,
+        14.75,
+        6.47
+      ],
+      "to": [
+        6.75,
+        15.0,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_361",
+      "from": [
+        6.25,
+        15.0,
+        6.47
+      ],
+      "to": [
+        6.75,
+        15.25,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_362",
+      "from": [
+        6.25,
+        15.25,
+        6.47
+      ],
+      "to": [
+        6.5,
+        15.5,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_light_363",
+      "from": [
+        6.5,
+        14.75,
+        6.34
+      ],
+      "to": [
+        6.75,
+        15.0,
+        9.66
+      ],
+      "mat": "dark_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_core_364",
+      "from": [
+        6.25,
+        14.25,
+        6.35
+      ],
+      "to": [
+        6.5,
+        14.75,
+        9.65
+      ],
+      "mat": "dark_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_core_365",
+      "from": [
+        6.0,
+        14.75,
+        6.35
+      ],
+      "to": [
+        6.5,
+        15.0,
+        9.65
+      ],
+      "mat": "dark_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_core_366",
+      "from": [
+        6.25,
+        15.0,
+        6.35
+      ],
+      "to": [
+        6.5,
+        15.5,
+        9.65
+      ],
+      "mat": "dark_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_367",
+      "from": [
+        6.28,
+        14.608,
+        6.23
+      ],
+      "to": [
+        6.53,
+        15.088,
+        9.77
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    },
+    {
+      "name": "obsidian_368",
+      "from": [
+        7.25,
+        3.5,
+        7
+      ],
+      "to": [
+        7.5,
+        3.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_369",
+      "from": [
+        7.0,
+        3.75,
+        7
+      ],
+      "to": [
+        7.5,
+        4.0,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_370",
+      "from": [
+        6.75,
+        4.0,
+        7
+      ],
+      "to": [
+        7.5,
+        4.25,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_371",
+      "from": [
+        6.75,
+        4.25,
+        7
+      ],
+      "to": [
+        7.25,
+        4.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_372",
+      "from": [
+        6.5,
+        4.5,
+        7
+      ],
+      "to": [
+        6.75,
+        4.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_373",
+      "from": [
+        7.25,
+        6.25,
+        7
+      ],
+      "to": [
+        7.5,
+        6.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_374",
+      "from": [
+        6.75,
+        6.5,
+        7
+      ],
+      "to": [
+        7.5,
+        6.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_375",
+      "from": [
+        6.75,
+        6.75,
+        7
+      ],
+      "to": [
+        7.25,
+        7.0,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_376",
+      "from": [
+        6.5,
+        7.0,
+        7
+      ],
+      "to": [
+        7.0,
+        7.25,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_377",
+      "from": [
+        6.5,
+        7.25,
+        7
+      ],
+      "to": [
+        6.75,
+        7.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_378",
+      "from": [
+        7.25,
+        15.5,
+        7
+      ],
+      "to": [
+        7.5,
+        15.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_379",
+      "from": [
+        7.0,
+        15.75,
+        7
+      ],
+      "to": [
+        7.5,
+        16.0,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_380",
+      "from": [
+        6.75,
+        16.0,
+        7
+      ],
+      "to": [
+        7.25,
+        16.25,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_381",
+      "from": [
+        6.5,
+        16.25,
+        7
+      ],
+      "to": [
+        7.0,
+        16.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_382",
+      "from": [
+        6.5,
+        16.5,
+        7
+      ],
+      "to": [
+        6.75,
+        16.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_383",
+      "from": [
+        7.25,
+        18.25,
+        7
+      ],
+      "to": [
+        7.5,
+        18.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_384",
+      "from": [
+        7.0,
+        18.5,
+        7
+      ],
+      "to": [
+        7.5,
+        18.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_385",
+      "from": [
+        6.75,
+        18.75,
+        7
+      ],
+      "to": [
+        7.5,
+        19.0,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_386",
+      "from": [
+        6.5,
+        19.0,
+        7
+      ],
+      "to": [
+        7.0,
+        19.25,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_387",
+      "from": [
+        6.5,
+        19.25,
+        7
+      ],
+      "to": [
+        6.75,
+        19.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_388",
+      "from": [
+        9.75,
+        18.75,
+        6.9
+      ],
+      "to": [
+        10.0,
+        19.0,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_389",
+      "from": [
+        9.5,
+        19.0,
+        6.9
+      ],
+      "to": [
+        10.0,
+        19.25,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_390",
+      "from": [
+        9.0,
+        19.25,
+        6.9
+      ],
+      "to": [
+        9.75,
+        19.5,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_391",
+      "from": [
+        8.75,
+        19.5,
+        6.9
+      ],
+      "to": [
+        9.25,
+        19.75,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_392",
+      "from": [
+        8.5,
+        19.75,
+        6.9
+      ],
+      "to": [
+        9.0,
+        20.0,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_393",
+      "from": [
+        10.0,
+        17.0,
+        6.9
+      ],
+      "to": [
+        10.25,
+        18.5,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_394",
+      "from": [
+        9.75,
+        18.5,
+        6.9
+      ],
+      "to": [
+        10.25,
+        19.0,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_395",
+      "from": [
+        9.5,
+        15.25,
+        6.9
+      ],
+      "to": [
+        9.75,
+        15.5,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_396",
+      "from": [
+        9.5,
+        15.5,
+        6.9
+      ],
+      "to": [
+        10.0,
+        15.75,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_397",
+      "from": [
+        9.75,
+        15.75,
+        6.9
+      ],
+      "to": [
+        10.0,
+        16.25,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_398",
+      "from": [
+        9.75,
+        16.25,
+        6.9
+      ],
+      "to": [
+        10.25,
+        16.5,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_edge_399",
+      "from": [
+        10.0,
+        16.5,
+        6.9
+      ],
+      "to": [
+        10.25,
+        17.0,
+        9.1
+      ],
+      "mat": "obsidian_edge",
+      "bone": "filigree"
+    },
+    {
+      "name": "silver_dark_400",
+      "from": [
+        9.8,
+        17.1,
+        6.6
+      ],
+      "to": [
+        10.2,
+        17.55,
+        9.4
+      ],
+      "mat": "silver_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "silver_dark_401",
+      "from": [
+        9.8,
+        18.1,
+        6.6
+      ],
+      "to": [
+        10.2,
+        18.55,
+        9.4
+      ],
+      "mat": "silver_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "silver_dark_402",
+      "from": [
+        9.8,
+        19.1,
+        6.6
+      ],
+      "to": [
+        10.2,
+        19.55,
+        9.4
+      ],
+      "mat": "silver_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "dark_dark_403",
+      "from": [
+        9.5,
+        14.0,
+        6.65
+      ],
+      "to": [
+        9.75,
+        14.5,
+        9.35
+      ],
+      "mat": "dark_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_dark_404",
+      "from": [
+        9.25,
+        14.5,
+        6.65
+      ],
+      "to": [
+        10.0,
+        15.25,
+        9.35
+      ],
+      "mat": "dark_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_dark_405",
+      "from": [
+        9.5,
+        15.25,
+        6.65
+      ],
+      "to": [
+        9.75,
+        15.5,
+        9.35
+      ],
+      "mat": "dark_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_406",
+      "from": [
+        9.5,
+        14.25,
+        6.47
+      ],
+      "to": [
+        9.75,
+        14.5,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_407",
+      "from": [
+        9.25,
+        14.5,
+        6.47
+      ],
+      "to": [
+        9.75,
+        14.75,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_408",
+      "from": [
+        9.25,
+        14.75,
+        6.47
+      ],
+      "to": [
+        10.0,
+        15.0,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_409",
+      "from": [
+        9.25,
+        15.0,
+        6.47
+      ],
+      "to": [
+        9.75,
+        15.25,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_410",
+      "from": [
+        9.5,
+        15.25,
+        6.47
+      ],
+      "to": [
+        9.75,
+        15.5,
+        9.53
+      ],
+      "mat": "dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_light_411",
+      "from": [
+        9.5,
+        14.25,
+        6.34
+      ],
+      "to": [
+        9.75,
+        14.75,
+        9.66
+      ],
+      "mat": "dark_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_light_412",
+      "from": [
+        9.5,
+        14.75,
+        6.34
+      ],
+      "to": [
+        10.0,
+        15.0,
+        9.66
+      ],
+      "mat": "dark_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_light_413",
+      "from": [
+        9.5,
+        15.0,
+        6.34
+      ],
+      "to": [
+        9.75,
+        15.5,
+        9.66
+      ],
+      "mat": "dark_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "dark_core_414",
+      "from": [
+        9.25,
+        14.75,
+        6.35
+      ],
+      "to": [
+        9.5,
+        15.0,
+        9.65
+      ],
+      "mat": "dark_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_415",
+      "from": [
+        9.48,
+        14.608,
+        6.23
+      ],
+      "to": [
+        9.73,
+        15.088,
+        9.77
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    },
+    {
+      "name": "obsidian_416",
+      "from": [
+        8.5,
+        3.5,
+        7
+      ],
+      "to": [
+        8.75,
+        3.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_417",
+      "from": [
+        8.5,
+        3.75,
+        7
+      ],
+      "to": [
+        9.0,
+        4.0,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_418",
+      "from": [
+        8.5,
+        4.0,
+        7
+      ],
+      "to": [
+        9.25,
+        4.25,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_419",
+      "from": [
+        8.75,
+        4.25,
+        7
+      ],
+      "to": [
+        9.25,
+        4.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_420",
+      "from": [
+        9.25,
+        4.5,
+        7
+      ],
+      "to": [
+        9.5,
+        4.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_421",
+      "from": [
+        8.5,
+        6.25,
+        7
+      ],
+      "to": [
+        8.75,
+        6.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_422",
+      "from": [
+        8.5,
+        6.5,
+        7
+      ],
+      "to": [
+        9.25,
+        6.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_423",
+      "from": [
+        8.75,
+        6.75,
+        7
+      ],
+      "to": [
+        9.25,
+        7.0,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_424",
+      "from": [
+        9.0,
+        7.0,
+        7
+      ],
+      "to": [
+        9.5,
+        7.25,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_425",
+      "from": [
+        9.25,
+        7.25,
+        7
+      ],
+      "to": [
+        9.5,
+        7.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_426",
+      "from": [
+        8.5,
+        15.5,
+        7
+      ],
+      "to": [
+        8.75,
+        15.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_427",
+      "from": [
+        8.5,
+        15.75,
+        7
+      ],
+      "to": [
+        9.0,
+        16.0,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_428",
+      "from": [
+        8.75,
+        16.0,
+        7
+      ],
+      "to": [
+        9.25,
+        16.25,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_429",
+      "from": [
+        9.0,
+        16.25,
+        7
+      ],
+      "to": [
+        9.5,
+        16.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_430",
+      "from": [
+        9.25,
+        16.5,
+        7
+      ],
+      "to": [
+        9.5,
+        16.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_431",
+      "from": [
+        8.5,
+        18.25,
+        7
+      ],
+      "to": [
+        8.75,
+        18.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_432",
+      "from": [
+        8.5,
+        18.5,
+        7
+      ],
+      "to": [
+        9.0,
+        18.75,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_433",
+      "from": [
+        8.5,
+        18.75,
+        7
+      ],
+      "to": [
+        9.25,
+        19.0,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_434",
+      "from": [
+        9.0,
+        19.0,
+        7
+      ],
+      "to": [
+        9.5,
+        19.25,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "obsidian_435",
+      "from": [
+        9.25,
+        19.25,
+        7
+      ],
+      "to": [
+        9.5,
+        19.5,
+        9
+      ],
+      "mat": "obsidian",
+      "bone": "filigree"
+    },
+    {
+      "name": "dark_dark_436",
+      "from": [
+        7.75,
+        19.75,
+        6.25
+      ],
+      "to": [
+        8.25,
+        20.0,
+        9.75
+      ],
+      "mat": "dark_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_dark_437",
+      "from": [
+        7.5,
+        20.0,
+        6.25
+      ],
+      "to": [
+        8.5,
+        20.5,
+        9.75
+      ],
+      "mat": "dark_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_dark_438",
+      "from": [
+        7.25,
+        20.5,
+        6.25
+      ],
+      "to": [
+        8.75,
+        20.75,
+        9.75
+      ],
+      "mat": "dark_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_dark_439",
+      "from": [
+        7.5,
+        20.75,
+        6.25
+      ],
+      "to": [
+        8.5,
+        21.0,
+        9.75
+      ],
+      "mat": "dark_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_dark_440",
+      "from": [
+        7.75,
+        21.0,
+        6.25
+      ],
+      "to": [
+        8.25,
+        21.25,
+        9.75
+      ],
+      "mat": "dark_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_441",
+      "from": [
+        7.75,
+        19.75,
+        6.07
+      ],
+      "to": [
+        8.25,
+        20.25,
+        9.93
+      ],
+      "mat": "dark",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_442",
+      "from": [
+        7.5,
+        20.25,
+        6.07
+      ],
+      "to": [
+        8.5,
+        20.75,
+        9.93
+      ],
+      "mat": "dark",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_443",
+      "from": [
+        7.75,
+        20.75,
+        6.07
+      ],
+      "to": [
+        8.25,
+        21.0,
+        9.93
+      ],
+      "mat": "dark",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_444",
+      "from": [
+        8.0,
+        19.75,
+        5.94
+      ],
+      "to": [
+        8.25,
+        20.25,
+        10.06
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_445",
+      "from": [
+        8.0,
+        20.25,
+        5.94
+      ],
+      "to": [
+        8.5,
+        20.75,
+        10.06
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_446",
+      "from": [
+        8.0,
+        20.75,
+        5.94
+      ],
+      "to": [
+        8.25,
+        21.0,
+        10.06
+      ],
+      "mat": "dark_light",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_core_447",
+      "from": [
+        7.75,
+        19.75,
+        5.95
+      ],
+      "to": [
+        8.0,
+        20.25,
+        10.05
+      ],
+      "mat": "dark_core",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_core_448",
+      "from": [
+        7.5,
+        20.25,
+        5.95
+      ],
+      "to": [
+        8.0,
+        20.75,
+        10.05
+      ],
+      "mat": "dark_core",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_core_449",
+      "from": [
+        7.75,
+        20.75,
+        5.95
+      ],
+      "to": [
+        8.0,
+        21.0,
+        10.05
+      ],
+      "mat": "dark_core",
+      "bone": "crown"
+    },
+    {
+      "name": "white_450",
+      "from": [
+        7.88,
+        20.112,
+        5.83
+      ],
+      "to": [
+        8.13,
+        20.832,
+        10.17
+      ],
+      "mat": "white",
+      "bone": "crown"
+    },
+    {
+      "name": "dark_light_451",
+      "from": [
+        7.5,
+        4.25,
+        7.1
+      ],
+      "to": [
+        7.75,
+        4.5,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_452",
+      "from": [
+        7.75,
+        4.5,
+        7.1
+      ],
+      "to": [
+        8.0,
+        4.75,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_453",
+      "from": [
+        8.0,
+        4.75,
+        7.1
+      ],
+      "to": [
+        8.25,
+        5.25,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_454",
+      "from": [
+        8.25,
+        5.25,
+        7.1
+      ],
+      "to": [
+        8.5,
+        5.5,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_455",
+      "from": [
+        8.0,
+        5.5,
+        7.1
+      ],
+      "to": [
+        8.5,
+        5.75,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_456",
+      "from": [
+        7.75,
+        5.75,
+        7.1
+      ],
+      "to": [
+        8.25,
+        6.0,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_457",
+      "from": [
+        7.5,
+        6.0,
+        7.1
+      ],
+      "to": [
+        7.75,
+        6.25,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_458",
+      "from": [
+        7.5,
+        6.25,
+        7.1
+      ],
+      "to": [
+        7.75,
+        6.5,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_459",
+      "from": [
+        7.75,
+        6.5,
+        7.1
+      ],
+      "to": [
+        8.0,
+        7.0,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_460",
+      "from": [
+        8.0,
+        7.0,
+        7.1
+      ],
+      "to": [
+        8.25,
+        7.25,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    },
+    {
+      "name": "dark_light_461",
+      "from": [
+        8.25,
+        7.25,
+        7.1
+      ],
+      "to": [
+        8.5,
+        7.5,
+        8.9
+      ],
+      "mat": "dark_light",
+      "bone": "staff"
+    }
+  ]
+}

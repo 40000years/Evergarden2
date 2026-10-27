@@ -48,26 +48,10 @@ public final class GuideMenuGui implements InventoryHolder, Listener {
 
         // Header info item
         inventory.setItem(4, createItem(Material.BOOK, "§6§l✦ ชุดคู่มือแนะนำการเล่น Evergarden ✦", List.of(
-            "§7ระบบถูกแบ่งออกเป็น 3 เล่มเพื่อความสะดวกในการอ่าน",
+            "§7ระบบถูกแบ่งออกเป็น 2 เล่มเพื่อความสะดวกในการอ่าน",
             "§eคลิกซ้าย: §fเปิดอ่านสมุดเสมือนทันที",
             "§6Shift+คลิก: §fรับสมุดเล่มจริงเข้าช่องเก็บของ"
         )));
-
-        // Slot 11: Book 1 - Crops
-        inventory.setItem(11, createBookIcon(
-            Material.WHEAT,
-            "§a§lเล่มที่ 1: " + GuideBookType.CROPS.bookTitle,
-            List.of(
-                "§7" + GuideBookType.CROPS.englishTitle,
-                GuideBookType.CROPS.description,
-                "§8- มิติ Evergarden และการเปิดประตูควอตซ์",
-                "§8- กฎการทำฟาร์ม และเวลาการเติบโต Tier 1-5",
-                "§8- รายชื่อพืชครบ 30 ชนิด และบัฟอาหาร",
-                "§8- การแลกเปลี่ยนกับ Botanist และเคล็ดลับฟาร์ม",
-                "",
-                "§e▶ คลิกซ้ายเพื่อเปิดอ่าน §8| §6Shift+คลิกเพื่อรับสมุด"
-            )
-        ));
 
         // Slot 13: Book 2 - Relics & Sanctum
         inventory.setItem(13, createBookIcon(
@@ -78,7 +62,7 @@ public final class GuideMenuGui implements InventoryHolder, Listener {
                 GuideBookType.RELICS.description,
                 "§8- 3 มหาวิหาร (ความมืด, ดวงดาว, กาลเวลา)",
                 "§8- คำสาป True Death, นมแก้คำสาป, ใยแมงมุม 20%",
-                "§8- 6 ยุทธภัณฑ์โบราณ (ที่ขุด 3x3, หลอมแร่, ดาบวาร์ป, ธนู, โล่)",
+                "\u00a78- \u0e40\u0e04\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e21\u0e37\u0e2d\u0e42\u0e1a\u0e23\u0e32\u0e13 2 ชิ้น (3x3 และหลอมแร่)",
                 "§8- Scroll of Eternity [MYTHIC] และ Limit Break",
                 "§8- ตารางสุ่ม Evergarden Vault ปรับปรุงใหม่",
                 "§8- Whale, Garden, Observatory และสมบัติลอยฟ้า",
@@ -94,10 +78,9 @@ public final class GuideMenuGui implements InventoryHolder, Listener {
             List.of(
                 "§7" + GuideBookType.MAGIC.englishTitle,
                 GuideBookType.MAGIC.description,
-                "§8- ระบบมานา /magic mana และการคราฟต์คทา",
-                "§8- Shulker Levitation [MYTHIC] พายุสายฟ้ามังกร",
-                "§8- คทาเวท 17 ธาตุ รวม Solar และ Chronos [MYTHIC]",
-                "§8- ความทนทาน, แกนอัปเกรด และแท่นฟื้นฟู",
+                "§8- โมเดลคทา 8 ธาตุ /magic staffs",
+                "§8- ข้อมูลคทาและ Core เดิมยังเก็บไว้",
+                "§8- ระบบมานาและแท่นฟื้นฟู",
                 "§8- Wand of Restoration และไม้เท้าบิน",
                 "",
                 "§e▶ คลิกซ้ายเพื่อเปิดอ่าน §8| §6Shift+คลิกเพื่อรับสมุด"
@@ -121,7 +104,6 @@ public final class GuideMenuGui implements InventoryHolder, Listener {
         if (slot < 0 || slot >= e.getInventory().getSize()) return;
 
         GuideBookType selectedType = switch (slot) {
-            case 11 -> GuideBookType.CROPS;
             case 13 -> GuideBookType.RELICS;
             case 15 -> GuideBookType.MAGIC;
             default -> null;

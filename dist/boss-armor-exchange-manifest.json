@@ -1,0 +1,22 @@
+{
+  "paper_result": "PASS 90 boss armor exchange checks",
+  "pure_rule_checks": 67143,
+  "live_server_modified": false,
+  "connected_client_playtest": false,
+  "drops_per_victory": 1,
+  "cores_per_selected_piece": 1,
+  "artifacts": {
+    "advance-magic.jar": {
+      "sha256": "a12f8bc5f58c9fd22934c2b74f80e1353a6341b52e31f0baf09e5608ae35fa46",
+      "bytes": 22375751,
+      "version": "version: 1.23.0-armor-combat",
+      "unchanged_pack_and_model_entries": 12
+    },
+    "evergarden.jar": {
+      "sha256": "013045ae9a3370ae0f692d45aac52806a70bf7c42ff67478289c6c23d387120f",
+      "bytes": 52930369,
+      "version": "version: '3.0.0-e2.124-boss-armor-exchange'",
+      "unchanged_pack_and_model_entries": 79
+    }
+  }
+}

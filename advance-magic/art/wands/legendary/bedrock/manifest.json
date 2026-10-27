@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "Advance Magic | Legendary Wands Preview",
+    "description": "Original legendary wand textures 05–07; requires Geyser custom mappings.",
+    "uuid": "4a964ba2-99e4-55d8-8c64-614b3e657fbe",
+    "version": [
+      0,
+      1,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      21,
+      80
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "dc217a37-495e-5206-a7a1-6df706aae5a2",
+      "version": [
+        0,
+        1,
+        0
+      ]
+    }
+  ]
+}

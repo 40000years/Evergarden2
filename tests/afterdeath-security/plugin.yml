@@ -1,0 +1,5 @@
+name: AfterdeathSecurityProbe
+version: '1.0'
+main: AfterdeathSecurityProbe
+api-version: '26.2'
+softdepend: [AfterDeath, Evergarden, advance-magic]

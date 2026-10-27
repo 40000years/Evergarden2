@@ -65,10 +65,8 @@ public final class SkyWhaleLayout {
         offset = 8 + random.nextInt(spacing - 16);
         int z = (gridZ * spacing + offset) * 16;
         if (Math.hypot(x, z) < 480) return null;
-        for (DungeonLayout.Site temple : temples.nearby(x, z)) {
-            if (Math.abs(x - temple.x()) < 160 && Math.abs(z - temple.z()) < 110) return null;
-        }
-        return new Site(x, z);
+        // Sanctum dungeons give way to whales (DungeonLayout.reserve), not the other way round.
+return new Site(x, z);
     }
 
     public Site at(int blockX, int blockZ, int margin) {

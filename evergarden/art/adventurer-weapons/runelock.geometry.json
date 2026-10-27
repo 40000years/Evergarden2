@@ -1,0 +1,9380 @@
+{
+  "id": "runelock",
+  "cubes": [
+    {
+      "name": "sky_light_000",
+      "from": [
+        -0.25,
+        3.0,
+        7.75
+      ],
+      "to": [
+        0.75,
+        3.25,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_001",
+      "from": [
+        0.0,
+        3.25,
+        7.75
+      ],
+      "to": [
+        0.5,
+        3.5,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_002",
+      "from": [
+        0.25,
+        3.5,
+        7.75
+      ],
+      "to": [
+        0.5,
+        3.75,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_003",
+      "from": [
+        0.5,
+        3.25,
+        7.75
+      ],
+      "to": [
+        0.75,
+        3.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_004",
+      "from": [
+        0.5,
+        3.5,
+        7.75
+      ],
+      "to": [
+        0.75,
+        3.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_005",
+      "from": [
+        0.5,
+        3.75,
+        7.75
+      ],
+      "to": [
+        0.75,
+        4.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_006",
+      "from": [
+        0.75,
+        3.5,
+        7.75
+      ],
+      "to": [
+        1.0,
+        3.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_007",
+      "from": [
+        0.75,
+        3.75,
+        7.75
+      ],
+      "to": [
+        1.0,
+        4.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_008",
+      "from": [
+        0.75,
+        4.0,
+        7.75
+      ],
+      "to": [
+        1.0,
+        4.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_009",
+      "from": [
+        0.75,
+        4.25,
+        7.75
+      ],
+      "to": [
+        1.0,
+        4.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_010",
+      "from": [
+        1.0,
+        4.0,
+        7.75
+      ],
+      "to": [
+        1.25,
+        4.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_011",
+      "from": [
+        1.0,
+        4.25,
+        7.75
+      ],
+      "to": [
+        1.25,
+        4.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_012",
+      "from": [
+        1.0,
+        4.5,
+        7.75
+      ],
+      "to": [
+        1.25,
+        5.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_013",
+      "from": [
+        1.25,
+        4.25,
+        7.75
+      ],
+      "to": [
+        1.5,
+        4.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_014",
+      "from": [
+        1.25,
+        4.5,
+        7.75
+      ],
+      "to": [
+        1.5,
+        5.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_015",
+      "from": [
+        1.25,
+        5.0,
+        7.75
+      ],
+      "to": [
+        1.5,
+        5.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_016",
+      "from": [
+        1.5,
+        4.5,
+        7.75
+      ],
+      "to": [
+        1.75,
+        4.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_017",
+      "from": [
+        1.5,
+        4.75,
+        7.75
+      ],
+      "to": [
+        1.75,
+        5.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_018",
+      "from": [
+        1.5,
+        5.5,
+        7.75
+      ],
+      "to": [
+        1.75,
+        6.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_019",
+      "from": [
+        1.75,
+        4.75,
+        7.75
+      ],
+      "to": [
+        2.0,
+        5.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_020",
+      "from": [
+        1.75,
+        5.25,
+        7.75
+      ],
+      "to": [
+        2.0,
+        6.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_021",
+      "from": [
+        1.75,
+        6.0,
+        7.75
+      ],
+      "to": [
+        2.0,
+        6.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_022",
+      "from": [
+        1.75,
+        6.25,
+        7.75
+      ],
+      "to": [
+        2.25,
+        6.5,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_023",
+      "from": [
+        2.0,
+        5.0,
+        7.75
+      ],
+      "to": [
+        2.25,
+        5.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_024",
+      "from": [
+        2.0,
+        5.75,
+        7.75
+      ],
+      "to": [
+        2.25,
+        6.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_025",
+      "from": [
+        2.0,
+        6.0,
+        7.75
+      ],
+      "to": [
+        2.5,
+        6.25,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_026",
+      "from": [
+        2.0,
+        6.5,
+        7.75
+      ],
+      "to": [
+        2.25,
+        7.0,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_027",
+      "from": [
+        2.25,
+        5.25,
+        7.75
+      ],
+      "to": [
+        2.5,
+        5.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_028",
+      "from": [
+        2.25,
+        6.25,
+        7.75
+      ],
+      "to": [
+        2.5,
+        6.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_029",
+      "from": [
+        2.25,
+        6.5,
+        7.5
+      ],
+      "to": [
+        2.5,
+        6.75,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_030",
+      "from": [
+        2.25,
+        6.5,
+        8.25
+      ],
+      "to": [
+        2.5,
+        6.75,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_031",
+      "from": [
+        2.25,
+        6.75,
+        7.75
+      ],
+      "to": [
+        2.5,
+        7.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_032",
+      "from": [
+        2.5,
+        5.5,
+        7.75
+      ],
+      "to": [
+        2.75,
+        5.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_033",
+      "from": [
+        2.5,
+        6.5,
+        7.75
+      ],
+      "to": [
+        2.75,
+        7.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_034",
+      "from": [
+        2.5,
+        6.75,
+        7.5
+      ],
+      "to": [
+        2.75,
+        7.0,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_035",
+      "from": [
+        2.5,
+        6.75,
+        8.25
+      ],
+      "to": [
+        2.75,
+        7.0,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_036",
+      "from": [
+        2.5,
+        7.0,
+        7.5
+      ],
+      "to": [
+        2.75,
+        7.25,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_037",
+      "from": [
+        2.5,
+        7.25,
+        7.75
+      ],
+      "to": [
+        2.75,
+        7.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_038",
+      "from": [
+        2.5,
+        12.0,
+        7.75
+      ],
+      "to": [
+        3.0,
+        12.25,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_039",
+      "from": [
+        2.75,
+        5.75,
+        7.75
+      ],
+      "to": [
+        3.0,
+        6.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_040",
+      "from": [
+        2.75,
+        6.75,
+        7.75
+      ],
+      "to": [
+        3.0,
+        7.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_041",
+      "from": [
+        2.75,
+        7.25,
+        7.5
+      ],
+      "to": [
+        3.0,
+        7.5,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_042",
+      "from": [
+        2.75,
+        7.25,
+        8.25
+      ],
+      "to": [
+        3.0,
+        7.5,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_043",
+      "from": [
+        2.75,
+        7.5,
+        7.5
+      ],
+      "to": [
+        3.0,
+        7.75,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_044",
+      "from": [
+        2.75,
+        7.75,
+        7.75
+      ],
+      "to": [
+        3.25,
+        8.0,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_045",
+      "from": [
+        2.75,
+        11.75,
+        7.75
+      ],
+      "to": [
+        3.25,
+        12.0,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_046",
+      "from": [
+        2.75,
+        12.25,
+        7.75
+      ],
+      "to": [
+        3.0,
+        12.5,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_047",
+      "from": [
+        3.0,
+        6.0,
+        7.75
+      ],
+      "to": [
+        3.25,
+        6.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_048",
+      "from": [
+        3.0,
+        7.0,
+        7.75
+      ],
+      "to": [
+        3.25,
+        7.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_049",
+      "from": [
+        3.0,
+        7.5,
+        7.5
+      ],
+      "to": [
+        3.25,
+        7.75,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_050",
+      "from": [
+        3.0,
+        7.5,
+        8.25
+      ],
+      "to": [
+        3.25,
+        7.75,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_051",
+      "from": [
+        3.0,
+        7.75,
+        7.5
+      ],
+      "to": [
+        3.25,
+        8.0,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_052",
+      "from": [
+        3.0,
+        7.75,
+        8.25
+      ],
+      "to": [
+        3.25,
+        8.0,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_053",
+      "from": [
+        3.0,
+        8.0,
+        7.75
+      ],
+      "to": [
+        3.5,
+        8.5,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_054",
+      "from": [
+        3.0,
+        11.5,
+        7.75
+      ],
+      "to": [
+        3.5,
+        11.75,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_055",
+      "from": [
+        3.0,
+        12.5,
+        7.75
+      ],
+      "to": [
+        3.25,
+        12.75,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_056",
+      "from": [
+        3.25,
+        6.25,
+        7.75
+      ],
+      "to": [
+        3.5,
+        6.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_057",
+      "from": [
+        3.25,
+        7.5,
+        7.75
+      ],
+      "to": [
+        3.5,
+        8.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_058",
+      "from": [
+        3.25,
+        7.75,
+        7.5
+      ],
+      "to": [
+        3.5,
+        8.0,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_059",
+      "from": [
+        3.25,
+        7.75,
+        8.25
+      ],
+      "to": [
+        3.5,
+        8.0,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_060",
+      "from": [
+        3.25,
+        8.0,
+        7.5
+      ],
+      "to": [
+        3.5,
+        8.5,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_061",
+      "from": [
+        3.25,
+        8.0,
+        8.25
+      ],
+      "to": [
+        3.5,
+        8.5,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_062",
+      "from": [
+        3.25,
+        8.5,
+        7.75
+      ],
+      "to": [
+        3.5,
+        8.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_063",
+      "from": [
+        3.25,
+        11.25,
+        7.75
+      ],
+      "to": [
+        3.75,
+        11.5,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_064",
+      "from": [
+        3.25,
+        12.75,
+        7.75
+      ],
+      "to": [
+        3.5,
+        13.0,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_065",
+      "from": [
+        3.5,
+        6.5,
+        7.75
+      ],
+      "to": [
+        3.75,
+        6.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_066",
+      "from": [
+        3.5,
+        7.75,
+        7.75
+      ],
+      "to": [
+        3.75,
+        8.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_067",
+      "from": [
+        3.5,
+        8.0,
+        7.5
+      ],
+      "to": [
+        3.75,
+        8.5,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_068",
+      "from": [
+        3.5,
+        8.0,
+        8.25
+      ],
+      "to": [
+        3.75,
+        8.5,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_069",
+      "from": [
+        3.5,
+        8.5,
+        7.5
+      ],
+      "to": [
+        4.0,
+        8.75,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_070",
+      "from": [
+        3.5,
+        8.75,
+        7.75
+      ],
+      "to": [
+        3.75,
+        9.0,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_071",
+      "from": [
+        3.5,
+        11.0,
+        7.75
+      ],
+      "to": [
+        4.0,
+        11.25,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_072",
+      "from": [
+        3.5,
+        13.0,
+        7.75
+      ],
+      "to": [
+        4.25,
+        13.25,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_073",
+      "from": [
+        3.75,
+        6.75,
+        7.75
+      ],
+      "to": [
+        4.0,
+        7.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_074",
+      "from": [
+        3.75,
+        8.0,
+        7.75
+      ],
+      "to": [
+        4.0,
+        8.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_075",
+      "from": [
+        3.75,
+        8.25,
+        7.75
+      ],
+      "to": [
+        4.0,
+        8.5,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_076",
+      "from": [
+        3.75,
+        8.75,
+        7.5
+      ],
+      "to": [
+        4.0,
+        9.25,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_077",
+      "from": [
+        3.75,
+        9.25,
+        7.75
+      ],
+      "to": [
+        4.5,
+        9.5,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_078",
+      "from": [
+        3.75,
+        10.75,
+        7.75
+      ],
+      "to": [
+        4.0,
+        11.0,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_core_079",
+      "from": [
+        3.75,
+        11.5,
+        6.75
+      ],
+      "to": [
+        4.5,
+        12.25,
+        9.25
+      ],
+      "mat": "sky_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_080",
+      "from": [
+        3.75,
+        13.25,
+        7.75
+      ],
+      "to": [
+        4.0,
+        13.5,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_081",
+      "from": [
+        4.0,
+        7.0,
+        7.75
+      ],
+      "to": [
+        4.25,
+        7.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_082",
+      "from": [
+        4.0,
+        8.5,
+        7.75
+      ],
+      "to": [
+        4.25,
+        9.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_083",
+      "from": [
+        4.0,
+        8.75,
+        7.5
+      ],
+      "to": [
+        4.25,
+        9.0,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_084",
+      "from": [
+        4.0,
+        8.75,
+        8.25
+      ],
+      "to": [
+        4.25,
+        9.0,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_085",
+      "from": [
+        4.0,
+        9.0,
+        7.5
+      ],
+      "to": [
+        4.25,
+        9.5,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_086",
+      "from": [
+        4.0,
+        9.0,
+        7.75
+      ],
+      "to": [
+        4.25,
+        9.25,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_087",
+      "from": [
+        4.0,
+        9.25,
+        8.25
+      ],
+      "to": [
+        4.5,
+        9.5,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_088",
+      "from": [
+        4.0,
+        9.5,
+        7.75
+      ],
+      "to": [
+        4.5,
+        9.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_089",
+      "from": [
+        4.0,
+        10.0,
+        7.0
+      ],
+      "to": [
+        6.0,
+        10.25,
+        7.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_090",
+      "from": [
+        4.0,
+        10.0,
+        7.5
+      ],
+      "to": [
+        4.75,
+        10.25,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_091",
+      "from": [
+        4.0,
+        10.0,
+        7.75
+      ],
+      "to": [
+        4.5,
+        10.25,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_092",
+      "from": [
+        4.0,
+        10.5,
+        7.0
+      ],
+      "to": [
+        4.25,
+        11.0,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_093",
+      "from": [
+        4.0,
+        11.0,
+        7.0
+      ],
+      "to": [
+        4.25,
+        11.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_094",
+      "from": [
+        4.0,
+        11.0,
+        7.5
+      ],
+      "to": [
+        4.25,
+        11.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_095",
+      "from": [
+        4.0,
+        12.75,
+        7.75
+      ],
+      "to": [
+        4.5,
+        13.0,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_096",
+      "from": [
+        4.25,
+        7.25,
+        7.75
+      ],
+      "to": [
+        4.5,
+        7.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_097",
+      "from": [
+        4.25,
+        8.75,
+        7.75
+      ],
+      "to": [
+        4.5,
+        9.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_098",
+      "from": [
+        4.25,
+        9.0,
+        7.5
+      ],
+      "to": [
+        4.5,
+        9.25,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_099",
+      "from": [
+        4.25,
+        9.0,
+        8.25
+      ],
+      "to": [
+        4.5,
+        9.25,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_100",
+      "from": [
+        4.25,
+        9.25,
+        7.5
+      ],
+      "to": [
+        4.5,
+        9.75,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_101",
+      "from": [
+        4.25,
+        9.5,
+        8.25
+      ],
+      "to": [
+        4.5,
+        9.75,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_102",
+      "from": [
+        4.25,
+        9.75,
+        7.0
+      ],
+      "to": [
+        5.75,
+        10.0,
+        7.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_103",
+      "from": [
+        4.25,
+        9.75,
+        7.5
+      ],
+      "to": [
+        4.5,
+        10.0,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_104",
+      "from": [
+        4.25,
+        9.75,
+        7.75
+      ],
+      "to": [
+        4.75,
+        10.0,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_105",
+      "from": [
+        4.25,
+        9.75,
+        8.25
+      ],
+      "to": [
+        4.5,
+        10.0,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_106",
+      "from": [
+        4.25,
+        10.25,
+        7.0
+      ],
+      "to": [
+        6.25,
+        10.5,
+        7.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_107",
+      "from": [
+        4.25,
+        10.25,
+        7.5
+      ],
+      "to": [
+        4.75,
+        10.5,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_108",
+      "from": [
+        4.25,
+        10.5,
+        7.0
+      ],
+      "to": [
+        4.5,
+        10.75,
+        7.75
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_109",
+      "from": [
+        4.25,
+        10.5,
+        7.75
+      ],
+      "to": [
+        4.5,
+        10.75,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_110",
+      "from": [
+        4.25,
+        10.5,
+        8.25
+      ],
+      "to": [
+        4.5,
+        10.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_111",
+      "from": [
+        4.25,
+        10.75,
+        7.0
+      ],
+      "to": [
+        4.5,
+        11.25,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_112",
+      "from": [
+        4.25,
+        11.25,
+        7.0
+      ],
+      "to": [
+        4.5,
+        11.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_113",
+      "from": [
+        4.25,
+        11.25,
+        7.5
+      ],
+      "to": [
+        4.5,
+        11.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_114",
+      "from": [
+        4.25,
+        12.5,
+        7.75
+      ],
+      "to": [
+        4.75,
+        12.75,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_115",
+      "from": [
+        4.5,
+        7.5,
+        7.75
+      ],
+      "to": [
+        4.75,
+        7.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_116",
+      "from": [
+        4.5,
+        9.0,
+        7.75
+      ],
+      "to": [
+        4.75,
+        9.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_117",
+      "from": [
+        4.5,
+        9.25,
+        7.5
+      ],
+      "to": [
+        4.75,
+        9.75,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_118",
+      "from": [
+        4.5,
+        9.25,
+        8.25
+      ],
+      "to": [
+        4.75,
+        9.75,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_119",
+      "from": [
+        4.5,
+        9.5,
+        7.0
+      ],
+      "to": [
+        5.5,
+        9.75,
+        7.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_120",
+      "from": [
+        4.5,
+        9.5,
+        8.5
+      ],
+      "to": [
+        5.5,
+        10.25,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_121",
+      "from": [
+        4.5,
+        9.75,
+        7.5
+      ],
+      "to": [
+        4.75,
+        10.0,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_122",
+      "from": [
+        4.5,
+        9.75,
+        8.25
+      ],
+      "to": [
+        4.75,
+        10.0,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_123",
+      "from": [
+        4.5,
+        10.0,
+        7.75
+      ],
+      "to": [
+        5.0,
+        10.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_124",
+      "from": [
+        4.5,
+        10.0,
+        8.25
+      ],
+      "to": [
+        4.75,
+        10.25,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_125",
+      "from": [
+        4.5,
+        10.5,
+        7.0
+      ],
+      "to": [
+        6.5,
+        10.75,
+        7.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_126",
+      "from": [
+        4.5,
+        10.5,
+        7.5
+      ],
+      "to": [
+        5.0,
+        10.75,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_127",
+      "from": [
+        4.5,
+        10.5,
+        7.75
+      ],
+      "to": [
+        4.75,
+        10.75,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_128",
+      "from": [
+        4.5,
+        10.75,
+        7.0
+      ],
+      "to": [
+        4.75,
+        11.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_129",
+      "from": [
+        4.5,
+        10.75,
+        7.5
+      ],
+      "to": [
+        4.75,
+        11.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_130",
+      "from": [
+        4.5,
+        11.0,
+        7.0
+      ],
+      "to": [
+        4.75,
+        11.5,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_131",
+      "from": [
+        4.5,
+        11.5,
+        7.0
+      ],
+      "to": [
+        4.75,
+        11.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_132",
+      "from": [
+        4.5,
+        11.5,
+        7.5
+      ],
+      "to": [
+        4.75,
+        11.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_133",
+      "from": [
+        4.5,
+        12.25,
+        7.75
+      ],
+      "to": [
+        5.0,
+        12.5,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_134",
+      "from": [
+        4.75,
+        7.75,
+        7.75
+      ],
+      "to": [
+        5.0,
+        8.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_135",
+      "from": [
+        4.75,
+        9.25,
+        7.0
+      ],
+      "to": [
+        5.25,
+        9.5,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_136",
+      "from": [
+        4.75,
+        9.25,
+        7.75
+      ],
+      "to": [
+        5.0,
+        10.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_137",
+      "from": [
+        4.75,
+        9.25,
+        8.25
+      ],
+      "to": [
+        5.25,
+        9.5,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_138",
+      "from": [
+        4.75,
+        9.5,
+        7.5
+      ],
+      "to": [
+        5.0,
+        10.0,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_139",
+      "from": [
+        4.75,
+        9.5,
+        8.25
+      ],
+      "to": [
+        5.0,
+        10.0,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_140",
+      "from": [
+        4.75,
+        10.0,
+        7.5
+      ],
+      "to": [
+        5.0,
+        10.5,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_141",
+      "from": [
+        4.75,
+        10.0,
+        8.25
+      ],
+      "to": [
+        5.0,
+        10.5,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_142",
+      "from": [
+        4.75,
+        10.25,
+        7.75
+      ],
+      "to": [
+        5.25,
+        10.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_143",
+      "from": [
+        4.75,
+        10.25,
+        8.5
+      ],
+      "to": [
+        6.25,
+        11.0,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_144",
+      "from": [
+        4.75,
+        10.5,
+        8.25
+      ],
+      "to": [
+        5.0,
+        11.0,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_145",
+      "from": [
+        4.75,
+        10.75,
+        7.0
+      ],
+      "to": [
+        6.75,
+        11.0,
+        7.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_146",
+      "from": [
+        4.75,
+        10.75,
+        7.5
+      ],
+      "to": [
+        5.25,
+        11.0,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_147",
+      "from": [
+        4.75,
+        10.75,
+        7.75
+      ],
+      "to": [
+        5.0,
+        11.0,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_148",
+      "from": [
+        4.75,
+        11.0,
+        6.75
+      ],
+      "to": [
+        5.0,
+        11.25,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_149",
+      "from": [
+        4.75,
+        11.0,
+        7.0
+      ],
+      "to": [
+        5.0,
+        11.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_150",
+      "from": [
+        4.75,
+        11.0,
+        7.5
+      ],
+      "to": [
+        5.0,
+        11.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_151",
+      "from": [
+        4.75,
+        11.25,
+        7.0
+      ],
+      "to": [
+        5.0,
+        11.75,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_152",
+      "from": [
+        4.75,
+        11.75,
+        7.0
+      ],
+      "to": [
+        5.0,
+        12.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_153",
+      "from": [
+        4.75,
+        11.75,
+        7.5
+      ],
+      "to": [
+        5.0,
+        12.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_154",
+      "from": [
+        4.75,
+        12.0,
+        7.75
+      ],
+      "to": [
+        5.25,
+        12.25,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_155",
+      "from": [
+        5.0,
+        8.0,
+        7.75
+      ],
+      "to": [
+        5.25,
+        8.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_156",
+      "from": [
+        5.0,
+        9.25,
+        7.75
+      ],
+      "to": [
+        5.25,
+        9.5,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_157",
+      "from": [
+        5.0,
+        9.5,
+        7.5
+      ],
+      "to": [
+        5.5,
+        9.75,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_158",
+      "from": [
+        5.0,
+        9.5,
+        7.75
+      ],
+      "to": [
+        5.25,
+        10.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_159",
+      "from": [
+        5.0,
+        9.5,
+        8.25
+      ],
+      "to": [
+        5.5,
+        9.75,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_160",
+      "from": [
+        5.0,
+        9.75,
+        7.5
+      ],
+      "to": [
+        5.25,
+        10.25,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_161",
+      "from": [
+        5.0,
+        9.75,
+        8.25
+      ],
+      "to": [
+        5.25,
+        10.25,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_162",
+      "from": [
+        5.0,
+        10.25,
+        7.5
+      ],
+      "to": [
+        5.25,
+        10.75,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_163",
+      "from": [
+        5.0,
+        10.25,
+        8.25
+      ],
+      "to": [
+        5.25,
+        10.75,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_164",
+      "from": [
+        5.0,
+        10.75,
+        6.75
+      ],
+      "to": [
+        5.25,
+        11.0,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_165",
+      "from": [
+        5.0,
+        10.75,
+        7.75
+      ],
+      "to": [
+        5.75,
+        11.0,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_166",
+      "from": [
+        5.0,
+        10.75,
+        8.25
+      ],
+      "to": [
+        5.25,
+        11.25,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_167",
+      "from": [
+        5.0,
+        11.0,
+        7.0
+      ],
+      "to": [
+        6.75,
+        11.25,
+        7.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_168",
+      "from": [
+        5.0,
+        11.0,
+        7.5
+      ],
+      "to": [
+        5.5,
+        11.25,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_169",
+      "from": [
+        5.0,
+        11.0,
+        7.75
+      ],
+      "to": [
+        5.25,
+        11.25,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_170",
+      "from": [
+        5.0,
+        11.0,
+        8.5
+      ],
+      "to": [
+        6.75,
+        11.25,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_171",
+      "from": [
+        5.0,
+        11.25,
+        7.0
+      ],
+      "to": [
+        5.25,
+        11.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_172",
+      "from": [
+        5.0,
+        11.25,
+        7.5
+      ],
+      "to": [
+        5.25,
+        11.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_173",
+      "from": [
+        5.0,
+        11.5,
+        7.0
+      ],
+      "to": [
+        5.25,
+        12.0,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_174",
+      "from": [
+        5.25,
+        8.25,
+        7.75
+      ],
+      "to": [
+        5.5,
+        8.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_175",
+      "from": [
+        5.25,
+        9.5,
+        7.75
+      ],
+      "to": [
+        5.5,
+        9.75,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_176",
+      "from": [
+        5.25,
+        9.75,
+        7.5
+      ],
+      "to": [
+        5.75,
+        10.0,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_177",
+      "from": [
+        5.25,
+        9.75,
+        7.75
+      ],
+      "to": [
+        5.5,
+        10.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_178",
+      "from": [
+        5.25,
+        9.75,
+        8.25
+      ],
+      "to": [
+        5.75,
+        10.0,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_179",
+      "from": [
+        5.25,
+        10.0,
+        7.5
+      ],
+      "to": [
+        5.5,
+        10.5,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_180",
+      "from": [
+        5.25,
+        10.0,
+        8.25
+      ],
+      "to": [
+        5.5,
+        10.5,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_181",
+      "from": [
+        5.25,
+        10.5,
+        6.75
+      ],
+      "to": [
+        5.5,
+        10.75,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_182",
+      "from": [
+        5.25,
+        10.5,
+        7.5
+      ],
+      "to": [
+        5.5,
+        11.0,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_183",
+      "from": [
+        5.25,
+        10.5,
+        7.75
+      ],
+      "to": [
+        5.5,
+        10.75,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_184",
+      "from": [
+        5.25,
+        10.75,
+        8.25
+      ],
+      "to": [
+        5.75,
+        11.0,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_185",
+      "from": [
+        5.25,
+        11.0,
+        7.75
+      ],
+      "to": [
+        6.0,
+        11.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_186",
+      "from": [
+        5.25,
+        11.0,
+        8.25
+      ],
+      "to": [
+        5.5,
+        11.5,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_187",
+      "from": [
+        5.25,
+        11.25,
+        7.0
+      ],
+      "to": [
+        6.5,
+        11.5,
+        7.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_188",
+      "from": [
+        5.25,
+        11.25,
+        7.5
+      ],
+      "to": [
+        6.0,
+        11.5,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_189",
+      "from": [
+        5.25,
+        11.25,
+        7.75
+      ],
+      "to": [
+        5.75,
+        11.5,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_190",
+      "from": [
+        5.25,
+        11.25,
+        8.5
+      ],
+      "to": [
+        6.5,
+        11.5,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_191",
+      "from": [
+        5.25,
+        11.5,
+        7.0
+      ],
+      "to": [
+        5.5,
+        11.75,
+        7.75
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_192",
+      "from": [
+        5.25,
+        11.5,
+        7.75
+      ],
+      "to": [
+        5.5,
+        11.75,
+        8.25
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_193",
+      "from": [
+        5.25,
+        11.5,
+        8.25
+      ],
+      "to": [
+        5.5,
+        11.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_194",
+      "from": [
+        5.25,
+        11.75,
+        7.0
+      ],
+      "to": [
+        5.5,
+        12.0,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_195",
+      "from": [
+        5.5,
+        8.5,
+        7.75
+      ],
+      "to": [
+        5.75,
+        8.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_196",
+      "from": [
+        5.5,
+        9.25,
+        7.0
+      ],
+      "to": [
+        5.75,
+        9.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_197",
+      "from": [
+        5.5,
+        9.5,
+        7.0
+      ],
+      "to": [
+        7.25,
+        9.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_198",
+      "from": [
+        5.5,
+        9.5,
+        7.5
+      ],
+      "to": [
+        7.5,
+        9.75,
+        7.75
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_199",
+      "from": [
+        5.5,
+        9.5,
+        7.75
+      ],
+      "to": [
+        6.5,
+        9.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_200",
+      "from": [
+        5.5,
+        9.75,
+        7.75
+      ],
+      "to": [
+        5.75,
+        10.0,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_201",
+      "from": [
+        5.5,
+        9.75,
+        8.5
+      ],
+      "to": [
+        5.75,
+        10.25,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_202",
+      "from": [
+        5.5,
+        10.0,
+        7.5
+      ],
+      "to": [
+        6.0,
+        10.25,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_203",
+      "from": [
+        5.5,
+        10.0,
+        7.75
+      ],
+      "to": [
+        5.75,
+        10.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_204",
+      "from": [
+        5.5,
+        10.0,
+        8.25
+      ],
+      "to": [
+        6.0,
+        10.25,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_205",
+      "from": [
+        5.5,
+        10.25,
+        6.75
+      ],
+      "to": [
+        5.75,
+        10.5,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_206",
+      "from": [
+        5.5,
+        10.25,
+        7.5
+      ],
+      "to": [
+        5.75,
+        10.75,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_207",
+      "from": [
+        5.5,
+        10.25,
+        8.25
+      ],
+      "to": [
+        5.75,
+        10.75,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_208",
+      "from": [
+        5.5,
+        10.75,
+        7.5
+      ],
+      "to": [
+        5.75,
+        11.25,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_209",
+      "from": [
+        5.5,
+        11.0,
+        8.25
+      ],
+      "to": [
+        6.0,
+        11.25,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_210",
+      "from": [
+        5.5,
+        11.25,
+        8.25
+      ],
+      "to": [
+        6.0,
+        11.75,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_211",
+      "from": [
+        5.5,
+        11.5,
+        7.0
+      ],
+      "to": [
+        6.25,
+        11.75,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_212",
+      "from": [
+        5.5,
+        11.5,
+        7.75
+      ],
+      "to": [
+        6.0,
+        11.75,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_213",
+      "from": [
+        5.5,
+        11.5,
+        8.5
+      ],
+      "to": [
+        6.25,
+        11.75,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_214",
+      "from": [
+        5.75,
+        8.75,
+        7.75
+      ],
+      "to": [
+        6.0,
+        9.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_215",
+      "from": [
+        5.75,
+        9.0,
+        7.0
+      ],
+      "to": [
+        6.0,
+        9.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_216",
+      "from": [
+        5.75,
+        9.25,
+        7.0
+      ],
+      "to": [
+        7.5,
+        9.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_217",
+      "from": [
+        5.75,
+        9.25,
+        7.5
+      ],
+      "to": [
+        7.75,
+        9.5,
+        7.75
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_218",
+      "from": [
+        5.75,
+        9.25,
+        7.75
+      ],
+      "to": [
+        6.25,
+        9.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_219",
+      "from": [
+        5.75,
+        9.75,
+        7.0
+      ],
+      "to": [
+        7.0,
+        10.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_220",
+      "from": [
+        5.75,
+        9.75,
+        7.5
+      ],
+      "to": [
+        7.25,
+        10.0,
+        7.75
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_221",
+      "from": [
+        5.75,
+        9.75,
+        7.75
+      ],
+      "to": [
+        6.75,
+        10.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_222",
+      "from": [
+        5.75,
+        10.0,
+        6.75
+      ],
+      "to": [
+        6.0,
+        10.25,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_223",
+      "from": [
+        5.75,
+        10.0,
+        7.75
+      ],
+      "to": [
+        6.0,
+        10.25,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_224",
+      "from": [
+        5.75,
+        10.0,
+        8.5
+      ],
+      "to": [
+        6.0,
+        10.25,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_225",
+      "from": [
+        5.75,
+        10.25,
+        7.5
+      ],
+      "to": [
+        6.25,
+        10.5,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_226",
+      "from": [
+        5.75,
+        10.25,
+        7.75
+      ],
+      "to": [
+        6.0,
+        11.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_227",
+      "from": [
+        5.75,
+        10.25,
+        8.25
+      ],
+      "to": [
+        6.25,
+        10.5,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_228",
+      "from": [
+        5.75,
+        10.5,
+        7.5
+      ],
+      "to": [
+        6.0,
+        11.0,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_229",
+      "from": [
+        5.75,
+        10.5,
+        8.25
+      ],
+      "to": [
+        6.0,
+        11.0,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_230",
+      "from": [
+        5.75,
+        11.0,
+        7.5
+      ],
+      "to": [
+        6.0,
+        11.25,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_231",
+      "from": [
+        5.75,
+        11.25,
+        7.75
+      ],
+      "to": [
+        6.25,
+        11.5,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_232",
+      "from": [
+        5.75,
+        11.75,
+        7.0
+      ],
+      "to": [
+        6.0,
+        12.0,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_233",
+      "from": [
+        6.0,
+        8.75,
+        7.0
+      ],
+      "to": [
+        6.25,
+        9.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_234",
+      "from": [
+        6.0,
+        9.0,
+        7.0
+      ],
+      "to": [
+        7.75,
+        9.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_235",
+      "from": [
+        6.0,
+        9.0,
+        7.5
+      ],
+      "to": [
+        8.0,
+        9.25,
+        7.75
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_236",
+      "from": [
+        6.0,
+        9.0,
+        7.75
+      ],
+      "to": [
+        6.25,
+        9.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_237",
+      "from": [
+        6.0,
+        9.0,
+        8.25
+      ],
+      "to": [
+        8.0,
+        9.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_238",
+      "from": [
+        6.0,
+        9.75,
+        6.75
+      ],
+      "to": [
+        6.25,
+        10.0,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_239",
+      "from": [
+        6.0,
+        10.0,
+        7.0
+      ],
+      "to": [
+        6.75,
+        10.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_240",
+      "from": [
+        6.0,
+        10.0,
+        7.5
+      ],
+      "to": [
+        7.0,
+        10.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_241",
+      "from": [
+        6.0,
+        10.25,
+        7.75
+      ],
+      "to": [
+        6.25,
+        10.5,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_242",
+      "from": [
+        6.0,
+        10.5,
+        7.5
+      ],
+      "to": [
+        6.5,
+        10.75,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_243",
+      "from": [
+        6.0,
+        10.5,
+        7.75
+      ],
+      "to": [
+        6.25,
+        11.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_244",
+      "from": [
+        6.0,
+        10.5,
+        8.25
+      ],
+      "to": [
+        6.5,
+        10.75,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_245",
+      "from": [
+        6.0,
+        10.75,
+        7.5
+      ],
+      "to": [
+        6.25,
+        11.25,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_246",
+      "from": [
+        6.0,
+        10.75,
+        8.25
+      ],
+      "to": [
+        6.25,
+        11.25,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_247",
+      "from": [
+        6.0,
+        11.25,
+        7.5
+      ],
+      "to": [
+        6.25,
+        11.5,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_248",
+      "from": [
+        6.0,
+        11.25,
+        8.25
+      ],
+      "to": [
+        6.25,
+        11.5,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_249",
+      "from": [
+        6.0,
+        11.5,
+        7.75
+      ],
+      "to": [
+        6.75,
+        11.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_250",
+      "from": [
+        6.0,
+        11.5,
+        8.25
+      ],
+      "to": [
+        6.25,
+        11.75,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_251",
+      "from": [
+        6.25,
+        8.25,
+        7.5
+      ],
+      "to": [
+        6.5,
+        8.5,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_252",
+      "from": [
+        6.25,
+        8.5,
+        7.0
+      ],
+      "to": [
+        6.5,
+        8.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_253",
+      "from": [
+        6.25,
+        8.75,
+        7.0
+      ],
+      "to": [
+        7.75,
+        9.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_254",
+      "from": [
+        6.25,
+        8.75,
+        7.5
+      ],
+      "to": [
+        7.75,
+        9.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_255",
+      "from": [
+        6.25,
+        9.0,
+        7.75
+      ],
+      "to": [
+        8.0,
+        9.25,
+        8.25
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_256",
+      "from": [
+        6.25,
+        9.25,
+        7.75
+      ],
+      "to": [
+        6.5,
+        9.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_257",
+      "from": [
+        6.25,
+        9.25,
+        8.25
+      ],
+      "to": [
+        7.75,
+        9.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_258",
+      "from": [
+        6.25,
+        9.5,
+        6.75
+      ],
+      "to": [
+        6.5,
+        9.75,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_259",
+      "from": [
+        6.25,
+        10.25,
+        7.0
+      ],
+      "to": [
+        6.5,
+        10.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_260",
+      "from": [
+        6.25,
+        10.25,
+        7.5
+      ],
+      "to": [
+        6.75,
+        10.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_261",
+      "from": [
+        6.25,
+        10.5,
+        7.75
+      ],
+      "to": [
+        6.5,
+        10.75,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_262",
+      "from": [
+        6.25,
+        10.5,
+        8.5
+      ],
+      "to": [
+        6.5,
+        11.0,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_263",
+      "from": [
+        6.25,
+        10.75,
+        7.5
+      ],
+      "to": [
+        6.75,
+        11.0,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_264",
+      "from": [
+        6.25,
+        10.75,
+        7.75
+      ],
+      "to": [
+        6.5,
+        11.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_265",
+      "from": [
+        6.25,
+        10.75,
+        8.25
+      ],
+      "to": [
+        6.75,
+        11.0,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_266",
+      "from": [
+        6.25,
+        11.0,
+        7.5
+      ],
+      "to": [
+        6.5,
+        11.5,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_267",
+      "from": [
+        6.25,
+        11.0,
+        8.25
+      ],
+      "to": [
+        6.5,
+        11.5,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_268",
+      "from": [
+        6.25,
+        11.5,
+        7.5
+      ],
+      "to": [
+        6.75,
+        11.75,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_269",
+      "from": [
+        6.25,
+        11.5,
+        8.25
+      ],
+      "to": [
+        6.75,
+        11.75,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_270",
+      "from": [
+        6.25,
+        11.75,
+        7.75
+      ],
+      "to": [
+        7.0,
+        12.0,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_271",
+      "from": [
+        6.5,
+        8.25,
+        7.0
+      ],
+      "to": [
+        6.75,
+        8.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_272",
+      "from": [
+        6.5,
+        8.5,
+        7.0
+      ],
+      "to": [
+        7.5,
+        8.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_273",
+      "from": [
+        6.5,
+        8.5,
+        7.5
+      ],
+      "to": [
+        7.5,
+        8.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_274",
+      "from": [
+        6.5,
+        9.25,
+        6.75
+      ],
+      "to": [
+        6.75,
+        9.5,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_275",
+      "from": [
+        6.5,
+        9.25,
+        7.75
+      ],
+      "to": [
+        7.75,
+        9.5,
+        8.25
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_276",
+      "from": [
+        6.5,
+        9.5,
+        7.75
+      ],
+      "to": [
+        6.75,
+        9.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_277",
+      "from": [
+        6.5,
+        9.5,
+        8.25
+      ],
+      "to": [
+        7.5,
+        9.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_278",
+      "from": [
+        6.5,
+        10.25,
+        7.0
+      ],
+      "to": [
+        6.75,
+        10.5,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_279",
+      "from": [
+        6.5,
+        10.75,
+        7.75
+      ],
+      "to": [
+        6.75,
+        11.0,
+        8.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_280",
+      "from": [
+        6.5,
+        10.75,
+        8.5
+      ],
+      "to": [
+        6.75,
+        11.0,
+        9.25
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_281",
+      "from": [
+        6.5,
+        11.0,
+        7.5
+      ],
+      "to": [
+        6.75,
+        11.25,
+        7.75
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_282",
+      "from": [
+        6.5,
+        11.0,
+        7.75
+      ],
+      "to": [
+        6.75,
+        11.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_dark_283",
+      "from": [
+        6.5,
+        11.0,
+        8.25
+      ],
+      "to": [
+        6.75,
+        11.25,
+        8.5
+      ],
+      "mat": "steel_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_284",
+      "from": [
+        6.5,
+        11.25,
+        7.5
+      ],
+      "to": [
+        6.75,
+        11.5,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_285",
+      "from": [
+        6.5,
+        11.25,
+        8.25
+      ],
+      "to": [
+        6.75,
+        11.5,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_286",
+      "from": [
+        6.5,
+        11.75,
+        7.5
+      ],
+      "to": [
+        7.0,
+        12.0,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_287",
+      "from": [
+        6.5,
+        11.75,
+        8.25
+      ],
+      "to": [
+        7.0,
+        12.0,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_288",
+      "from": [
+        6.5,
+        12.0,
+        7.75
+      ],
+      "to": [
+        7.25,
+        12.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_289",
+      "from": [
+        6.75,
+        7.75,
+        7.0
+      ],
+      "to": [
+        7.25,
+        8.0,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_290",
+      "from": [
+        6.75,
+        8.0,
+        7.0
+      ],
+      "to": [
+        7.0,
+        8.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_291",
+      "from": [
+        6.75,
+        8.25,
+        7.0
+      ],
+      "to": [
+        7.25,
+        8.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_292",
+      "from": [
+        6.75,
+        8.25,
+        7.5
+      ],
+      "to": [
+        7.25,
+        8.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_293",
+      "from": [
+        6.75,
+        9.0,
+        6.75
+      ],
+      "to": [
+        7.0,
+        9.25,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_294",
+      "from": [
+        6.75,
+        9.5,
+        7.75
+      ],
+      "to": [
+        7.5,
+        9.75,
+        8.25
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_295",
+      "from": [
+        6.75,
+        9.75,
+        7.75
+      ],
+      "to": [
+        7.0,
+        10.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_296",
+      "from": [
+        6.75,
+        9.75,
+        8.25
+      ],
+      "to": [
+        7.25,
+        10.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_297",
+      "from": [
+        6.75,
+        10.0,
+        7.0
+      ],
+      "to": [
+        7.0,
+        10.25,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_298",
+      "from": [
+        6.75,
+        11.25,
+        7.75
+      ],
+      "to": [
+        7.0,
+        11.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_299",
+      "from": [
+        6.75,
+        11.5,
+        7.5
+      ],
+      "to": [
+        7.0,
+        11.75,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_300",
+      "from": [
+        6.75,
+        11.5,
+        8.25
+      ],
+      "to": [
+        7.0,
+        11.75,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_301",
+      "from": [
+        6.75,
+        12.0,
+        7.5
+      ],
+      "to": [
+        7.25,
+        12.25,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_302",
+      "from": [
+        6.75,
+        12.0,
+        8.25
+      ],
+      "to": [
+        7.25,
+        12.25,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_303",
+      "from": [
+        7.0,
+        8.0,
+        7.0
+      ],
+      "to": [
+        7.5,
+        8.25,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_304",
+      "from": [
+        7.0,
+        8.75,
+        6.75
+      ],
+      "to": [
+        7.25,
+        9.0,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_305",
+      "from": [
+        7.0,
+        9.75,
+        7.0
+      ],
+      "to": [
+        7.25,
+        10.0,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_306",
+      "from": [
+        7.0,
+        9.75,
+        7.75
+      ],
+      "to": [
+        7.25,
+        10.0,
+        8.25
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_307",
+      "from": [
+        7.0,
+        10.0,
+        7.75
+      ],
+      "to": [
+        7.25,
+        10.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_308",
+      "from": [
+        7.0,
+        11.5,
+        7.75
+      ],
+      "to": [
+        7.25,
+        12.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_309",
+      "from": [
+        7.0,
+        11.75,
+        7.5
+      ],
+      "to": [
+        7.25,
+        12.0,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_310",
+      "from": [
+        7.0,
+        11.75,
+        8.25
+      ],
+      "to": [
+        7.25,
+        12.0,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_311",
+      "from": [
+        7.0,
+        12.25,
+        7.75
+      ],
+      "to": [
+        7.5,
+        12.5,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_312",
+      "from": [
+        7.25,
+        7.25,
+        7.5
+      ],
+      "to": [
+        7.5,
+        7.5,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_313",
+      "from": [
+        7.25,
+        7.5,
+        7.0
+      ],
+      "to": [
+        7.5,
+        7.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_314",
+      "from": [
+        7.25,
+        7.75,
+        7.0
+      ],
+      "to": [
+        9.0,
+        8.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_315",
+      "from": [
+        7.25,
+        7.75,
+        7.5
+      ],
+      "to": [
+        9.25,
+        8.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_316",
+      "from": [
+        7.25,
+        8.25,
+        7.0
+      ],
+      "to": [
+        7.75,
+        8.5,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_317",
+      "from": [
+        7.25,
+        8.5,
+        6.75
+      ],
+      "to": [
+        7.5,
+        8.75,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_318",
+      "from": [
+        7.25,
+        9.5,
+        7.0
+      ],
+      "to": [
+        7.5,
+        9.75,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_319",
+      "from": [
+        7.25,
+        10.25,
+        7.75
+      ],
+      "to": [
+        7.5,
+        10.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_320",
+      "from": [
+        7.25,
+        11.75,
+        7.75
+      ],
+      "to": [
+        7.5,
+        12.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_321",
+      "from": [
+        7.25,
+        12.0,
+        7.5
+      ],
+      "to": [
+        7.5,
+        12.5,
+        7.75
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_322",
+      "from": [
+        7.25,
+        12.0,
+        7.75
+      ],
+      "to": [
+        7.75,
+        12.25,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_323",
+      "from": [
+        7.25,
+        12.0,
+        8.25
+      ],
+      "to": [
+        7.5,
+        12.5,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_324",
+      "from": [
+        7.25,
+        12.5,
+        7.75
+      ],
+      "to": [
+        8.0,
+        12.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_325",
+      "from": [
+        7.5,
+        7.0,
+        7.5
+      ],
+      "to": [
+        7.75,
+        7.25,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_326",
+      "from": [
+        7.5,
+        7.25,
+        7.0
+      ],
+      "to": [
+        7.75,
+        7.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_327",
+      "from": [
+        7.5,
+        7.5,
+        7.0
+      ],
+      "to": [
+        9.25,
+        7.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_328",
+      "from": [
+        7.5,
+        7.5,
+        7.5
+      ],
+      "to": [
+        9.5,
+        7.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_329",
+      "from": [
+        7.5,
+        8.0,
+        7.0
+      ],
+      "to": [
+        8.75,
+        8.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_330",
+      "from": [
+        7.5,
+        8.0,
+        7.5
+      ],
+      "to": [
+        9.0,
+        8.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_331",
+      "from": [
+        7.5,
+        8.25,
+        6.75
+      ],
+      "to": [
+        7.75,
+        8.5,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_332",
+      "from": [
+        7.5,
+        8.5,
+        7.0
+      ],
+      "to": [
+        8.0,
+        8.75,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_333",
+      "from": [
+        7.5,
+        9.25,
+        7.0
+      ],
+      "to": [
+        7.75,
+        9.5,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_334",
+      "from": [
+        7.5,
+        9.5,
+        7.5
+      ],
+      "to": [
+        7.75,
+        9.75,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_335",
+      "from": [
+        7.5,
+        10.5,
+        7.75
+      ],
+      "to": [
+        7.75,
+        10.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_336",
+      "from": [
+        7.5,
+        12.25,
+        7.5
+      ],
+      "to": [
+        8.0,
+        12.5,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_337",
+      "from": [
+        7.5,
+        12.5,
+        7.5
+      ],
+      "to": [
+        8.0,
+        12.75,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_338",
+      "from": [
+        7.5,
+        12.5,
+        8.25
+      ],
+      "to": [
+        8.0,
+        12.75,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_339",
+      "from": [
+        7.5,
+        12.75,
+        7.75
+      ],
+      "to": [
+        8.25,
+        13.0,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_340",
+      "from": [
+        7.75,
+        7.0,
+        7.0
+      ],
+      "to": [
+        8.0,
+        7.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_341",
+      "from": [
+        7.75,
+        7.25,
+        7.0
+      ],
+      "to": [
+        9.5,
+        7.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_342",
+      "from": [
+        7.75,
+        7.25,
+        7.5
+      ],
+      "to": [
+        9.75,
+        7.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_343",
+      "from": [
+        7.75,
+        8.0,
+        6.75
+      ],
+      "to": [
+        8.0,
+        8.25,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_344",
+      "from": [
+        7.75,
+        8.25,
+        7.0
+      ],
+      "to": [
+        8.5,
+        8.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_345",
+      "from": [
+        7.75,
+        8.25,
+        7.5
+      ],
+      "to": [
+        8.75,
+        8.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_346",
+      "from": [
+        7.75,
+        8.75,
+        7.0
+      ],
+      "to": [
+        8.25,
+        9.0,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_347",
+      "from": [
+        7.75,
+        9.0,
+        7.0
+      ],
+      "to": [
+        8.0,
+        9.25,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_348",
+      "from": [
+        7.75,
+        10.75,
+        7.75
+      ],
+      "to": [
+        8.0,
+        11.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_349",
+      "from": [
+        7.75,
+        12.0,
+        7.75
+      ],
+      "to": [
+        8.0,
+        12.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_350",
+      "from": [
+        8.0,
+        6.75,
+        7.0
+      ],
+      "to": [
+        8.25,
+        7.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_351",
+      "from": [
+        8.0,
+        7.0,
+        7.0
+      ],
+      "to": [
+        9.75,
+        7.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_352",
+      "from": [
+        8.0,
+        7.0,
+        7.5
+      ],
+      "to": [
+        10.0,
+        7.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_353",
+      "from": [
+        8.0,
+        7.75,
+        6.75
+      ],
+      "to": [
+        8.25,
+        8.0,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_354",
+      "from": [
+        8.0,
+        8.5,
+        7.0
+      ],
+      "to": [
+        8.25,
+        8.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_355",
+      "from": [
+        8.0,
+        8.5,
+        7.5
+      ],
+      "to": [
+        8.5,
+        8.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_356",
+      "from": [
+        8.0,
+        9.0,
+        7.0
+      ],
+      "to": [
+        8.25,
+        9.25,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_357",
+      "from": [
+        8.0,
+        11.0,
+        7.75
+      ],
+      "to": [
+        8.25,
+        11.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_358",
+      "from": [
+        8.0,
+        12.25,
+        7.75
+      ],
+      "to": [
+        8.25,
+        12.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_359",
+      "from": [
+        8.0,
+        12.5,
+        7.5
+      ],
+      "to": [
+        8.25,
+        12.75,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_360",
+      "from": [
+        8.0,
+        12.5,
+        8.25
+      ],
+      "to": [
+        8.25,
+        12.75,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_361",
+      "from": [
+        8.0,
+        12.75,
+        7.5
+      ],
+      "to": [
+        8.25,
+        13.0,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_362",
+      "from": [
+        8.0,
+        12.75,
+        8.25
+      ],
+      "to": [
+        8.25,
+        13.0,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_363",
+      "from": [
+        8.0,
+        13.0,
+        7.75
+      ],
+      "to": [
+        8.5,
+        13.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_364",
+      "from": [
+        8.25,
+        6.5,
+        7.0
+      ],
+      "to": [
+        8.5,
+        6.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_365",
+      "from": [
+        8.25,
+        6.75,
+        7.0
+      ],
+      "to": [
+        10.0,
+        7.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_366",
+      "from": [
+        8.25,
+        6.75,
+        7.5
+      ],
+      "to": [
+        10.25,
+        7.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_367",
+      "from": [
+        8.25,
+        7.5,
+        6.75
+      ],
+      "to": [
+        8.5,
+        7.75,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_368",
+      "from": [
+        8.25,
+        8.5,
+        7.0
+      ],
+      "to": [
+        8.5,
+        8.75,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_369",
+      "from": [
+        8.25,
+        11.25,
+        7.75
+      ],
+      "to": [
+        8.5,
+        11.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_370",
+      "from": [
+        8.25,
+        12.5,
+        7.75
+      ],
+      "to": [
+        8.5,
+        13.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_371",
+      "from": [
+        8.25,
+        12.75,
+        7.5
+      ],
+      "to": [
+        8.5,
+        13.0,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_372",
+      "from": [
+        8.25,
+        12.75,
+        8.25
+      ],
+      "to": [
+        8.5,
+        13.0,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_373",
+      "from": [
+        8.25,
+        13.0,
+        7.5
+      ],
+      "to": [
+        8.5,
+        13.25,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_374",
+      "from": [
+        8.25,
+        13.0,
+        8.25
+      ],
+      "to": [
+        8.5,
+        13.25,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_375",
+      "from": [
+        8.25,
+        13.25,
+        7.75
+      ],
+      "to": [
+        9.0,
+        13.5,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_376",
+      "from": [
+        8.5,
+        6.0,
+        7.5
+      ],
+      "to": [
+        8.75,
+        6.25,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_377",
+      "from": [
+        8.5,
+        6.25,
+        7.0
+      ],
+      "to": [
+        8.75,
+        6.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_378",
+      "from": [
+        8.5,
+        6.5,
+        7.0
+      ],
+      "to": [
+        10.25,
+        6.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_379",
+      "from": [
+        8.5,
+        6.5,
+        7.5
+      ],
+      "to": [
+        10.5,
+        6.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_380",
+      "from": [
+        8.5,
+        7.25,
+        6.75
+      ],
+      "to": [
+        8.75,
+        7.5,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_381",
+      "from": [
+        8.5,
+        8.25,
+        7.0
+      ],
+      "to": [
+        8.75,
+        8.5,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_382",
+      "from": [
+        8.5,
+        8.5,
+        7.5
+      ],
+      "to": [
+        8.75,
+        8.75,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_383",
+      "from": [
+        8.5,
+        11.5,
+        7.75
+      ],
+      "to": [
+        8.75,
+        11.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_384",
+      "from": [
+        8.5,
+        12.75,
+        7.75
+      ],
+      "to": [
+        9.0,
+        13.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_385",
+      "from": [
+        8.5,
+        13.0,
+        7.5
+      ],
+      "to": [
+        8.75,
+        13.25,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_386",
+      "from": [
+        8.5,
+        13.0,
+        8.25
+      ],
+      "to": [
+        8.75,
+        13.25,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_387",
+      "from": [
+        8.75,
+        5.75,
+        7.5
+      ],
+      "to": [
+        9.0,
+        6.0,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_388",
+      "from": [
+        8.75,
+        6.0,
+        7.0
+      ],
+      "to": [
+        9.0,
+        6.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_389",
+      "from": [
+        8.75,
+        6.25,
+        7.0
+      ],
+      "to": [
+        10.5,
+        6.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_390",
+      "from": [
+        8.75,
+        6.25,
+        7.5
+      ],
+      "to": [
+        10.75,
+        6.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_391",
+      "from": [
+        8.75,
+        7.0,
+        6.75
+      ],
+      "to": [
+        9.0,
+        7.25,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_392",
+      "from": [
+        8.75,
+        8.0,
+        7.0
+      ],
+      "to": [
+        9.0,
+        8.25,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_393",
+      "from": [
+        8.75,
+        8.25,
+        7.5
+      ],
+      "to": [
+        9.0,
+        8.5,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_394",
+      "from": [
+        8.75,
+        11.75,
+        7.75
+      ],
+      "to": [
+        9.0,
+        12.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_395",
+      "from": [
+        8.75,
+        13.25,
+        7.5
+      ],
+      "to": [
+        9.0,
+        13.5,
+        7.75
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_396",
+      "from": [
+        8.75,
+        13.25,
+        8.25
+      ],
+      "to": [
+        9.0,
+        13.5,
+        8.5
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_397",
+      "from": [
+        8.75,
+        13.5,
+        7.75
+      ],
+      "to": [
+        9.25,
+        13.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_398",
+      "from": [
+        9.0,
+        5.75,
+        7.0
+      ],
+      "to": [
+        9.25,
+        6.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_399",
+      "from": [
+        9.0,
+        6.0,
+        7.0
+      ],
+      "to": [
+        10.75,
+        6.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_400",
+      "from": [
+        9.0,
+        6.0,
+        7.5
+      ],
+      "to": [
+        11.0,
+        6.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_401",
+      "from": [
+        9.0,
+        6.75,
+        6.75
+      ],
+      "to": [
+        9.25,
+        7.0,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_402",
+      "from": [
+        9.0,
+        7.75,
+        7.0
+      ],
+      "to": [
+        9.25,
+        8.0,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_403",
+      "from": [
+        9.0,
+        12.0,
+        7.75
+      ],
+      "to": [
+        9.25,
+        12.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_404",
+      "from": [
+        9.0,
+        13.0,
+        7.75
+      ],
+      "to": [
+        9.25,
+        13.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_405",
+      "from": [
+        9.0,
+        13.25,
+        7.5
+      ],
+      "to": [
+        9.25,
+        13.5,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_406",
+      "from": [
+        9.0,
+        13.25,
+        8.25
+      ],
+      "to": [
+        9.25,
+        13.5,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_407",
+      "from": [
+        9.0,
+        13.75,
+        7.75
+      ],
+      "to": [
+        9.5,
+        14.0,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_408",
+      "from": [
+        9.25,
+        5.5,
+        7.0
+      ],
+      "to": [
+        9.5,
+        5.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_409",
+      "from": [
+        9.25,
+        5.75,
+        7.0
+      ],
+      "to": [
+        11.0,
+        6.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_410",
+      "from": [
+        9.25,
+        5.75,
+        7.5
+      ],
+      "to": [
+        11.25,
+        6.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_411",
+      "from": [
+        9.25,
+        6.5,
+        6.75
+      ],
+      "to": [
+        9.5,
+        6.75,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_412",
+      "from": [
+        9.25,
+        7.5,
+        7.0
+      ],
+      "to": [
+        9.5,
+        7.75,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_413",
+      "from": [
+        9.25,
+        12.25,
+        7.75
+      ],
+      "to": [
+        9.5,
+        12.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_414",
+      "from": [
+        9.25,
+        13.25,
+        7.75
+      ],
+      "to": [
+        9.5,
+        13.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_415",
+      "from": [
+        9.25,
+        13.5,
+        7.5
+      ],
+      "to": [
+        9.5,
+        13.75,
+        7.75
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_416",
+      "from": [
+        9.25,
+        13.5,
+        8.25
+      ],
+      "to": [
+        9.5,
+        13.75,
+        8.5
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_417",
+      "from": [
+        9.5,
+        5.25,
+        7.0
+      ],
+      "to": [
+        9.75,
+        5.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_418",
+      "from": [
+        9.5,
+        5.5,
+        7.0
+      ],
+      "to": [
+        11.0,
+        5.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_419",
+      "from": [
+        9.5,
+        5.5,
+        7.5
+      ],
+      "to": [
+        11.0,
+        5.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_420",
+      "from": [
+        9.5,
+        6.25,
+        6.75
+      ],
+      "to": [
+        9.75,
+        6.5,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_421",
+      "from": [
+        9.5,
+        7.25,
+        7.0
+      ],
+      "to": [
+        9.75,
+        7.5,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_422",
+      "from": [
+        9.5,
+        12.5,
+        7.75
+      ],
+      "to": [
+        9.75,
+        12.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_423",
+      "from": [
+        9.5,
+        13.5,
+        7.75
+      ],
+      "to": [
+        9.75,
+        13.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_424",
+      "from": [
+        9.5,
+        13.75,
+        7.75
+      ],
+      "to": [
+        10.0,
+        14.0,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_425",
+      "from": [
+        9.5,
+        14.0,
+        7.75
+      ],
+      "to": [
+        9.75,
+        14.25,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_426",
+      "from": [
+        9.75,
+        4.75,
+        7.5
+      ],
+      "to": [
+        10.0,
+        5.0,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_427",
+      "from": [
+        9.75,
+        5.0,
+        7.0
+      ],
+      "to": [
+        10.0,
+        5.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_428",
+      "from": [
+        9.75,
+        5.25,
+        7.0
+      ],
+      "to": [
+        10.75,
+        5.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_429",
+      "from": [
+        9.75,
+        5.25,
+        7.5
+      ],
+      "to": [
+        10.75,
+        5.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_430",
+      "from": [
+        9.75,
+        6.0,
+        6.75
+      ],
+      "to": [
+        10.0,
+        6.25,
+        7.0
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_431",
+      "from": [
+        9.75,
+        7.0,
+        7.0
+      ],
+      "to": [
+        10.0,
+        7.25,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_432",
+      "from": [
+        9.75,
+        7.25,
+        7.5
+      ],
+      "to": [
+        10.0,
+        7.5,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_433",
+      "from": [
+        9.75,
+        12.75,
+        7.75
+      ],
+      "to": [
+        10.0,
+        13.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_434",
+      "from": [
+        9.75,
+        13.5,
+        7.75
+      ],
+      "to": [
+        10.0,
+        13.75,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_435",
+      "from": [
+        9.75,
+        14.0,
+        7.75
+      ],
+      "to": [
+        10.0,
+        14.5,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_436",
+      "from": [
+        10.0,
+        4.5,
+        7.0
+      ],
+      "to": [
+        10.5,
+        4.75,
+        7.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_437",
+      "from": [
+        10.0,
+        4.5,
+        7.5
+      ],
+      "to": [
+        10.25,
+        4.75,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_438",
+      "from": [
+        10.0,
+        4.5,
+        8.5
+      ],
+      "to": [
+        10.5,
+        4.75,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_439",
+      "from": [
+        10.0,
+        4.75,
+        7.0
+      ],
+      "to": [
+        10.25,
+        5.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_440",
+      "from": [
+        10.0,
+        5.0,
+        7.0
+      ],
+      "to": [
+        10.5,
+        5.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_441",
+      "from": [
+        10.0,
+        5.0,
+        7.5
+      ],
+      "to": [
+        10.5,
+        5.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_442",
+      "from": [
+        10.0,
+        5.5,
+        10.0
+      ],
+      "to": [
+        10.75,
+        5.75,
+        10.25
+      ],
+      "mat": "steel",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_443",
+      "from": [
+        10.0,
+        5.75,
+        10.0
+      ],
+      "to": [
+        10.5,
+        6.0,
+        10.25
+      ],
+      "mat": "steel",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_444",
+      "from": [
+        10.0,
+        6.75,
+        7.0
+      ],
+      "to": [
+        10.25,
+        7.0,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_445",
+      "from": [
+        10.0,
+        7.0,
+        7.5
+      ],
+      "to": [
+        10.25,
+        7.25,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_446",
+      "from": [
+        10.0,
+        13.0,
+        7.75
+      ],
+      "to": [
+        10.25,
+        13.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_447",
+      "from": [
+        10.0,
+        13.75,
+        7.75
+      ],
+      "to": [
+        10.25,
+        14.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_448",
+      "from": [
+        10.0,
+        14.25,
+        7.75
+      ],
+      "to": [
+        10.5,
+        14.5,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_449",
+      "from": [
+        10.25,
+        4.5,
+        7.5
+      ],
+      "to": [
+        10.5,
+        5.0,
+        8.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_450",
+      "from": [
+        10.25,
+        4.75,
+        7.0
+      ],
+      "to": [
+        10.75,
+        5.0,
+        7.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_451",
+      "from": [
+        10.25,
+        4.75,
+        8.5
+      ],
+      "to": [
+        10.75,
+        5.0,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_452",
+      "from": [
+        10.25,
+        5.25,
+        9.0
+      ],
+      "to": [
+        11.25,
+        5.5,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_453",
+      "from": [
+        10.25,
+        5.25,
+        9.25
+      ],
+      "to": [
+        11.0,
+        5.5,
+        10.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_454",
+      "from": [
+        10.25,
+        5.25,
+        10.0
+      ],
+      "to": [
+        11.0,
+        5.5,
+        10.25
+      ],
+      "mat": "steel",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_455",
+      "from": [
+        10.25,
+        6.5,
+        7.0
+      ],
+      "to": [
+        10.5,
+        6.75,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_456",
+      "from": [
+        10.25,
+        13.25,
+        7.75
+      ],
+      "to": [
+        10.5,
+        13.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_457",
+      "from": [
+        10.25,
+        14.0,
+        7.75
+      ],
+      "to": [
+        10.75,
+        14.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_458",
+      "from": [
+        10.25,
+        14.5,
+        7.75
+      ],
+      "to": [
+        11.0,
+        14.75,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_459",
+      "from": [
+        10.5,
+        4.25,
+        7.0
+      ],
+      "to": [
+        10.75,
+        4.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_460",
+      "from": [
+        10.5,
+        4.5,
+        7.0
+      ],
+      "to": [
+        12.25,
+        4.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_461",
+      "from": [
+        10.5,
+        4.5,
+        7.5
+      ],
+      "to": [
+        12.5,
+        4.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_462",
+      "from": [
+        10.5,
+        4.75,
+        7.5
+      ],
+      "to": [
+        10.75,
+        5.25,
+        8.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_463",
+      "from": [
+        10.5,
+        5.0,
+        7.0
+      ],
+      "to": [
+        11.0,
+        5.25,
+        7.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_464",
+      "from": [
+        10.5,
+        5.0,
+        8.5
+      ],
+      "to": [
+        11.0,
+        5.25,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_465",
+      "from": [
+        10.5,
+        5.0,
+        9.25
+      ],
+      "to": [
+        10.75,
+        5.25,
+        10.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_466",
+      "from": [
+        10.5,
+        5.0,
+        10.0
+      ],
+      "to": [
+        11.25,
+        5.25,
+        10.25
+      ],
+      "mat": "steel",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_467",
+      "from": [
+        10.5,
+        5.5,
+        9.0
+      ],
+      "to": [
+        10.75,
+        5.75,
+        10.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_468",
+      "from": [
+        10.5,
+        6.25,
+        7.0
+      ],
+      "to": [
+        10.75,
+        6.5,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_469",
+      "from": [
+        10.5,
+        13.5,
+        7.75
+      ],
+      "to": [
+        10.75,
+        13.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_470",
+      "from": [
+        10.5,
+        14.25,
+        7.75
+      ],
+      "to": [
+        11.25,
+        14.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_471",
+      "from": [
+        10.75,
+        4.0,
+        7.0
+      ],
+      "to": [
+        11.0,
+        4.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_472",
+      "from": [
+        10.75,
+        4.25,
+        7.0
+      ],
+      "to": [
+        12.5,
+        4.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_473",
+      "from": [
+        10.75,
+        4.25,
+        7.5
+      ],
+      "to": [
+        12.75,
+        4.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_474",
+      "from": [
+        10.75,
+        4.25,
+        9.0
+      ],
+      "to": [
+        12.5,
+        4.5,
+        9.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_475",
+      "from": [
+        10.75,
+        4.75,
+        7.0
+      ],
+      "to": [
+        12.0,
+        5.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_476",
+      "from": [
+        10.75,
+        4.75,
+        7.5
+      ],
+      "to": [
+        12.25,
+        5.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_477",
+      "from": [
+        10.75,
+        4.75,
+        10.0
+      ],
+      "to": [
+        11.0,
+        5.0,
+        10.25
+      ],
+      "mat": "steel",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_478",
+      "from": [
+        10.75,
+        5.0,
+        7.5
+      ],
+      "to": [
+        11.0,
+        5.5,
+        8.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_479",
+      "from": [
+        10.75,
+        5.25,
+        7.0
+      ],
+      "to": [
+        11.25,
+        5.5,
+        7.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_480",
+      "from": [
+        10.75,
+        5.25,
+        8.5
+      ],
+      "to": [
+        11.25,
+        5.5,
+        9.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_481",
+      "from": [
+        10.75,
+        6.0,
+        7.0
+      ],
+      "to": [
+        11.0,
+        6.25,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_482",
+      "from": [
+        10.75,
+        13.75,
+        7.75
+      ],
+      "to": [
+        11.0,
+        14.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_483",
+      "from": [
+        10.75,
+        14.75,
+        7.75
+      ],
+      "to": [
+        11.5,
+        15.0,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_484",
+      "from": [
+        11.0,
+        3.5,
+        7.5
+      ],
+      "to": [
+        11.25,
+        3.75,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_485",
+      "from": [
+        11.0,
+        3.75,
+        7.0
+      ],
+      "to": [
+        11.25,
+        4.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_486",
+      "from": [
+        11.0,
+        4.0,
+        7.0
+      ],
+      "to": [
+        12.75,
+        4.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_487",
+      "from": [
+        11.0,
+        4.0,
+        7.5
+      ],
+      "to": [
+        13.0,
+        4.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_488",
+      "from": [
+        11.0,
+        4.0,
+        9.0
+      ],
+      "to": [
+        12.5,
+        4.25,
+        10.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_489",
+      "from": [
+        11.0,
+        4.25,
+        9.25
+      ],
+      "to": [
+        12.5,
+        4.5,
+        9.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_490",
+      "from": [
+        11.0,
+        4.5,
+        9.0
+      ],
+      "to": [
+        12.25,
+        4.75,
+        9.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_491",
+      "from": [
+        11.0,
+        5.0,
+        7.0
+      ],
+      "to": [
+        11.75,
+        5.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_492",
+      "from": [
+        11.0,
+        5.0,
+        7.5
+      ],
+      "to": [
+        12.0,
+        5.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_493",
+      "from": [
+        11.0,
+        5.25,
+        7.5
+      ],
+      "to": [
+        11.25,
+        5.75,
+        8.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_494",
+      "from": [
+        11.0,
+        5.5,
+        7.0
+      ],
+      "to": [
+        11.5,
+        5.75,
+        7.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_495",
+      "from": [
+        11.0,
+        5.5,
+        8.5
+      ],
+      "to": [
+        11.5,
+        5.75,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_496",
+      "from": [
+        11.0,
+        5.75,
+        7.0
+      ],
+      "to": [
+        11.25,
+        6.0,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_497",
+      "from": [
+        11.0,
+        6.0,
+        7.5
+      ],
+      "to": [
+        11.25,
+        6.25,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_498",
+      "from": [
+        11.0,
+        14.0,
+        7.75
+      ],
+      "to": [
+        11.25,
+        14.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_499",
+      "from": [
+        11.0,
+        14.5,
+        7.75
+      ],
+      "to": [
+        11.5,
+        14.75,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_500",
+      "from": [
+        11.25,
+        3.5,
+        7.0
+      ],
+      "to": [
+        11.5,
+        3.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_501",
+      "from": [
+        11.25,
+        3.75,
+        7.0
+      ],
+      "to": [
+        13.0,
+        4.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_502",
+      "from": [
+        11.25,
+        3.75,
+        7.5
+      ],
+      "to": [
+        13.25,
+        4.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_503",
+      "from": [
+        11.25,
+        3.75,
+        9.0
+      ],
+      "to": [
+        12.25,
+        4.0,
+        10.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_504",
+      "from": [
+        11.25,
+        4.0,
+        10.0
+      ],
+      "to": [
+        12.75,
+        4.25,
+        10.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_505",
+      "from": [
+        11.25,
+        4.25,
+        9.5
+      ],
+      "to": [
+        12.5,
+        4.5,
+        10.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_506",
+      "from": [
+        11.25,
+        4.5,
+        9.25
+      ],
+      "to": [
+        12.25,
+        4.75,
+        9.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_507",
+      "from": [
+        11.25,
+        4.75,
+        9.0
+      ],
+      "to": [
+        12.0,
+        5.0,
+        9.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_508",
+      "from": [
+        11.25,
+        5.25,
+        7.0
+      ],
+      "to": [
+        11.5,
+        5.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_509",
+      "from": [
+        11.25,
+        5.25,
+        7.5
+      ],
+      "to": [
+        11.75,
+        5.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_510",
+      "from": [
+        11.25,
+        5.5,
+        7.5
+      ],
+      "to": [
+        11.5,
+        5.75,
+        8.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_511",
+      "from": [
+        11.25,
+        5.75,
+        7.0
+      ],
+      "to": [
+        11.5,
+        6.0,
+        7.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_512",
+      "from": [
+        11.25,
+        5.75,
+        7.5
+      ],
+      "to": [
+        11.5,
+        6.0,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_513",
+      "from": [
+        11.25,
+        5.75,
+        8.5
+      ],
+      "to": [
+        11.5,
+        6.0,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_514",
+      "from": [
+        11.25,
+        14.25,
+        7.75
+      ],
+      "to": [
+        11.5,
+        14.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_515",
+      "from": [
+        11.25,
+        15.0,
+        7.75
+      ],
+      "to": [
+        11.75,
+        15.25,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_516",
+      "from": [
+        11.5,
+        3.25,
+        7.0
+      ],
+      "to": [
+        11.75,
+        3.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_517",
+      "from": [
+        11.5,
+        3.5,
+        7.0
+      ],
+      "to": [
+        13.25,
+        3.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_518",
+      "from": [
+        11.5,
+        3.5,
+        7.5
+      ],
+      "to": [
+        13.25,
+        3.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_519",
+      "from": [
+        11.5,
+        3.5,
+        9.0
+      ],
+      "to": [
+        12.0,
+        3.75,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_520",
+      "from": [
+        11.5,
+        3.75,
+        10.75
+      ],
+      "to": [
+        13.0,
+        4.0,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_521",
+      "from": [
+        11.5,
+        4.0,
+        10.5
+      ],
+      "to": [
+        12.75,
+        4.25,
+        10.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_522",
+      "from": [
+        11.5,
+        4.25,
+        10.0
+      ],
+      "to": [
+        12.5,
+        4.5,
+        10.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_523",
+      "from": [
+        11.5,
+        4.5,
+        9.5
+      ],
+      "to": [
+        12.25,
+        4.75,
+        10.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_524",
+      "from": [
+        11.5,
+        4.75,
+        9.25
+      ],
+      "to": [
+        12.0,
+        5.0,
+        9.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_525",
+      "from": [
+        11.5,
+        5.0,
+        9.0
+      ],
+      "to": [
+        11.75,
+        5.25,
+        9.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_526",
+      "from": [
+        11.5,
+        5.25,
+        7.0
+      ],
+      "to": [
+        11.75,
+        5.5,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_527",
+      "from": [
+        11.5,
+        14.5,
+        7.75
+      ],
+      "to": [
+        11.75,
+        14.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_528",
+      "from": [
+        11.5,
+        14.75,
+        7.75
+      ],
+      "to": [
+        11.75,
+        15.0,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_529",
+      "from": [
+        11.75,
+        3.0,
+        7.0
+      ],
+      "to": [
+        12.0,
+        3.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_530",
+      "from": [
+        11.75,
+        3.25,
+        7.0
+      ],
+      "to": [
+        13.0,
+        3.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_531",
+      "from": [
+        11.75,
+        3.25,
+        7.5
+      ],
+      "to": [
+        13.0,
+        3.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_532",
+      "from": [
+        11.75,
+        3.25,
+        9.25
+      ],
+      "to": [
+        12.0,
+        3.5,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_533",
+      "from": [
+        11.75,
+        4.0,
+        10.75
+      ],
+      "to": [
+        12.75,
+        4.25,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_534",
+      "from": [
+        11.75,
+        4.25,
+        10.5
+      ],
+      "to": [
+        12.5,
+        4.5,
+        10.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_535",
+      "from": [
+        11.75,
+        4.5,
+        10.0
+      ],
+      "to": [
+        12.25,
+        4.75,
+        10.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_536",
+      "from": [
+        11.75,
+        4.75,
+        9.5
+      ],
+      "to": [
+        12.0,
+        5.0,
+        10.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_537",
+      "from": [
+        11.75,
+        5.0,
+        7.0
+      ],
+      "to": [
+        12.0,
+        5.25,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_538",
+      "from": [
+        11.75,
+        14.75,
+        7.75
+      ],
+      "to": [
+        12.0,
+        15.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_539",
+      "from": [
+        11.75,
+        15.0,
+        7.75
+      ],
+      "to": [
+        12.0,
+        15.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_light_540",
+      "from": [
+        11.75,
+        15.25,
+        7.75
+      ],
+      "to": [
+        12.25,
+        15.5,
+        8.25
+      ],
+      "mat": "silver_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_541",
+      "from": [
+        12.0,
+        2.75,
+        7.0
+      ],
+      "to": [
+        12.25,
+        3.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_542",
+      "from": [
+        12.0,
+        3.0,
+        7.0
+      ],
+      "to": [
+        12.75,
+        3.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_543",
+      "from": [
+        12.0,
+        3.0,
+        7.5
+      ],
+      "to": [
+        12.75,
+        3.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_544",
+      "from": [
+        12.0,
+        3.0,
+        10.0
+      ],
+      "to": [
+        12.25,
+        3.75,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_545",
+      "from": [
+        12.0,
+        3.25,
+        9.75
+      ],
+      "to": [
+        12.25,
+        3.75,
+        10.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_546",
+      "from": [
+        12.0,
+        3.5,
+        9.25
+      ],
+      "to": [
+        12.25,
+        3.75,
+        9.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_547",
+      "from": [
+        12.0,
+        4.25,
+        10.75
+      ],
+      "to": [
+        12.5,
+        4.5,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_548",
+      "from": [
+        12.0,
+        4.5,
+        10.5
+      ],
+      "to": [
+        12.25,
+        4.75,
+        10.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_549",
+      "from": [
+        12.0,
+        4.75,
+        7.0
+      ],
+      "to": [
+        12.25,
+        5.0,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_550",
+      "from": [
+        12.0,
+        15.0,
+        7.75
+      ],
+      "to": [
+        12.25,
+        15.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_551",
+      "from": [
+        12.25,
+        2.25,
+        7.0
+      ],
+      "to": [
+        12.5,
+        2.75,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_552",
+      "from": [
+        12.25,
+        2.75,
+        7.0
+      ],
+      "to": [
+        12.5,
+        3.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_553",
+      "from": [
+        12.25,
+        2.75,
+        7.5
+      ],
+      "to": [
+        12.5,
+        3.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_554",
+      "from": [
+        12.25,
+        2.75,
+        10.75
+      ],
+      "to": [
+        12.5,
+        3.75,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_555",
+      "from": [
+        12.25,
+        3.0,
+        10.5
+      ],
+      "to": [
+        12.5,
+        4.0,
+        10.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_556",
+      "from": [
+        12.25,
+        3.25,
+        10.0
+      ],
+      "to": [
+        12.5,
+        4.0,
+        10.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_557",
+      "from": [
+        12.25,
+        3.5,
+        9.75
+      ],
+      "to": [
+        12.5,
+        4.0,
+        10.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_558",
+      "from": [
+        12.25,
+        3.75,
+        9.25
+      ],
+      "to": [
+        12.5,
+        4.0,
+        9.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_559",
+      "from": [
+        12.25,
+        4.5,
+        7.0
+      ],
+      "to": [
+        12.5,
+        4.75,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_560",
+      "from": [
+        12.25,
+        4.75,
+        7.5
+      ],
+      "to": [
+        12.5,
+        5.0,
+        8.5
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_561",
+      "from": [
+        12.25,
+        15.0,
+        7.75
+      ],
+      "to": [
+        12.5,
+        15.25,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_562",
+      "from": [
+        12.25,
+        15.25,
+        7.75
+      ],
+      "to": [
+        12.5,
+        15.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_563",
+      "from": [
+        12.25,
+        15.5,
+        7.75
+      ],
+      "to": [
+        13.0,
+        15.75,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_564",
+      "from": [
+        12.5,
+        1.75,
+        7.0
+      ],
+      "to": [
+        13.25,
+        2.0,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_565",
+      "from": [
+        12.5,
+        2.0,
+        7.0
+      ],
+      "to": [
+        13.0,
+        2.25,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_566",
+      "from": [
+        12.5,
+        2.25,
+        7.0
+      ],
+      "to": [
+        12.75,
+        2.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_567",
+      "from": [
+        12.5,
+        2.5,
+        7.0
+      ],
+      "to": [
+        12.75,
+        3.0,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_568",
+      "from": [
+        12.5,
+        3.0,
+        10.75
+      ],
+      "to": [
+        12.75,
+        3.75,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_569",
+      "from": [
+        12.5,
+        3.25,
+        10.5
+      ],
+      "to": [
+        12.75,
+        4.0,
+        10.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_570",
+      "from": [
+        12.5,
+        3.5,
+        10.0
+      ],
+      "to": [
+        12.75,
+        4.0,
+        10.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_571",
+      "from": [
+        12.5,
+        3.75,
+        9.75
+      ],
+      "to": [
+        12.75,
+        4.25,
+        10.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_572",
+      "from": [
+        12.5,
+        4.0,
+        9.25
+      ],
+      "to": [
+        12.75,
+        4.25,
+        9.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_573",
+      "from": [
+        12.5,
+        4.25,
+        7.0
+      ],
+      "to": [
+        12.75,
+        4.5,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "silver_574",
+      "from": [
+        12.5,
+        15.25,
+        7.75
+      ],
+      "to": [
+        12.75,
+        15.5,
+        8.25
+      ],
+      "mat": "silver",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_575",
+      "from": [
+        12.5,
+        15.75,
+        7.75
+      ],
+      "to": [
+        13.0,
+        16.0,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_576",
+      "from": [
+        12.75,
+        1.5,
+        7.0
+      ],
+      "to": [
+        13.5,
+        1.75,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_577",
+      "from": [
+        12.75,
+        2.25,
+        7.0
+      ],
+      "to": [
+        14.5,
+        2.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_578",
+      "from": [
+        12.75,
+        2.25,
+        7.5
+      ],
+      "to": [
+        15.25,
+        2.5,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_579",
+      "from": [
+        12.75,
+        2.5,
+        7.0
+      ],
+      "to": [
+        14.25,
+        2.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_580",
+      "from": [
+        12.75,
+        2.5,
+        7.5
+      ],
+      "to": [
+        13.0,
+        2.75,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_581",
+      "from": [
+        12.75,
+        2.75,
+        7.0
+      ],
+      "to": [
+        13.0,
+        3.25,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_582",
+      "from": [
+        12.75,
+        3.25,
+        10.75
+      ],
+      "to": [
+        13.0,
+        3.75,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_583",
+      "from": [
+        12.75,
+        3.5,
+        10.5
+      ],
+      "to": [
+        13.0,
+        4.0,
+        10.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_584",
+      "from": [
+        12.75,
+        3.75,
+        10.0
+      ],
+      "to": [
+        13.0,
+        4.0,
+        10.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_585",
+      "from": [
+        12.75,
+        4.0,
+        7.0
+      ],
+      "to": [
+        13.0,
+        4.25,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_586",
+      "from": [
+        12.75,
+        15.25,
+        7.75
+      ],
+      "to": [
+        13.0,
+        15.5,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "sky_light_587",
+      "from": [
+        12.75,
+        16.0,
+        7.75
+      ],
+      "to": [
+        13.0,
+        16.25,
+        8.25
+      ],
+      "mat": "sky_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_588",
+      "from": [
+        13.0,
+        1.25,
+        7.0
+      ],
+      "to": [
+        13.75,
+        1.5,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_589",
+      "from": [
+        13.0,
+        2.0,
+        7.0
+      ],
+      "to": [
+        14.75,
+        2.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_590",
+      "from": [
+        13.0,
+        2.0,
+        7.5
+      ],
+      "to": [
+        15.5,
+        2.25,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_591",
+      "from": [
+        13.0,
+        2.5,
+        7.5
+      ],
+      "to": [
+        15.0,
+        2.75,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_592",
+      "from": [
+        13.0,
+        2.75,
+        7.0
+      ],
+      "to": [
+        14.0,
+        3.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_593",
+      "from": [
+        13.0,
+        2.75,
+        7.5
+      ],
+      "to": [
+        13.25,
+        3.0,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_594",
+      "from": [
+        13.0,
+        3.0,
+        7.0
+      ],
+      "to": [
+        13.25,
+        3.5,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_595",
+      "from": [
+        13.0,
+        3.5,
+        10.75
+      ],
+      "to": [
+        13.25,
+        3.75,
+        11.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_596",
+      "from": [
+        13.0,
+        3.75,
+        7.0
+      ],
+      "to": [
+        13.25,
+        4.0,
+        7.5
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_597",
+      "from": [
+        13.25,
+        1.0,
+        7.0
+      ],
+      "to": [
+        14.0,
+        1.25,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_598",
+      "from": [
+        13.25,
+        1.75,
+        7.0
+      ],
+      "to": [
+        15.0,
+        2.0,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_599",
+      "from": [
+        13.25,
+        1.75,
+        7.5
+      ],
+      "to": [
+        15.5,
+        2.0,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_600",
+      "from": [
+        13.25,
+        2.75,
+        7.5
+      ],
+      "to": [
+        14.75,
+        3.0,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_601",
+      "from": [
+        13.25,
+        3.0,
+        7.0
+      ],
+      "to": [
+        13.75,
+        3.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_602",
+      "from": [
+        13.25,
+        3.0,
+        7.5
+      ],
+      "to": [
+        13.5,
+        3.25,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_603",
+      "from": [
+        13.25,
+        3.25,
+        7.0
+      ],
+      "to": [
+        13.5,
+        3.75,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_604",
+      "from": [
+        13.5,
+        0.75,
+        7.0
+      ],
+      "to": [
+        14.5,
+        1.0,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_605",
+      "from": [
+        13.5,
+        1.5,
+        7.0
+      ],
+      "to": [
+        15.0,
+        1.75,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_606",
+      "from": [
+        13.5,
+        1.5,
+        7.5
+      ],
+      "to": [
+        15.25,
+        1.75,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_607",
+      "from": [
+        13.5,
+        3.0,
+        7.5
+      ],
+      "to": [
+        14.5,
+        3.25,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_608",
+      "from": [
+        13.5,
+        3.25,
+        7.0
+      ],
+      "to": [
+        13.75,
+        3.5,
+        9.0
+      ],
+      "mat": "obsidian",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_609",
+      "from": [
+        13.5,
+        3.5,
+        7.0
+      ],
+      "to": [
+        13.75,
+        3.75,
+        9.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_610",
+      "from": [
+        13.75,
+        0.5,
+        7.0
+      ],
+      "to": [
+        14.25,
+        0.75,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_611",
+      "from": [
+        13.75,
+        1.25,
+        7.0
+      ],
+      "to": [
+        14.75,
+        1.5,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_612",
+      "from": [
+        13.75,
+        1.25,
+        7.5
+      ],
+      "to": [
+        15.0,
+        1.5,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_613",
+      "from": [
+        13.75,
+        3.0,
+        7.0
+      ],
+      "to": [
+        14.5,
+        3.25,
+        7.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_614",
+      "from": [
+        13.75,
+        3.25,
+        7.0
+      ],
+      "to": [
+        14.25,
+        3.5,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "steel_light_615",
+      "from": [
+        14.0,
+        1.0,
+        7.0
+      ],
+      "to": [
+        14.5,
+        1.25,
+        7.5
+      ],
+      "mat": "steel_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_616",
+      "from": [
+        14.0,
+        1.0,
+        7.5
+      ],
+      "to": [
+        14.75,
+        1.25,
+        9.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_617",
+      "from": [
+        14.0,
+        2.75,
+        7.0
+      ],
+      "to": [
+        14.75,
+        3.0,
+        7.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_618",
+      "from": [
+        14.25,
+        2.5,
+        7.0
+      ],
+      "to": [
+        15.0,
+        2.75,
+        7.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_619",
+      "from": [
+        14.5,
+        1.0,
+        7.0
+      ],
+      "to": [
+        14.75,
+        1.25,
+        7.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_620",
+      "from": [
+        14.5,
+        2.25,
+        7.0
+      ],
+      "to": [
+        15.25,
+        2.5,
+        7.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_621",
+      "from": [
+        14.75,
+        1.25,
+        7.0
+      ],
+      "to": [
+        15.0,
+        1.5,
+        7.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_622",
+      "from": [
+        14.75,
+        2.0,
+        7.0
+      ],
+      "to": [
+        15.5,
+        2.25,
+        7.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_623",
+      "from": [
+        15.0,
+        1.5,
+        7.0
+      ],
+      "to": [
+        15.25,
+        2.0,
+        7.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "obsidian_light_624",
+      "from": [
+        15.25,
+        1.75,
+        7.0
+      ],
+      "to": [
+        15.5,
+        2.0,
+        7.5
+      ],
+      "mat": "obsidian_light",
+      "bone": "weapon"
+    }
+  ]
+}

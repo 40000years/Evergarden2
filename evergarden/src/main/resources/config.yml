@@ -1,5 +1,48 @@
 # Evergarden — Twilight Gardens / Advance Magic
 config-version: 2
+overworld-sanctuaries:
+  enabled: true
+  bosses:
+    enabled: true
+  search-max-cells: 128
+  habitat:
+    clear-stray-leaves: true
+    suppress-natural-hostiles: true
+    guard-spawners: true
+  treasure:
+    # Per eligible equipment item. One existing multi-level enchant becomes vanilla cap + 1.
+    over-cap-chance: 0.15
+  # Empty = ordinary vanilla Overworlds only; custom generators are excluded.
+  worlds: []
+  # Saved per world UUID on first installation; later config edits do not move sites.
+  spacing-chunks: 64
+  chance: 0.65
+  # Fresh cells: each kind has its own grid of regions N x N cells (N = 2-8) and at most one sanctuary per region,
+  # clear of vanilla villages and outposts. Smaller N = more of that kind. About 3-5 of each per 15000 x 15000 blocks.
+  # Saved per world on first start; cells that already had terrain keep the one-roll placement above.
+  region-cells:
+    acheron: 5
+    phlegethon: 2
+    cocytus: 6
+    banshee: 6
+    malefeasance: 7
+    styx: 7
+arkhaia:
+  # Game ticks an altar rests after a victory (24000 = one Minecraft day, ~20 minutes).
+  # Each summon also consumes the held Netherite Block (Creative excepted).
+  respawn-ticks: 24000
+  model-engine:
+    # Java uses Model Engine; Bedrock uses the native Geyser rig when available.
+    enabled: true
+  combat:
+    # Solo health; each extra participant adds health-per-extra-player, never above health-cap.
+    health: 7000.0
+    health-per-extra-player: 1500.0
+    health-cap: 10000.0
+    # Scales every Arkhaia attack (100 = the published tuning). Hits pierce armor like the sanctuary bosses.
+    damage-percent: 100
+    # A wiped party restarts the current phase after 10 seconds; the arena closes after this grace.
+    return-grace-seconds: 180
 dimension:
   world-name: evergarden
   seed: 72819345
@@ -9,11 +52,53 @@ dimension:
   border-size: 1000000
   # Fixed twilight: light gardens, dark sky, visible stars.
   time: 13000
+  terrain:
+    # Four continental skyland biomes: gardens, glacier, ancient-forest, lunar-city.
+    # Typical region scale in blocks; warped borders vary the actual size and shape.
+    # Frozen into world-layout.yml on first upgrade. Later config edits do not move biomes.
+    # Existing region files keep the original generator with a 192-block transition outside.
+    biome-size: 2048
 structures:
+  exploration:
+    # Three small and five medium destinations per biome (32 designs total).
+    # Small: 2-3 chests. Medium: 5-6 chests and 50% more supplies; identical loot quality.
+    # One candidate per 256-block cell; terrain and large-structure checks reduce this rate.
+    # Initial chance is frozen in world-layout.yml. Restart after toggling generation.
+    enabled: true
+    chance: 0.35
+    # Each chest guarantees food, building blocks and useful supplies. Equipment stops at iron tier.
+    gear-chance: 0.65
+    # Of awarded equipment, 4% has one compatible enchant 1-2 levels above the vanilla cap.
+    # Other equipment uses normal Minecraft enchantments. Existing chests never refill.
+    rare-enchant-chance: 0.04
+    golden-apple-chance: 0.07
+    enchanted-apple-chance: 0.0025
   observatory:
     enabled: true
   hanging-garden:
     enabled: true
+  boss-structures:
+    # Boss structures and treasure; Arkhaia also has a summonable encounter.
+    # Same independent seed rolls as whale/garden/observatory, per kind per sky cell.
+    # null inherits the saved sky grid and its unexplored rarity (normally 32 / 0.03).
+    spacing-chunks: null
+    # Empty space between building reservations, including existing structures.
+    minimum-gap: 64
+    # Grid, chances, gap and explored exclusions are persisted in world-layout.yml.
+    # Restart after enabling/disabling a kind; existing world placement stays stable.
+    arkhaia-castle:
+      enabled: true
+      chance: null
+      traps:
+        enabled: true
+        # Ward plates in the side passage; normal damage, 2-second cooldown per player.
+        damage: 4.0
+    seraphon-valkyrie:
+      enabled: true
+      chance: null
+    seraphon-sanctum:
+      enabled: true
+      chance: null
   world-boss-temple:
     enabled: true
     # Ancient 241x241 temple with a clear 161-block combat arena; boss not added yet.
@@ -31,17 +116,16 @@ structures:
       whale: 0.10
       hanging-garden: 0.075
       observatory: 0.075
+      arkhaia-castle: 0.075
+      seraphon-valkyrie: 0.075
+      seraphon-sanctum: 0.075
     second-chest-chance: 0.30
-    crop-stacks: 2
-    tier-three-chance: 0.75
-    seed-chance: 0.35
     bonus-weights:
-      key-shard: 300
-      astral-dust: 150
+      echo-shard: 300
       nether-star: 30
       limit-break: 15
       unique-scroll: 5
-      none: 500
+      none: 650
   sky-whale:
     enabled: true
     # Each kind has one candidate per 32x32 chunk cell (512x512 blocks).
@@ -63,7 +147,6 @@ structures:
 performance:
   max-active-dungeons: 6
   max-dungeon-mobs: 64
-  max-special-projectiles: 64
   idle-reset-seconds: 60
 portal:
   # Build a Nether Portal shape from Block of Quartz, then throw any flower into the empty frame.
@@ -105,44 +188,41 @@ world-boss:
   visuals:
     pack:
       enabled: true
+      required: true
       # Separate bundled addon; keep the existing relic pack/CDN intact.
-      # Leave empty to serve judge-java.zip automatically; an external URL must host these exact bytes.
+      # This pack shares the resource-pack.host listener below (the Minecraft port by default).
+      # Leave empty to serve the current Judge/ModelEngine ZIP automatically.
       url: ''
       host:
-        bind: 0.0.0.0
-        port: 8189
         public-host: ''
-        # Optional HTTPS reverse proxy base, followed by /evergarden/<sha1>.zip.
+        # Optional HTTP(S) base override; otherwise resource-pack.host.public-url is used.
         public-url: ''
   # Virtual solo HP, separately scaled from LevelledMobs. No automatic DPS adaptation.
-  # Upgrade the former 40,000 default once; custom HP values remain configurable.
-  balance-version: 2
-  core-health: 20000
-  hand-health: 8500
+  # Upgrade previous published HP defaults once; preserve administrator tuning.
+  balance-version: 4
+  core-health: 10000
+  hand-health: 1500
   health-per-extra-player: 0.65
   max-participants: 16
   max-active: 2
   exposure-seconds: 12
   # A core opening gives 3 seconds to approach, then ordinary attacks resume while it stays open.
-  # Phase pressure: 1/2/3-pulse combos, wider areas, and 2.4/1.8/1.4-second recovery gaps.
+  # Phase pressure: 1/2/3-pulse combos, wider areas, and 3.4/2.8/2.4-second recovery gaps.
   # Spell damage pierces armor/enchantments; resistance, absorption and life-saving effects still work.
   # Base hits use this max HP fraction. Sky beams add 15%, capped at 80% before power.
   # All red-circle spells gain 30% after those base ceilings and before defenses.
   attack-damage: 56
   attack-max-health-fraction: 0.70
   attack-power-percent: 130
-  # Final damage after all weapon bonuses, shared across hands/core/summons per player.
-  damage-caps:
-    melee: 100
-    projectile: 80
-    magic: 240
-    other: 80
-    per-player-per-second: 240
-  # Phase 2 only. First judgment 12 seconds after transition, then at least 130 seconds apart.
+  # No incoming damage caps. Phase 2 blocks projectiles; phase 3 also blocks wand magic.
+  # Judgment remains forced death in every phase. Phase 1: first at 40s, then 230-250s.
+  judgment-phase-one-delay-seconds: 40
+  # Phases 2/3: first at 12s/20s after transition, then 115-135s after the last charge.
   judgment-phase-two-delay-seconds: 12
-  # 8 seconds to reach a green sanctuary. Death outside bypasses Totem/Phoenix/Soul Ward.
+  judgment-phase-three-delay-seconds: 20
+  # 8 seconds to reach a green sanctuary. Death outside bypasses Totem/Phoenix.
   judgment-warning-seconds: 8
-  judgment-cooldown-seconds: 130
+  judgment-cooldown-seconds: 115
   sanctuary-radius: 16
   # Give defeated/disconnected players three minutes to return before resetting.
   empty-reset-seconds: 180
@@ -152,57 +232,235 @@ world-boss:
   respawn-seconds: 14400
   rewards:
     # Every player who damaged a hand or the core also receives one random core
-    # from all 18 Advance Magic types (including Solar, Chronos and other Mythics).
+    # from all 21 Advance Magic types (including the three new legendary wands).
     # The roll is stored for dead/offline players and when their inventory is full.
     keys: 2
     experience: 1500
 rewards:
-  # Vault Loot Table Percentages:
-  # One reward per vault; rates are defined in VaultLootTable.
-  # 58.5% Consumables and reagents, 1.5% Flying Staff
-  # 15% Limit Break Scroll, 12% Unique Enchant Scroll
-  # 7% Advance Magic Core (14 normal types, equal chance)
-  # 5% Special Relic Equipment
-  # 0.5% Mythic Core total: Levitation / Solar Apocalypse / Chronos: Final Hour / Heaven's Judgment
-  # Four equally likely Mythic cores: 0.125% each per vault. Scroll of Eternity: 0.5%.
-  # Core total: 7.5%. These comments document VaultLootTable, not configurable weights.
+  # Tier 1/2 major rewards: 35%/45% over-cap enchant books, otherwise the ordinary pool.
+  # Independent weapon bonuses: T2 0.25% Rare; T3/4/5 5%/10%/15% (80% Rare, 20% Legendary).
+  # Independent elemental staff bonuses: T2 0.25%; T3/4/5 10%/15%/20%, once per opening.
+  # Tier 1 never gives weapons or staffs. Tier 5 retains two major rewards and one supply.
+staff-loot:
+  enabled: true
+  # One random APPRENTICE staff, three empty spell slots; all eight elements equally likely.
+  # Legacy untiered setting; tiered Vault odds are now defined by VaultLootTable.
+  vault-chance: 0.10
+  # Per newly authored chest, only Whale / Hanging Garden / Observatory in Evergarden.
+  sky-chest-chance: 0.03
+  # Per new Evergarden structure chest in a NORMAL world, excluding Evergarden itself.
+  overworld-chest-chance: 0.01
+  # Existing awarded/looted chests never receive a retroactive roll.
 relics:
   allow-pvp: false
 resource-pack:
   enabled: true
-  # Pinned to the published pack with the redesigned Mythic cores. Private CDN URLs are preserved.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/0e6a864979528b50e00e48baa98e267993803ba4/evergarden/dist/evergarden-java.zip'
-  sha1: '764b727583b67d39a9445ce5bb99fc243f16d683'
-  required: false
+  # Empty URL/SHA-1 serves the exact pack embedded in this JAR.
+  # Administrator CDN URLs and their hashes are preserved during upgrades.
+  url: ''
+  sha1: ''
+  required: true
+  # Seconds a player may spend downloading all required Java packs before the kick.
+  # Slow connections need several minutes; the larger value of both plugins applies.
+  required-timeout-seconds: 600
+  # Public copies of the packs, named by a fingerprint of their contents. At startup the
+  # server downloads each copy once and offers it only if it holds exactly the same files;
+  # players then fetch it there first, with this server's own host as the fallback.
+  # Outbound HTTPS is enough, so this works on hosts that expose only the game port.
+  # [] = serve the packs only from this server.
+  mirrors:
+  - https://raw.githubusercontent.com/40000years/Evergarden2/packs/{pack}/{fingerprint}.zip
   host:
-    enabled: false
+    enabled: true
+    # Serve the Java packs through the Minecraft port itself, so hosting panels
+    # need no extra port. false = listen on the separate port below instead.
+    use-server-port: true
     bind: 0.0.0.0
+    # Shared by the Evergarden and Judge/ModelEngine Java packs when use-server-port is false.
     port: 8188
     public-host: ''
+    # Optional HTTP(S) reverse-proxy base URL for the separate port (also turns off use-server-port).
     public-url: ''
   geyser:
     auto-install: true
+
+# ModelEngine Java Edition model previews, only for operators / evergarden.admin.
+# Includes 17 pets with separate baby, medium and adult blueprints (51 total).
+# /evergarden pets list | spawn <id> <baby|medium|adult> | gallery <stage>
+# /evergarden pets growth <id> compares the three growth stages together.
+# /evergarden pets animate <idle|walk|fly|sit|greet> | clear
+# Preview entities never save to disk; abilities, mounts and progression come later.
+pets:
+  wild-spawns:
+    enabled: true
+    # Independent custom encounters; ordinary monster spawning stays disabled.
+    # Only the 12 rare species; the five mythical pets never spawn naturally.
+    attempt-interval-seconds: 45
+    chance-per-player: 0.12
+    stage-weights:
+      baby: 45
+      medium: 38
+      adult: 17
+    max-active-world: 16
+    max-nearby-player: 2
+    nearby-radius: 96
+    min-player-distance: 24
+    max-player-distance: 48
+    min-spacing: 48
+    # Candidate ground points tried per successful roll. The footprint now matches
+    # the pet's real size (1x1 baby, 3x3 medium/adult, 2 blocks of headroom).
+    spot-attempts: 24
+    # After this many game minutes in Evergarden without an encounter, the next roll always passes.
+    guarantee-minutes: 8
+    # A chime marks each new encounter, and the player it appeared for sees roughly which way to look.
+    # Species favour their home regions (gardens, glacier, ancient forest, lunar city) three to one.
+    announce: true
+    spawn-island-radius: 128
+    lifetime-seconds: 900
+    despawn-distance: 160
+  # Per-viewer culling: each player receives data only for their own companion plus the
+  # nearest few others. Hidden pets cost that player nothing, so crowds stay light.
+  view:
+    max-others: 6
+    show-distance: 56
+    hide-distance: 64
+  stable:
+    slots: 6
+  companions:
+    # Worlds where companions never appear, e.g. [world_nether]
+    disabled-worlds: []
+    # Companions step away while a boss fight is this close and return afterwards.
+    boss-radius: 40
+    feed-cooldown-seconds: 60
+    feed-growth: 5
+    boss-growth: 20
+    # Modes (/pet mode follow|stay|perch|assist). A pet on stay follows again past this distance.
+    stay-leash: 64
+    # Assist: foes within this many blocks of the owner; a foe hits back on this % of bites.
+    assist-radius: 16
+    counter-chance: 35
+    # A pet knocked out in a fight rests this many game ticks (24000 = one in-game day).
+    faint-ticks: 24000
+  # Growth points: +1 per minute out with an active owner, plus feeding and boss victories.
+  growth:
+    medium: 120
+    adult: 360
+  taming:
+    feed-cooldown-ms: 2500
+    # Favourite foods; any item name, e.g. frost_wyvern: COD
+    food: {}
+  breeding:
+    nest-minutes: 30
+    cooldown-hours: 24
+    food-cost: 8
+    bond-required: 50
+    eggs-per-day: 2
+    incubate-minutes: 20
+  model-preview:
+    enabled: true
+    # Keep all 51 editable files in Evergarden/modelengine/pets/library by default.
+    # Import only chosen species (all three growth forms), then restart the server.
+    # This preserves ModelEngine slots for boss models and the required internal_fire.
+    install-species: []
+    # Opt in only with unrestricted ModelEngine; imports the entire 51-model collection.
+    install-all-models: false
+    lifetime-seconds: 600
+    max-per-admin: 18
+    max-distance: 96
+
+# The Seraph at the Evergarden spawn: a villager-style exchange paid mostly in Seraph Feathers,
+# with Soul Orbs from the six sanctuary bosses as the special ingredient for higher goods.
+# /evergarden seraph here moves her (saved in seraph-trader.yml, which overrides x/y/z/yaw).
+seraph-trader:
+  enabled: true
+  x: 7.5
+  y: 97
+  z: 0.5
+  yaw: 90
+  label-height: 4.6
+  feathers:
+    # Repeatable sources (sanctuary bosses, wild pets) stop at this many per player per day.
+    daily-cap: 60
+    sanctuary-boss: 5        # each contributing player, capped
+    world-boss: 15           # Bodiless Judge and Arkhaia, not capped
+    first-tame: 5            # first tame of each species, once ever
+    first-hatch: 5           # first hatch of each species, once ever
+    wild-feed-chance: 0.2    # a fed wild pet drops 1 feather, capped
+    blessing: 5              # first visit to the Seraph each day
+    # Structure chests: exploration 1-2, landmarks 2-3, boss structures and sanctuaries 3-5, once per chest.
+    chest-loot: true
+  # Ingredient amounts (max 64 per slot). 1 golden feather = 10 feathers in the exchange.
+  prices:
+    staff-feathers: 40
+    staff-orbs: 7              # Soul Orbs in the element's colour (element-orbs below)
+    special-staff-feathers: 60 # Light and Dark
+    special-staff-orbs: 9
+    scroll-basic-feathers: 8
+    scroll-rare-feathers: 15
+    scroll-epic-feathers: 30
+    good-potion-feathers: 1
+    supreme-potion-feathers: 12
+    legend-core-golden: 15     # golden feathers
+    legend-core-orbs: 3        # orbs of any one sanctuary
+    legendary-weapon-cores: 3  # Excalibur, Longinus, Tyrfing, Mjolnir, Vajra
+    legendary-scroll-cores: 1
+  maps:
+    # Fixed destinations: six Overworld sanctuaries, or Bodiless Judge / Arkhaia / Seraphon.
+    overworld-feathers: 30
+    evergarden-golden-feathers: 10
+    evergarden-search-radius: 12000
+  # A new sale every few in-game days (Evergarden's game clock; 3 days = 1 real hour at 20 TPS):
+  # random staff elements, plus one category that rotates scrolls -> potions -> Core of Legend.
+  promotions:
+    enabled: true
+    period-days: 3
+    staff-elements: 2
+    staff-feathers-off: 30     # percent, shown struck through like a villager discount
+    staff-orbs-off: 40
+    other-off: 30              # daily scrolls
+    potion-off: 50             # supreme mana potion
+    legend-core-off: 20        # golden feathers for a Core of Legend
+  # Per-player stock, like a villager that restocks: per day, or per ISO week.
+  limits:
+    staffs-per-week: 2
+    scroll-basic-per-day: 2    # scrolls on offer today (same for everyone); 1 of each per day
+    scroll-rare-per-day: 3
+    scroll-epic-per-day: 2
+    good-potions-per-day: 10
+    supreme-potions-per-day: 2
+    legend-cores-per-week: 1
+    legendary-weapons-per-week: 1
+    legendary-scrolls-on-offer: 2
+    legendary-scrolls-per-week: 1
+  # Matched by colour: fire red/orange, wind and earth green, ice and water blue,
+  # lightning and dark purple, light gold.
+  element-orbs:
+    fire: [phlegethon, acheron]
+    wind: [banshee]
+    earth: [banshee]
+    ice: [cocytus]
+    water: [cocytus]
+    lightning: [malefeasance]
+    light: [styx]
+    dark: [malefeasance]
 
 # No anticheat bypass permissions are granted. Restart after changing modes.
 compatibility:
   # Keep LevelledMobs active elsewhere, but automatically exclude the Evergarden world.
   levelled-mobs-exclude-world: true
-  # Offer the official Java 26.x food pack when AeternumSeasons is enabled.
-  # Bedrock pack + mappings are installed before local Geyser starts when Aeternum is present.
-  aeternum-seasons:
-    bedrock:
-      # Installs missing official files, preserves existing files, and enables Geyser custom content.
-      auto-install: true
-    resource-pack:
-      enabled: true
-      # Verified GitHub mirror; clients do not need access to the Modrinth CDN.
-      url: https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/evergarden/dist/Aeternum-Foods-26.x.zip
-      sha1: f7137350c381dfb933f96e869bfaced4a292bcff
-  # vanilla: Fairy/Bamboo use Jump Boost; no flight toggles or step-height changes.
-  # enhanced: opt-in Double Jump and a temporary step-height modifier; test your anticheat first.
-  # Glider always uses vanilla Slow Falling while sneaking, in either mode.
-  crop-movement: vanilla
   # Capped server-sent grapple/knockback. Set false to disable these player impulses.
   player-impulses: true
   max-impulse-horizontal: 1.2
   max-impulse-vertical: 1.0
+
+# Six-wing guardian of Supreme Sanctuary.
+seraphon:
+  enabled: true
+  # Solo health; each extra participant adds health-per-extra-player, never above health-cap.
+  health: 7000.0
+  health-per-extra-player: 1500.0
+  health-cap: 10000.0
+  # Scales every Seraphon attack (100 = the published tuning). Light pierces armor.
+  damage-percent: 100
+  # A wiped party restarts the current phase after 10 seconds; full reset after this grace.
+  return-grace-seconds: 180

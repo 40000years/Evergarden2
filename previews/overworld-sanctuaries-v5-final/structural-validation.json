@@ -1,0 +1,26 @@
+{
+  "acheron": {
+    "detached_assemblies": [],
+    "isolated_fixtures": []
+  },
+  "phlegethon": {
+    "detached_assemblies": [],
+    "isolated_fixtures": []
+  },
+  "cocytus": {
+    "detached_assemblies": [],
+    "isolated_fixtures": []
+  },
+  "banshee": {
+    "detached_assemblies": [],
+    "isolated_fixtures": []
+  },
+  "malefeasance": {
+    "detached_assemblies": [],
+    "isolated_fixtures": []
+  },
+  "styx": {
+    "detached_assemblies": [],
+    "isolated_fixtures": []
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "release": "1.10.0-legendary-combat",
+  "jar": "advance-magic-1.10.0.jar",
+  "sha256": "a199efb900ed801dcd6d41b10c567c3a693e7de9bc713f802db762b1d37bc50b",
+  "bedrock_pack_version": "2.13.0",
+  "packs": {
+    "advance-magic-java.zip": "697d9e0abcad45a5aa68565d751f687db4e48d17",
+    "advance-magic-bedrock.mcpack": "ff67e13fdb313ebae7727df86b2b63c5a32d634d"
+  },
+  "base_damage": {
+    "excalibur": 50,
+    "tyrfing": 35,
+    "longinus": 20,
+    "mjolnir": 15,
+    "vajra": 30
+  },
+  "active_cooldown_seconds": 180,
+  "activation": "sneak + mainhand attack (including air swing)",
+  "approved_defaults": {
+    "tyrfing_hit_gain": 5,
+    "tyrfing_decay_delay_seconds": 10,
+    "tyrfing_decay_per_second": 5,
+    "excalibur_range_blocks": 16,
+    "area_radius_blocks": 8,
+    "pulse_interval_seconds": 1
+  },
+  "longinus_melee_reach_blocks": 7,
+  "longinus_throwable": false,
+  "verification": {
+    "paper_runtime_checks": 138,
+    "geyser_modelengine_checks": 62,
+    "weapon_asset_checks": 236,
+    "hand_fit_checks": 145,
+    "approximate_camera_checks": 32,
+    "pack_crc_hash_embedded_checks": "PASS",
+    "final_jar_content_matches_geyser_tested_jar": true,
+    "real_client_visual_playtest": false
+  },
+  "runtime_report": "output/legendary-combat-runtime-v6-20261016/legendary-weapons-result.txt",
+  "integration_report": "output/legendary-combat-integration-v1-20261016/legendary-weapon-integration-result.txt",
+  "documentation": "docs/legendary-combat.md"
+}

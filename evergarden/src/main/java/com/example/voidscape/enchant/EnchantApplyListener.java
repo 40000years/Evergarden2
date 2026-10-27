@@ -15,21 +15,30 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public final class EnchantApplyListener implements Listener {
     private final VoidscapePlugin plugin;
     private final RelicService relics;
+    private final Set<UUID> transactions = new HashSet<>();
 
     public EnchantApplyListener(VoidscapePlugin plugin, RelicService relics) {
         this.plugin = plugin;
@@ -43,9 +52,67 @@ public final class EnchantApplyListener implements Listener {
             || relics.getUniqueEnchant(item) != null;
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    private boolean storageInventory(Player player, Inventory inventory) {
+        if (inventory == null) return false;
+        if (inventory instanceof PlayerInventory own) return own.getHolder() == player;
+        if (inventory.equals(player.getEnderChest())) return true;
+        boolean storage = switch (inventory.getType()) {
+            case CHEST, BARREL, SHULKER_BOX, HOPPER, DISPENSER, DROPPER -> true;
+            default -> false;
+        };
+        if (!storage) return false;
+        var holder = inventory.getHolder();
+        return holder instanceof org.bukkit.block.Container
+            || holder instanceof org.bukkit.block.DoubleChest
+            || holder instanceof org.bukkit.entity.minecart.StorageMinecart
+            || holder instanceof org.bukkit.entity.minecart.HopperMinecart;
+    }
+
+    private boolean editableSlot(Player player, InventoryView view, int rawSlot) {
+        if (rawSlot < 0 || rawSlot >= view.countSlots()) return false;
+        Inventory top = view.getTopInventory();
+        // A menu's player-inventory slots also belong to its cancelled transaction.
+        if (top.getType() != InventoryType.CRAFTING && top.getType() != InventoryType.CREATIVE
+            && !storageInventory(player, top)) return false;
+        var slotType = view.getSlotType(rawSlot);
+        if (slotType != InventoryType.SlotType.CONTAINER && slotType != InventoryType.SlotType.QUICKBAR
+            && slotType != InventoryType.SlotType.ARMOR) return false;
+        return storageInventory(player, view.getInventory(rawSlot));
+    }
+
+    private boolean ordinaryClick(InventoryClickEvent event) {
+        if (event.getClick() != ClickType.LEFT && event.getClick() != ClickType.RIGHT) return false;
+        return switch (event.getAction()) {
+            case SWAP_WITH_CURSOR, PICKUP_ALL, PICKUP_SOME, PICKUP_HALF, PICKUP_ONE,
+                PLACE_ALL, PLACE_SOME, PLACE_ONE -> true;
+            default -> false;
+        };
+    }
+
+    private void refresh(Player player) {
+        player.updateInventory();
+        // ห้ามเขียนไอเทมซ้ำข้าม tick เพราะ packet ใหม่อาจย้ายของไปแล้ว
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (player.isOnline()) player.updateInventory();
+        });
+    }
+
+    private boolean beginTransaction(Player player) {
+        UUID id = player.getUniqueId();
+        // กันการใช้คัมภีร์ซ้ำใน tick เดียว แต่ยังย้ายของได้ตามปกติ
+        if (!transactions.add(id)) {
+            refresh(player);
+            return false;
+        }
+        Bukkit.getScheduler().runTask(plugin, () -> transactions.remove(id));
+        return true;
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
+        if (event.isCancelled() || event.getClickedInventory() == null) return;
         if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (!ordinaryClick(event) || !editableSlot(player, event.getView(), event.getRawSlot())) return;
 
         ItemStack cursor = event.getCursor();
         ItemStack target = event.getCurrentItem();
@@ -57,35 +124,32 @@ public final class EnchantApplyListener implements Listener {
         // Case A: Cursor is scroll, target is equipment
         if (isScroll(cursor)) {
             event.setCancelled(true);
-            applyAnyScroll(player, cursor, target, null, event, -1);
+            if (!beginTransaction(player)) return;
+            if (target.getAmount() == 1) applyAnyScroll(player, cursor.clone(), target.clone(), null, event, -1);
             return;
         }
 
         // Case B: Cursor is equipment, target is scroll (common on mobile touch selection)
         if (isScroll(target) && cursor.getType().getMaxDurability() > 0) {
             event.setCancelled(true);
-            handleEquipmentOnScroll(player, target, cursor, event);
+            if (!beginTransaction(player)) return;
+            if (cursor.getAmount() == 1) handleEquipmentOnScroll(player, target.clone(), cursor.clone(), event);
             return;
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryDrag(InventoryDragEvent event) {
+        if (event.isCancelled()) return;
         if (!(event.getWhoClicked() instanceof Player player)) return;
 
         ItemStack oldCursor = event.getOldCursor();
         if (!isScroll(oldCursor)) return;
 
-        // Prevent dragging scrolls across multiple slots to prevent splitting/ghost items
+        // Paper คืน cursor หลังยกเลิก drag จึงไม่อัปเกรดผ่านการลาก ให้ใช้คลิกแทน
         event.setCancelled(true);
-
-        if (event.getRawSlots().size() == 1) {
-            int rawSlot = event.getRawSlots().iterator().next();
-            ItemStack target = event.getView().getItem(rawSlot);
-            if (target != null && !target.getType().isAir() && target.getType().getMaxDurability() > 0) {
-                applyAnyScroll(player, oldCursor, target, null, null, rawSlot);
-            }
-        }
+        if (!beginTransaction(player)) return;
+        refresh(player);
     }
 
     private void handleEquipmentOnScroll(Player player, ItemStack scrollInSlot, ItemStack equipOnCursor, InventoryClickEvent event) {
@@ -108,16 +172,7 @@ public final class EnchantApplyListener implements Listener {
         player.setItemOnCursor(result);
         success(player, "✦ ปลุกเสกมนตราสำเร็จ!");
 
-        final ItemStack finalRemaining = remainingScroll;
-        Bukkit.getScheduler().runTask(plugin, () -> {
-            if (player.isOnline()) {
-                if (event.getClickedInventory() != null && event.getSlot() >= 0) {
-                    event.getClickedInventory().setItem(event.getSlot(), finalRemaining);
-                }
-                player.setItemOnCursor(result);
-                player.updateInventory();
-            }
-        });
+        refresh(player);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -125,6 +180,9 @@ public final class EnchantApplyListener implements Listener {
         // Prevent double-firing: Paper fires PlayerInteractEvent for both HAND and OFF_HAND in the same tick
         if (event.getHand() != EquipmentSlot.HAND) return;
         if (!event.getAction().isRightClick()) return;
+        // Air-use can start pre-cancelled when a scroll has no vanilla action.
+        if (event.getClickedBlock() != null && (event.useItemInHand() == org.bukkit.event.Event.Result.DENY
+            || event.useInteractedBlock() == org.bukkit.event.Event.Result.DENY)) return;
 
         Player player = event.getPlayer();
         ItemStack main = player.getInventory().getItemInMainHand();
@@ -135,14 +193,16 @@ public final class EnchantApplyListener implements Listener {
         // Case 1: Scroll in main hand, target item in off hand
         if (isScroll(main)) {
             event.setCancelled(true);
-            applyAnyScroll(player, main, off, EquipmentSlot.HAND, null, -1);
+            if (!beginTransaction(player)) return;
+            if (off.getAmount() == 1) applyAnyScroll(player, main.clone(), off.clone(), EquipmentSlot.HAND, null, -1);
             return;
         }
 
         // Case 2: Scroll in off hand, target item in main hand
         if (isScroll(off)) {
             event.setCancelled(true);
-            applyAnyScroll(player, off, main, EquipmentSlot.OFF_HAND, null, -1);
+            if (!beginTransaction(player)) return;
+            if (main.getAmount() == 1) applyAnyScroll(player, off.clone(), main.clone(), EquipmentSlot.OFF_HAND, null, -1);
             return;
         }
     }
@@ -176,8 +236,12 @@ public final class EnchantApplyListener implements Listener {
         ItemMeta meta = target.getItemMeta();
         if (meta == null) return;
 
-        if (relics.isEternityItem(target)) {
-            fail(player, "ไอเทมนี้สถิตนิรันดร์อยู่แล้ว (ไม่มีวันพัง)");
+        if (!UniqueCompatibility.canApplyEternity(target, relics)) {
+            fail(player, hasUnique(target, UniqueEnchant.SOULBOUND)
+                ? "Soulbound ใช้ร่วมกับ Scroll of Eternity ไม่ได้"
+                : UniqueCompatibility.needsResolution(target, relics)
+                    ? "อุปกรณ์นี้มีมนตราที่ขัดกันอยู่ ใช้ /upgrade เพื่อเลือกพลังที่จะเก็บก่อน"
+                    : "ไอเทมนี้สถิตนิรันดร์อยู่แล้ว (ไม่มีวันพัง)");
             return;
         }
 
@@ -235,8 +299,10 @@ public final class EnchantApplyListener implements Listener {
         if (meta == null) return;
 
         NamespacedKey key = new NamespacedKey("evergarden", "ue_" + enchant.id().toLowerCase(Locale.ROOT));
-        if (meta.getPersistentDataContainer().has(key)) {
-            fail(player, "อุปกรณ์นี้มีมนตรา " + enchant.thaiTitle() + " อยู่แล้ว");
+        if (!UniqueCompatibility.canApply(target, enchant, relics)) {
+            fail(player, enchant == UniqueEnchant.SOULBOUND && relics.isEternityItem(target)
+                ? "Soulbound ใช้ร่วมกับ Scroll of Eternity ไม่ได้"
+                : "อุปกรณ์นี้มีมนตราหลักที่ใช้ร่วมกับ " + enchant.title() + " ไม่ได้");
             return;
         }
 
@@ -268,31 +334,6 @@ public final class EnchantApplyListener implements Listener {
                 remaining.setAmount(source.getAmount() - 1);
             }
             player.setItemOnCursor(remaining);
-            if (clickEvent != null) {
-                try { clickEvent.setCursor(remaining); } catch (Throwable ignored) {}
-                try { clickEvent.getView().setCursor(remaining); } catch (Throwable ignored) {}
-            }
-            final ItemStack finalRemaining = remaining;
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                if (player.isOnline()) {
-                    player.setItemOnCursor(finalRemaining);
-                    if (rawSlot >= 0) {
-                        player.getOpenInventory().setItem(rawSlot, target);
-                    } else if (clickEvent != null && clickEvent.getSlot() >= 0 && clickEvent.getClickedInventory() != null) {
-                        clickEvent.getClickedInventory().setItem(clickEvent.getSlot(), target);
-                    }
-
-                    // Anti-dupe Bedrock safeguard:
-                    // If Bedrock's client prediction swapped the old item to cursor,
-                    // ensure cursor does not contain an un-enchanted clone of target
-                    ItemStack onCursor = player.getItemOnCursor();
-                    if (onCursor != null && onCursor.getType() == target.getType() && !isScroll(onCursor)) {
-                        player.setItemOnCursor(finalRemaining);
-                    }
-
-                    player.updateInventory();
-                }
-            });
         } else {
             ItemStack remaining = null;
             if (source.getAmount() > 1) {
@@ -306,21 +347,8 @@ public final class EnchantApplyListener implements Listener {
                 player.getInventory().setItemInMainHand(remaining);
                 player.getInventory().setItemInOffHand(target);
             }
-            final ItemStack finalRemaining = remaining;
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                if (player.isOnline()) {
-                    if (hand == EquipmentSlot.OFF_HAND) {
-                        player.getInventory().setItemInOffHand(finalRemaining);
-                        player.getInventory().setItemInMainHand(target);
-                    } else {
-                        player.getInventory().setItemInMainHand(finalRemaining);
-                        player.getInventory().setItemInOffHand(target);
-                    }
-                    player.updateInventory();
-                }
-            });
         }
-        player.updateInventory();
+        refresh(player);
     }
 
     private void fail(Player player, String message) {

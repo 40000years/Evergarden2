@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "element": "WATER",
+  "spell": "LEVIATHANS_WRATH",
+  "mode": "built-in image_gen",
+  "semantic_postprocessing": "none; selected generated PNG copied byte-identical",
+  "assets": [
+    {
+      "file": "leviathans_wrath_sigil.png",
+      "source_file": "source/leviathans_wrath_sigil.png",
+      "role": "horizontal oceanic tide sigil",
+      "generated_source": "C:/Users/User/.codex/generated_images/01a16e06-eeb0-7ce2-a4c2-c95a62b90778/exec-36a2be16-7848-4e39-9893-90b8bff380a5.png",
+      "generation": [
+        {
+          "kind": "generate",
+          "prompt": "Use case: stylized-concept.\nAsset type: one production RGBA emissive VFX texture for a Minecraft Java and Bedrock Legendary water spell, Leviathan's Wrath.\nPrimary request: one complete intricate oceanic magic sigil viewed exactly straight down, perfectly circular and centred, luminous cyan, deep royal blue, turquoise and pearly silver.\nSubject: seven concentric delicate tide rings, dragon-scale arcs, interwoven wave geometry, tiny invented rune strokes, elegant radial trident and fin motifs. Many exceptionally fine crisp arcane lines and tiny pearlescent motes. The outer ring has cresting translucent wave flourishes integrated into the circle. Centre 35 percent is mostly transparent negative space around a small eight-point geometric wave star. Readable exquisite detail, controlled translucent glow, no solid opaque disk. This should feel as powerful and intricate as an ornate legendary prismatic magic circle, while unmistakably oceanic rather than celestial gold.\nStyle: polished high fantasy game VFX painted emissive texture, precise delicate arcane line art and refractive water highlights, not pixel art or a scene painting.\nComposition: exact orthographic top-down full disk, no tilt or perspective; circle plus all spray take at most 80 percent of image width and height with broad entirely transparent empty margins on every side. Nothing touches an edge.\nBackground: genuine transparent alpha outside and between rune strokes. No stone floor, no sky, no opaque black/white backdrop, no checkerboard painted into image.\nNo readable writing, English letters, numbers, labels, UI, border, logo, watermark, characters, dragon body, portal or gate. Only one isolated reusable circular sigil texture. Highest available detail.",
+          "transparent_background": true
+        }
+      ],
+      "sha256": "5b6a7afd043fa5a074f754942949cb880311ee73890c16c916d0396138fde976",
+      "width": 1274,
+      "height": 1234,
+      "image_mode": "RGBA",
+      "file_bytes": 2859023,
+      "source_byte_identical": true,
+      "alpha_extrema": [
+        0,
+        253
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1274,
+        1234
+      ],
+      "transparent_fraction": 0.252753,
+      "translucent_fraction": 0.747247,
+      "opaque_fraction": 0.0,
+      "visually_inspected": true
+    },
+    {
+      "file": "leviathans_wrath_leviathan.png",
+      "source_file": "source/leviathans_wrath_leviathan.png",
+      "role": "whole coiling translucent water dragon hero sprite; head lower-right",
+      "generated_source": "C:/Users/User/.codex/generated_images/01a16e06-eeb0-7ce2-a4c2-c95a62b90778/exec-d1747d94-96a0-4154-96db-149e75ee5abe.png",
+      "generation": [
+        {
+          "kind": "generate",
+          "prompt": "Use case: stylized-concept.\nAsset type: one production transparent RGBA hero VFX sprite for Legendary water spell Leviathan's Wrath, Minecraft Java and Bedrock, high-end fantasy spell effect.\nPrimary request: a single majestic colossal WATER DRAGON formed entirely from translucent luminous water, isolated on transparent alpha, its entire long serpentine body visible in one elegant S-shaped coiling action pose. The dragon head faces down and to the right, as if diving forward through an enemy field; tail curls back up to upper left.\nSubject details: an unmistakably expressive horned eastern sea-dragon face, flowing whiskers, small curved crystalline horns, long serpentine scaled body, translucent layered webbed fins along neck and spine, four small clawed forelimbs, enormous trailing ribbon-like tail. Cobalt-blue inner currents, cyan edges, pearly white foam and silver glints trace the form. Refractive scales and detailed swirling water filaments inside the body, occasional small detached droplets and tight foam accents. Fine readable details at head and fins. Graceful powerful ancient sea deity, not a cartoon.\nStyle: exquisite painted high fantasy emissive VFX texture with layered transparent water, luminous but controlled crisp silhouette, no excessive bloom. It must be readable as a water dragon rather than an opaque blue stone statue or a cloud.\nComposition: complete whole dragon from horns to the very end of its tail, no clipping, full silhouette contained inside the central 75 percent of canvas, broad clean transparent margins on all sides. 3/4 side profile, sweeping S motion, head at lower right, tail at upper left. Single creature only.\nBackground: actual transparent alpha, including large open spaces between the coils, fine translucent water edge fade; no sky, ocean, environment, ground, opaque black/white fill, or checkerboard painting.\nAvoid: rune circles, gate, portal, human rider, text, captions, UI, logo, border, watermark, multiple dragons, massive smoke cloud, cropped anatomy. Highest available detail.",
+          "transparent_background": true
+        }
+      ],
+      "sha256": "3f182e33844feeb85474384f72d574137da400f35807b3bc211e0fab6e767b84",
+      "width": 1312,
+      "height": 1199,
+      "image_mode": "RGBA",
+      "file_bytes": 2614153,
+      "source_byte_identical": true,
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "alpha_bbox": [
+        0,
+        0,
+        1312,
+        1199
+      ],
+      "transparent_fraction": 0.424175,
+      "translucent_fraction": 0.57582,
+      "opaque_fraction": 6e-06,
+      "visually_inspected": true
+    }
+  ],
+  "framing": "Native image tool outputs are tightly alpha-cropped. Keep these originals unchanged; use uniform transparent-canvas padding when preparing future pack textures."
+}

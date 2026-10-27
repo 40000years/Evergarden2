@@ -1,0 +1,24 @@
+{
+  "version": "1.9.11-longinus-bedrock-flight",
+  "bedrock_pack": "2.12.11",
+  "video_review": "Original 6.41 second user clip, inspected extracted frames at 10 fps; launch issue around 0.6-0.9s",
+  "fixes": [
+    "Include entity-to-world Z reflection: projectile root yaw = 180 + flight_yaw",
+    "Do not reveal Bedrock carrier at the projectile birth/eye position; wait for actual first movement",
+    "Already impacted/reloaded spears remain eligible for display"
+  ],
+  "unchanged": [
+    "All Java pack bytes",
+    "All Bedrock held models and animations",
+    "Native projectile position, velocity, collision, damage and Loyalty",
+    "Other four weapons"
+  ],
+  "runtime": "PASS 92",
+  "integration": "PASS 73",
+  "asset_checks": "PASS 784 including 28 full world-space projectile directions",
+  "native_pose_checks": "PASS 145",
+  "approximate_camera_checks": "PASS 32",
+  "before_fix_regression": "1.9.10 pack fails world +Z tip direction when actual Bedrock entity-to-world frame is included",
+  "real_client_rendering": "New release not tested in actual Bedrock client",
+  "sha256": "58b8277fc6148dcdb040942775a3081a155d22792cbb8b1bda38d690eaaf9160"
+}

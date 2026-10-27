@@ -1,0 +1,6 @@
+# Python 3.14 tooling for the pack, model and release scripts (tools/, evergarden/tools/, tests/).
+numpy>=2.5
+pillow>=12.3
+imagequant>=1.1.5
+# Optional: only evergarden/tools/prepare_evergarden_art.py uses scipy.
+# scipy

@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "element": "dark",
+  "spell": "ABYSSAL_COLLAPSE",
+  "created": "2026-10-24",
+  "generator": "Built-in image_gen.imagegen",
+  "transparent_background": true,
+  "semantic_edits": "None; production files and source/ originals are byte-identical",
+  "runtime_integration": "Texture assets only; no runtime, resource pack or combat changes",
+  "assets": [
+    {
+      "file": "abyssal_collapse_sigil.png",
+      "prompt": "Use case: stylized-concept. Asset type: production transparent game VFX texture, Legendary DARK magic floor sigil for Minecraft Java and Bedrock.\nPrimary request: one exquisite flat circular eclipse rune seal, viewed perfectly top-down orthographically, centred on a square canvas. Black-violet and amethyst luminous engraving with deep indigo highlights and very faint antique-gold accents.\nStructure: many distinct concentric rings of microscopic arcane glyph marks, interlocking sacred geometry, precise radial divisions and chain-link motifs, elegant eight-point eclipse crests. Fine high-contrast emissive lines, sophisticated jewellery-like detail, layered filigree. A large open transparent centre and ample negative-space openings between the rings. The glyphs are decorative abstract marks, never readable words.\nStyle: highest-detail polished fantasy MMORPG spell effect, crisp readable geometry, subtle purple bloom hugging the lines rather than opaque fog. The entire circular silhouette must fit with a generous transparent margin on every side.\nBackground: genuinely transparent alpha, including the central opening and every space between lines. No opaque disc, no black backdrop, no checkerboard painting, no stone floor, no scene, no perspective, no character, no labels, no text, no interface, no watermark. Produce a single standalone texture only.",
+      "generated_original": "C:/Users/User/.codex/generated_images/01a16e07-816c-7bd3-b0d3-1387907f9719/exec-278e9a85-7169-4a4f-92c2-d05fe8e3c79c.png",
+      "role": "Horizontal floor rune seal",
+      "source": "source/abyssal_collapse_sigil.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "sha256": "9376a88af0781a8ddbc3cc9de0ea81c5cfe5e9e1d3e8e2151273dc69aeb45a16",
+      "alpha": {
+        "extrema": [
+          0,
+          255
+        ],
+        "nonzero_bbox": [
+          0,
+          0,
+          1254,
+          1254
+        ],
+        "transparent_fraction": 0.379093,
+        "partial_fraction": 0.620895,
+        "opaque_fraction": 1.1e-05
+      },
+      "visual_review": "Inspected with view_image; isolated subject, true alpha, no text or UI"
+    },
+    {
+      "file": "abyssal_collapse_core.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: single production transparent game VFX sprite for the Legendary DARK spell Abyssal Collapse.\nPrimary request: an isolated floating obsidian eclipse core, a compact dark spherical mass fractured by intensely luminous amethyst-violet cracks. Its silhouette is jagged and crystalline but clearly reads as one round occult core. A thin violet eclipse corona encircles it, with a few elegant curling shadow-chain filaments and broken angular shards orbiting close by.\nStyle: extremely detailed premium fantasy MMORPG spell effect, finely carved obsidian facets, purple-white molten light deep inside fractures, restrained antique-gold rune inlays, deep indigo and black-violet surface. Crisp readable form with delicate high-resolution wisps and sparks rather than a bulky fog cloud. Orthographic-like side view suitable as a billboard sprite.\nComposition: central subject uses only the middle 70 percent of a square canvas. Entire core, chains, corona and shards fit inside the canvas with generous empty alpha margins. No ground or pedestal. Every gap between the chains and fragments must be transparent.\nBackground: genuinely transparent alpha. No painted checkerboard, no dark backdrop, no scenery, no characters, no face, no eyes, no skull, no gate, no portal doorway, no text, no UI, no border, no watermark. This is one isolated texture asset, not a gameplay screenshot.",
+      "generated_original": "C:/Users/User/.codex/generated_images/01a16e07-816c-7bd3-b0d3-1387907f9719/exec-ebb6a7db-57c8-44c1-bee3-90c86fec63e0.png",
+      "role": "Floating eclipse core billboard",
+      "source": "source/abyssal_collapse_core.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "sha256": "acfa189a08e2a41183144542a86be505899113167a653f2757a789a48b6981bc",
+      "alpha": {
+        "extrema": [
+          0,
+          255
+        ],
+        "nonzero_bbox": [
+          0,
+          0,
+          1251,
+          1254
+        ],
+        "transparent_fraction": 0.411861,
+        "partial_fraction": 0.587955,
+        "opaque_fraction": 0.000184
+      },
+      "visual_review": "Inspected with view_image; isolated subject, true alpha, no text or UI"
+    }
+  ]
+}

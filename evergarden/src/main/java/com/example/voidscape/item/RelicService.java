@@ -2,9 +2,9 @@ package com.example.voidscape.item;
 
 import com.example.voidscape.VoidscapePlugin;
 import com.example.voidscape.enchant.EnchantApplyListener;
-import com.example.voidscape.enchant.ItemCategory;
 import com.example.voidscape.enchant.LimitBreakType;
 import com.example.voidscape.enchant.UniqueEnchant;
+import com.example.voidscape.enchant.UniqueCompatibility;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -23,7 +23,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.*;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -32,17 +31,9 @@ public final class RelicService implements Listener {
         VOID_KEY(Material.TRIAL_KEY,"กุญแจ Evergarden","ใช้สำหรับเปิด Evergarden Vault ในวิหารโบราณ"),
         RIFT_PICKAXE(Material.NETHERITE_PICKAXE,"อีเต้อแยกพิภพ","ขุด 3×3 บล็อกพร้อมกัน · ย่อตัวเพื่อขุดทีละก้อน"),
         SMELTER_PICKAXE(Material.NETHERITE_PICKAXE,"อีเต้อหลอมเพลิงมิติ","หลอมบล็อกที่ขุดอัตโนมัติ (ทราย->กระจก, แร่->แท่งโลหะ)"),
-        STORM_BOW(Material.BOW,"ธนูพิพากษาสายฟ้า","ยิงธนูผ่าสายฟ้าต่อเนื่องใส่ศัตรู"),
-        NOVA_BOW(Material.BOW,"ธนูสะเก็ดดาว","ชาร์จเต็ม: ระเบิดพลังงาน · ไม่ทำลายบล็อก"),
-        RIFT_BLADE(Material.NETHERITE_SWORD,"ดาบกรีดมิติ","คลิกขวา: วาร์ปไปข้างหน้า · ต้องมีทางโล่ง"),
-        ETERNAL_AEGIS(Material.SHIELD,"โล่แห่งความอมตะ","คลิกขวา/ย่อ 2 ครั้ง/สลับมือ: อมตะ 3 วินาที · โจมตีไม่ได้ขณะใช้งาน"),
         SCROLL_ETERNITY(Material.PAPER,"คัมภีร์ศิลานิรันดร์","ลากทับไอเทมเพื่อทำให้อุปกรณ์ 'ไม่มีวันพังถาวร (Unbreakable)'"),
         SCROLL_LIMIT_BREAK(Material.PAPER,"คัมภีร์ทลายขีดจำกัด","ลากทับไอเทมเพื่อเพิ่มเลเวลเอนแชนต์เดิม +1"),
-        SCROLL_UNIQUE(Material.PAPER,"คัมภีร์มนตราโบราณ","ลากทับไอเทมเพื่อสลักเวทมนตร์เฉพาะตัว"),
-        ASTRAL_DUST(Material.SUGAR,"ผงละอองดาว","ละอองดาวดึกดำบรรพ์ สสารเวทมนตร์แห่ง Evergarden"),
-        KEY_SHARD(Material.PRISMARINE_SHARD,"เศษกุญแจมิติ","รวบรวมครบ 4 ชิ้นคราฟต์เป็น Evergarden Key ได้ที่โต๊ะคราฟต์"),
-        REPAIR_STONE(Material.FLINT,"ศิลาฟื้นฟูมิติ","คลิกขวาเพื่อซ่อมแซมความทนทานของอุปกรณ์ 500 หน่วย"),
-        VOID_ELIXIR(Material.HONEY_BOTTLE,"น้ำยาเดินเวหา","ดื่มเพื่อรับ Speed II, Jump Boost II และ Slow Falling 3 นาที");
+        SCROLL_UNIQUE(Material.PAPER,"คัมภีร์มนตราโบราณ","ลากทับไอเทมเพื่อสลักเวทมนตร์เฉพาะตัว");
 
         public final Material material; public final String title,lore;
         Relic(Material m,String t,String l){material=m;title=t;lore=l;}
@@ -50,10 +41,8 @@ public final class RelicService implements Listener {
     }
 
     private final VoidscapePlugin plugin;
-    private final NamespacedKey type,shot,shotOwner,shieldUntil,voidKeyTag;
+    private final NamespacedKey type,voidKeyTag;
     private final Set<UUID> mining=new HashSet<>();
-    private final Map<UUID,Long> arrows=new HashMap<>();
-    private final Map<UUID,Long> lastAegisSneak=new HashMap<>();
 
     public record MagicCore(String id, String title, String wandTitle) {}
     public static final List<MagicCore> MAGIC_CORES = List.of(
@@ -74,84 +63,25 @@ public final class RelicService implements Listener {
         new MagicCore("guardian_beam", "Core of the Guardian", "Guardian Beam"),
         new MagicCore("solar_apocalypse", "Core of the Sun", "Solar Apocalypse"),
         new MagicCore("chronos_final_hour", "Core of Time", "Chronos: Final Hour"),
-        new MagicCore("heavens_judgment", "Core of Judgment", "Heaven's Judgment")
+        new MagicCore("heavens_judgment", "Core of Judgment", "Heaven's Judgment"),
+        new MagicCore("verdant_sovereign", "Core of the Verdant Crown", "Verdant Sovereign"),
+        new MagicCore("lunar_requiem", "Core of the Requiem Moon", "Lunar Requiem"),
+        new MagicCore("crimson_oblivion", "Core of Oblivion", "Crimson Oblivion")
     );
 
-    private static boolean mythicCore(MagicCore core) {
-        return Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment").contains(core.id());
-    }
-
     public RelicService(VoidscapePlugin plugin) {
-        this.plugin=plugin; type=plugin.key("relic_v2");shot=plugin.key("shot");shotOwner=plugin.key("shot_owner");shieldUntil=plugin.key("shield_until");
+        this.plugin=plugin; type=plugin.key("relic_v2");
         voidKeyTag=plugin.key("void_key");
-        registerKeyRecipe();
-    }
-
-    public void registerKeyRecipe() {
-        // 1. Evergarden Key (4 Key Shards 2x2)
-        NamespacedKey key = plugin.key("craft_void_key");
-        try { Bukkit.removeRecipe(key); } catch (Exception ignored) {}
-        ShapedRecipe recipe = new ShapedRecipe(key, createVoidKey());
-        recipe.shape("SS", "SS");
-        recipe.setIngredient('S', RecipeChoice.predicateChoice(this::isKeyShard,createKeyShard(1)));
-        try { Bukkit.addRecipe(recipe); } catch (Exception ignored) {}
-
-        // 1b. Evergarden Key Shapeless (any 4 Prismarine Shards)
-        NamespacedKey keyShapeless = plugin.key("craft_void_key_shapeless");
-        try { Bukkit.removeRecipe(keyShapeless); } catch (Exception ignored) {}
-        ShapelessRecipe recipeShapeless = new ShapelessRecipe(keyShapeless, createVoidKey());
-        for(int i=0;i<4;i++)recipeShapeless.addIngredient(RecipeChoice.predicateChoice(this::isKeyShard,createKeyShard(1)));
-        try { Bukkit.addRecipe(recipeShapeless); } catch (Exception ignored) {}
-
-        // 2. Vault Repair Stone (4 Astral Dust + 1 Amethyst Shard)
-        NamespacedKey repairKey = plugin.key("craft_repair_stone");
-        try { Bukkit.removeRecipe(repairKey); } catch (Exception ignored) {}
-        ShapedRecipe repairRecipe = new ShapedRecipe(repairKey, createRepairStone(1));
-        repairRecipe.shape(" D ", "DAD", " D ");
-        repairRecipe.setIngredient('D', RecipeChoice.predicateChoice(this::isAstralDust,createAstralDust(1)));
-        repairRecipe.setIngredient('A', Material.AMETHYST_SHARD);
-        try { Bukkit.addRecipe(repairRecipe); } catch (Exception ignored) {}
-
-        // 3. Void Walker Elixir (1 Astral Dust + 1 Glass Bottle)
-        NamespacedKey elixirKey = plugin.key("craft_void_elixir");
-        try { Bukkit.removeRecipe(elixirKey); } catch (Exception ignored) {}
-        ShapelessRecipe elixirRecipe = new ShapelessRecipe(elixirKey, createVoidElixir(1));
-        elixirRecipe.addIngredient(RecipeChoice.predicateChoice(this::isAstralDust,createAstralDust(1)));
-        elixirRecipe.addIngredient(Material.GLASS_BOTTLE);
-        try { Bukkit.addRecipe(elixirRecipe); } catch (Exception ignored) {}
+        for(String namespace:List.of("evergarden","voidscape"))for(String id:RemovedRelics.RECIPES)Bukkit.removeRecipe(new NamespacedKey(namespace,id));
     }
 
     public ItemStack createMagicCore(MagicCore core) {
         ItemStack item=new ItemStack(Material.HEART_OF_THE_SEA);
         ItemMeta meta=item.getItemMeta();
-        if(core.id().equals("shulker_levitation")) {
-            meta.setDisplayName(ChatColor.LIGHT_PURPLE+"✦ "+ChatColor.GOLD+"Core of Levitation "+ChatColor.RED+"[MYTHIC]");
-            meta.setLore(List.of(
-                ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC 0.5%]",
-                ChatColor.DARK_PURPLE+"§k||§r "+ChatColor.LIGHT_PURPLE+"Forbidden Dragon Heart "+ChatColor.DARK_PURPLE+"§k||",
-                ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+"Shulker Levitation Wand",
-                ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.RED+"✦ หมวด Mythic ใน Vault รวม 0.5% · สุ่มหนึ่งในสี่แกน"
-            ));
-        } else if(mythicCore(core)) {
-            meta.setDisplayName(ChatColor.GOLD+"✦ "+core.title()+ChatColor.RED+" [MYTHIC]");
-            meta.setLore(List.of(ChatColor.GOLD+"[ระดับตำนานสูงสุด · MYTHIC]",
-                ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+core.wandTitle()+" Wand",
-                ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.DARK_AQUA+"หมวด Mythic ใน Evergarden Vault: 0.5% · สุ่ม 1 ใน 4 แกน"));
-        } else {
-            meta.setDisplayName(ChatColor.GOLD+"✦ "+core.title());
-            meta.setLore(List.of(
-                ChatColor.AQUA+"Ancient Magic Core (แกนเวทมนตร์โบราณ)",
-                ChatColor.GRAY+"ใช้คราฟต์: "+ChatColor.LIGHT_PURPLE+core.wandTitle()+" Wand",
-                ChatColor.YELLOW+"สูตร: 8 Netherite Ingots หรือ Nether Stars + แกนนี้",
-                ChatColor.DARK_AQUA+"หาได้จาก: Evergarden Vault"
-            ));
-        }
-        var modelData=meta.getCustomModelDataComponent();
-        modelData.setStrings(List.of("advance_magic:core_"+core.id()));
-        meta.setCustomModelDataComponent(modelData);
-        meta.setItemModel(new NamespacedKey("advance_magic","core_"+core.id()));
+        meta.setDisplayName(ChatColor.LIGHT_PURPLE+"✦ "+ChatColor.GOLD+core.title()+ChatColor.DARK_GRAY+" [LEGACY]");
+        meta.setLore(List.of(ChatColor.GRAY+"แกนคราฟต์ระบบเก่า · เลิกใช้คราฟต์คทาแล้ว",
+                ChatColor.DARK_AQUA+"เวทเดิม: "+core.wandTitle(),
+                ChatColor.YELLOW+"ยังใช้เป็นเชื้อเพลิงที่แท่นฟื้นฟูได้"));
         meta.getPersistentDataContainer().set(new NamespacedKey("advance_magic","core"),PersistentDataType.STRING,core.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("advance-magic","core"),PersistentDataType.STRING,core.id());
         meta.getPersistentDataContainer().set(new NamespacedKey("voidscape","magic_core"),PersistentDataType.STRING,core.id());
@@ -182,9 +112,6 @@ public final class RelicService implements Listener {
             Component.text(relic.lore,NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
             Component.text(relic==Relic.VOID_KEY?"EVERGARDEN · TRIAL KEY":"EVERGARDEN · RELIC",NamedTextColor.DARK_PURPLE).decoration(TextDecoration.ITALIC, false)
         ));
-        // The Aeternum food pack also defines honey_bottle. Give our elixir its
-        // own item definition so pack order cannot turn it into a vanilla drink.
-        meta.setItemModel(relic == Relic.VOID_ELIXIR ? new NamespacedKey("voidscape", relic.id()) : null);
         var selector=meta.getCustomModelDataComponent();selector.setStrings(List.of("voidscape:"+relic.id()));meta.setCustomModelDataComponent(selector);
         meta.getPersistentDataContainer().set(type,PersistentDataType.STRING,relic.name());
 
@@ -193,8 +120,6 @@ public final class RelicService implements Listener {
         } else if(relic.material==Material.NETHERITE_PICKAXE||relic.material==Material.NETHERITE_SWORD||relic.material==Material.BOW||relic.material==Material.SHIELD) {
             meta.addEnchant(Enchantment.UNBREAKING,3,true);
             if(relic==Relic.RIFT_PICKAXE||relic==Relic.SMELTER_PICKAXE) {meta.addEnchant(Enchantment.EFFICIENCY,5,true);meta.addEnchant(Enchantment.FORTUNE,3,true);}
-            if(relic==Relic.RIFT_BLADE) applyLimitBreakMeta(meta, LimitBreakType.SHARPNESS, 8);
-            if(relic==Relic.NOVA_BOW||relic==Relic.STORM_BOW) applyLimitBreakMeta(meta, LimitBreakType.POWER, 6);
         }
         item.setItemMeta(meta); return item;
     }
@@ -208,6 +133,7 @@ public final class RelicService implements Listener {
             Component.text("ลากคัมภีร์นี้ไปแตะที่อาวุธ ชุดเกราะ หรือเครื่องมือ",NamedTextColor.WHITE).decoration(TextDecoration.ITALIC,false),
             Component.text("ไอเทมนั้นจะได้รับสถานะ 'ไม่มีวันพังเสียหาย (Unbreakable 100%)'",NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false),
             Component.text("หลอดความทนทานจะหายไปตลอดกาล",NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC,false),
+            Component.text("ใช้ร่วมกับ Soulbound ไม่ได้",NamedTextColor.RED).decoration(TextDecoration.ITALIC,false),
             Component.text("วิธีใช้: พิมพ์ /upgrade หรือลากแตะทับไอเทมในกระเป๋า",NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC,false)
         ));
         meta.getPersistentDataContainer().set(plugin.key("scroll_eternity"),PersistentDataType.BYTE,(byte)1);
@@ -233,71 +159,16 @@ public final class RelicService implements Listener {
         ItemStack item=create(Relic.SCROLL_UNIQUE,1);
         ItemMeta meta=item.getItemMeta();
         meta.displayName(Component.text("✦ มนตราโบราณ: "+ue.title(),NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC,false));
-        meta.lore(List.of(
+        List<Component> lore=new ArrayList<>(List.of(
             Component.text("✦ "+ue.thaiTitle(),NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false),
             Component.text("ความสามารถ: "+ue.description(),NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
             Component.text("ประเภทอุปกรณ์: "+ue.category().name(),NamedTextColor.DARK_AQUA).decoration(TextDecoration.ITALIC,false),
+            Component.text(UniqueCompatibility.ruleLabel(ue),NamedTextColor.RED).decoration(TextDecoration.ITALIC,false),
             Component.text("วิธีใช้: พิมพ์ /upgrade หรือลากแตะทับอุปกรณ์ในกระเป๋า",NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC,false),
             Component.text("[อัตราสำเร็จ 100% · ลากแตะเพื่อใช้งาน]",NamedTextColor.GREEN).decoration(TextDecoration.ITALIC,false)
         ));
+        meta.lore(lore);
         meta.getPersistentDataContainer().set(plugin.key("unique_enchant"),PersistentDataType.STRING,ue.name());
-        item.setItemMeta(meta);return item;
-    }
-
-    public ItemStack createKeyShard(int count) {
-        ItemStack item=create(Relic.KEY_SHARD,count);
-        ItemMeta meta=item.getItemMeta();
-        meta.displayName(Component.text("✦ เศษกุญแจมิติ (Evergarden Key Shard)",NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC,false));
-        meta.lore(List.of(
-            Component.text("เศษผลึกโบราณจาก Evergarden Vault",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
-            Component.text("• วาง 4 ชิ้น (2×2) ที่โต๊ะคราฟต์เพื่อประกอบเป็น Evergarden Key",NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC,false),
-            Component.text("• ใช้เปิดกล่องสมบัติ Evergarden Vault ประจำวิหาร",NamedTextColor.AQUA).decoration(TextDecoration.ITALIC,false)
-        ));
-        meta.getPersistentDataContainer().set(plugin.key("key_shard"),PersistentDataType.BYTE,(byte)1);
-        item.setItemMeta(meta);return item;
-    }
-
-    public ItemStack createAstralDust(int count) {
-        ItemStack item=create(Relic.ASTRAL_DUST,count);
-        ItemMeta meta=item.getItemMeta();
-        meta.displayName(Component.text("✦ ผงละอองดาว (Astral Dust)",NamedTextColor.AQUA).decoration(TextDecoration.ITALIC,false));
-        meta.lore(List.of(
-            Component.text("ละอองดวงดาวโบราณ สสารเวทมนตร์แห่ง Evergarden",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
-            Component.text("• คลิกขวาใส่พืช Evergarden = เร่งเวลาเติบโต +5%",NamedTextColor.AQUA).decoration(TextDecoration.ITALIC,false),
-            Component.text("• คราฟต์คู่ขวดแก้ว = น้ำยาเดินเวหา (Void Elixir)",NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC,false),
-            Component.text("• ใช้ 4 ชิ้น + 1 Amethyst = ศิลาฟื้นฟู (Repair Stone)",NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC,false)
-        ));
-        meta.getPersistentDataContainer().set(plugin.key("astral_dust"),PersistentDataType.BYTE,(byte)1);
-        item.setItemMeta(meta);return item;
-    }
-
-    public ItemStack createRepairStone(int count) {
-        ItemStack item=create(Relic.REPAIR_STONE,count);
-        ItemMeta meta=item.getItemMeta();
-        meta.displayName(Component.text("✦ ศิลาฟื้นฟูมิติ (Vault Repair Stone)",NamedTextColor.GREEN).decoration(TextDecoration.ITALIC,false));
-        meta.lore(List.of(
-            Component.text("ศิลาจารึกอักขระฟื้นฟูโบราณ",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
-            Component.text("คลิกขวาเพื่อซ่อมแซมความทนทาน 500 หน่วย",NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC,false),
-            Component.text("(ซ่อมให้กับอุปกรณ์ที่ชำรุดมากที่สุดในตัวคุณ)",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
-            Component.text("สูตรคราฟต์: 4 Astral Dust + 1 Amethyst Shard",NamedTextColor.AQUA).decoration(TextDecoration.ITALIC,false)
-        ));
-        meta.getPersistentDataContainer().set(plugin.key("repair_stone"),PersistentDataType.BYTE,(byte)1);
-        item.setItemMeta(meta);return item;
-    }
-
-    public ItemStack createVoidElixir(int count) {
-        ItemStack item=create(Relic.VOID_ELIXIR,count);
-        ItemMeta meta=item.getItemMeta();
-        meta.displayName(Component.text("✦ น้ำยาเดินเวหา (Void Walker Elixir)",NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC,false));
-        meta.lore(List.of(
-            Component.text("น้ำยาเรืองแสงผสมละอองดาวบริสุทธิ์",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
-            Component.text("ดื่มเพื่อรับผลลัพธ์เป็นเวลา 3 นาที:",NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC,false),
-            Component.text("• ความเร็ว Speed II",NamedTextColor.AQUA).decoration(TextDecoration.ITALIC,false),
-            Component.text("• กระโดดสูง Jump Boost II",NamedTextColor.GREEN).decoration(TextDecoration.ITALIC,false),
-            Component.text("• ตกช้า Slow Falling (ป้องกันตกหลุม Void)",NamedTextColor.WHITE).decoration(TextDecoration.ITALIC,false),
-            Component.text("สูตรคราฟต์: 1 Astral Dust + 1 ขวดแก้ว",NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false)
-        ));
-        meta.getPersistentDataContainer().set(plugin.key("void_elixir"),PersistentDataType.BYTE,(byte)1);
         item.setItemMeta(meta);return item;
     }
 
@@ -319,34 +190,6 @@ public final class RelicService implements Listener {
         String raw=item.getItemMeta().getPersistentDataContainer().get(plugin.key("unique_enchant"),PersistentDataType.STRING);
         if(raw==null) return null;
         try{return UniqueEnchant.valueOf(raw);}catch(Exception e){return null;}
-    }
-
-    public boolean isKeyShard(ItemStack item) {
-        if(item==null||item.getType()!=Material.PRISMARINE_SHARD||!item.hasItemMeta()) return false;
-        var pdc = item.getItemMeta().getPersistentDataContainer();
-        return pdc.has(plugin.key("key_shard"),PersistentDataType.BYTE)
-            || type(item)==Relic.KEY_SHARD;
-    }
-
-    public boolean isRepairStone(ItemStack item) {
-        if(item==null||item.getType()!=Material.FLINT||!item.hasItemMeta()) return false;
-        var pdc = item.getItemMeta().getPersistentDataContainer();
-        return pdc.has(plugin.key("repair_stone"),PersistentDataType.BYTE)
-            || type(item)==Relic.REPAIR_STONE;
-    }
-
-    public boolean isVoidElixir(ItemStack item) {
-        if(item==null||item.getType()!=Material.HONEY_BOTTLE||!item.hasItemMeta()) return false;
-        var pdc = item.getItemMeta().getPersistentDataContainer();
-        return pdc.has(plugin.key("void_elixir"),PersistentDataType.BYTE)
-            || type(item)==Relic.VOID_ELIXIR;
-    }
-
-    public boolean isAstralDust(ItemStack item) {
-        if(item==null||item.getType()!=Material.SUGAR||!item.hasItemMeta()) return false;
-        var pdc = item.getItemMeta().getPersistentDataContainer();
-        return pdc.has(plugin.key("astral_dust"),PersistentDataType.BYTE)
-            || type(item)==Relic.ASTRAL_DUST;
     }
 
     public static String toRoman(int n) {
@@ -419,8 +262,7 @@ public final class RelicService implements Listener {
 
         // 1. Scroll of Eternity
         if (isScrollEternity(scroll)) {
-            if (target.getType().getMaxDurability() <= 0) return null;
-            if (isEternityItem(target)) return null;
+            if (!UniqueCompatibility.canApplyEternity(target,this)) return null;
             ItemMeta meta = target.getItemMeta();
             if (meta == null) return null;
             applyEternityMeta(meta);
@@ -447,11 +289,10 @@ public final class RelicService implements Listener {
         // 3. Unique Enchant Scroll
         UniqueEnchant enchant = getUniqueEnchant(scroll);
         if (enchant != null) {
-            if (!enchant.category().matches(target.getType())) return null;
+            if (!UniqueCompatibility.canApply(target,enchant,this)) return null;
             ItemMeta meta = target.getItemMeta();
             if (meta == null) return null;
             NamespacedKey key = new NamespacedKey("evergarden", "ue_" + enchant.id().toLowerCase(Locale.ROOT));
-            if (meta.getPersistentDataContainer().has(key)) return null;
             meta.getPersistentDataContainer().set(key, PersistentDataType.BYTE, (byte) 1);
             if (enchant == UniqueEnchant.ADVANCE_TOOL) {
                 EnchantApplyListener.applyAdvanceToolComponent(meta);
@@ -468,192 +309,35 @@ public final class RelicService implements Listener {
         return null;
     }
 
-    public boolean isEvergardenItem(ItemMeta meta) {
-        if (meta == null) return false;
-        var pdc = meta.getPersistentDataContainer();
-        if (pdc.has(new NamespacedKey("voidscape", "crop_seed"), PersistentDataType.STRING)
-            || pdc.has(new NamespacedKey("evergarden", "crop_seed"), PersistentDataType.STRING)
-            || pdc.has(new NamespacedKey("voidscape", "crop_food"), PersistentDataType.STRING)
-            || pdc.has(new NamespacedKey("evergarden", "crop_food"), PersistentDataType.STRING)
-            || pdc.has(type, PersistentDataType.STRING)
-            || pdc.has(plugin.key("relic"), PersistentDataType.STRING)
-            || pdc.has(new NamespacedKey("evergarden", "relic_v2"), PersistentDataType.STRING)
-            || pdc.has(new NamespacedKey("evergarden", "relic"), PersistentDataType.STRING)
-            || pdc.has(plugin.key("limit_break_type"), PersistentDataType.STRING)
-            || pdc.has(plugin.key("unique_enchant"), PersistentDataType.STRING)
-            || pdc.has(plugin.key("relic_eternity"), PersistentDataType.BYTE)
-            || pdc.has(voidKeyTag, PersistentDataType.BYTE)
-            || pdc.has(new NamespacedKey("evergarden", "void_key"), PersistentDataType.BYTE)
-            || pdc.has(plugin.key("key_shard"), PersistentDataType.BYTE)
-            || pdc.has(new NamespacedKey("evergarden", "key_shard"), PersistentDataType.BYTE)
-            || pdc.has(plugin.key("repair_stone"), PersistentDataType.BYTE)
-            || pdc.has(new NamespacedKey("evergarden", "repair_stone"), PersistentDataType.BYTE)
-            || pdc.has(plugin.key("void_elixir"), PersistentDataType.BYTE)
-            || pdc.has(new NamespacedKey("evergarden", "void_elixir"), PersistentDataType.BYTE)
-            || pdc.has(plugin.key("astral_dust"), PersistentDataType.BYTE)
-            || pdc.has(new NamespacedKey("evergarden", "astral_dust"), PersistentDataType.BYTE)) {
-            return true;
-        }
-        for (NamespacedKey key : pdc.getKeys()) {
-            if ((key.getNamespace().equals("voidscape") || key.getNamespace().equals("evergarden"))
-                && (key.getKey().startsWith("lb_") || key.getKey().startsWith("ue_"))) return true;
-        }
-        if (meta.hasLore()) {
-            for (Component line : meta.lore()) {
-                String plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(line);
-                if (plain.contains("EVERGARDEN ·") || plain.contains("VOIDSCAPE ·")) return true;
-            }
-        }
-        return false;
-    }
 
-    public boolean isAeternumItem(ItemMeta meta) {
-        if (meta == null) return false;
-        if (isEvergardenItem(meta)) return false;
-        var pdc = meta.getPersistentDataContainer();
-        for (NamespacedKey k : pdc.getKeys()) {
-            String ns = k.getNamespace().toLowerCase(Locale.ROOT);
-            String key = k.getKey().toLowerCase(Locale.ROOT);
-            if (ns.contains("aeternum") || key.contains("aeternum")) {
-                return true;
-            }
-        }
-        if (meta.hasDisplayName()) {
-            String plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(meta.displayName());
-            if (plain.toLowerCase(Locale.ROOT).contains("aeternum")) return true;
-        }
-        if (meta.hasLore()) {
-            for (Component line : meta.lore()) {
-                String plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(line);
-                if (plain.toLowerCase(Locale.ROOT).contains("aeternum")) return true;
-            }
-        }
-        return false;
-    }
 
-    public boolean cleanseAeternumCorruption(ItemStack item) {
-        return cleanseAeternumCorruption(item, false);
-    }
 
-    private boolean cleanseAeternumCorruption(ItemStack item, boolean plainHeatLoot) {
-        if (item == null || !item.hasItemMeta()) return false;
-        ItemMeta meta = item.getItemMeta();
-        if (!plainHeatLoot && !isAeternumItem(meta)) return false;
 
-        boolean changed = false;
-        var pdc = meta.getPersistentDataContainer();
-        // 1. Remove corrupted Evergarden / Voidscape Relic & Limit Break tags
-        List<NamespacedKey> toRemove = new ArrayList<>();
-        for (NamespacedKey k : pdc.getKeys()) {
-            String ns = k.getNamespace().toLowerCase(Locale.ROOT);
-            String key = k.getKey().toLowerCase(Locale.ROOT);
-            if (ns.equals("voidscape") || ns.equals("evergarden")) {
-                if (key.startsWith("relic") || key.equals("type") || key.equals("limit_break_type")
-                    || key.equals("unique_enchant") || key.equals("scroll_eternity")
-                    || key.equals("void_key") || key.equals("key_shard") || key.equals("repair_stone")
-                    || key.equals("void_elixir") || key.equals("astral_dust") || key.startsWith("lb_") || key.startsWith("ue_")) {
-                    toRemove.add(k);
-                }
-            }
-        }
-        for (NamespacedKey k : toRemove) {
-            pdc.remove(k);
-            changed = true;
-        }
 
-        // 2. Remove corrupted CustomModelData strings from Evergarden
-        var cmdComp = meta.getCustomModelDataComponent();
-        if (cmdComp != null && !cmdComp.getStrings().isEmpty()) {
-            List<String> validStrings = new ArrayList<>();
-            for (String str : cmdComp.getStrings()) {
-                String lower = str.toLowerCase(Locale.ROOT);
-                if (lower.startsWith("voidscape:") || lower.startsWith("evergarden:")) {
-                    changed = true;
-                } else {
-                    validStrings.add(str);
-                }
-            }
-            if (changed) {
-                cmdComp.setStrings(validStrings);
-                meta.setCustomModelDataComponent(cmdComp);
-            }
-        }
-
-        // 3. Remove corrupted ItemModel
-        if (meta.getItemModel() != null) {
-            String ns = meta.getItemModel().getNamespace().toLowerCase(Locale.ROOT);
-            if (ns.equals("voidscape") || ns.equals("evergarden")) {
-                meta.setItemModel(null);
-                changed = true;
-            }
-        }
-
-        // 4. Clean up corrupted Evergarden lore lines
-        if (meta.hasLore()) {
-            List<Component> lore = new ArrayList<>(meta.lore());
-            boolean loreChanged = lore.removeIf(line -> {
-                String plain = net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(line);
-                return plain.contains("EVERGARDEN · RELIC") || plain.contains("EVERGARDEN · TRIAL KEY");
-            });
-            if (loreChanged) {
-                meta.lore(lore.isEmpty() ? null : lore);
-                changed = true;
-            }
-        }
-
-        if (plainHeatLoot) {
-            // HeatLootListener creates ordinary enchanted gear; neither component is part of its loot.
-            if (meta.hasTool() && isOldEvergardenToolComponent(meta, meta.getEnchantLevel(Enchantment.EFFICIENCY))) {
-                meta.setTool(null);
-                changed = true;
-            }
-            if (meta.isUnbreakable()) {
-                meta.setUnbreakable(false);
-                changed = true;
-            }
-        }
-
-        if (changed) {
-            item.setItemMeta(meta);
-        }
-        return changed;
-    }
-
-    private boolean isOldEvergardenToolComponent(ItemMeta meta, int efficiency) {
-        var tool = meta.getTool();
-        if (tool.getDefaultMiningSpeed() == 25.0f) return true;
-        float oldEfficiencySpeed = 9.0f + efficiency * efficiency + 1.0f;
-        return tool.getDefaultMiningSpeed() == 1.0f && tool.getRules().stream()
-            .anyMatch(rule -> rule.getSpeed() != null && rule.getSpeed() == oldEfficiencySpeed);
-    }
-
-    private boolean isPlainAeternumHeatLoot(ItemStack item) {
-        if (item == null || !ItemCategory.TOOL.matches(item.getType()) || !item.hasItemMeta()) return false;
-        ItemMeta meta = item.getItemMeta();
-        if (meta.getEnchantLevel(Enchantment.EFFICIENCY) < 6 || meta.hasDisplayName() || meta.hasLore()) return false;
-        if (!(Bukkit.getPluginManager().getPlugin("AeternumSeasons") instanceof org.bukkit.plugin.java.JavaPlugin aeternum)) return false;
-        List<String> pool = aeternum.getConfig().getStringList("heat_loot.gear_pool");
-        if (pool.isEmpty()) pool = List.of("DIAMOND_PICKAXE", "DIAMOND_AXE");
-        if (pool.stream().noneMatch(name -> name.equalsIgnoreCase(item.getType().name()))) return false;
-        // Any other plugin's persistent marker takes precedence over this inferred loot signature.
-        for (NamespacedKey key : meta.getPersistentDataContainer().getKeys())
-            if (!key.getNamespace().equals("evergarden") && !key.getNamespace().equals("voidscape")) return false;
-        return true;
-    }
 
     public boolean migrate(ItemStack item) {
+        if(RemovedRelics.clean(item))return true;
         if (item == null || !item.hasItemMeta()) return false;
-        if (isPlainAeternumHeatLoot(item)) return cleanseAeternumCorruption(item, true);
-        if (cleanseAeternumCorruption(item)) return true;
-        if (isAeternumItem(item.getItemMeta())) return false;
+        var guide=getGuideBookType(item);
+        if(guide!=null&&item.getItemMeta().getPersistentDataContainer().has(plugin.key("guide_book"))){
+            var updated=createGuideBook(guide).getItemMeta();
+            if(!item.getItemMeta().equals(updated)){item.setItemMeta(updated);return true;}
+        }
         if (!isManagedItem(item)) return false;
         boolean changed = false;
         if (EnchantApplyListener.hasUnique(item, UniqueEnchant.ADVANCE_TOOL)) {
             var meta = item.getItemMeta();
-            if (meta != null && (!meta.hasTool() || meta.getTool().getRules().isEmpty())) {
+            boolean active=UniqueCompatibility.active(item,UniqueEnchant.ADVANCE_TOOL,this);
+            if (meta != null && active && (!meta.hasTool() || meta.getTool().getRules().isEmpty())) {
                 EnchantApplyListener.applyAdvanceToolComponent(meta);
                 item.setItemMeta(meta);
                 changed = true;
+            } else if(meta != null && !active && meta.hasTool() && meta.getTool().getDefaultMiningSpeed()==25.0f) {
+                meta.setTool(null);
+                int efficiency=getLimitBreakLevel(item,LimitBreakType.EFFICIENCY);
+                if(efficiency>=6)EnchantApplyListener.applyEfficiencyToolComponent(item.getType(),meta,efficiency);
+                item.setItemMeta(meta);
+                changed=true;
             }
         }
         int lbEff = getLimitBreakLevel(item, LimitBreakType.EFFICIENCY);
@@ -669,7 +353,7 @@ public final class RelicService implements Listener {
         // of unrelated tool components or the native unbreakable flag to us.
         Relic relic=type(item);if(relic==null)return changed;
         var meta=item.getItemMeta();var data=meta.getCustomModelDataComponent();String model="voidscape:"+relic.id();
-        NamespacedKey itemModel=relic==Relic.VOID_ELIXIR?new NamespacedKey("voidscape",relic.id()):null;
+        NamespacedKey itemModel=null;
         if(Objects.equals(meta.getItemModel(),itemModel)&&data.getStrings().equals(List.of(model)))return changed;
         meta.setItemModel(itemModel);data.setStrings(List.of(model));meta.setCustomModelDataComponent(data);item.setItemMeta(meta);return true;
     }
@@ -677,7 +361,6 @@ public final class RelicService implements Listener {
     private boolean isManagedItem(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return false;
         ItemMeta meta = item.getItemMeta();
-        if (isAeternumItem(meta)) return false;
         var pdc = meta.getPersistentDataContainer();
         for (LimitBreakType enchant : LimitBreakType.values()) {
             if (pdc.has(plugin.key("lb_" + enchant.name().toLowerCase(Locale.ROOT)), PersistentDataType.INTEGER)) return true;
@@ -693,24 +376,17 @@ public final class RelicService implements Listener {
             || pdc.has(plugin.key("unique_enchant"), PersistentDataType.STRING)
             || pdc.has(plugin.key("relic_eternity"), PersistentDataType.BYTE)
             || pdc.has(voidKeyTag, PersistentDataType.BYTE)
-            || pdc.has(plugin.key("key_shard"), PersistentDataType.BYTE)
-            || pdc.has(plugin.key("repair_stone"), PersistentDataType.BYTE)
-            || pdc.has(plugin.key("void_elixir"), PersistentDataType.BYTE)
-            || pdc.has(plugin.key("astral_dust"), PersistentDataType.BYTE)
             || type(item) != null;
     }
 
     public void migrate(Inventory inventory){for(int i=0;i<inventory.getSize();i++){var item=inventory.getItem(i);if(migrate(item))inventory.setItem(i,item);}}
     @EventHandler public void join(PlayerJoinEvent e){
         Player p=e.getPlayer();
+        RemovedRelics.player(p);
         migrate(p.getInventory());
         migrate(p.getEnderChest());
-        p.discoverRecipes(List.of(
-            plugin.key("craft_void_key"),
-            plugin.key("craft_void_key_shapeless"),
-            plugin.key("craft_repair_stone"),
-            plugin.key("craft_void_elixir")
-        ));
+        if(Arrays.stream(p.getInventory().getContents()).anyMatch(item->UniqueCompatibility.needsResolution(item,this)))
+            plugin.message(p,"มีอุปกรณ์เก่าที่สลักมนตราขัดกัน · ถือชิ้นนั้นแล้วพิมพ์ /upgrade เพื่อเลือกพลังและรับคัมภีร์คืน");
     }
     @EventHandler public void open(org.bukkit.event.inventory.InventoryOpenEvent e){migrate(e.getInventory());migrate(e.getPlayer().getInventory());}
     @EventHandler public void held(PlayerItemHeldEvent e){
@@ -718,9 +394,10 @@ public final class RelicService implements Listener {
         var item=inventory.getItem(e.getNewSlot());
         if(migrate(item))inventory.setItem(e.getNewSlot(),item);
     }
-    @EventHandler public void pickup(EntityPickupItemEvent e){var item=e.getItem().getItemStack();if(migrate(item))e.getItem().setItemStack(item);}
-    @EventHandler public void drop(ItemSpawnEvent e){var item=e.getEntity().getItemStack();if(migrate(item))e.getEntity().setItemStack(item);}
+    @EventHandler public void pickup(EntityPickupItemEvent e){if(RemovedRelics.matches(e.getItem().getItemStack())){e.setCancelled(true);e.getItem().remove();return;}var item=e.getItem().getItemStack();if(migrate(item))e.getItem().setItemStack(item);}
+    @EventHandler public void drop(ItemSpawnEvent e){if(RemovedRelics.matches(e.getEntity().getItemStack())){e.setCancelled(true);return;}var item=e.getEntity().getItemStack();if(migrate(item))e.getEntity().setItemStack(item);}
     public void migrateEntity(Entity entity) {
+        RemovedRelics.entity(entity);if(!entity.isValid())return;
         if(entity instanceof org.bukkit.entity.Item dropped){var item=dropped.getItemStack();if(migrate(item))dropped.setItemStack(item);}
         if(entity instanceof ItemFrame frame){var item=frame.getItem();if(migrate(item))frame.setItem(item);}
     }
@@ -735,54 +412,294 @@ public final class RelicService implements Listener {
     public ItemStack createVoidKey() {
         return create(Relic.VOID_KEY,1);
     }
+    public ItemStack createVoidKey(int tier) {
+        int clamped = Math.clamp(tier, 1, 5);
+        String roman = toRoman(clamped);
+        NamedTextColor tierColor = switch (clamped) {
+            case 1 -> NamedTextColor.GREEN;
+            case 2 -> NamedTextColor.AQUA;
+            case 3 -> NamedTextColor.YELLOW;
+            case 4 -> NamedTextColor.GOLD;
+            default -> NamedTextColor.RED;
+        };
+        ItemStack item = create(Relic.VOID_KEY, 1);
+        ItemMeta meta = item.getItemMeta();
+        meta.displayName(Component.text("✦ Evergarden Key [Tier " + roman + "]", tierColor).decoration(TextDecoration.ITALIC, false));
+        meta.lore(List.of(
+            Component.text("กุญแจศักดิ์สิทธิ์จากวิหารระดับ Tier " + roman, NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false),
+            Component.text("✦ ไข Vault ระดับ Tier I ถึง Tier " + roman + " ได้", tierColor).decoration(TextDecoration.ITALIC, false),
+            Component.text("EVERGARDEN · TRIAL KEY [TIER " + roman + "]", NamedTextColor.DARK_PURPLE).decoration(TextDecoration.ITALIC, false)
+        ));
+        meta.getPersistentDataContainer().set(plugin.key("key_tier"), PersistentDataType.INTEGER, clamped);
+        item.setItemMeta(meta);
+        return item;
+    }
+    /** Returns the key tier (1..5), or 5 for legacy/untagged keys so old keys work as Master Keys. */
+    public int getVoidKeyTier(ItemStack item) {
+        if (!isVoidKey(item)) return 0;
+        Integer tier = item.getItemMeta().getPersistentDataContainer().get(plugin.key("key_tier"), PersistentDataType.INTEGER);
+        return tier == null ? 5 : Math.clamp(tier, 1, 5);
+    }
+
+    private static final LimitBreakType[] DARK_LIMIT_BREAKS = {
+        LimitBreakType.SHARPNESS, LimitBreakType.SMITE, LimitBreakType.SWEEPING_EDGE,
+        LimitBreakType.LOOTING, LimitBreakType.DENSITY, LimitBreakType.BREACH
+    };
+    private static final LimitBreakType[] ASTRAL_LIMIT_BREAKS = {
+        LimitBreakType.POWER, LimitBreakType.FEATHER_FALLING, LimitBreakType.LOOTING,
+        LimitBreakType.DEPTH_STRIDER, LimitBreakType.SWEEPING_EDGE
+    };
+    private static final LimitBreakType[] TIME_LIMIT_BREAKS = {
+        LimitBreakType.PROTECTION, LimitBreakType.EFFICIENCY, LimitBreakType.FORTUNE,
+        LimitBreakType.UNBREAKING, LimitBreakType.THORNS
+    };
+
+    private static final UniqueEnchant[] DARK_UNIQUES = {
+        UniqueEnchant.GUILLOTINE, UniqueEnchant.ECHO_STRIKE, UniqueEnchant.BLADE_VORTEX,
+        UniqueEnchant.SOUL_HARVEST, UniqueEnchant.VAMPIRIC, UniqueEnchant.TITAN_BREACH,
+        UniqueEnchant.SHADOW_STEP
+    };
+    private static final UniqueEnchant[] ASTRAL_UNIQUES = {
+        UniqueEnchant.COLOSSUS_SLAYER, UniqueEnchant.RICOCHET, UniqueEnchant.KINETIC_GRAPPLE,
+        UniqueEnchant.ABSOLUTE_ZERO, UniqueEnchant.SINGULARITY, UniqueEnchant.METEOR_ARROW,
+        UniqueEnchant.THUNDERLORD
+    };
+    private static final UniqueEnchant[] TIME_UNIQUES = {
+        UniqueEnchant.SEISMIC_SLAM, UniqueEnchant.VEIN_SMELTER, UniqueEnchant.ADVANCE_TOOL,
+        UniqueEnchant.TELEPATHY, UniqueEnchant.PHOENIX_REBIRTH, UniqueEnchant.TITAN_STANCE,
+        UniqueEnchant.SOULBOUND
+    };
+
+    private LimitBreakType pickThematicLimitBreak(com.example.voidscape.world.DungeonLayout.Kind kind, java.util.random.RandomGenerator random) {
+        if (kind != null && random.nextInt(100) < 68) {
+            LimitBreakType[] pool = switch (kind) {
+                case SANCTUM_DARK -> DARK_LIMIT_BREAKS;
+                case SANCTUM_ASTRAL -> ASTRAL_LIMIT_BREAKS;
+                case SANCTUM_TIME -> TIME_LIMIT_BREAKS;
+            };
+            return pool[random.nextInt(pool.length)];
+        }
+        LimitBreakType[] all = LimitBreakType.values();
+        return all[random.nextInt(all.length)];
+    }
+
+    private UniqueEnchant pickThematicUnique(com.example.voidscape.world.DungeonLayout.Kind kind, java.util.random.RandomGenerator random) {
+        if (kind != null && random.nextInt(100) < 68) {
+            UniqueEnchant[] pool = switch (kind) {
+                case SANCTUM_DARK -> DARK_UNIQUES;
+                case SANCTUM_ASTRAL -> ASTRAL_UNIQUES;
+                case SANCTUM_TIME -> TIME_UNIQUES;
+            };
+            return pool[random.nextInt(pool.length)];
+        }
+        UniqueEnchant[] all = UniqueEnchant.values();
+        return all[random.nextInt(all.length)];
+    }
+
+    public List<ItemStack> rollVaultRewards(com.example.voidscape.world.DungeonLayout.Site site) {
+        return rollVaultRewards(site, java.util.concurrent.ThreadLocalRandom.current());
+    }
+
+    /**
+     * Tier-scaled & element-biased Vault reward generator:
+     * - Tier 1-2: 35/45% native over-cap enchant books; no Tier 1 weapons or staffs.
+     * - Tier 2: independent 0.25% Rare weapon and 0.25% elemental staff bonuses.
+     * - Tier 3-5: weapon bonuses 5/10/15%, elemental staff bonuses 10/15/20%, plus supplies.
+     * - Tier 4-5: guaranteed non-consumable majors; Tier 5 rolls two majors.
+     */
+    public List<ItemStack> rollVaultRewards(com.example.voidscape.world.DungeonLayout.Site site, java.util.random.RandomGenerator random) {
+        int tier = site == null ? 1 : Math.clamp(site.tier(), 1, 5);
+        var kind = site == null ? null : site.kind();
+        List<ItemStack> results = new ArrayList<>(4);
+
+        int majorRolls = tier >= 5 ? 2 : 1;
+        boolean forceMajor = tier >= 4;
+
+        for (int r = 0; r < majorRolls; r++) {
+            results.add(rollSingleTieredReward(kind, tier, forceMajor, random));
+        }
+
+        // Tier 3-5 bonus supply drop alongside major reward(s)
+        if (tier >= 3) {
+            ItemStack bonus = createBonusSupply(tier, random);
+            if (bonus != null) results.add(bonus);
+        }
+        // Draw once per opening, even when Tier 5 grants two major rewards.
+        ItemStack weapon = rollVaultWeaponBonus(site, random);
+        if (weapon != null) results.add(weapon);
+        ItemStack staff = rollVaultStaffBonus(site, random);
+        if (staff != null) results.add(staff);
+        return results;
+    }
+
+    /** Modeled weapon bonus, independent of the normal major rewards and supplies. */
+    public ItemStack rollVaultWeaponBonus(com.example.voidscape.world.DungeonLayout.Site site,
+                                         java.util.random.RandomGenerator random) {
+        if (site == null || site.tier() < 2) return null;
+        var reward = VaultLootTable.weaponReward(site.tier(), random.nextInt(10000));
+        if (reward == VaultLootTable.WeaponReward.NONE) return null;
+        if (reward == VaultLootTable.WeaponReward.LEGENDARY) {
+            var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
+            if (addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic
+                    && magic.isEnabled() && magic.legendaryWeapons() != null) {
+                var weapons = com.example.advancemagic.item.LegendaryWeaponService.Weapon.values();
+                return magic.legendaryWeapons().create(weapons[random.nextInt(weapons.length)]);
+            }
+            // Advance Magic is optional: retain the weapon drop as an enabled Rare instead.
+        }
+        var weapons = plugin.adventurerWeapons();
+        return weapons == null ? null : weapons.create(weapons.pickThematicWeapon(site.kind(), random));
+    }
+
+    /** Tier-aware staff bonus; never repeats for Astral or Tier 5's second major reward. */
+    public ItemStack rollVaultStaffBonus(com.example.voidscape.world.DungeonLayout.Site site,
+                                        java.util.random.RandomGenerator random) {
+        int chance = site == null ? 0 : VaultLootTable.staffChanceBps(site.tier());
+        if (chance == 0 || !plugin.getConfig().getBoolean("staff-loot.enabled", true)) return null;
+        var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
+        if (!(addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic) || !magic.isEnabled()
+                || magic.staffSpells() == null || magic.staffs() == null) return null;
+        if (random.nextInt(10000) >= chance) return null;
+        var elements = com.example.advancemagic.item.ElementalStaffService.Element.values();
+        return magic.staffSpells().createStaff(elements[random.nextInt(elements.length)],
+                com.example.advancemagic.elemental.StaffSpellService.Tier.APPRENTICE);
+    }
+
+    /** Real stored enchants, stamped for the existing scoped high-level anvil transfer. */
+    public ItemStack createVaultEnchantBook(int tier, java.util.random.RandomGenerator random) {
+        Enchantment[] enchants = {Enchantment.SHARPNESS, Enchantment.PROTECTION, Enchantment.LOOTING,
+                Enchantment.FORTUNE, Enchantment.EFFICIENCY, Enchantment.UNBREAKING};
+        Enchantment enchant = enchants[random.nextInt(enchants.length)];
+        int level = switch (enchant.getKey().getKey()) {
+            case "sharpness", "protection", "efficiency" -> 6;
+            default -> 4;
+        };
+        if (tier >= 2 && random.nextInt(100) < 30) level++;
+        ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
+        var meta = (org.bukkit.inventory.meta.EnchantmentStorageMeta) item.getItemMeta();
+        meta.setDisplayName(ChatColor.AQUA + "สมุดมนตราแห่ง Vault");
+        meta.setLore(List.of(ChatColor.GRAY + "ใช้กับอุปกรณ์ที่รองรับบนทั่งตีเหล็ก"));
+        meta.addStoredEnchant(enchant, level, true);
+        plugin.bossEnchants().markGenerated(meta);
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    private ItemStack createBonusSupply(int tier, java.util.random.RandomGenerator random) {
+        int roll = random.nextInt(100);
+        if (roll < 40) {
+            int feathers = tier >= 5 ? 3 : tier >= 4 ? 2 : 1;
+            return com.example.voidscape.trade.SeraphFeathers.feather(plugin, feathers);
+        }
+        var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
+        if (addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()) {
+            if (roll < 75 && magic.staffSpells() != null) {
+                var spells = com.example.advancemagic.elemental.ElementalSpell.values();
+                ItemStack scroll = magic.staffSpells().createScroll(spells[random.nextInt(spells.length)]);
+                scroll.setAmount(tier >= 5 ? 2 : 1);
+                return scroll;
+            }
+            var qualities = com.example.advancemagic.mana.ManaPotionService.Quality.values();
+            var q = tier >= 4 ? qualities[3] : qualities[2]; // Supreme for Tier 4-5, Good for Tier 3
+            ItemStack pot = magic.manaPotions().create(q);
+            pot.setAmount(tier >= 5 ? 2 : 1);
+            return pot;
+        }
+        return com.example.voidscape.trade.SeraphFeathers.feather(plugin, tier >= 4 ? 2 : 1);
+    }
+
+    private ItemStack rollSingleTieredReward(com.example.voidscape.world.DungeonLayout.Kind kind, int tier,
+                                             boolean forceMajor, java.util.random.RandomGenerator random) {
+        if (tier <= 2 && VaultLootTable.enchantBookReward(tier, random.nextInt(10000)))
+            return createVaultEnchantBook(tier, random);
+
+        // Extra Mythic bonus roll for Tier 3-5
+        int mythicBonusBps = switch (tier) {
+            case 1 -> 0;
+            case 2 -> 60;   // +0.6%
+            case 3 -> 150;  // +1.5%
+            case 4 -> 320;  // +3.2%
+            default -> 550; // +5.5% on Tier 5
+        };
+        if (mythicBonusBps > 0 && random.nextInt(10000) < mythicBonusBps) {
+            boolean preferEternity = kind == com.example.voidscape.world.DungeonLayout.Kind.SANCTUM_TIME
+                    ? random.nextInt(100) < 65
+                    : kind == com.example.voidscape.world.DungeonLayout.Kind.SANCTUM_ASTRAL
+                    ? random.nextInt(100) < 30
+                    : random.nextBoolean();
+            if (preferEternity || tier < 3) {
+                return createScrollEternity();
+            } else {
+                var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
+                if (addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()) {
+                    return magic.flyingStaff().create();
+                }
+                return createScrollEternity();
+            }
+        }
+
+        VaultLootTable.Reward category = VaultLootTable.activeReward(random.nextInt(9250));
+        // All staffs start at Tier 3, apart from the explicit tiny Tier 2 elemental bonus.
+        if (tier < 3 && category == VaultLootTable.Reward.FLYING_STAFF)
+            category = VaultLootTable.Reward.EQUIPMENT;
+        if (category == VaultLootTable.Reward.CONSUMABLE) {
+            int rerollChance = switch (tier) {
+                case 1 -> 0;
+                case 2 -> 38;
+                case 3 -> 68;
+                default -> 100; // Tier 4 & 5 never roll plain consumable
+            };
+            if (forceMajor || random.nextInt(100) < rerollChance) {
+                // Reroll directly into the major non-consumable band (0..3199 in activeReward: Limit Break, Unique, Equipment)
+                // with thematic boost for Time Sanctum toward Equipment (Rift/Smelter Pickaxe)
+                if (kind == com.example.voidscape.world.DungeonLayout.Kind.SANCTUM_TIME && random.nextInt(100) < 25) {
+                    category = VaultLootTable.Reward.EQUIPMENT;
+                } else {
+                    category = VaultLootTable.activeReward(random.nextInt(3200));
+                }
+            }
+        }
+
+        return switch (category) {
+            case FLYING_STAFF -> {
+                var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
+                yield addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()
+                        ? magic.flyingStaff().create() : createScrollEternity();
+            }
+            case SCROLL_ETERNITY -> createScrollEternity();
+            case MYTHIC_CORE, CORE -> throw new IllegalStateException("Retired core ticket in active Vault table");
+            case LIMIT_BREAK -> createScrollLimitBreak(pickThematicLimitBreak(kind, random));
+            case UNIQUE_SCROLL -> createScrollUnique(pickThematicUnique(kind, random));
+            case EQUIPMENT -> {
+                Relic[] equipment = {Relic.RIFT_PICKAXE, Relic.SMELTER_PICKAXE};
+                yield create(equipment[random.nextInt(equipment.length)], 1);
+            }
+            case CONSUMABLE -> {
+                var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
+                if (addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()) {
+                    var qualities = com.example.advancemagic.mana.ManaPotionService.Quality.values();
+                    int draw = random.nextInt(100);
+                    var quality = tier >= 2
+                            ? (draw < 55 ? qualities[2] : qualities[3])
+                            : (draw < 60 ? qualities[1] : draw < 90 ? qualities[2] : qualities[3]);
+                    yield magic.manaPotions().create(quality);
+                }
+                yield new ItemStack(Material.ECHO_SHARD, random.nextInt(2) + tier);
+            }
+        };
+    }
 
     public ItemStack rollVaultReward() {
         return rollVaultReward(java.util.concurrent.ThreadLocalRandom.current());
     }
 
-    /** Same production table and item factories, with a repeatable source for verifying every reward. */
+    /** Untiered admin previews use the same Tier 1 major reward pool as real Vaults. */
     public ItemStack rollVaultReward(java.util.random.RandomGenerator random) {
-        return switch(VaultLootTable.reward(random.nextInt(10000))) {
-            case FLYING_STAFF -> {
-                var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");
-                yield addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()
-                        ? magic.flyingStaff().create() : createKeyShard(1);
-            }
-            case SCROLL_ETERNITY -> createScrollEternity();
-            case MYTHIC_CORE -> {
-                List<MagicCore> cores=MAGIC_CORES.stream().filter(RelicService::mythicCore).toList();
-                yield createMagicCore(cores.get(random.nextInt(cores.size())));
-            }
-            case LIMIT_BREAK -> {
-                LimitBreakType[] types=LimitBreakType.values();
-                yield createScrollLimitBreak(types[random.nextInt(types.length)]);
-            }
-            case UNIQUE_SCROLL -> {
-                UniqueEnchant[] enchants=UniqueEnchant.values();
-                yield createScrollUnique(enchants[random.nextInt(enchants.length)]);
-            }
-            case CORE -> {
-                List<MagicCore> cores=MAGIC_CORES.stream().filter(c->!mythicCore(c)).toList();
-                yield createMagicCore(cores.get(random.nextInt(cores.size())));
-            }
-            case EQUIPMENT -> {
-                Relic[] equipment={Relic.RIFT_PICKAXE,Relic.SMELTER_PICKAXE,Relic.STORM_BOW,Relic.NOVA_BOW,Relic.RIFT_BLADE,Relic.ETERNAL_AEGIS};
-                yield create(equipment[random.nextInt(equipment.length)],1);
-            }
-            case CONSUMABLE -> {
-                int sub = random.nextInt(4);
-                yield switch(sub) {
-                    case 0 -> createKeyShard(random.nextInt(2) + 1);
-                    case 1 -> createRepairStone(1);
-                    case 2 -> createVoidElixir(1);
-                    default -> new ItemStack(Material.ECHO_SHARD, random.nextInt(2) + 1);
-                };
-            }
-        };
+        return rollSingleTieredReward(null, 1, false, random);
     }
 
     public ItemStack createGuideBook(com.example.voidscape.guide.GuideBookType type) {
-        if (type == null) type = com.example.voidscape.guide.GuideBookType.CROPS;
+        if (type == null) type = com.example.voidscape.guide.GuideBookType.RELICS;
         ItemStack book = new ItemStack(Material.WRITTEN_BOOK);
         org.bukkit.inventory.meta.BookMeta meta = (org.bukkit.inventory.meta.BookMeta) book.getItemMeta();
         meta.setTitle(type.bookTitle);
@@ -806,9 +723,6 @@ public final class RelicService implements Listener {
         return book;
     }
 
-    public ItemStack createCropGuideBook() {
-        return createGuideBook(com.example.voidscape.guide.GuideBookType.CROPS);
-    }
 
     public ItemStack createRelicGuideBook() {
         return createGuideBook(com.example.voidscape.guide.GuideBookType.RELICS);
@@ -819,7 +733,7 @@ public final class RelicService implements Listener {
     }
 
     public ItemStack createGuideBook() {
-        return createGuideBook(com.example.voidscape.guide.GuideBookType.CROPS);
+        return createGuideBook(com.example.voidscape.guide.GuideBookType.RELICS);
     }
 
     public com.example.voidscape.guide.GuideBookType getGuideBookType(ItemStack item) {
@@ -827,7 +741,7 @@ public final class RelicService implements Listener {
         var pdc = item.getItemMeta().getPersistentDataContainer();
         String typeName = pdc.get(plugin.key("guide_book_type"), PersistentDataType.STRING);
         if (typeName != null) {
-            try { return com.example.voidscape.guide.GuideBookType.valueOf(typeName); } catch (Exception ignored) {}
+            try { return com.example.voidscape.guide.GuideBookType.valueOf(typeName); } catch (Exception ignored) { return null; }
         }
         if (item.getItemMeta() instanceof org.bukkit.inventory.meta.BookMeta bm) {
             String title = bm.getTitle();
@@ -837,13 +751,12 @@ public final class RelicService implements Listener {
                 }
             }
         }
-        return pdc.has(plugin.key("guide_book"), PersistentDataType.BYTE) ? com.example.voidscape.guide.GuideBookType.CROPS : null;
+        return pdc.has(plugin.key("guide_book"), PersistentDataType.BYTE) ? com.example.voidscape.guide.GuideBookType.RELICS : null;
     }
 
     public Relic type(ItemStack item) {
         if(item==null||!item.hasItemMeta()) return null;
         ItemMeta meta = item.getItemMeta();
-        if (isAeternumItem(meta)) return null;
         var pdc = meta.getPersistentDataContainer();
 
         // 1. Primary PDC key (voidscape:relic_v2)
@@ -890,94 +803,30 @@ public final class RelicService implements Listener {
         // Only our PDC keys or explicitly namespaced models identify a relic.
         return null;
     }
-    public boolean immune(Player p) {
-        return p.getPersistentDataContainer().getOrDefault(shieldUntil,PersistentDataType.LONG,0L)>System.currentTimeMillis();
-    }
-    private boolean ready(Player p,Relic relic) {
-        long end=p.getPersistentDataContainer().getOrDefault(plugin.key("cd_"+relic.id()),PersistentDataType.LONG,0L);
-        long left=end-System.currentTimeMillis();
-        if(left<=0)return true;
-        p.sendActionBar(Component.text("คูลดาวน์ " + ((left+999)/1000) + " วินาที",NamedTextColor.GRAY));return false;
-    }
-    private void cooldown(Player p,Relic r,int seconds) {
-        p.getPersistentDataContainer().set(plugin.key("cd_"+r.id()),PersistentDataType.LONG,System.currentTimeMillis()+seconds*1000L);
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPrepareCraft(org.bukkit.event.inventory.PrepareItemCraftEvent e) {
         CraftingInventory inv = e.getInventory();
+        if(Arrays.stream(inv.getMatrix()).anyMatch(RemovedRelics::matches)){RemovedRelics.clean(inv);inv.setResult(null);return;}
         ItemStack[] matrix = inv.getMatrix();
 
         int totalItems = 0;
-        int keyShards = 0;
-        int astralDust = 0;
-        int repairStones = 0;
-        int amethystShards = 0;
-        int glassBottles = 0;
         int scrollCount = 0;
-        int damagedEquipCount = 0;
         ItemStack singleScroll = null;
         ItemStack singleEquip = null;
-        ItemStack singleDamagedEquip = null;
 
         for (ItemStack it : matrix) {
             if (it == null || it.getType().isAir()) continue;
             totalItems++;
-            if (isKeyShard(it)) {
-                keyShards++;
-            } else if (isAstralDust(it)) {
-                astralDust++;
-            } else if (isRepairStone(it)) {
-                repairStones++;
-            } else if (isScrollEternity(it) || getLimitBreakType(it) != null || getUniqueEnchant(it) != null) {
+            if (isScrollEternity(it) || getLimitBreakType(it) != null || getUniqueEnchant(it) != null) {
                 scrollCount++;
                 singleScroll = it;
-            } else if (it.getType() == Material.AMETHYST_SHARD) {
-                amethystShards++;
-            } else if (it.getType() == Material.GLASS_BOTTLE) {
-                glassBottles++;
             } else if (it.getType().getMaxDurability() > 0) {
                 singleEquip = it;
-                if (it.hasItemMeta() && it.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable dmg && dmg.getDamage() > 0) {
-                    damagedEquipCount++;
-                    singleDamagedEquip = it;
-                }
-            }
-        }
-
-        // 1. Evergarden Key: exactly 4 Key Shards and nothing else
-        if (keyShards == 4 && totalItems == 4) {
-            inv.setResult(createVoidKey());
-            return;
-        }
-
-        // 2. Vault Repair Stone: exactly 4 Astral Dust + 1 Amethyst Shard and nothing else
-        if (astralDust == 4 && amethystShards == 1 && totalItems == 5) {
-            inv.setResult(createRepairStone(1));
-            return;
-        }
-
-        // 3. Void Walker Elixir: exactly 1 Astral Dust + 1 Glass Bottle and nothing else
-        if (astralDust == 1 && glassBottles == 1 && totalItems == 2) {
-            inv.setResult(createVoidElixir(1));
-            return;
-        }
-
-        // 4. Bedrock Crafting Table Repair: 1 Repair Stone + 1 Damaged Item
-        if (repairStones == 1 && damagedEquipCount == 1 && totalItems == 2) {
-            org.bukkit.inventory.meta.Damageable dmg = (org.bukkit.inventory.meta.Damageable) singleDamagedEquip.getItemMeta();
-            if (dmg.getDamage() > 0) {
-                ItemStack result = singleDamagedEquip.clone();
-                org.bukkit.inventory.meta.Damageable resDmg = (org.bukkit.inventory.meta.Damageable) result.getItemMeta();
-                resDmg.setDamage(Math.max(0, resDmg.getDamage() - 500));
-                result.setItemMeta(resDmg);
-                inv.setResult(result);
-                return;
             }
         }
 
         // 5. Bedrock Scrolls in Crafting Table: 1 Scroll + 1 Target Equipment
-        if (scrollCount == 1 && singleEquip != null && totalItems == 2) {
+        if (scrollCount == 1 && singleEquip != null && singleEquip.getAmount() == 1 && totalItems == 2) {
             ItemStack result = evaluateScrollCraft(singleScroll, singleEquip);
             if (result != null) {
                 inv.setResult(result);
@@ -987,376 +836,87 @@ public final class RelicService implements Listener {
 
         // 6. Only reserve the crafting grid when it actually contains Evergarden custom ingredients.
         // This avoids hijacking unrelated vanilla recipes on Bedrock, which can cause crafting-table hangs.
-        if (keyShards > 0 || astralDust > 0 || repairStones > 0 || amethystShards > 0 || glassBottles > 0 || scrollCount > 0 || damagedEquipCount > 0) {
+        if (scrollCount > 0) {
             inv.setResult(null);
             return;
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCraftItem(org.bukkit.event.inventory.CraftItemEvent e) {
-        if (!(e.getWhoClicked() instanceof Player p)) return;
-        CraftingInventory inv = e.getInventory();
-        ItemStack result = inv.getResult();
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onCraftItem(org.bukkit.event.inventory.CraftItemEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        CraftingInventory inventory = event.getInventory();
+        if (handleDynamicCraft(event, player, inventory)) return;
+        // Registered recipes are consumed by Minecraft after a successful transfer.
+        ItemStack result = inventory.getResult();
         if (result == null || result.getType().isAir()) return;
-
-        ItemStack[] matrix = inv.getMatrix();
-        int totalItems = 0;
-        int keyShards = 0;
-        int astralDust = 0;
-        int repairStones = 0;
-        int amethystShards = 0;
-        int glassBottles = 0;
-        int scrollCount = 0;
-        int damagedEquipCount = 0;
-
-        for (ItemStack it : matrix) {
-            if (it == null || it.getType().isAir()) continue;
-            totalItems++;
-            if (isKeyShard(it)) keyShards++;
-            else if (isAstralDust(it)) astralDust++;
-            else if (isRepairStone(it)) repairStones++;
-            else if (it.getType() == Material.AMETHYST_SHARD) amethystShards++;
-            else if (it.getType() == Material.GLASS_BOTTLE) glassBottles++;
-            else if (isScrollEternity(it) || getLimitBreakType(it) != null || getUniqueEnchant(it) != null) scrollCount++;
-            else if (it.hasItemMeta() && it.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable dmg && dmg.getDamage() > 0) damagedEquipCount++;
-        }
-
-        boolean isCustomEvergardenCraft = false;
-
-        if (keyShards == 4 && totalItems == 4) {
-            isCustomEvergardenCraft = true;
-            p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1.0f, 1.2f);
-            p.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, p.getLocation().add(0, 1, 0), 10, 0.3, 0.3, 0.3, 0.05);
-            p.sendActionBar(Component.text("✦ ประกอบ Evergarden Key สำเร็จ!", NamedTextColor.LIGHT_PURPLE));
-        } else if (astralDust == 4 && amethystShards == 1 && totalItems == 5) {
-            isCustomEvergardenCraft = true;
-            p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1.0f, 1.2f);
-            p.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, p.getLocation().add(0, 1, 0), 10, 0.3, 0.3, 0.3, 0.05);
-            p.sendActionBar(Component.text("✦ สร้างศิลาฟื้นฟูมิติ (Vault Repair Stone) สำเร็จ!", NamedTextColor.GREEN));
-        } else if (astralDust == 1 && glassBottles == 1 && totalItems == 2) {
-            isCustomEvergardenCraft = true;
-            p.playSound(p.getLocation(), Sound.ITEM_BOTTLE_FILL, 1.0f, 1.2f);
-            p.getWorld().spawnParticle(Particle.PORTAL, p.getLocation().add(0, 1, 0), 10, 0.3, 0.3, 0.3, 0.05);
-            p.sendActionBar(Component.text("✦ ปรุงน้ำยาเดินเวหา (Void Walker Elixir) สำเร็จ!", NamedTextColor.LIGHT_PURPLE));
-        } else if (repairStones == 1 && damagedEquipCount == 1 && totalItems == 2) {
-            isCustomEvergardenCraft = true;
-            p.playSound(p.getLocation(), Sound.BLOCK_GRINDSTONE_USE, 1.0f, 1.2f);
-            p.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, p.getLocation().add(0, 1, 0), 15, 0.3, 0.3, 0.3, 0.05);
-            p.sendActionBar(Component.text("✦ ศิลาฟื้นฟูมิติ ซ่อมแซมความทนทาน 500 หน่วย!", NamedTextColor.GREEN));
-        } else if (scrollCount == 1 && totalItems == 2) {
-            isCustomEvergardenCraft = true;
-            p.playSound(p.getLocation(), Sound.BLOCK_ANVIL_USE, 1.0f, 1.25f);
-            p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.7f, 1.35f);
-            p.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, p.getLocation().add(0, 1.2, 0), 25, 0.35, 0.35, 0.35, 0.1);
-            p.sendActionBar(Component.text("✦ ปลุกเสกมนตราผ่านโต๊ะคราฟต์สำเร็จ!", NamedTextColor.GREEN));
-        }
-
-        if (isCustomEvergardenCraft) {
-            e.setCurrentItem(result);
-            inv.setResult(result);
-
-            // Check if recipe is upgrade/repair: disable Shift-Click to prevent item dupes
-            // NOTE: Only unregistered dynamic recipes (scroll upgrade / repair stone on equipment)
-            // require manual ingredient consumption. Registered Bukkit recipes (Evergarden Key,
-            // Repair Stone craft, Void Elixir) are natively consumed by Minecraft! Calling
-            // consumeMatrixIngredients on registered recipes causes double-consumption (requiring 2 of each).
-            if (scrollCount == 1 || (repairStones == 1 && damagedEquipCount == 1)) {
-                if (e.isShiftClick()) {
-                    e.setCancelled(true);
-                    p.sendActionBar(Component.text("⚠ การตีบวก/ซ่อมแซม ไม่รองรับการกด Shift-Click (กรุณาแตะหยิบทีละชิ้น)", NamedTextColor.YELLOW));
-                    return;
-                }
-                consumeMatrixIngredients(inv);
-            }
-
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                if (p.isOnline()) {
-                    p.updateInventory();
-                }
-            });
+        if (isVoidKey(result)) {
+            player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_CHIME, 1.0f, 1.2f);
+            Bukkit.getScheduler().runTask(plugin, player::updateInventory);
         }
     }
 
-    public void consumeMatrixIngredients(CraftingInventory inv) {
-        ItemStack[] matrix = inv.getMatrix();
-        boolean changed = false;
-        for (int i = 0; i < matrix.length; i++) {
-            ItemStack it = matrix[i];
-            if (it != null && !it.getType().isAir()) {
-                int amount = it.getAmount() - 1;
-                if (amount <= 0) {
-                    matrix[i] = null;
-                } else {
-                    it.setAmount(amount);
-                    matrix[i] = it;
-                }
-                changed = true;
-            }
+    /** Re-evaluate the two inputs rather than trusting a cached result-slot preview. */
+    private ItemStack dynamicCraftResult(ItemStack[] matrix) {
+        ItemStack catalyst = null, equipment = null;
+        int occupied = 0;
+        for (ItemStack item : matrix) {
+            if (item == null || item.getType().isAir()) continue;
+            occupied++;
+            if (isScrollEternity(item)
+                    || getLimitBreakType(item) != null || getUniqueEnchant(item) != null) {
+                if (catalyst != null) return null;
+                catalyst = item;
+            } else if (item.getType().getMaxDurability() > 0) {
+                if (equipment != null) return null;
+                equipment = item;
+            } else return null;
         }
-        if (changed) {
-            inv.setMatrix(matrix);
+        if (occupied != 2 || catalyst == null || equipment == null || equipment.getAmount() != 1) return null;
+        return evaluateScrollCraft(catalyst, equipment);
+    }
+
+    /** One cancelled, synchronous transaction owns both consumption and delivery. */
+    private boolean handleDynamicCraft(org.bukkit.event.inventory.InventoryClickEvent event,
+                                       Player player, CraftingInventory inventory) {
+        ItemStack[] matrix = inventory.getMatrix();
+        boolean dynamic = Arrays.stream(matrix).anyMatch(item -> isScrollEternity(item)
+                || getLimitBreakType(item) != null || getUniqueEnchant(item) != null);
+        if (!dynamic) return false;
+        event.setCancelled(true);
+        if (event.getClick() != org.bukkit.event.inventory.ClickType.LEFT
+                && event.getClick() != org.bukkit.event.inventory.ClickType.RIGHT) return true;
+        ItemStack result = dynamicCraftResult(matrix);
+        ItemStack preview = inventory.getResult();
+        if (result == null || preview == null || preview.getAmount() != result.getAmount() || !preview.isSimilar(result)) return true;
+        ItemStack cursor = event.getCursor();
+        ItemStack delivered = result.clone();
+        if (cursor != null && !cursor.getType().isAir()) {
+            if (!cursor.isSimilar(result) || cursor.getAmount() > result.getMaxStackSize() - result.getAmount()) return true;
+            delivered.setAmount(cursor.getAmount() + result.getAmount());
         }
+        ItemStack[] remaining = Arrays.stream(matrix).map(item -> {
+            if (item == null || item.getType().isAir()) return null;
+            if (item.getAmount() == 1) return null;
+            ItemStack copy = item.clone(); copy.setAmount(copy.getAmount() - 1); return copy;
+        }).toArray(ItemStack[]::new);
+        inventory.setMatrix(remaining);
+        player.setItemOnCursor(delivered);
+        player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1.0f, 1.25f);
+        // Refresh client state only; never replay item snapshots in a later tick.
+        Bukkit.getScheduler().runTask(plugin, player::updateInventory);
+        return true;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onCraftResultClick(org.bukkit.event.inventory.InventoryClickEvent e) {
-        if (e instanceof org.bukkit.event.inventory.CraftItemEvent) return; // Handled authoritatively by onCraftItem
-        if (!(e.getWhoClicked() instanceof Player p)) return;
-        if (!(e.getInventory() instanceof CraftingInventory inv)) return;
-        if (e.getSlotType() != org.bukkit.event.inventory.InventoryType.SlotType.RESULT && e.getRawSlot() != 0) return;
-
-        // Prevent number-key swap, drop, or non-standard clicks from duping custom crafts
-        if (e.getClick() == org.bukkit.event.inventory.ClickType.NUMBER_KEY
-            || e.getClick() == org.bukkit.event.inventory.ClickType.DROP
-            || e.getClick() == org.bukkit.event.inventory.ClickType.CONTROL_DROP
-            || e.getClick() == org.bukkit.event.inventory.ClickType.SWAP_OFFHAND) {
-            e.setCancelled(true);
-            return;
-        }
-
-        ItemStack result = inv.getResult();
-        if (result == null || result.getType().isAir()) return;
-
-        ItemStack[] matrix = inv.getMatrix();
-        int totalItems = 0;
-        int keyShards = 0;
-        int astralDust = 0;
-        int repairStones = 0;
-        int amethystShards = 0;
-        int glassBottles = 0;
-        int scrollCount = 0;
-        int damagedEquipCount = 0;
-
-        for (ItemStack it : matrix) {
-            if (it == null || it.getType().isAir()) continue;
-            totalItems++;
-            if (isKeyShard(it)) keyShards++;
-            else if (isAstralDust(it)) astralDust++;
-            else if (isRepairStone(it)) repairStones++;
-            else if (it.getType() == Material.AMETHYST_SHARD) amethystShards++;
-            else if (it.getType() == Material.GLASS_BOTTLE) glassBottles++;
-            else if (isScrollEternity(it) || getLimitBreakType(it) != null || getUniqueEnchant(it) != null) scrollCount++;
-            else if (it.hasItemMeta() && it.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable dmg && dmg.getDamage() > 0) damagedEquipCount++;
-        }
-
-        boolean isCustom = (keyShards == 4 && totalItems == 4)
-            || (astralDust == 4 && amethystShards == 1 && totalItems == 5)
-            || (astralDust == 1 && glassBottles == 1 && totalItems == 2)
-            || (repairStones == 1 && damagedEquipCount == 1 && totalItems == 2)
-            || (scrollCount == 1 && totalItems == 2);
-
-        if (isCustom) {
-            if (scrollCount == 1 || (repairStones == 1 && damagedEquipCount == 1)) {
-                if (e.isShiftClick()) {
-                    e.setCancelled(true);
-                    p.sendActionBar(Component.text("⚠ การตีบวก/ซ่อมแซม ไม่รองรับการกด Shift-Click (กรุณาแตะหยิบทีละชิ้น)", NamedTextColor.YELLOW));
-                    return;
-                }
-                consumeMatrixIngredients(inv);
-            }
-            Bukkit.getScheduler().runTask(plugin, () -> {
-                if (p.isOnline()) {
-                    p.updateInventory();
-                }
-            });
-        }
+    public void onCraftResultClick(org.bukkit.event.inventory.InventoryClickEvent event) {
+        if (event instanceof org.bukkit.event.inventory.CraftItemEvent) return;
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        if (!(event.getInventory() instanceof CraftingInventory inventory)) return;
+        if (event.getSlotType() != org.bukkit.event.inventory.InventoryType.SlotType.RESULT) return;
+        handleDynamicCraft(event, player, inventory);
     }
 
-    public void triggerRiftBladeWarp(Player p) {
-        if(p.getGameMode()==GameMode.SPECTATOR||!ready(p,Relic.RIFT_BLADE)||immune(p))return;
-        Location start=p.getLocation(),target=null;
-        Vector direction=start.getDirection();
-        if(direction.getY() < -0.2) direction.setY(-0.05); // prevent diving into floor on slight look-down
-        direction.normalize();
-        double distance=plugin.integer("relics.blink.distance",8,2,12);
-        for(double d=0.5;d<=distance;d+=0.5) {
-            Location next=start.clone().add(direction.clone().multiply(d));
-            if(!p.getWorld().getWorldBorder().isInside(next))break;
-            if(!p.getWorld().isChunkLoaded(next.getBlockX()>>4,next.getBlockZ()>>4))break;
-            BoundingBox body=BoundingBox.of(next.clone().add(-0.31,0,-0.31),next.clone().add(0.31,1.85,0.31));
-            boolean collision=false;
-            for(int x=(int)Math.floor(body.getMinX());x<=Math.floor(body.getMaxX());x++)
-                for(int y=(int)Math.floor(body.getMinY());y<=Math.floor(body.getMaxY());y++)
-                    for(int z=(int)Math.floor(body.getMinZ());z<=Math.floor(body.getMaxZ());z++)
-                        if(!p.getWorld().getBlockAt(x,y,z).isPassable())collision=true;
-            if(collision)break;target=next;
-        }
-        if(target!=null&&start.distanceSquared(target)>=1&&p.teleport(target,PlayerTeleportEvent.TeleportCause.PLUGIN)) {
-            cooldown(p,Relic.RIFT_BLADE,plugin.integer("relics.blink.cooldown-seconds",8,2,120));
-            p.setFallDistance(0);p.playSound(target,Sound.ENTITY_ENDERMAN_TELEPORT,0.7f,0.7f);
-            p.spawnParticle(Particle.REVERSE_PORTAL,target.clone().add(0,1,0),12,0.3,0.5,0.3,0.03);
-            p.sendActionBar(Component.text("✦ กรีดมิติวาร์ปพริบตา!", NamedTextColor.AQUA));
-        } else {
-            p.playSound(p.getLocation(), Sound.BLOCK_DISPENSER_FAIL, 0.7f, 1.4f);
-            p.sendActionBar(Component.text("⚠ ทางข้างหน้าไม่เปิดโล่ง ไม่สามารถวาร์ปได้", NamedTextColor.YELLOW));
-        }
-    }
-
-    public void triggerAegis(Player p) {
-        if(p.getGameMode()==GameMode.SPECTATOR||!ready(p,Relic.ETERNAL_AEGIS))return;
-        int seconds=plugin.integer("relics.shield.duration-seconds",3,1,5);
-        p.getPersistentDataContainer().set(shieldUntil,PersistentDataType.LONG,System.currentTimeMillis()+seconds*1000L);
-        cooldown(p,Relic.ETERNAL_AEGIS,plugin.integer("relics.shield.cooldown-seconds",75,10,600));
-        p.playSound(p.getLocation(),Sound.ITEM_TOTEM_USE,0.6f,0.7f);
-        p.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,p.getLocation().add(0,1,0),20,0.4,0.4,0.4,0.05);
-        p.sendActionBar(Component.text("โล่แห่งความอมตะ · "+seconds+" วินาที",NamedTextColor.GOLD));
-    }
-
-    @EventHandler(priority=EventPriority.HIGH)
-    public void interact(PlayerInteractEvent e) {
-        Player p=e.getPlayer();
-        ItemStack held=e.getItem();
-        if(held==null||held.getType().isAir())return;
-
-        // 1. Vault Repair Stone interaction (support right click, sneak + left click / swing for Bedrock)
-        if(isRepairStone(held)) {
-            if(e.getAction().isRightClick() || (p.isSneaking() && (e.getAction()==org.bukkit.event.block.Action.LEFT_CLICK_AIR||e.getAction()==org.bukkit.event.block.Action.LEFT_CLICK_BLOCK))) {
-                e.setCancelled(true);
-                useRepairStone(p,held);
-                return;
-            }
-        }
-
-        Relic r=type(held);
-        if(r==Relic.ETERNAL_AEGIS) {
-            if(e.getAction().isRightClick()) {
-                e.setCancelled(true);
-                triggerAegis(p);
-                return;
-            }
-        } else if(r==Relic.RIFT_BLADE) {
-            if(e.getAction().isRightClick() || (p.isSneaking() && (e.getAction()==org.bukkit.event.block.Action.LEFT_CLICK_AIR||e.getAction()==org.bukkit.event.block.Action.LEFT_CLICK_BLOCK))) {
-                e.setCancelled(true);
-                triggerRiftBladeWarp(p);
-                return;
-            }
-        }
-    }
-
-    @EventHandler(priority=EventPriority.HIGH)
-    public void onSwapHand(PlayerSwapHandItemsEvent e) {
-        Player p=e.getPlayer();
-        if(type(e.getMainHandItem())==Relic.RIFT_BLADE) {
-            e.setCancelled(true);
-            triggerRiftBladeWarp(p);
-        } else if(type(e.getMainHandItem())==Relic.ETERNAL_AEGIS||type(e.getOffHandItem())==Relic.ETERNAL_AEGIS) {
-            e.setCancelled(true);
-            triggerAegis(p);
-        }
-    }
-
-    @EventHandler(priority=EventPriority.HIGH)
-    public void onSneak(PlayerToggleSneakEvent e) {
-        if(!e.isSneaking())return;
-        Player p=e.getPlayer();
-        ItemStack main=p.getInventory().getItemInMainHand();
-        ItemStack off=p.getInventory().getItemInOffHand();
-        if(type(main)==Relic.ETERNAL_AEGIS||type(off)==Relic.ETERNAL_AEGIS) {
-            long now=System.currentTimeMillis();
-            long last=lastAegisSneak.getOrDefault(p.getUniqueId(),0L);
-            lastAegisSneak.put(p.getUniqueId(),now);
-            if(now-last<=550L) { // Double-sneak within 550ms to activate intentionally
-                triggerAegis(p);
-            }
-        }
-    }
-
-    private void useRepairStone(Player p,ItemStack item) {
-        ItemStack best=null;
-        int maxDamage=0;
-        List<ItemStack> candidates=new ArrayList<>();
-        if(p.getInventory().getArmorContents()!=null) {
-            candidates.addAll(Arrays.asList(p.getInventory().getArmorContents()));
-        }
-        candidates.add(p.getInventory().getItemInOffHand());
-        candidates.add(p.getInventory().getItemInMainHand());
-        for(ItemStack it:candidates) {
-            if(it!=null&&it.hasItemMeta()&&it.getItemMeta() instanceof org.bukkit.inventory.meta.Damageable dmg) {
-                if(dmg.getDamage()>maxDamage&&!it.equals(item)) {
-                    maxDamage=dmg.getDamage();
-                    best=it;
-                }
-            }
-        }
-        if(best==null||maxDamage<=0) {
-            p.playSound(p.getLocation(),Sound.ENTITY_VILLAGER_NO,0.8f,1.0f);
-            p.sendActionBar(Component.text("⚠ อุปกรณ์และชุดเกราะของคุณไม่ได้รับความเสียหาย",NamedTextColor.YELLOW));
-            return;
-        }
-        org.bukkit.inventory.meta.Damageable dmg=(org.bukkit.inventory.meta.Damageable)best.getItemMeta();
-        int repaired=Math.min(500,dmg.getDamage());
-        dmg.setDamage(dmg.getDamage()-repaired);
-        best.setItemMeta(dmg);
-
-        item.subtract(1);
-        p.updateInventory();
-        p.playSound(p.getLocation(),Sound.BLOCK_GRINDSTONE_USE,1.0f,1.2f);
-        p.getWorld().spawnParticle(Particle.HAPPY_VILLAGER,p.getLocation().add(0,1,0),15,0.3,0.3,0.3,0.05);
-        p.sendActionBar(Component.text("✦ ศิลาฟื้นฟูมิติ ซ่อมแซมความทนทาน "+repaired+" หน่วย!",NamedTextColor.GREEN));
-    }
-
-    @EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
-    public void onConsume(PlayerItemConsumeEvent e) {
-        if(isVoidElixir(e.getItem())) {
-            Player p=e.getPlayer();
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,20*180,1));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST,20*180,1));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,20*180,0));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,20*30,0));
-            p.playSound(p.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_CHIME,1.0f,1.4f);
-            p.getWorld().spawnParticle(Particle.PORTAL,p.getLocation().add(0,1,0),30,0.5,0.5,0.5,0.1);
-            p.sendActionBar(Component.text("✦ พลังแห่งเดินเวหาตื่นขึ้น! (Speed II + Jump II + Slow Falling 3 นาที)",NamedTextColor.LIGHT_PURPLE));
-        }
-    }
-
-    @EventHandler(priority=EventPriority.HIGHEST)
-    public void shieldDamage(EntityDamageEvent e) {if(e.getEntity() instanceof Player p&&immune(p))e.setCancelled(true);}
-    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void shieldAttack(EntityDamageByEntityEvent e) {
-        Player p=e.getDamager() instanceof Player direct?direct:e.getDamager() instanceof Projectile pr&&pr.getShooter() instanceof Player shooter?shooter:null;
-        if(p!=null&&immune(p))e.setCancelled(true);
-    }
-    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
-    public void shoot(EntityShootBowEvent e) {
-        if(!(e.getEntity() instanceof Player p))return;
-        if(immune(p)){e.setCancelled(true);return;}
-        Relic r=type(e.getBow());
-        if((r!=Relic.NOVA_BOW&&r!=Relic.STORM_BOW)||e.getForce()<0.85)return;
-        if(arrows.size()>=plugin.integer("performance.max-special-projectiles",64,1,256)) {e.setCancelled(true);return;}
-        Entity arrow=e.getProjectile();
-        arrow.getPersistentDataContainer().set(shot,PersistentDataType.STRING,r.name());
-        arrow.getPersistentDataContainer().set(shotOwner,PersistentDataType.STRING,p.getUniqueId().toString());
-        arrows.put(arrow.getUniqueId(),System.currentTimeMillis()+10000);
-    }
-    @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
-    public void hit(ProjectileHitEvent e) {
-        Projectile arrow=e.getEntity();String id=arrow.getPersistentDataContainer().get(shot,PersistentDataType.STRING);
-        if(id==null)return;
-        arrow.getPersistentDataContainer().remove(shot);arrows.remove(arrow.getUniqueId());
-        if(!(arrow.getShooter() instanceof Player p)||!p.isOnline()||p.getWorld()!=arrow.getWorld()||immune(p)){arrow.remove();return;}
-        Location at=arrow.getLocation();arrow.remove();
-        List<LivingEntity> targets=new ArrayList<>(at.getNearbyLivingEntities(5.0));
-        targets.removeIf(t->t.equals(p)||t instanceof ArmorStand||t.isDead()||t instanceof Player&&!plugin.getConfig().getBoolean("relics.allow-pvp",false));
-        targets.sort(Comparator.comparingDouble(t->t.getLocation().distanceSquared(at)));
-        if(id.equals(Relic.NOVA_BOW.name())) {
-            p.getWorld().spawnParticle(Particle.EXPLOSION,at,1);
-            p.getWorld().playSound(at,Sound.ENTITY_GENERIC_EXPLODE,0.7f,1.3f);
-            for(LivingEntity t:targets.subList(0,Math.min(8,targets.size())))
-                if(clear(at,t.getEyeLocation()))t.damage(Math.max(2,16-at.distance(t.getLocation())*3),p);
-        } else {
-            int n=0;
-            for(LivingEntity t:targets) {
-                if(!clear(at,t.getEyeLocation()))continue;
-                t.getWorld().strikeLightningEffect(t.getLocation());t.damage(14-n*3,p);
-                if(++n==3)break;
-            }
-        }
-    }
-    private boolean clear(Location a,Location b) {
-        Vector v=b.toVector().subtract(a.toVector());double d=v.length();
-        return d<0.3||a.getWorld().rayTraceBlocks(a,v,d-0.2,FluidCollisionMode.NEVER,true)==null;
-    }
     @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
     public void mine(BlockBreakEvent e) {
         Player p=e.getPlayer();
@@ -1411,11 +971,12 @@ public final class RelicService implements Listener {
         }
 
         e.setDropItems(false);
-        e.setExpToDrop(Math.max(e.getExpToDrop(),1));
+        // Only ores earn the smelting XP; placed cobblestone, logs or sand would be an endless XP farm.
+        if(block.getType().name().endsWith("_ORE")||block.getType()==Material.ANCIENT_DEBRIS)e.setExpToDrop(Math.max(e.getExpToDrop(),1));
         Location loc=block.getLocation().add(0.5,0.5,0.5);
 
         // Telepathy support: if tool has Telepathy enchant, put directly into player inventory
-        boolean hasTelepathy = EnchantApplyListener.hasUnique(held, UniqueEnchant.TELEPATHY);
+        boolean hasTelepathy = UniqueCompatibility.active(held, UniqueEnchant.TELEPATHY,this);
         if (hasTelepathy) {
             var leftover = p.getInventory().addItem(smelted);
             leftover.values().forEach(rem -> block.getWorld().dropItemNaturally(loc, rem));
@@ -1465,10 +1026,4 @@ public final class RelicService implements Listener {
             default -> null;
         };
     }
-    public void tick() {
-        if(arrows.isEmpty())return;
-        long now=System.currentTimeMillis();
-        arrows.entrySet().removeIf(e->{Entity a=Bukkit.getEntity(e.getKey());if(a==null)return true;if(now>=e.getValue()){a.remove();return true;}return false;});
-    }
-    public void close(){for(UUID id:arrows.keySet()){Entity e=Bukkit.getEntity(id);if(e!=null)e.remove();}arrows.clear();}
 }

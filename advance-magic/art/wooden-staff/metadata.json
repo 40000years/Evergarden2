@@ -1,0 +1,79 @@
+{
+  "format": 1,
+  "generator": "tools/wooden_staff_assets.py",
+  "base_item": "minecraft:carrot_on_a_stick",
+  "modelengine_version": "4.1.1",
+  "items": [
+    {
+      "id": "wood",
+      "title": "Amethystwood Staff",
+      "model_key": "advance_magic:staff_wood",
+      "modelengine": "wooden_staff.bbmodel",
+      "grip": [
+        8,
+        10.6,
+        8
+      ],
+      "cuboids": 270,
+      "element": null,
+      "slots": {
+        "initial": 1,
+        "upgraded": 2,
+        "maximum_rarity": "rare"
+      },
+      "description": "Chestnut wood grain, carved branch cradle, three fixed violet amethyst shards, leather and restrained blaze brass."
+    }
+  ],
+  "item_atlas": {
+    "advance_magic.staff_wood": {
+      "textures": "textures/wooden_staff/wood_icon"
+    }
+  },
+  "definitions": {
+    "minecraft:carrot_on_a_stick": [
+      {
+        "type": "definition",
+        "model": "advance_magic:staff_wood",
+        "bedrock_identifier": "advance_magic:staff_wood",
+        "display_name": "Amethystwood Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.staff_wood",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      }
+    ]
+  },
+  "grip_frame": {
+    "bedrock_root": [
+      0,
+      24,
+      0
+    ],
+    "bedrock_contact": [
+      0,
+      12.5,
+      0
+    ],
+    "first_scale": 0.356668,
+    "first_lift": 8.442628,
+    "third_scale": 0.9
+  },
+  "camera_fit": {
+    "method": "existing screenshot-calibrated affine projection, approximate; not a client render",
+    "frame": [
+      1160,
+      500
+    ],
+    "solid_y_bounds": [
+      50,
+      450
+    ]
+  },
+  "vfx": {
+    "type": "solid crystal facets and slow Java material shimmer",
+    "picture_planes": 0,
+    "server_entities": 0
+  }
+}

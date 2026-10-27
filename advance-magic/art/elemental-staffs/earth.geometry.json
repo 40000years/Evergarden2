@@ -1,0 +1,5350 @@
+{
+  "id": "earth",
+  "grip": [
+    8,
+    10.3,
+    8
+  ],
+  "cubes": [
+    {
+      "name": "wood_000",
+      "from": [
+        7.59,
+        1.5,
+        7.55
+      ],
+      "to": [
+        8.41,
+        22,
+        8.45
+      ],
+      "mat": "wood",
+      "bone": "staff"
+    },
+    {
+      "name": "wood_light_001",
+      "from": [
+        7.61,
+        2,
+        7.39
+      ],
+      "to": [
+        7.83,
+        21.6,
+        8.61
+      ],
+      "mat": "wood_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_002",
+      "from": [
+        7.44,
+        8.5,
+        7.4
+      ],
+      "to": [
+        8.56,
+        12.1,
+        8.6
+      ],
+      "mat": "leather",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_003",
+      "from": [
+        7.35,
+        8.7,
+        7.31
+      ],
+      "to": [
+        8.65,
+        8.87,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_004",
+      "from": [
+        7.35,
+        9.3,
+        7.31
+      ],
+      "to": [
+        8.65,
+        9.47,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_005",
+      "from": [
+        7.35,
+        9.9,
+        7.31
+      ],
+      "to": [
+        8.65,
+        10.07,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_006",
+      "from": [
+        7.35,
+        10.5,
+        7.31
+      ],
+      "to": [
+        8.65,
+        10.67,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_007",
+      "from": [
+        7.35,
+        11.1,
+        7.31
+      ],
+      "to": [
+        8.65,
+        11.27,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "leather_light_008",
+      "from": [
+        7.35,
+        11.7,
+        7.31
+      ],
+      "to": [
+        8.65,
+        11.87,
+        8.69
+      ],
+      "mat": "leather_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_009",
+      "from": [
+        7.175,
+        2.1,
+        7.175
+      ],
+      "to": [
+        8.825,
+        2.6,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_010",
+      "from": [
+        7.305,
+        2.47,
+        7.095
+      ],
+      "to": [
+        8.695,
+        2.66,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_011",
+      "from": [
+        7.175,
+        5.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        5.7,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_012",
+      "from": [
+        7.305,
+        5.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        5.76,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_013",
+      "from": [
+        7.175,
+        8.25,
+        7.175
+      ],
+      "to": [
+        8.825,
+        8.75,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_014",
+      "from": [
+        7.305,
+        8.62,
+        7.095
+      ],
+      "to": [
+        8.695,
+        8.81,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_015",
+      "from": [
+        7.175,
+        12.15,
+        7.175
+      ],
+      "to": [
+        8.825,
+        12.65,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_016",
+      "from": [
+        7.305,
+        12.52,
+        7.095
+      ],
+      "to": [
+        8.695,
+        12.71,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_017",
+      "from": [
+        7.175,
+        16.7,
+        7.175
+      ],
+      "to": [
+        8.825,
+        17.2,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_018",
+      "from": [
+        7.305,
+        17.07,
+        7.095
+      ],
+      "to": [
+        8.695,
+        17.26,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_019",
+      "from": [
+        7.175,
+        20.2,
+        7.175
+      ],
+      "to": [
+        8.825,
+        20.7,
+        8.825
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_020",
+      "from": [
+        7.305,
+        20.57,
+        7.095
+      ],
+      "to": [
+        8.695,
+        20.76,
+        8.905
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_dark_021",
+      "from": [
+        7.75,
+        1.25,
+        6.85
+      ],
+      "to": [
+        8.25,
+        1.5,
+        9.15
+      ],
+      "mat": "earth_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_dark_022",
+      "from": [
+        7.5,
+        1.5,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.0,
+        9.15
+      ],
+      "mat": "earth_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_dark_023",
+      "from": [
+        7.25,
+        2.0,
+        6.85
+      ],
+      "to": [
+        8.75,
+        2.25,
+        9.15
+      ],
+      "mat": "earth_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_dark_024",
+      "from": [
+        7.5,
+        2.25,
+        6.85
+      ],
+      "to": [
+        8.5,
+        2.75,
+        9.15
+      ],
+      "mat": "earth_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_dark_025",
+      "from": [
+        7.75,
+        2.75,
+        6.85
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.15
+      ],
+      "mat": "earth_dark",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_026",
+      "from": [
+        7.75,
+        1.25,
+        6.67
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.33
+      ],
+      "mat": "earth",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_027",
+      "from": [
+        7.5,
+        1.75,
+        6.67
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.33
+      ],
+      "mat": "earth",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_028",
+      "from": [
+        7.75,
+        2.5,
+        6.67
+      ],
+      "to": [
+        8.25,
+        3.0,
+        9.33
+      ],
+      "mat": "earth",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_light_029",
+      "from": [
+        8.0,
+        1.25,
+        6.54
+      ],
+      "to": [
+        8.25,
+        1.75,
+        9.46
+      ],
+      "mat": "earth_light",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_light_030",
+      "from": [
+        8.0,
+        1.75,
+        6.54
+      ],
+      "to": [
+        8.5,
+        2.5,
+        9.46
+      ],
+      "mat": "earth_light",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_light_031",
+      "from": [
+        8.0,
+        2.5,
+        6.54
+      ],
+      "to": [
+        8.25,
+        2.75,
+        9.46
+      ],
+      "mat": "earth_light",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_core_032",
+      "from": [
+        7.75,
+        1.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        1.75,
+        9.45
+      ],
+      "mat": "earth_core",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_core_033",
+      "from": [
+        7.5,
+        1.75,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.5,
+        9.45
+      ],
+      "mat": "earth_core",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_core_034",
+      "from": [
+        7.75,
+        2.5,
+        6.55
+      ],
+      "to": [
+        8.0,
+        2.75,
+        9.45
+      ],
+      "mat": "earth_core",
+      "bone": "staff"
+    },
+    {
+      "name": "white_035",
+      "from": [
+        7.88,
+        1.746,
+        6.43
+      ],
+      "to": [
+        8.13,
+        2.506,
+        9.57
+      ],
+      "mat": "white",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_036",
+      "from": [
+        7.75,
+        0.75,
+        7.15
+      ],
+      "to": [
+        8.25,
+        1.5,
+        8.85
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_037",
+      "from": [
+        7.5,
+        1.5,
+        7.15
+      ],
+      "to": [
+        8.5,
+        1.75,
+        8.85
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_038",
+      "from": [
+        7.275,
+        1.5,
+        7.275
+      ],
+      "to": [
+        8.725,
+        1.88,
+        8.725
+      ],
+      "mat": "gold",
+      "bone": "staff"
+    },
+    {
+      "name": "gold_light_039",
+      "from": [
+        7.405,
+        1.75,
+        7.195
+      ],
+      "to": [
+        8.595,
+        1.94,
+        8.805
+      ],
+      "mat": "gold_light",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_light_040",
+      "from": [
+        7.84,
+        6.7,
+        7.3
+      ],
+      "to": [
+        8.16,
+        7.5,
+        8.7
+      ],
+      "mat": "earth_light",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_light_041",
+      "from": [
+        7.84,
+        14.5,
+        7.3
+      ],
+      "to": [
+        8.16,
+        15.3,
+        8.7
+      ],
+      "mat": "earth_light",
+      "bone": "staff"
+    },
+    {
+      "name": "earth_light_042",
+      "from": [
+        7.84,
+        18,
+        7.3
+      ],
+      "to": [
+        8.16,
+        18.8,
+        8.7
+      ],
+      "mat": "earth_light",
+      "bone": "staff"
+    },
+    {
+      "name": "stone_dark_043",
+      "from": [
+        7.5,
+        20.25,
+        6.3
+      ],
+      "to": [
+        7.75,
+        20.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_044",
+      "from": [
+        7.0,
+        20.5,
+        6.3
+      ],
+      "to": [
+        7.5,
+        20.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_045",
+      "from": [
+        6.75,
+        20.75,
+        6.3
+      ],
+      "to": [
+        7.5,
+        21.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_046",
+      "from": [
+        6.25,
+        21.0,
+        6.3
+      ],
+      "to": [
+        7.25,
+        21.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_047",
+      "from": [
+        5.75,
+        21.25,
+        6.3
+      ],
+      "to": [
+        7.25,
+        21.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_048",
+      "from": [
+        5.5,
+        21.5,
+        6.3
+      ],
+      "to": [
+        7.0,
+        22.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_049",
+      "from": [
+        5.25,
+        22.0,
+        6.3
+      ],
+      "to": [
+        6.75,
+        22.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_050",
+      "from": [
+        5.0,
+        22.25,
+        6.3
+      ],
+      "to": [
+        6.75,
+        22.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_051",
+      "from": [
+        4.75,
+        22.5,
+        6.3
+      ],
+      "to": [
+        6.5,
+        22.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_052",
+      "from": [
+        4.5,
+        22.75,
+        6.3
+      ],
+      "to": [
+        6.5,
+        23.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_053",
+      "from": [
+        4.25,
+        23.0,
+        6.3
+      ],
+      "to": [
+        6.5,
+        23.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_054",
+      "from": [
+        4.0,
+        23.25,
+        6.3
+      ],
+      "to": [
+        6.25,
+        23.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_055",
+      "from": [
+        3.75,
+        23.5,
+        6.3
+      ],
+      "to": [
+        6.25,
+        23.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_056",
+      "from": [
+        3.5,
+        23.75,
+        6.3
+      ],
+      "to": [
+        6.0,
+        24.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_057",
+      "from": [
+        3.5,
+        24.5,
+        6.3
+      ],
+      "to": [
+        5.75,
+        25.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_058",
+      "from": [
+        3.5,
+        25.25,
+        6.3
+      ],
+      "to": [
+        5.5,
+        25.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_059",
+      "from": [
+        3.25,
+        25.5,
+        6.3
+      ],
+      "to": [
+        5.5,
+        26.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_060",
+      "from": [
+        3.5,
+        26.5,
+        6.3
+      ],
+      "to": [
+        5.5,
+        26.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_061",
+      "from": [
+        3.75,
+        26.75,
+        6.3
+      ],
+      "to": [
+        5.5,
+        27.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_062",
+      "from": [
+        4.0,
+        27.0,
+        6.3
+      ],
+      "to": [
+        5.5,
+        27.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_063",
+      "from": [
+        4.25,
+        27.25,
+        6.3
+      ],
+      "to": [
+        5.5,
+        28.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_064",
+      "from": [
+        4.25,
+        28.0,
+        6.3
+      ],
+      "to": [
+        5.75,
+        29.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_065",
+      "from": [
+        4.25,
+        29.0,
+        6.3
+      ],
+      "to": [
+        6.0,
+        29.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_066",
+      "from": [
+        4.5,
+        29.5,
+        6.3
+      ],
+      "to": [
+        6.0,
+        29.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_067",
+      "from": [
+        4.5,
+        29.75,
+        6.3
+      ],
+      "to": [
+        6.25,
+        30.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_068",
+      "from": [
+        4.75,
+        30.0,
+        6.3
+      ],
+      "to": [
+        6.25,
+        30.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_069",
+      "from": [
+        5.0,
+        30.25,
+        6.3
+      ],
+      "to": [
+        6.0,
+        30.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_070",
+      "from": [
+        5.25,
+        30.5,
+        6.3
+      ],
+      "to": [
+        5.75,
+        31.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_071",
+      "from": [
+        6.5,
+        21.75,
+        6.05
+      ],
+      "to": [
+        6.75,
+        22.0,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_072",
+      "from": [
+        5.75,
+        22.0,
+        6.05
+      ],
+      "to": [
+        6.75,
+        22.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_073",
+      "from": [
+        5.5,
+        22.25,
+        6.05
+      ],
+      "to": [
+        6.5,
+        22.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_074",
+      "from": [
+        5.25,
+        22.5,
+        6.05
+      ],
+      "to": [
+        6.25,
+        23.0,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_075",
+      "from": [
+        5.0,
+        23.0,
+        6.05
+      ],
+      "to": [
+        6.0,
+        23.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_076",
+      "from": [
+        4.75,
+        23.25,
+        6.05
+      ],
+      "to": [
+        6.0,
+        23.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_077",
+      "from": [
+        4.5,
+        23.5,
+        6.05
+      ],
+      "to": [
+        5.75,
+        24.0,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_078",
+      "from": [
+        4.25,
+        24.0,
+        6.05
+      ],
+      "to": [
+        5.5,
+        24.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_079",
+      "from": [
+        4.0,
+        24.25,
+        6.05
+      ],
+      "to": [
+        5.5,
+        24.75,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_080",
+      "from": [
+        4.0,
+        24.75,
+        6.05
+      ],
+      "to": [
+        5.25,
+        25.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_081",
+      "from": [
+        4.0,
+        25.5,
+        6.05
+      ],
+      "to": [
+        5.0,
+        25.75,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_082",
+      "from": [
+        4.0,
+        25.75,
+        6.05
+      ],
+      "to": [
+        5.25,
+        26.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_083",
+      "from": [
+        4.5,
+        26.25,
+        6.05
+      ],
+      "to": [
+        5.25,
+        26.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_084",
+      "from": [
+        4.75,
+        26.5,
+        6.05
+      ],
+      "to": [
+        5.25,
+        27.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_085",
+      "from": [
+        4.75,
+        27.5,
+        6.05
+      ],
+      "to": [
+        5.5,
+        29.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_086",
+      "from": [
+        5.0,
+        29.25,
+        6.05
+      ],
+      "to": [
+        5.5,
+        29.75,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_087",
+      "from": [
+        5.25,
+        29.75,
+        6.05
+      ],
+      "to": [
+        5.5,
+        30.0,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_light_088",
+      "from": [
+        5.05,
+        29,
+        5.9
+      ],
+      "to": [
+        5.65,
+        29.6,
+        10.1
+      ],
+      "mat": "stone_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_light_089",
+      "from": [
+        4.05,
+        25.3,
+        5.9
+      ],
+      "to": [
+        4.65,
+        25.9,
+        10.1
+      ],
+      "mat": "stone_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_light_090",
+      "from": [
+        5.75,
+        22.9,
+        5.9
+      ],
+      "to": [
+        6.35,
+        23.5,
+        10.1
+      ],
+      "mat": "stone_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_091",
+      "from": [
+        7.0,
+        20.75,
+        5.8
+      ],
+      "to": [
+        7.25,
+        21.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_092",
+      "from": [
+        6.75,
+        21.0,
+        5.8
+      ],
+      "to": [
+        7.25,
+        21.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_093",
+      "from": [
+        6.75,
+        21.25,
+        5.8
+      ],
+      "to": [
+        7.0,
+        21.5,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_094",
+      "from": [
+        6.5,
+        21.5,
+        5.8
+      ],
+      "to": [
+        7.0,
+        21.75,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_095",
+      "from": [
+        6.5,
+        21.75,
+        5.8
+      ],
+      "to": [
+        6.75,
+        22.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_096",
+      "from": [
+        6.25,
+        22.0,
+        5.8
+      ],
+      "to": [
+        6.75,
+        22.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_097",
+      "from": [
+        6.25,
+        22.25,
+        5.8
+      ],
+      "to": [
+        6.5,
+        22.5,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_098",
+      "from": [
+        6.0,
+        22.5,
+        5.8
+      ],
+      "to": [
+        6.25,
+        23.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_099",
+      "from": [
+        5.75,
+        23.0,
+        5.8
+      ],
+      "to": [
+        6.0,
+        23.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_100",
+      "from": [
+        5.5,
+        23.25,
+        5.8
+      ],
+      "to": [
+        6.0,
+        23.5,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_101",
+      "from": [
+        5.25,
+        23.5,
+        5.8
+      ],
+      "to": [
+        5.75,
+        23.75,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_102",
+      "from": [
+        5.0,
+        23.75,
+        5.8
+      ],
+      "to": [
+        5.5,
+        24.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_103",
+      "from": [
+        4.75,
+        24.0,
+        5.8
+      ],
+      "to": [
+        5.25,
+        24.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_104",
+      "from": [
+        4.5,
+        24.25,
+        5.8
+      ],
+      "to": [
+        5.0,
+        24.5,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_105",
+      "from": [
+        4.5,
+        24.5,
+        5.8
+      ],
+      "to": [
+        4.75,
+        25.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_106",
+      "from": [
+        4.5,
+        25.0,
+        5.8
+      ],
+      "to": [
+        5.0,
+        26.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_107",
+      "from": [
+        4.75,
+        26.25,
+        5.8
+      ],
+      "to": [
+        5.0,
+        27.75,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "moss_108",
+      "from": [
+        4.75,
+        25.5,
+        7.05
+      ],
+      "to": [
+        5.0,
+        25.75,
+        8.95
+      ],
+      "mat": "moss",
+      "bone": "filigree"
+    },
+    {
+      "name": "moss_109",
+      "from": [
+        4.0,
+        25.75,
+        7.05
+      ],
+      "to": [
+        5.0,
+        26.0,
+        8.95
+      ],
+      "mat": "moss",
+      "bone": "filigree"
+    },
+    {
+      "name": "moss_110",
+      "from": [
+        4.0,
+        26.0,
+        7.05
+      ],
+      "to": [
+        4.75,
+        26.25,
+        8.95
+      ],
+      "mat": "moss",
+      "bone": "filigree"
+    },
+    {
+      "name": "moss_111",
+      "from": [
+        4.0,
+        26.25,
+        7.05
+      ],
+      "to": [
+        4.5,
+        26.5,
+        8.95
+      ],
+      "mat": "moss",
+      "bone": "filigree"
+    },
+    {
+      "name": "stone_dark_112",
+      "from": [
+        8.25,
+        20.25,
+        6.3
+      ],
+      "to": [
+        8.5,
+        20.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_113",
+      "from": [
+        8.5,
+        20.5,
+        6.3
+      ],
+      "to": [
+        9.0,
+        20.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_114",
+      "from": [
+        8.5,
+        20.75,
+        6.3
+      ],
+      "to": [
+        9.25,
+        21.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_115",
+      "from": [
+        8.75,
+        21.0,
+        6.3
+      ],
+      "to": [
+        9.75,
+        21.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_116",
+      "from": [
+        8.75,
+        21.25,
+        6.3
+      ],
+      "to": [
+        10.25,
+        21.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_117",
+      "from": [
+        9.0,
+        21.5,
+        6.3
+      ],
+      "to": [
+        10.5,
+        22.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_118",
+      "from": [
+        9.25,
+        22.0,
+        6.3
+      ],
+      "to": [
+        10.75,
+        22.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_119",
+      "from": [
+        9.25,
+        22.25,
+        6.3
+      ],
+      "to": [
+        11.0,
+        22.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_120",
+      "from": [
+        9.5,
+        22.5,
+        6.3
+      ],
+      "to": [
+        11.25,
+        22.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_121",
+      "from": [
+        9.5,
+        22.75,
+        6.3
+      ],
+      "to": [
+        11.5,
+        23.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_122",
+      "from": [
+        9.5,
+        23.0,
+        6.3
+      ],
+      "to": [
+        11.75,
+        23.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_123",
+      "from": [
+        9.75,
+        23.25,
+        6.3
+      ],
+      "to": [
+        12.0,
+        23.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_124",
+      "from": [
+        9.75,
+        23.5,
+        6.3
+      ],
+      "to": [
+        12.25,
+        23.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_125",
+      "from": [
+        10.0,
+        23.75,
+        6.3
+      ],
+      "to": [
+        12.5,
+        24.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_126",
+      "from": [
+        10.25,
+        24.5,
+        6.3
+      ],
+      "to": [
+        12.5,
+        25.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_127",
+      "from": [
+        10.5,
+        25.25,
+        6.3
+      ],
+      "to": [
+        12.5,
+        25.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_128",
+      "from": [
+        10.5,
+        25.5,
+        6.3
+      ],
+      "to": [
+        12.75,
+        26.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_129",
+      "from": [
+        10.5,
+        26.5,
+        6.3
+      ],
+      "to": [
+        12.5,
+        26.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_130",
+      "from": [
+        10.5,
+        26.75,
+        6.3
+      ],
+      "to": [
+        12.25,
+        27.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_131",
+      "from": [
+        10.5,
+        27.0,
+        6.3
+      ],
+      "to": [
+        12.0,
+        27.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_132",
+      "from": [
+        10.5,
+        27.25,
+        6.3
+      ],
+      "to": [
+        11.75,
+        28.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_133",
+      "from": [
+        10.25,
+        28.0,
+        6.3
+      ],
+      "to": [
+        11.75,
+        29.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_134",
+      "from": [
+        10.0,
+        29.0,
+        6.3
+      ],
+      "to": [
+        11.75,
+        29.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_135",
+      "from": [
+        10.0,
+        29.5,
+        6.3
+      ],
+      "to": [
+        11.5,
+        29.75,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_136",
+      "from": [
+        9.75,
+        29.75,
+        6.3
+      ],
+      "to": [
+        11.5,
+        30.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_137",
+      "from": [
+        9.75,
+        30.0,
+        6.3
+      ],
+      "to": [
+        11.25,
+        30.25,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_138",
+      "from": [
+        10.0,
+        30.25,
+        6.3
+      ],
+      "to": [
+        11.0,
+        30.5,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_dark_139",
+      "from": [
+        10.25,
+        30.5,
+        6.3
+      ],
+      "to": [
+        10.75,
+        31.0,
+        9.7
+      ],
+      "mat": "stone_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_140",
+      "from": [
+        9.25,
+        21.75,
+        6.05
+      ],
+      "to": [
+        9.5,
+        22.0,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_141",
+      "from": [
+        9.25,
+        22.0,
+        6.05
+      ],
+      "to": [
+        10.25,
+        22.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_142",
+      "from": [
+        9.5,
+        22.25,
+        6.05
+      ],
+      "to": [
+        10.5,
+        22.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_143",
+      "from": [
+        9.75,
+        22.5,
+        6.05
+      ],
+      "to": [
+        10.75,
+        23.0,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_144",
+      "from": [
+        10.0,
+        23.0,
+        6.05
+      ],
+      "to": [
+        11.0,
+        23.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_145",
+      "from": [
+        10.0,
+        23.25,
+        6.05
+      ],
+      "to": [
+        11.25,
+        23.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_146",
+      "from": [
+        10.25,
+        23.5,
+        6.05
+      ],
+      "to": [
+        11.5,
+        24.0,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_147",
+      "from": [
+        10.5,
+        24.0,
+        6.05
+      ],
+      "to": [
+        11.75,
+        24.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_148",
+      "from": [
+        10.5,
+        24.25,
+        6.05
+      ],
+      "to": [
+        12.0,
+        24.75,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_149",
+      "from": [
+        10.75,
+        24.75,
+        6.05
+      ],
+      "to": [
+        12.0,
+        25.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_150",
+      "from": [
+        11.0,
+        25.5,
+        6.05
+      ],
+      "to": [
+        12.0,
+        25.75,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_151",
+      "from": [
+        10.75,
+        25.75,
+        6.05
+      ],
+      "to": [
+        12.0,
+        26.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_152",
+      "from": [
+        10.75,
+        26.25,
+        6.05
+      ],
+      "to": [
+        11.5,
+        26.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_153",
+      "from": [
+        10.75,
+        26.5,
+        6.05
+      ],
+      "to": [
+        11.25,
+        27.5,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_154",
+      "from": [
+        10.5,
+        27.5,
+        6.05
+      ],
+      "to": [
+        11.25,
+        29.25,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_155",
+      "from": [
+        10.5,
+        29.25,
+        6.05
+      ],
+      "to": [
+        11.0,
+        29.75,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_156",
+      "from": [
+        10.5,
+        29.75,
+        6.05
+      ],
+      "to": [
+        10.75,
+        30.0,
+        9.95
+      ],
+      "mat": "stone",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_light_157",
+      "from": [
+        10.45,
+        29,
+        5.9
+      ],
+      "to": [
+        11.05,
+        29.6,
+        10.1
+      ],
+      "mat": "stone_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_light_158",
+      "from": [
+        11.45,
+        25.3,
+        5.9
+      ],
+      "to": [
+        12.05,
+        25.9,
+        10.1
+      ],
+      "mat": "stone_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "stone_light_159",
+      "from": [
+        9.75,
+        22.9,
+        5.9
+      ],
+      "to": [
+        10.35,
+        23.5,
+        10.1
+      ],
+      "mat": "stone_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_160",
+      "from": [
+        8.75,
+        20.75,
+        5.8
+      ],
+      "to": [
+        9.0,
+        21.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_161",
+      "from": [
+        8.75,
+        21.0,
+        5.8
+      ],
+      "to": [
+        9.25,
+        21.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_162",
+      "from": [
+        9.0,
+        21.25,
+        5.8
+      ],
+      "to": [
+        9.25,
+        21.5,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_163",
+      "from": [
+        9.0,
+        21.5,
+        5.8
+      ],
+      "to": [
+        9.5,
+        21.75,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_164",
+      "from": [
+        9.25,
+        21.75,
+        5.8
+      ],
+      "to": [
+        9.5,
+        22.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_165",
+      "from": [
+        9.25,
+        22.0,
+        5.8
+      ],
+      "to": [
+        9.75,
+        22.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_166",
+      "from": [
+        9.5,
+        22.25,
+        5.8
+      ],
+      "to": [
+        9.75,
+        22.5,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_167",
+      "from": [
+        9.75,
+        22.5,
+        5.8
+      ],
+      "to": [
+        10.0,
+        23.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_168",
+      "from": [
+        10.0,
+        23.0,
+        5.8
+      ],
+      "to": [
+        10.25,
+        23.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_169",
+      "from": [
+        10.0,
+        23.25,
+        5.8
+      ],
+      "to": [
+        10.5,
+        23.5,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_170",
+      "from": [
+        10.25,
+        23.5,
+        5.8
+      ],
+      "to": [
+        10.75,
+        23.75,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_171",
+      "from": [
+        10.5,
+        23.75,
+        5.8
+      ],
+      "to": [
+        11.0,
+        24.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_172",
+      "from": [
+        10.75,
+        24.0,
+        5.8
+      ],
+      "to": [
+        11.25,
+        24.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_173",
+      "from": [
+        11.0,
+        24.25,
+        5.8
+      ],
+      "to": [
+        11.5,
+        24.5,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_174",
+      "from": [
+        11.25,
+        24.5,
+        5.8
+      ],
+      "to": [
+        11.5,
+        25.0,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_175",
+      "from": [
+        11.0,
+        25.0,
+        5.8
+      ],
+      "to": [
+        11.5,
+        26.25,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_176",
+      "from": [
+        11.0,
+        26.25,
+        5.8
+      ],
+      "to": [
+        11.25,
+        27.75,
+        10.2
+      ],
+      "mat": "gold",
+      "bone": "crown"
+    },
+    {
+      "name": "moss_177",
+      "from": [
+        11.0,
+        25.5,
+        7.05
+      ],
+      "to": [
+        11.25,
+        25.75,
+        8.95
+      ],
+      "mat": "moss",
+      "bone": "filigree"
+    },
+    {
+      "name": "moss_178",
+      "from": [
+        11.0,
+        25.75,
+        7.05
+      ],
+      "to": [
+        12.0,
+        26.0,
+        8.95
+      ],
+      "mat": "moss",
+      "bone": "filigree"
+    },
+    {
+      "name": "moss_179",
+      "from": [
+        11.25,
+        26.0,
+        7.05
+      ],
+      "to": [
+        12.0,
+        26.25,
+        8.95
+      ],
+      "mat": "moss",
+      "bone": "filigree"
+    },
+    {
+      "name": "moss_180",
+      "from": [
+        11.5,
+        26.25,
+        7.05
+      ],
+      "to": [
+        12.0,
+        26.5,
+        8.95
+      ],
+      "mat": "moss",
+      "bone": "filigree"
+    },
+    {
+      "name": "earth_dark_181",
+      "from": [
+        7.75,
+        23.0,
+        5.8
+      ],
+      "to": [
+        8.25,
+        23.5,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_182",
+      "from": [
+        7.5,
+        23.5,
+        5.8
+      ],
+      "to": [
+        8.5,
+        24.0,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_183",
+      "from": [
+        7.25,
+        24.0,
+        5.8
+      ],
+      "to": [
+        8.75,
+        24.5,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_184",
+      "from": [
+        7.0,
+        24.5,
+        5.8
+      ],
+      "to": [
+        9.0,
+        25.0,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_185",
+      "from": [
+        6.75,
+        25.0,
+        5.8
+      ],
+      "to": [
+        9.25,
+        25.5,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_186",
+      "from": [
+        6.5,
+        25.5,
+        5.8
+      ],
+      "to": [
+        9.5,
+        26.5,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_187",
+      "from": [
+        6.75,
+        26.5,
+        5.8
+      ],
+      "to": [
+        9.25,
+        26.75,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_188",
+      "from": [
+        7.0,
+        26.75,
+        5.8
+      ],
+      "to": [
+        9.0,
+        27.25,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_189",
+      "from": [
+        7.25,
+        27.25,
+        5.8
+      ],
+      "to": [
+        8.75,
+        27.5,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_190",
+      "from": [
+        7.5,
+        27.5,
+        5.8
+      ],
+      "to": [
+        8.5,
+        27.75,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_dark_191",
+      "from": [
+        7.75,
+        27.75,
+        5.8
+      ],
+      "to": [
+        8.25,
+        28.25,
+        10.2
+      ],
+      "mat": "earth_dark",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_192",
+      "from": [
+        7.75,
+        23.25,
+        5.62
+      ],
+      "to": [
+        8.25,
+        23.75,
+        10.38
+      ],
+      "mat": "earth",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_193",
+      "from": [
+        7.5,
+        23.75,
+        5.62
+      ],
+      "to": [
+        8.5,
+        24.25,
+        10.38
+      ],
+      "mat": "earth",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_194",
+      "from": [
+        7.25,
+        24.25,
+        5.62
+      ],
+      "to": [
+        8.75,
+        24.75,
+        10.38
+      ],
+      "mat": "earth",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_195",
+      "from": [
+        7.0,
+        24.75,
+        5.62
+      ],
+      "to": [
+        9.0,
+        25.5,
+        10.38
+      ],
+      "mat": "earth",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_196",
+      "from": [
+        6.75,
+        25.5,
+        5.62
+      ],
+      "to": [
+        9.25,
+        26.5,
+        10.38
+      ],
+      "mat": "earth",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_197",
+      "from": [
+        7.0,
+        26.5,
+        5.62
+      ],
+      "to": [
+        9.0,
+        26.75,
+        10.38
+      ],
+      "mat": "earth",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_198",
+      "from": [
+        7.25,
+        26.75,
+        5.62
+      ],
+      "to": [
+        8.75,
+        27.25,
+        10.38
+      ],
+      "mat": "earth",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_199",
+      "from": [
+        7.5,
+        27.25,
+        5.62
+      ],
+      "to": [
+        8.5,
+        27.5,
+        10.38
+      ],
+      "mat": "earth",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_200",
+      "from": [
+        7.75,
+        27.5,
+        5.62
+      ],
+      "to": [
+        8.25,
+        28.0,
+        10.38
+      ],
+      "mat": "earth",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_light_201",
+      "from": [
+        8.0,
+        23.5,
+        5.49
+      ],
+      "to": [
+        8.25,
+        24.0,
+        10.51
+      ],
+      "mat": "earth_light",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_light_202",
+      "from": [
+        8.0,
+        24.0,
+        5.49
+      ],
+      "to": [
+        8.5,
+        24.5,
+        10.51
+      ],
+      "mat": "earth_light",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_light_203",
+      "from": [
+        8.0,
+        24.5,
+        5.49
+      ],
+      "to": [
+        8.75,
+        25.25,
+        10.51
+      ],
+      "mat": "earth_light",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_light_204",
+      "from": [
+        8.0,
+        25.25,
+        5.49
+      ],
+      "to": [
+        9.0,
+        25.75,
+        10.51
+      ],
+      "mat": "earth_light",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_light_205",
+      "from": [
+        8.0,
+        25.75,
+        5.49
+      ],
+      "to": [
+        9.25,
+        26.0,
+        10.51
+      ],
+      "mat": "earth_light",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_light_206",
+      "from": [
+        8.0,
+        26.0,
+        5.49
+      ],
+      "to": [
+        9.0,
+        26.5,
+        10.51
+      ],
+      "mat": "earth_light",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_light_207",
+      "from": [
+        8.0,
+        26.5,
+        5.49
+      ],
+      "to": [
+        8.75,
+        27.0,
+        10.51
+      ],
+      "mat": "earth_light",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_light_208",
+      "from": [
+        8.0,
+        27.0,
+        5.49
+      ],
+      "to": [
+        8.5,
+        27.25,
+        10.51
+      ],
+      "mat": "earth_light",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_light_209",
+      "from": [
+        8.0,
+        27.25,
+        5.49
+      ],
+      "to": [
+        8.25,
+        27.75,
+        10.51
+      ],
+      "mat": "earth_light",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_core_210",
+      "from": [
+        7.75,
+        23.5,
+        5.5
+      ],
+      "to": [
+        8.0,
+        24.0,
+        10.5
+      ],
+      "mat": "earth_core",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_core_211",
+      "from": [
+        7.5,
+        24.0,
+        5.5
+      ],
+      "to": [
+        8.0,
+        24.75,
+        10.5
+      ],
+      "mat": "earth_core",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_core_212",
+      "from": [
+        7.25,
+        24.75,
+        5.5
+      ],
+      "to": [
+        8.0,
+        25.25,
+        10.5
+      ],
+      "mat": "earth_core",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_core_213",
+      "from": [
+        7.0,
+        25.25,
+        5.5
+      ],
+      "to": [
+        8.0,
+        25.75,
+        10.5
+      ],
+      "mat": "earth_core",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_core_214",
+      "from": [
+        6.75,
+        25.75,
+        5.5
+      ],
+      "to": [
+        8.0,
+        26.0,
+        10.5
+      ],
+      "mat": "earth_core",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_core_215",
+      "from": [
+        7.0,
+        26.0,
+        5.5
+      ],
+      "to": [
+        8.0,
+        26.5,
+        10.5
+      ],
+      "mat": "earth_core",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_core_216",
+      "from": [
+        7.25,
+        26.5,
+        5.5
+      ],
+      "to": [
+        8.0,
+        26.75,
+        10.5
+      ],
+      "mat": "earth_core",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_core_217",
+      "from": [
+        7.5,
+        26.75,
+        5.5
+      ],
+      "to": [
+        8.0,
+        27.25,
+        10.5
+      ],
+      "mat": "earth_core",
+      "bone": "focus"
+    },
+    {
+      "name": "earth_core_218",
+      "from": [
+        7.75,
+        27.25,
+        5.5
+      ],
+      "to": [
+        8.0,
+        27.75,
+        10.5
+      ],
+      "mat": "earth_core",
+      "bone": "focus"
+    },
+    {
+      "name": "white_219",
+      "from": [
+        7.88,
+        24.912,
+        5.38
+      ],
+      "to": [
+        8.13,
+        26.632,
+        10.62
+      ],
+      "mat": "white",
+      "bone": "focus"
+    },
+    {
+      "name": "gold_light_220",
+      "from": [
+        6.25,
+        26.0,
+        5.3
+      ],
+      "to": [
+        6.5,
+        26.5,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_221",
+      "from": [
+        6.5,
+        26.5,
+        5.3
+      ],
+      "to": [
+        6.75,
+        26.75,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_222",
+      "from": [
+        6.5,
+        26.75,
+        5.3
+      ],
+      "to": [
+        7.0,
+        27.0,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_223",
+      "from": [
+        6.75,
+        27.0,
+        5.3
+      ],
+      "to": [
+        7.0,
+        27.25,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_224",
+      "from": [
+        6.75,
+        24.0,
+        5.3
+      ],
+      "to": [
+        7.0,
+        24.5,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_225",
+      "from": [
+        6.5,
+        24.5,
+        5.3
+      ],
+      "to": [
+        6.75,
+        25.25,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_226",
+      "from": [
+        6.25,
+        25.25,
+        5.3
+      ],
+      "to": [
+        6.5,
+        25.75,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_227",
+      "from": [
+        6.0,
+        25.75,
+        5.3
+      ],
+      "to": [
+        6.25,
+        26.0,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_228",
+      "from": [
+        9.5,
+        26.0,
+        5.3
+      ],
+      "to": [
+        9.75,
+        26.5,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_229",
+      "from": [
+        9.25,
+        26.5,
+        5.3
+      ],
+      "to": [
+        9.5,
+        26.75,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_230",
+      "from": [
+        9.0,
+        26.75,
+        5.3
+      ],
+      "to": [
+        9.5,
+        27.0,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_231",
+      "from": [
+        9.0,
+        27.0,
+        5.3
+      ],
+      "to": [
+        9.25,
+        27.25,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_232",
+      "from": [
+        9.0,
+        24.0,
+        5.3
+      ],
+      "to": [
+        9.25,
+        24.5,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_233",
+      "from": [
+        9.25,
+        24.5,
+        5.3
+      ],
+      "to": [
+        9.5,
+        25.25,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_234",
+      "from": [
+        9.5,
+        25.25,
+        5.3
+      ],
+      "to": [
+        9.75,
+        25.75,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "gold_light_235",
+      "from": [
+        9.75,
+        25.75,
+        5.3
+      ],
+      "to": [
+        10.0,
+        26.0,
+        10.7
+      ],
+      "mat": "gold_light",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_dark_236",
+      "from": [
+        7.75,
+        20.25,
+        6.2
+      ],
+      "to": [
+        8.25,
+        20.5,
+        9.8
+      ],
+      "mat": "earth_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_dark_237",
+      "from": [
+        7.5,
+        20.5,
+        6.2
+      ],
+      "to": [
+        8.5,
+        21.0,
+        9.8
+      ],
+      "mat": "earth_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_dark_238",
+      "from": [
+        7.25,
+        21.0,
+        6.2
+      ],
+      "to": [
+        8.75,
+        21.25,
+        9.8
+      ],
+      "mat": "earth_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_dark_239",
+      "from": [
+        7.5,
+        21.25,
+        6.2
+      ],
+      "to": [
+        8.5,
+        21.5,
+        9.8
+      ],
+      "mat": "earth_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_dark_240",
+      "from": [
+        7.75,
+        21.5,
+        6.2
+      ],
+      "to": [
+        8.25,
+        21.75,
+        9.8
+      ],
+      "mat": "earth_dark",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_241",
+      "from": [
+        7.75,
+        20.25,
+        6.02
+      ],
+      "to": [
+        8.25,
+        20.75,
+        9.98
+      ],
+      "mat": "earth",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_242",
+      "from": [
+        7.5,
+        20.75,
+        6.02
+      ],
+      "to": [
+        8.5,
+        21.25,
+        9.98
+      ],
+      "mat": "earth",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_243",
+      "from": [
+        7.75,
+        21.25,
+        6.02
+      ],
+      "to": [
+        8.25,
+        21.5,
+        9.98
+      ],
+      "mat": "earth",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_light_244",
+      "from": [
+        8.0,
+        20.25,
+        5.89
+      ],
+      "to": [
+        8.25,
+        20.75,
+        10.11
+      ],
+      "mat": "earth_light",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_light_245",
+      "from": [
+        8.0,
+        20.75,
+        5.89
+      ],
+      "to": [
+        8.5,
+        21.25,
+        10.11
+      ],
+      "mat": "earth_light",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_light_246",
+      "from": [
+        8.0,
+        21.25,
+        5.89
+      ],
+      "to": [
+        8.25,
+        21.5,
+        10.11
+      ],
+      "mat": "earth_light",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_core_247",
+      "from": [
+        7.75,
+        20.25,
+        5.9
+      ],
+      "to": [
+        8.0,
+        20.75,
+        10.1
+      ],
+      "mat": "earth_core",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_core_248",
+      "from": [
+        7.5,
+        20.75,
+        5.9
+      ],
+      "to": [
+        8.0,
+        21.25,
+        10.1
+      ],
+      "mat": "earth_core",
+      "bone": "crown"
+    },
+    {
+      "name": "earth_core_249",
+      "from": [
+        7.75,
+        21.25,
+        5.9
+      ],
+      "to": [
+        8.0,
+        21.5,
+        10.1
+      ],
+      "mat": "earth_core",
+      "bone": "crown"
+    },
+    {
+      "name": "white_250",
+      "from": [
+        7.88,
+        20.6056,
+        5.78
+      ],
+      "to": [
+        8.13,
+        21.3416,
+        10.22
+      ],
+      "mat": "white",
+      "bone": "crown"
+    },
+    {
+      "name": "wood_dark_251",
+      "from": [
+        7.0,
+        2.75,
+        7
+      ],
+      "to": [
+        7.5,
+        3.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_252",
+      "from": [
+        7.0,
+        3.0,
+        7
+      ],
+      "to": [
+        7.25,
+        3.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_253",
+      "from": [
+        6.75,
+        3.25,
+        7
+      ],
+      "to": [
+        7.25,
+        3.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_254",
+      "from": [
+        6.75,
+        3.5,
+        7
+      ],
+      "to": [
+        7.0,
+        3.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_255",
+      "from": [
+        6.5,
+        3.75,
+        7
+      ],
+      "to": [
+        7.0,
+        4.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_256",
+      "from": [
+        6.5,
+        4.0,
+        7
+      ],
+      "to": [
+        6.75,
+        4.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_257",
+      "from": [
+        6.5,
+        4.25,
+        7
+      ],
+      "to": [
+        7.0,
+        4.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_258",
+      "from": [
+        6.75,
+        4.75,
+        7
+      ],
+      "to": [
+        7.0,
+        5.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_259",
+      "from": [
+        6.75,
+        5.0,
+        7
+      ],
+      "to": [
+        7.25,
+        5.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_260",
+      "from": [
+        7.0,
+        5.25,
+        7
+      ],
+      "to": [
+        7.25,
+        5.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_261",
+      "from": [
+        7.0,
+        5.5,
+        7
+      ],
+      "to": [
+        7.5,
+        5.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_262",
+      "from": [
+        7.0,
+        5.75,
+        7
+      ],
+      "to": [
+        7.5,
+        8.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_263",
+      "from": [
+        7.0,
+        13.25,
+        7
+      ],
+      "to": [
+        7.5,
+        13.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_264",
+      "from": [
+        7.0,
+        13.5,
+        7
+      ],
+      "to": [
+        7.25,
+        13.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_265",
+      "from": [
+        6.75,
+        13.75,
+        7
+      ],
+      "to": [
+        7.25,
+        14.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_266",
+      "from": [
+        6.75,
+        14.0,
+        7
+      ],
+      "to": [
+        7.0,
+        14.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_267",
+      "from": [
+        6.5,
+        14.25,
+        7
+      ],
+      "to": [
+        7.0,
+        14.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_268",
+      "from": [
+        6.5,
+        14.75,
+        7
+      ],
+      "to": [
+        6.75,
+        15.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_269",
+      "from": [
+        6.5,
+        15.0,
+        7
+      ],
+      "to": [
+        7.0,
+        15.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_270",
+      "from": [
+        6.75,
+        15.25,
+        7
+      ],
+      "to": [
+        7.0,
+        15.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_271",
+      "from": [
+        6.75,
+        15.5,
+        7
+      ],
+      "to": [
+        7.25,
+        15.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_272",
+      "from": [
+        7.0,
+        15.75,
+        7
+      ],
+      "to": [
+        7.25,
+        16.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_273",
+      "from": [
+        7.0,
+        16.0,
+        7
+      ],
+      "to": [
+        7.5,
+        16.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_274",
+      "from": [
+        7.0,
+        16.25,
+        7
+      ],
+      "to": [
+        7.5,
+        19.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_275",
+      "from": [
+        7.0,
+        3.0,
+        7.05
+      ],
+      "to": [
+        7.5,
+        3.25,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_276",
+      "from": [
+        6.5,
+        3.25,
+        7.05
+      ],
+      "to": [
+        7.25,
+        3.5,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_277",
+      "from": [
+        6.25,
+        3.5,
+        7.05
+      ],
+      "to": [
+        7.0,
+        3.75,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_278",
+      "from": [
+        6.25,
+        3.75,
+        7.05
+      ],
+      "to": [
+        6.75,
+        4.0,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_279",
+      "from": [
+        7.25,
+        5.75,
+        7.05
+      ],
+      "to": [
+        7.5,
+        6.0,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_280",
+      "from": [
+        6.5,
+        6.0,
+        7.05
+      ],
+      "to": [
+        7.25,
+        6.25,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_281",
+      "from": [
+        6.25,
+        6.25,
+        7.05
+      ],
+      "to": [
+        7.25,
+        6.5,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_282",
+      "from": [
+        6.25,
+        6.5,
+        7.05
+      ],
+      "to": [
+        7.0,
+        6.75,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_283",
+      "from": [
+        6.75,
+        15.75,
+        7.05
+      ],
+      "to": [
+        7.5,
+        16.0,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_284",
+      "from": [
+        6.5,
+        16.0,
+        7.05
+      ],
+      "to": [
+        7.25,
+        16.25,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_285",
+      "from": [
+        6.25,
+        16.25,
+        7.05
+      ],
+      "to": [
+        7.0,
+        16.5,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_286",
+      "from": [
+        6.25,
+        16.5,
+        7.05
+      ],
+      "to": [
+        6.5,
+        16.75,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_287",
+      "from": [
+        7.25,
+        18.75,
+        7.05
+      ],
+      "to": [
+        7.5,
+        19.0,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_288",
+      "from": [
+        6.5,
+        19.0,
+        7.05
+      ],
+      "to": [
+        7.25,
+        19.25,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_289",
+      "from": [
+        6.25,
+        19.25,
+        7.05
+      ],
+      "to": [
+        7.25,
+        19.5,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_290",
+      "from": [
+        6.25,
+        19.5,
+        7.05
+      ],
+      "to": [
+        7.0,
+        19.75,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_291",
+      "from": [
+        8.5,
+        2.75,
+        7
+      ],
+      "to": [
+        9.0,
+        3.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_292",
+      "from": [
+        8.75,
+        3.0,
+        7
+      ],
+      "to": [
+        9.0,
+        3.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_293",
+      "from": [
+        8.75,
+        3.25,
+        7
+      ],
+      "to": [
+        9.25,
+        3.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_294",
+      "from": [
+        9.0,
+        3.5,
+        7
+      ],
+      "to": [
+        9.25,
+        3.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_295",
+      "from": [
+        9.0,
+        3.75,
+        7
+      ],
+      "to": [
+        9.5,
+        4.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_296",
+      "from": [
+        9.25,
+        4.0,
+        7
+      ],
+      "to": [
+        9.5,
+        4.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_297",
+      "from": [
+        9.0,
+        4.25,
+        7
+      ],
+      "to": [
+        9.5,
+        4.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_298",
+      "from": [
+        9.0,
+        4.75,
+        7
+      ],
+      "to": [
+        9.25,
+        5.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_299",
+      "from": [
+        8.75,
+        5.0,
+        7
+      ],
+      "to": [
+        9.25,
+        5.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_300",
+      "from": [
+        8.75,
+        5.25,
+        7
+      ],
+      "to": [
+        9.0,
+        5.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_301",
+      "from": [
+        8.5,
+        5.5,
+        7
+      ],
+      "to": [
+        9.0,
+        5.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_302",
+      "from": [
+        8.5,
+        5.75,
+        7
+      ],
+      "to": [
+        9.0,
+        8.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_303",
+      "from": [
+        8.5,
+        13.25,
+        7
+      ],
+      "to": [
+        9.0,
+        13.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_304",
+      "from": [
+        8.75,
+        13.5,
+        7
+      ],
+      "to": [
+        9.0,
+        13.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_305",
+      "from": [
+        8.75,
+        13.75,
+        7
+      ],
+      "to": [
+        9.25,
+        14.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_306",
+      "from": [
+        9.0,
+        14.0,
+        7
+      ],
+      "to": [
+        9.25,
+        14.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_307",
+      "from": [
+        9.0,
+        14.25,
+        7
+      ],
+      "to": [
+        9.5,
+        14.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_308",
+      "from": [
+        9.25,
+        14.75,
+        7
+      ],
+      "to": [
+        9.5,
+        15.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_309",
+      "from": [
+        9.0,
+        15.0,
+        7
+      ],
+      "to": [
+        9.5,
+        15.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_310",
+      "from": [
+        9.0,
+        15.25,
+        7
+      ],
+      "to": [
+        9.25,
+        15.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_311",
+      "from": [
+        8.75,
+        15.5,
+        7
+      ],
+      "to": [
+        9.25,
+        15.75,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_312",
+      "from": [
+        8.75,
+        15.75,
+        7
+      ],
+      "to": [
+        9.0,
+        16.0,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_313",
+      "from": [
+        8.5,
+        16.0,
+        7
+      ],
+      "to": [
+        9.0,
+        16.25,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "wood_dark_314",
+      "from": [
+        8.5,
+        16.25,
+        7
+      ],
+      "to": [
+        9.0,
+        19.5,
+        9
+      ],
+      "mat": "wood_dark",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_315",
+      "from": [
+        8.5,
+        3.0,
+        7.05
+      ],
+      "to": [
+        9.0,
+        3.25,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_316",
+      "from": [
+        8.75,
+        3.25,
+        7.05
+      ],
+      "to": [
+        9.5,
+        3.5,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_317",
+      "from": [
+        9.0,
+        3.5,
+        7.05
+      ],
+      "to": [
+        9.75,
+        3.75,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_318",
+      "from": [
+        9.25,
+        3.75,
+        7.05
+      ],
+      "to": [
+        9.75,
+        4.0,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_319",
+      "from": [
+        8.5,
+        5.75,
+        7.05
+      ],
+      "to": [
+        8.75,
+        6.0,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_320",
+      "from": [
+        8.75,
+        6.0,
+        7.05
+      ],
+      "to": [
+        9.5,
+        6.25,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_321",
+      "from": [
+        8.75,
+        6.25,
+        7.05
+      ],
+      "to": [
+        9.75,
+        6.5,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_322",
+      "from": [
+        9.0,
+        6.5,
+        7.05
+      ],
+      "to": [
+        9.75,
+        6.75,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_323",
+      "from": [
+        8.5,
+        15.75,
+        7.05
+      ],
+      "to": [
+        9.25,
+        16.0,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_324",
+      "from": [
+        8.75,
+        16.0,
+        7.05
+      ],
+      "to": [
+        9.5,
+        16.25,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_325",
+      "from": [
+        9.0,
+        16.25,
+        7.05
+      ],
+      "to": [
+        9.75,
+        16.5,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_326",
+      "from": [
+        9.5,
+        16.5,
+        7.05
+      ],
+      "to": [
+        9.75,
+        16.75,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_327",
+      "from": [
+        8.5,
+        18.75,
+        7.05
+      ],
+      "to": [
+        8.75,
+        19.0,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_328",
+      "from": [
+        8.75,
+        19.0,
+        7.05
+      ],
+      "to": [
+        9.5,
+        19.25,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_329",
+      "from": [
+        8.75,
+        19.25,
+        7.05
+      ],
+      "to": [
+        9.75,
+        19.5,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "leaf_330",
+      "from": [
+        9.0,
+        19.5,
+        7.05
+      ],
+      "to": [
+        9.75,
+        19.75,
+        8.95
+      ],
+      "mat": "leaf",
+      "bone": "filigree"
+    },
+    {
+      "name": "stone_331",
+      "from": [
+        2.4,
+        27.4,
+        6.4
+      ],
+      "to": [
+        3.6,
+        28.6,
+        7.6
+      ],
+      "mat": "stone",
+      "bone": "orbit"
+    },
+    {
+      "name": "moss_332",
+      "from": [
+        2.4,
+        28.24,
+        6.3
+      ],
+      "to": [
+        3.1,
+        28.6,
+        7.7
+      ],
+      "mat": "moss",
+      "bone": "orbit"
+    },
+    {
+      "name": "stone_333",
+      "from": [
+        12.3,
+        23.3,
+        6.2
+      ],
+      "to": [
+        13.7,
+        24.7,
+        7.6
+      ],
+      "mat": "stone",
+      "bone": "orbit"
+    },
+    {
+      "name": "moss_334",
+      "from": [
+        12.3,
+        24.28,
+        6.1
+      ],
+      "to": [
+        13.1,
+        24.7,
+        7.7
+      ],
+      "mat": "moss",
+      "bone": "orbit"
+    },
+    {
+      "name": "stone_335",
+      "from": [
+        3.65,
+        19.55,
+        6.85
+      ],
+      "to": [
+        4.55,
+        20.45,
+        7.75
+      ],
+      "mat": "stone",
+      "bone": "orbit"
+    },
+    {
+      "name": "moss_336",
+      "from": [
+        3.65,
+        20.18,
+        6.75
+      ],
+      "to": [
+        4.2,
+        20.45,
+        7.85
+      ],
+      "mat": "moss",
+      "bone": "orbit"
+    },
+    {
+      "name": "stone_337",
+      "from": [
+        12.05,
+        28.55,
+        6.75
+      ],
+      "to": [
+        12.95,
+        29.45,
+        7.65
+      ],
+      "mat": "stone",
+      "bone": "orbit"
+    },
+    {
+      "name": "moss_338",
+      "from": [
+        12.05,
+        29.18,
+        6.65
+      ],
+      "to": [
+        12.6,
+        29.45,
+        7.75
+      ],
+      "mat": "moss",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_dark_339",
+      "from": [
+        6.5,
+        17.75,
+        6.7
+      ],
+      "to": [
+        7.0,
+        18.25,
+        9.3
+      ],
+      "mat": "earth_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_340",
+      "from": [
+        6.5,
+        17.75,
+        6.52
+      ],
+      "to": [
+        6.75,
+        18.0,
+        9.48
+      ],
+      "mat": "earth",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_341",
+      "from": [
+        6.5,
+        18.0,
+        6.52
+      ],
+      "to": [
+        7.0,
+        18.25,
+        9.48
+      ],
+      "mat": "earth",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_light_342",
+      "from": [
+        6.75,
+        18.0,
+        6.39
+      ],
+      "to": [
+        7.0,
+        18.25,
+        9.61
+      ],
+      "mat": "earth_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_core_343",
+      "from": [
+        6.5,
+        17.75,
+        6.4
+      ],
+      "to": [
+        6.75,
+        18.25,
+        9.6
+      ],
+      "mat": "earth_core",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_344",
+      "from": [
+        6.58,
+        17.8656,
+        6.28
+      ],
+      "to": [
+        6.83,
+        18.2016,
+        9.72
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_dark_345",
+      "from": [
+        9.5,
+        7.0,
+        6.7
+      ],
+      "to": [
+        9.75,
+        7.25,
+        9.3
+      ],
+      "mat": "earth_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_dark_346",
+      "from": [
+        9.25,
+        7.25,
+        6.7
+      ],
+      "to": [
+        9.75,
+        7.5,
+        9.3
+      ],
+      "mat": "earth_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_dark_347",
+      "from": [
+        9.5,
+        7.5,
+        6.7
+      ],
+      "to": [
+        9.75,
+        7.75,
+        9.3
+      ],
+      "mat": "earth_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_348",
+      "from": [
+        9.5,
+        7.0,
+        6.52
+      ],
+      "to": [
+        9.75,
+        7.75,
+        9.48
+      ],
+      "mat": "earth",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_light_349",
+      "from": [
+        9.5,
+        7.0,
+        6.39
+      ],
+      "to": [
+        9.75,
+        7.75,
+        9.61
+      ],
+      "mat": "earth_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_350",
+      "from": [
+        9.48,
+        7.2656,
+        6.28
+      ],
+      "to": [
+        9.73,
+        7.6016,
+        9.72
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_dark_351",
+      "from": [
+        5.0,
+        21.75,
+        6.7
+      ],
+      "to": [
+        5.5,
+        22.25,
+        9.3
+      ],
+      "mat": "earth_dark",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_352",
+      "from": [
+        5.25,
+        21.75,
+        6.52
+      ],
+      "to": [
+        5.5,
+        22.0,
+        9.48
+      ],
+      "mat": "earth",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_353",
+      "from": [
+        5.0,
+        22.0,
+        6.52
+      ],
+      "to": [
+        5.5,
+        22.25,
+        9.48
+      ],
+      "mat": "earth",
+      "bone": "orbit"
+    },
+    {
+      "name": "earth_light_354",
+      "from": [
+        5.25,
+        21.75,
+        6.39
+      ],
+      "to": [
+        5.5,
+        22.25,
+        9.61
+      ],
+      "mat": "earth_light",
+      "bone": "orbit"
+    },
+    {
+      "name": "white_355",
+      "from": [
+        5.18,
+        21.8656,
+        6.28
+      ],
+      "to": [
+        5.43,
+        22.2016,
+        9.72
+      ],
+      "mat": "white",
+      "bone": "orbit"
+    }
+  ]
+}

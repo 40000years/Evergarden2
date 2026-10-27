@@ -9,15 +9,18 @@ public final class MagicCastEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS=new HandlerList();
     private final Player caster;
     private final Spell spell;
+    private final boolean basicCast;
     private boolean cancelled;
     private double cooldownMultiplier = 1.0;
     private boolean bloodCast = false;
     private int extraCasts = 0;
     private double velocityMultiplier = 1.0;
 
-    public MagicCastEvent(Player caster,Spell spell){this.caster=caster;this.spell=spell;}
+    public MagicCastEvent(Player caster,Spell spell){this(caster,spell,false);}
+    public MagicCastEvent(Player caster,Spell spell,boolean basicCast){this.caster=caster;this.spell=spell;this.basicCast=basicCast;}
     public Player getCaster(){return caster;}
     public Spell getSpell(){return spell;}
+    public boolean isBasicCast(){return basicCast;}
     public boolean isCancelled(){return cancelled;}
     public void setCancelled(boolean value){cancelled=value;}
     public double getCooldownMultiplier(){return cooldownMultiplier;}

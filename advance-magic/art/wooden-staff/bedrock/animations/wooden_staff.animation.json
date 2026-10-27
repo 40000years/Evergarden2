@@ -1,0 +1,68 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.advance_magic.staff_wood.first": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            152,
+            "context.item_slot == 'off_hand' ? 9 : -9",
+            "context.item_slot == 'off_hand' ? -25 : 25"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? 7 : -7",
+            -1.5,
+            -5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.356668,
+            0.356668,
+            0.356668
+          ],
+          "position": [
+            0,
+            8.442628,
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_wood.third": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            97,
+            "context.item_slot == 'off_hand' ? 1.5 : -1.5",
+            "context.item_slot == 'off_hand' ? 49 : -49"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? -1.5 : 1.5",
+            -2.5,
+            -10.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        }
+      }
+    }
+  }
+}

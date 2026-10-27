@@ -1,0 +1,1109 @@
+{
+  "version": 2,
+  "texture_size": 128,
+  "mode": "RGBA",
+  "icons": [
+    {
+      "id": "fireball",
+      "title": "Fireball",
+      "element": "fire",
+      "rarity": "BASIC",
+      "file": "icons/fireball.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        37,
+        25,
+        326,
+        320
+      ],
+      "sha256": "584aaed052945853da81ea017d3a45c12acdb0c18e0f2c177bfe68c887bfa8ec"
+    },
+    {
+      "id": "flame_burst",
+      "title": "Flame Burst",
+      "element": "fire",
+      "rarity": "BASIC",
+      "file": "icons/flame_burst.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        399,
+        25,
+        688,
+        319
+      ],
+      "sha256": "0ebd8bab7ee8e0b7bc80bd6f901c519123de741d015e5f7303b4ced0dbef9902"
+    },
+    {
+      "id": "burning_ground",
+      "title": "Burning Ground",
+      "element": "fire",
+      "rarity": "RARE",
+      "file": "icons/burning_ground.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        746,
+        15,
+        1064,
+        329
+      ],
+      "sha256": "46c892764d03a200d65837a8017df41a94b16a6a5bd6a8e088a0c01099d5b725"
+    },
+    {
+      "id": "flame_dash",
+      "title": "Flame Dash",
+      "element": "fire",
+      "rarity": "RARE",
+      "file": "icons/flame_dash.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1109,
+        15,
+        1427,
+        329
+      ],
+      "sha256": "5faec1cbd4ce5144aad3183a3948061d7c4c799a4018faa2bbff12934eb221f9"
+    },
+    {
+      "id": "inferno_spear",
+      "title": "Inferno Spear",
+      "element": "fire",
+      "rarity": "RARE",
+      "file": "icons/inferno_spear.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        22,
+        348,
+        341,
+        673
+      ],
+      "sha256": "54e81bc0e5ba5f7021336f86582f0f2da00cf3e9a16af84e426af60291c28120"
+    },
+    {
+      "id": "magma_eruption",
+      "title": "Magma Eruption",
+      "element": "fire",
+      "rarity": "EPIC",
+      "file": "icons/magma_eruption.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        366,
+        337,
+        720,
+        678
+      ],
+      "sha256": "d93c0e749e23aa540b05c1b2e9cb7f34850fb6d3f6efb0d0ff081952aa47ec7c"
+    },
+    {
+      "id": "hellfire_chain",
+      "title": "Hellfire Chain",
+      "element": "fire",
+      "rarity": "RARE",
+      "file": "icons/hellfire_chain.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        741,
+        348,
+        1070,
+        675
+      ],
+      "sha256": "f96a8cc5ec95745d0a719afb596f77b0037552cf34fc9fc976c8e598851c4c58"
+    },
+    {
+      "id": "scorching_vortex",
+      "title": "Scorching Vortex",
+      "element": "fire",
+      "rarity": "EPIC",
+      "file": "icons/scorching_vortex.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1090,
+        337,
+        1445,
+        680
+      ],
+      "sha256": "6a7a7dfcd222feee320c839ca1020dbb1b1f2964cd956897bc5d225dcc40c52b"
+    },
+    {
+      "id": "meteor_rain",
+      "title": "Meteor Rain",
+      "element": "fire",
+      "rarity": "LEGENDARY",
+      "file": "icons/meteor_rain.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        17,
+        680,
+        346,
+        1082
+      ],
+      "sha256": "7e8c5f0bb4fe44d3bc787625f6e38b97d1a1b61a438139362f9228a1d927acfb"
+    },
+    {
+      "id": "phoenix_rebirth",
+      "title": "Phoenix Rebirth",
+      "element": "fire",
+      "rarity": "LEGENDARY",
+      "file": "icons/phoenix_rebirth.png",
+      "source": "source/fire.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        370,
+        680,
+        716,
+        1082
+      ],
+      "sha256": "52624a73cbf6820ffceeee28676250c99ceaed44ed359f4677081b6ad24fa831"
+    },
+    {
+      "id": "aqua_bullet",
+      "title": "Aqua Bullet",
+      "element": "water",
+      "rarity": "BASIC",
+      "file": "icons/aqua_bullet.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        34,
+        21,
+        329,
+        329
+      ],
+      "sha256": "b373bdb8ad46115fbc216d0bef5f617fc90c165b4463a5840cfd02186536a83e"
+    },
+    {
+      "id": "water_blade",
+      "title": "Water Blade",
+      "element": "water",
+      "rarity": "BASIC",
+      "file": "icons/water_blade.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        396,
+        20,
+        691,
+        329
+      ],
+      "sha256": "87232c6192387bd8310e8080b2cd0ef91e68f32d94c73e56391550f2781ca6cc"
+    },
+    {
+      "id": "healing_spring",
+      "title": "Healing Spring",
+      "element": "water",
+      "rarity": "RARE",
+      "file": "icons/healing_spring.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        746,
+        12,
+        1064,
+        336
+      ],
+      "sha256": "2207f326e46bbc141e6c888c211ef9b11cdee79a40ea1a1d9ef90b9bdc93f5d0"
+    },
+    {
+      "id": "bubble_prison",
+      "title": "Bubble Prison",
+      "element": "water",
+      "rarity": "RARE",
+      "file": "icons/bubble_prison.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1108,
+        12,
+        1426,
+        336
+      ],
+      "sha256": "9203c9a4c8c5aff193c5418c966bde9fbbb2a5031d55ee11bf394748aabfb580"
+    },
+    {
+      "id": "tidal_push",
+      "title": "Tidal Push",
+      "element": "water",
+      "rarity": "RARE",
+      "file": "icons/tidal_push.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        23,
+        344,
+        339,
+        677
+      ],
+      "sha256": "43e0d71752282650567ee4660356f55c46b60cd57405311b524bfa3a3e6bf7fe"
+    },
+    {
+      "id": "aqua_shield",
+      "title": "Aqua Shield",
+      "element": "water",
+      "rarity": "RARE",
+      "file": "icons/aqua_shield.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        385,
+        344,
+        701,
+        677
+      ],
+      "sha256": "19ac5bd37475d7a43840ecb2662b559bec74cb15cd205f7cd999b761ce5942f7"
+    },
+    {
+      "id": "rain_blessing",
+      "title": "Rain Blessing",
+      "element": "water",
+      "rarity": "EPIC",
+      "file": "icons/rain_blessing.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        732,
+        336,
+        1078,
+        677
+      ],
+      "sha256": "28c7a9a12eb99e5c972cd8428d996013111f91de633883be8db87e97550a1c0f"
+    },
+    {
+      "id": "whirlpool",
+      "title": "Whirlpool",
+      "element": "water",
+      "rarity": "EPIC",
+      "file": "icons/whirlpool.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1094,
+        336,
+        1440,
+        677
+      ],
+      "sha256": "76e7be82daf79ca1a8097d6c10f6d766b338c3b2b68cac40876143d313e31617"
+    },
+    {
+      "id": "tsunami",
+      "title": "Tsunami",
+      "element": "water",
+      "rarity": "LEGENDARY",
+      "file": "icons/tsunami.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        12,
+        677,
+        351,
+        1074
+      ],
+      "sha256": "2ced22624c36257efdf54355e212f1fddb2912ed55b26dccfcb7403ab5edf5d5"
+    },
+    {
+      "id": "leviathans_wrath",
+      "title": "Leviathan's Wrath",
+      "element": "water",
+      "rarity": "LEGENDARY",
+      "file": "icons/leviathans_wrath.png",
+      "source": "source/water.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        374,
+        677,
+        714,
+        1074
+      ],
+      "sha256": "5a9ee2835a994b74872aaf8ce304a463146b4e9ecc116b82d4934c7ebe0ecc25"
+    },
+    {
+      "id": "frost_bolt",
+      "title": "Frost Bolt",
+      "element": "ice",
+      "rarity": "BASIC",
+      "file": "icons/frost_bolt.png",
+      "source": "source/ice.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        43,
+        41,
+        348,
+        359
+      ],
+      "sha256": "a136f621c2c11c09f354400203fe64f762c34075e95a9c38ba6cfda30e5dfc57"
+    },
+    {
+      "id": "ice_spike",
+      "title": "Ice Spike",
+      "element": "ice",
+      "rarity": "RARE",
+      "file": "icons/ice_spike.png",
+      "source": "source/ice.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        385,
+        37,
+        713,
+        362
+      ],
+      "sha256": "94c0dc170c60b2b7ecaa3f08db05ab17c33a5c1408d4eefdc14f5734f6021732"
+    },
+    {
+      "id": "frozen_armor",
+      "title": "Frozen Armor",
+      "element": "ice",
+      "rarity": "RARE",
+      "file": "icons/frozen_armor.png",
+      "source": "source/ice.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        739,
+        37,
+        1066,
+        362
+      ],
+      "sha256": "3447081000aa0591c44e8bc024e389936b3506c254de23909eb7d1baf8818ba9"
+    },
+    {
+      "id": "glacial_path",
+      "title": "Glacial Path",
+      "element": "ice",
+      "rarity": "RARE",
+      "file": "icons/glacial_path.png",
+      "source": "source/ice.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1098,
+        36,
+        1423,
+        362
+      ],
+      "sha256": "d613a418c5dd37e75a2b8a27737ccbeeec9b7342e0fbea0a94ea9f79b46bf1ed"
+    },
+    {
+      "id": "crystal_prison",
+      "title": "Crystal Prison",
+      "element": "ice",
+      "rarity": "EPIC",
+      "file": "icons/crystal_prison.png",
+      "source": "source/ice.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        30,
+        369,
+        362,
+        733
+      ],
+      "sha256": "04698c6a476356722798d0fecda8543c20da8e7ff400fad5c77272a8ee2a1cd0"
+    },
+    {
+      "id": "blizzard",
+      "title": "Blizzard",
+      "element": "ice",
+      "rarity": "EPIC",
+      "file": "icons/blizzard.png",
+      "source": "source/ice.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        381,
+        368,
+        717,
+        734
+      ],
+      "sha256": "393d1fe662d801bb29d1392caca08c7fc6b9b402bc79b8133ed56975bba16c7a"
+    },
+    {
+      "id": "absolute_zero",
+      "title": "Absolute Zero",
+      "element": "ice",
+      "rarity": "LEGENDARY",
+      "file": "icons/absolute_zero.png",
+      "source": "source/ice.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        734,
+        362,
+        1076,
+        803
+      ],
+      "sha256": "a7ee5ad320ec2f940daedeb25b709d384c6421d168ca77bb7f7b5a3a6357bec8"
+    },
+    {
+      "id": "wind_cutter",
+      "title": "Wind Cutter",
+      "element": "wind",
+      "rarity": "BASIC",
+      "file": "icons/wind_cutter.png",
+      "source": "source/wind.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        33,
+        19,
+        328,
+        363
+      ],
+      "sha256": "21bad7914f6ad9880ef7a939f0600bde648414aea95ceddbc679f0a2c9395447"
+    },
+    {
+      "id": "gale_step",
+      "title": "Gale Step",
+      "element": "wind",
+      "rarity": "BASIC",
+      "file": "icons/gale_step.png",
+      "source": "source/wind.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        395,
+        20,
+        691,
+        363
+      ],
+      "sha256": "d5ef7dfd36fe5d4608cc8f86a47cfa32ffdd265c5dbd9e1e954c09744f088bb5"
+    },
+    {
+      "id": "updraft",
+      "title": "Updraft",
+      "element": "wind",
+      "rarity": "RARE",
+      "file": "icons/updraft.png",
+      "source": "source/wind.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        741,
+        18,
+        1067,
+        364
+      ],
+      "sha256": "0a8105b92ad163d02bcb4ee16d65f9c039ed11db78b9d83e2cafa5f123fd5a0a"
+    },
+    {
+      "id": "wind_barrier",
+      "title": "Wind Barrier",
+      "element": "wind",
+      "rarity": "RARE",
+      "file": "icons/wind_barrier.png",
+      "source": "source/wind.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1105,
+        18,
+        1430,
+        364
+      ],
+      "sha256": "d04ec32c63704b26a351b954fdc8bd07eef9896b4554a0b0703a33bf5a6e61fd"
+    },
+    {
+      "id": "cyclone_trap",
+      "title": "Cyclone Trap",
+      "element": "wind",
+      "rarity": "EPIC",
+      "file": "icons/cyclone_trap.png",
+      "source": "source/wind.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        17,
+        382,
+        345,
+        736
+      ],
+      "sha256": "50bc08319b09d0023118cf68664f79bb9d40d5130136f5fa6b9294cb413fb809"
+    },
+    {
+      "id": "thousand_wind_blades",
+      "title": "Thousand Wind Blades",
+      "element": "wind",
+      "rarity": "EPIC",
+      "file": "icons/thousand_wind_blades.png",
+      "source": "source/wind.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        379,
+        382,
+        707,
+        736
+      ],
+      "sha256": "e178f978d7a921cfcec0f1ab9e5978c630aba3b35ab70909ef35d378378c7fb5"
+    },
+    {
+      "id": "tempest_dominion",
+      "title": "Tempest Dominion",
+      "element": "wind",
+      "rarity": "LEGENDARY",
+      "file": "icons/tempest_dominion.png",
+      "source": "source/wind.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        724,
+        364,
+        1086,
+        821
+      ],
+      "sha256": "5aac5e04585277d66a003be47a834142574e83af759556b41498a0abaff8cd2d"
+    },
+    {
+      "id": "stone_bullet",
+      "title": "Stone Bullet",
+      "element": "earth",
+      "rarity": "BASIC",
+      "file": "icons/stone_bullet.png",
+      "source": "source/earth.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        35,
+        24,
+        329,
+        338
+      ],
+      "sha256": "0a47d05471ece558e1b6d5e18a44e27251a2eef2294684df0bfa5d1f31edd951"
+    },
+    {
+      "id": "earth_spike",
+      "title": "Earth Spike",
+      "element": "earth",
+      "rarity": "RARE",
+      "file": "icons/earth_spike.png",
+      "source": "source/earth.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        385,
+        21,
+        704,
+        342
+      ],
+      "sha256": "7927446acc3bd23676ca5dd3cbe15457551e3b398b237de6e50a9fb042272921"
+    },
+    {
+      "id": "stone_wall",
+      "title": "Stone Wall",
+      "element": "earth",
+      "rarity": "RARE",
+      "file": "icons/stone_wall.png",
+      "source": "source/earth.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        745,
+        21,
+        1066,
+        342
+      ],
+      "sha256": "4a295fb374cc8438b6f66c0c23dae5b1fa9d90e6fd3a6ef0a0b36b5944af3d7e"
+    },
+    {
+      "id": "iron_skin",
+      "title": "Iron Skin",
+      "element": "earth",
+      "rarity": "RARE",
+      "file": "icons/iron_skin.png",
+      "source": "source/earth.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1108,
+        21,
+        1428,
+        342
+      ],
+      "sha256": "ba6add76889ab644a2b21b0101eacba01b58ac69bd410cf31b789a0d85c70e88"
+    },
+    {
+      "id": "quicksand",
+      "title": "Quicksand",
+      "element": "earth",
+      "rarity": "RARE",
+      "file": "icons/quicksand.png",
+      "source": "source/earth.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        21,
+        369,
+        343,
+        708
+      ],
+      "sha256": "9855477bd751e55ed85c5a2fbb3b73c5344a2217ea71063fbc5db15d99236c29"
+    },
+    {
+      "id": "seismic_slam",
+      "title": "Seismic Slam",
+      "element": "earth",
+      "rarity": "EPIC",
+      "file": "icons/seismic_slam.png",
+      "source": "source/earth.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        370,
+        358,
+        717,
+        708
+      ],
+      "sha256": "85e3ab21752a39aa4015967d18e9d71efa9ec262bdc4d0154b82b4de964dcc2d"
+    },
+    {
+      "id": "golem_guardian",
+      "title": "Golem Guardian",
+      "element": "earth",
+      "rarity": "EPIC",
+      "file": "icons/golem_guardian.png",
+      "source": "source/earth.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        732,
+        358,
+        1079,
+        708
+      ],
+      "sha256": "3b77917d186df2c7d90e4d9ca370bc932a29fd88a2552c5c567b5de6a9d6405e"
+    },
+    {
+      "id": "titans_judgment",
+      "title": "Titan's Judgment",
+      "element": "earth",
+      "rarity": "LEGENDARY",
+      "file": "icons/titans_judgment.png",
+      "source": "source/earth.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1091,
+        348,
+        1444,
+        789
+      ],
+      "sha256": "d392ee1c669d3c1691e2a22adfea9c3a78a56932767125821e853077b3ac7498"
+    },
+    {
+      "id": "radiant_bolt",
+      "title": "Radiant Bolt",
+      "element": "light",
+      "rarity": "BASIC",
+      "file": "icons/radiant_bolt.png",
+      "source": "source/light.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        32,
+        42,
+        334,
+        354
+      ],
+      "sha256": "c42ea7b75c9015dd06e741d075d245839c2a02df3a5d3134c5822dedf8ae6963"
+    },
+    {
+      "id": "holy_sanctuary",
+      "title": "Holy Sanctuary",
+      "element": "light",
+      "rarity": "EPIC",
+      "file": "icons/holy_sanctuary.png",
+      "source": "source/light.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        369,
+        5,
+        722,
+        375
+      ],
+      "sha256": "bd937cef1ff864b5bdbcd632ef09048c06326ea9401b65276958980a75809328"
+    },
+    {
+      "id": "purification",
+      "title": "Purification",
+      "element": "light",
+      "rarity": "RARE",
+      "file": "icons/purification.png",
+      "source": "source/light.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        744,
+        30,
+        1076,
+        372
+      ],
+      "sha256": "99db9071d8131f1667586e3c530b25500d4123dd9ab2aa5dcd251b52b0c4f569"
+    },
+    {
+      "id": "divine_judgment",
+      "title": "Divine Judgment",
+      "element": "light",
+      "rarity": "EPIC",
+      "file": "icons/divine_judgment.png",
+      "source": "source/light.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1096,
+        5,
+        1445,
+        375
+      ],
+      "sha256": "41a14605f9501eee2fb92067dcdf6083d04e0cba1dffdc8efa8ac19ff9d81995"
+    },
+    {
+      "id": "heavens_descent",
+      "title": "Heaven's Descent",
+      "element": "light",
+      "rarity": "LEGENDARY",
+      "file": "icons/heavens_descent.png",
+      "source": "source/light.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        6,
+        375,
+        360,
+        806
+      ],
+      "sha256": "c27f67c27dbe8c1709973fa01efd2e31dc0e5e5dc713e40f529e15b616062bb5"
+    },
+    {
+      "id": "shadow_bolt",
+      "title": "Shadow Bolt",
+      "element": "dark",
+      "rarity": "BASIC",
+      "file": "icons/shadow_bolt.png",
+      "source": "source/dark.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        39,
+        83,
+        355,
+        452
+      ],
+      "sha256": "87b254ee9c502aac518ddc35661b78abbb447239052371ed347fd483be062ec9"
+    },
+    {
+      "id": "life_drain",
+      "title": "Life Drain",
+      "element": "dark",
+      "rarity": "RARE",
+      "file": "icons/life_drain.png",
+      "source": "source/dark.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        380,
+        76,
+        716,
+        458
+      ],
+      "sha256": "01c496ee367274b7b91f3e905785aa4d17d1ab46604a412930027198642f0b2e"
+    },
+    {
+      "id": "cursed_mark",
+      "title": "Cursed Mark",
+      "element": "dark",
+      "rarity": "RARE",
+      "file": "icons/cursed_mark.png",
+      "source": "source/dark.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        733,
+        76,
+        1067,
+        458
+      ],
+      "sha256": "6eb625f77432dc548d45a336c318a3443c8cb56ca0ca28eb1e83fc16dfd7d17b"
+    },
+    {
+      "id": "shadow_doppelganger",
+      "title": "Shadow Doppelganger",
+      "element": "dark",
+      "rarity": "EPIC",
+      "file": "icons/shadow_doppelganger.png",
+      "source": "source/dark.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1083,
+        65,
+        1437,
+        462
+      ],
+      "sha256": "53e46aefdac428fffbb290cede91f255ab6df2e23c42ae9e1d876204f9ca7722"
+    },
+    {
+      "id": "abyssal_collapse",
+      "title": "Abyssal Collapse",
+      "element": "dark",
+      "rarity": "LEGENDARY",
+      "file": "icons/abyssal_collapse.png",
+      "source": "source/dark.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        27,
+        466,
+        363,
+        935
+      ],
+      "sha256": "14c51b53528cec5a89049d6ef07432d14f247fc8792a5ae918a948c7f3bb417e"
+    },
+    {
+      "id": "spark_shot",
+      "title": "Spark Shot",
+      "element": "lightning",
+      "rarity": "BASIC",
+      "file": "icons/spark_shot.png",
+      "source": "source/lightning.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        12,
+        42,
+        358,
+        390
+      ],
+      "sha256": "0632a9bcd290281fd877e445561338e4734712943fc31fb591a3904fd1b259b2"
+    },
+    {
+      "id": "lightning_chain",
+      "title": "Lightning Chain",
+      "element": "lightning",
+      "rarity": "RARE",
+      "file": "icons/lightning_chain.png",
+      "source": "source/lightning.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        378,
+        34,
+        728,
+        397
+      ],
+      "sha256": "4b5d846b30649d037528eb38f8cc01fc73f2e6036c89674770d39d640c057bf9"
+    },
+    {
+      "id": "thunder_dash",
+      "title": "Thunder Dash",
+      "element": "lightning",
+      "rarity": "RARE",
+      "file": "icons/thunder_dash.png",
+      "source": "source/lightning.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        745,
+        34,
+        1077,
+        397
+      ],
+      "sha256": "022522befe20cab9655e52afa3005abd4f261c4a3f14205ed83dfb037c755e13"
+    },
+    {
+      "id": "static_field",
+      "title": "Static Field",
+      "element": "lightning",
+      "rarity": "EPIC",
+      "file": "icons/static_field.png",
+      "source": "source/lightning.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        1086,
+        20,
+        1445,
+        397
+      ],
+      "sha256": "b21782658e72651b5758d4d545e8f9b727635e091bc88c5b19f60607effe6adf"
+    },
+    {
+      "id": "thunder_spear",
+      "title": "Thunder Spear",
+      "element": "lightning",
+      "rarity": "EPIC",
+      "file": "icons/thunder_spear.png",
+      "source": "source/lightning.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        8,
+        411,
+        362,
+        791
+      ],
+      "sha256": "dde979ea8809fe978161b8224147fc447a938bdbc51f6bc79375d003b9e0b7a5"
+    },
+    {
+      "id": "wrath_of_raijin",
+      "title": "Wrath of Raijin",
+      "element": "lightning",
+      "rarity": "LEGENDARY",
+      "file": "icons/wrath_of_raijin.png",
+      "source": "source/lightning.png",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "source_crop": [
+        366,
+        397,
+        745,
+        868
+      ],
+      "sha256": "51f9aa203f3c3e9081c95b2dd34e5adbd5c5023856942033efeb555dc361d579"
+    }
+  ]
+}

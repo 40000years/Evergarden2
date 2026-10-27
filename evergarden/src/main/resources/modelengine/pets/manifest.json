@@ -1,0 +1,1634 @@
+[
+  {
+    "id": "everpet_arcane_nine_tails_baby",
+    "species": "arcane_nine_tails",
+    "stage": "baby",
+    "title": "Arcane Nine-Tails",
+    "rarity": "rare",
+    "cubes": 121,
+    "bones": 16,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "12dd4b6b89c281715f780ba7e8cbcea3334a77148ec50802b928a86612028e40"
+  },
+  {
+    "id": "everpet_arcane_nine_tails_medium",
+    "species": "arcane_nine_tails",
+    "stage": "medium",
+    "title": "Arcane Nine-Tails",
+    "rarity": "rare",
+    "cubes": 139,
+    "bones": 16,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "751d631c52473082a9bd93ed32c76a7b1dcba9f5fb926455efadb0771c4096e4"
+  },
+  {
+    "id": "everpet_arcane_nine_tails_adult",
+    "species": "arcane_nine_tails",
+    "stage": "adult",
+    "title": "Arcane Nine-Tails",
+    "rarity": "rare",
+    "cubes": 152,
+    "bones": 16,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "4fc7db2759e6f9038b4e720a6b31ebff31e1d003226e8d769a15c9842aaaa3bd"
+  },
+  {
+    "id": "everpet_frost_wyvern_baby",
+    "species": "frost_wyvern",
+    "stage": "baby",
+    "title": "Frost Wyvern",
+    "rarity": "rare",
+    "cubes": 154,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "f312ff15ae1d8941d08f271d2a1e4360f7761eb8936ba8801056d3195194a6d1"
+  },
+  {
+    "id": "everpet_frost_wyvern_medium",
+    "species": "frost_wyvern",
+    "stage": "medium",
+    "title": "Frost Wyvern",
+    "rarity": "rare",
+    "cubes": 154,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "16348cad8400ec1f01ea68ca9a6e67ab9651eacf938789e9c8b6050100ea10c6"
+  },
+  {
+    "id": "everpet_frost_wyvern_adult",
+    "species": "frost_wyvern",
+    "stage": "adult",
+    "title": "Frost Wyvern",
+    "rarity": "rare",
+    "cubes": 154,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "8719353e7fe55ddf7c8a15510ff405ae3a1fb2fec817ae30a306644bdb3e25b6"
+  },
+  {
+    "id": "everpet_astral_owl_baby",
+    "species": "astral_owl",
+    "stage": "baby",
+    "title": "Astral Owl",
+    "rarity": "rare",
+    "cubes": 81,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "2e0712b07e963046f9a280981080193cb521464f6e05dd901237db52d2f5e354"
+  },
+  {
+    "id": "everpet_astral_owl_medium",
+    "species": "astral_owl",
+    "stage": "medium",
+    "title": "Astral Owl",
+    "rarity": "rare",
+    "cubes": 92,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "57c2896d14cb0ecd7b94918960756158c414226242a1098f5230339dd0897cbd"
+  },
+  {
+    "id": "everpet_astral_owl_adult",
+    "species": "astral_owl",
+    "stage": "adult",
+    "title": "Astral Owl",
+    "rarity": "rare",
+    "cubes": 126,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "ee6add059ba8830b7aa1da6be66cdc81755ae08e0bc7e7efa2192ae207ed1341"
+  },
+  {
+    "id": "everpet_crimson_cerberus_baby",
+    "species": "crimson_cerberus",
+    "stage": "baby",
+    "title": "Crimson Cerberus",
+    "rarity": "rare",
+    "cubes": 142,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "01f4507b3344c2c31d9ace07e5f3721c17498ec6cf344868fe21f33b759c456b"
+  },
+  {
+    "id": "everpet_crimson_cerberus_medium",
+    "species": "crimson_cerberus",
+    "stage": "medium",
+    "title": "Crimson Cerberus",
+    "rarity": "rare",
+    "cubes": 174,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "5608c707ba597b4f5165ffca12abab04130653e91f4447f2650372451ea47f1d"
+  },
+  {
+    "id": "everpet_crimson_cerberus_adult",
+    "species": "crimson_cerberus",
+    "stage": "adult",
+    "title": "Crimson Cerberus",
+    "rarity": "rare",
+    "cubes": 200,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "55dbc86ffabf84b924c71c4b96843acf75d51aec20921dc6a705575e8f9b58a2"
+  },
+  {
+    "id": "everpet_shadow_panther_baby",
+    "species": "shadow_panther",
+    "stage": "baby",
+    "title": "Shadow Panther",
+    "rarity": "rare",
+    "cubes": 146,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "872ee89e5e1873e6df3a05792f829919077aad2860b913b0c60451922f24a122"
+  },
+  {
+    "id": "everpet_shadow_panther_medium",
+    "species": "shadow_panther",
+    "stage": "medium",
+    "title": "Shadow Panther",
+    "rarity": "rare",
+    "cubes": 150,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "2ae8d626bbfd191f82890e774cb16e77657bbbc3f32722ba507806ad3e4d8655"
+  },
+  {
+    "id": "everpet_shadow_panther_adult",
+    "species": "shadow_panther",
+    "stage": "adult",
+    "title": "Shadow Panther",
+    "rarity": "rare",
+    "cubes": 159,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "1198bbd0cb70d6d0d6088c50c1c20048d4f6000e66715526a9992cafc15984e6"
+  },
+  {
+    "id": "everpet_blood_gargoyle_baby",
+    "species": "blood_gargoyle",
+    "stage": "baby",
+    "title": "Blood Gargoyle",
+    "rarity": "rare",
+    "cubes": 92,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "c2262139f588ed8ad7644cc297394979627ea82657f0de08d3c0a723cefd3016"
+  },
+  {
+    "id": "everpet_blood_gargoyle_medium",
+    "species": "blood_gargoyle",
+    "stage": "medium",
+    "title": "Blood Gargoyle",
+    "rarity": "rare",
+    "cubes": 90,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "c21dbd1c40e7fa421f2b52d62e6a466dd197fae44ee6179658fa642deeffa598"
+  },
+  {
+    "id": "everpet_blood_gargoyle_adult",
+    "species": "blood_gargoyle",
+    "stage": "adult",
+    "title": "Blood Gargoyle",
+    "rarity": "rare",
+    "cubes": 94,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "5e581923d26c76e1644bbac1eb6cf5e1919600129fa1d1e3b628fc61aa51f220"
+  },
+  {
+    "id": "everpet_runic_golem_baby",
+    "species": "runic_golem",
+    "stage": "baby",
+    "title": "Runic Golem",
+    "rarity": "rare",
+    "cubes": 88,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "44d724ebc3553fd2fb4299bb5c3ea91c94ecfb8000fd06c8eabe8d8bd4fb1c89"
+  },
+  {
+    "id": "everpet_runic_golem_medium",
+    "species": "runic_golem",
+    "stage": "medium",
+    "title": "Runic Golem",
+    "rarity": "rare",
+    "cubes": 93,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "039764c93bf9b7db7019d0b86c8eaceab862b96c8bf34142c800acc7016931dd"
+  },
+  {
+    "id": "everpet_runic_golem_adult",
+    "species": "runic_golem",
+    "stage": "adult",
+    "title": "Runic Golem",
+    "rarity": "rare",
+    "cubes": 98,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "c6476770485905b568d6d318aba9bddcb90203e28d5b6caba56c2bed8828c082"
+  },
+  {
+    "id": "everpet_world_tree_entling_baby",
+    "species": "world_tree_entling",
+    "stage": "baby",
+    "title": "World-Tree Entling",
+    "rarity": "rare",
+    "cubes": 82,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "374810501f0fc14f66c611425e0c0d3411d3681e5392cdbd50a0bcce2133bb4d"
+  },
+  {
+    "id": "everpet_world_tree_entling_medium",
+    "species": "world_tree_entling",
+    "stage": "medium",
+    "title": "World-Tree Entling",
+    "rarity": "rare",
+    "cubes": 89,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "d4c1345921e614732df47d723323c9b15af76f1d7ebaab4b0ae68240f831d185"
+  },
+  {
+    "id": "everpet_world_tree_entling_adult",
+    "species": "world_tree_entling",
+    "stage": "adult",
+    "title": "World-Tree Entling",
+    "rarity": "rare",
+    "cubes": 104,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "0073e0f3aabaa559631809726dd67ee6fccab184731d8a3643717fa1aa9e76ff"
+  },
+  {
+    "id": "everpet_crystal_tortoise_baby",
+    "species": "crystal_tortoise",
+    "stage": "baby",
+    "title": "Crystal Tortoise",
+    "rarity": "rare",
+    "cubes": 115,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "2e561faaf5eb3a4d06edc5df342e90f036ddf77b630447ad19bcc03b435aec0b"
+  },
+  {
+    "id": "everpet_crystal_tortoise_medium",
+    "species": "crystal_tortoise",
+    "stage": "medium",
+    "title": "Crystal Tortoise",
+    "rarity": "rare",
+    "cubes": 119,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "48836200132e1587db1c5ea63965d3b19cdde1856a4f3af4029af855497b7e3e"
+  },
+  {
+    "id": "everpet_crystal_tortoise_adult",
+    "species": "crystal_tortoise",
+    "stage": "adult",
+    "title": "Crystal Tortoise",
+    "rarity": "rare",
+    "cubes": 123,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "fbb672b2a5ca2b53cf49ec5759e5adcc5302c7663a3d4d552d0fdc08c622e617"
+  },
+  {
+    "id": "everpet_abyssal_manta_baby",
+    "species": "abyssal_manta",
+    "stage": "baby",
+    "title": "Abyssal Manta",
+    "rarity": "rare",
+    "cubes": 132,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "9f06429b5fda65d04df0aed96189c387670e834ba744f2a997b0c61ed8b009d4"
+  },
+  {
+    "id": "everpet_abyssal_manta_medium",
+    "species": "abyssal_manta",
+    "stage": "medium",
+    "title": "Abyssal Manta",
+    "rarity": "rare",
+    "cubes": 132,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "b3e23112f1cfff926fe8e7b6e28858937f89c97e453faddf0eb839de4890b21f"
+  },
+  {
+    "id": "everpet_abyssal_manta_adult",
+    "species": "abyssal_manta",
+    "stage": "adult",
+    "title": "Abyssal Manta",
+    "rarity": "rare",
+    "cubes": 132,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "7f22555eaf66da52c5ba95ada04b2a51eca30c02fe3bd6722569ddc3c6b0843b"
+  },
+  {
+    "id": "everpet_alchemist_mimic_baby",
+    "species": "alchemist_mimic",
+    "stage": "baby",
+    "title": "Alchemist Mimic",
+    "rarity": "rare",
+    "cubes": 80,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "dbd0960b7c919e9829cb661e144a39c29b0cc5f284e781700c745502fae7ff51"
+  },
+  {
+    "id": "everpet_alchemist_mimic_medium",
+    "species": "alchemist_mimic",
+    "stage": "medium",
+    "title": "Alchemist Mimic",
+    "rarity": "rare",
+    "cubes": 91,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "85f89c166b627e0ab375c7ca99fb61d28fe3ce99d355256109d82413d54e08be"
+  },
+  {
+    "id": "everpet_alchemist_mimic_adult",
+    "species": "alchemist_mimic",
+    "stage": "adult",
+    "title": "Alchemist Mimic",
+    "rarity": "rare",
+    "cubes": 100,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "881019db9bcc938db908865ddf93f1be76034a0516ed09f539d6aa0b0d5e4997"
+  },
+  {
+    "id": "everpet_chrono_fairy_baby",
+    "species": "chrono_fairy",
+    "stage": "baby",
+    "title": "Chrono Fairy",
+    "rarity": "rare",
+    "cubes": 111,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "9212be2af58369e9437646c7ed3ea878f33a98d24286d467b68b90aa7d851312"
+  },
+  {
+    "id": "everpet_chrono_fairy_medium",
+    "species": "chrono_fairy",
+    "stage": "medium",
+    "title": "Chrono Fairy",
+    "rarity": "rare",
+    "cubes": 115,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "7920c2673b233449670fca050cd6ff573db9a8b600fe8cd7661bd4768ba40d7f"
+  },
+  {
+    "id": "everpet_chrono_fairy_adult",
+    "species": "chrono_fairy",
+    "stage": "adult",
+    "title": "Chrono Fairy",
+    "rarity": "rare",
+    "cubes": 121,
+    "bones": 10,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "6ef2d40d6db4c147ac9a48cbe4fe6d0a4957116e27674497a3157ad1d3e1c411"
+  },
+  {
+    "id": "everpet_mochi_slime_baby",
+    "species": "mochi_slime",
+    "stage": "baby",
+    "title": "Mochi Slime",
+    "rarity": "rare",
+    "cubes": 42,
+    "bones": 3,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "1a5658bc63dfbb2209e71eb10c2060dc6b5ba53de315d1c519cd54fea2e36601"
+  },
+  {
+    "id": "everpet_mochi_slime_medium",
+    "species": "mochi_slime",
+    "stage": "medium",
+    "title": "Mochi Slime",
+    "rarity": "rare",
+    "cubes": 58,
+    "bones": 3,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "9f7340acba6f5e4cdccd157eeecf85337030ccfeb21ceecea0b6a236216db112"
+  },
+  {
+    "id": "everpet_mochi_slime_adult",
+    "species": "mochi_slime",
+    "stage": "adult",
+    "title": "Mochi Slime",
+    "rarity": "rare",
+    "cubes": 72,
+    "bones": 3,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "ce06d6ee8e83e3dec5c8cdf9a56ac9744ca5db08d5478fcbde0969d1952a45f7"
+  },
+  {
+    "id": "everpet_cloud_lamb_baby",
+    "species": "cloud_lamb",
+    "stage": "baby",
+    "title": "Cloud Lamb",
+    "rarity": "rare",
+    "cubes": 140,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "74c7c59c96db250b14e0ae74dc3d49ec46157d6216f2009a5e6d58d4ec85eed8"
+  },
+  {
+    "id": "everpet_cloud_lamb_medium",
+    "species": "cloud_lamb",
+    "stage": "medium",
+    "title": "Cloud Lamb",
+    "rarity": "rare",
+    "cubes": 149,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "f8945384e4f17565d284fd3a75a6bbc63b6a35fc284a627c0b07c98896209a36"
+  },
+  {
+    "id": "everpet_cloud_lamb_adult",
+    "species": "cloud_lamb",
+    "stage": "adult",
+    "title": "Cloud Lamb",
+    "rarity": "rare",
+    "cubes": 184,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "d97ec2c8177f6dbc46ba0ffa1b07f07bde7af775c05a98c4c6a8e6c083e1c2b2"
+  },
+  {
+    "id": "everpet_moon_rabbit_baby",
+    "species": "moon_rabbit",
+    "stage": "baby",
+    "title": "Moon Rabbit",
+    "rarity": "rare",
+    "cubes": 74,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "bf4a8a4384118dbc4ac17e70bf8c3d814d8de616d5638ee39f347578c20c6025"
+  },
+  {
+    "id": "everpet_moon_rabbit_medium",
+    "species": "moon_rabbit",
+    "stage": "medium",
+    "title": "Moon Rabbit",
+    "rarity": "rare",
+    "cubes": 75,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "ca9ca4f0d010901c1a8db7908b24b49cd26c1422f57fb49d4b79771c08d39546"
+  },
+  {
+    "id": "everpet_moon_rabbit_adult",
+    "species": "moon_rabbit",
+    "stage": "adult",
+    "title": "Moon Rabbit",
+    "rarity": "rare",
+    "cubes": 81,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "22441115aa0ebd98f280b65c7c9742cf2319da44c1c430844ad4c60e96ee9166"
+  },
+  {
+    "id": "everpet_bloom_hedgehog_baby",
+    "species": "bloom_hedgehog",
+    "stage": "baby",
+    "title": "Bloom Hedgehog",
+    "rarity": "rare",
+    "cubes": 109,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "9d97b3f62c2a017d5ad95617605b72e15af6f866a86bb1b520ade5dacee12b5f"
+  },
+  {
+    "id": "everpet_bloom_hedgehog_medium",
+    "species": "bloom_hedgehog",
+    "stage": "medium",
+    "title": "Bloom Hedgehog",
+    "rarity": "rare",
+    "cubes": 152,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "ab06d24d2d23ed213e8f97f0cad261824027e6812c4a02dcc0071864ccf1f5f8"
+  },
+  {
+    "id": "everpet_bloom_hedgehog_adult",
+    "species": "bloom_hedgehog",
+    "stage": "adult",
+    "title": "Bloom Hedgehog",
+    "rarity": "rare",
+    "cubes": 204,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "1b54bfc4a10d26622b27f091402253ea802db018adce1d44339a5478dcc2010e"
+  },
+  {
+    "id": "everpet_coral_axolotl_baby",
+    "species": "coral_axolotl",
+    "stage": "baby",
+    "title": "Coral Axolotl",
+    "rarity": "rare",
+    "cubes": 72,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "496c6717d19a1d8dc24e74c3c5b80da04c64430c2f2997025d0dcae26bac03f7"
+  },
+  {
+    "id": "everpet_coral_axolotl_medium",
+    "species": "coral_axolotl",
+    "stage": "medium",
+    "title": "Coral Axolotl",
+    "rarity": "rare",
+    "cubes": 87,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "cefaa2091d931f36c7fee7648fb2df9beb16020a2d45e2ef2e05fac651ff8650"
+  },
+  {
+    "id": "everpet_coral_axolotl_adult",
+    "species": "coral_axolotl",
+    "stage": "adult",
+    "title": "Coral Axolotl",
+    "rarity": "rare",
+    "cubes": 103,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "43aca15bd5da77a60cd87a130ceaac61e1e7d82b622fc465ff7bef4323281728"
+  },
+  {
+    "id": "everpet_clover_bumble_baby",
+    "species": "clover_bumble",
+    "stage": "baby",
+    "title": "Clover Bumble",
+    "rarity": "rare",
+    "cubes": 69,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "dcc26ecb6a1cb07a5a0dee5251acf5caf4af5adf97b2d35ad0c01d06230f99a3"
+  },
+  {
+    "id": "everpet_clover_bumble_medium",
+    "species": "clover_bumble",
+    "stage": "medium",
+    "title": "Clover Bumble",
+    "rarity": "rare",
+    "cubes": 74,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "d30d4e05f32a6199a05bab12b9bfa8e699f7ccec302169cd08f98ea5363bb13d"
+  },
+  {
+    "id": "everpet_clover_bumble_adult",
+    "species": "clover_bumble",
+    "stage": "adult",
+    "title": "Clover Bumble",
+    "rarity": "rare",
+    "cubes": 86,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "f3ef6eae630a93149e8b605d3eb30839e27ac0fcff707fd4d7cb1c41643580fa"
+  },
+  {
+    "id": "everpet_aurora_penguin_baby",
+    "species": "aurora_penguin",
+    "stage": "baby",
+    "title": "Aurora Penguin",
+    "rarity": "rare",
+    "cubes": 47,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "4b262bf529162ad959394cfe6f721d5e5144c6871188c3594cab0834567b1029"
+  },
+  {
+    "id": "everpet_aurora_penguin_medium",
+    "species": "aurora_penguin",
+    "stage": "medium",
+    "title": "Aurora Penguin",
+    "rarity": "rare",
+    "cubes": 40,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "98133e619ff7a8a4bafbdd4d79ec2dda9f2b4cccf51a431f89f3a0b046301606"
+  },
+  {
+    "id": "everpet_aurora_penguin_adult",
+    "species": "aurora_penguin",
+    "stage": "adult",
+    "title": "Aurora Penguin",
+    "rarity": "rare",
+    "cubes": 54,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "42ed84ca499476bd57fa0dd04cf1d95227f5a3e32c01fcd821d04054fc47fede"
+  },
+  {
+    "id": "everpet_storm_raptor_baby",
+    "species": "storm_raptor",
+    "stage": "baby",
+    "title": "Storm Raptor",
+    "rarity": "rare",
+    "cubes": 74,
+    "bones": 11,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "c9e5b24b3a2442f3bac321acf0e5f6c80eb586593cf68912230891ca1003a621"
+  },
+  {
+    "id": "everpet_storm_raptor_medium",
+    "species": "storm_raptor",
+    "stage": "medium",
+    "title": "Storm Raptor",
+    "rarity": "rare",
+    "cubes": 90,
+    "bones": 11,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "8596d99fefcba369cd2073acceaeef5ed0aacd9ec633acb9674b927e6431f246"
+  },
+  {
+    "id": "everpet_storm_raptor_adult",
+    "species": "storm_raptor",
+    "stage": "adult",
+    "title": "Storm Raptor",
+    "rarity": "rare",
+    "cubes": 99,
+    "bones": 11,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "c3c88ef2c4f7e78f206096ecd5ad67a972e383f0369ec8b78c575cdeaa9ddecc"
+  },
+  {
+    "id": "everpet_magma_rhino_baby",
+    "species": "magma_rhino",
+    "stage": "baby",
+    "title": "Magma Rhino",
+    "rarity": "rare",
+    "cubes": 104,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "0fe323a28d63e90658d43a9ccbe892c00f2367194424582844f0a6b6c6e0ca19"
+  },
+  {
+    "id": "everpet_magma_rhino_medium",
+    "species": "magma_rhino",
+    "stage": "medium",
+    "title": "Magma Rhino",
+    "rarity": "rare",
+    "cubes": 124,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "a9ba3c21b94e1b6834be7f82602c8ba4f55e486beb5f420b7149441597624a14"
+  },
+  {
+    "id": "everpet_magma_rhino_adult",
+    "species": "magma_rhino",
+    "stage": "adult",
+    "title": "Magma Rhino",
+    "rarity": "rare",
+    "cubes": 140,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "d3dce378f16ed5703253f172bf7a21c2ce0158a09b554d4523673f1fc826b6a6"
+  },
+  {
+    "id": "everpet_eclipse_scorpion_baby",
+    "species": "eclipse_scorpion",
+    "stage": "baby",
+    "title": "Eclipse Scorpion",
+    "rarity": "rare",
+    "cubes": 92,
+    "bones": 11,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "b22ad9044acbf5d6de90589ff766acba314bc7c23487cf90aa8c85aa5f7a3b05"
+  },
+  {
+    "id": "everpet_eclipse_scorpion_medium",
+    "species": "eclipse_scorpion",
+    "stage": "medium",
+    "title": "Eclipse Scorpion",
+    "rarity": "rare",
+    "cubes": 88,
+    "bones": 11,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "4f5436c2c3ed0f784f7358761f13a23a8297f3f8e52af8d731197daaef7cf55f"
+  },
+  {
+    "id": "everpet_eclipse_scorpion_adult",
+    "species": "eclipse_scorpion",
+    "stage": "adult",
+    "title": "Eclipse Scorpion",
+    "rarity": "rare",
+    "cubes": 107,
+    "bones": 11,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "702ea7de555ff41089ab974407d113bc42ad24549b54b73e12dbf3e75f6b050f"
+  },
+  {
+    "id": "everpet_raijin_tiger_baby",
+    "species": "raijin_tiger",
+    "stage": "baby",
+    "title": "Raijin Tiger",
+    "rarity": "rare",
+    "cubes": 107,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "2082c60b918d8021bf1b78b35197c33e8210f2513de27801e463f0c90b078f2f"
+  },
+  {
+    "id": "everpet_raijin_tiger_medium",
+    "species": "raijin_tiger",
+    "stage": "medium",
+    "title": "Raijin Tiger",
+    "rarity": "rare",
+    "cubes": 125,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "d543c1cc1574780fbf37524589e10a69bd3150d5cf0adee5244d9858922c8737"
+  },
+  {
+    "id": "everpet_raijin_tiger_adult",
+    "species": "raijin_tiger",
+    "stage": "adult",
+    "title": "Raijin Tiger",
+    "rarity": "rare",
+    "cubes": 187,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "c6938b4b59d7fde013cff26ae030e0ff92437c884735a4c71928e08a73afb6c9"
+  },
+  {
+    "id": "everpet_titan_beetle_baby",
+    "species": "titan_beetle",
+    "stage": "baby",
+    "title": "Titan Beetle",
+    "rarity": "rare",
+    "cubes": 64,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "d0d4cabb135a9afbaba11c622232a364fb2da1a1cabd4e85b99942b8ba803869"
+  },
+  {
+    "id": "everpet_titan_beetle_medium",
+    "species": "titan_beetle",
+    "stage": "medium",
+    "title": "Titan Beetle",
+    "rarity": "rare",
+    "cubes": 61,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "9b62500579544fc2d824eb8b58404b2dfc675b3d0403023f680efcdb2955ed1b"
+  },
+  {
+    "id": "everpet_titan_beetle_adult",
+    "species": "titan_beetle",
+    "stage": "adult",
+    "title": "Titan Beetle",
+    "rarity": "rare",
+    "cubes": 78,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "44a7fef3614dfa07884c571802b3626baa8fd0e7daf9e0f18ef2d785cfbd0cff"
+  },
+  {
+    "id": "everpet_anubis_jackal_baby",
+    "species": "anubis_jackal",
+    "stage": "baby",
+    "title": "Anubis Jackal",
+    "rarity": "rare",
+    "cubes": 72,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "7ecd177c6836894f8f875dae7a8db212a0005e839a4c5582fc0a401dc5645cc8"
+  },
+  {
+    "id": "everpet_anubis_jackal_medium",
+    "species": "anubis_jackal",
+    "stage": "medium",
+    "title": "Anubis Jackal",
+    "rarity": "rare",
+    "cubes": 92,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "1673a0d5d09b652ab25137a68ec84d19923a91d7c6b442482092cbdad749286d"
+  },
+  {
+    "id": "everpet_anubis_jackal_adult",
+    "species": "anubis_jackal",
+    "stage": "adult",
+    "title": "Anubis Jackal",
+    "rarity": "rare",
+    "cubes": 100,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "6dceabf0745838c33e16fbb6aa72a5832418928db73b67e7c7d2f9fe353fa9f0"
+  },
+  {
+    "id": "everpet_bone_drake_baby",
+    "species": "bone_drake",
+    "stage": "baby",
+    "title": "Bone Drake",
+    "rarity": "rare",
+    "cubes": 136,
+    "bones": 11,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "00db70a02b4e9acf689f9489634731763f72a9292dfec2d146d4d3199a55642d"
+  },
+  {
+    "id": "everpet_bone_drake_medium",
+    "species": "bone_drake",
+    "stage": "medium",
+    "title": "Bone Drake",
+    "rarity": "rare",
+    "cubes": 145,
+    "bones": 11,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "e44e02d3b6c6faf134c40f8ccef621adf5ce8a2478ed5fa7871be20a79c28e7f"
+  },
+  {
+    "id": "everpet_bone_drake_adult",
+    "species": "bone_drake",
+    "stage": "adult",
+    "title": "Bone Drake",
+    "rarity": "rare",
+    "cubes": 163,
+    "bones": 11,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "970dbd2dce775e826acf1e7097277708cc72c0cf341e4368971430767ec1439f"
+  },
+  {
+    "id": "everpet_jade_lung_baby",
+    "species": "jade_lung",
+    "stage": "baby",
+    "title": "Jade Lung",
+    "rarity": "rare",
+    "cubes": 87,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "47f6310d52fca1b2513b97e5b3f444fa7cbe99e3db1ace5e3782195f0a3f08ea"
+  },
+  {
+    "id": "everpet_jade_lung_medium",
+    "species": "jade_lung",
+    "stage": "medium",
+    "title": "Jade Lung",
+    "rarity": "rare",
+    "cubes": 100,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "6f32111c59bfe354e997a67a8cdf08639f443fc0cadc6132012764e6a4675f2e"
+  },
+  {
+    "id": "everpet_jade_lung_adult",
+    "species": "jade_lung",
+    "stage": "adult",
+    "title": "Jade Lung",
+    "rarity": "rare",
+    "cubes": 137,
+    "bones": 9,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "1cb5b772135b3396ad867924f92470fd55a3cd4b8e6f1114536a551b262ffa94"
+  },
+  {
+    "id": "everpet_crystal_stag_baby",
+    "species": "crystal_stag",
+    "stage": "baby",
+    "title": "Crystal Stag",
+    "rarity": "rare",
+    "cubes": 71,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "117596241f5225eeebbb87fe5fb06b9451535f85b47c60bb9912644de8c3ca3e"
+  },
+  {
+    "id": "everpet_crystal_stag_medium",
+    "species": "crystal_stag",
+    "stage": "medium",
+    "title": "Crystal Stag",
+    "rarity": "rare",
+    "cubes": 77,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "c2088b65018f1020dbd76349a9bda8f6617d5e59557e981a94eb03da33b2f7a0"
+  },
+  {
+    "id": "everpet_crystal_stag_adult",
+    "species": "crystal_stag",
+    "stage": "adult",
+    "title": "Crystal Stag",
+    "rarity": "rare",
+    "cubes": 120,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "934f673e4a8e53954e2576a53de5ed0d026539461f7edb8caaa206ea48daadae"
+  },
+  {
+    "id": "everpet_luna_moth_baby",
+    "species": "luna_moth",
+    "stage": "baby",
+    "title": "Luna Moth",
+    "rarity": "rare",
+    "cubes": 64,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "f0fd90711fb8bcff802df360b4e5fb5e95e8c6e6d1606cc2b3ba28223895a176"
+  },
+  {
+    "id": "everpet_luna_moth_medium",
+    "species": "luna_moth",
+    "stage": "medium",
+    "title": "Luna Moth",
+    "rarity": "rare",
+    "cubes": 78,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "0933c0fe588c29e630af47171148b3e2abf989578f7f5847518f7cbe3b4ff28e"
+  },
+  {
+    "id": "everpet_luna_moth_adult",
+    "species": "luna_moth",
+    "stage": "adult",
+    "title": "Luna Moth",
+    "rarity": "rare",
+    "cubes": 93,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "4510b0428c0a189e5d7ddddd532318667ae4045a057607f810d6f0d1b63741ce"
+  },
+  {
+    "id": "everpet_celestial_koi_baby",
+    "species": "celestial_koi",
+    "stage": "baby",
+    "title": "Celestial Koi",
+    "rarity": "rare",
+    "cubes": 55,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "9d0402cd30e00f711d03355a7eff918aa9694b4dafbdfdd5141625367886e617"
+  },
+  {
+    "id": "everpet_celestial_koi_medium",
+    "species": "celestial_koi",
+    "stage": "medium",
+    "title": "Celestial Koi",
+    "rarity": "rare",
+    "cubes": 69,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "abe544a8bb707d91f26b18443a553d157ff1d123c9e41ae2be59c54a50717e0f"
+  },
+  {
+    "id": "everpet_celestial_koi_adult",
+    "species": "celestial_koi",
+    "stage": "adult",
+    "title": "Celestial Koi",
+    "rarity": "rare",
+    "cubes": 85,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "ef6e0e4627eee90dc8c8e9b7da8e3b69b276f8f2ed0d797af76ef3034f8abaf5"
+  },
+  {
+    "id": "everpet_starlight_peacock_baby",
+    "species": "starlight_peacock",
+    "stage": "baby",
+    "title": "Starlight Peacock",
+    "rarity": "rare",
+    "cubes": 53,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "1c607dc90fb283df39f31d27abb0df298652d71b2a71cc5cdf2eba1f3b91e581"
+  },
+  {
+    "id": "everpet_starlight_peacock_medium",
+    "species": "starlight_peacock",
+    "stage": "medium",
+    "title": "Starlight Peacock",
+    "rarity": "rare",
+    "cubes": 100,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "b96b090b6ff89f5770042f27df8b09417fda64fe5b9d20cfbb103fe21b27c679"
+  },
+  {
+    "id": "everpet_starlight_peacock_adult",
+    "species": "starlight_peacock",
+    "stage": "adult",
+    "title": "Starlight Peacock",
+    "rarity": "rare",
+    "cubes": 141,
+    "bones": 8,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "bbcfe81f4701de183557beed37a681ccbead69a711166b6e2a657cae5af2d89b"
+  },
+  {
+    "id": "everpet_aurora_jelly_baby",
+    "species": "aurora_jelly",
+    "stage": "baby",
+    "title": "Aurora Jelly",
+    "rarity": "rare",
+    "cubes": 70,
+    "bones": 5,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "ba04243c130ddb2cfb668b239533154f776faaa0bc4df9d2b2df72651f6d5413"
+  },
+  {
+    "id": "everpet_aurora_jelly_medium",
+    "species": "aurora_jelly",
+    "stage": "medium",
+    "title": "Aurora Jelly",
+    "rarity": "rare",
+    "cubes": 89,
+    "bones": 6,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "d009ccc3d2490a73e9eb50be2fa94811687e8f0eb6768cfff2aa53adb7c963f8"
+  },
+  {
+    "id": "everpet_aurora_jelly_adult",
+    "species": "aurora_jelly",
+    "stage": "adult",
+    "title": "Aurora Jelly",
+    "rarity": "rare",
+    "cubes": 116,
+    "bones": 7,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "549691498e667b86e982476794ae7cc028b54cdf6bf9709f5107d08ab288bb70"
+  }
+]

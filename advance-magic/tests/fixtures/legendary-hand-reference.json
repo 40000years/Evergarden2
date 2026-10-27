@@ -1,0 +1,19 @@
+{
+  "sources": {
+    "bedrock_geometry": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/models/entity/trident.geo.json",
+    "bedrock_animation": "https://raw.githubusercontent.com/Mojang/bedrock-samples/main/resource_pack/animations/trident.animation.json",
+    "java": "Official installed Minecraft 26.3 client: assets/minecraft/models/item/handheld.json"
+  },
+  "bedrock": {
+    "pivot": [0, 24, 0],
+    "pole_min_y": -3,
+    "pole_max_y": 28,
+    "first": {"rotation": [152, -9, 25], "position": [-7, -3, -2]},
+    "third": {"rotation": [97, -1.5, -49], "position": [1.5, -2.5, -10.5]}
+  },
+  "java": {
+    "sprite_grip": [3.5, 3.5, 8],
+    "first": {"rotation": [0, -90, 25], "translation": [1.13, 3.2, 1.13], "scale": 0.68},
+    "third": {"rotation": [0, -90, 55], "translation": [0, 4, 0.5], "scale": 0.85}
+  }
+}

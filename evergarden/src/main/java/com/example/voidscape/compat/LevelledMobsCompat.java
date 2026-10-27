@@ -28,6 +28,8 @@ public final class LevelledMobsCompat {
      */
     public static void register(Plugin plugin) {
         List<String> eventClassNames = List.of(
+            "io.github.arcaneplugins.levelledmobs.events.MobPreLevelEvent",
+            "me.lokka30.levelledmobs.events.MobPreLevelEvent",
             "me.lokka30.levelledmobs.events.PreMobLevelUpEvent",
             "me.lokka30.levelledmobs.events.MobLevelUpEvent"
         );
@@ -40,7 +42,7 @@ public final class LevelledMobsCompat {
                     plugin.getServer().getPluginManager().registerEvent(
                         eventClass,
                         new Listener() {},
-                        EventPriority.LOWEST,
+                        EventPriority.HIGHEST,
                         (listener, event) -> handleLevelMobEvent(event),
                         plugin,
                         true
@@ -87,7 +89,8 @@ public final class LevelledMobsCompat {
      * to prevent external levelling plugins from modifying attributes or healing the mob.
      */
     public static void tagMob(Mob mob, Plugin plugin, boolean isBoss) {
-        if (mob == null || !mob.isValid() || mob.isDead()) return;
+        // Spawn consumers run before the entity is valid. Mark it before spawn listeners see it.
+        if (mob == null || mob.isDead()) return;
 
         // Scoreboard tags
         mob.addScoreboardTag("evergarden_mob");

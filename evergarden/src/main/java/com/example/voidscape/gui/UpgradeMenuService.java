@@ -2,6 +2,7 @@ package com.example.voidscape.gui;
 
 import com.example.voidscape.VoidscapePlugin;
 import com.example.voidscape.guide.BedrockGuideService;
+import com.example.voidscape.enchant.UniqueCompatibility;
 import org.bukkit.entity.Player;
 
 public final class UpgradeMenuService {
@@ -17,6 +18,17 @@ public final class UpgradeMenuService {
      */
     public static void open(VoidscapePlugin plugin, Player player) {
         if (player == null || !player.isOnline()) return;
+
+        if (UniqueCompatibility.needsResolution(player.getInventory().getItemInMainHand(),plugin.relics())) {
+            if (BedrockGuideService.isBedrock(player)) {
+                try {
+                    if (FloodgateUpgradeForm.sendLegacyResolution(plugin,player)) return;
+                } catch (Throwable t) {
+                    plugin.getLogger().warning("Could not open Bedrock enchant resolution for " + player.getName() + ": " + t.getMessage());
+                }
+            }
+            if (LegacyEnchantResolutionGui.open(plugin,player)) return;
+        }
 
         if (BedrockGuideService.isBedrock(player)) {
             try {

@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "tool": "built-in image_gen",
+  "texture_size": [
+    2048,
+    2048
+  ],
+  "processing": "Uniform LANCZOS fit inside 1800px on 2048px transparent canvas; original generated RGBA colors and alpha preserved. No semantic image changes.",
+  "textures": [
+    {
+      "id": "elemental_legendary_light_sigil",
+      "source": "source/sigil-reference-final.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "size": [
+        2048,
+        2048
+      ],
+      "alpha_bbox": [
+        124,
+        124,
+        1924,
+        1924
+      ],
+      "sha256": "99cfd268fdcc39c2726eff4541bfe4c09ebd7b3e585c0f373b740a7f39860da8"
+    },
+    {
+      "id": "elemental_legendary_light_halo",
+      "source": "source/elemental_legendary_light_halo.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "size": [
+        2048,
+        2048
+      ],
+      "alpha_bbox": [
+        124,
+        124,
+        1924,
+        1924
+      ],
+      "sha256": "9f3b88a4796d5074b81790dbe3696a50eec7f551324e434fb5cb281cf660f4f6"
+    },
+    {
+      "id": "elemental_legendary_light_mist",
+      "source": "source/elemental_legendary_light_mist.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "size": [
+        2048,
+        2048
+      ],
+      "alpha_bbox": [
+        124,
+        124,
+        1924,
+        1924
+      ],
+      "sha256": "9f85c08388564a5ad58e5c04e82e3601717384d47b35368bb6bf9d1c7509a11f"
+    }
+  ]
+}

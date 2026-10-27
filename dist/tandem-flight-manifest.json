@@ -1,0 +1,24 @@
+{
+  "name": "Flying Staff II / Aetherwing",
+  "versions": {
+    "advance-magic": "1.32.0-tandem-flight",
+    "evergarden": "3.0.0-e2.145-tandem-flight"
+  },
+  "sha256": {
+    "advance-magic.jar": "73a94132d070c0d3d3f9a07f2876079de33e3a197542e60e33de13ac8f0e3235",
+    "evergarden.jar": "6a00b396025a9c9f4fe7344015c0b2ad810701afb1c43f8995d9ccfa2e60a6a4"
+  },
+  "speed_multiplier": 0.5,
+  "mana_multiplier": 1.5,
+  "seats": 2,
+  "test_gui": "/evergarden test -> slot 15 -> slot 20",
+  "validation": {
+    "tier2": 665,
+    "legacy_controls": 269,
+    "input_matrix_cases": 40764,
+    "gems": 2747,
+    "assets": 4005
+  },
+  "validation_directory": "output/tandem-flight-20261026",
+  "client_render_verified": false
+}

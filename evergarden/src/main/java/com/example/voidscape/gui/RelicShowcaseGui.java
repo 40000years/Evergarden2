@@ -47,28 +47,20 @@ public final class RelicShowcaseGui implements InventoryHolder, Listener {
         Inventory inv = Bukkit.createInventory(this, 54, parseLegacy("§9§lEvergarden §8✦ §fRelics, Scrolls & Materials"));
 
         // ==========================================
-        // Row 0 (0-8): 6 Special Relics + Key + Shards + Eternity
+        // Row 0 (0-8): 2 Special Tools + Key + Shards + Eternity
         // ==========================================
         inv.setItem(0, wrapDisplay(plugin.relics().create(RelicService.Relic.SMELTER_PICKAXE, 1), "§eคลิก: รับ Smelter Pickaxe 1 เล่ม"));
         inv.setItem(1, wrapDisplay(plugin.relics().create(RelicService.Relic.RIFT_PICKAXE, 1), "§eคลิก: รับ Rift Pickaxe (3×3) 1 เล่ม"));
-        inv.setItem(2, wrapDisplay(plugin.relics().create(RelicService.Relic.RIFT_BLADE, 1), "§eคลิก: รับ Rift Blade 1 เล่ม"));
-        inv.setItem(3, wrapDisplay(plugin.relics().create(RelicService.Relic.ETERNAL_AEGIS, 1), "§eคลิก: รับ Eternal Aegis 1 ชิ้น"));
-        inv.setItem(4, wrapDisplay(plugin.relics().create(RelicService.Relic.STORM_BOW, 1), "§eคลิก: รับ Storm Bow 1 คัน"));
-        inv.setItem(5, wrapDisplay(plugin.relics().create(RelicService.Relic.NOVA_BOW, 1), "§eคลิก: รับ Nova Bow 1 คัน"));
         inv.setItem(6, wrapDisplay(plugin.relics().createVoidKey(), "§eคลิกซ้าย: รับกุญแจ x1 | §6คลิกขวา: รับกุญแจ x4"));
-        inv.setItem(7, wrapDisplay(plugin.relics().createKeyShard(4), "§eคลิกซ้าย: รับเศษกุญแจ x4 | §6คลิกขวา: รับเศษกุญแจ x16"));
         inv.setItem(8, wrapDisplay(plugin.relics().createScrollEternity(), "§eคลิกซ้าย: รับคัมภีร์ x1 | §6คลิกขวา: รับคัมภีร์ x5"));
 
         // ==========================================
         // Row 1 (9-17): Materials, Guide & God Weapons + 1st Unique
         // ==========================================
-        inv.setItem(9, wrapDisplay(plugin.relics().createAstralDust(16), "§eคลิกซ้าย: รับผงละอองดาว x16 | §6คลิกขวา: รับ x64"));
-        inv.setItem(10, wrapDisplay(plugin.relics().createRepairStone(1), "§eคลิกซ้าย: รับศิลาซ่อม x1 | §6คลิกขวา: รับ x8"));
-        inv.setItem(11, wrapDisplay(plugin.relics().createVoidElixir(1), "§eคลิกซ้าย: รับน้ำยา x1 | §6คลิกขวา: รับ x4"));
-        inv.setItem(12, createAction(Material.BOOK, "§a§l📚 ชุดคู่มือมิติ Evergarden (3 เล่ม)", List.of(
-            "§7ประกอบด้วย: เล่ม 1 พืช, เล่ม 2 ยุทธภัณฑ์, เล่ม 3 Advance Magic",
+        inv.setItem(12, createAction(Material.BOOK, "§a§l📚 ชุดคู่มือมิติ Evergarden (2 เล่ม)", List.of(
+            "§7ประกอบด้วย: เล่ม 2 ยุทธภัณฑ์, เล่ม 3 Advance Magic",
             "§eคลิกซ้าย: §aเปิดเมนูเลือกอ่านคู่มือ",
-            "§6คลิกขวา / Shift: §7รับชุดคู่มือครบทั้ง 3 เล่มลงกระเป๋า"
+            "§6คลิกขวา / Shift: §7รับชุดคู่มือครบทั้ง 2 เล่มลงกระเป๋า"
         )));
         inv.setItem(13, wrapDisplay(AdminTestGui.createGodSword(), "§eคลิก: รับ Dev God Sword (Sharpness VIII + Vampiric)"));
         inv.setItem(14, wrapDisplay(AdminTestGui.createGodBow(), "§eคลิก: รับ Dev God Bow (Power VIII + Ricochet)"));
@@ -100,7 +92,6 @@ public final class RelicShowcaseGui implements InventoryHolder, Listener {
         inv.setItem(29, wrapDisplay(plugin.relics().createScrollUnique(UniqueEnchant.SEISMIC_SLAM), "§eคลิก: รับคัมภีร์ x1 | §6คลิกขวา: รับ x5"));
         inv.setItem(30, wrapDisplay(plugin.relics().createScrollUnique(UniqueEnchant.VEIN_SMELTER), "§eคลิก: รับคัมภีร์ x1 | §6คลิกขวา: รับ x5"));
         inv.setItem(31, wrapDisplay(plugin.relics().createScrollUnique(UniqueEnchant.ADVANCE_TOOL), "§eคลิก: รับคัมภีร์ x1 | §6คลิกขวา: รับ x5"));
-        inv.setItem(32, wrapDisplay(plugin.relics().createScrollUnique(UniqueEnchant.DEMETER_SCYTHE), "§eคลิก: รับคัมภีร์ x1 | §6คลิกขวา: รับ x5"));
         inv.setItem(33, wrapDisplay(plugin.relics().createScrollUnique(UniqueEnchant.TITAN_BREACH), "§eคลิก: รับคัมภีร์ x1 | §6คลิกขวา: รับ x5"));
         inv.setItem(34, wrapDisplay(plugin.relics().createScrollUnique(UniqueEnchant.TELEPATHY), "§eคลิก: รับคัมภีร์ x1 | §6คลิกขวา: รับ x5"));
         inv.setItem(35, wrapDisplay(plugin.relics().createScrollUnique(UniqueEnchant.GUILLOTINE), "§eคลิก: รับคัมภีร์ x1 | §6คลิกขวา: รับ x5"));
@@ -122,9 +113,8 @@ public final class RelicShowcaseGui implements InventoryHolder, Listener {
         // Row 5 (45-53): Cross-Navigation & Bulk Grants
         // ==========================================
         inv.setItem(45, createAction(Material.CARROT_ON_A_STICK, "§5§l🪄 คลังคทา & แกนเวทมนตร์ (Wands)", List.of("§7คลิกเพื่อสลับไปยังคลังคทา 15 เล่มและแกน 15 ธาตุ")));
-        inv.setItem(46, createAction(Material.WHEAT, "§a§l🌿 คลังพืชผล Evergarden (30 Crops)", List.of("§7คลิกเพื่อสลับไปยังคลังพืชผลและอาหาร 30 ชนิด")));
         inv.setItem(47, createAction(Material.COMMAND_BLOCK, "§6§l⚙️ แผงควบคุมระบบ (Admin Test Kit)", List.of("§7คลิกเพื่อสลับไปยังหน้าต่างควบคุมระบบหลัก")));
-        inv.setItem(48, createAction(Material.NETHERITE_PICKAXE, "§e§l📦 รับยุทธภัณฑ์ 6 ชิ้นครบชุด", List.of("§7รับ Smelter, Rift, Blade, Aegis, Storm, Nova ลงกระเป๋าทันที")));
+        inv.setItem(48, createAction(Material.NETHERITE_PICKAXE, "\u00a7e\u00a7l\u0e23\u0e31\u0e1a\u0e40\u0e04\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e21\u0e37\u0e2d\u0e42\u0e1a\u0e23\u0e32\u0e13 2 \u0e0a\u0e34\u0e49\u0e19", List.of("\u00a77\u0e2d\u0e35\u0e40\u0e15\u0e49\u0e2d Smelter Pickaxe \u0e41\u0e25\u0e30 Rift Pickaxe")));
         inv.setItem(49, createAction(Material.CHEST, "§b§l📦 รับ Limit Break x5 ทุกชนิด", List.of("§7รับคัมภีร์ Limit Break ทั้ง 6 สาย สายละ 5 เล่ม")));
         inv.setItem(50, createAction(Material.BOOKSHELF, "§d§l📜 รับ Unique Enchants ครบ 22 ใบ", List.of("§7รับคัมภีร์มนตราทั้ง 22 สกิลลงกระเป๋าทันที")));
         inv.setItem(51, createAction(Material.ENDER_CHEST, "§e§l🎲 สุ่มเปิด Vault (Test Roll)", List.of("§7คลิกเพื่อจำลองการเปิด Evergarden Vault")));
@@ -198,18 +188,10 @@ public final class RelicShowcaseGui implements InventoryHolder, Listener {
             // Row 0: Relics & Core items
             case 0 -> give(p, plugin.relics().create(RelicService.Relic.SMELTER_PICKAXE, 1), "อีเต้อหลอมเพลิงมิติ (Smelter Pickaxe)");
             case 1 -> give(p, plugin.relics().create(RelicService.Relic.RIFT_PICKAXE, 1), "อีเต้อแยกพิภพ (Rift Pickaxe 3×3)");
-            case 2 -> give(p, plugin.relics().create(RelicService.Relic.RIFT_BLADE, 1), "ดาบกรีดมิติ (Rift Blade)");
-            case 3 -> give(p, plugin.relics().create(RelicService.Relic.ETERNAL_AEGIS, 1), "โล่แห่งความอมตะ (Eternal Aegis)");
-            case 4 -> give(p, plugin.relics().create(RelicService.Relic.STORM_BOW, 1), "ธนูพิพากษาสายฟ้า (Storm Bow)");
-            case 5 -> give(p, plugin.relics().create(RelicService.Relic.NOVA_BOW, 1), "ธนูสะเก็ดดาว (Nova Bow)");
             case 6 -> give(p, plugin.relics().create(RelicService.Relic.VOID_KEY, right ? 4 : 1), "กุญแจ Evergarden Key");
-            case 7 -> give(p, plugin.relics().createKeyShard(right ? 16 : 4), "เศษกุญแจมิติ Key Shard");
             case 8 -> give(p, createScrollEternityStack(right || shift ? 5 : 1), "คัมภีร์ศิลานิรันดร์ Scroll of Eternity");
 
             // Row 1: Materials & God weapons
-            case 9 -> give(p, plugin.relics().createAstralDust(right ? 64 : 16), "ผงละอองดาว Astral Dust");
-            case 10 -> give(p, plugin.relics().createRepairStone(right ? 8 : 1), "ศิลาฟื้นฟูมิติ Repair Stone");
-            case 11 -> give(p, plugin.relics().createVoidElixir(right ? 4 : 1), "น้ำยาเดินเวหา Void Elixir");
             case 12 -> {
                 if (right || shift) {
                     for (com.example.voidscape.guide.GuideBookType gType : com.example.voidscape.guide.GuideBookType.values()) {
@@ -246,7 +228,6 @@ public final class RelicShowcaseGui implements InventoryHolder, Listener {
             case 29 -> giveUnique(p, UniqueEnchant.SEISMIC_SLAM, right || shift ? 5 : 1);
             case 30 -> giveUnique(p, UniqueEnchant.VEIN_SMELTER, right || shift ? 5 : 1);
             case 31 -> giveUnique(p, UniqueEnchant.ADVANCE_TOOL, right || shift ? 5 : 1);
-            case 32 -> giveUnique(p, UniqueEnchant.DEMETER_SCYTHE, right || shift ? 5 : 1);
             case 33 -> giveUnique(p, UniqueEnchant.TITAN_BREACH, right || shift ? 5 : 1);
             case 34 -> giveUnique(p, UniqueEnchant.TELEPATHY, right || shift ? 5 : 1);
             case 35 -> giveUnique(p, UniqueEnchant.GUILLOTINE, right || shift ? 5 : 1);
@@ -264,21 +245,16 @@ public final class RelicShowcaseGui implements InventoryHolder, Listener {
 
             // Row 5: Navigation & Bulk
             case 45 -> plugin.wandGui().open(p);
-            case 46 -> plugin.cropGui().open(p);
             case 47 -> plugin.testGui().open(p);
             case 48 -> {
                 for (RelicService.Relic r : new RelicService.Relic[]{
                     RelicService.Relic.SMELTER_PICKAXE,
                     RelicService.Relic.RIFT_PICKAXE,
-                    RelicService.Relic.RIFT_BLADE,
-                    RelicService.Relic.ETERNAL_AEGIS,
-                    RelicService.Relic.STORM_BOW,
-                    RelicService.Relic.NOVA_BOW
                 }) {
                     give(p, plugin.relics().create(r, 1), r.title);
                 }
                 p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.2f);
-                p.sendMessage(ChatColor.GOLD + "✦ ได้รับชุดยุทธภัณฑ์โบราณครบทั้ง 6 ชิ้น!");
+                p.sendMessage(ChatColor.GOLD + "\u0e44\u0e14\u0e49\u0e23\u0e31\u0e1a\u0e40\u0e04\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e21\u0e37\u0e2d\u0e42\u0e1a\u0e23\u0e32\u0e13 2 \u0e0a\u0e34\u0e49\u0e19 (Rift Pickaxe \u0e41\u0e25\u0e30 Smelter Pickaxe)!" );
             }
             case 49 -> {
                 for (LimitBreakType lb : LimitBreakType.values()) {

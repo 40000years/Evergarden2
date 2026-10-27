@@ -1,0 +1,16 @@
+{
+  "release": "1.9.13-longinus-bedrock-reach",
+  "jar": "advance-magic-1.9.13.jar",
+  "sha256": "52336e0c1359f35ec140fcd193b9f7eacbac9dea8fd5b5ab48b394b865cede9e",
+  "bedrock_pack_version": "2.12.12 (unchanged)",
+  "fix": "Resolve Longinus air-swing attack synchronously before Paper 26.3 Punch handler resets attack cooldown.",
+  "verification": {
+    "old_release_regression": "1.9.12 FAIL: Geyser-style punch cannot damage at six blocks",
+    "fixed_release_paper_runtime": "PASS 81",
+    "fixed_release_geyser_modelengine_integration": "PASS 57",
+    "assets": "PASS 230; embedded packs byte-identical to 1.9.12",
+    "real_bedrock_client_playtest": false
+  },
+  "reach_blocks": 7,
+  "throwable": false
+}

@@ -1,0 +1,365 @@
+{
+  "format": 1,
+  "generator": "tools/elemental_staff_assets.py",
+  "modelengine_version": "4.1.1",
+  "base_item": "minecraft:carrot_on_a_stick",
+  "ordinary_cycle": [
+    "fire",
+    "wind",
+    "earth",
+    "ice",
+    "water"
+  ],
+  "special_cycle": [
+    "lightning",
+    "light",
+    "dark"
+  ],
+  "items": [
+    {
+      "id": "fire",
+      "title": "Fire Staff",
+      "model_key": "advance_magic:staff_fire",
+      "blueprint_id": "elemental_staff_fire",
+      "modelengine": "elemental_staff_fire.bbmodel",
+      "grip": [
+        8,
+        10.6,
+        8
+      ],
+      "cuboids": 354,
+      "color": [
+        255,
+        102,
+        32
+      ],
+      "description": "Crimson sunstone in an open golden brazier; ember crown and two silk tails."
+    },
+    {
+      "id": "wind",
+      "title": "Wind Staff",
+      "model_key": "advance_magic:staff_wind",
+      "blueprint_id": "elemental_staff_wind",
+      "modelengine": "elemental_staff_wind.bbmodel",
+      "grip": [
+        8,
+        11.2,
+        8
+      ],
+      "cuboids": 470,
+      "color": [
+        121,
+        255,
+        212
+      ],
+      "description": "Jade focus framed by twin ivory feather crescents and a winding air helix."
+    },
+    {
+      "id": "earth",
+      "title": "Earth Staff",
+      "model_key": "advance_magic:staff_earth",
+      "blueprint_id": "elemental_staff_earth",
+      "modelengine": "elemental_staff_earth.bbmodel",
+      "grip": [
+        8,
+        10.3,
+        8
+      ],
+      "cuboids": 356,
+      "color": [
+        165,
+        230,
+        55
+      ],
+      "description": "Peridot heart held by split basalt antlers, moss, roots and floating stones."
+    },
+    {
+      "id": "ice",
+      "title": "Ice Staff",
+      "model_key": "advance_magic:staff_ice",
+      "blueprint_id": "elemental_staff_ice",
+      "modelengine": "elemental_staff_ice.bbmodel",
+      "grip": [
+        8,
+        11.0,
+        8
+      ],
+      "cuboids": 391,
+      "color": [
+        135,
+        222,
+        255
+      ],
+      "description": "Sixfold silver snowflake crown, sapphire icicles and suspended crystal chains."
+    },
+    {
+      "id": "water",
+      "title": "Water Staff",
+      "model_key": "advance_magic:staff_water",
+      "blueprint_id": "elemental_staff_water",
+      "modelengine": "elemental_staff_water.bbmodel",
+      "grip": [
+        8,
+        10.8,
+        8
+      ],
+      "cuboids": 568,
+      "color": [
+        44,
+        182,
+        255
+      ],
+      "description": "Azure pearl embraced by two sculpted breaking waves and a water spiral."
+    },
+    {
+      "id": "lightning",
+      "title": "Lightning Staff",
+      "model_key": "advance_magic:staff_lightning",
+      "blueprint_id": "elemental_staff_lightning",
+      "modelengine": "elemental_staff_lightning.bbmodel",
+      "grip": [
+        8,
+        10.4,
+        8
+      ],
+      "cuboids": 313,
+      "color": [
+        181,
+        172,
+        255
+      ],
+      "description": "Amethyst storm core between two asymmetric conductor prongs and coil rings."
+    },
+    {
+      "id": "light",
+      "title": "Light Staff",
+      "model_key": "advance_magic:staff_light",
+      "blueprint_id": "elemental_staff_light",
+      "modelengine": "elemental_staff_light.bbmodel",
+      "grip": [
+        8,
+        11.1,
+        8
+      ],
+      "cuboids": 398,
+      "color": [
+        255,
+        224,
+        132
+      ],
+      "description": "Sun diamond inside an open gilded astrolabe, halo and suspended light blades."
+    },
+    {
+      "id": "dark",
+      "title": "Dark Staff",
+      "model_key": "advance_magic:staff_dark",
+      "blueprint_id": "elemental_staff_dark",
+      "modelengine": "elemental_staff_dark.bbmodel",
+      "grip": [
+        8,
+        10.7,
+        8
+      ],
+      "cuboids": 462,
+      "color": [
+        187,
+        74,
+        255
+      ],
+      "description": "Void amethyst inside a blackened crescent, violet chains and hooked thorns."
+    }
+  ],
+  "item_atlas": {
+    "advance_magic.staff_fire": {
+      "textures": "textures/elemental_staffs/fire_icon"
+    },
+    "advance_magic.staff_wind": {
+      "textures": "textures/elemental_staffs/wind_icon"
+    },
+    "advance_magic.staff_earth": {
+      "textures": "textures/elemental_staffs/earth_icon"
+    },
+    "advance_magic.staff_ice": {
+      "textures": "textures/elemental_staffs/ice_icon"
+    },
+    "advance_magic.staff_water": {
+      "textures": "textures/elemental_staffs/water_icon"
+    },
+    "advance_magic.staff_lightning": {
+      "textures": "textures/elemental_staffs/lightning_icon"
+    },
+    "advance_magic.staff_light": {
+      "textures": "textures/elemental_staffs/light_icon"
+    },
+    "advance_magic.staff_dark": {
+      "textures": "textures/elemental_staffs/dark_icon"
+    }
+  },
+  "definitions": {
+    "minecraft:carrot_on_a_stick": [
+      {
+        "type": "definition",
+        "model": "advance_magic:staff_fire",
+        "bedrock_identifier": "advance_magic:staff_fire",
+        "display_name": "Fire Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.staff_fire",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:staff_wind",
+        "bedrock_identifier": "advance_magic:staff_wind",
+        "display_name": "Wind Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.staff_wind",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:staff_earth",
+        "bedrock_identifier": "advance_magic:staff_earth",
+        "display_name": "Earth Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.staff_earth",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:staff_ice",
+        "bedrock_identifier": "advance_magic:staff_ice",
+        "display_name": "Ice Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.staff_ice",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:staff_water",
+        "bedrock_identifier": "advance_magic:staff_water",
+        "display_name": "Water Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.staff_water",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:staff_lightning",
+        "bedrock_identifier": "advance_magic:staff_lightning",
+        "display_name": "Lightning Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.staff_lightning",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:staff_light",
+        "bedrock_identifier": "advance_magic:staff_light",
+        "display_name": "Light Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.staff_light",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:staff_dark",
+        "bedrock_identifier": "advance_magic:staff_dark",
+        "display_name": "Dark Staff",
+        "bedrock_options": {
+          "icon": "advance_magic.staff_dark",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      }
+    ]
+  },
+  "vfx": {
+    "java": {
+      "frames": 8,
+      "frame_ticks": 2,
+      "type": "animated cutout sheets"
+    },
+    "bedrock": {
+      "type": "opaque crown-local solid glints",
+      "first_person_motes": 2,
+      "third_person_motes": 3,
+      "max_mote_dimension": 0.38,
+      "max_bob": 0.1,
+      "source_bounds": {
+        "from": [
+          4,
+          21,
+          5
+        ],
+        "to": [
+          12,
+          30,
+          11
+        ]
+      },
+      "material": "entity_alphatest",
+      "ignore_lighting": true
+    },
+    "server_entities": 0
+  },
+  "grip_frame": {
+    "bedrock_root": [
+      0,
+      24,
+      0
+    ],
+    "bedrock_contact": [
+      0,
+      12.5,
+      0
+    ],
+    "method": "native trident binding; child uniformly scales about real hand contact; independent first-person camera framing"
+  },
+  "camera_fit": {
+    "method": "existing Longinus screenshot-calibrated affine projection; approximate, not a real client render",
+    "frame": [
+      1160,
+      500
+    ],
+    "solid_y_bounds": [
+      50,
+      450
+    ],
+    "projection": [
+      [
+        13,
+        -3
+      ],
+      [
+        -11.68,
+        -18.42
+      ],
+      [
+        2.5,
+        1.5
+      ]
+    ]
+  }
+}

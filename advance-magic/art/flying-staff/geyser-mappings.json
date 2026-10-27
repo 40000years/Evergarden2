@@ -12,6 +12,17 @@
           "allow_offhand": true,
           "display_handheld": true
         }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff_tier2",
+        "bedrock_identifier": "advance_magic:flying_staff_tier2",
+        "display_name": "Flying Staff II",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff_tier2",
+          "allow_offhand": true,
+          "display_handheld": true
+        }
       }
     ],
     "minecraft:carved_pumpkin": [
@@ -55,6 +66,50 @@
         "display_name": "Flying Staff / dismiss",
         "bedrock_options": {
           "icon": "advance_magic.flying_staff",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff_tier2_summon",
+        "bedrock_identifier": "advance_magic:flying_staff_tier2_summon",
+        "display_name": "Flying Staff II / summon",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff_tier2",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff_tier2_idle",
+        "bedrock_identifier": "advance_magic:flying_staff_tier2_idle",
+        "display_name": "Flying Staff II / idle",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff_tier2",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff_tier2_flight",
+        "bedrock_identifier": "advance_magic:flying_staff_tier2_flight",
+        "display_name": "Flying Staff II / flight",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff_tier2",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:flying_staff_tier2_dismiss",
+        "bedrock_identifier": "advance_magic:flying_staff_tier2_dismiss",
+        "display_name": "Flying Staff II / dismiss",
+        "bedrock_options": {
+          "icon": "advance_magic.flying_staff_tier2",
           "allow_offhand": false,
           "display_handheld": false
         }

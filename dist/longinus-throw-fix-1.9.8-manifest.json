@@ -1,0 +1,19 @@
+{
+  "version": "1.9.8-longinus-throw-fix",
+  "bedrock_pack": "2.12.8",
+  "changes": [
+    "Freeze flight direction on impact; ignore reversed post-hit velocity",
+    "Tip anchored to collision point on Java and Bedrock",
+    "Java wind-up flips model about existing hand contact",
+    "Native Bedrock wind-up in first and third person",
+    "Explicit Geyser spear animation/use duration for custom trident",
+    "Server-synchronized Bedrock projectile yaw/pitch"
+  ],
+  "runtime": "PASS 88 incl. real block impact and repeated native charge-release at 5/10/20/30 ticks",
+  "integration": "PASS 58 incl. transmitted item-component NBT across 3 protocol tables and pre-spawn rotation initialization",
+  "assets": "PASS 726",
+  "hand_fit": "PASS 145",
+  "camera_profiles": "PASS 32 approximate",
+  "client_test": "Actual client input and rendering not tested",
+  "sha256": "1dc3b2ec972bd931e0762f1057a6014cb59e23b0269e6485929c469137354684"
+}

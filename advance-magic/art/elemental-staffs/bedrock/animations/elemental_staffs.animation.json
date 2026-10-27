@@ -1,0 +1,991 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "animation.advance_magic.staff_fire.first": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            152,
+            "context.item_slot == 'off_hand' ? 9 : -9",
+            "context.item_slot == 'off_hand' ? -25 : 25"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? 7 : -7",
+            -1.5,
+            -5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.333394,
+            0.333394,
+            0.333394
+          ],
+          "position": [
+            0,
+            8.12775,
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_fire.third": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            97,
+            "context.item_slot == 'off_hand' ? 1.5 : -1.5",
+            "context.item_slot == 'off_hand' ? 49 : -49"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? -1.5 : 1.5",
+            -2.5,
+            -10.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_fire.idle": {
+      "loop": true,
+      "animation_length": 3,
+      "bones": {
+        "flame_glow": {
+          "scale": [
+            1,
+            "1 + math.sin(q.life_time * 360) * 0.10",
+            1
+          ]
+        },
+        "orbit": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "focus": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "orbit_glow": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "ribbon": {
+          "rotation": [
+            0,
+            0,
+            "math.sin(q.life_time * 120) * 3"
+          ]
+        },
+        "flame": {
+          "scale": [
+            1,
+            "1 + math.sin(q.life_time * 360) * 0.10",
+            1
+          ]
+        },
+        "focus_glow": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "glint_1": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 0) * 0.10",
+            0
+          ]
+        },
+        "glint_2": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 120) * 0.10",
+            0
+          ]
+        },
+        "glint_3": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 240) * 0.10",
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_wind.first": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            152,
+            "context.item_slot == 'off_hand' ? 9 : -9",
+            "context.item_slot == 'off_hand' ? -25 : 25"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? 7 : -7",
+            -1.5,
+            -5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.331237,
+            0.331237,
+            0.331237
+          ],
+          "position": [
+            0,
+            8.30501,
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_wind.third": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            97,
+            "context.item_slot == 'off_hand' ? 1.5 : -1.5",
+            "context.item_slot == 'off_hand' ? 49 : -49"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? -1.5 : 1.5",
+            -2.5,
+            -10.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_wind.idle": {
+      "loop": true,
+      "animation_length": 3,
+      "bones": {
+        "focus": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "orbit_glow": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "spiral": {
+          "rotation": [
+            0,
+            0,
+            "math.sin(q.life_time * 120) * 3"
+          ]
+        },
+        "focus_glow": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "glint_1": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 0) * 0.10",
+            0
+          ]
+        },
+        "glint_2": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 120) * 0.10",
+            0
+          ]
+        },
+        "glint_3": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 240) * 0.10",
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_earth.first": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            152,
+            "context.item_slot == 'off_hand' ? 9 : -9",
+            "context.item_slot == 'off_hand' ? -25 : 25"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? 7 : -7",
+            -1.5,
+            -5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.336824,
+            0.336824,
+            0.336824
+          ],
+          "position": [
+            0,
+            8.060868,
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_earth.third": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            97,
+            "context.item_slot == 'off_hand' ? 1.5 : -1.5",
+            "context.item_slot == 'off_hand' ? 49 : -49"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? -1.5 : 1.5",
+            -2.5,
+            -10.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_earth.idle": {
+      "loop": true,
+      "animation_length": 3,
+      "bones": {
+        "focus": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "orbit": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "orbit_glow": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "focus_glow": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "glint_1": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 0) * 0.10",
+            0
+          ]
+        },
+        "glint_2": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 120) * 0.10",
+            0
+          ]
+        },
+        "glint_3": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 240) * 0.10",
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_ice.first": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            152,
+            "context.item_slot == 'off_hand' ? 9 : -9",
+            "context.item_slot == 'off_hand' ? -25 : 25"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? 7 : -7",
+            -1.5,
+            -5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.335852,
+            0.335852,
+            0.335852
+          ],
+          "position": [
+            0,
+            8.286573,
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_ice.third": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            97,
+            "context.item_slot == 'off_hand' ? 1.5 : -1.5",
+            "context.item_slot == 'off_hand' ? 49 : -49"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? -1.5 : 1.5",
+            -2.5,
+            -10.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_ice.idle": {
+      "loop": true,
+      "animation_length": 3,
+      "bones": {
+        "focus": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "orbit": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "orbit_glow": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "focus_glow": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "glint_1": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 0) * 0.10",
+            0
+          ]
+        },
+        "glint_2": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 120) * 0.10",
+            0
+          ]
+        },
+        "glint_3": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 240) * 0.10",
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_water.first": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            152,
+            "context.item_slot == 'off_hand' ? 9 : -9",
+            "context.item_slot == 'off_hand' ? -25 : 25"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? 7 : -7",
+            -1.5,
+            -5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.337295,
+            0.337295,
+            0.337295
+          ],
+          "position": [
+            0,
+            8.234059,
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_water.third": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            97,
+            "context.item_slot == 'off_hand' ? 1.5 : -1.5",
+            "context.item_slot == 'off_hand' ? 49 : -49"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? -1.5 : 1.5",
+            -2.5,
+            -10.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_water.idle": {
+      "loop": true,
+      "animation_length": 3,
+      "bones": {
+        "focus": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "orbit": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "orbit_glow": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "spiral": {
+          "rotation": [
+            0,
+            0,
+            "math.sin(q.life_time * 120) * 3"
+          ]
+        },
+        "focus_glow": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "glint_1": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 0) * 0.10",
+            0
+          ]
+        },
+        "glint_2": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 120) * 0.10",
+            0
+          ]
+        },
+        "glint_3": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 240) * 0.10",
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_lightning.first": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            152,
+            "context.item_slot == 'off_hand' ? 9 : -9",
+            "context.item_slot == 'off_hand' ? -25 : 25"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? 7 : -7",
+            -1.5,
+            -5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.340453,
+            0.340453,
+            0.340453
+          ],
+          "position": [
+            0,
+            8.129962,
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_lightning.third": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            97,
+            "context.item_slot == 'off_hand' ? 1.5 : -1.5",
+            "context.item_slot == 'off_hand' ? 49 : -49"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? -1.5 : 1.5",
+            -2.5,
+            -10.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_lightning.idle": {
+      "loop": true,
+      "animation_length": 3,
+      "bones": {
+        "focus": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "orbit": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "orbit_glow": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "focus_glow": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "glint_1": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 0) * 0.10",
+            0
+          ]
+        },
+        "glint_2": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 120) * 0.10",
+            0
+          ]
+        },
+        "glint_3": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 240) * 0.10",
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_light.first": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            152,
+            "context.item_slot == 'off_hand' ? 9 : -9",
+            "context.item_slot == 'off_hand' ? -25 : 25"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? 7 : -7",
+            -1.5,
+            -5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.333498,
+            0.333498,
+            0.333498
+          ],
+          "position": [
+            0,
+            8.295537,
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_light.third": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            97,
+            "context.item_slot == 'off_hand' ? 1.5 : -1.5",
+            "context.item_slot == 'off_hand' ? 49 : -49"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? -1.5 : 1.5",
+            -2.5,
+            -10.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_light.idle": {
+      "loop": true,
+      "animation_length": 3,
+      "bones": {
+        "halo_glow": {
+          "rotation": [
+            0,
+            "q.life_time * 22",
+            0
+          ]
+        },
+        "halo": {
+          "rotation": [
+            0,
+            "q.life_time * 22",
+            0
+          ]
+        },
+        "focus": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "orbit": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "orbit_glow": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "focus_glow": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "glint_1": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 0) * 0.10",
+            0
+          ]
+        },
+        "glint_2": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 120) * 0.10",
+            0
+          ]
+        },
+        "glint_3": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 240) * 0.10",
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_dark.first": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            152,
+            "context.item_slot == 'off_hand' ? 9 : -9",
+            "context.item_slot == 'off_hand' ? -25 : 25"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? 7 : -7",
+            -1.5,
+            -5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.331469,
+            0.331469,
+            0.331469
+          ],
+          "position": [
+            0,
+            8.141721,
+            0
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_dark.third": {
+      "loop": true,
+      "bones": {
+        "root": {
+          "rotation": [
+            97,
+            "context.item_slot == 'off_hand' ? 1.5 : -1.5",
+            "context.item_slot == 'off_hand' ? 49 : -49"
+          ],
+          "position": [
+            "context.item_slot == 'off_hand' ? -1.5 : 1.5",
+            -2.5,
+            -10.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ]
+        },
+        "grip": {
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ]
+        }
+      }
+    },
+    "animation.advance_magic.staff_dark.idle": {
+      "loop": true,
+      "animation_length": 3,
+      "bones": {
+        "focus": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "orbit": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "orbit_glow": {
+          "rotation": [
+            0,
+            "math.sin(q.life_time * 120) * 12",
+            0
+          ]
+        },
+        "focus_glow": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 120) * 0.27",
+            0
+          ]
+        },
+        "glint_1": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 0) * 0.10",
+            0
+          ]
+        },
+        "glint_2": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 120) * 0.10",
+            0
+          ]
+        },
+        "glint_3": {
+          "position": [
+            0,
+            "math.sin(q.life_time * 90 + 240) * 0.10",
+            0
+          ]
+        }
+      }
+    }
+  }
+}

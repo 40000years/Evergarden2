@@ -65,7 +65,7 @@ public final class BedrockGuideService {
 
     public static void openGuide(VoidscapePlugin plugin, Player player, GuideBookType type, int pageIndex) {
         if (player == null || !player.isOnline()) return;
-        if (type == null) type = GuideBookType.CROPS;
+        if (type == null) type = GuideBookType.RELICS;
 
         if (isBedrock(player)) {
             if (floodgateAvailable) {
@@ -88,12 +88,12 @@ public final class BedrockGuideService {
     }
 
     public static void openGuide(VoidscapePlugin plugin, Player player, int pageIndex) {
-        openGuide(plugin, player, GuideBookType.CROPS, pageIndex);
+        openGuide(plugin, player, GuideBookType.RELICS, pageIndex);
     }
 
     public static void openIndex(VoidscapePlugin plugin, Player player, GuideBookType type, int returnPageIndex) {
         if (player == null || !player.isOnline()) return;
-        if (type == null) type = GuideBookType.CROPS;
+        if (type == null) type = GuideBookType.RELICS;
 
         if (isBedrock(player)) {
             if (floodgateAvailable) {
@@ -114,6 +114,6 @@ public final class BedrockGuideService {
     }
 
     public static void openIndex(VoidscapePlugin plugin, Player player, int returnPageIndex) {
-        openIndex(plugin, player, GuideBookType.CROPS, returnPageIndex);
+        openIndex(plugin, player, GuideBookType.RELICS, returnPageIndex);
     }
 }

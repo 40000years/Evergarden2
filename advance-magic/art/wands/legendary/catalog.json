@@ -1,0 +1,93 @@
+{
+  "name": "Advance Magic — Legendary Wand Art 05–07",
+  "version": [
+    0,
+    1,
+    0
+  ],
+  "status": "art_preview",
+  "gameplay_registered": false,
+  "source_reference": "Original legendary staff concept, designs 05–07: emerald dragon crown, silver crescent, crimson obsidian crown.",
+  "reference_image": "reference.png",
+  "texture_preview": "texture-preview.png",
+  "generation_metadata": "generation-prompts.json",
+  "normalization_tool": "../../../tools/prepare_legendary_wand_art.py",
+  "java_resource_formats": {
+    "min": [
+      75,
+      0
+    ],
+    "max": [
+      88,
+      0
+    ]
+  },
+  "bedrock_min_engine_version": [
+    1,
+    21,
+    80
+  ],
+  "bedrock_requirement": "Geyser v2 custom mapping and server-created item_model items; resource pack alone does not add items.",
+  "wands": [
+    {
+      "id": "verdant_sovereign",
+      "design_number": "05",
+      "name_en": "Verdant Sovereign",
+      "name_th": "ราชันมังกรพฤกษา",
+      "rarity": "legendary",
+      "theme_en": "An emerald dragon crown with faceted crystals and antique gold spines.",
+      "theme_th": "มงกุฎมังกร มรกตเจียระไน และหนามทองโบราณ",
+      "source_texture": "../verdant_sovereign.png",
+      "texture_sha256": "a6ff43259e76c152e18bb4a5cf4abf0c5fc33a84b46fe236d8a6ddd351df59ef",
+      "texture_size": [
+        128,
+        128
+      ],
+      "texture_format": "RGBA, binary alpha",
+      "java_item_model": "advance_magic:verdant_sovereign",
+      "bedrock_identifier": "advance_magic:verdant_sovereign",
+      "base_item": "minecraft:carrot_on_a_stick",
+      "translation_key": "item.advance_magic.verdant_sovereign"
+    },
+    {
+      "id": "lunar_requiem",
+      "design_number": "06",
+      "name_en": "Lunar Requiem",
+      "name_th": "บทสวดจันทรา",
+      "rarity": "legendary",
+      "theme_en": "A silver crescent with pale blue moon crystal and celestial ornaments.",
+      "theme_th": "จันทร์เสี้ยวเงิน คริสตัลจันทราสีฟ้า และเครื่องประดับดวงดาว",
+      "source_texture": "../lunar_requiem.png",
+      "texture_sha256": "88b55bad7c04b534a5ba9d32dcb24c14ddf222b7870e9bc01ee516565f3c9afa",
+      "texture_size": [
+        128,
+        128
+      ],
+      "texture_format": "RGBA, binary alpha",
+      "java_item_model": "advance_magic:lunar_requiem",
+      "bedrock_identifier": "advance_magic:lunar_requiem",
+      "base_item": "minecraft:carrot_on_a_stick",
+      "translation_key": "item.advance_magic.lunar_requiem"
+    },
+    {
+      "id": "crimson_oblivion",
+      "design_number": "07",
+      "name_en": "Crimson Oblivion",
+      "name_th": "หายนะโลหิตทมิฬ",
+      "rarity": "legendary",
+      "theme_en": "A jagged obsidian crystal crown with a crimson core and dark gold.",
+      "theme_th": "มงกุฎคริสตัลออบซิเดียนแหลม แกนพลังสีแดง และทองทมิฬ",
+      "source_texture": "../crimson_oblivion.png",
+      "texture_sha256": "0af519e78ab73e55c141ae5c7b033c3cd59b29a9ca955727580b2d9203cfcb48",
+      "texture_size": [
+        128,
+        128
+      ],
+      "texture_format": "RGBA, binary alpha",
+      "java_item_model": "advance_magic:crimson_oblivion",
+      "bedrock_identifier": "advance_magic:crimson_oblivion",
+      "base_item": "minecraft:carrot_on_a_stick",
+      "translation_key": "item.advance_magic.crimson_oblivion"
+    }
+  ]
+}

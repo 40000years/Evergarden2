@@ -21,6 +21,7 @@ final class JudgeSigils implements AutoCloseable {
     JudgeSigils(VoidscapePlugin plugin,JudgeAether aether){this.plugin=plugin;this.aether=aether;}
     private static Location pose(Location at){Location p=at.clone();p.setYaw(0);p.setPitch(0);return p;}
     void plane(String key,String model,Location at,Vector right,Vector up,double width,double height,double angle){
+        ItemDisplay existing=planes.get(key);if(existing!=null&&!existing.isValid())planes.remove(key);
         ItemDisplay display=planes.computeIfAbsent(key,k->at.getWorld().spawn(pose(at),ItemDisplay.class,e->{
             ItemStack item=new ItemStack(Material.PAPER);var meta=item.getItemMeta();
             meta.setItemModel(new NamespacedKey("voidscape",model));item.setItemMeta(meta);
@@ -52,10 +53,10 @@ final class JudgeSigils implements AutoCloseable {
     }
     void circle(String key,String model,Location at,double radius,double turn,boolean upright){
         Vector right=new Vector(1,0,0),up=upright?new Vector(0,1,0):new Vector(0,0,1);
-        double diameter=radius*2*512/480;
+        double diameter=radius*2*(model.startsWith("river_")?384.0/331:512.0/480);
         plane(key,model,at,right,up,diameter,diameter,turn);
         if(!aether.needsFallback())return;
-        Color color=model.equals("judge_sanctuary")?GREEN:RED;
+        Color color=model.equals("seraphon_sanctuary")?SeraphonEffects.CYAN:model.startsWith("seraphon_")?SeraphonEffects.GOLD:model.startsWith("malef_violet")?Color.fromRGB(184,84,255):model.startsWith("malef_crimson")?Color.fromRGB(255,48,93):model.startsWith("malef_cyan")?Color.fromRGB(34,180,216):model.startsWith("malef_gold")?Color.fromRGB(250,210,70):model.startsWith("river_")?ArkhaiaMinions.color(ArkhaiaWaves.Kind.valueOf(model.substring(6).toUpperCase(Locale.ROOT))):model.startsWith("arkhaia_")?Color.fromRGB(175,90,255):model.equals("judge_sanctuary")?GREEN:RED;
         // Only clients lacking the textures receive dust. Outer radius matches the damage boundary.
         int samples=(int)Math.clamp(radius*5,32,112);
         for(int i=0;i<samples;i++){
@@ -72,17 +73,25 @@ final class JudgeSigils implements AutoCloseable {
             aether.fallbackDust(at.clone().add(right.clone().multiply(i)).add(up.clone().multiply(side)),RED,1.6f);
     }
     void ray(String key,Location from,Location to,double width){
+        ray(key,"judge_ray",from,to,width);
+    }
+    void ray(String key,String model,Location from,Location to,double width){
         Vector delta=to.toVector().subtract(from.toVector());double length=delta.length();if(length<.01)return;
         Vector up=delta.clone().multiply(1/length),right=new Vector(1,0,0);
         if(Math.abs(up.dot(right))>.95)right=new Vector(0,0,1);
         right.subtract(up.clone().multiply(right.dot(up))).normalize();
-        plane(key,"judge_ray",from.clone().add(delta.multiply(.5)),right,up,width,length,0);
+        plane(key,model,from.clone().add(delta.multiply(.5)),right,up,width,length,0);
+    }
+    void fastRay(String key,String model,Location from,Location to,double width){
+        ray(key,model,from,to,width);ItemDisplay display=planes.get(key);
+        if(display!=null)display.setInterpolationDuration(1);
     }
     void clearAttack(){
         for(var it=planes.entrySet().iterator();it.hasNext();){var entry=it.next();
             if(entry.getKey().startsWith("attack:")){entry.getValue().remove();it.remove();}}
     }
     void remove(String key){ItemDisplay display=planes.remove(key);if(display!=null)display.remove();}
+    void removePrefix(String prefix){for(String key:new ArrayList<>(planes.keySet()))if(key.startsWith(prefix))remove(key);}
     void clearEffects(){for(String key:new ArrayList<>(planes.keySet()))if(key.startsWith("fx:"))remove(key);}
     boolean owns(Entity entity){return planes.containsValue(entity);}
     @Override public void close(){for(ItemDisplay display:planes.values())display.remove();planes.clear();}

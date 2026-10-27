@@ -1,16 +1,24 @@
 name: Evergarden
-version: '3.0.0-e2.33-vault-security'
+version: '3.0.0-e2.156-malefeasance-v5'
 main: com.example.voidscape.VoidscapePlugin
 api-version: '26.2'
-description: Evergarden - Ancient world boss temples, sky landmarks, sanctums and trial vaults.
-softdepend: [floodgate, advance-magic]
+description: Evergarden - Varied biome scenery with twelve small and twenty medium exploration destinations.
+softdepend: [floodgate, advance-magic, LevelledMobs, ModelEngine]
 provides: [Voidscape]
 loadbefore: [Geyser-Spigot]
 commands:
+  sanctuary:
+    description: Locate the six biome sanctuaries in the Overworld
+    usage: /sanctuary locate|tp <kind> [search-cells]
+    permission: evergarden.admin
   evergarden:
     aliases: [garden, void, voidscape]
     description: Explore Evergarden and claim dungeon relics
     usage: /evergarden help
+  pet:
+    aliases: [pets]
+    description: Open your pet stable; summon, rename and set your companion's mode
+    usage: /pet [summon|dismiss|list|name|mode|skills|hide]
   upgrade:
     aliases: [up, enchantgui]
     description: Open the Evergarden Enchanting and Upgrade menu

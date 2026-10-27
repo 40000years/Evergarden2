@@ -1,0 +1,5 @@
+name: StructureProtectionProbe
+version: '1.0'
+main: StructureProtectionProbe
+api-version: '26.2'
+depend: [Evergarden, advance-magic]

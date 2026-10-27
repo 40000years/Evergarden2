@@ -1,0 +1,19 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "advance_magic:item/verdant_sovereign",
+      "sprite": "advance_magic:item/verdant_sovereign"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "advance_magic:item/lunar_requiem",
+      "sprite": "advance_magic:item/lunar_requiem"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "advance_magic:item/crimson_oblivion",
+      "sprite": "advance_magic:item/crimson_oblivion"
+    }
+  ]
+}

@@ -146,6 +146,13 @@ public final class GardensChecks extends JavaPlugin {
         var request=java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://127.0.0.1:"+host.port()+host.path())).build();
         var response=java.net.http.HttpClient.newHttpClient().send(request,java.net.http.HttpResponse.BodyHandlers.ofByteArray());
         check(response.statusCode()==200&&Arrays.equals(response.body(),java.nio.file.Files.readAllBytes(voids.getDataFolder().toPath().resolve("resource-packs/evergarden-java.zip"))),"HTTP serves exact embedded Evergarden pack");
+        byte[] judgeAddon="dynamic judge pack".getBytes(java.nio.charset.StandardCharsets.UTF_8);
+        String judgeHash=java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-1").digest(judgeAddon));
+        String judgePath=packs.publishAddition(judgeAddon,judgeHash);
+        var judgeRequest=java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://127.0.0.1:"+host.port()+judgePath)).build();
+        var judgeResponse=java.net.http.HttpClient.newHttpClient().send(judgeRequest,java.net.http.HttpResponse.BodyHandlers.ofByteArray());
+        check(judgePath.startsWith("/evergarden/")&&judgeResponse.statusCode()==200&&Arrays.equals(judgeResponse.body(),judgeAddon),"shared HTTP host serves dynamic Judge/ModelEngine pack");
+        check(packs.urlForPath(judgePath,null,"https://packs.example.org/garden/","").equals("https://packs.example.org/garden"+judgePath),"shared Judge route uses the configured public base URL");
         actor.setGameMode(GameMode.SURVIVAL);actor.setInvulnerable(true);
         Map<String,Object> active=(Map<String,Object>)field(voids.dungeons(),"active");
         var ledger=(org.bukkit.configuration.file.YamlConfiguration)field(voids.dungeons(),"ledger");

@@ -5,13 +5,14 @@ import json
 def register(java, write_json):
     # Keeping the sprite IDs also repairs models supplied by an older server pack.
     effects = {'type': 'minecraft:directory', 'source': 'effect', 'prefix': 'effect/'}
+    armor = {'type': 'minecraft:directory', 'source': 'armor', 'prefix': 'armor/'}
     beam = {'type': 'minecraft:single',
             'resource': 'minecraft:entity/beacon/beacon_beam',
             'sprite': 'minecraft:entity/beacon_beam'}
     atlas = 'assets/minecraft/atlases/items.json'
     path = java / atlas
     existing = json.loads(path.read_text()) if path.exists() else {'sources': []}
-    for source in (effects, beam):
+    for source in (effects, armor, beam):
         if source not in existing['sources']:
             existing['sources'].append(source)
     write_json(path, existing)

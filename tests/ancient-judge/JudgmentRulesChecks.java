@@ -1,6 +1,5 @@
 import com.example.voidscape.boss.JudgmentFight;
 import com.example.voidscape.boss.JudgmentPattern;
-import com.example.voidscape.boss.JudgeDamageBudget;
 import com.example.voidscape.boss.JudgeBalance;
 import static com.example.voidscape.boss.JudgmentFight.Part.*;
 import java.util.UUID;
@@ -12,7 +11,7 @@ public final class JudgmentRulesChecks {
     public static int run(){
         for(int phase=1;phase<=3;phase++){
             var pattern=JudgmentPattern.forPhase(phase);
-            check(pattern.pulses()==phase&&pattern.recovery()<=48,"each later phase adds a pulse and shortens recovery");
+            check(pattern.pulses()==phase&&pattern.recovery()==new int[]{68,56,48}[phase-1],"later phases add pulses and retain an extra second of recovery");
             check(pattern.slamRadius()+1<pattern.slamWarning()/20.0*5.6,"larger slams leave a sprint escape plus a one-block margin");
             check(pattern.laneHalfWidth()*Math.sqrt(2)+1<pattern.crossWarning()/20.0*5.6,"cross intersections retain an escape from the center");
             check(pattern.ringHalfWidth()+1<pattern.ringWarning()/20.0*5.6,"wide annular warnings retain a radial escape");
@@ -26,21 +25,29 @@ public final class JudgmentRulesChecks {
             check(!JudgmentPattern.ring(30+pattern.ringHalfWidth()+.01,0,30,pattern.ringHalfWidth()),"annulus excludes points beyond its outer warning");
         }
         UUID a=UUID.randomUUID(),b=UUID.randomUUID();
-        var budget=new JudgeDamageBudget();var limits=new JudgeDamageBudget.Limits(100,80,240,80,240);
-        check(budget.available(a,JudgeDamageBudget.Kind.PROJECTILE,1000000,0,limits)==80,"projectile bonuses cannot exceed their final cap");
-        check(budget.available(a,JudgeDamageBudget.Kind.MELEE,1000000,0,limits)==100,"melee has a separate hit cap");
-        check(budget.available(a,JudgeDamageBudget.Kind.OTHER,1000000,0,limits)==80,"unclassified damage also has a cap");
-        budget.spend(a,80,0);budget.spend(a,100,5);
-        check(budget.available(a,JudgeDamageBudget.Kind.MAGIC,1000000,19,limits)==60,"mixed attacks share a rolling budget");
-        check(budget.available(b,JudgeDamageBudget.Kind.MAGIC,1000000,19,limits)==240,"each participant has an independent budget");
-        check(budget.available(a,JudgeDamageBudget.Kind.MAGIC,1000000,20,limits)==140,"only hits a full second old expire");
-        check(budget.available(a,JudgeDamageBudget.Kind.MAGIC,1000000,25,limits)==240,"expired damage restores the full budget");
-        check(budget.available(a,JudgeDamageBudget.Kind.MAGIC,Double.NaN,25,limits)==0,"NaN damage is rejected");
-        check(budget.available(a,JudgeDamageBudget.Kind.MAGIC,Double.POSITIVE_INFINITY,25,limits)==0,"infinite damage is rejected");
+        var bonus=new JudgmentFight(JudgeBalance.CORE_HEALTH,JudgeBalance.HAND_HEALTH,.65,240,16);bonus.join(a);
+        check(bonus.core()==10000&&bonus.hand(LEFT)==1500&&bonus.hand(RIGHT)==1500,"new solo HP defaults");
+        for(var kind:JudgmentFight.DamageKind.values())check(bonus.accepts(kind),"phase one accepts "+kind);
+        check(bonus.coreMultiplier(0)==1,"sealed core has no damage bonus");
+        check(bonus.hit(a,LEFT,1000,0).damage()==1000&&bonus.hit(a,LEFT,500,0).broke(),"same-tick hits have no per-hit or per-second cap");
+        check(bonus.coreMultiplier(0)==2&&bonus.hit(a,CORE,100,0).damage()==200,"one broken hand doubles core damage");
+        check(bonus.hit(a,RIGHT,1500,0).broke()&&bonus.coreMultiplier(0)==3,"both hands broken in one opening grant triple damage");
+        check(bonus.hit(a,CORE,100,0).damage()==300,"both-hand bonus is applied to core damage");
+        bonus.join(b);check(Math.abs(bonus.hit(b,CORE,165,1).damage()-300)<1e-9,"multiplayer scaling and bonus are each applied once");
+        long bonusEnd=bonus.exposedUntil();bonus.tick(bonusEnd);
+        check(bonus.coreMultiplier(bonusEnd)==1&&bonus.hand(LEFT)==675&&bonus.hand(RIGHT)==675,"missed opening clears the bonus and restores broken hands at 45 percent HP");
+        bonus.hit(a,RIGHT,1000000,bonusEnd+1);check(bonus.coreMultiplier(bonusEnd+1)==2,"rebreaking one regenerated hand only grants the single-hand bonus");
+        bonus.hit(a,CORE,1000000,bonusEnd+2);
+        check(bonus.phase()==2&&bonus.coreMultiplier(bonusEnd+2)==1,"phase transition resets the bonus");
+        check(!bonus.accepts(JudgmentFight.DamageKind.PROJECTILE)&&bonus.accepts(JudgmentFight.DamageKind.MAGIC),"phase two blocks projectiles and permits wands");
+        bonus.hit(a,LEFT,1000000,bonusEnd+3);bonus.hit(a,CORE,1000000,bonusEnd+4);bonus.tick(bonusEnd+164);
+        check(bonus.phase()==3&&bonus.coreMultiplier(bonusEnd+164)==1,"final phase has no bonus from removed hands");
+        check(!bonus.accepts(JudgmentFight.DamageKind.PROJECTILE)&&!bonus.accepts(JudgmentFight.DamageKind.MAGIC)&&bonus.accepts(JudgmentFight.DamageKind.MELEE),"phase three blocks arrows and wands while allowing melee");
         JudgmentFight f=new JudgmentFight(30000,6500,.65,240,16);f.join(a);
         check(f.hit(a,CORE,2000,0).damage()==0,"sealed core rejects a burst");
         check(f.hit(a,LEFT,2000,1).damage()==2000,"strong equipment retains its damage on a hand");
         check(f.hit(a,LEFT,Double.NaN,1).damage()==0&&f.hand(LEFT)==4500,"invalid spell damage cannot poison HP");
+        check(f.hit(a,LEFT,Double.POSITIVE_INFINITY,1).damage()==0&&f.hand(LEFT)==4500,"infinite damage cannot poison HP");
         f.join(b);check(Math.abs(f.scale()-1.65)<1e-9,"duo gets 65 percent extra effective HP");
         check(f.core()==30000&&f.hand(LEFT)==4500,"joining changes neither existing damage nor boss-bar percentage");
         check(Math.abs(f.hit(b,LEFT,1650,2).damage()-1000)<1e-9,"duo damage uses the shared scale once");
@@ -52,12 +59,42 @@ public final class JudgmentRulesChecks {
         f.tick(end);check(!f.exposed(end)&&f.hand(RIGHT)==2925,"missed exposure restores only 45 percent of the broken hand");
         f.hit(a,RIGHT,1000000,end+1);f.hit(a,CORE,1000000,end+2);
         check(f.phase()==3&&f.core()==10500&&f.hand(LEFT)==0&&f.hand(RIGHT)==0,"second boundary leaves a final independent heart");
-        check(f.openingIn(end+2)==160&&f.openingIn(end+102)==60,"final opening countdown is tied to actual server ticks");
-        check(!f.tick(end+161)&&!f.exposed(end+161),"final phase gives warning time before opening");
-        check(f.tick(end+162)&&f.exposed(end+162),"final core opens without requiring another hand or another player");
+        check(f.openingIn(end+2)==0&&f.exposed(end+2),"final core is immediately open without a countdown");
+        check(!f.tick(end+161)&&f.exposed(end+161),"final core stays open while time advances");
+        check(!f.tick(end+10000)&&f.exposed(end+10000),"final core never reseals after a missed damage window");
         check(f.hit(a,CORE,1000000,end+163).won(),"final exposed core can be defeated");
         check(f.hit(a,CORE,1000000,end+164).damage()==0,"dead encounters cannot award contribution twice");
         check(f.contribution(a)>0&&f.contribution(b)>0,"separate contributors remain credited");
+        var finale=new JudgmentFight(10000,1500,.65,240,16);finale.join(a);finale.prepareTestPhase(3);
+        check(finale.core()==3500&&finale.exposed(0)&&finale.hand(LEFT)==0,"phase-three test starts directly with the actual final-phase HP");
+        finale.beginRupture(0);
+        check(finale.ruptureCharging(159)&&!finale.ruptureCharging(160),"charge deadline is exactly eight seconds");
+        check(!finale.strikeSeal(a,0,JudgmentFight.DamageKind.MAGIC,1000,1)&&finale.sealHits(0)==0,"wands cannot break a seal");
+        check(!finale.strikeSeal(a,0,JudgmentFight.DamageKind.PROJECTILE,1000,1)&&finale.sealHits(0)==0,"arrows cannot break a seal");
+        check(!finale.strikeSeal(a,0,JudgmentFight.DamageKind.MELEE,Double.NaN,1)&&finale.sealHits(0)==0,"invalid damage cannot break a seal");
+        finale.strikeSeal(a,0,JudgmentFight.DamageKind.MELEE,1000000,1);
+        check(finale.sealHits(0)==1,"huge melee damage counts as one strike");
+        finale.strikeSeal(a,1,JudgmentFight.DamageKind.MELEE,1000000,1);
+        check(finale.sealHits(1)==0,"same-tick bonus hits cannot advance a second seal");
+        finale.strikeSeal(a,0,JudgmentFight.DamageKind.MELEE,1,9);finale.strikeSeal(a,0,JudgmentFight.DamageKind.MELEE,1,17);
+        check(finale.sealHits(0)==3&&!finale.stunned(17)&&finale.coreMultiplier(17)==1,"one completed seal does not interrupt the charge");
+        finale.strikeSeal(a,1,JudgmentFight.DamageKind.MELEE,1,25);finale.strikeSeal(a,1,JudgmentFight.DamageKind.MELEE,1,33);
+        check(finale.strikeSeal(a,1,JudgmentFight.DamageKind.MELEE,1,41)&&finale.stunned(41)&&!finale.ruptureCharging(41),"six valid strikes interrupt the charge");
+        check(finale.hit(a,CORE,100,42).damage()==300,"successful interruption grants triple core damage");
+        check(finale.stunned(180)&&!finale.stunned(181)&&finale.coreMultiplier(181)==1,"stun and bonus expire at the exact seven-second boundary");
+        finale.beginRupture(200);finale.strikeSeal(a,0,JudgmentFight.DamageKind.MELEE,1,201);finale.finishRupture();
+        check(finale.sealHits(0)==0&&finale.sealHits(1)==0&&finale.coreMultiplier(360)==1&&finale.exposed(360),"failed charge resets its seals without resealing the core");
+        finale.beginRupture(400);
+        check(!finale.strikeSeal(a,0,JudgmentFight.DamageKind.MELEE,1,560)&&finale.sealHits(0)==0,"a strike at the deadline cannot cancel a resolved attack");
+        finale.prepareTestPhase(2);check(finale.core()==7000&&!finale.exposed(0)&&!finale.stunned(0)&&finale.contribution(a)==0,"test phase reset clears damage and final-phase mechanics");
+        var lure=new JudgmentFight(10000,1500,.65,240,16);lure.join(a);lure.prepareTestPhase(2);
+        check(JudgmentPattern.baitRune(3,0,0,0)&&!JudgmentPattern.baitRune(3.01,0,0,0),"lure collision matches the exact visible three-block rune");
+        check(lure.baitHand(a,LEFT,0).broke()&&lure.hand(LEFT)==0&&lure.coreMultiplier(0)==2,"a successful lure breaks its hand and doubles core damage");
+        check(lure.contribution(a)==1500&&lure.baitHand(a,LEFT,1).damage()==0,"lure effort earns contribution once without repeat credit");
+        check(lure.baitHand(a,RIGHT,2).broke()&&lure.coreMultiplier(2)==3,"luring both hands in one opening grants triple damage");
+        lure.tick(lure.exposedUntil());check(lure.hand(LEFT)==675&&lure.hand(RIGHT)==675,"missed lure opening regenerates hands under the same encounter rules");
+        lure.prepareTestPhase(1);check(!lure.baitHand(a,LEFT,10).broke()&&lure.hand(LEFT)==1500,"lure mechanic cannot break phase-one hands");
+        lure.prepareTestPhase(3);check(!lure.baitHand(a,LEFT,11).broke(),"lure mechanic cannot change the final phase");
         JudgmentFight capped=new JudgmentFight(1,1,.65,240,1);capped.join(a);
         check(!capped.join(b)&&capped.scale()==1,"participant limit does not alter HP");
         check(JudgmentFight.sanctuary(30,0,30,0,10)&&JudgmentFight.sanctuary(-30,0,30,0,10),"either sanctuary is valid");
@@ -70,7 +107,7 @@ public final class JudgmentRulesChecks {
         }
         // A deterministic endgame DPS simulation. Test the promised target instead of guessing HP.
         for(int players:new int[]{1,4,6}){
-            JudgmentFight sim=new JudgmentFight(JudgeBalance.CORE_HEALTH,8500,.65,240,16);
+            JudgmentFight sim=new JudgmentFight(JudgeBalance.CORE_HEALTH,JudgeBalance.HAND_HEALTH,.65,240,16);
             UUID[] ids=new UUID[players];for(int i=0;i<players;i++){ids[i]=UUID.randomUUID();sim.join(ids[i]);}
             long ticks=0;
             for(;ticks<20*1800&&!sim.won();ticks+=20){
@@ -79,7 +116,7 @@ public final class JudgmentRulesChecks {
             }
             check(sim.won(),"endgame DPS simulation completes for "+players+" players");
             double minutes=ticks/1200.0;System.out.printf("%d players at 180 applied DPS each: %.2f minutes%n",players,minutes);
-            check(minutes>=3&&minutes<=8,"lower core HP keeps the capped endgame simulation within three to eight minutes");
+            check(minutes>0&&minutes<3,"lower HP and hand bonuses finish the stationary DPS simulation within three minutes");
         }
         return checks;
     }

@@ -1,0 +1,44 @@
+{
+  "version": "3.0.0-e2.105-wild-pets",
+  "jar_sha256": "035aa46a82ddf3ccc1e3cb16084bfef2d36d8078270da43fce621dfef5c89588",
+  "previous_jar_sha256": "a4dd3267fdfab074a0acb940cd1cc9ce40085f045713a0190df3329d0d618da2",
+  "native_cases": [
+    {
+      "runtime": "output/wild-pets-native-final-v3-20261021",
+      "checks": 1631,
+      "result": "PASS: nonmythical wild pets / 1631 checks"
+    },
+    {
+      "runtime": "output/wild-pets-boss-restore-final-v3-20261021",
+      "checks": 209,
+      "result": "PASS: model restore after existing 51-pet installation / 209 checks / selected="
+    }
+  ],
+  "native_checks": 1840,
+  "asset_checks": 170699,
+  "eligible_species": 12,
+  "native_variants": 36,
+  "mythical_natural_spawns": false,
+  "stage_weights": {
+    "baby": 85,
+    "medium": 13,
+    "adult": 2
+  },
+  "attempt_interval_seconds": 45,
+  "chance_per_eligible_player": 0.12,
+  "world_cap": 16,
+  "nearby_player_cap": 2,
+  "original_modelengine_assets_changed": false,
+  "preserved_boss_models": 8,
+  "preserved_pet_blueprints": 51,
+  "preserved_resource_entries": 101,
+  "bundled_base_packs_changed": false,
+  "served_judge_pack_extended": true,
+  "native_pet_modelengine_slots": 0,
+  "melee_impact_helper_classes_changed": false,
+  "inherited_workspace_boss_out_of_arena_reminders_preserved": true,
+  "java_pack_required": true,
+  "bedrock_native_pet_models": false,
+  "connected_client_visual_review": false,
+  "live_server_modified": false
+}

@@ -1,0 +1,51 @@
+{
+  "advance_magic_version": "1.23.0-armor-combat",
+  "evergarden_version": "3.0.0-e2.123-armor-combat",
+  "artifacts": {
+    "advance-magic.jar": {
+      "sha256": "6e371ae857e204aa97c041649b6f3fbd6cc8494b388f59b36dad55b9ce1a2c18",
+      "bytes": 22375751
+    },
+    "evergarden.jar": {
+      "sha256": "b0ac93b24ae191bad3340885d23fc3f65e814b0ea08e9245913c82780e80d5f0",
+      "bytes": 52925136
+    }
+  },
+  "tests": [
+    {
+      "fixture": "armor-sets-paper-v3-20261023",
+      "checks": 154,
+      "result": "PASS 154 boss armor durability checks",
+      "clean_shutdown": true,
+      "jar_sha256": {
+        "advance-magic.jar": "6e371ae857e204aa97c041649b6f3fbd6cc8494b388f59b36dad55b9ce1a2c18",
+        "evergarden.jar": "b0ac93b24ae191bad3340885d23fc3f65e814b0ea08e9245913c82780e80d5f0"
+      }
+    },
+    {
+      "fixture": "armor-sanctuary-paper-v1-20261023",
+      "checks": 147,
+      "result": "PASS 147 Paper checks",
+      "clean_shutdown": true,
+      "jar_sha256": {
+        "advance-magic.jar": "6e371ae857e204aa97c041649b6f3fbd6cc8494b388f59b36dad55b9ce1a2c18",
+        "evergarden.jar": "b0ac93b24ae191bad3340885d23fc3f65e814b0ea08e9245913c82780e80d5f0"
+      }
+    }
+  ],
+  "assets": {
+    "advance-magic.jar": {
+      "unchanged_embedded_packs_and_models": 12
+    },
+    "evergarden.jar": {
+      "unchanged_embedded_packs_and_models": 79
+    }
+  },
+  "paper_checks": 301,
+  "pure_rule_checks": 67143,
+  "native_player_persistence": {
+    "six_unique_souls_saved": true,
+    "four_independent_cooldowns_saved": true
+  },
+  "java_exit_smoke_check": 0
+}

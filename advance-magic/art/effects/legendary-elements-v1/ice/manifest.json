@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "element": "ice",
+  "spell": "absolute_zero",
+  "generation_tool": "built-in image_gen.imagegen",
+  "transparent_background": true,
+  "production_transformations": "None: native generated PNG copied byte-for-byte",
+  "stage": "Texture artwork only; no runtime or pack registration changes",
+  "assets": [
+    {
+      "name": "absolute_zero_sigil",
+      "role": "Horizontal floor seal",
+      "source": "source/absolute_zero_sigil-original.png",
+      "generated_source_path": "C:/Users/User/.codex/generated_images/01a16e07-3acd-73b3-8456-093c2aeb9378/exec-910481cb-5f44-444e-b86f-f81a2b6a3ccc.png",
+      "prompts": [
+        {
+          "mode": "generate",
+          "text": "Use case: stylized-concept\nAsset type: production game VFX texture, one standalone magical floor sigil on genuine transparent alpha.\nPrimary request: Absolute Zero, Legendary ice magic. A magnificent intricate circular arcane snow-crystal seal, perfectly top-down orthographic and completely flat.\nComposition: one centered circular design filling 84% of a square canvas, whole perimeter visible, generous transparent margin. A sixfold snowflake heart with open negative spaces and a small transparent center, six radial crystal spokes, many precisely nested concentric rings of icy filigree, tiny ornamental invented rune marks, hexagonal lattices, diamond facets and frost-fractal linework. Crisp readable hairline luminous engraving with varied line weights.\nStyle: extremely detailed high-end fantasy spell VFX sprite, delicate celestial geometry, premium polished hand-painted digital texture. Predominantly luminous pale ice blue, cyan, pearl white, very subtle lilac edge refraction. Bright narrow emissive lines with controlled soft bloom, not a filled disk.\nConstraints: isolated flat texture only, actual transparent background and transparent holes between every structure. No environment, floor, scenery, dragon, character, UI, text, Latin letters, logos, watermark, border frame or fake checkerboard. No perspective, no standing circle, no opaque fog, no solid dark backing, no cropped points. Maximum fine detail and clean alpha edges."
+        }
+      ],
+      "file": "absolute_zero_sigil.png",
+      "visual_review": "Inspected built-in output and local view_image; palette, silhouette and transparency considered",
+      "sha256": "958ae58f3dcb0416a4b22dcf9ea5064a9c76ec38a88c1fd1a88ff637375e4107",
+      "source_sha256": "958ae58f3dcb0416a4b22dcf9ea5064a9c76ec38a88c1fd1a88ff637375e4107",
+      "source_bytes_preserved": true,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "fully_transparent_fraction": 0.287753,
+      "fully_opaque_fraction": 1e-06,
+      "alpha_content_bbox": [
+        0,
+        0,
+        1254,
+        1254
+      ]
+    },
+    {
+      "name": "absolute_zero_crystal",
+      "role": "Crystal crown climax sprite",
+      "source": "source/absolute_zero_crystal-original.png",
+      "generated_source_path": "C:/Users/User/.codex/generated_images/01a16e07-3acd-73b3-8456-093c2aeb9378/exec-e174e76a-1487-4f45-ac78-c18251d2a0b8.png",
+      "prompts": [
+        {
+          "mode": "generate",
+          "text": "Use case: stylized-concept\nAsset type: one isolated high-end fantasy spell VFX sprite on genuine transparent alpha.\nPrimary request: the Legendary ice magic Absolute Zero's majestic final ice-crystal crown.\nSubject: a radial crown cluster of tall sharply faceted ice crystals rising upward from a small crystalline root, tallest long central spear with several strong medium spires fanning outward and smaller shards around its foot. Sculptural full silhouette, regal catastrophic power, all tips intact. Precisely rendered internal facets, luminous freezing fissures, layered glasslike reflections, delicate frost filigree and only a small amount of faint drifting powder snow.\nComposition: portrait-friendly subject centered within square image occupying about75%height and70%width; clear generous transparent margin above every tip and beneath the root. Slight three-quarter side view, no ground plane or terrain.\nStyle: maximum-detail premium digital fantasy game VFX texture; pearl white, icy cyan, glacial blue, subtle lavender refractions. Bright emissive edges with restrained soft bloom, readable structural facets and translucent ice interiors rather than a solid white mass.\nConstraints: entire isolated crystal crown, true transparent background, transparent gaps between spires, no scenery, room, floor, character, magic circle, UI, text, letters, watermark, frame or fake checkerboard. No cropped tips, no dense fog wall, no black rectangular backing."
+        }
+      ],
+      "file": "absolute_zero_crystal.png",
+      "visual_review": "Inspected built-in output and local view_image; palette, silhouette and transparency considered",
+      "sha256": "139a0e5eca3ee48cb6661aec69850d999210c4f3dfb6a5594649b1670b96b1ab",
+      "source_sha256": "139a0e5eca3ee48cb6661aec69850d999210c4f3dfb6a5594649b1670b96b1ab",
+      "source_bytes_preserved": true,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "fully_transparent_fraction": 0.535747,
+      "fully_opaque_fraction": 0.000155,
+      "alpha_content_bbox": [
+        0,
+        15,
+        1238,
+        1254
+      ]
+    }
+  ]
+}

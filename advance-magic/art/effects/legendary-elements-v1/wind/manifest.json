@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "element": "wind",
+  "spell": "tempest_dominion",
+  "generation_tool": "built-in image_gen.imagegen",
+  "transparent_background": true,
+  "production_transformations": "None: native generated PNG copied byte-for-byte",
+  "stage": "Texture artwork only; no runtime or pack registration changes",
+  "assets": [
+    {
+      "name": "tempest_dominion_sigil",
+      "role": "Horizontal floor seal",
+      "source": "source/tempest_dominion_sigil-original.png",
+      "generated_source_path": "C:/Users/User/.codex/generated_images/01a16e07-3acd-73b3-8456-093c2aeb9378/exec-f5e77391-993b-4b7f-b83a-06315168b0a8.png",
+      "prompts": [
+        {
+          "mode": "generate",
+          "text": "Use case: stylized-concept\nAsset type: production game VFX texture, one magical floor sigil on genuine transparent alpha.\nPrimary request: Tempest Dominion, Legendary wind magic. A spectacular precision-engraved arcane compass wheel formed entirely from luminous emerald, sea-glass mint and white-silver wind lines.\nComposition: perfectly flat top-down orthographic circle centered on square canvas, complete circumference within 84% of image width with generous empty margin. Sixteen-point compass star and delicate open central aperture; five concentric rune rings with ornate invented glyph marks, elegant crescent blade curves, layered flowing air currents woven into the radial geometry, a few thin sweeping arcs suggest acceleration while preserving exact circle structure.\nStyle: exceptionally intricate premium high-fantasy game VFX sprite, luminous fine calligraphy-like ornamental metal engraving made of air, controlled emissive bloom. Mostly empty transparent negative space between fine lines, not a filled disk. Strong line hierarchy so the wheel remains legible at a distance, but rich minute details at full resolution.\nConstraints: one isolated wind seal; actual transparent alpha background and see-through interior gaps. No floor, scenery, character, tornado body, text, Latin letters, labels, UI, watermark, frame, checkerboard or opaque fog. No perspective or standing circle. No cut-off tips, no filled green backing plate."
+        }
+      ],
+      "file": "tempest_dominion_sigil.png",
+      "visual_review": "Inspected built-in output and local view_image; palette, silhouette and transparency considered",
+      "sha256": "95d95145a608e98b15a45a5bfd2ab2da089969fa21fce8ee68eeff53fa0137f8",
+      "source_sha256": "95d95145a608e98b15a45a5bfd2ab2da089969fa21fce8ee68eeff53fa0137f8",
+      "source_bytes_preserved": true,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        253
+      ],
+      "fully_transparent_fraction": 0.262184,
+      "fully_opaque_fraction": 0.0,
+      "alpha_content_bbox": [
+        0,
+        0,
+        1254,
+        1254
+      ]
+    },
+    {
+      "name": "tempest_dominion_vortex",
+      "role": "Airy segmented wind vortex sprite",
+      "source": "source/tempest_dominion_vortex-v2.png",
+      "generated_source_path": "C:/Users/User/.codex/generated_images/01a16e07-3acd-73b3-8456-093c2aeb9378/exec-ff71eb0f-584b-49e2-a70b-e8e0d1306f24.png",
+      "discarded_source": "source/tempest_dominion_vortex-v1.png",
+      "prompts": [
+        {
+          "mode": "generate",
+          "text": "Use case: stylized-concept\nAsset type: one isolated transparent animated-game VFX source sprite.\nPrimary request: Tempest Dominion, an elegant towering magical air vortex made of cutting wind ribbons. Legendary fantasy wind spell, extreme detail.\nSubject: a tall tapering spiral with several clearly separated helical layers of curved luminous air blades. The base is narrow, the crown broad and airy. Slender emerald, sea-glass mint and silver-white translucent ribbons sweep upward around a readable empty core; numerous fine trailing filaments and a small scattering of bright air-mote sparks. Layered sweeping motion, sharp crescent blade edges with softly feathered vapor edges. Structure must feel fast, powerful and weightless.\nComposition: entire vortex from narrow base to full broad upper rim fits inside a square canvas with 12% transparent margin; centered tall silhouette, full shape visible in slight three-quarter view.\nStyle: premium high-detail hand-painted fantasy spell VFX sprite with crisp luminous ribbons, controlled glow, dimensional layered transparency, strong elegant silhouette, varied ribbon thickness. Not a muddy smoke cone or opaque fog wall. Keep generous visible gaps between the spirals so scenery can be seen through them.\nConstraints: one vortex only, true transparent alpha background, no scenery, landscape, floor, platform, magic circle, character, text, UI, labels, frame, watermark, fake checkerboard or solid black backing. No cropped ends or strands."
+        },
+        {
+          "mode": "edit",
+          "input": "source/tempest_dominion_vortex-v1.png",
+          "text": "Use case: precise-object-edit\nEdit target: the supplied Tempest Dominion wind vortex sprite.\nKeep the emerald/mint/silver palette, premium luminous fine details, complete tall tapering spiral silhouette, sharp cutting air-blade curves and exact centered framing. Keep actual transparent background.\nChange only its density: remove the continuous translucent fog filling the cone. Rebuild it as FOUR widely separated narrow sweeping helical wind ribbons with very large truly transparent empty gaps between each coil, plus only a few delicate fine streamers. The hollow core and background must be clearly visible THROUGH most of the vortex, at least half the overall silhouette area. Distinct top rim, separated middle crescent blades, separated lower spiral and narrow tail. Strong crisp detailed blade edges, softly feathered luminous outerfringes. This is an airy spiral made of sparse wind blades, not a solid tornado, not a mist column or opaque cone. Whole silhouette and all tips remain inside a generous clear alpha margin.\nNo terrain, floor, text, UI, logos, fake checkerboard or black backing. Preserve transparency and full-resolution game-texture quality."
+        }
+      ],
+      "file": "tempest_dominion_vortex.png",
+      "visual_review": "Inspected built-in output and local view_image; palette, silhouette and transparency considered",
+      "sha256": "6011484e030a54670a3f578c557d673da7a9bbb91429d0e0c520cf0cb9b7d9d4",
+      "source_sha256": "6011484e030a54670a3f578c557d673da7a9bbb91429d0e0c520cf0cb9b7d9d4",
+      "source_bytes_preserved": true,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "fully_transparent_fraction": 0.571566,
+      "fully_opaque_fraction": 1.1e-05,
+      "alpha_content_bbox": [
+        0,
+        9,
+        1242,
+        1254
+      ]
+    }
+  ]
+}

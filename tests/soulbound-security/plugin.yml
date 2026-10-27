@@ -1,0 +1,5 @@
+name: SoulboundSecurityProbe
+version: '1.0'
+main: SoulboundSecurityProbe
+api-version: '26.2'
+depend: [advance-magic, Evergarden]

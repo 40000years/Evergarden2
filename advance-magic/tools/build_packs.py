@@ -1,13 +1,12 @@
-"""Build deterministic Java/Bedrock wand packs using the project's pixel-art asset style.
+"""Build deterministic Java/Bedrock elemental staff packs and shared magic assets.
 
-The Java enum is the single source for identifiers, titles and gem colors.
-No third-party libraries or downloaded textures are needed.
+The authored staff generator supplies the eight equipment items and
+cross-client geometry.
 """
 import hashlib
 import base64
 import html
 import json
-import re
 import shutil
 import struct
 import tempfile
@@ -18,20 +17,34 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent / 'tools'))
+sys.path.insert(0, str(ROOT.parent / 'evergarden/tools'))
 import restoration_assets
 import mythic_particles
 import judgment_assets
 import mythic_line_assets
+import legendary_effect_assets
+import legendary_light_assets
+import legendary_seven_assets
+import legendary_block_assets
 import magic_java_atlas
+import legendary_weapon_assets
+import elemental_staff_assets
+import wooden_staff_assets
+import elemental_spell_assets
+import elemental_vfx_assets
+import seraph_armor_assets
+import revenant_armor_assets
+import skilltree_gui_assets
+import menu_gui_assets
 DIST = ROOT / 'dist'
-BEDROCK_PACK_VERSION = [2, 7, 1]  # Correct the native billboard direction mode enum.
+BEDROCK_PACK_VERSION = [2, 33, 1]  # Retired wand-crafting core assets removed.
 
-
-def spells():
-    source = (ROOT / 'src/main/java/com/example/advancemagic/spell/Spell.java').read_text(encoding='utf8')
-    rows = re.findall(r'(\w+)\("([^"]+)", Material\.(\w+), (\d+), (\d+), 0x([0-9A-F]+)\)', source)
-    assert len(rows) == 18, 'The spell catalog must contain exactly 18 spells'
-    return [(name.lower(), title, int(color, 16)) for name, title, core, mana, cd, color in rows]
+# Compatibility artwork is retained without adding retired wand registrations.
+PRESERVED_WANDS = (
+    'solar_apocalypse', 'chronos_final_hour', 'heavens_judgment',
+    'verdant_sovereign', 'lunar_requiem', 'crimson_oblivion',
+)
+STAFF_IDS = ('fire', 'wind', 'earth', 'ice', 'water', 'lightning', 'light', 'dark')
 
 
 UPGRADES = (
@@ -51,42 +64,6 @@ def write_java_json(path, value):
     write_json(path, value, '\r\n')
 
 
-def wand(color, variant):
-    pixels = [[(0, 0, 0, 0) for _ in range(32)] for _ in range(32)]
-    gem = ((color >> 16) & 255, (color >> 8) & 255, color & 255, 255)
-    dark = (27, 22, 40, 255)
-    gold = (224, 183, 108, 255)
-
-    def dot(x, y, color, width=1):
-        for yy in range(y, y + width):
-            for xx in range(x, x + width):
-                if 0 <= xx < 32 and 0 <= yy < 32:
-                    pixels[yy][xx] = color
-
-    # Diagonal handle follows minecraft:item/handheld so the gem points forward.
-    for n in range(20):
-        dot(3 + n, 26 - n, dark, 3)
-        dot(4 + n, 27 - n, (96, 65, 92, 255))
-    for n in (3, 7, 13):
-        dot(4 + n, 26 - n, gold, 2)
-    # Distinct crystal, halo and fork crowns, with one color per spell.
-    cx, cy = 24, 7
-    for y in range(-5, 6):
-        for x in range(-5, 6):
-            distance = abs(x) + abs(y)
-            if variant % 3 == 0:
-                fill = distance <= 5
-            elif variant % 3 == 1:
-                fill = 3 <= distance <= 6 or distance <= 1
-            else:
-                fill = abs(x) == 4 or y == 4 or (abs(x) <= 1 and abs(y) <= 2)
-            if fill:
-                dot(cx + x, cy + y, dark)
-                if distance < 5 or variant % 3:
-                    dot(cx + x, cy + y, gem)
-    dot(23, 5, (241, 255, 250, 255), 2)
-    dot(21, 11, gold, 2)
-    return pixels
 
 
 def png(path, pixels):
@@ -105,7 +82,9 @@ def archive(folder, path):
             if f.is_file():
                 info = zipfile.ZipInfo(f.relative_to(folder).as_posix(), (2026, 9, 9, 0, 0, 0))
                 info.compress_type = zipfile.ZIP_DEFLATED
-                z.writestr(info, f.read_bytes())
+                data=f.read_bytes()
+                if f.suffix in ('.json','.mcmeta'):data=json.dumps(json.loads(data),ensure_ascii=False,separators=(',',':')).encode('utf8')
+                z.writestr(info, data)
 
 
 def main():
@@ -115,28 +94,16 @@ def main():
     # A fresh staging tree prevents removed assets leaking into subsequent builds.
     with tempfile.TemporaryDirectory(prefix='packs-', dir=target) as temp:
         java, bedrock = Path(temp) / 'java', Path(temp) / 'bedrock'
-        write_java_json(java / 'pack.mcmeta', {'pack': {'description': 'Advance Magic | 18 Arcane Wands', 'min_format': [75, 0], 'max_format': [88, 0]}})
+        write_java_json(java / 'pack.mcmeta', {'pack': {'description': f'Advance Magic | {len(STAFF_IDS)} Elemental Staffs + Amethystwood Staff', 'min_format': [75, 0], 'max_format': [88, 0]}})
         write_json(bedrock / 'manifest.json', {
             'format_version': 2,
-            'header': {'name': 'Advance Magic', 'description': '18 arcane wands for Geyser',
+            'header': {'name': 'Advance Magic', 'description': f'{len(STAFF_IDS)} elemental staffs + Amethystwood staff for Geyser',
                        'uuid': 'e8233d13-8c1f-4eb9-8275-4d1d32a9c193', 'version': BEDROCK_PACK_VERSION, 'min_engine_version': [1, 21, 80]},
             'modules': [{'type': 'resources', 'uuid': '540c6378-ed9a-4e3a-b121-8f5d10607f72', 'version': BEDROCK_PACK_VERSION}]})
-        atlas, definitions, cases = {}, [], []
-        core_atlas, core_definitions, core_cases = {}, [], []
-        core_titles = {
-            'lightning_strike': 'Core of Lightning', 'frost_nova': 'Core of Frost',
-            'shadow_step': 'Core of Shadows', 'natures_bloom': 'Core of Nature',
-            'earth_wall': 'Core of Earth', 'dragons_breath': 'Core of Dragon',
-            'void_pull': 'Core of the Void', 'sonic_boom': 'Core of the Warden',
-            'blaze_barrage': 'Core of the Blaze', 'wither_ray': 'Core of Wither',
-            'shulker_levitation': 'Core of Levitation', 'meteor_strike': 'Core of Meteor',
-            'iron_armor': 'Core of Iron', 'vex_legion': 'Core of Evocation', 'guardian_beam': 'Core of the Guardian',
-            'solar_apocalypse': 'Core of the Sun', 'chronos_final_hour': 'Core of Time',
-            'heavens_judgment': 'Core of Judgment'
-        }
+        atlas = {}
 
-        # 1. Arcane Wands
-        for index, (name, title, color) in enumerate(spells()):
+        # 1. Preserved mythic/legendary resources, without old catalog entries.
+        for name in PRESERVED_WANDS:
             source = ROOT / f'art/wands/{name}.png'
             if not source.is_file():
                 raise FileNotFoundError(f'Missing final wand texture: {source}')
@@ -147,29 +114,6 @@ def main():
                 'parent': 'minecraft:item/handheld', 'textures': {'layer0': f'advance_magic:item/{name}'}})
             write_java_json(java / f'assets/advance_magic/items/{name}.json', {
                 'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/{name}'}})
-            atlas[f'advance_magic.{name}'] = {'textures': f'textures/items/{name}'}
-            cases.append({'when': f'advance_magic:{name}', 'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/{name}'}})
-            definitions.append({'type': 'definition', 'model': f'advance_magic:{name}',
-                                'bedrock_identifier': f'advance_magic:{name}', 'display_name': title + ' Wand',
-                                'bedrock_options': {'icon': f'advance_magic.{name}', 'allow_offhand': True, 'display_handheld': True, 'creative_category': 'equipment'}})
-
-        # 2. Magic Cores (18 Elemental Cores)
-        for index, (name, title, color) in enumerate(spells()):
-            core_source = ROOT / f'art/cores/core_{name}.png'
-            if not core_source.is_file():
-                raise FileNotFoundError(f'Missing core texture: {core_source}')
-            for destination in (java / f'assets/advance_magic/textures/item/core_{name}.png', bedrock / f'textures/items/core_{name}.png'):
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(core_source, destination)
-            write_java_json(java / f'assets/advance_magic/models/item/core_{name}.json', {
-                'parent': 'minecraft:item/generated', 'textures': {'layer0': f'advance_magic:item/core_{name}'}})
-            write_java_json(java / f'assets/advance_magic/items/core_{name}.json', {
-                'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/core_{name}'}})
-            atlas[f'advance_magic.core_{name}'] = {'textures': f'textures/items/core_{name}'}
-            core_cases.append({'when': f'advance_magic:core_{name}', 'model': {'type': 'minecraft:model', 'model': f'advance_magic:item/core_{name}'}})
-            core_definitions.append({'type': 'definition', 'model': f'advance_magic:core_{name}',
-                                     'bedrock_identifier': f'advance_magic:core_{name}', 'display_name': core_titles[name],
-                                     'bedrock_options': {'icon': f'advance_magic.core_{name}', 'allow_offhand': True, 'display_handheld': False, 'creative_category': 'items'}})
 
         upgrade_definitions = {}
         for name, material, title in UPGRADES:
@@ -195,6 +139,11 @@ def main():
         judgment_assets.register_bedrock(bedrock,write_json,png)
         mythic_line_assets.register_java(java,write_java_json)
         mythic_line_assets.register_bedrock(bedrock,write_json)
+        legendary_effect_assets.register_java(java,write_java_json)
+        legendary_effect_assets.register_bedrock(bedrock,write_json)
+        legendary_light_assets.register_java(java,write_java_json)
+        legendary_light_assets.register_bedrock(bedrock,write_json)
+        legendary_block_assets.write_assets(bedrock)
         magic_java_atlas.register(java,write_java_json)
         # Include the authored staff resources in the real packs, not as a second
         # pack that could override the existing wand atlas or Geyser mappings.
@@ -220,42 +169,79 @@ def main():
         staff_definitions = json.loads((staff / 'geyser-mappings.json').read_text())['items']
         for material, rows in staff_definitions.items():
             upgrade_definitions.setdefault(material, []).extend(rows)
+        # Fixed-color potion sprites avoid the clients' different vanilla potion tint layers.
+        potion_definitions=[]
+        for quality in ('low','medium','good','supreme'):
+            name='mana_potion_'+quality
+            source=ROOT / f'art/potions/{name}.png'
+            for destination in (java / f'assets/advance_magic/textures/item/{name}.png',bedrock / f'textures/items/{name}.png'):
+                destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,destination)
+            write_java_json(java / f'assets/advance_magic/models/item/{name}.json',{
+                'parent':'minecraft:item/generated','textures':{'layer0':f'advance_magic:item/{name}'}})
+            write_java_json(java / f'assets/advance_magic/items/{name}.json',{
+                'model':{'type':'minecraft:model','model':f'advance_magic:item/{name}'}})
+            atlas[f'advance_magic.{name}']={'textures':f'textures/items/{name}'}
+            potion_definitions.append({'type':'definition','model':f'advance_magic:{name}',
+                'bedrock_identifier':f'advance_magic:{name}','display_name':'Mana Potion',
+                'bedrock_options':{'icon':f'advance_magic.{name}','allow_offhand':True,'display_handheld':False}})
+        upgrade_definitions['minecraft:potion']=potion_definitions
+        legendary_weapon_assets.register(java, bedrock, atlas, upgrade_definitions)
+        elemental_staff_assets.register(java, bedrock, atlas, upgrade_definitions)
+        wooden_staff_assets.register(java, bedrock, atlas, upgrade_definitions)
+        elemental_spell_assets.register(ROOT, java, bedrock, atlas, upgrade_definitions)
+        elemental_vfx_assets.register(java, bedrock)
+        seraph_armor_assets.register(java, bedrock, atlas, upgrade_definitions)
+        revenant_armor_assets.register(java, bedrock, atlas, upgrade_definitions)
+        skilltree_gui_assets.register(java, bedrock, atlas, upgrade_definitions)
+        menu_gui_assets.register(java, bedrock, atlas, upgrade_definitions)
+        legendary_seven_assets.register(java, bedrock, atlas, upgrade_definitions)
         write_json(bedrock / 'textures/item_texture.json', {'resource_pack_name': 'advance_magic', 'texture_name': 'atlas.items', 'texture_data': atlas})
         write_json(DIST / 'geyser-mappings.json', {
             'format_version': 2,
-            'items': {
-                'minecraft:carrot_on_a_stick': definitions,
-                'minecraft:heart_of_the_sea': core_definitions,
-                **upgrade_definitions
-            }
+            'items': upgrade_definitions
         })
-        shutil.copyfile(ROOT / 'art/wands/frost_nova.png', java / 'pack.png')
-        shutil.copyfile(ROOT / 'art/wands/frost_nova.png', bedrock / 'pack_icon.png')
+        icon = bedrock / 'textures/elemental_staffs/ice_icon.png'
+        shutil.copyfile(icon, java / 'pack.png')
+        shutil.copyfile(icon, bedrock / 'pack_icon.png')
         # Bedrock uses the pack UUID and version for cache/update identity. Keep this
         # monotonically increasing; content hashes can produce a lower revision.
         print('Bedrock content version: ' + '.'.join(map(str, BEDROCK_PACK_VERSION)))
         archive(java, DIST / 'advance-magic-java.zip')
         archive(bedrock, DIST / 'advance-magic-bedrock.mcpack')
+        # Editable models are a separate deliverable, never unnecessary client
+        # pack downloads. The same deterministic archive helper normalizes dates.
+        sources = Path(temp) / 'elemental-staff-sources'
+        authored = ROOT / 'art/elemental-staffs'
+        models = sorted((authored / 'blockbench').glob('*.bbmodel'))
+        if len(models) != len(STAFF_IDS):
+            raise ValueError('Source bundle requires exactly eight authored .bbmodel files')
+        for source in [*models, authored / 'metadata.json', authored / 'README.md']:
+            destination = sources / source.relative_to(authored)
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source, destination)
+        shutil.copyfile(ROOT.parent / 'tools/elemental_staff_assets.py', sources / 'elemental_staff_assets.py')
+        archive(sources, DIST / 'elemental-staff-sources.zip')
+        wooden_sources = Path(temp) / 'wooden-staff-sources'
+        wooden_art = ROOT / 'art/wooden-staff'
+        for name in ('wooden_staff.bbmodel', 'metadata.json', 'materials.png', 'wood.geometry.json', 'README.md'):
+            wooden_sources.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(wooden_art / name, wooden_sources / name)
+        shutil.copyfile(ROOT.parent / 'tools/wooden_staff_assets.py', wooden_sources / 'wooden_staff_assets.py')
+        archive(wooden_sources, DIST / 'wooden-staff-sources.zip')
         cards = []
-        for name, title, color in spells():
-            data = base64.b64encode((java / f'assets/advance_magic/textures/item/{name}.png').read_bytes()).decode('ascii')
-            cards.append(f'<article><img alt="{html.escape(title)} wand" src="data:image/png;base64,{data}"><h2>{html.escape(title)}</h2><code>{name}</code></article>')
-        core_cards = []
-        for name, title, color in spells():
-            c_name = core_titles[name]
-            data = base64.b64encode((java / f'assets/advance_magic/textures/item/core_{name}.png').read_bytes()).decode('ascii')
-            core_cards.append(f'<article><img alt="{html.escape(c_name)}" src="data:image/png;base64,{data}"><h2>{html.escape(c_name)}</h2><code>advance_magic:core_{name}</code></article>')
-
-        (DIST / 'wand-preview.html').write_text(
+        for name in STAFF_IDS:
+            title = name.title() + ' Staff'
+            data = base64.b64encode((bedrock / f'textures/elemental_staffs/{name}_icon.png').read_bytes()).decode('ascii')
+            cards.append(f'<article><img alt="{html.escape(title)}" src="data:image/png;base64,{data}"><h2>{html.escape(title)}</h2><code>advance_magic:staff_{name}</code></article>')
+        (DIST / 'elemental-staff-preview.html').write_text(
             '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-            '<title>Advance Magic — Wands & Cores</title><style>'
+            '<title>Advance Magic | Elemental Staffs</title><style>'
             'body{background:#14101d;color:#eee5ff;font:16px system-ui;max-width:1100px;margin:40px auto;padding:24px}'
             'main{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:40px}'
             'article{background:#221a30;border:1px solid #493758;border-radius:14px;padding:20px;text-align:center}'
             'img{width:128px;height:128px;image-rendering:pixelated}h2{font-size:17px}code{font-size:11px;color:#b9a8cd}'
-            '</style><h1>Advance Magic</h1><p>18 Arcane Wands &amp; 18 Elemental Cores · Java &amp; Bedrock Textures</p>'
-            '<h2>18 Arcane Wands</h2><main>' + ''.join(cards) + '</main>'
-            '<h2>18 Magic Cores (Void Vault Drops)</h2><main>' + ''.join(core_cards) + '</main></html>', encoding='utf8')
+            f'</style><h1>Advance Magic</h1><p>{len(STAFF_IDS)} Elemental Staffs | Java &amp; Bedrock</p>'
+            f'<h2>{len(STAFF_IDS)} Elemental Staffs</h2><main>' + ''.join(cards) + '</main></html>', encoding='utf8')
         hashes = {name: hashlib.sha1((DIST / name).read_bytes()).hexdigest()
                   for name in ('advance-magic-java.zip', 'advance-magic-bedrock.mcpack')}
         write_json(DIST / 'pack-hashes.json', hashes)

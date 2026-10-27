@@ -43,7 +43,7 @@ PALETTE = {
     'DARK_PRISMARINE': (57, 103, 90), 'VERDANT_FROGLIGHT': (207, 224, 177),
     'SHROOMLIGHT': (237, 161, 89), 'COPPER_BLOCK': (179, 102, 75),
 }
-TINTED_LEAVES = {'OAK_LEAVES', 'SPRUCE_LEAVES', 'BIRCH_LEAVES', 'VINE'}
+TINTED_LEAVES = {'OAK_LEAVES', 'DARK_OAK_LEAVES', 'SPRUCE_LEAVES', 'BIRCH_LEAVES', 'VINE'}
 EMISSION = {'SEA_LANTERN', 'LANTERN', 'SOUL_LANTERN', 'GLOWSTONE', 'SHROOMLIGHT',
             'VERDANT_FROGLIGHT', 'OCHRE_FROGLIGHT', 'PEARLESCENT_FROGLIGHT', 'END_ROD'}
 NOT_SOLID = {'WATER', 'CHAIN', 'IRON_CHAIN', 'LANTERN', 'SOUL_LANTERN', 'VINE', 'CAVE_VINES',
@@ -76,6 +76,7 @@ class Textures:
         if key in self.cache:
             return self.cache[key]
         name = material.lower()
+        name = name.removeprefix('waxed_')
         if name == 'bone_block': name += '_top' if axis == 1 else '_side'
         elif name in ('quartz_block', 'smooth_quartz'): name = 'quartz_block_top' if axis == 1 else 'quartz_block_side'
         elif name.endswith('_log') or name.endswith('_wood'):
@@ -86,15 +87,38 @@ class Textures:
         elif name == 'azalea': name = 'azalea_top' if axis == 1 else 'azalea_side'
         elif name in ('chain','iron_chain'): name = 'chain'
         elif name == 'moss_carpet': name = 'moss_block'
+        elif name.startswith('potted_'): name = name.removeprefix('potted_') if axis == 1 else 'flower_pot'
+        elif name == 'wheat': name = 'wheat_stage7'
+        elif name == 'carrots': name = 'carrots_stage3'
+        elif name == 'rose_bush': name = 'rose_bush_bottom'
+        elif name.endswith('_door'): name += '_bottom'
+        elif name.endswith('_bed'): name = name[:-4] + '_wool'
+        elif name.endswith('_wall_banner'): name = name.removesuffix('_wall_banner') + '_wool'
+        elif name == 'cake': name = 'cake_top' if axis == 1 else 'cake_side'
+        elif name == 'bell': name = 'gold_block'
+        elif name == 'lectern': name = 'lectern_top' if axis == 1 else 'lectern_sides'
+        elif name == 'grindstone': name = 'grindstone_pivot'
+        elif name == 'composter': name = 'composter_top' if axis == 1 else 'composter_side'
+        elif name == 'stonecutter': name = 'stonecutter_top' if axis == 1 else 'stonecutter_side'
+        elif name == 'farmland': name = 'farmland_moist' if axis == 1 else 'dirt'
+        elif name == 'barrel': name = 'barrel_top' if axis == 1 else 'barrel_side'
+        elif name == 'chest': name = 'oak_planks'
+        elif name == 'cauldron': name = 'cauldron_top' if axis == 1 else 'cauldron_side'
+        elif name == 'brewing_stand': name = 'brewing_stand_base' if axis == 1 else 'brewing_stand'
+        elif name == 'crafting_table': name = 'crafting_table_top' if axis == 1 else 'crafting_table_side'
+        elif name == 'smoker': name = 'smoker_top' if axis == 1 else 'smoker_side'
         elif name.endswith('_froglight'): name += '_top' if axis == 1 else '_side'
         elif name == 'bookshelf' and axis == 1: name = 'oak_planks'
         elif name.endswith('_planks'): pass
         elif name.endswith('_fence'): name = name[:-6] + '_planks'
         elif name.endswith('_slab'): name = name[:-5]
         elif name.endswith('_stairs'): name = name[:-7]
+        elif name.endswith('_pane'): name = name[:-5]
+        elif name.endswith('_carpet'): name = name[:-7] + '_wool'
+        if name == 'quartz': name = 'quartz_block_top' if axis == 1 else 'quartz_block_side'
         if name == 'smooth_quartz': name = 'quartz_block_top' if axis == 1 else 'quartz_block_side'
         if name in ('spruce','oak','dark_oak','cherry'): name += '_planks'
-        if name in ('stone_brick', 'mossy_stone_brick', 'deepslate_brick', 'polished_blackstone_brick'):
+        if name in ('stone_brick', 'mossy_stone_brick', 'deepslate_brick', 'deepslate_tile', 'polished_blackstone_brick'):
             name += 's'
         try:
             raw = self.jar.read(f'assets/minecraft/textures/block/{name}.png')

@@ -61,17 +61,11 @@ public final class IntegrationChecks extends JavaPlugin {
                 case "equals"->o==a[0];case "hashCode"->playerId.hashCode();
                 default->empty(m);
             });
-            ItemStack shield=plugin.relics().create(Relic.ETERNAL_AEGIS,1);
-            PlayerInteractEvent shieldUse=new PlayerInteractEvent(p,Action.RIGHT_CLICK_AIR,shield,null,BlockFace.SELF,EquipmentSlot.HAND);
-            shieldUse.setUseItemInHand(org.bukkit.event.Event.Result.ALLOW);plugin.relics().interact(shieldUse);
-            check(plugin.relics().immune(p),"shield activates full immunity");
-            EntityDamageEvent denied=new EntityDamageEvent(p,EntityDamageEvent.DamageCause.CUSTOM,10000);
-            plugin.relics().shieldDamage(denied);check(denied.isCancelled(),"shield cancels lethal damage");
             // Production claim path with a real Bukkit inventory and PDC, simulating a crash-replayed entitlement.
             YamlConfiguration ledger=(YamlConfiguration)field(plugin.dungeons(),"ledger");String root="pending."+playerId+".test-receipt";
-            ledger.set(root+".shards",8);ledger.set(root+".relic",Relic.RIFT_BLADE.name());
-            plugin.dungeons().claim(p);check(count(storage,Relic.VOID_SHARD)==8&&count(storage,Relic.RIFT_BLADE)==1,"guaranteed fragments and special reward delivered");
-            ledger.set(root+".shards",8);ledger.set(root+".relic",Relic.RIFT_BLADE.name());plugin.dungeons().claim(p);
+            ledger.set(root+".shards",8);ledger.set(root+".relic",Relic.RIFT_PICKAXE.name());
+            plugin.dungeons().claim(p);check(count(storage,Relic.VOID_SHARD)==8&&count(storage,Relic.RIFT_PICKAXE)==1,"guaranteed fragments and special reward delivered");
+            ledger.set(root+".shards",8);ledger.set(root+".relic",Relic.RIFT_PICKAXE.name());plugin.dungeons().claim(p);
             check(count(storage,Relic.VOID_SHARD)==8,"persisted receipt prevents replay duplication");
             for(int i=0;i<36;i++)storage.setItem(i,new ItemStack(Material.COBBLESTONE,64));
             ledger.set("pending."+playerId+".full.shards",8);plugin.dungeons().claim(p);

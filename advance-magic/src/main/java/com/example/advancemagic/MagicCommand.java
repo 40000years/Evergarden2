@@ -1,6 +1,6 @@
 package com.example.advancemagic;
 
-import com.example.advancemagic.spell.Spell;
+import com.example.advancemagic.item.ElementalStaffService.Element;
 import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -9,111 +9,60 @@ import java.util.*;
 
 public final class MagicCommand implements TabExecutor {
     private final AdvanceMagicPlugin plugin;
-    public MagicCommand(AdvanceMagicPlugin plugin){this.plugin=plugin;}
-    public boolean onCommand(CommandSender sender,Command command,String label,String[] args) {
-        if(args.length==0||args[0].equalsIgnoreCase("list")) {
-            sender.sendMessage(ChatColor.LIGHT_PURPLE+"Advance Magic: right-click a wand to cast.");
-            for(Spell s:Spell.values())sender.sendMessage(ChatColor.AQUA+s.id()+ChatColor.GRAY+" | "+s.mana+" mana | "+s.cooldown+"s | Core: Core of "+com.example.advancemagic.item.WandService.coreTitle(s));
-            sender.sendMessage(ChatColor.GRAY+"Craft: 8 Netherite Ingots / Nether Stars around a matching Evergarden Vault Core (mix allowed).");
-            sender.sendMessage(ChatColor.YELLOW+"เมนูคราฟ: "+ChatColor.AQUA+"/magic craft "+ChatColor.GREEN+"(คราฟคทา) "+ChatColor.GRAY+"(แอดมิน: /magic items)");
-            sender.sendMessage(ChatColor.GOLD+"ไม้เท้าบิน: "+ChatColor.GRAY+"หาได้จาก Whale, Garden, Observatory และ Evergarden Vault · คราฟต์ไม่ได้");
-            sender.sendMessage(ChatColor.GRAY+"ขณะขี่ กด Sprint เพื่อเร่ง หรือใช้ /magic turbo เพื่อเปิด/ปิด Turbo ค้าง");
-            return true;
+    private final com.example.advancemagic.item.ArmorSetService armor;
+    public MagicCommand(AdvanceMagicPlugin plugin){this.plugin=plugin;armor=new com.example.advancemagic.item.ArmorSetService(plugin);}
+    public boolean onCommand(CommandSender sender,Command command,String label,String[] args){
+        String action=args.length==0?"list":args[0].toLowerCase(Locale.ROOT);
+        if(action.equals("weapon")||action.equals("weapons"))return plugin.legendaryWeapons().command(sender,args);
+        if(action.equals("armor"))return armor.command(sender,args,this::resolvePlayer);
+        if(action.equals("list")){
+            sender.sendMessage(ChatColor.LIGHT_PURPLE+"Elemental Staffs · คทาธาตุ 8 แบบ + คทาไม้เริ่มต้น");
+            sender.sendMessage(ChatColor.AQUA+"Fire → Wind → Earth → Ice → Water → Fire");
+            sender.sendMessage(ChatColor.GOLD+"Lightning → Light → Dark → Lightning");
+            sender.sendMessage(ChatColor.GRAY+"จัดเวท: /spell · พัฒนาตัวละคร: /skilltree · ดูคทา: /magic staffs");return true;
         }
-        if(args[0].equalsIgnoreCase("items")||args[0].equalsIgnoreCase("craft")) {
-            boolean admin = args[0].equalsIgnoreCase("items");
-            if(admin && !sender.hasPermission("advance-magic.admin")) {
-                sender.sendMessage(ChatColor.RED+"คุณไม่มีสิทธิ์ใช้คำสั่งเสกของ กรุณาใช้ /magic craft เพื่อคราฟคทา");
-                return true;
-            }
-            if(sender instanceof Player player)plugin.itemMenu().open(player,admin);
-            else sender.sendMessage("Use this menu from in-game.");
-            return true;
+        if(action.equals("staffs")||action.equals("items")){
+            if(action.equals("items")&&!sender.hasPermission("advance-magic.admin")){sender.sendMessage(ChatColor.RED+"No permission.");return true;}
+            if(sender instanceof Player player)plugin.itemMenu().open(player,sender.hasPermission("advance-magic.admin"));
+            else sender.sendMessage("Use this menu in-game.");return true;
         }
-        if(args[0].equalsIgnoreCase("mana")&&sender instanceof Player p){
-            plugin.casts().actionbar(p,"");
-            var a=plugin.mana().account(p);
-            p.sendMessage(ChatColor.LIGHT_PURPLE+"[Advance Magic] "+ChatColor.AQUA+"Mana: "+String.format(Locale.ROOT,"%.1f/%.1f",a.manaExact(),a.maxMana())+
-                ChatColor.WHITE+" | Regen: "+ChatColor.GREEN+String.format(Locale.ROOT,"%.1f/s",a.regenRate())+
-                ChatColor.GRAY+" (เพิ่มขีดจำกัดถาวรได้จากพืชระดับตำนาน Evergarden)");
-            return true;
+        if(action.equals("staff")){
+            if(!sender.hasPermission("advance-magic.admin")){sender.sendMessage(ChatColor.RED+"No permission.");return true;}
+            if(args.length<3||args.length>4||!args[1].equalsIgnoreCase("give")){sender.sendMessage("/magic staff give <element|wood|all> [player]");return true;}
+            Player target=args.length==4?resolvePlayer(sender,args[3]):sender instanceof Player p?p:null;
+            Element element=Element.parse(args[2]);boolean all=args[2].equalsIgnoreCase("all");
+            boolean wood=args[2].equalsIgnoreCase("wood")||args[2].equalsIgnoreCase("wooden");
+            if(target==null||(!all&&!wood&&element==null)){sender.sendMessage(ChatColor.RED+"Unknown staff or online player.");return true;}
+            if(wood){giveOrDrop(target,plugin.staffSpells().createWoodenStaff());sender.sendMessage(ChatColor.GREEN+"Gave Amethystwood Staff to "+target.getName());return true;}
+            for(Element e:all?Element.values():new Element[]{element})giveOrDrop(target,plugin.staffSpells().createStaff(e,com.example.advancemagic.elemental.StaffSpellService.Tier.APPRENTICE));
+            sender.sendMessage(ChatColor.GREEN+"Gave "+(all?"all eight elemental staffs":element.title+" Staff")+" to "+target.getName());return true;
         }
-        if(args[0].equalsIgnoreCase("pack")) {
-            if(args.length>1&&args[1].equalsIgnoreCase("resend")) {
-                if(sender instanceof Player p) {
-                    plugin.packs().offer(p);
-                    sender.sendMessage(ChatColor.GREEN+"ส่ง Resource Pack ให้คุณใหม่แล้ว");
-                }
-                return true;
-            }
+        if(action.equals("craft")||action.equals("give")||action.equals("givecore")){
+            sender.sendMessage(ChatColor.YELLOW+"คทาและสูตรคราฟชุดเดิมถูกยกเลิกแล้ว · /magic staffs");
+            if(sender.hasPermission("advance-magic.admin"))sender.sendMessage(ChatColor.GRAY+"/magic staff give <element|all> [player]");return true;
+        }
+        if(action.equals("mana")&&sender instanceof Player p){
+            plugin.casts().actionbar(p,"");var a=plugin.mana().account(p);
+            p.sendMessage(ChatColor.AQUA+"Mana: "+String.format(Locale.ROOT,"%.1f/%.1f",a.manaExact(),a.maxMana())+" | Regen: "+String.format(Locale.ROOT,"%.1f/s",a.regenRate()));return true;
+        }
+        if(action.equals("pack")){
+            if(args.length>1&&args[1].equalsIgnoreCase("resend")){if(sender instanceof Player p)plugin.packs().resend(p);return true;}
             if(!sender.hasPermission("advance-magic.admin")){sender.sendMessage(ChatColor.RED+"No permission.");return true;}
             plugin.packs().describe(sender);return true;
         }
-        if(args[0].equalsIgnoreCase("turbo")) {
-            if(!(sender instanceof Player player)){sender.sendMessage("Use this command in-game.");return true;}
-            if(!plugin.flyingStaff().isRiding(player)){
-                sender.sendMessage(ChatColor.YELLOW+"ต้องขึ้นขี่ไม้เท้าบินก่อนจึงจะใช้ Turbo ได้");return true;
-            }
-            boolean enabled=plugin.flyingStaff().toggleTurbo(player);
-            sender.sendMessage(ChatColor.AQUA+(enabled?"เปิด Turbo ค้างแล้ว":"ปิด Turbo ค้างแล้ว"));
-            return true;
+        if(action.equals("turbo")){
+            if(!(sender instanceof Player p)){sender.sendMessage("Use this command in-game.");return true;}
+            if(!plugin.flyingStaff().isRiding(p)){sender.sendMessage(ChatColor.YELLOW+"ขึ้นขี่ไม้เท้าบินก่อนใช้ Turbo");return true;}
+            sender.sendMessage(ChatColor.AQUA+(plugin.flyingStaff().toggleTurbo(p)?"เปิด Turbo":"ปิด Turbo"));return true;
         }
-        if(args[0].equalsIgnoreCase("givestaff")) {
+        if(action.equals("givestaff")){
             if(!sender.hasPermission("advance-magic.admin")){sender.sendMessage(ChatColor.RED+"No permission.");return true;}
-            Player player=args.length>=2?resolvePlayer(sender,args[1]):sender instanceof Player p?p:null;
-            if(player==null){sender.sendMessage(ChatColor.RED+"Unknown online player. Usage: /magic givestaff [player]");return true;}
-            giveOrDrop(player,plugin.flyingStaff().create());
-            sender.sendMessage(ChatColor.GREEN+"Gave Flying Staff to "+player.getName());
-            return true;
+            Player p=args.length>=2?resolvePlayer(sender,args[1]):sender instanceof Player self?self:null;
+            if(p==null){sender.sendMessage("/magic givestaff [player]");return true;}
+            giveOrDrop(p,plugin.flyingStaff().create());sender.sendMessage(ChatColor.GREEN+"Gave Flying Staff to "+p.getName());return true;
         }
-        if(args[0].equalsIgnoreCase("givecore")||(args[0].equalsIgnoreCase("give")&&args.length>=4&&args[3].equalsIgnoreCase("core"))) {
-            if(!sender.hasPermission("advance-magic.admin")){sender.sendMessage(ChatColor.RED+"No permission.");return true;}
-            Player p;
-            Spell spell;
-            if(args[0].equalsIgnoreCase("givecore")&&args.length==2&&sender instanceof Player sp) {
-                p=sp;
-                spell=Spell.parse(args[1]);
-            } else if(args.length>=3) {
-                p=resolvePlayer(sender,args[1]);
-                spell=Spell.parse(args[2]);
-            } else {
-                sender.sendMessage(ChatColor.YELLOW+"Usage: /magic givecore [player] <spell>");
-                return true;
-            }
-            if(p==null||spell==null){sender.sendMessage(ChatColor.RED+"Unknown online player or spell. Use /magic list.");return true;}
-            giveOrDrop(p,plugin.wands().createCore(spell));
-            sender.sendMessage(ChatColor.GREEN+"Gave Core of "+com.example.advancemagic.item.WandService.coreTitle(spell)+" to "+p.getName());
-            return true;
-        }
-        if(args[0].equalsIgnoreCase("give")) {
-            if(!sender.hasPermission("advance-magic.admin")){sender.sendMessage(ChatColor.RED+"No permission.");return true;}
-            Player p;
-            Spell spell;
-            boolean isCore=false;
-            if(args.length==2&&sender instanceof Player sp) {
-                p=sp;
-                spell=Spell.parse(args[1]);
-            } else if(args.length==3&&sender instanceof Player sp&&(args[2].equalsIgnoreCase("core")||args[2].equalsIgnoreCase("wand"))) {
-                p=sp;
-                spell=Spell.parse(args[1]);
-                isCore=args[2].equalsIgnoreCase("core");
-            } else if(args.length>=3) {
-                p=resolvePlayer(sender,args[1]);
-                spell=Spell.parse(args[2]);
-                if(args.length>=4) isCore=args[3].equalsIgnoreCase("core");
-            } else {
-                sender.sendMessage(ChatColor.YELLOW+"Usage: /magic give [player] <spell> [wand|core]");
-                return true;
-            }
-            if(p==null||spell==null){sender.sendMessage(ChatColor.RED+"Unknown online player or spell. Use /magic list.");return true;}
-            ItemStack item=isCore?plugin.wands().createCore(spell):plugin.wands().create(spell);
-            giveOrDrop(p,item);
-            sender.sendMessage(ChatColor.GREEN+"Gave "+(isCore?"Core of "+com.example.advancemagic.item.WandService.coreTitle(spell):spell.title+" Wand")+" to "+p.getName());
-            return true;
-        }
-        sender.sendMessage("/magic [list|mana|craft|items|pack [resend]|givestaff [player]|turbo|give [player] <spell> [wand|core]|givecore [player] <spell>]");return true;
+        sender.sendMessage("/magic [list|staffs|staff give <element|all> [player]|mana|items|weapons|armor give <seraph|revenant> [piece|all] [player]|pack [resend]|givestaff [player]|turbo]");return true;
     }
-
     private Player resolvePlayer(CommandSender sender, String targetName) {
         if(targetName==null||targetName.isEmpty()) return sender instanceof Player p ? p : null;
         if(targetName.equalsIgnoreCase("@s")||targetName.equalsIgnoreCase("@p")) {
@@ -145,26 +94,18 @@ public final class MagicCommand implements TabExecutor {
         p.updateInventory();
     }
 
-    public List<String> onTabComplete(CommandSender sender,Command command,String alias,String[] args) {
+    public List<String> onTabComplete(CommandSender sender,Command command,String alias,String[] args){
+        if(args.length>1&&(args[0].equalsIgnoreCase("weapon")||args[0].equalsIgnoreCase("weapons")))return plugin.legendaryWeapons().complete(sender,args);
+        if(args.length>1&&args[0].equalsIgnoreCase("armor"))return armor.complete(sender,args);
         List<String> values=new ArrayList<>();
-        if(args.length==1){values.addAll(List.of("list","mana","craft","turbo"));if(sender.hasPermission("advance-magic.admin"))values.addAll(List.of("give","givecore","givestaff","pack","items"));}
-        if(args.length==2&&sender.hasPermission("advance-magic.admin")&&args[0].equalsIgnoreCase("givestaff"))
-            for(Player p:Bukkit.getOnlinePlayers())values.add(p.getName());
-        if(args.length==2&&sender.hasPermission("advance-magic.admin")&&args[0].equalsIgnoreCase("pack"))values.add("resend");
-        if(sender.hasPermission("advance-magic.admin")&&args.length>=2&&(args[0].equalsIgnoreCase("give")||args[0].equalsIgnoreCase("givecore"))) {
-            if(args.length==2) {
-                values.addAll(List.of("@s","@p","@a"));
-                for(Player p:Bukkit.getOnlinePlayers()) {
-                    values.add(p.getName());
-                    if(p.getName().startsWith(".")) values.add(p.getName().substring(1));
-                }
-                for(Spell s:Spell.values()) values.add(s.id());
+        if(args.length==1){values.addAll(List.of("list","staffs","mana","turbo","pack"));if(sender.hasPermission("advance-magic.admin"))values.addAll(List.of("staff","givestaff","items","weapons","weapon","armor"));}
+        if(args.length==2&&args[0].equalsIgnoreCase("pack"))values.add("resend");
+        if(sender.hasPermission("advance-magic.admin")){
+            if(args.length==2&&args[0].equalsIgnoreCase("staff"))values.add("give");
+            if(args.length==3&&args[0].equalsIgnoreCase("staff")&&args[1].equalsIgnoreCase("give")){for(Element e:Element.values())values.add(e.id());values.addAll(List.of("wood","all"));}
+            if((args.length==2&&args[0].equalsIgnoreCase("givestaff"))||(args.length==4&&args[0].equalsIgnoreCase("staff"))){
+                values.addAll(List.of("@s","@p"));for(Player p:Bukkit.getOnlinePlayers())values.add(p.getName());
             }
-            if(args.length==3) {
-                for(Spell s:Spell.values()) values.add(s.id());
-                if(args[0].equalsIgnoreCase("give")) values.addAll(List.of("wand","core"));
-            }
-            if(args.length==4&&args[0].equalsIgnoreCase("give")) values.addAll(List.of("wand","core"));
         }
         String prefix=args.length==0?"":args[args.length-1].toLowerCase(Locale.ROOT);
         return values.stream().filter(v->v.toLowerCase(Locale.ROOT).startsWith(prefix)).toList();

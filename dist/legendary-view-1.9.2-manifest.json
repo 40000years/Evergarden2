@@ -1,0 +1,9 @@
+{
+  "release": "1.9.2-legendary-view-fit",
+  "bedrock_pack": "2.12.2",
+  "sha256": "ba500b0d525310292890d007a09f076ba71880549264855d6664966b8d0eee4b",
+  "runtime": "PASS 58",
+  "assets": "PASS 225",
+  "hand_view_profiles": "PASS 145",
+  "scope": "First-person view fitting only. World geometry, third-person poses and hotbar icons match 1.9.1. Actual client framing remains unverified."
+}

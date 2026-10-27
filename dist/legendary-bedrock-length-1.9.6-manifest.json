@@ -1,0 +1,25 @@
+{
+  "version": "1.9.6-legendary-bedrock-length",
+  "bedrock_pack": "2.12.6",
+  "changed_weapons": [
+    "excalibur",
+    "longinus",
+    "tyrfing"
+  ],
+  "bedrock_first_person_scale_relative_to_1_9_5": 1.3,
+  "bedrock_positions_and_rotations": "Exact match to 1.9.5",
+  "unchanged": [
+    "Java pack",
+    "Mjolnir",
+    "Vajra",
+    "all third-person/F5 poses",
+    "all geometry",
+    "icons"
+  ],
+  "runtime": "PASS 58",
+  "assets": "PASS 225",
+  "hand_profiles": "PASS 145",
+  "relative_view_profiles": "PASS 32",
+  "real_client_rendering": "Not tested; gradual tuning against supplied client screenshots",
+  "sha256": "1ebe51cc990534e2578b5428f5a423959ac9a1c27bbb73b2033cae56d74b9d68"
+}

@@ -59,84 +59,6 @@
         }
       }
     ],
-    "minecraft:bow": [
-      {
-        "type": "definition",
-        "model": "minecraft:bow",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:storm_bow"
-        },
-        "bedrock_identifier": "voidscape:storm_bow",
-        "display_name": "Storm Verdict",
-        "bedrock_options": {
-          "icon": "voidscape.storm_bow",
-          "allow_offhand": true,
-          "display_handheld": true,
-          "creative_category": "equipment"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "minecraft:bow",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:nova_bow"
-        },
-        "bedrock_identifier": "voidscape:nova_bow",
-        "display_name": "Nova Bow",
-        "bedrock_options": {
-          "icon": "voidscape.nova_bow",
-          "allow_offhand": true,
-          "display_handheld": true,
-          "creative_category": "equipment"
-        }
-      }
-    ],
-    "minecraft:netherite_sword": [
-      {
-        "type": "definition",
-        "model": "minecraft:netherite_sword",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:rift_blade"
-        },
-        "bedrock_identifier": "voidscape:rift_blade",
-        "display_name": "Rift Blade",
-        "bedrock_options": {
-          "icon": "voidscape.rift_blade",
-          "allow_offhand": true,
-          "display_handheld": true,
-          "creative_category": "equipment"
-        }
-      }
-    ],
-    "minecraft:shield": [
-      {
-        "type": "definition",
-        "model": "minecraft:shield",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:eternal_aegis"
-        },
-        "bedrock_identifier": "voidscape:eternal_aegis",
-        "display_name": "Eternal Aegis",
-        "bedrock_options": {
-          "icon": "voidscape.eternal_aegis",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "equipment"
-        }
-      }
-    ],
     "minecraft:paper": [
       {
         "type": "definition",
@@ -191,76 +113,14 @@
           "display_handheld": false,
           "creative_category": "items"
         }
-      }
-    ],
-    "minecraft:sugar": [
+      },
       {
         "type": "definition",
-        "model": "minecraft:sugar",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:astral_dust"
-        },
-        "bedrock_identifier": "voidscape:astral_dust",
-        "display_name": "Astral Dust",
+        "model": "voidscape:pet_egg",
+        "bedrock_identifier": "voidscape:pet_egg",
+        "display_name": "Pet Egg",
         "bedrock_options": {
-          "icon": "voidscape.astral_dust",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:prismarine_shard": [
-      {
-        "type": "definition",
-        "model": "minecraft:prismarine_shard",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:key_shard"
-        },
-        "bedrock_identifier": "voidscape:key_shard",
-        "display_name": "Evergarden Key Shard",
-        "bedrock_options": {
-          "icon": "voidscape.key_shard",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:flint": [
-      {
-        "type": "definition",
-        "model": "minecraft:flint",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:repair_stone"
-        },
-        "bedrock_identifier": "voidscape:repair_stone",
-        "display_name": "Vault Repair Stone",
-        "bedrock_options": {
-          "icon": "voidscape.repair_stone",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:honey_bottle": [
-      {
-        "type": "definition",
-        "model": "voidscape:void_elixir",
-        "bedrock_identifier": "voidscape:void_elixir",
-        "display_name": "Void Walker Elixir",
-        "bedrock_options": {
-          "icon": "voidscape.void_elixir",
+          "icon": "voidscape.pet_egg",
           "allow_offhand": true,
           "display_handheld": false,
           "creative_category": "items"
@@ -339,1858 +199,9 @@
           "display_handheld": false,
           "creative_category": "equipment"
         }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_mana_dew_berry_stage_0",
-        "bedrock_identifier": "voidscape:crop_mana_dew_berry_stage_0",
-        "display_name": "Blueberry (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_mana_dew_berry_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_mana_dew_berry_stage_1",
-        "bedrock_identifier": "voidscape:crop_mana_dew_berry_stage_1",
-        "display_name": "Blueberry (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_mana_dew_berry_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_mana_dew_berry_stage_2",
-        "bedrock_identifier": "voidscape:crop_mana_dew_berry_stage_2",
-        "display_name": "Blueberry (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_mana_dew_berry_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_chameleon_leaf_stage_0",
-        "bedrock_identifier": "voidscape:crop_chameleon_leaf_stage_0",
-        "display_name": "Lettuce (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_chameleon_leaf_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_chameleon_leaf_stage_1",
-        "bedrock_identifier": "voidscape:crop_chameleon_leaf_stage_1",
-        "display_name": "Lettuce (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_chameleon_leaf_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_chameleon_leaf_stage_2",
-        "bedrock_identifier": "voidscape:crop_chameleon_leaf_stage_2",
-        "display_name": "Lettuce (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_chameleon_leaf_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_fairy_mushroom_stage_0",
-        "bedrock_identifier": "voidscape:crop_fairy_mushroom_stage_0",
-        "display_name": "Truffle (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_fairy_mushroom_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_fairy_mushroom_stage_1",
-        "bedrock_identifier": "voidscape:crop_fairy_mushroom_stage_1",
-        "display_name": "Truffle (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_fairy_mushroom_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_fairy_mushroom_stage_2",
-        "bedrock_identifier": "voidscape:crop_fairy_mushroom_stage_2",
-        "display_name": "Truffle (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_fairy_mushroom_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_magnetic_squash_stage_0",
-        "bedrock_identifier": "voidscape:crop_magnetic_squash_stage_0",
-        "display_name": "Butternut Squash (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_magnetic_squash_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_magnetic_squash_stage_1",
-        "bedrock_identifier": "voidscape:crop_magnetic_squash_stage_1",
-        "display_name": "Butternut Squash (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_magnetic_squash_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_magnetic_squash_stage_2",
-        "bedrock_identifier": "voidscape:crop_magnetic_squash_stage_2",
-        "display_name": "Butternut Squash (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_magnetic_squash_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_mountain_walker_bamboo_stage_0",
-        "bedrock_identifier": "voidscape:crop_mountain_walker_bamboo_stage_0",
-        "display_name": "Leek (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_mountain_walker_bamboo_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_mountain_walker_bamboo_stage_1",
-        "bedrock_identifier": "voidscape:crop_mountain_walker_bamboo_stage_1",
-        "display_name": "Leek (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_mountain_walker_bamboo_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_mountain_walker_bamboo_stage_2",
-        "bedrock_identifier": "voidscape:crop_mountain_walker_bamboo_stage_2",
-        "display_name": "Leek (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_mountain_walker_bamboo_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_lumberjack_acorn_stage_0",
-        "bedrock_identifier": "voidscape:crop_lumberjack_acorn_stage_0",
-        "display_name": "Chestnut (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_lumberjack_acorn_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_lumberjack_acorn_stage_1",
-        "bedrock_identifier": "voidscape:crop_lumberjack_acorn_stage_1",
-        "display_name": "Chestnut (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_lumberjack_acorn_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_lumberjack_acorn_stage_2",
-        "bedrock_identifier": "voidscape:crop_lumberjack_acorn_stage_2",
-        "display_name": "Chestnut (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_lumberjack_acorn_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_blood_thorn_tomato_stage_0",
-        "bedrock_identifier": "voidscape:crop_blood_thorn_tomato_stage_0",
-        "display_name": "Tomato (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_blood_thorn_tomato_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_blood_thorn_tomato_stage_1",
-        "bedrock_identifier": "voidscape:crop_blood_thorn_tomato_stage_1",
-        "display_name": "Tomato (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_blood_thorn_tomato_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_blood_thorn_tomato_stage_2",
-        "bedrock_identifier": "voidscape:crop_blood_thorn_tomato_stage_2",
-        "display_name": "Tomato (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_blood_thorn_tomato_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_frostbite_radish_stage_0",
-        "bedrock_identifier": "voidscape:crop_frostbite_radish_stage_0",
-        "display_name": "Radish (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_frostbite_radish_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_frostbite_radish_stage_1",
-        "bedrock_identifier": "voidscape:crop_frostbite_radish_stage_1",
-        "display_name": "Radish (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_frostbite_radish_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_frostbite_radish_stage_2",
-        "bedrock_identifier": "voidscape:crop_frostbite_radish_stage_2",
-        "display_name": "Radish (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_frostbite_radish_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_thunder_kernel_corn_stage_0",
-        "bedrock_identifier": "voidscape:crop_thunder_kernel_corn_stage_0",
-        "display_name": "Corn (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_thunder_kernel_corn_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_thunder_kernel_corn_stage_1",
-        "bedrock_identifier": "voidscape:crop_thunder_kernel_corn_stage_1",
-        "display_name": "Corn (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_thunder_kernel_corn_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_thunder_kernel_corn_stage_2",
-        "bedrock_identifier": "voidscape:crop_thunder_kernel_corn_stage_2",
-        "display_name": "Corn (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_thunder_kernel_corn_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_reapers_garlic_stage_0",
-        "bedrock_identifier": "voidscape:crop_reapers_garlic_stage_0",
-        "display_name": "Garlic (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_reapers_garlic_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_reapers_garlic_stage_1",
-        "bedrock_identifier": "voidscape:crop_reapers_garlic_stage_1",
-        "display_name": "Garlic (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_reapers_garlic_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_reapers_garlic_stage_2",
-        "bedrock_identifier": "voidscape:crop_reapers_garlic_stage_2",
-        "display_name": "Garlic (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_reapers_garlic_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_titan_pumpkin_stage_0",
-        "bedrock_identifier": "voidscape:crop_titan_pumpkin_stage_0",
-        "display_name": "Eggplant (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_titan_pumpkin_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_titan_pumpkin_stage_1",
-        "bedrock_identifier": "voidscape:crop_titan_pumpkin_stage_1",
-        "display_name": "Eggplant (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_titan_pumpkin_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_titan_pumpkin_stage_2",
-        "bedrock_identifier": "voidscape:crop_titan_pumpkin_stage_2",
-        "display_name": "Eggplant (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_titan_pumpkin_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_kinetic_pea_pod_stage_0",
-        "bedrock_identifier": "voidscape:crop_kinetic_pea_pod_stage_0",
-        "display_name": "Green Peas (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_kinetic_pea_pod_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_kinetic_pea_pod_stage_1",
-        "bedrock_identifier": "voidscape:crop_kinetic_pea_pod_stage_1",
-        "display_name": "Green Peas (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_kinetic_pea_pod_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_kinetic_pea_pod_stage_2",
-        "bedrock_identifier": "voidscape:crop_kinetic_pea_pod_stage_2",
-        "display_name": "Green Peas (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_kinetic_pea_pod_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_twilight_grape_stage_0",
-        "bedrock_identifier": "voidscape:crop_twilight_grape_stage_0",
-        "display_name": "Grape (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_twilight_grape_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_twilight_grape_stage_1",
-        "bedrock_identifier": "voidscape:crop_twilight_grape_stage_1",
-        "display_name": "Grape (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_twilight_grape_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_twilight_grape_stage_2",
-        "bedrock_identifier": "voidscape:crop_twilight_grape_stage_2",
-        "display_name": "Grape (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_twilight_grape_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_void_feather_blossom_stage_0",
-        "bedrock_identifier": "voidscape:crop_void_feather_blossom_stage_0",
-        "display_name": "Red Cabbage (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_void_feather_blossom_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_void_feather_blossom_stage_1",
-        "bedrock_identifier": "voidscape:crop_void_feather_blossom_stage_1",
-        "display_name": "Red Cabbage (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_void_feather_blossom_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_void_feather_blossom_stage_2",
-        "bedrock_identifier": "voidscape:crop_void_feather_blossom_stage_2",
-        "display_name": "Red Cabbage (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_void_feather_blossom_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_lodestone_gourd_stage_0",
-        "bedrock_identifier": "voidscape:crop_lodestone_gourd_stage_0",
-        "display_name": "Bottle Gourd (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_lodestone_gourd_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_lodestone_gourd_stage_1",
-        "bedrock_identifier": "voidscape:crop_lodestone_gourd_stage_1",
-        "display_name": "Bottle Gourd (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_lodestone_gourd_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_lodestone_gourd_stage_2",
-        "bedrock_identifier": "voidscape:crop_lodestone_gourd_stage_2",
-        "display_name": "Bottle Gourd (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_lodestone_gourd_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_abyssal_kelp_stage_0",
-        "bedrock_identifier": "voidscape:crop_abyssal_kelp_stage_0",
-        "display_name": "Celery (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_abyssal_kelp_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_abyssal_kelp_stage_1",
-        "bedrock_identifier": "voidscape:crop_abyssal_kelp_stage_1",
-        "display_name": "Celery (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_abyssal_kelp_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_abyssal_kelp_stage_2",
-        "bedrock_identifier": "voidscape:crop_abyssal_kelp_stage_2",
-        "display_name": "Celery (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_abyssal_kelp_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_glider_spore_stage_0",
-        "bedrock_identifier": "voidscape:crop_glider_spore_stage_0",
-        "display_name": "Broccoli (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_glider_spore_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_glider_spore_stage_1",
-        "bedrock_identifier": "voidscape:crop_glider_spore_stage_1",
-        "display_name": "Broccoli (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_glider_spore_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_glider_spore_stage_2",
-        "bedrock_identifier": "voidscape:crop_glider_spore_stage_2",
-        "display_name": "Broccoli (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_glider_spore_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_star_anise_stage_0",
-        "bedrock_identifier": "voidscape:crop_star_anise_stage_0",
-        "display_name": "Star Anise (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_star_anise_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_star_anise_stage_1",
-        "bedrock_identifier": "voidscape:crop_star_anise_stage_1",
-        "display_name": "Star Anise (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_star_anise_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_star_anise_stage_2",
-        "bedrock_identifier": "voidscape:crop_star_anise_stage_2",
-        "display_name": "Star Anise (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_star_anise_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_fortune_beet_stage_0",
-        "bedrock_identifier": "voidscape:crop_fortune_beet_stage_0",
-        "display_name": "Turnip (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_fortune_beet_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_fortune_beet_stage_1",
-        "bedrock_identifier": "voidscape:crop_fortune_beet_stage_1",
-        "display_name": "Turnip (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_fortune_beet_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_fortune_beet_stage_2",
-        "bedrock_identifier": "voidscape:crop_fortune_beet_stage_2",
-        "display_name": "Turnip (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_fortune_beet_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_demeters_melon_stage_0",
-        "bedrock_identifier": "voidscape:crop_demeters_melon_stage_0",
-        "display_name": "Papaya (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_demeters_melon_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_demeters_melon_stage_1",
-        "bedrock_identifier": "voidscape:crop_demeters_melon_stage_1",
-        "display_name": "Papaya (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_demeters_melon_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_demeters_melon_stage_2",
-        "bedrock_identifier": "voidscape:crop_demeters_melon_stage_2",
-        "display_name": "Papaya (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_demeters_melon_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_prism_shard_carrot_stage_0",
-        "bedrock_identifier": "voidscape:crop_prism_shard_carrot_stage_0",
-        "display_name": "Cassava (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_prism_shard_carrot_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_prism_shard_carrot_stage_1",
-        "bedrock_identifier": "voidscape:crop_prism_shard_carrot_stage_1",
-        "display_name": "Cassava (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_prism_shard_carrot_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_prism_shard_carrot_stage_2",
-        "bedrock_identifier": "voidscape:crop_prism_shard_carrot_stage_2",
-        "display_name": "Cassava (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_prism_shard_carrot_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_goldleaf_herb_stage_0",
-        "bedrock_identifier": "voidscape:crop_goldleaf_herb_stage_0",
-        "display_name": "Spinach (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_goldleaf_herb_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_goldleaf_herb_stage_1",
-        "bedrock_identifier": "voidscape:crop_goldleaf_herb_stage_1",
-        "display_name": "Spinach (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_goldleaf_herb_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_goldleaf_herb_stage_2",
-        "bedrock_identifier": "voidscape:crop_goldleaf_herb_stage_2",
-        "display_name": "Spinach (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_goldleaf_herb_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_soul_ward_bulb_stage_0",
-        "bedrock_identifier": "voidscape:crop_soul_ward_bulb_stage_0",
-        "display_name": "Onion (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_soul_ward_bulb_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_soul_ward_bulb_stage_1",
-        "bedrock_identifier": "voidscape:crop_soul_ward_bulb_stage_1",
-        "display_name": "Onion (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_soul_ward_bulb_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_soul_ward_bulb_stage_2",
-        "bedrock_identifier": "voidscape:crop_soul_ward_bulb_stage_2",
-        "display_name": "Onion (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_soul_ward_bulb_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_chrono_pepper_stage_0",
-        "bedrock_identifier": "voidscape:crop_chrono_pepper_stage_0",
-        "display_name": "Bell Pepper (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_chrono_pepper_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_chrono_pepper_stage_1",
-        "bedrock_identifier": "voidscape:crop_chrono_pepper_stage_1",
-        "display_name": "Bell Pepper (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_chrono_pepper_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_chrono_pepper_stage_2",
-        "bedrock_identifier": "voidscape:crop_chrono_pepper_stage_2",
-        "display_name": "Bell Pepper (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_chrono_pepper_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_ancient_astral_root_stage_0",
-        "bedrock_identifier": "voidscape:crop_ancient_astral_root_stage_0",
-        "display_name": "Sweet Potato (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_ancient_astral_root_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_ancient_astral_root_stage_1",
-        "bedrock_identifier": "voidscape:crop_ancient_astral_root_stage_1",
-        "display_name": "Sweet Potato (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_ancient_astral_root_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_ancient_astral_root_stage_2",
-        "bedrock_identifier": "voidscape:crop_ancient_astral_root_stage_2",
-        "display_name": "Sweet Potato (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_ancient_astral_root_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_yggdrasil_sprout_stage_0",
-        "bedrock_identifier": "voidscape:crop_yggdrasil_sprout_stage_0",
-        "display_name": "Asparagus (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_yggdrasil_sprout_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_yggdrasil_sprout_stage_1",
-        "bedrock_identifier": "voidscape:crop_yggdrasil_sprout_stage_1",
-        "display_name": "Asparagus (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_yggdrasil_sprout_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_yggdrasil_sprout_stage_2",
-        "bedrock_identifier": "voidscape:crop_yggdrasil_sprout_stage_2",
-        "display_name": "Asparagus (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_yggdrasil_sprout_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_void_overcharge_fig_stage_0",
-        "bedrock_identifier": "voidscape:crop_void_overcharge_fig_stage_0",
-        "display_name": "Fig (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_void_overcharge_fig_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_void_overcharge_fig_stage_1",
-        "bedrock_identifier": "voidscape:crop_void_overcharge_fig_stage_1",
-        "display_name": "Fig (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_void_overcharge_fig_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_void_overcharge_fig_stage_2",
-        "bedrock_identifier": "voidscape:crop_void_overcharge_fig_stage_2",
-        "display_name": "Fig (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_void_overcharge_fig_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_ethereal_mint_stage_0",
-        "bedrock_identifier": "voidscape:crop_ethereal_mint_stage_0",
-        "display_name": "Mint (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_ethereal_mint_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_ethereal_mint_stage_1",
-        "bedrock_identifier": "voidscape:crop_ethereal_mint_stage_1",
-        "display_name": "Mint (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_ethereal_mint_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_ethereal_mint_stage_2",
-        "bedrock_identifier": "voidscape:crop_ethereal_mint_stage_2",
-        "display_name": "Mint (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_ethereal_mint_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_bloodburn_chili_stage_0",
-        "bedrock_identifier": "voidscape:crop_bloodburn_chili_stage_0",
-        "display_name": "Chili Pepper (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_bloodburn_chili_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_bloodburn_chili_stage_1",
-        "bedrock_identifier": "voidscape:crop_bloodburn_chili_stage_1",
-        "display_name": "Chili Pepper (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_bloodburn_chili_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_bloodburn_chili_stage_2",
-        "bedrock_identifier": "voidscape:crop_bloodburn_chili_stage_2",
-        "display_name": "Chili Pepper (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_bloodburn_chili_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_omni_pomegranate_stage_0",
-        "bedrock_identifier": "voidscape:crop_omni_pomegranate_stage_0",
-        "display_name": "Pomegranate (Stage 0)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_omni_pomegranate_stage_0",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_omni_pomegranate_stage_1",
-        "bedrock_identifier": "voidscape:crop_omni_pomegranate_stage_1",
-        "display_name": "Pomegranate (Stage 1)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_omni_pomegranate_stage_1",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_omni_pomegranate_stage_2",
-        "bedrock_identifier": "voidscape:crop_omni_pomegranate_stage_2",
-        "display_name": "Pomegranate (Stage 2)",
-        "bedrock_options": {
-          "icon": "voidscape.crop_omni_pomegranate_stage_2",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:beetroot_seeds": [
-      {
-        "type": "definition",
-        "model": "voidscape:seed_mana_dew_berry",
-        "bedrock_identifier": "voidscape:seed_mana_dew_berry",
-        "display_name": "Seed of Blueberry",
-        "bedrock_options": {
-          "icon": "voidscape.seed_mana_dew_berry",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_fairy_mushroom",
-        "bedrock_identifier": "voidscape:seed_fairy_mushroom",
-        "display_name": "Seed of Truffle",
-        "bedrock_options": {
-          "icon": "voidscape.seed_fairy_mushroom",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_frostbite_radish",
-        "bedrock_identifier": "voidscape:seed_frostbite_radish",
-        "display_name": "Seed of Radish",
-        "bedrock_options": {
-          "icon": "voidscape.seed_frostbite_radish",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_reapers_garlic",
-        "bedrock_identifier": "voidscape:seed_reapers_garlic",
-        "display_name": "Seed of Garlic",
-        "bedrock_options": {
-          "icon": "voidscape.seed_reapers_garlic",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_glider_spore",
-        "bedrock_identifier": "voidscape:seed_glider_spore",
-        "display_name": "Seed of Broccoli",
-        "bedrock_options": {
-          "icon": "voidscape.seed_glider_spore",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_fortune_beet",
-        "bedrock_identifier": "voidscape:seed_fortune_beet",
-        "display_name": "Seed of Turnip",
-        "bedrock_options": {
-          "icon": "voidscape.seed_fortune_beet",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_soul_ward_bulb",
-        "bedrock_identifier": "voidscape:seed_soul_ward_bulb",
-        "display_name": "Seed of Onion",
-        "bedrock_options": {
-          "icon": "voidscape.seed_soul_ward_bulb",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:sweet_berries": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_mana_dew_berry",
-        "bedrock_identifier": "voidscape:crop_mana_dew_berry",
-        "display_name": "Blueberry",
-        "bedrock_options": {
-          "icon": "voidscape.crop_mana_dew_berry",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_kinetic_pea_pod",
-        "bedrock_identifier": "voidscape:crop_kinetic_pea_pod",
-        "display_name": "Green Peas",
-        "bedrock_options": {
-          "icon": "voidscape.crop_kinetic_pea_pod",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_twilight_grape",
-        "bedrock_identifier": "voidscape:crop_twilight_grape",
-        "display_name": "Grape",
-        "bedrock_options": {
-          "icon": "voidscape.crop_twilight_grape",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:wheat_seeds": [
-      {
-        "type": "definition",
-        "model": "voidscape:seed_chameleon_leaf",
-        "bedrock_identifier": "voidscape:seed_chameleon_leaf",
-        "display_name": "Seed of Lettuce",
-        "bedrock_options": {
-          "icon": "voidscape.seed_chameleon_leaf",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_mountain_walker_bamboo",
-        "bedrock_identifier": "voidscape:seed_mountain_walker_bamboo",
-        "display_name": "Seed of Leek",
-        "bedrock_options": {
-          "icon": "voidscape.seed_mountain_walker_bamboo",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_lumberjack_acorn",
-        "bedrock_identifier": "voidscape:seed_lumberjack_acorn",
-        "display_name": "Seed of Chestnut",
-        "bedrock_options": {
-          "icon": "voidscape.seed_lumberjack_acorn",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_thunder_kernel_corn",
-        "bedrock_identifier": "voidscape:seed_thunder_kernel_corn",
-        "display_name": "Seed of Corn",
-        "bedrock_options": {
-          "icon": "voidscape.seed_thunder_kernel_corn",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_kinetic_pea_pod",
-        "bedrock_identifier": "voidscape:seed_kinetic_pea_pod",
-        "display_name": "Seed of Green Peas",
-        "bedrock_options": {
-          "icon": "voidscape.seed_kinetic_pea_pod",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_abyssal_kelp",
-        "bedrock_identifier": "voidscape:seed_abyssal_kelp",
-        "display_name": "Seed of Celery",
-        "bedrock_options": {
-          "icon": "voidscape.seed_abyssal_kelp",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_ethereal_mint",
-        "bedrock_identifier": "voidscape:seed_ethereal_mint",
-        "display_name": "Seed of Mint",
-        "bedrock_options": {
-          "icon": "voidscape.seed_ethereal_mint",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:dried_kelp": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_chameleon_leaf",
-        "bedrock_identifier": "voidscape:crop_chameleon_leaf",
-        "display_name": "Lettuce",
-        "bedrock_options": {
-          "icon": "voidscape.crop_chameleon_leaf",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_void_feather_blossom",
-        "bedrock_identifier": "voidscape:crop_void_feather_blossom",
-        "display_name": "Red Cabbage",
-        "bedrock_options": {
-          "icon": "voidscape.crop_void_feather_blossom",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_abyssal_kelp",
-        "bedrock_identifier": "voidscape:crop_abyssal_kelp",
-        "display_name": "Celery",
-        "bedrock_options": {
-          "icon": "voidscape.crop_abyssal_kelp",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:cookie": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_fairy_mushroom",
-        "bedrock_identifier": "voidscape:crop_fairy_mushroom",
-        "display_name": "Truffle",
-        "bedrock_options": {
-          "icon": "voidscape.crop_fairy_mushroom",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_lumberjack_acorn",
-        "bedrock_identifier": "voidscape:crop_lumberjack_acorn",
-        "display_name": "Chestnut",
-        "bedrock_options": {
-          "icon": "voidscape.crop_lumberjack_acorn",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_glider_spore",
-        "bedrock_identifier": "voidscape:crop_glider_spore",
-        "display_name": "Broccoli",
-        "bedrock_options": {
-          "icon": "voidscape.crop_glider_spore",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:pumpkin_seeds": [
-      {
-        "type": "definition",
-        "model": "voidscape:seed_magnetic_squash",
-        "bedrock_identifier": "voidscape:seed_magnetic_squash",
-        "display_name": "Seed of Butternut Squash",
-        "bedrock_options": {
-          "icon": "voidscape.seed_magnetic_squash",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_blood_thorn_tomato",
-        "bedrock_identifier": "voidscape:seed_blood_thorn_tomato",
-        "display_name": "Seed of Tomato",
-        "bedrock_options": {
-          "icon": "voidscape.seed_blood_thorn_tomato",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_titan_pumpkin",
-        "bedrock_identifier": "voidscape:seed_titan_pumpkin",
-        "display_name": "Seed of Eggplant",
-        "bedrock_options": {
-          "icon": "voidscape.seed_titan_pumpkin",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_chrono_pepper",
-        "bedrock_identifier": "voidscape:seed_chrono_pepper",
-        "display_name": "Seed of Bell Pepper",
-        "bedrock_options": {
-          "icon": "voidscape.seed_chrono_pepper",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_bloodburn_chili",
-        "bedrock_identifier": "voidscape:seed_bloodburn_chili",
-        "display_name": "Seed of Chili Pepper",
-        "bedrock_options": {
-          "icon": "voidscape.seed_bloodburn_chili",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:pumpkin_pie": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_magnetic_squash",
-        "bedrock_identifier": "voidscape:crop_magnetic_squash",
-        "display_name": "Butternut Squash",
-        "bedrock_options": {
-          "icon": "voidscape.crop_magnetic_squash",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_titan_pumpkin",
-        "bedrock_identifier": "voidscape:crop_titan_pumpkin",
-        "display_name": "Eggplant",
-        "bedrock_options": {
-          "icon": "voidscape.crop_titan_pumpkin",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:carrot": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_mountain_walker_bamboo",
-        "bedrock_identifier": "voidscape:crop_mountain_walker_bamboo",
-        "display_name": "Leek",
-        "bedrock_options": {
-          "icon": "voidscape.crop_mountain_walker_bamboo",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_frostbite_radish",
-        "bedrock_identifier": "voidscape:crop_frostbite_radish",
-        "display_name": "Radish",
-        "bedrock_options": {
-          "icon": "voidscape.crop_frostbite_radish",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_fortune_beet",
-        "bedrock_identifier": "voidscape:crop_fortune_beet",
-        "display_name": "Turnip",
-        "bedrock_options": {
-          "icon": "voidscape.crop_fortune_beet",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:apple": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_blood_thorn_tomato",
-        "bedrock_identifier": "voidscape:crop_blood_thorn_tomato",
-        "display_name": "Tomato",
-        "bedrock_options": {
-          "icon": "voidscape.crop_blood_thorn_tomato",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_lodestone_gourd",
-        "bedrock_identifier": "voidscape:crop_lodestone_gourd",
-        "display_name": "Bottle Gourd",
-        "bedrock_options": {
-          "icon": "voidscape.crop_lodestone_gourd",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_chrono_pepper",
-        "bedrock_identifier": "voidscape:crop_chrono_pepper",
-        "display_name": "Bell Pepper",
-        "bedrock_options": {
-          "icon": "voidscape.crop_chrono_pepper",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_ethereal_mint",
-        "bedrock_identifier": "voidscape:crop_ethereal_mint",
-        "display_name": "Mint",
-        "bedrock_options": {
-          "icon": "voidscape.crop_ethereal_mint",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_bloodburn_chili",
-        "bedrock_identifier": "voidscape:crop_bloodburn_chili",
-        "display_name": "Chili Pepper",
-        "bedrock_options": {
-          "icon": "voidscape.crop_bloodburn_chili",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:bread": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_thunder_kernel_corn",
-        "bedrock_identifier": "voidscape:crop_thunder_kernel_corn",
-        "display_name": "Corn",
-        "bedrock_options": {
-          "icon": "voidscape.crop_thunder_kernel_corn",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:golden_carrot": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_reapers_garlic",
-        "bedrock_identifier": "voidscape:crop_reapers_garlic",
-        "display_name": "Garlic",
-        "bedrock_options": {
-          "icon": "voidscape.crop_reapers_garlic",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_star_anise",
-        "bedrock_identifier": "voidscape:crop_star_anise",
-        "display_name": "Star Anise",
-        "bedrock_options": {
-          "icon": "voidscape.crop_star_anise",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_prism_shard_carrot",
-        "bedrock_identifier": "voidscape:crop_prism_shard_carrot",
-        "display_name": "Cassava",
-        "bedrock_options": {
-          "icon": "voidscape.crop_prism_shard_carrot",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_soul_ward_bulb",
-        "bedrock_identifier": "voidscape:crop_soul_ward_bulb",
-        "display_name": "Onion",
-        "bedrock_options": {
-          "icon": "voidscape.crop_soul_ward_bulb",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_void_overcharge_fig",
-        "bedrock_identifier": "voidscape:crop_void_overcharge_fig",
-        "display_name": "Fig",
-        "bedrock_options": {
-          "icon": "voidscape.crop_void_overcharge_fig",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:melon_seeds": [
-      {
-        "type": "definition",
-        "model": "voidscape:seed_twilight_grape",
-        "bedrock_identifier": "voidscape:seed_twilight_grape",
-        "display_name": "Seed of Grape",
-        "bedrock_options": {
-          "icon": "voidscape.seed_twilight_grape",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_lodestone_gourd",
-        "bedrock_identifier": "voidscape:seed_lodestone_gourd",
-        "display_name": "Seed of Bottle Gourd",
-        "bedrock_options": {
-          "icon": "voidscape.seed_lodestone_gourd",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_demeters_melon",
-        "bedrock_identifier": "voidscape:seed_demeters_melon",
-        "display_name": "Seed of Papaya",
-        "bedrock_options": {
-          "icon": "voidscape.seed_demeters_melon",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:torchflower_seeds": [
-      {
-        "type": "definition",
-        "model": "voidscape:seed_void_feather_blossom",
-        "bedrock_identifier": "voidscape:seed_void_feather_blossom",
-        "display_name": "Seed of Red Cabbage",
-        "bedrock_options": {
-          "icon": "voidscape.seed_void_feather_blossom",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_goldleaf_herb",
-        "bedrock_identifier": "voidscape:seed_goldleaf_herb",
-        "display_name": "Seed of Spinach",
-        "bedrock_options": {
-          "icon": "voidscape.seed_goldleaf_herb",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_ancient_astral_root",
-        "bedrock_identifier": "voidscape:seed_ancient_astral_root",
-        "display_name": "Seed of Sweet Potato",
-        "bedrock_options": {
-          "icon": "voidscape.seed_ancient_astral_root",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_yggdrasil_sprout",
-        "bedrock_identifier": "voidscape:seed_yggdrasil_sprout",
-        "display_name": "Seed of Asparagus",
-        "bedrock_options": {
-          "icon": "voidscape.seed_yggdrasil_sprout",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_omni_pomegranate",
-        "bedrock_identifier": "voidscape:seed_omni_pomegranate",
-        "display_name": "Seed of Pomegranate",
-        "bedrock_options": {
-          "icon": "voidscape.seed_omni_pomegranate",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:pitcher_pod": [
-      {
-        "type": "definition",
-        "model": "voidscape:seed_star_anise",
-        "bedrock_identifier": "voidscape:seed_star_anise",
-        "display_name": "Seed of Star Anise",
-        "bedrock_options": {
-          "icon": "voidscape.seed_star_anise",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_prism_shard_carrot",
-        "bedrock_identifier": "voidscape:seed_prism_shard_carrot",
-        "display_name": "Seed of Cassava",
-        "bedrock_options": {
-          "icon": "voidscape.seed_prism_shard_carrot",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:seed_void_overcharge_fig",
-        "bedrock_identifier": "voidscape:seed_void_overcharge_fig",
-        "display_name": "Seed of Fig",
-        "bedrock_options": {
-          "icon": "voidscape.seed_void_overcharge_fig",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:melon_slice": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_demeters_melon",
-        "bedrock_identifier": "voidscape:crop_demeters_melon",
-        "display_name": "Papaya",
-        "bedrock_options": {
-          "icon": "voidscape.crop_demeters_melon",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      }
-    ],
-    "minecraft:golden_apple": [
-      {
-        "type": "definition",
-        "model": "voidscape:crop_goldleaf_herb",
-        "bedrock_identifier": "voidscape:crop_goldleaf_herb",
-        "display_name": "Spinach",
-        "bedrock_options": {
-          "icon": "voidscape.crop_goldleaf_herb",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_ancient_astral_root",
-        "bedrock_identifier": "voidscape:crop_ancient_astral_root",
-        "display_name": "Sweet Potato",
-        "bedrock_options": {
-          "icon": "voidscape.crop_ancient_astral_root",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_yggdrasil_sprout",
-        "bedrock_identifier": "voidscape:crop_yggdrasil_sprout",
-        "display_name": "Asparagus",
-        "bedrock_options": {
-          "icon": "voidscape.crop_yggdrasil_sprout",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
-      },
-      {
-        "type": "definition",
-        "model": "voidscape:crop_omni_pomegranate",
-        "bedrock_identifier": "voidscape:crop_omni_pomegranate",
-        "display_name": "Pomegranate",
-        "bedrock_options": {
-          "icon": "voidscape.crop_omni_pomegranate",
-          "allow_offhand": true,
-          "display_handheld": false,
-          "creative_category": "items"
-        }
       }
     ],
     "minecraft:iron_helmet": [
-      {
-        "type": "definition",
-        "model": "minecraft:iron_helmet",
-        "predicate": {
-          "type": "match",
-          "property": "custom_model_data",
-          "index": 0,
-          "value": "voidscape:azure_portal"
-        },
-        "bedrock_identifier": "voidscape:azure_portal",
-        "display_name": "Evergarden Azure Portal",
-        "bedrock_options": {
-          "icon": "voidscape.azure_portal",
-          "allow_offhand": false,
-          "display_handheld": false
-        }
-      },
       {
         "type": "definition",
         "model": "minecraft:iron_helmet",
@@ -2394,6 +405,452 @@
           "icon": "voidscape.judge_shard",
           "allow_offhand": false,
           "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_seraph_idle",
+        "bedrock_identifier": "voidscape:judge_seraph_idle",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_seraph_idle",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:judge_seraph_cast",
+        "bedrock_identifier": "voidscape:judge_seraph_cast",
+        "display_name": "Ancient Judge Sculpture",
+        "bedrock_options": {
+          "icon": "voidscape.judge_seraph_cast",
+          "allow_offhand": false,
+          "display_handheld": false
+        }
+      }
+    ],
+    "minecraft:heart_of_the_sea": [
+      {
+        "type": "definition",
+        "model": "voidscape:boss_orb_acheron",
+        "bedrock_identifier": "voidscape:boss_orb_acheron",
+        "display_name": "Acheron Soul Orb",
+        "bedrock_options": {
+          "icon": "voidscape.boss_orb_acheron",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:boss_orb_phlegethon",
+        "bedrock_identifier": "voidscape:boss_orb_phlegethon",
+        "display_name": "Phlegethon Soul Orb",
+        "bedrock_options": {
+          "icon": "voidscape.boss_orb_phlegethon",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:boss_orb_cocytus",
+        "bedrock_identifier": "voidscape:boss_orb_cocytus",
+        "display_name": "Cocytus Soul Orb",
+        "bedrock_options": {
+          "icon": "voidscape.boss_orb_cocytus",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:boss_orb_banshee",
+        "bedrock_identifier": "voidscape:boss_orb_banshee",
+        "display_name": "Banshee Wail Soul Orb",
+        "bedrock_options": {
+          "icon": "voidscape.boss_orb_banshee",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:boss_orb_malefeasance",
+        "bedrock_identifier": "voidscape:boss_orb_malefeasance",
+        "display_name": "Malefeasance Soul Orb",
+        "bedrock_options": {
+          "icon": "voidscape.boss_orb_malefeasance",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:boss_orb_styx",
+        "bedrock_identifier": "voidscape:boss_orb_styx",
+        "display_name": "Styx Soul Orb",
+        "bedrock_options": {
+          "icon": "voidscape.boss_orb_styx",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:core_of_legend",
+        "bedrock_identifier": "voidscape:core_of_legend",
+        "display_name": "Core of Legend",
+        "bedrock_options": {
+          "icon": "voidscape.core_of_legend",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:feather": [
+      {
+        "type": "definition",
+        "model": "voidscape:seraph_feather",
+        "bedrock_identifier": "voidscape:seraph_feather",
+        "display_name": "Seraph Feather",
+        "bedrock_options": {
+          "icon": "voidscape.seraph_feather",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:seraph_feather_golden",
+        "bedrock_identifier": "voidscape:seraph_feather_golden",
+        "display_name": "Golden Seraph Feather",
+        "bedrock_options": {
+          "icon": "voidscape.seraph_feather_golden",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:netherite_sword": [
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_emberfang",
+        "bedrock_identifier": "voidscape:adventurer_emberfang",
+        "display_name": "Emberfang",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_emberfang",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_frostveil",
+        "bedrock_identifier": "voidscape:adventurer_frostveil",
+        "display_name": "Frostveil",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_frostveil",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_moonrift",
+        "bedrock_identifier": "voidscape:adventurer_moonrift",
+        "display_name": "Moonrift",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_moonrift",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_ashcleaver",
+        "bedrock_identifier": "voidscape:adventurer_ashcleaver",
+        "display_name": "Ashcleaver",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_ashcleaver",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_silvershiv",
+        "bedrock_identifier": "voidscape:adventurer_silvershiv",
+        "display_name": "Silvershiv",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_silvershiv",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_starfang",
+        "bedrock_identifier": "voidscape:adventurer_starfang",
+        "display_name": "Starfang",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_starfang",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_voidreel",
+        "bedrock_identifier": "voidscape:adventurer_voidreel",
+        "display_name": "Voidreel",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_voidreel",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      }
+    ],
+    "minecraft:netherite_spear": [
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_stormpiercer",
+        "bedrock_identifier": "voidscape:adventurer_stormpiercer",
+        "display_name": "Stormpiercer",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_stormpiercer",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_bramblepike",
+        "bedrock_identifier": "voidscape:adventurer_bramblepike",
+        "display_name": "Bramblepike",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_bramblepike",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_tidehook",
+        "bedrock_identifier": "voidscape:adventurer_tidehook",
+        "display_name": "Tidehook",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_tidehook",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_mistcaller",
+        "bedrock_identifier": "voidscape:adventurer_mistcaller",
+        "display_name": "Mistcaller",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_mistcaller",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_nightbloom",
+        "bedrock_identifier": "voidscape:adventurer_nightbloom",
+        "display_name": "Nightbloom",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_nightbloom",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_ironwave",
+        "bedrock_identifier": "voidscape:adventurer_ironwave",
+        "display_name": "Ironwave",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_ironwave",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      }
+    ],
+    "minecraft:mace": [
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_ironbloom",
+        "bedrock_identifier": "voidscape:adventurer_ironbloom",
+        "display_name": "Ironbloom",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_ironbloom",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_sunflare",
+        "bedrock_identifier": "voidscape:adventurer_sunflare",
+        "display_name": "Sunflare",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_sunflare",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_glimmermaul",
+        "bedrock_identifier": "voidscape:adventurer_glimmermaul",
+        "display_name": "Glimmermaul",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_glimmermaul",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_stoneheart",
+        "bedrock_identifier": "voidscape:adventurer_stoneheart",
+        "display_name": "Stoneheart",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_stoneheart",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_rootspire",
+        "bedrock_identifier": "voidscape:adventurer_rootspire",
+        "display_name": "Rootspire",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_rootspire",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      }
+    ],
+    "minecraft:nether_star": [
+      {
+        "type": "definition",
+        "model": "voidscape:core_of_seraph",
+        "bedrock_identifier": "voidscape:core_of_seraph",
+        "display_name": "Core of Seraph",
+        "bedrock_options": {
+          "icon": "voidscape.core_of_seraph",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:echo_shard": [
+      {
+        "type": "definition",
+        "model": "voidscape:core_of_revenant",
+        "bedrock_identifier": "voidscape:core_of_revenant",
+        "display_name": "Core of Revenant",
+        "bedrock_options": {
+          "icon": "voidscape.core_of_revenant",
+          "allow_offhand": true,
+          "display_handheld": false,
+          "creative_category": "items"
+        }
+      }
+    ],
+    "minecraft:bow": [
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_thornwhisper",
+        "bedrock_identifier": "voidscape:adventurer_thornwhisper",
+        "display_name": "Thornwhisper",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_thornwhisper",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      }
+    ],
+    "minecraft:crossbow": [
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_runelock",
+        "bedrock_identifier": "voidscape:adventurer_runelock",
+        "display_name": "Runelock",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_runelock",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_runelock",
+        "predicate": {
+          "type": "match",
+          "property": "charge_type",
+          "value": "arrow"
+        },
+        "bedrock_identifier": "voidscape:adventurer_runelock_loaded_arrow",
+        "display_name": "Runelock",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_runelock_loaded_arrow",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
+        }
+      },
+      {
+        "type": "definition",
+        "model": "voidscape:adventurer_runelock",
+        "predicate": {
+          "type": "match",
+          "property": "charge_type",
+          "value": "rocket"
+        },
+        "bedrock_identifier": "voidscape:adventurer_runelock_loaded_rocket",
+        "display_name": "Runelock",
+        "bedrock_options": {
+          "icon": "voidscape.adventurer_runelock_loaded_rocket",
+          "allow_offhand": true,
+          "display_handheld": true,
+          "creative_category": "equipment"
         }
       }
     ]

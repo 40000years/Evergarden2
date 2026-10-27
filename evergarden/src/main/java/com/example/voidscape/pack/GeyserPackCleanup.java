@@ -7,13 +7,26 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.zip.ZipFile;
 
-/** Removes only identifiers owned by the bundled mapping; backs up every changed file. */
+/** Removes bundled and explicitly retired identifiers; backs up every changed file. */
 public final class GeyserPackCleanup {
+    // Retired definitions are absent from the current bundle but can survive in old duplicate mappings.
+    private static final Set<String> RETIRED_CORE_IDS=Set.of(
+        "advance_magic:core_lightning_strike", "advance_magic:core_frost_nova",
+        "advance_magic:core_shadow_step", "advance_magic:core_natures_bloom",
+        "advance_magic:core_earth_wall", "advance_magic:core_dragons_breath",
+        "advance_magic:core_void_pull", "advance_magic:core_sonic_boom",
+        "advance_magic:core_blaze_barrage", "advance_magic:core_wither_ray",
+        "advance_magic:core_shulker_levitation", "advance_magic:core_meteor_strike",
+        "advance_magic:core_iron_armor", "advance_magic:core_vex_legion",
+        "advance_magic:core_guardian_beam", "advance_magic:core_solar_apocalypse",
+        "advance_magic:core_chronos_final_hour", "advance_magic:core_heavens_judgment",
+        "advance_magic:core_verdant_sovereign", "advance_magic:core_lunar_requiem",
+        "advance_magic:core_crimson_oblivion");
     private GeyserPackCleanup() {}
 
     public static int clean(Path geyser, Path bundledMapping, Path bundledPack,
                             String mappingName, String packName) throws IOException {
-        Set<String> owned=new HashSet<>();
+        Set<String> owned=new HashSet<>(RETIRED_CORE_IDS);
         collect(new JsonParser().parse(Files.readString(bundledMapping)),owned);
         Path backup=geyser.resolve("plugin-pack-backups");
         int changed=0;

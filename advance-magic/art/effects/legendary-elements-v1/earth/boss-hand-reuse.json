@@ -1,0 +1,69 @@
+{
+  "reuse": true,
+  "boss": "Ancient Judge",
+  "location": "boss-temple",
+  "java_namespace": "voidscape",
+  "item_material": "IRON_HELMET",
+  "model_components": {
+    "judge_left": {
+      "scale": 8,
+      "center": [
+        0,
+        5.2,
+        0
+      ],
+      "offset": [
+        0,
+        0,
+        0
+      ]
+    },
+    "judge_left_light": {
+      "scale": 8,
+      "center": [
+        0,
+        5.2,
+        0
+      ],
+      "offset": [
+        0,
+        0,
+        0
+      ]
+    },
+    "judge_right": {
+      "scale": 8,
+      "center": [
+        0,
+        5.2,
+        0
+      ],
+      "offset": [
+        0,
+        0,
+        0
+      ]
+    },
+    "judge_right_light": {
+      "scale": 8,
+      "center": [
+        0,
+        5.2,
+        0
+      ],
+      "offset": [
+        0,
+        0,
+        0
+      ]
+    }
+  },
+  "model_source": "evergarden/src/main/resources/judge-shape.yml",
+  "renderer": "evergarden/src/main/java/com/example/voidscape/boss/JudgmentBody.java",
+  "motion_source": "evergarden/src/main/java/com/example/voidscape/boss/WorldBossManager.java",
+  "motion_reference": "SLAM / BAIT_SLAM at updateBody; target XZ plus10*(1-progress) vertical descent",
+  "java_pack": "evergarden/dist/judge-java.zip",
+  "bedrock_implementation": "Existing JudgmentBody ArmorStand carrier/attachable path, not a flat image of a new hand.",
+  "new_hand_art": false,
+  "integration_status": "Reuse reference identified; no gameplay implementation in texture-only phase."
+}

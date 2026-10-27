@@ -1,6 +1,7 @@
 package com.example.voidscape.gui;
 
 import com.example.voidscape.VoidscapePlugin;
+import com.example.voidscape.enchant.UniqueCompatibility;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -86,6 +87,13 @@ public final class ChestUpgradeGui implements Listener {
             return;
         }
 
+        if (UniqueCompatibility.needsResolution(equip,plugin.relics())) {
+            inv.setItem(SLOT_BUTTON, createItem(Material.BARRIER,
+                Component.text("เลือกมนตราของอุปกรณ์เก่าก่อน",NamedTextColor.RED),
+                List.of(Component.text("นำอุปกรณ์ออกมาถือ แล้วพิมพ์ /upgrade",NamedTextColor.YELLOW))));
+            return;
+        }
+
         // Evaluate upgrade
         ItemStack preview = evaluateUpgrade(plugin, scroll, equip);
         if (preview != null) {
@@ -106,18 +114,6 @@ public final class ChestUpgradeGui implements Listener {
 
     private static ItemStack evaluateUpgrade(VoidscapePlugin plugin, ItemStack scroll, ItemStack equip) {
         if (scroll == null || equip == null || equip.getType().getMaxDurability() <= 0) return null;
-
-        // Repair stone special case
-        if (plugin.relics().isRepairStone(scroll)) {
-            if (equip.hasItemMeta() && equip.getItemMeta() instanceof Damageable dmg && dmg.getDamage() > 0) {
-                ItemStack res = equip.clone();
-                Damageable resDmg = (Damageable) res.getItemMeta();
-                resDmg.setDamage(Math.max(0, resDmg.getDamage() - 500));
-                res.setItemMeta(resDmg);
-                return res;
-            }
-            return null;
-        }
 
         return plugin.relics().evaluateScrollCraft(scroll, equip);
     }

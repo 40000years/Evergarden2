@@ -1,0 +1,85 @@
+{
+  "release": "1.12.1-bedrock-staff-vfx",
+  "date": "2026-10-19",
+  "bedrock_pack": [
+    2,
+    15,
+    1
+  ],
+  "scope": "Local workspace hotfix. No production deployment or connected-client visual validation.",
+  "change": "Replace Bedrock whole-staff effect sheets with crown-local 3D glints; send ambient dust only to Java viewers.",
+  "runtime": "PASS 246",
+  "modelengine_4_1_1_geyser_and_ambient_packets": "PASS 159",
+  "asset_checks": [
+    {
+      "script": "advance-magic/tests/check_packs.py",
+      "args": [
+        "--assets-only"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: eight elemental staff routes, 21 preserved cores, legendary compatibility art, retired ordinary assets absent, effect textures, models, Geyser mappings, PNGs, archives and hashes (assets only)\n",
+      "stderr": ""
+    },
+    {
+      "script": "advance-magic/tests/check_legendary_assets.py",
+      "args": [
+        "--assets-only"
+      ],
+      "exit_code": 0,
+      "stdout": "PASS: 13 live PNG/SVG effects, retired Lunar crescent excluded, Java/Bedrock art without duplicate Evergarden effects, native particle modes and .20s lifetimes, 5 tints, eight staff routes, 21 core routes, preserved legendary wand art, archive hashes (assets only)\n",
+      "stderr": ""
+    },
+    {
+      "script": "advance-magic/tests/check_elemental_staff_assets.py",
+      "args": [],
+      "exit_code": 0,
+      "stdout": "PASS 4277 elemental staff export, dependency, animation, source parity and physical grip checks (no client/import test)\n",
+      "stderr": ""
+    },
+    {
+      "script": "advance-magic/tests/check_elemental_staff_camera_frame.py",
+      "args": [],
+      "exit_code": 0,
+      "stdout": "fire predicted solid bounds [701.2, 50.0] [976.3, 450.0] grip [892.6, 322.6]\nwind predicted solid bounds [694.5, 50.0] [976.2, 450.0] grip [888.3, 315.8]\nearth predicted solid bounds [690.2, 50.0] [976.3, 450.0] grip [894.3, 325.1]\nice predicted solid bounds [698.4, 50.0] [980.5, 450.0] grip [888.8, 316.5]\nwater predicted solid bounds [688.1, 50.0] [976.3, 450.0] grip [890.0, 318.5]\nlightning predicted solid bounds [679.8, 50.0] [976.3, 450.0] grip [892.6, 322.5]\nlight predicted solid bounds [710.0, 50.0] [976.3, 450.0] grip [888.5, 316.1]\ndark predicted solid bounds [706.7, 50.0] [976.3, 450.0] grip [892.3, 322.0]\nPASS 64 independent screenshot-calibrated staff camera checks (approximate; no game client rendering)\n",
+      "stderr": ""
+    },
+    {
+      "script": "advance-magic/tests/check_bedrock_staff_vfx.py",
+      "args": [],
+      "exit_code": 0,
+      "stdout": "fire approximate animated first-person effect bounds [757.4, 104.6] [791.4, 166.8]\nwind approximate animated first-person effect bounds [758.8, 106.9] [792.6, 168.6]\nearth approximate animated first-person effect bounds [755.1, 101.1] [789.5, 163.8]\nice approximate animated first-person effect bounds [755.8, 102.1] [790.1, 164.7]\nwater approximate animated first-person effect bounds [754.8, 100.6] [789.3, 163.4]\nlightning approximate animated first-person effect bounds [752.8, 97.3] [787.6, 160.8]\nlight approximate animated first-person effect bounds [757.3, 104.5] [791.4, 166.7]\ndark approximate animated first-person effect bounds [758.6, 106.6] [792.5, 168.4]\nPASS 361 Bedrock solid-mote, bounded-motion, material, visibility and approximate first-person safety checks\n",
+      "stderr": ""
+    },
+    {
+      "script": "advance-magic/tests/check_legendary_weapons.py",
+      "args": [],
+      "exit_code": 0,
+      "stdout": "PASS 236 legendary weapon asset checks\n",
+      "stderr": ""
+    },
+    {
+      "script": "preservation_against_before_hashes",
+      "exit_code": 0,
+      "stdout": "{\n  \"java_zip_identical\": true,\n  \"geyser_mappings_identical\": true,\n  \"protected_before_paths_verified\": 69,\n  \"changed_protected_paths\": [],\n  \"preserved_shared_core_effect_legendary_sources_verified\": 142,\n  \"changed_shared_sources\": []\n}",
+      "stderr": ""
+    },
+    {
+      "script": "bedrock_archive_entry_preservation",
+      "exit_code": 0,
+      "stdout": "{\n  \"baseline_source\": \"dist/advance-magic.jar\",\n  \"baseline_pack_sha256\": \"9e404cf9d7969c7e41aef269c5118f58ee919fc17ffbd165df68841427db6589\",\n  \"unchanged_entries\": 249,\n  \"preserved_core_texture_entries\": 21,\n  \"preserved_legendary_and_mythic_entries\": 145\n}\nChanged 19 allowed staff VFX/manifest entries; removed exactly64 old effect sheets; no added entries.",
+      "stderr": ""
+    }
+  ],
+  "java_pack_sha256_unchanged": "b3605e02eb87ad6277279740b9f37e0d8d64b1b4d1e795cdb034d50f9f5b0608",
+  "preserved_artifacts": 69,
+  "all_first_third_person_clips_unchanged": true,
+  "changed_production_classes": [
+    "com/example/advancemagic/item/ElementalStaffService.class"
+  ],
+  "evergarden_jar_unchanged": "67db96f73f92719af63217fd6130ee13a69605160de86791537de4ec2fe76f0d",
+  "sha256": {
+    "dist/advance-magic.jar": "3182377f45a153145cbc8ec43f0cf1600d2b2eed0782e6a76f24a3bc6adc3e5e",
+    "docs/bedrock-staff-vfx.md": "72fabd9f0756a2d40e74541fe24244bab881bdd2dda7cf6fdceb309991bc4620",
+    "advance-magic/dist/elemental-staff-sources.zip": "e527539e8673a934ab85aea7dadf9716dc6f7ef78e239ba64e329b7e70ecc560"
+  }
+}

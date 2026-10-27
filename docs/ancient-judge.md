@@ -35,21 +35,49 @@ parts, floor warnings, sounds and Thai instructions explain the encounter.
 
 * Phases 1–2: destroy either hand to open the core for 12 seconds. The gemstone descends
   and its core hitbox shrinks into melee reach, while the mask stays overhead. Breaking the other hand extends
-  the opportunity; after a missed window a broken hand returns with 45% health.
+  the opportunity. One broken hand grants **×2 core damage**; breaking both before
+  the opening closes grants **×3**. The bonus resets when the core reseals or the
+  phase changes; after a missed window a broken hand returns with 45% health.
   Hitboxes move into position immediately in the damage callback. An opening
   cancels the current ordinary attack and gives three seconds to approach;
   ordinary attacks then resume while the heart remains damageable. This replaces
   the previous full 12-second attack pause.
+* **Phase 2 adds hand luring.** Two gold rune markers sit near the heart, fourteen
+  blocks left/right and six blocks forward. During a lure slam, stand on the rune
+  matching the named hand: the red aim follows its chosen player for two seconds,
+  then locks for three seconds so they can escape the twelve-block impact area.
+  The slam's center must land within the visible three-block rune. Success breaks
+  that hand and opens the core at ×2; the other hand gets an early lure opportunity
+  to reach ×3 before the opening closes. Luring credits the responsible player
+  with the hand's damage contribution. Missing the rune grants no opening, while
+  ordinary melee/wand damage to the hands remains a fallback. Gold rune markers
+  and their small green rings disappear during Judgment so they cannot be mistaken
+  for the four genuine safe sanctuaries.
 * Core phase boundaries are 70% and 35%. A large combo reaches the boundary and
   starts the next sealed phase instead of skipping every phase with one cast.
-  The phase-two title explicitly says that both hands have regenerated and
-  either hand must be destroyed again.
+  The phase-two title teaches the lure-and-dodge mechanic after both hands regenerate.
 * Phase 3: the face remains recognizable with fragments slowly orbiting behind
-  it. The heart and its small hitbox remain visible at floor level, even while
-  sealed. A red floor seal and countdown say to dodge and wait; a green seal,
-  glowing heart and title say to attack. The heart opens automatically
-  after eight seconds, then alternates 12-second openings with ten-second seals.
-  All mechanics can be completed by one player.
+  it. The heart and its small hitbox stay at floor level and **remain open**;
+  there is no opening/resealing wait. Ordinary three-pulse attacks continue.
+  After a five-second approach grace, **Core Rupture** charges for eight seconds.
+  Two floating amethyst **interrupt crystals / ผลึกขัดท่า** appear near the heart, nine blocks to either side.
+  Land three direct melee strikes on each before the charge ends to interrupt
+  it, stun the Judge for **seven seconds**, and deal **×3 core damage** during
+  the stun. Their labels and the countdown show left/right progress from 0/3 to 3/3,
+  and instructions say to destroy both crystals or leave the red circle, then
+  return to the core for ×3 after interruption. Strike counts ignore weapon DPS and party HP scaling. Arrows, wands,
+  sweeping attacks and same-tick bonus hits cannot complete the seals.
+  If interrupted, no rupture damage occurs. Otherwise, leave the clearly marked
+  20-block red circle before it explodes; this is normal damage with the same
+  defenses as sky beams, rather than forced death. The heart remains open even
+  after a failed interruption. Another rupture becomes due twenty seconds after
+  the interruption or explosion, and starts after the current combo completes.
+  This mechanic continues after summoned minions die and is completable solo.
+* Phase 1 accepts all weapon types. Phase 2 blocks physical projectiles, including
+  arrows, but still accepts wand spells. Phase 3 blocks both physical projectiles
+  and wand magic, including during the interruption bonus; use melee for the heart.
+  These shields apply to the Judge's hands/core, while summoned temple bosses
+  retain their normal damage rules.
 * Phase 1 opens with **Sky Beams**: 5–10 separate red magic circles at the same
   height, 60 blocks above the floor and clear of the entire crown. Centers stay at least 20 blocks apart, so
   their 18-block casting circles do not overlap. Each has a radius-seven floor
@@ -58,38 +86,44 @@ parts, floor warnings, sounds and Thai instructions explain the encounter.
 * Ordinary attacks also include targeted hand slams, rotated crossing lanes,
   annular waves and **Lances**, three parallel lanes separated by 22 blocks.
   The dispatcher excludes the previous pattern from its next selection.
-  Slam radii are 11/12 blocks in phases 1/2, with 2.4/2.6-second warnings so their
-  wider area still leaves sprint escape time. Crossing lanes are 10/11/12 blocks
+  Phase-one slam radius is eleven blocks with a 2.4-second warning; phase-two lure
+  slams use twelve blocks with two seconds of tracking plus three seconds to escape.
+  Crossing lanes are 10/11/12 blocks
   wide across phases 1/2/3. Wave bands are 14/16/16 blocks wide and center their
   radius near a participant instead of choosing an unrelated random distance.
   Phases 2 and 3 use two- and three-pulse combos. Each new pulse gives a complete
   new warning; cross pulses turn by 30 degrees. A pulse locks its area at charge
-  start, so warnings never chase a player. Spell damage uses sonic-boom damage
+  start, except the explicitly signposted tracking portion of the lure slam.
+  Spell damage uses sonic-boom damage
   to pierce vanilla armor and enchantments. Resistance, absorption and plugin
   defensive effects remain active. Raw difficulty scaling is compensated on
   Easy/Hard. Ordinary base hits are capped at 70% of Max HP, with sky beams adding
-  15% up to an 80% base ceiling. `attack-power-percent: 130` then boosts all five
+  15% up to an 80% base ceiling. `attack-power-percent: 130` then boosts ordinary
   red-circle attacks by exactly 30%, after those ceilings and before defenses.
   Their boosted ceilings are 91% and 104% of Max HP respectively. A sufficiently
   strong sky beam can kill through normal damage; defensive and life-saving
-  effects still apply to red spells. The phase-two judgment uses its separate
+  effects still apply to red spells. Judgment uses its separate
   forced-death mechanic.
 
 | Phase | Pulses per combo | Cross warning | Wave warning | Recovery after combo |
 | --- | --- | --- | --- | --- |
-| 1 | 1 | 2.0 s | 2.0 s | 2.4 s |
-| 2 | 2 | 1.8 s | 1.9 s | 1.8 s |
-| 3 | 3 | 1.8 s | 1.8 s | 1.4 s |
+| 1 | 1 | 2.0 s | 2.0 s | 3.4 s |
+| 2 | 2 | 1.8 s | 1.9 s | 2.8 s |
+| 3 | 3 | 1.8 s | 1.8 s | 2.4 s |
 
-* **Final Judgment is exclusive to phase 2**: first available twelve seconds
-  after the phase transition, then 130–150 seconds
-  after its previous charge. An eight-second warning pauses normal attacks.
+* **Final Judgment is the forced-death signature in every phase**. Phase 1 first
+  schedules it forty seconds after summoning, then 230–250 seconds after its previous
+  charge. Phases 2/3 first schedule it twelve/twenty seconds after transition, then
+  115–135 seconds after its previous charge. Phase 1 uses twice the configured base
+  cooldown. Judgment takes priority over due lure/rupture attacks once the current
+  attack or earned stun finishes.
+  An eight-second warning pauses normal attacks.
   Four green sanctuaries, each radius 16 at distance 48 from the center, are
   shown using green resource-backed seals and vanilla emerald markers. Reach any of them before
   the countdown ends. Even the arena edge is within about 41 blocks of safety.
   Judgment kills participants outside the circles, including flying players,
   despite vanilla armor, Protection, Resistance, absorption, Totems, Phoenix
-  Rebirth and the Soul Ward vegetable. It sets HP directly to zero, using the
+  Rebirth. It sets HP directly to zero, using the
   same final bypass technique found in True Death. No curse levels, hit stacks,
   True Death configuration or dungeon encounter are reused. Leaving the arena avoids death but does not remove
   the participant's scaling contribution.
@@ -108,34 +142,37 @@ automatically enrolled. Joining during a charge means joining that live mechanic
 
 ## Balance and configuration
 
-Default solo health: **20,000 core HP** (halved from 40,000), **8,500 HP per hand**. Effective HP scales
+Default solo health: **10,000 core HP**, **1,500 HP per hand**. Effective HP scales
 by `1 + 0.65 × (participants − 1)`; four players get ×2.95 and six get ×4.25.
 Health is stored in solo units and damage is divided by that factor. Existing
 boss-bar progress never jumps when someone joins, dies, leaves or disconnects.
 The roster remains fixed upward for that encounter, capped at 16 participants.
 Damage does not secretly adjust to measured player DPS.
 
-Final damage is capped **after weapon bonuses** at 100 melee, 80 projectile,
-240 magic and 80 other damage per hit. A rolling 20-tick budget allows at most
-240 damage per player across both hands, the heart and summoned bosses combined.
-The Titan Hunter Max HP bonus and virtual Power are included before this cap.
+Incoming damage has **no encounter cap per hit or per second**, including on
+summoned bosses. The Titan Hunter Max HP bonus and virtual Power retain their damage.
 Advance Magic casts are classified by their active damage context, so a staff
-spell attributed directly to a player is not mistaken for a melee hit. These
-caps apply only to this World Boss encounter; other weapons and fights retain
-their existing rules. Tune `world-boss.damage-caps` to change them.
+spell attributed directly to a player is not mistaken for a melee hit. Magic
+classification takes precedence over a spell's projectile carrier. Core seals
+in phases 1–2 and phase boundaries still apply even to very large bursts.
 
-At 180 applied damage per second per player, deterministic combat simulations
-give approximately 6.3 minutes solo, 4.1 minutes with four players and 3.9 minutes
-with six. These estimates exclude movement and warning downtime, and are tuning
-targets rather than measurements of live server equipment. Tune `world-boss`
+Stationary simulations at 180 incoming damage per second per player finish in
+under three minutes with the reduced health and hand bonus. They exclude movement
+and warning downtime, and do not measure live server equipment. Tune `world-boss`
 values in `plugins/Evergarden/config.yml` after trying the server's actual gear.
 
-On first startup with this balance update, `world-boss.balance-version` migrates
-the old 40,000 core HP default to 20,000 and adds 130% spell power. Custom HP/power
-values are preserved, and subsequent startups leave administrator edits alone.
+On first startup, balance revision 3 migrates the published 20,000 core HP default
+to 10,000, and 8,000/8,500 hand HP to 1,500, then removes obsolete `damage-caps`.
+Custom HP/power values are preserved, and subsequent startups leave administrator edits alone.
+Older configurations also receive the previous revision-1 migration from 40,000
+core HP and its 130% spell-power default.
 Revision 2 also migrates the former 30-minute fight timeout to unlimited and the
 30-second empty-arena reset to a three-minute grace. It preserves custom timer
 values and does not repeat the previous health migration.
+Revision 4 reduces the published 130-second judgment cooldown to 115 seconds and
+the phase-one initial delay from 45 to 40 seconds once, preserving other custom
+timings and all revision-3 HP edits. Ordinary combo recovery is one second longer
+in every phase; warning durations and ordinary damage remain unchanged.
 
 The hitboxes carry the existing Evergarden LevelledMobs exclusions and encounter
 control-resistance marker. Damage events feed shared encounter health, so Java
@@ -166,6 +203,19 @@ server log; `world-bosses.yml` also records the latest stop reason per temple.
 
 ## Commands, rewards and storage
 
+Admins can use **`/evergarden test` → World Boss Test** (the amethyst block) to
+start or reset directly in phases 1, 2 or 3, force a phase-two lure, signature
+Judgment in any phase, or a phase-three rupture immediately,
+heal, receive a plain unbreakable practice sword, or stop the test encounter.
+Starting a test automatically teleports to the arena, enters Survival when needed,
+and heals the starter. Ending the test restores the starter's original game mode.
+Tests run the same combat mechanics with a visible `[TEST]` boss bar, grant no
+rewards, and leave the site's real cooldown ledger unchanged. They can bypass an
+existing cooldown, but cannot replace an active real encounter. Repeating a phase
+button clears the previous test's entire body, summons, seals and warnings.
+The owner can stop a test even after leaving the arena. Every control checks admin
+permission again when used.
+
 * `/evergarden tp boss-temple` — admin teleport to the existing safe entrance.
 * `/evergarden boss status` — encounter state or remaining temple cooldown.
 * `/evergarden boss claim` — claim queued rewards after making inventory space.
@@ -193,7 +243,10 @@ player connections supply the hostname. Host failure/decline/reload failure keep
 the Java fallback and fully working hitboxes. `pack.enabled: false` disables the addon.
 
 Local Geyser receives the updated Evergarden pack/mappings during `onLoad`.
-Restart Geyser and reconnect Bedrock clients; the pack content version is 3.19.0.
+Restart Geyser and reconnect Bedrock clients; the pack content version is 3.24.1.
+The Judge helmet attachables now use Bedrock's vanilla `armor` material, matching
+[Mojang's helmet definition](https://github.com/Mojang/bedrock-samples/blob/main/resource_pack/attachables/iron_helmet.json).
+This is a rendering compatibility adjustment; device rendering remains a manual check.
 External Geyser needs the extracted pack and mapping files copied to that instance.
 `/evergarden boss pack` identifies `cathedral-wings-v2`, fourteen models and
 twenty-five sculpture components, alongside the Java pack hash and client status.
@@ -203,10 +256,24 @@ the current `evergarden-bedrock.mcpack` and `geyser-mappings.json` as well.
 Colored Bedrock filaments use original glint particles via Geyser's optional bridge;
 an incompatible bridge falls back to vanilla particles without stopping the fight.
 
+The admin-only `/evergarden test` → World Boss Test menu also has a Feather to
+summon a 10-minute Seraph model preview four blocks ahead and Shears to remove it.
+Its white hair, blue eyes, gold-trimmed robe and large layered wings are separate
+`judge_seraph_idle` and `judge_seraph_cast` item models. An invisible, AI-disabled
+Witch anchors the preview and cannot throw potions. The pose changes to spellcasting
+every five seconds. Normal witches, the live Judge fight, rewards and cooldowns are
+unaffected. Each admin owns one preview; it disappears on logout, removal or expiry.
+Java requires the Judge addon pack to finish loading before the summon button works.
+Bedrock requires the updated Evergarden pack and Geyser mappings.
+The `seraph-feathered-v2` preview uses a 1024×1024 atlas, layered white hair,
+embroidered robe panels, an octagonal gold halo and continuous tapered feathers.
+Both export paths preserve the rotated feather pivots and UV crops. The local
+preview renderer reads the final Java pack with textures and depth testing.
+
 Victory sets a four-hour site cooldown. Every participant credited with positive
 hand/core damage receives one random Advance Magic core, two Evergarden keys and
-1,500 XP by default. Each player rolls independently from all eighteen cores with
-equal chances, including the four Mythics (Levitation, Solar, Chronos and Judgment).
+1,500 XP by default. Each player rolls independently from all available cores with
+equal chances, including Mythic cores.
 Being nearby or damaging only summoned temple bosses does not qualify. The exact
 core ID is drawn once at victory and saved; claiming cannot reroll it. Rewards
 accumulate over multiple wins until there is room for the entire item bundle.
@@ -222,14 +289,17 @@ never edits the protected arena blocks.
 `tests/ancient-judge/run.py` boots isolated Paper twice. The probe uses actual
 NMS sword attacks, moving vanilla arrows, selection rays, Advance Magic calls,
 pack download/acceptance/reload-failure checks, actual Titan Hunter bonuses,
-melee/projectile/magic/other caps and shared rolling damage budget, aerial circle
+uncapped melee/projectile/magic/other damage, same-tick multi-hit spells,
+phase-specific projectile/wand shields, hand-break core bonuses, aerial circle
 spacing and beam damage, three horizontal lance rays, a high-HP player with
-Totem/Phoenix/Soul Ward simultaneously equipped, the live
+Totem/Phoenix simultaneously equipped, the live
 judgment countdown, spell placement above the crown, larger slam damage beyond
 the old radius, rotated two-pulse combos, attacks during core openings,
 resource-backed seals, green sanctuary safety, three phase
-transitions, visible final heart, missed final openings and a real sword attack
-after reopening, temple boss counts/species, late participant summons, no loot
+transitions, always-open final heart, real sword strikes on interruption seals,
+seal repair, failed-charge damage boundaries, exact stun timing and bonus damage,
+admin phase shortcuts, test reward/cooldown isolation and cleanup, menu permission
+checks, temple boss counts/species, late participant summons, no loot
 or respawns for defeated summons, one core per positive contributor, queued rewards
 for dead/offline players, inventory capacity, unchanged rolls after restart,
 repeated-claim prevention, entity/ticket cleanup and persisted cooldowns.
@@ -245,6 +315,9 @@ The installed Geyser suite checks sanctuary materials and no-gravity/NO_AI
 translation across five Bedrock block palettes, crimson glints, horizontal/upright
 spell packets with nearby emitters and exact world centers,
 and all fourteen direct custom model routes, alongside the existing Mythic spell suite.
+The equipment checks also use the real Judge item factory and Geyser armor stand:
+spawn and armor packet order, custom helmet identifiers, registered head-slot wearable
+components, and invisible carriers with nonzero scale across every item protocol table.
 `evergarden/tests/check_judge_assets.py` verifies Java element limits, shared atlas,
 Bedrock/Java world-space geometry parity, transparent spell textures and weakpoint placement. These are real
 translation checks without a client connection; visual inspection on a Bedrock

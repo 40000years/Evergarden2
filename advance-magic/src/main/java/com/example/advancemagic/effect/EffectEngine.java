@@ -21,6 +21,7 @@ public final class EffectEngine {
             this.owner=owner;this.world=owner.getWorld().getUID();this.duration=duration;this.body=body;
         }
         public <T extends Entity> T track(T entity) { entity.setPersistent(false);entities.add(entity);return entity; }
+        public boolean isClosed() { return closed; }
         public void onClose(Runnable callback) { cleanup.add(callback); }
         public void close() {
             if(closed)return;closed=true;

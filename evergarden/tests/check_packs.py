@@ -1,4 +1,4 @@
-"""Check model routing, Geyser coexistence, six wearable models and release integrity."""
+"""Check model routing, Geyser coexistence, six mask models and release integrity."""
 import hashlib
 import json
 import zipfile
@@ -11,10 +11,16 @@ root = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(root.parent / 'tools'))
 from release_jar_checks import check_jar
 from bedrock_particle_checks import check_direction_modes
+from check_retired_core_cleanup import assert_no_retired, assert_mapping_cleanup
 dist = root / 'dist'
 check_direction_modes(dist / 'evergarden-bedrock.mcpack')
 mapping = json.loads((dist / 'geyser-mappings.json').read_text())
 other = json.loads((root.parent / 'advance-magic/dist/geyser-mappings.json').read_text())
+assert_mapping_cleanup(mapping)
+assert_mapping_cleanup(other)
+for pack_name in ('evergarden-java.zip', 'evergarden-bedrock.mcpack'):
+    with zipfile.ZipFile(dist / pack_name) as retired_check:
+        assert_no_retired(retired_check)
 
 def check_bedrock_references(pack_paths):
     """Resolve attachable references across the packs served together, including vanilla exceptions."""
@@ -53,22 +59,32 @@ definitions = [d for group in mapping['items'].values() for d in group]
 identifiers = {d['bedrock_identifier'] for d in definitions}
 other_ids = {d['bedrock_identifier'] for group in other['items'].values() for d in group}
 relic_expected = {"voidscape:" + name for name in (
-    "void_key", "rift_pickaxe", "smelter_pickaxe", "storm_bow", "nova_bow", "rift_blade", "eternal_aegis",
-    "scroll_eternity", "scroll_limit_break", "scroll_unique", "astral_dust", "key_shard", "repair_stone", "void_elixir",
+    "void_key", "rift_pickaxe", "smelter_pickaxe",
+    "scroll_eternity", "scroll_limit_break", "scroll_unique",
     "thorn_mask", "thorn_crown", "astral_mask", "astral_crown", "chrono_mask", "chrono_crown"
 )}
 assert len(definitions) == len(identifiers)
 assert relic_expected.issubset(identifiers), f"Missing relics: {relic_expected - identifiers}"
-assert len(identifiers) == 188, f"Expected 188 identifiers including the fourteen Judge models, got {len(identifiers)}"
+retired = {"voidscape:" + name for name in ("rift_blade", "storm_bow", "nova_bow", "eternal_aegis")}
+assert not identifiers & retired, f"Retired relic mappings remain: {identifiers & retired}"
+# Arkhaia and Seraphon are ModelEngine / native Geyser entities; no static boss item models remain.
+assert not [i for i in identifiers if i.startswith(('voidscape:boss_arkhaia_', 'voidscape:boss_seraphon_'))], 'Retired static boss models remain'
+with zipfile.ZipFile(dist / 'evergarden-bedrock.mcpack') as pack:
+    for boss in ('arkhaia', 'seraphon'):
+        entity = json.loads(pack.read(f'entity/{boss}_native.entity.json'))['minecraft:client_entity']['description']
+        assert entity['identifier'] == 'voidscape:' + boss and 'aura' in entity['scripts']['animate'], boss
+    assert not [n for n in pack.namelist() if 'boss_arkhaia' in n or 'boss_seraphon' in n]
+assert len(identifiers) == 41, f"Expected 41 active identifiers, got {len(identifiers)}"
+assert not identifiers & {'voidscape:'+name for name in ('key_shard','repair_stone','void_elixir')}
 assert not identifiers & other_ids, 'Duplicate Geyser custom item IDs across plugins'
 hashes = json.loads((dist / 'pack-hashes.json').read_text())
 service_source = (root / 'src/main/java/com/example/voidscape/pack/ResourcePackService.java').read_text(encoding='utf8')
 pack_config = (root / 'src/main/resources/config.yml').read_text(encoding='utf8')
-url = re.search(r'DEFAULT_CDN_URL = "([^"]+)"', service_source).group(1)
-sha1 = re.search(r'CURRENT_SHA1 = "([0-9a-f]{40})"', service_source).group(1)
-assert re.fullmatch(r'https://raw\.githubusercontent\.com/40000years/Evergarden2/[0-9a-f]{40}/evergarden/dist/evergarden-java\.zip',url)
-assert f"url: '{url}'" in pack_config and f"sha1: '{sha1}'" in pack_config
-assert sha1 == hashes['evergarden-java.zip']
+assert "url: ''" in pack_config and "sha1: ''" in pack_config
+assert 'host:\n    enabled: true' in pack_config and 'port: 8188' in pack_config
+assert 'migratePackConfig(plugin.getConfig(),sha1)' in service_source
+assert 'packDigest(plugin.getConfig(),sha1)' in service_source
+assert 'return DEFAULT_CDN_URL' not in service_source, 'An unavailable local bundle must not fall back to stale art'
 for filename, digest in hashes.items():
     assert hashlib.sha1((dist / filename).read_bytes()).hexdigest() == digest
 with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist / 'evergarden-bedrock.mcpack') as bedrock:
@@ -79,20 +95,16 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
                 json.loads(archive.read(name))
     atlas = json.loads(bedrock.read('textures/item_texture.json'))['texture_data']
     manifest = json.loads(bedrock.read('manifest.json'))
-    expected_version = [3, 19, 0]
+    expected_version = [3, 45, 0]
     assert manifest['header']['version'] == expected_version
     assert manifest['modules'][0]['version'] == expected_version
-    with zipfile.ZipFile(root.parent / 'advance-magic/dist/advance-magic-bedrock.mcpack') as magic:
-        magic_atlas = json.loads(magic.read('textures/item_texture.json'))['texture_data']
-        assert magic_atlas.keys() <= atlas.keys(), 'Evergarden must also expose the Advance Magic icons'
-        for key, entry in magic_atlas.items():
-            if key.startswith('advance_magic.core_'):
-                continue
-            assert bedrock.read(entry['textures'] + '.png') == magic.read(entry['textures'] + '.png')
+    assert all(not key.startswith('advance_magic.') for key in atlas), 'Advance Magic icons belong to their own pack; retired crafting core fallback icons must be absent'
     assert not any('nether_portal' in name or name.endswith('/portal.png') for name in java.namelist())
     assert 'textures/blocks/portal.png' not in bedrock.namelist()
-    assert json.loads(java.read('assets/voidscape/textures/item/azure_portal.png.mcmeta'))['animation']['frametime'] == 2
-    assert 'USE_UV_ANIM' in json.loads(bedrock.read('materials/evergarden_portal.material'))['materials']['evergarden_portal:entity_alphablend']['+defines']
+    for archive in (java, bedrock):
+        assert not any('azure_portal' in name or 'evergarden_portal' in name for name in archive.namelist())
+    assert not any(entry.get('bedrock_identifier') == 'voidscape:azure_portal'
+                   for entries in mapping['items'].values() for entry in entries)
     assert 'assets/minecraft/items/carved_pumpkin.json' not in java.namelist()
     for theme in ('whale','garden','observatory'):
         name=f'restoration_altar_{theme}'
@@ -111,31 +123,20 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
             if name.startswith('judge_'):
                 assert entry['model'] == entry['bedrock_identifier'] and 'predicate' not in entry
                 continue  # Dedicated addon; meshes and atlas are checked by check_judge_assets.py.
-            # Crops and head models use direct item_model components; relics
+            # Head models use direct item_model components; relics
             # additionally support the legacy custom-model-data selector.
-            if name.startswith(('seed_', 'crop_')) or name == 'void_elixir' or name.endswith(('_mask', '_crown')):
+            direct = entry['model'] == entry['bedrock_identifier']  # item_model component routes (masks, orbs, eggs, feathers)
+            if name.endswith(('_mask', '_crown')) or direct:
                 assert entry['model'] == entry['bedrock_identifier']
                 assert 'predicate' not in entry
             else:
                 assert entry['model'] == base
-            if not name.startswith(('seed_', 'crop_')) and name != 'void_elixir' and not name.endswith(('_mask', '_crown')):
                 assert entry['predicate']['value'] in cases
             assert json.loads(java.read(f'assets/voidscape/items/{name}.json'))['model']
             java_texture = java.read(f'assets/voidscape/textures/item/{name}.png')
             bedrock_texture = bedrock.read(atlas[entry['bedrock_options']['icon']]['textures'] + '.png')
-            if name in ('storm_bow', 'nova_bow'):
-                assert struct.unpack('>II', java_texture[16:24]) == (32, 32)
-                assert struct.unpack('>II', bedrock_texture[16:24]) == (16, 16)
-                attachment = json.loads(bedrock.read(f'attachables/{name}.json'))['minecraft:attachable']['description']
-                assert 'wield_first_person_pull' in attachment['animations']
-                for stage in range(3):
-                    frame = bedrock.read(f'textures/items/{name}_pulling_{stage}.png')
-                    assert struct.unpack('>II', frame[16:24]) == (16, 16)
-            else:
-                assert java_texture == bedrock_texture
-            if name.startswith(('seed_', 'crop_')):
-                assert struct.unpack('>II', java.read(f'assets/voidscape/textures/item/{name}.png')[16:24]) == (64, 64), name
-            if name.endswith(('_mask', '_crown')) or '_stage_' in name:
+            assert java_texture == bedrock_texture
+            if name.endswith(('_mask', '_crown')):
                 model = json.loads(java.read(f'assets/voidscape/models/item/{name}.json'))
                 assert 'head' in model['display']
                 if name.endswith(('_mask', '_crown')):
@@ -144,35 +145,11 @@ with zipfile.ZipFile(dist / 'evergarden-java.zip') as java, zipfile.ZipFile(dist
                 assert attachment['identifier'] == entry['bedrock_identifier']
                 geometry = json.loads(bedrock.read(f'models/entity/{name}.geo.json'))['minecraft:geometry'][0]
                 assert geometry['description']['identifier'] == attachment['geometry']['default']
-                if '_stage_' not in name:
-                    assert 'item_slot_to_bone_name' in geometry['bones'][0]['binding']
-                if '_stage_' in name:
-                    assert geometry['bones'][0]['name'] == 'head'
-                    assert geometry['bones'][0]['pivot'] == [0, 24, 0]
-                    assert base in ('minecraft:carved_pumpkin', 'minecraft:iron_helmet'), 'Plant attachables require a head-equippable base'
-                    # Match vanilla crop.json density: two X planes plus two Z planes.
-                    assert len(geometry['bones'][0]['cubes']) == 4
-                    assert geometry['description']['texture_width'] == geometry['description']['texture_height'] == 64
-                    # Box UV previously sampled only the top of the sprite,
-                    # clipping the sprout drawn in its lower half.
-                    plane_faces = [('north', 'south'), ('north', 'south'), ('west', 'east'), ('west', 'east')]
-                    for cube, faces in zip(geometry['bones'][0]['cubes'], plane_faces):
-                        # Small stand at -0.65, geometry in pixels /16, scale .5.
-                        # The base must be above the farmland surface (-1/16).
-                        assert abs(-0.8125 + cube['origin'][1] / 16 * 0.5 + 1 / 16) < 1e-6
-                        assert cube['uv'][faces[0]] == {'uv': [0, 0], 'uv_size': [64, 64]}, name
-                        assert cube['uv'][faces[1]] == {'uv': [64, 0], 'uv_size': [-64, 64]}, name
-                        assert cube['size'][1] == 20, name
-                        assert model['display']['head']['scale'] == [3.2, 3.2, 3.2], name
-                        assert model['display']['head']['translation'] == [0, 9.6, 0], name
-    assert json.loads(java.read('assets/minecraft/items/bow.json'))['model']['fallback']['type'] == 'minecraft:condition'
-    assert json.loads(java.read('assets/minecraft/items/shield.json'))['model']['fallback']['on_false']['model']['type'] == 'minecraft:shield'
-    assert json.loads(java.read('assets/minecraft/items/shield.json'))['model']['fallback']['on_true']['model']['type'] == 'minecraft:shield'
-    assert json.loads(java.read('assets/minecraft/items/shield.json'))['model']['fallback']['transformation']['scale'] == [1.0, -1.0, -1.0]
+                assert 'item_slot_to_bone_name' in geometry['bones'][0]['binding']
+    assert 'assets/minecraft/items/bow.json' not in java.namelist()
+    assert 'assets/minecraft/items/shield.json' not in java.namelist()
 check_jar(root.parent / 'dist/evergarden.jar')
 with zipfile.ZipFile(root.parent / 'dist/evergarden.jar') as jar:
     for filename in (*hashes, 'geyser-mappings.json', 'pack-hashes.json'):
         assert jar.read('resource-packs/' + filename) == (dist / filename).read_bytes()
-    for filename in ('evergarden-bedrock.mcpack', 'geyser-mappings.json'):
-        assert jar.read('geyser/' + filename) == (dist / filename).read_bytes()
-print('PASS: all Bedrock atlas/geometry/texture/controller/animation references, 20 relic routes, six wearable models, vanilla fallbacks, no cross-plugin IDs, hashes and embedded assets')
+print('PASS: all Bedrock references, 16 active relic/mask routes, six mask models, retired items absent, vanilla fallbacks, no cross-plugin IDs, hashes and embedded assets')

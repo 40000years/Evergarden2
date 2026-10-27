@@ -108,6 +108,7 @@ public final class RestorationService implements Listener {
     }
     @EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)
     public void entity(PlayerInteractEntityEvent e){
+        if(plugin.flyingStaff().isDisplay(e.getRightClicked()))return;
         if(e.getHand()==EquipmentSlot.HAND&&isRepairWand(e.getPlayer().getInventory().getItemInMainHand())){e.setCancelled(true);use(e.getPlayer());}
     }
     @EventHandler(priority=EventPriority.HIGH,ignoreCancelled=true)

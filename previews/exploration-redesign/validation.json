@@ -1,0 +1,32 @@
+{
+  "version": "3.0.0-e2.58-exploration-redesign",
+  "checks": 2205,
+  "designs": 32,
+  "medium_designs": 20,
+  "authored_chests": 134,
+  "placement_cells": 196608,
+  "loot_rolls": 20000,
+  "paired_loot_rolls": 4000,
+  "release": "output/exploration-redesign-release-v5-20261014/evergarden.jar",
+  "sha256": "2f965ea87da8d38b50b047c00cf619f1e31c32a88db70fc50092dfecc02ec7be",
+  "reports": {
+    "terrain-coordinates": "output/exploration-redesign-validation-v5-20261014/samples/checks.txt",
+    "living-first": "output/exploration-redesign-paper-v5-20261014/living-result-1.txt",
+    "living-restart": "output/exploration-redesign-paper-v5-20261014/living-result-2.txt",
+    "terrain-first": "output/exploration-redesign-terrain-paper-20261014/biome-world-result-1.txt",
+    "terrain-restart": "output/exploration-redesign-terrain-paper-20261014/biome-world-result-2.txt",
+    "rarity-first": "output/exploration-redesign-rarity-paper-20261014/rarity-result-1.txt",
+    "rarity-restart": "output/exploration-redesign-rarity-paper-20261014/rarity-result-2.txt",
+    "e256-upgrade-1": "output/exploration-redesign-upgrade-e256-paper-20261014/small-upgrade-result-1.txt",
+    "e256-upgrade-2": "output/exploration-redesign-upgrade-e256-paper-20261014/small-upgrade-result-2.txt",
+    "e256-upgrade-3": "output/exploration-redesign-upgrade-e256-paper-20261014/small-upgrade-result-3.txt",
+    "e257-upgrade-1": "output/exploration-redesign-upgrade-e257-v3-paper-20261014/small-upgrade-result-1.txt",
+    "e257-upgrade-2": "output/exploration-redesign-upgrade-e257-v3-paper-20261014/small-upgrade-result-2.txt",
+    "e257-upgrade-3": "output/exploration-redesign-upgrade-e257-v3-paper-20261014/small-upgrade-result-3.txt"
+  },
+  "validation_build_note": "Living checks and e2.57 upgrade use the final v5 JAR. Terrain, rarity and e2.56 upgrade use v4. All corresponding placement, terrain, archived geometry and migration classes are byte-for-byte identical; only current medium geometry changed in the final refinement.",
+  "final_geometry_changes": [
+    "com/example/voidscape/world/MediumExplorationBlueprint$Builder.class",
+    "com/example/voidscape/world/MediumExplorationBlueprint.class"
+  ]
+}

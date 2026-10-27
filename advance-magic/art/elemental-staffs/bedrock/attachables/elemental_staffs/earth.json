@@ -1,0 +1,39 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:attachable": {
+    "description": {
+      "identifier": "advance_magic:staff_earth",
+      "materials": {
+        "default": "entity_alphatest",
+        "glow": "entity_emissive_alpha"
+      },
+      "textures": {
+        "default": "textures/elemental_staffs/materials"
+      },
+      "geometry": {
+        "default": "geometry.advance_magic.staff_earth",
+        "fx": "geometry.advance_magic.staff_earth_fx"
+      },
+      "animations": {
+        "first": "animation.advance_magic.staff_earth.first",
+        "third": "animation.advance_magic.staff_earth.third",
+        "idle": "animation.advance_magic.staff_earth.idle"
+      },
+      "scripts": {
+        "animate": [
+          {
+            "first": "context.is_first_person == 1.0"
+          },
+          {
+            "third": "context.is_first_person == 0.0"
+          },
+          "idle"
+        ]
+      },
+      "render_controllers": [
+        "controller.render.advance_magic.elemental_staff_body",
+        "controller.render.advance_magic.staff_earth_fx"
+      ]
+    }
+  }
+}

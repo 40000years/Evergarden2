@@ -1,0 +1,33 @@
+{
+  "tool": "built-in image_gen.imagegen",
+  "mode": "transparent RGBA",
+  "prompts": [
+    {
+      "id": "earth-sigil-v1",
+      "selected": false,
+      "prompt": "Use case: stylized-concept. Asset type: production transparent magical VFX texture for Minecraft Java and Bedrock, flat world-plane artwork, not a screenshot or inventory icon. Primary request: one extremely intricate legendary EARTH spell casting seal for Titan's Judgment, designed to accompany an existing ivory stone and antique-gold Ancient Judge boss hand that descends to smash the ground. Subject: one perfectly circular top-down orthographic geometric earth rune wheel. Concentric ornate antique-gold and warm amber engraved rings, squared stone-like arcane glyphs, sixfold architectural geometry, interlocking fine labyrinth lines and small faceted crystalline accents. The center has a subtle small earth crest and much open negative space, not a solid painted disc. Outer ornament is complete, balanced and readable at a distance, exquisite fine line work similar to premium celestial magic circles. Palette: antique gold, glowing amber, pale sandstone ivory, restrained dark bronze edge accents. Lighting: emissive golden strokes with a very thin soft glow, crisp detailed lines, no large cloud. Composition: entire circle centered in square canvas, no perspective or foreshortening, at least 8 percent transparent margin all sides. GENUINELY TRANSPARENT RGBA background, transparent holes between all lines; no ground, stones outside circle, environment, solid black or white backdrop, checkerboard, frame, labels, text, letters, UI, hand, character or watermark. Native high resolution maximum detail; do not draw a filled background."
+    },
+    {
+      "id": "earth-sigil-v2",
+      "selected": true,
+      "prompt": "Use case: precise-object-edit. Edit target: the supplied golden EARTH rune seal PNG. Preserve this exact ornate golden/ivory/amber circle design, colour, fine engraving, symmetry and transparent holes. Only correct its framing: make the ENTIRE circle visibly smaller inside a larger square transparent canvas so that every outer diamond tip is fully visible and there is at least 10 percent empty transparent margin on ALL four sides. Do not crop any ornament. Complete any tip truncated at the old image edge. Truly transparent RGBA background. Do not add new objects, text, backdrop, checkerboard, hand, environment or shadow. The circle remains perfectly round, top-down orthographic, centered. Highest-detail crisp emissive game VFX texture.",
+      "reference": "source/titans_judgment_sigil-v1.png"
+    },
+    {
+      "id": "earth-impact-v1",
+      "selected": false,
+      "prompt": "Use case: stylized-concept. Asset type: one production transparent ground-impact VFX texture for a Legendary EARTH spell in Minecraft Java and Bedrock. Primary request: a magnificent top-down radial shockwave of cracked golden earth magic at the moment an existing ivory-stone boss hand slams the ground. Subject: one circular burst: fine branching amber-gold fissures radiate from a small bright impact center, jagged pale sandstone and dark bronze fragment accents erupt along an annular expanding front, with delicate dusty gold translucent wisps and tiny glowing grit. Draw the LIGHT and fragments of the shockwave only, NOT a solid filled disc or terrain tile. All gaps and most of the center remain genuine alpha. Style: exquisite high-resolution hand-painted fantasy game VFX, crisp angular luminous fracture patterns and translucent dust, highly readable silhouette, controlled bloom. Palette: amber, antique gold, ivory stone, restrained warm bronze. Composition: perfectly top-down orthographic round burst, no perspective, one isolated effect fully contained with visible empty transparent border all sides. No hand, fist, character, landscape, ground plane, scene, backdrop, text, label, UI, frame, watermark or checkerboard. Truly transparent RGBA background. Maximum native fine detail, do not crop rays or fragments."
+    },
+    {
+      "id": "earth-impact-v2",
+      "selected": false,
+      "prompt": "Use case: precise-object-edit. Edit target: this earth shockwave VFX PNG. Keep the same top-down circular amber/ivory earth-impact burst, angular floating stone fragments, fine branching golden cracks, glowing sparks and native detail. REMOVE the broad connected painted brown/beige terrain surfaces between the bright cracks: those areas must become genuinely TRANSPARENT. Preserve the glowing fissure lines themselves as separate radiant branches, scattered detached rock pieces, and only a VERY sparse semi-transparent dusty outer annulus. The centre and large gaps between branches must be mostly clear alpha; this is a fleeting spell overlay, not a round terrain slab. Slightly reduce the entire artwork inside the square so no fragments touch any canvas edge; at least 6 percent empty alpha margin. No hand, character, terrain tile, environment, backdrop, checkerboard, text, UI or watermark. True transparent RGBA background. Highest-detail controlled emissive fantasy game VFX.",
+      "reference": "source/titans_judgment_impact-v1.png"
+    },
+    {
+      "id": "earth-impact-ring-v3",
+      "selected": true,
+      "prompt": "Use case: stylized-concept. Asset type: one isolated transparent spell VFX sprite, EARTH expanding impact SHOCKWAVE RING. Draw ONLY a narrow circular annulus of angular ivory rock chips, bright amber/gold sparks and short jagged golden energy fractures. Absolutely EMPTY TRANSPARENT CENTER: the inner 60 percent diameter is a clear hole with zero rocks, zero paint, zero dust, zero terrain. The annular ring occupies only a thin band around that clear hole; its edge breaks apart into detached glowing fragments and wisps. Do NOT fill this ring with a ground surface. It should resemble a beautifully detailed floating shockwave wreath, viewed exactly top-down, with thin emissive light accent and a few floating golden chips around the outer edge. Palette antique gold, warm amber, pale sandstone, bronze. No continuous brown disk. No terrain slab. No hand. No character. No object inside central hole. No scene or backdrop, text, letters, UI, frame, checkerboard or watermark. Entire circular narrow ring visible, genuine transparent RGBA surroundings AND transparent middle. High resolution fine crystalline rock detail. Native game-ready magical impact overlay for Titan's Judgment, accompanying an existing ivory-and-gold boss hand."
+    }
+  ]
+}

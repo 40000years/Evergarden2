@@ -1,0 +1,29 @@
+{
+  "version": "3.0.0-e2.117-ranged-models",
+  "bedrock_pack_version": "3.46.0",
+  "result": "PASS_CODE_AND_ASSETS_CLIENT_CHECK_PENDING",
+  "jar_sha256": "6517490d7b4f118ff7d178f57ac0cb832a1a529339cbfd8d3188caafe8b48df6",
+  "previous_jar_sha256": "dbf1d5d373471e4d594201d80556d901e82e9012ef0012a02c039100bb20a9dd",
+  "native_runtime_checks": 1139,
+  "java_asset_and_projection_checks": 871,
+  "bedrock_asset_and_pose_checks": 491,
+  "geyser_charged_state_checks": 45,
+  "changed_jar_entries": [
+    "plugin.yml",
+    "resource-packs/evergarden-bedrock.mcpack",
+    "resource-packs/evergarden-java.zip",
+    "resource-packs/geyser-mappings.json",
+    "resource-packs/pack-hashes.json"
+  ],
+  "unchanged_production_classes": 403,
+  "unchanged_other_adventurer_weapons": 18,
+  "all_other_resources_including_pets_and_arkhaia_byte_identical": true,
+  "java_hotbar_state_dispatch_verified": true,
+  "java_draw_pose_projection_verified": true,
+  "bedrock_hand_orientation_math_verified": true,
+  "bedrock_loaded_arrow_rocket_definitions_verified_on_geyser": true,
+  "bedrock_hotbar_pull_client_verified": false,
+  "connected_client_playtest": false,
+  "live_server_modified": false,
+  "limitation": "Bedrock in-use hotbar atlas frame selection still requires a real client test; loaded arrow/rocket icons use registered charge_type predicates."
+}

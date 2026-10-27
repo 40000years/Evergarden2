@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "advance_magic:item/elemental_staffs/earth_icon"
+  }
+}

@@ -12,6 +12,7 @@ public final class GeometryChecks {
         for(var starter : DungeonLayout.STARTER_SITES) {
             check(starter.kind()!=null&&starter.id()!=null,"valid starter site "+starter.id());
             check(starter.x()!=0||starter.z()!=0,"starter is outside spawn island");
+            check(starter.tier()==1,"starter site is Tier 1: "+starter.id());
         }
         var foundDark=planner.locate(0,0,DungeonLayout.Kind.SANCTUM_DARK,12);
         check(foundDark!=null&&foundDark.kind()==DungeonLayout.Kind.SANCTUM_DARK,"locate finds dark sanctum");

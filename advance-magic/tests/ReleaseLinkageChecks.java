@@ -7,13 +7,12 @@ public final class ReleaseLinkageChecks {
         // Reproduces the constructor failure reported during plugin onEnable.
         new MythicSpells(new MagicContext(null));
         for(String name:new String[]{"SolarLineVisuals","ChronosLineVisuals","MythicLineVisuals",
-                "JudgmentSealVisuals","JudgmentBeamVisuals"}) {
+                "JudgmentSealVisuals","JudgmentBeamVisuals","LegendarySpells","LegendarySpellVisuals"}) {
             var type=Class.forName("com.example.advancemagic.spell."+name,false,ReleaseLinkageChecks.class.getClassLoader());
             type.getDeclaredConstructors();type.getDeclaredMethods();
         }
         Class.forName("com.example.advancemagic.effect.EffectEngine$Effect",false,ReleaseLinkageChecks.class.getClassLoader());
         Class.forName("com.example.advancemagic.api.MagicCastEvent",false,ReleaseLinkageChecks.class.getClassLoader()).getDeclaredMethods();
-        Class.forName("com.example.voidscape.crop.CropBuffListener",false,ReleaseLinkageChecks.class.getClassLoader()).getDeclaredMethods();
-        System.out.println("PASS: MythicSpells constructor, five effect classes and Evergarden MagicCastEvent linkage");
+        System.out.println("PASS: MythicSpells constructor, seven effect classes and Evergarden MagicCastEvent linkage");
     }
 }

@@ -1,0 +1,5 @@
+name: WandSecurityProbe
+version: '1.0'
+main: WandSecurityProbe
+api-version: '26.2'
+depend: [advance-magic, Evergarden]

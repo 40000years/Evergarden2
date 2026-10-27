@@ -1,0 +1,26 @@
+{
+  "version": "1.9.5-legendary-view-presence",
+  "bedrock_pack": "2.12.5",
+  "changed_weapons": [
+    "excalibur",
+    "longinus",
+    "tyrfing"
+  ],
+  "first_person_scale_relative_to_1_9_4": 1.2,
+  "first_person_shaft_position_delta": [
+    0,
+    -0.5,
+    0
+  ],
+  "unchanged_weapons": [
+    "mjolnir",
+    "vajra"
+  ],
+  "third_person": "Exact match to 1.9.4",
+  "java_pack": "Exact match to 1.9.4",
+  "runtime": "PASS 58",
+  "asset_checks": 225,
+  "hand_fit_checks": 145,
+  "view_profile_checks": 32,
+  "sha256": "cce8d2d74d7d7b94d8263f2fa3b4b8eb3376dbeb126060ef71a7d095e6c94f53"
+}

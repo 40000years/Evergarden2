@@ -12,8 +12,15 @@
 
     <artifactId>evergarden</artifactId>
     <packaging>jar</packaging>
+    <repositories>
+        <repository><id>lumine</id><url>https://mvn.lumine.io/repository/maven-public/</url></repository>
+    </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.ticxo.modelengine</groupId><artifactId>ModelEngine</artifactId>
+            <version>R4.1.1</version><scope>provided</scope>
+        </dependency>
         <!-- Advance Magic API -->
         <dependency>
             <groupId>com.example</groupId>
@@ -42,6 +49,9 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.bak</exclude>
+                </excludes>
             </resource>
             <resource>
                 <directory>dist</directory>
@@ -55,17 +65,25 @@
                     <include>pack-hashes.json</include>
                 </includes>
             </resource>
-            <resource>
-                <directory>dist</directory>
-                <targetPath>geyser</targetPath>
-                <filtering>false</filtering>
-                <includes>
-                    <include>evergarden-bedrock.mcpack</include>
-                    <include>geyser-mappings.json</include>
-                </includes>
-            </resource>
         </resources>
         <plugins>
+            <!-- Compile the shared delivery package into both JARs. Evergarden's
+                 resource packs must also work without the optional Magic plugin. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>shared-pack-delivery</id>
+                        <phase>generate-sources</phase>
+                        <goals><goal>add-source</goal></goals>
+                        <configuration>
+                            <sources><source>${project.basedir}/../advance-magic/src/main/java/com/example/advancemagic/pack/delivery</source></sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

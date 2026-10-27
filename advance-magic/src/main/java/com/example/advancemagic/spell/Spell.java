@@ -22,7 +22,10 @@ public enum Spell {
     GUARDIAN_BEAM("Guardian Beam", Material.PRISMARINE_SHARD, 60, 10, 0x56E0B5),
     SOLAR_APOCALYPSE("Solar Apocalypse", Material.SUNFLOWER, 100, 45, 0xFFD34D),
     CHRONOS_FINAL_HOUR("Chronos: Final Hour", Material.CLOCK, 95, 40, 0x72EDFF),
-    HEAVENS_JUDGMENT("Heaven's Judgment", Material.BEACON, 100, 45, 0xFFD34D);
+    HEAVENS_JUDGMENT("Heaven's Judgment", Material.BEACON, 100, 45, 0xFFD34D),
+    VERDANT_SOVEREIGN("Verdant Sovereign", Material.EMERALD, 100, 55, 0x58FFB1),
+    LUNAR_REQUIEM("Lunar Requiem", Material.AMETHYST_SHARD, 100, 55, 0xD8F3FF),
+    CRIMSON_OBLIVION("Crimson Oblivion", Material.CRYING_OBSIDIAN, 100, 60, 0xFF315B);
 
     public final String title;
     public final Material core;
@@ -32,14 +35,21 @@ public enum Spell {
     }
     public String id() { return name().toLowerCase(Locale.ROOT); }
     public boolean isMythic() {
-        return this==SHULKER_LEVITATION||this==SOLAR_APOCALYPSE||this==CHRONOS_FINAL_HOUR||this==HEAVENS_JUDGMENT;
+        return this==SHULKER_LEVITATION||this==SOLAR_APOCALYPSE||this==CHRONOS_FINAL_HOUR||this==HEAVENS_JUDGMENT||isLegendary();
     }
+    public boolean isLegendary() {
+        return this==VERDANT_SOVEREIGN||this==LUNAR_REQUIEM||this==CRIMSON_OBLIVION;
+    }
+    public static long mythicCount() { return java.util.Arrays.stream(values()).filter(Spell::isMythic).count(); }
     public static Spell parse(String text) {
         if(text==null) return null;
         String upper=text.toUpperCase(Locale.ROOT).trim();
         if(upper.equals("SOLAR")||upper.equals("SUN"))return SOLAR_APOCALYPSE;
         if(upper.equals("CHRONOS")||upper.equals("FINAL_HOUR"))return CHRONOS_FINAL_HOUR;
         if(upper.equals("JUDGMENT")||upper.equals("JUDGEMENT")||upper.equals("HEAVEN"))return HEAVENS_JUDGMENT;
+        if(upper.equals("VERDANT")||upper.equals("SOVEREIGN"))return VERDANT_SOVEREIGN;
+        if(upper.equals("LUNAR")||upper.equals("MOON")||upper.equals("REQUIEM"))return LUNAR_REQUIEM;
+        if(upper.equals("CRIMSON")||upper.equals("OBLIVION"))return CRIMSON_OBLIVION;
         if(upper.contains("INVISIBILITY")||upper.equals("SHROUD")) return SONIC_BOOM;
         if(upper.contains("POISON")||upper.contains("SPORES")) return BLAZE_BARRAGE;
         if(upper.contains("SOUL")||upper.equals("SOULS")||upper.contains("DRAIN")) return GUARDIAN_BEAM;

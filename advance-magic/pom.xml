@@ -12,7 +12,6 @@
         <includes>
           <include>advance-magic-java.zip</include><include>advance-magic-bedrock.mcpack</include>
           <include>geyser-mappings.json</include><include>pack-hashes.json</include>
-          <include>wand-preview.html</include><include>advance-magic-guide-th.png</include>
         </includes>
       </resource>
     </resources>

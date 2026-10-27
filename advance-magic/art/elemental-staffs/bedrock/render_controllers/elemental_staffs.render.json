@@ -1,0 +1,235 @@
+{
+  "format_version": "1.8.0",
+  "render_controllers": {
+    "controller.render.advance_magic.staff_fire_fx": {
+      "geometry": "Geometry.fx",
+      "materials": [
+        {
+          "*": "Material.default"
+        }
+      ],
+      "rebuild_animation_matrices": true,
+      "textures": [
+        "Texture.default"
+      ],
+      "ignore_lighting": true,
+      "part_visibility": [
+        {
+          "glint_1": "1.0"
+        },
+        {
+          "glint_2": "1.0"
+        },
+        {
+          "glint_3": "context.is_first_person == 0.0"
+        }
+      ]
+    },
+    "controller.render.advance_magic.staff_wind_fx": {
+      "geometry": "Geometry.fx",
+      "materials": [
+        {
+          "*": "Material.default"
+        }
+      ],
+      "rebuild_animation_matrices": true,
+      "textures": [
+        "Texture.default"
+      ],
+      "ignore_lighting": true,
+      "part_visibility": [
+        {
+          "glint_1": "1.0"
+        },
+        {
+          "glint_2": "1.0"
+        },
+        {
+          "glint_3": "context.is_first_person == 0.0"
+        }
+      ]
+    },
+    "controller.render.advance_magic.staff_earth_fx": {
+      "geometry": "Geometry.fx",
+      "materials": [
+        {
+          "*": "Material.default"
+        }
+      ],
+      "rebuild_animation_matrices": true,
+      "textures": [
+        "Texture.default"
+      ],
+      "ignore_lighting": true,
+      "part_visibility": [
+        {
+          "glint_1": "1.0"
+        },
+        {
+          "glint_2": "1.0"
+        },
+        {
+          "glint_3": "context.is_first_person == 0.0"
+        }
+      ]
+    },
+    "controller.render.advance_magic.staff_ice_fx": {
+      "geometry": "Geometry.fx",
+      "materials": [
+        {
+          "*": "Material.default"
+        }
+      ],
+      "rebuild_animation_matrices": true,
+      "textures": [
+        "Texture.default"
+      ],
+      "ignore_lighting": true,
+      "part_visibility": [
+        {
+          "glint_1": "1.0"
+        },
+        {
+          "glint_2": "1.0"
+        },
+        {
+          "glint_3": "context.is_first_person == 0.0"
+        }
+      ]
+    },
+    "controller.render.advance_magic.staff_water_fx": {
+      "geometry": "Geometry.fx",
+      "materials": [
+        {
+          "*": "Material.default"
+        }
+      ],
+      "rebuild_animation_matrices": true,
+      "textures": [
+        "Texture.default"
+      ],
+      "ignore_lighting": true,
+      "part_visibility": [
+        {
+          "glint_1": "1.0"
+        },
+        {
+          "glint_2": "1.0"
+        },
+        {
+          "glint_3": "context.is_first_person == 0.0"
+        }
+      ]
+    },
+    "controller.render.advance_magic.staff_lightning_fx": {
+      "geometry": "Geometry.fx",
+      "materials": [
+        {
+          "*": "Material.default"
+        }
+      ],
+      "rebuild_animation_matrices": true,
+      "textures": [
+        "Texture.default"
+      ],
+      "ignore_lighting": true,
+      "part_visibility": [
+        {
+          "glint_1": "1.0"
+        },
+        {
+          "glint_2": "1.0"
+        },
+        {
+          "glint_3": "context.is_first_person == 0.0"
+        }
+      ]
+    },
+    "controller.render.advance_magic.staff_light_fx": {
+      "geometry": "Geometry.fx",
+      "materials": [
+        {
+          "*": "Material.default"
+        }
+      ],
+      "rebuild_animation_matrices": true,
+      "textures": [
+        "Texture.default"
+      ],
+      "ignore_lighting": true,
+      "part_visibility": [
+        {
+          "glint_1": "1.0"
+        },
+        {
+          "glint_2": "1.0"
+        },
+        {
+          "glint_3": "context.is_first_person == 0.0"
+        }
+      ]
+    },
+    "controller.render.advance_magic.staff_dark_fx": {
+      "geometry": "Geometry.fx",
+      "materials": [
+        {
+          "*": "Material.default"
+        }
+      ],
+      "rebuild_animation_matrices": true,
+      "textures": [
+        "Texture.default"
+      ],
+      "ignore_lighting": true,
+      "part_visibility": [
+        {
+          "glint_1": "1.0"
+        },
+        {
+          "glint_2": "1.0"
+        },
+        {
+          "glint_3": "context.is_first_person == 0.0"
+        }
+      ]
+    },
+    "controller.render.advance_magic.elemental_staff_body": {
+      "geometry": "Geometry.default",
+      "materials": [
+        {
+          "*": "Material.default"
+        },
+        {
+          "staff_glow": "Material.glow"
+        },
+        {
+          "crown_glow": "Material.glow"
+        },
+        {
+          "focus_glow": "Material.glow"
+        },
+        {
+          "orbit_glow": "Material.glow"
+        },
+        {
+          "filigree_glow": "Material.glow"
+        },
+        {
+          "ribbon_glow": "Material.glow"
+        },
+        {
+          "flame_glow": "Material.glow"
+        },
+        {
+          "halo_glow": "Material.glow"
+        },
+        {
+          "spiral_glow": "Material.glow"
+        }
+      ],
+      "textures": [
+        "Texture.default"
+      ]
+    }
+  }
+}

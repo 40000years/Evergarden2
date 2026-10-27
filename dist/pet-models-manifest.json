@@ -1,0 +1,28 @@
+{
+  "version": "3.0.0-e2.102-mythical-pets",
+  "model_count": 51,
+  "species_count": 17,
+  "stages": [
+    "baby",
+    "medium",
+    "adult"
+  ],
+  "clips": [
+    "idle",
+    "walk",
+    "fly",
+    "sit",
+    "greet"
+  ],
+  "jar_sha256": "4567004812aea704165887397975ab762d45dbc54435253be81aededf46c0358",
+  "previous_jar_sha256": "205c0fca54a566b5750674425912ae71bc732bf656e3a1c00f61841345204176",
+  "native_report": "PASS: 51 pet models in 6 bounded trial batches / 1923 checks",
+  "asset_report": "PASS: 174789 pet asset checks / 51 original models / 255 skeletal clips",
+  "runtime": "output\\pet-models-native-final-batches-v7-20261021",
+  "native_test_mode": "bounded trial batches; unrestricted simultaneous collection requires full ModelEngine",
+  "supported_client": "Java Edition",
+  "abilities": false,
+  "riding": false,
+  "live_server_modified": false,
+  "connected_client_playtest": false
+}

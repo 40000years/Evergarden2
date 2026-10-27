@@ -1,14 +1,23 @@
 name: advance-magic
-version: 1.5.1-temple-protection
+version: '1.34.1-bedrock-pack-repair'
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
-description: Eighteen spells including four Mythic wands, mana and crafting.
+description: 58 elemental spells, cross-element loadouts, scroll extraction and craftable wooden starter staffs.
 softdepend: [floodgate, GrimAC]
 loadbefore: [Geyser-Spigot]
 commands:
+  spell:
+    description: Manage staff spells, imprint scrolls and browse the codex.
+    usage: /spell [select|imprint|extract [slot]|codex|upgrade|give]
+  staff:
+    description: Manage the spells on your held elemental staff.
+    usage: /staff [select|imprint|extract [slot]|upgrade|protect|recipe wood]
+  skilltree:
+    description: Develop your permanent magic specialization.
+    usage: /skilltree [learn <node>|reset confirm|xp <player> <amount>]
   magic:
-    description: List spells, craft wands or open the admin item menu.
-    usage: /magic [list|mana|craft|items|pack [resend]|givestaff [player]|turbo|give <player> <spell>]
+    description: Preview elemental staffs and manage magic utility items.
+    usage: /magic [list|staffs|staff give <element|all> [player]|mana|items|weapons|armor give <seraph|revenant> [piece|all] [player]|pack [resend]|givestaff [player]|turbo]
 permissions:
   advance-magic.cast:
     default: true

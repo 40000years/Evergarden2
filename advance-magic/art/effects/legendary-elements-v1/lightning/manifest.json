@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "element": "lightning",
+  "spell": "WRATH_OF_RAIJIN",
+  "created": "2026-10-24",
+  "generator": "Built-in image_gen.imagegen",
+  "transparent_background": true,
+  "semantic_edits": "None; production files and source/ originals are byte-identical",
+  "runtime_integration": "Texture assets only; no runtime, resource pack or combat changes",
+  "assets": [
+    {
+      "file": "wrath_of_raijin_sigil.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: one production transparent game VFX floor texture for the Legendary LIGHTNING spell Wrath of Raijin.\nPrimary request: an exquisitely intricate flat circular thunder-drum rune seal, viewed perfectly top-down orthographically and centred on a square canvas. Brilliant electric blue, pale gold and white luminous engraving on transparent alpha.\nStructure: many concentric sharply divided arcane circles, microscopic abstract runic ticks, interlocking geometric lightning paths, a small stylized three-comma thunder crest at the exact centre, and six smaller drum-crest medallions spaced around the outer ring. Fine jagged lightning filigree weaves between the rings without filling the negative spaces. Clear rotational symmetry, premium high-detail magical craftsmanship, crisp emissive linework and restrained blue glow tightly hugging the lines.\nComposition: entire circular silhouette contained within the middle 85 percent of the image, generous transparent margin all around. The centre and all gaps between the lines remain substantially transparent. This must read as a flat rune wheel, not physical drums, not a tilted disc, not a scene.\nBackground: genuinely transparent alpha. No opaque coloured disc or backdrop, no checkerboard painting, no floor, no smoke wall, no character, no text, no lettering, no labels, no UI, no frame, no watermark. A single standalone high-resolution texture.",
+      "generated_original": "C:/Users/User/.codex/generated_images/01a16e07-816c-7bd3-b0d3-1387907f9719/exec-648957d3-d418-40ee-bc1b-3593a6f30d37.png",
+      "role": "Horizontal floor thunder rune seal",
+      "source": "source/wrath_of_raijin_sigil.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "sha256": "463dc1bec1414d5d523dce6fa6af6f057c040835658c971fd96993afcc12a1fa",
+      "alpha": {
+        "extrema": [
+          0,
+          253
+        ],
+        "nonzero_bbox": [
+          0,
+          0,
+          1254,
+          1254
+        ],
+        "transparent_fraction": 0.19044,
+        "partial_fraction": 0.80956,
+        "opaque_fraction": 0.0
+      },
+      "visual_review": "Inspected with view_image; isolated subject, true alpha, no text or UI"
+    },
+    {
+      "file": "wrath_of_raijin_drums.png",
+      "prompt": "Use case: stylized-concept.\nAsset type: single production transparent game VFX sprite for the Legendary LIGHTNING spell Wrath of Raijin.\nPrimary request: an isolated floating ceremonial thunder-drum array. One large central drum faces the viewer almost square-on, with exactly four smaller matching drums forming a loose arc behind and around it. Each drum has a meticulously detailed dark lacquered wooden barrel, antique-gold engraved rim, tight ornamental lacing, and a luminous electric-blue three-comma thunder crest on the pale drum face.\nElectric blue and white branching lightning arcs jump between the drums, with small pale-gold sparks and thin electric wisps. The drums themselves remain clearly readable and cleanly separated by transparent gaps. No god, no person, no arms, no hands, no character, no stand.\nStyle: exceptionally detailed premium fantasy MMORPG legendary spell effect, dark lacquer, carved gold filigree, pearlescent drum skins, intense cyan-blue energy with tight controlled bloom. Lightly three-dimensional product-like view while keeping the central face readable as a game billboard.\nComposition: the entire group occupies the middle 75 percent of a square canvas. All five drums, lightning branches and sparks fit comfortably inside generous transparent margins. No cropped drums or arcs.\nBackground: genuinely transparent alpha, including gaps between drums. No opaque mist cloud, no painted checkerboard, no black backdrop, no scenery, no floor, no text, no labels, no UI, no border, no watermark. One standalone game texture.",
+      "generated_original": "C:/Users/User/.codex/generated_images/01a16e07-816c-7bd3-b0d3-1387907f9719/exec-92221083-54b2-4faf-ad88-3d6590d8c11b.png",
+      "role": "Floating thunder-drum array billboard",
+      "source": "source/wrath_of_raijin_drums.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "sha256": "dc7eaee535f9c9d0488ee01e073f7c071fc7006c43362e23d9934a8022f5579b",
+      "alpha": {
+        "extrema": [
+          0,
+          255
+        ],
+        "nonzero_bbox": [
+          0,
+          9,
+          1240,
+          1254
+        ],
+        "transparent_fraction": 0.354418,
+        "partial_fraction": 0.645566,
+        "opaque_fraction": 1.6e-05
+      },
+      "visual_review": "Inspected with view_image; isolated subject, true alpha, no text or UI"
+    }
+  ]
+}

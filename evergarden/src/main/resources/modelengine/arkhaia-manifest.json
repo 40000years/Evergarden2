@@ -1,0 +1,46 @@
+{
+  "revision": "arkhaia-dreadrose-sovereign-v1",
+  "cubes": 638,
+  "bones": 47,
+  "scale": 3.2,
+  "texture": {
+    "size": 1024,
+    "density": 9.0,
+    "tiles": 683,
+    "coverage": 0.412
+  },
+  "aura_bones": [
+    "dread_halo",
+    "flame_r",
+    "flame_l",
+    "ember_ring"
+  ],
+  "animations": {
+    "idle": 2.4,
+    "walk": 0.8,
+    "backstep": 0.8,
+    "hover": 1.4,
+    "light_windup": 0.7,
+    "light_active": 0.4,
+    "light_recover": 1.8,
+    "heavy_windup": 1.0,
+    "heavy_active": 0.6,
+    "heavy_recover": 2.0,
+    "rift_windup": 2.0,
+    "rift_active": 1.7,
+    "rift_recover": 2.4,
+    "nova_windup": 2.4,
+    "nova_active": 2.4,
+    "nova_recover": 2.6,
+    "portals_windup": 2.3,
+    "portals_active": 2.6,
+    "portals_recover": 2.6,
+    "eclipse_windup": 3.5,
+    "eclipse_active": 2.7,
+    "eclipse_recover": 3.2,
+    "stun": 1.8,
+    "transition": 3.5,
+    "aura": 12.0
+  },
+  "worst_ik_reach_error": 0.0
+}

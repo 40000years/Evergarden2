@@ -15,10 +15,6 @@ ITEMS = {
     'scroll_eternity': 'scroll_eternity_*.jpg',
     'scroll_limit_break': 'scroll_limit_break_*.jpg',
     'scroll_unique': 'scroll_unique_*.jpg',
-    'astral_dust': 'astral_dust_*.jpg',
-    'key_shard': 'key_shard_*.jpg',
-    'repair_stone': 'repair_stone_*.jpg',
-    'void_elixir': 'void_elixir_*.jpg'
 }
 
 BRAIN_DIR = Path(r'C:\Users\User\.gemini\antigravity-cli\brain\dc9d20cd-9bfd-461a-87f3-eaeeeb7daa03')

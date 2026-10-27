@@ -1,0 +1,23 @@
+{
+  "version": "1.20.1-controller-flight",
+  "sha256": "69cd0e4a8168bcf0d019c42487098337cf7be0ac05c58ecb2ef100cc1c38b875",
+  "base_sha256": "a69d1cb9468007623f05fa7a2fb7e24ba0f93622713db3cb6ae3f2e3bcdf19db",
+  "checks_passed": 269,
+  "input_matrix_cases": 40764,
+  "validation": "output/flying-staff-controller-final-20261022/flying-staff-controls-result.json",
+  "source_manifest": "output/flying-staff-controller-final-20261022/artifact-manifest.json",
+  "changed_entries": [
+    "com/example/advancemagic/CastListener.class",
+    "com/example/advancemagic/item/FlyingStaffBedrockInput$Access.class",
+    "com/example/advancemagic/item/FlyingStaffBedrockInput$Binding.class",
+    "com/example/advancemagic/item/FlyingStaffBedrockInput$Snapshot.class",
+    "com/example/advancemagic/item/FlyingStaffBedrockInput.class",
+    "com/example/advancemagic/item/FlyingStaffService$Phase.class",
+    "com/example/advancemagic/item/FlyingStaffService$Session.class",
+    "com/example/advancemagic/item/FlyingStaffService.class",
+    "com/example/advancemagic/item/RestorationService.class",
+    "plugin.yml"
+  ],
+  "resource_packs": "Byte-identical to the base release",
+  "scope": "Local workspace release only; no production server deployment or physical controller test."
+}

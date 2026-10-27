@@ -6,7 +6,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Ageable;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -15,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -25,6 +25,7 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 public final class UniqueAbilityListener implements Listener {
+    private static final ThreadLocal<Boolean> GENERATED_DAMAGE = ThreadLocal.withInitial(() -> false);
     private final VoidscapePlugin plugin;
     private final NamespacedKey arrowUniqueKey, arrowShooterKey;
     private final Map<UUID, Integer> thunderHits = new HashMap<>();
@@ -40,6 +41,21 @@ public final class UniqueAbilityListener implements Listener {
         this.plugin = plugin;
         this.arrowUniqueKey = new NamespacedKey("evergarden", "shot_unique");
         this.arrowShooterKey = new NamespacedKey("evergarden", "shot_shooter");
+    }
+
+    private boolean active(ItemStack item, UniqueEnchant enchant) {
+        return UniqueCompatibility.active(item, enchant, plugin.relics());
+    }
+
+    /** Ability damage keeps its player attribution without firing a second set of on-hit powers. */
+    public static void abilityDamage(LivingEntity victim, double amount, Player source) {
+        boolean previous = GENERATED_DAMAGE.get();
+        GENERATED_DAMAGE.set(true);
+        try {
+            victim.damage(amount, source);
+        } finally {
+            GENERATED_DAMAGE.set(previous);
+        }
     }
 
     // ==========================================
@@ -61,7 +77,7 @@ public final class UniqueAbilityListener implements Listener {
             UniqueEnchant.KINETIC_GRAPPLE, UniqueEnchant.ABSOLUTE_ZERO,
             UniqueEnchant.SINGULARITY, UniqueEnchant.METEOR_ARROW
         )) {
-            if (EnchantApplyListener.hasUnique(bow, ue)) {
+            if (active(bow, ue)) {
                 activeEnchants.add(ue.name());
             }
         }
@@ -84,6 +100,29 @@ public final class UniqueAbilityListener implements Listener {
             if (part.trim().equalsIgnoreCase(ue.name())) return true;
         }
         return false;
+    }
+
+    // Ancient enchant balance: chance-based combat procs share one rate; crowd control also has a cooldown.
+    private static final double ANCIENT_PROC_CHANCE = 0.33;
+    private final Map<String, Long> ancientCooldown = new HashMap<>();
+
+    /** Rolls an ancient enchant proc for this shooter, honouring its cooldown (0 = none). */
+    private boolean ancientProc(Player player, UniqueEnchant enchant, long cooldownMs) {
+        long now = System.currentTimeMillis();
+        String key = player.getUniqueId() + ":" + enchant.name();
+        if (ancientCooldown.getOrDefault(key, 0L) > now) return false;
+        if (java.util.concurrent.ThreadLocalRandom.current().nextDouble() >= ANCIENT_PROC_CHANCE) return false;
+        if (cooldownMs > 0) ancientCooldown.put(key, now + cooldownMs);
+        return true;
+    }
+
+    /** Vanilla bosses, world boss parts, Arkhaia and sanctuary encounters (as the pet system tells them apart). */
+    private boolean isBoss(Entity entity) {
+        var tags = entity.getScoreboardTags();
+        var data = entity.getPersistentDataContainer();
+        return entity instanceof Boss || tags.contains("boss") || tags.contains("arkhaia")
+            || data.has(plugin.key("sanctuary_boss"), PersistentDataType.BYTE)
+            || data.has(plugin.key("world_boss_entity"), PersistentDataType.BYTE);
     }
 
     private boolean canDamage(Player damager, Entity victim) {
@@ -129,17 +168,21 @@ public final class UniqueAbilityListener implements Listener {
                     }
                 }
                 case ABSOLUTE_ZERO -> {
+                    if (!ancientProc(shooter, ue, 6000L)) break;
                     at.getWorld().spawnParticle(Particle.SNOWFLAKE, at, 50, 1.5, 1.5, 1.5, 0.1);
                     at.getWorld().playSound(at, Sound.BLOCK_GLASS_BREAK, 1.0f, 0.8f);
                     for (Entity e : at.getNearbyEntities(5, 5, 5)) {
                         if (canDamage(shooter, e) && e instanceof LivingEntity target) {
-                            target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 70, 6)); // Slowness VII
-                            target.setFreezeTicks(300);
-                            target.damage(10, shooter);
+                            if (!isBoss(target)) {
+                                target.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 70, 3)); // Slowness IV
+                                target.setFreezeTicks(300);
+                            }
+                            abilityDamage(target, 10, shooter);
                         }
                     }
                 }
                 case SINGULARITY -> {
+                    if (!ancientProc(shooter, ue, 8000L)) break;
                     at.getWorld().playSound(at, Sound.BLOCK_RESPAWN_ANCHOR_DEPLETE, 1.0f, 0.6f);
                     new org.bukkit.scheduler.BukkitRunnable() {
                         int ticks = 0;
@@ -149,7 +192,7 @@ public final class UniqueAbilityListener implements Listener {
                             at.getWorld().spawnParticle(Particle.PORTAL, at, 40, 0.8, 0.8, 0.8, 0.5);
                             at.getWorld().spawnParticle(Particle.REVERSE_PORTAL, at, 25, 0.5, 0.5, 0.5, 0.2);
                             for (Entity e : at.getNearbyEntities(6.5, 4.0, 6.5)) {
-                                if (canDamage(shooter, e) && e instanceof LivingEntity m) {
+                                if (canDamage(shooter, e) && e instanceof LivingEntity m && !isBoss(m)) {
                                     Vector v = at.toVector().subtract(m.getLocation().toVector()).normalize().multiply(0.45);
                                     com.example.voidscape.compat.PlayerImpulse.apply(plugin,m,v);
                                 }
@@ -158,6 +201,7 @@ public final class UniqueAbilityListener implements Listener {
                     }.runTaskTimer(plugin, 1L, 5L);
                 }
                 case METEOR_ARROW -> {
+                    if (!ancientProc(shooter, ue, 5000L)) break;
                     at.getWorld().spawnParticle(Particle.FLAME, at, 20, 0.5, 0.1, 0.5, 0.05);
                     at.getWorld().playSound(at, Sound.ENTITY_BLAZE_SHOOT, 1.0f, 0.7f);
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -165,15 +209,15 @@ public final class UniqueAbilityListener implements Listener {
                         at.getWorld().playSound(at, Sound.ENTITY_GENERIC_EXPLODE, 1.0f, 0.8f);
                         for (Entity e : at.getNearbyEntities(5.0, 3.0, 5.0)) {
                             if (canDamage(shooter, e) && e instanceof LivingEntity m) {
-                                m.damage(32.0, shooter);
+                                abilityDamage(m, 32.0, shooter);
                                 m.setFireTicks(100);
                             }
                         }
                     }, 20L);
                 }
                 case RICOCHET -> {
-                    if (event.getHitEntity() instanceof LivingEntity victim) {
-                        List<LivingEntity> nearby = new ArrayList<>();
+                    if (event.getHitEntity() instanceof LivingEntity victim && ancientProc(shooter, ue, 0L)) {
+                        List<LivingEntity> nearby= new ArrayList<>();
                         for (Entity e : victim.getNearbyEntities(7, 4, 7)) {
                             if (canDamage(shooter, e) && !e.equals(victim) && e instanceof LivingEntity target) {
                                 nearby.add(target);
@@ -183,7 +227,7 @@ public final class UniqueAbilityListener implements Listener {
                         for (LivingEntity next : nearby) {
                             if (++chained > 3) break;
                             next.getWorld().strikeLightningEffect(next.getLocation());
-                            next.damage(14.0, shooter);
+                            abilityDamage(next, 14.0, shooter);
                             next.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, next.getLocation().add(0, 1, 0), 15, 0.3, 0.3, 0.3, 0.1);
                         }
                         if (chained > 0) {
@@ -224,10 +268,11 @@ public final class UniqueAbilityListener implements Listener {
                 event.setDamage(event.getDamage() + (effectivePower - 5) * 2.5);
             }
 
-            if (arrowHasUnique(arrow, UniqueEnchant.COLOSSUS_SLAYER) && event.getEntity() instanceof LivingEntity victim) {
+            if (arrowHasUnique(arrow, UniqueEnchant.COLOSSUS_SLAYER) && event.getEntity() instanceof LivingEntity victim
+                && arrow.getShooter() instanceof Player colossusShooter && ancientProc(colossusShooter, UniqueEnchant.COLOSSUS_SLAYER, 0L)) {
                 var maxHpAttr = victim.getAttribute(Attribute.MAX_HEALTH);
                 double maxHp = maxHpAttr != null ? maxHpAttr.getValue() : 20.0;
-                double bonus = Math.min(Math.max(12.0, maxHp * 0.08), 350.0);
+                double bonus = Math.min(Math.max(12.0, maxHp * 0.08), 150.0);
                 event.setDamage(event.getDamage() + bonus);
                 victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 0.8f, 1.4f);
                 victim.getWorld().spawnParticle(Particle.CRIT, victim.getLocation().add(0, 1, 0), 20, 0.3, 0.3, 0.3, 0.2);
@@ -238,6 +283,7 @@ public final class UniqueAbilityListener implements Listener {
             return;
         }
 
+        if (GENERATED_DAMAGE.get()) return;
         if (!(event.getDamager() instanceof Player player) || !(event.getEntity() instanceof LivingEntity victim)) return;
         if (victim instanceof ArmorStand) return;
         ItemStack weapon = player.getInventory().getItemInMainHand();
@@ -264,7 +310,7 @@ public final class UniqueAbilityListener implements Listener {
             double sweepBonus = (lbSweep - 3) * 1.5;
             for (Entity nearby : victim.getNearbyEntities(2.5, 2.5, 2.5)) {
                 if (nearby instanceof LivingEntity nearbyLiving && nearbyLiving != victim && nearbyLiving != player && canDamage(player, nearbyLiving)) {
-                    nearbyLiving.damage(Math.min(event.getDamage() * 0.5 + sweepBonus, 40.0), player);
+                    abilityDamage(nearbyLiving, Math.min(event.getDamage() * 0.5 + sweepBonus, 40.0), player);
                     nearbyLiving.getWorld().spawnParticle(Particle.SWEEP_ATTACK, nearbyLiving.getLocation().add(0, 1, 0), 1);
                 }
             }
@@ -295,19 +341,20 @@ public final class UniqueAbilityListener implements Listener {
         }
 
         // Titan Breach (Armor breach + True Damage on Axe attacks)
-        if (EnchantApplyListener.hasUnique(weapon, UniqueEnchant.TITAN_BREACH) && canDamage(player, victim)) {
+        if (active(weapon, UniqueEnchant.TITAN_BREACH) && canDamage(player, victim) && ancientProc(player, UniqueEnchant.TITAN_BREACH, 0L)) {
             var armorAttr = victim.getAttribute(Attribute.ARMOR);
             double armorVal = armorAttr != null ? armorAttr.getValue() : 0.0;
             double trueDamage = 10.0 + (armorVal * 0.35); // Breaches high armor targets
-            
-            victim.setNoDamageTicks(0);
-            double oldHp = victim.getHealth();
-            double newHp = Math.max(0.0, oldHp - trueDamage);
-            victim.setHealth(newHp);
-            if (newHp <= 0.001) {
-                victim.damage(1.0, player);
+
+            // Added to this hit, with armor still reducing only the original damage, so the bonus
+            // pierces armor but goes through the target's own damage handling (boss health pools).
+            double armorBefore = event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)
+                ? event.getDamage(EntityDamageEvent.DamageModifier.ARMOR) : 0.0;
+            event.setDamage(event.getDamage() + trueDamage);
+            if (event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)) {
+                event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, armorBefore);
             }
-            
+
             victim.getWorld().playSound(victim.getLocation(), Sound.ITEM_ARMOR_EQUIP_CHAIN, 1.0f, 0.6f);
             victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 0.8f, 1.8f);
             victim.getWorld().spawnParticle(Particle.CRIT, victim.getLocation().add(0, 1, 0), 20, 0.3, 0.5, 0.3, 0.15);
@@ -316,10 +363,10 @@ public final class UniqueAbilityListener implements Listener {
         }
 
         // Guillotine (Execute mobs under 15% HP)
-        if (EnchantApplyListener.hasUnique(weapon, UniqueEnchant.GUILLOTINE)) {
+        if (active(weapon, UniqueEnchant.GUILLOTINE)) {
             var maxHpAttr = victim.getAttribute(Attribute.MAX_HEALTH);
             double maxHp = maxHpAttr != null ? maxHpAttr.getValue() : 20.0;
-            if (!(victim instanceof Player) && (victim.getHealth() / maxHp) <= 0.15) {
+            if (!(victim instanceof Player) && !isBoss(victim) && (victim.getHealth() / maxHp) <= 0.15) {
                 victim.setNoDamageTicks(0);
                 event.setDamage(Math.max(victim.getHealth() * 25.0, 5000.0));
                 victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT, 1.2f, 0.5f);
@@ -330,13 +377,13 @@ public final class UniqueAbilityListener implements Listener {
         }
 
         // Echo Strike (35% chance to hit twice with 100% damage)
-        if (EnchantApplyListener.hasUnique(weapon, UniqueEnchant.ECHO_STRIKE) && canDamage(player, victim)) {
-            if (Math.random() < 0.35) {
+        if (active(weapon, UniqueEnchant.ECHO_STRIKE) && canDamage(player, victim)) {
+            if (Math.random() < ANCIENT_PROC_CHANCE) {
                 double damage = event.getFinalDamage();
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     if (victim.isValid() && !victim.isDead() && canDamage(player, victim)) {
                         victim.setNoDamageTicks(0); // Critical: bypass invulnerability tick so 100% damage registers!
-                        victim.damage(damage, player);
+                        abilityDamage(victim, damage, player);
                         victim.getWorld().spawnParticle(Particle.SWEEP_ATTACK, victim.getLocation().add(0, 1, 0), 1);
                         victim.getWorld().playSound(victim.getLocation(), Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.8f, 1.6f);
                         player.sendActionBar(Component.text("✦ เงาดาบซ้ำสอง! (Echo Strike 100%)", NamedTextColor.LIGHT_PURPLE));
@@ -346,7 +393,7 @@ public final class UniqueAbilityListener implements Listener {
         }
 
         // Thunderlord (Every 3rd hit deals True Damage lightning)
-        if (EnchantApplyListener.hasUnique(weapon, UniqueEnchant.THUNDERLORD) && canDamage(player, victim)) {
+        if (active(weapon, UniqueEnchant.THUNDERLORD) && canDamage(player, victim)) {
             UUID prevTarget = thunderLastTarget.get(player.getUniqueId());
             int hits = (prevTarget != null && prevTarget.equals(victim.getUniqueId())) ? thunderHits.getOrDefault(player.getUniqueId(), 0) + 1 : 1;
             thunderLastTarget.put(player.getUniqueId(), victim.getUniqueId());
@@ -359,7 +406,7 @@ public final class UniqueAbilityListener implements Listener {
                 double newHp = Math.max(0.0, oldHp - trueDamage);
                 victim.setHealth(newHp);
                 if (newHp <= 0.001) {
-                    victim.damage(1.0, player);
+                    abilityDamage(victim, 1.0, player);
                 }
                 player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.8f, 1.2f);
                 player.sendActionBar(Component.text("✦ สายฟ้าทัณฑ์สวรรค์! (True Damage เจาะเกราะ)", NamedTextColor.AQUA));
@@ -369,7 +416,7 @@ public final class UniqueAbilityListener implements Listener {
         }
 
         // Soul Harvest (Lifesteal 5% on hit)
-        if (EnchantApplyListener.hasUnique(weapon, UniqueEnchant.SOUL_HARVEST)) {
+        if (active(weapon, UniqueEnchant.SOUL_HARVEST)) {
             double heal = Math.max(0.5, Math.min(5.0, event.getFinalDamage() * 0.05));
             var playerMaxHp = player.getAttribute(Attribute.MAX_HEALTH);
             double max = playerMaxHp != null ? playerMaxHp.getValue() : 20.0;
@@ -378,7 +425,7 @@ public final class UniqueAbilityListener implements Listener {
         }
 
         // Vampiric (Lifesteal 15% of damage)
-        if (EnchantApplyListener.hasUnique(weapon, UniqueEnchant.VAMPIRIC)) {
+        if (active(weapon, UniqueEnchant.VAMPIRIC)) {
             double heal = Math.min(6.0, event.getFinalDamage() * 0.15);
             if (heal > 0.5) {
                 var playerMaxHp = player.getAttribute(Attribute.MAX_HEALTH);
@@ -403,7 +450,7 @@ public final class UniqueAbilityListener implements Listener {
         ItemStack weapon = player.getInventory().getItemInMainHand();
         if (weapon == null || !weapon.hasItemMeta()) return;
 
-        if (EnchantApplyListener.hasUnique(weapon, UniqueEnchant.BLADE_VORTEX)) {
+        if (active(weapon, UniqueEnchant.BLADE_VORTEX)) {
             long now = System.currentTimeMillis();
             if (bladeVortexCooldown.getOrDefault(player.getUniqueId(), 0L) > now) return;
             bladeVortexCooldown.put(player.getUniqueId(), now + 3000L); // 3.0s cooldown
@@ -422,7 +469,7 @@ public final class UniqueAbilityListener implements Listener {
                 point.getWorld().spawnParticle(Particle.SWEEP_ATTACK, point, 1);
                 for (Entity e : point.getNearbyEntities(1.5, 1.5, 1.5)) {
                     if (e instanceof LivingEntity m && canDamage(player, m) && hitTargets.add(m.getUniqueId())) {
-                        m.damage(18.0, player);
+                        abilityDamage(m, 18.0, player);
                         com.example.voidscape.compat.PlayerImpulse.apply(plugin, m, dir.clone().multiply(0.4).setY(0.2));
                     }
                 }
@@ -439,7 +486,7 @@ public final class UniqueAbilityListener implements Listener {
         ItemStack weapon = killer.getInventory().getItemInMainHand();
         if (weapon == null || !weapon.hasItemMeta()) return;
 
-        if (EnchantApplyListener.hasUnique(weapon, UniqueEnchant.SOUL_HARVEST)) {
+        if (active(weapon, UniqueEnchant.SOUL_HARVEST)) {
             killer.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20 * 15, 1));
             var killerMaxHp = killer.getAttribute(Attribute.MAX_HEALTH);
             double max = killerMaxHp != null ? killerMaxHp.getValue() : 20.0;
@@ -479,7 +526,7 @@ public final class UniqueAbilityListener implements Listener {
         }
 
         // Advance Tool (Haste boost for ultra-fast digging on all platforms & Bedrock)
-        if (EnchantApplyListener.hasUnique(tool, UniqueEnchant.ADVANCE_TOOL)) {
+        if (active(tool, UniqueEnchant.ADVANCE_TOOL)) {
             grantMiningHaste(player, 1);
         }
     }
@@ -523,29 +570,21 @@ public final class UniqueAbilityListener implements Listener {
 
         Block origin = event.getBlock();
 
-        // 1. Demeter's Scythe (9x9 auto harvest & replant for Hoes)
-        boolean isEvergardenCrop = plugin.crops() != null && (plugin.crops().getCropAt(origin.getLocation()) != null || plugin.crops().getCropAt(origin.getRelative(org.bukkit.block.BlockFace.UP).getLocation()) != null);
-        if (EnchantApplyListener.hasUnique(tool, UniqueEnchant.DEMETER_SCYTHE) && (origin.getBlockData() instanceof Ageable || isEvergardenCrop)) {
-            event.setCancelled(true);
-            harvestCropsArea(player, origin);
-            return;
-        }
-
         // 2. Timber Titan / Titan Breach (Fell whole tree for Axes)
-        if (EnchantApplyListener.hasUnique(tool, UniqueEnchant.TITAN_BREACH) && Tag.LOGS.isTagged(origin.getType())) {
+        if (active(tool, UniqueEnchant.TITAN_BREACH) && Tag.LOGS.isTagged(origin.getType())) {
             fellTree(player, origin);
             return;
         }
 
         // 3. Vein Smelter (Vein miner + auto smelt + fortune into inventory)
-        if (EnchantApplyListener.hasUnique(tool, UniqueEnchant.VEIN_SMELTER) && isOre(origin.getType())) {
+        if (active(tool, UniqueEnchant.VEIN_SMELTER) && isOre(origin.getType())) {
             event.setDropItems(false);
             mineVeinSmelt(player, origin);
             return;
         }
 
         // 4. Seismic Slam (3x3 mining for Pickaxes)
-        if (EnchantApplyListener.hasUnique(tool, UniqueEnchant.SEISMIC_SLAM) && !player.isSneaking() && Tag.MINEABLE_PICKAXE.isTagged(origin.getType())) {
+        if (active(tool, UniqueEnchant.SEISMIC_SLAM) && !player.isSneaking() && Tag.MINEABLE_PICKAXE.isTagged(origin.getType())) {
             RayTraceResult ray = player.rayTraceBlocks(5.5);
             var face = ray != null ? ray.getHitBlockFace() : null;
             if (face == null) {
@@ -563,8 +602,10 @@ public final class UniqueAbilityListener implements Listener {
         if (tool == null || !tool.hasItemMeta()) return;
 
         // Virtual Fortune Bonus (Levels 4-10: uncapped scaling +1..+2 at lvl 4 up to +4..+8 at lvl 10)
+        // Only blocks that cannot be crafted back from their drops qualify; containers,
+        // raw-ore blocks, glowstone/melon/clay and unripe crops would otherwise loop forever.
         int lbFortune = plugin.relics().getLimitBreakLevel(tool, LimitBreakType.FORTUNE);
-        if (lbFortune > 3) {
+        if (lbFortune > 3 && isFortuneBlock(event.getBlockState())) {
             int extra = lbFortune - 3;
             int minBonus = Math.max(1, (extra + 1) / 2);
             int maxBonus = extra + 1;
@@ -584,7 +625,7 @@ public final class UniqueAbilityListener implements Listener {
         }
 
         // Vein Smelter: Auto-smelt drops
-        if (EnchantApplyListener.hasUnique(tool, UniqueEnchant.VEIN_SMELTER)) {
+        if (active(tool, UniqueEnchant.VEIN_SMELTER)) {
             for (Item itemEntity : event.getItems()) {
                 ItemStack dropStack = itemEntity.getItemStack();
                 ItemStack smelted = smeltItem(dropStack);
@@ -594,7 +635,7 @@ public final class UniqueAbilityListener implements Listener {
             }
         }
 
-        if (EnchantApplyListener.hasUnique(tool, UniqueEnchant.TELEPATHY)) {
+        if (active(tool, UniqueEnchant.TELEPATHY)) {
             Iterator<Item> it = event.getItems().iterator();
             while (it.hasNext()) {
                 Item drop = it.next();
@@ -609,15 +650,21 @@ public final class UniqueAbilityListener implements Listener {
         }
     }
 
+    private boolean isFortuneBlock(org.bukkit.block.BlockState state) {
+        Material type = state.getType();
+        if (type.name().endsWith("_ORE") || type == Material.AMETHYST_CLUSTER) return true;
+        boolean crop = type == Material.CARROTS || type == Material.POTATOES || type == Material.WHEAT
+            || type == Material.BEETROOTS || type == Material.NETHER_WART;
+        return crop && state.getBlockData() instanceof org.bukkit.block.data.Ageable age && age.getAge() >= age.getMaximumAge();
+    }
+
     private boolean isFortuneDrop(Material mat) {
         String name = mat.name();
-        return name.contains("RAW_") || name.endsWith("_INGOT") || name.equals("DIAMOND")
+        return (name.startsWith("RAW_") && !name.endsWith("_BLOCK")) || name.endsWith("_INGOT") || name.equals("DIAMOND")
             || name.equals("EMERALD") || name.equals("COAL") || name.equals("REDSTONE")
-            || name.equals("LAPIS_LAZULI") || name.equals("NETHER_QUARTZ") || name.equals("AMETHYST_SHARD")
-            || name.equals("GLOWSTONE_DUST") || name.equals("CLAY_BALL") || name.equals("COPPER_INGOT")
-            || name.equals("CARROT") || name.equals("POTATO") || name.equals("WHEAT_SEEDS")
-            || name.equals("BEETROOT_SEEDS") || name.equals("NETHER_WART") || name.equals("MELON_SLICE")
-            || name.equals("PRISMARINE_CRYSTALS") || name.equals("PRISMARINE_SHARD");
+            || name.equals("LAPIS_LAZULI") || name.equals("QUARTZ") || name.equals("AMETHYST_SHARD")
+            || name.equals("GOLD_NUGGET") || name.equals("CARROT") || name.equals("POTATO") || name.equals("WHEAT")
+            || name.equals("WHEAT_SEEDS") || name.equals("BEETROOT") || name.equals("BEETROOT_SEEDS") || name.equals("NETHER_WART");
     }
 
     private boolean isPickaxeInstaMineable(Material mat) {
@@ -650,56 +697,6 @@ public final class UniqueAbilityListener implements Listener {
         return org.bukkit.block.BlockFace.SOUTH;
     }
 
-    public void harvestCropsArea(Player player, Block origin) {
-        recursiveBreaking.add(player.getUniqueId());
-        try {
-            ItemStack tool = player.getInventory().getItemInMainHand();
-            boolean hasTelepathy = EnchantApplyListener.hasUnique(tool, UniqueEnchant.TELEPATHY);
-            int count = 0;
-            for (int x = -4; x <= 4; x++) {
-                for (int z = -4; z <= 4; z++) {
-                    Block b = origin.getRelative(x, 0, z);
-                    if (!b.getWorld().getWorldBorder().isInside(b.getLocation())) continue;
-                    if (b.getState() instanceof org.bukkit.inventory.InventoryHolder) continue;
-                    if (b.getBlockData() instanceof Ageable ageable) {
-                        if (ageable.getAge() >= ageable.getMaximumAge()) {
-                            count++;
-                            // Drop mature crops with x2 multiplier
-                            for (ItemStack drop : b.getDrops(tool, player)) {
-                                drop.setAmount(drop.getAmount() * 2);
-                                if (hasTelepathy) {
-                                    var leftover = player.getInventory().addItem(drop);
-                                    leftover.values().forEach(rem -> b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 0.3, 0.5), rem));
-                                } else {
-                                    b.getWorld().dropItemNaturally(b.getLocation().add(0.5, 0.3, 0.5), drop);
-                                }
-                            }
-                            ageable.setAge(0); // Replant
-                            b.setBlockData(ageable);
-                            b.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, b.getLocation().add(0.5, 0.5, 0.5), 2);
-                        }
-                    } else if (plugin.crops() != null) {
-                        com.example.voidscape.crop.PlantedCrop customCrop = plugin.crops().getCropAt(b.getLocation());
-                        if (customCrop == null) {
-                            customCrop = plugin.crops().getCropAt(b.getRelative(org.bukkit.block.BlockFace.UP).getLocation());
-                        }
-                        if (customCrop != null && customCrop.isMature()) {
-                            plugin.crops().harvest(customCrop, player, false);
-                            count++;
-                            b.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, customCrop.getLocation().add(0.5, 0.5, 0.5), 2);
-                        }
-                    }
-                }
-            }
-            if (count > 0) {
-                damageTool(player, tool, Math.max(1, count / 4));
-                player.playSound(origin.getLocation(), Sound.BLOCK_CROP_BREAK, 1.0f, 1.2f);
-                player.sendActionBar(Component.text("✦ เคียวเทพกสิกรรม! (เก็บเกี่ยวและปลูกคืน 9×9 อัตโนมัติ " + count + " แปลง)", NamedTextColor.GREEN));
-            }
-        } finally {
-            recursiveBreaking.remove(player.getUniqueId());
-        }
-    }
 
     private void fellTree(Player player, Block origin) {
         recursiveBreaking.add(player.getUniqueId());
@@ -743,7 +740,9 @@ public final class UniqueAbilityListener implements Listener {
         try {
             Material type = origin.getType();
             ItemStack tool = player.getInventory().getItemInMainHand();
-            boolean hasTelepathy = EnchantApplyListener.hasUnique(tool, UniqueEnchant.TELEPATHY);
+            boolean hasTelepathy = active(tool, UniqueEnchant.TELEPATHY);
+            // Silk Touch returns the ore itself; granting ore XP too lets a placed ore be re-mined forever.
+            boolean silkTouch = tool.containsEnchantment(org.bukkit.enchantments.Enchantment.SILK_TOUCH);
             Queue<Block> queue = new LinkedList<>();
             Set<Block> visited = new HashSet<>();
             queue.add(origin);
@@ -776,7 +775,7 @@ public final class UniqueAbilityListener implements Listener {
                     drops = converted;
                 }
 
-                int exp = getOreExp(curr.getType());
+                int exp = silkTouch ? 0 : getOreExp(curr.getType());
                 if (exp > 0) totalExp += exp;
 
                 curr.setType(Material.AIR);
@@ -932,13 +931,13 @@ public final class UniqueAbilityListener implements Listener {
     // ==========================================
 
     // Phoenix Rebirth (Fatal damage cancel + 50% HP heal)
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onFatalDamage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         ItemStack chest = player.getInventory().getChestplate();
         if (chest == null || !chest.hasItemMeta()) return;
 
-        if (EnchantApplyListener.hasUnique(chest, UniqueEnchant.PHOENIX_REBIRTH)) {
+        if (active(chest, UniqueEnchant.PHOENIX_REBIRTH)) {
             if (player.getHealth() - event.getFinalDamage() <= 0) {
                 long now = System.currentTimeMillis();
                 long cd = phoenixCooldown.getOrDefault(player.getUniqueId(), 0L);
@@ -984,7 +983,7 @@ public final class UniqueAbilityListener implements Listener {
 
         // Titan Stance (Reduce explosion damage by 40%)
         ItemStack legs = player.getInventory().getLeggings();
-        if (legs != null && legs.hasItemMeta() && EnchantApplyListener.hasUnique(legs, UniqueEnchant.TITAN_STANCE)) {
+        if (legs != null && legs.hasItemMeta() && active(legs, UniqueEnchant.TITAN_STANCE)) {
             if (event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
                 event.setDamage(event.getDamage() * 0.6);
             }
@@ -996,7 +995,7 @@ public final class UniqueAbilityListener implements Listener {
     public void onTitanKnockback(io.papermc.paper.event.entity.EntityKnockbackEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         ItemStack legs = player.getInventory().getLeggings();
-        if (legs != null && legs.hasItemMeta() && EnchantApplyListener.hasUnique(legs, UniqueEnchant.TITAN_STANCE)) {
+        if (legs != null && legs.hasItemMeta() && active(legs, UniqueEnchant.TITAN_STANCE)) {
             event.setCancelled(true);
         }
     }
@@ -1009,7 +1008,7 @@ public final class UniqueAbilityListener implements Listener {
         ItemStack boots = player.getInventory().getBoots();
         if (boots == null || !boots.hasItemMeta()) return;
 
-        if (EnchantApplyListener.hasUnique(boots, UniqueEnchant.SHADOW_STEP)) {
+        if (active(boots, UniqueEnchant.SHADOW_STEP)) {
             long now = System.currentTimeMillis();
             long last = lastSneakTime.getOrDefault(player.getUniqueId(), 0L);
             lastSneakTime.put(player.getUniqueId(), now);
@@ -1058,7 +1057,7 @@ public final class UniqueAbilityListener implements Listener {
 
         while (it.hasNext()) {
             ItemStack drop = it.next();
-            if (EnchantApplyListener.hasUnique(drop, UniqueEnchant.SOULBOUND)) {
+            if (active(drop, UniqueEnchant.SOULBOUND)) {
                 event.getItemsToKeep().add(drop);
                 it.remove();
                 savedCount++;
@@ -1104,6 +1103,18 @@ public final class UniqueAbilityListener implements Listener {
         }
     }
 
+    /** Removes one stored stack matching this drop exactly; true if the drop came from storage. */
+    private static boolean consumeStored(List<ItemStack> stored, ItemStack drop) {
+        for (Iterator<ItemStack> it = stored.iterator(); it.hasNext(); ) {
+            ItemStack item = it.next();
+            if (item.isSimilar(drop) && item.getAmount() == drop.getAmount()) {
+                it.remove();
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Virtual Looting Bonus (Levels 4-10: uncapped multiplier + rare drop booster)
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityDeathLooting(EntityDeathEvent event) {
@@ -1121,8 +1132,16 @@ public final class UniqueAbilityListener implements Listener {
             int minBonus = Math.max(1, (extra + 1) / 2);
             int maxBonus = extra + 1;
             boolean bonusAdded = false;
+            // Llama/horse chests, and any container mob, drop their stored items in
+            // getDrops(). Those belong to the player's storage, not the loot table.
+            List<ItemStack> stored = new ArrayList<>();
+            if (event.getEntity() instanceof InventoryHolder holder && holder.getInventory() != null) {
+                for (ItemStack item : holder.getInventory().getContents())
+                    if (item != null && !item.getType().isAir()) stored.add(item);
+            }
 
             for (ItemStack drop : event.getDrops()) {
+                if (drop != null && consumeStored(stored, drop)) continue;
                 if (drop != null && drop.getMaxStackSize() > 1) {
                     int add = minBonus + (int) (Math.random() * (maxBonus - minBonus + 1));
                     drop.setAmount(Math.min(drop.getMaxStackSize(), drop.getAmount() + add));
@@ -1223,7 +1242,7 @@ public final class UniqueAbilityListener implements Listener {
                     double reflectDmg = 2.0 + (maxThorns - 3) * 1.5;
                     IN_THORNS_REFLECTION.set(Boolean.TRUE);
                     try {
-                        attacker.damage(reflectDmg, player);
+                        abilityDamage(attacker, reflectDmg, player);
                         attacker.getWorld().playSound(attacker.getLocation(), Sound.ENCHANT_THORNS_HIT, 1.0f, 1.2f);
                         attacker.getWorld().spawnParticle(Particle.CRIT, attacker.getLocation().add(0, 1, 0), 10, 0.2, 0.3, 0.2, 0.1);
                     } finally {

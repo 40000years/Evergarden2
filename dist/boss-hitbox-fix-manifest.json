@@ -1,0 +1,27 @@
+{
+  "version": "3.0.0-e2.121-boss-hitbox-fix",
+  "artifact": "dist/evergarden.jar",
+  "sha256": "22c74c311d96372f55d50468528e9b5426c465be3518205f6e8634d8c1da7273",
+  "base_sha256": "ac0cabbcf12fd17de573cd06515c8279d0d645a4abb68354140c853174e8ad24",
+  "paper_checks": 221,
+  "pure_combat_checks": 67143,
+  "reports": {
+    "hitbox": {
+      "checks": 80,
+      "result": "PASS 80 Paper checks",
+      "report": "output/boss-hitbox-paper-v4-20261023/arkhaia-result.txt"
+    },
+    "sanctuary": {
+      "checks": 141,
+      "result": "PASS 141 Paper checks",
+      "report": "output/boss-hitbox-sanctuary-v2-20261023/arkhaia-result.txt"
+    }
+  },
+  "models_and_resource_packs_byte_identical": true,
+  "preserved_asset_entries": 78,
+  "build_manifest": "output/boss-hitbox-release-20261023/build-v2/build-manifest.json",
+  "tests": {
+    "tests/arkhaia/BossHitboxProbe.java": "1269f5c5e10a9078531c53076997bffd8ab6bc706615c89486d091f2206f070d",
+    "tests/arkhaia/run.py": "ee4365924b74ce7783d091de1302b5dc5ddcc11cde31e4003e640d3ece68b3e9"
+  }
+}

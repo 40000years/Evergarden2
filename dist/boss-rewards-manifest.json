@@ -1,0 +1,48 @@
+{
+  "versions": {
+    "evergarden": "3.0.0-e2.101-boss-rewards",
+    "advance-magic": "1.20.0-boss-exploration-points"
+  },
+  "bedrock_pack": "3.38.0",
+  "sha256": {
+    "evergarden": "205c0fca54a566b5750674425912ae71bc732bf656e3a1c00f61841345204176",
+    "advance-magic": "389e2197730872de86fbdeaf7c67ef82dc8fbbc25344dbcf95c8709faa21cce5"
+  },
+  "previous_sha256": {
+    "evergarden": "8b31758a0d8943fbf8d8d696e5d94da67abda7afa9bbd908038f61c0b3ceedc7",
+    "advance-magic": "074e3a3f73ada0f7cb4df0ed887eb56a6183471170d23950837d7955f02d84ac"
+  },
+  "reports": {
+    "boss-rewards-sanctuary-final-20261021": {
+      "result": "PASS 141 Paper checks",
+      "garden_sha256": "205c0fca54a566b5750674425912ae71bc732bf656e3a1c00f61841345204176",
+      "magic_sha256": "389e2197730872de86fbdeaf7c67ef82dc8fbbc25344dbcf95c8709faa21cce5"
+    },
+    "boss-rewards-other-bosses-final-20261021": {
+      "result": "PASS 25 Paper checks",
+      "garden_sha256": "205c0fca54a566b5750674425912ae71bc732bf656e3a1c00f61841345204176",
+      "magic_sha256": "389e2197730872de86fbdeaf7c67ef82dc8fbbc25344dbcf95c8709faa21cce5"
+    },
+    "boss-rewards-native-final-20261021": {
+      "result": "PASS: boss orbs / 32 native Model Engine and Geyser checks",
+      "garden_sha256": "205c0fca54a566b5750674425912ae71bc732bf656e3a1c00f61841345204176",
+      "magic_sha256": "389e2197730872de86fbdeaf7c67ef82dc8fbbc25344dbcf95c8709faa21cce5"
+    },
+    "boss-rewards-elemental-final-20261021": {
+      "result": "PASS 2366",
+      "garden_sha256": null,
+      "magic_sha256": "389e2197730872de86fbdeaf7c67ef82dc8fbbc25344dbcf95c8709faa21cce5"
+    },
+    "boss-rewards-styx-final-20261021": {
+      "result": "PASS 61 Paper checks",
+      "garden_sha256": "205c0fca54a566b5750674425912ae71bc732bf656e3a1c00f61841345204176",
+      "magic_sha256": "389e2197730872de86fbdeaf7c67ef82dc8fbbc25344dbcf95c8709faa21cce5"
+    }
+  },
+  "orb_pack_checks": 71,
+  "world_boss_rule_checks": 67143,
+  "live_server_modified": false,
+  "connected_client_playtest": false,
+  "image_generation": "Built-in image_gen; six transparent originals and exact prompts included",
+  "backup": "output\\boss-rewards-release-20261021\\before"
+}

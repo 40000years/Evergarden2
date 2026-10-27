@@ -1,7 +1,7 @@
 package com.example.advancemagic.item;
 
 import com.example.advancemagic.AdvanceMagicPlugin;
-import com.example.advancemagic.spell.Spell;
+import com.example.advancemagic.item.ElementalStaffService.Element;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -230,18 +230,17 @@ public final class BedrockCreativeBridge implements Listener {
 
     private ItemStack resolveCustomItem(String identifier) {
         if (identifier == null) return null;
-
-        // 1. Advance Magic Wands & Cores
-        if (identifier.startsWith("advance_magic:core_")) {
-            String spellId = identifier.substring("advance_magic:core_".length());
-            Spell spell = Spell.parse(spellId);
-            if (spell != null) return plugin.wands().createCore(spell);
-        } else if (identifier.startsWith("advance_magic:")) {
-            String spellId = identifier.substring("advance_magic:".length());
-            Spell spell = Spell.parse(spellId);
-            if (spell != null) return plugin.wands().create(spell);
+        if (identifier.startsWith("advance_magic:legendary_")) {
+            var weapon=LegendaryWeaponService.Weapon.parse(identifier.substring("advance_magic:legendary_".length()));
+            if(weapon!=null)return plugin.legendaryWeapons().create(weapon);
         }
 
+        if(identifier.startsWith("advance_magic:staff_")){
+            if(identifier.equals("advance_magic:staff_wood"))return plugin.staffSpells().createWoodenStaff();
+            Element element=Element.parse(identifier.substring("advance_magic:staff_".length()));
+            return element==null?null:plugin.staffs().create(element);
+        }
+        // Legacy wand and core creative IDs are intentionally no longer issued.
         // 2. Evergarden / Voidscape Relics & Cores
         if (identifier.startsWith("voidscape:") || identifier.startsWith("evergarden:")) {
             String relicId = identifier.replace("voidscape:", "").replace("evergarden:", "").toLowerCase(Locale.ROOT);
@@ -251,35 +250,7 @@ public final class BedrockCreativeBridge implements Listener {
                     Method relicsMethod = evergarden.getClass().getMethod("relics");
                     Object relicService = relicsMethod.invoke(evergarden);
 
-                    // Check if it's a magic core
-                    if (relicId.startsWith("core_")) {
-                        String coreId = relicId.substring("core_".length());
-                        Method createCoreMethod = relicService.getClass().getMethod("createMagicCore", String.class);
-                        return (ItemStack) createCoreMethod.invoke(relicService, coreId);
-                    }
-
-                    // Check if it is an Evergarden crop or seed
-                    if (relicId.startsWith("seed_") || relicId.startsWith("crop_")) {
-                        boolean isSeed = relicId.startsWith("seed_");
-                        String cropRawId = relicId.substring(isSeed ? "seed_".length() : "crop_".length());
-                        Method cropsMethod = evergarden.getClass().getMethod("crops");
-                        Object cropService = cropsMethod.invoke(evergarden);
-                        Method factoryMethod = cropService.getClass().getMethod("factory");
-                        Object cropFactory = factoryMethod.invoke(cropService);
-
-                        Class<?> cropTypeClass = Class.forName("com.example.voidscape.crop.CropType");
-                        Method fromIdMethod = cropTypeClass.getMethod("fromId", String.class);
-                        Object cropType = fromIdMethod.invoke(null, cropRawId);
-                        if (cropType != null) {
-                            if (isSeed) {
-                                Method createSeed = cropFactory.getClass().getMethod("createSeed", cropTypeClass, int.class);
-                                return (ItemStack) createSeed.invoke(cropFactory, cropType, 16);
-                            } else {
-                                Method createFood = cropFactory.getClass().getMethod("createFood", cropTypeClass, int.class);
-                                return (ItemStack) createFood.invoke(cropFactory, cropType, 16);
-                            }
-                        }
-                    }
+                    if(relicId.startsWith("core_"))return null;
 
                     // Check if it's a relic
                     Class<?> relicEnum = Class.forName("com.example.voidscape.item.RelicService$Relic");

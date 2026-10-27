@@ -1,9 +1,144 @@
 # Allies: the caster, their tamed animals, and members of their main-scoreboard team.
 pvp: true
+elemental-visuals:
+  enabled: true
+  # Native Minecraft particles, Blaze/Ghast fireballs and vanilla 3D blocks.
+  # authored restores the previous illustrated presentation for comparison.
+  style: native
+  # balanced: animated volumes and solids; low: fewer particles and solids.
+  quality: balanced
+  sounds: true
+  # Cosmetic limits do not consume combat EffectEngine slots or change damage.
+  max-scenes: 96
+  max-native-particles-per-world-tick: 1200
+  max-native-particles-per-viewer-tick: 220
+  max-native-displays-per-world: 80
+  max-native-projectiles-per-world: 48
+  # Limits for the optional authored renderer.
+  max-planes-per-world: 128
+  bedrock-packets-per-viewer-tick: 12
+  # The seven elemental Legendaries: vanilla particles per viewer per tick (low quality uses 160).
+  legendary-particles-per-viewer-tick: 450
+  # Wrath of Raijin calls cosmetic lightning bolts (no damage or fire); false removes them and their thunder.
+  legendary-lightning-strikes: true
+  # Heaven's Descent: a golden judgment beam cannon (the Ancient Judge's gold seals).
+  # Applies in either style; false draws a plain beam instead. Size of seals and beam: 0.5..1.5.
+  # The old light-rain keys (sky-height, duration-seconds, afterglow-ticks) are ignored.
+  legendary-light:
+    enabled: true
+    scale: 1.0
+elemental-system:
+  staff-durability:
+    # Each successful cast (and each Phoenix Rebirth trigger) uses one. Repair at a
+    # Restoration Altar; each Wand Repair Core adds this many to the maximum (level 10 max).
+    base-uses: 300
+    uses-per-repair-core: 50
+  stats:
+    # Minecraft HP: Fireball base14.4; matching staff21.6; mismatched/wood7.2.
+    spell-power: 12.0
+    healing-power: 6.0
+  skill-tree:
+    # Arcane XP (separate from vanilla levels). Level L -> L+1 costs xp-base * xp-growth^(L-1);
+    # every Arcane level is one skill point. Bosses still grant points directly.
+    xp-base: 100
+    xp-growth: 1.15
+    max-level: 100
+    # First opening of a structure chest (shared per chest, once).
+    structure-chest-xp: 60
+  mana:
+    combat-regen: 3.0
+    out-of-combat-regen: 7.0
+    combat-duration-seconds: 10
+    regen-delay-seconds: 2
+    global-cooldown: 0.65
+    ultimate-gcd: 1.2
+    ultimate-category-seconds: 15
+  scroll-loot:
+    # One roll per NEW authored Evergarden chest; all eight elements share each rarity pool.
+    exploration:
+      chance: 0.25
+      rarity-weights: {basic: 65, rare: 28, epic: 6, legendary: 1}
+    landmark:
+      chance: 0.40
+      rarity-weights: {basic: 45, rare: 35, epic: 17, legendary: 3}
+    boss:
+      chance: 0.65
+      rarity-weights: {basic: 25, rare: 35, epic: 30, legendary: 10}
+    sanctuary:
+      chance: 0.65
+      rarity-weights: {basic: 25, rare: 35, epic: 30, legendary: 10}
+elemental-combat:
+  target-cap: 12
+  # A single cast (including its DoT and reactions) can remove at most 5% boss HP.
+  boss-damage-cap-percent: 5
+  healing-per-cast-percent: 35
+  healing-pulse-lock-ticks: 15
+  phoenix-health-percent: 25
+  summon-goal-range: 12
+  # Heaven's Descent beam: firing seconds after the 1.2 s charge (3..10), reach in blocks
+  # (16..64; it stops at solid blocks) and how fast it follows the caster's aim (30..360
+  # degrees per second). The old pull-strength key is ignored.
+  legendary-light:
+    beam-seconds: 6
+    beam-range: 48
+    turn-degrees-per-second: 120
+mana-potions:
+  nausea-seconds: 30
+  restore:
+    low: 20
+    medium: 35
+    good: 50
+    supreme: 100
 max-active-effects: 128
 max-targets-per-effect: 32
+# Native staff models, now carrying an item-owned elemental spell loadout.
+elemental-staffs:
+  ambient-effects: true
+# Legacy spell configuration remains for bosses and internal API integrations.
+basic-casting:
+  max-active-per-world: 32
+  max-pulse-targets: 6
+  particle-budget-per-frame: 64
+  # Reduced basic damage to players, before their usual damage defenses.
+  player-damage-multiplier: 0.6
+  profiles:
+    bolt:
+      mana: 3
+      cooldown-seconds: 1.4
+      damage: 14.0
+      range: 22.0
+    beam:
+      mana: 3
+      cooldown-seconds: 1.25
+      damage: 12.0
+      range: 20.0
+    pulse:
+      mana: 4
+      cooldown-seconds: 1.75
+      damage: 10.0
+      range: 3.0
+    mythic:
+      mana: 5
+      cooldown-seconds: 1.75
+      damage: 18.0
+      range: 24.0
+    legendary:
+      mana: 7
+      cooldown-seconds: 2.25
+      # Total per target across every pulse, projectile and decorative shard.
+      damage: 24.0
+      range: 24.0
 # Bound the new cinematic spells' packet work independently of older spells.
 mythic-max-active-per-world: 4
+# Layered dragon sigils, sixteen lunar needle portals and sequential crimson impacts.
+# Opening attacks and the finale
+# belong to one cast; no additional mana or cooldown is charged between stages.
+legendary:
+  max-active-per-world: 2
+  radius: 14
+  # Scales the authored structures and directional beam hit widths together.
+  visual-scale: 1.0
+  particle-budget-per-frame: 220
 mythic-terrain:
   # Solar lava and Chronos blue ice restore the original ground after each cast.
   radius: 16
@@ -14,6 +149,20 @@ meteor:
   # Explosions damage entities but never remove terrain blocks.
   damage: 135.0
 damage:
+  # Direct full-scene exposure: Verdant beam 775, one Lunar column 760, Crimson 800.
+  # Keep the established keys when upgrading. Verdant's former thorns key now
+  # controls its four opening forward-beam pulses; Lunar's slash/moonfall keys
+  # control repeated column pulses / the simultaneous sixteen-column finale.
+  # Crimson distributes collapse + twice aftershock evenly across eight shard hits.
+  verdant-thorns: 65.0
+  verdant-dragon-breath: 55.0
+  verdant-final: 240.0
+  lunar-slash: 70.0
+  lunar-moonfall: 260.0
+  lunar-final: 110.0
+  crimson-heartbeat: 75.0
+  crimson-collapse: 300.0
+  crimson-aftershock: 100.0
   # Full direct exposure: Solar 745, Shulker 750, Chronos 895 (before fire/Wither damage).
   solar-beam: 45.0
   solar-apocalypse: 250.0
@@ -72,6 +221,12 @@ flying-staff:
   speed-version: 3
   horizontal-speed: 0.486
   vertical-speed: 0.288
+  bedrock-controls:
+    # Preserve controller stick magnitude before Geyser converts it to buttons.
+    analog-deadzone: 0.15
+    # Forward movement follows the camera smoothly above/below this level band.
+    pitch-deadzone: 12.0
+    pitch-full-speed: 60.0
   turbo-multiplier: 4.0
   mana-per-second: 2.0
   # Normal = 2 mana/sec; Turbo = 3 mana/sec with the default multiplier.
@@ -84,22 +239,88 @@ flying-staff:
       NoCheatPlus: [nocheatplus.checks.moving.vehicle]
 resource-pack:
   enabled: true
-  # Pin the GitHub pack to the revision embedded in this plugin.
-  url: 'https://raw.githubusercontent.com/40000years/Evergarden2/0e6a864979528b50e00e48baa98e267993803ba4/advance-magic/dist/advance-magic-java.zip'
-  sha1: '278eef0ea167e62d84152f57bb32c60483b62e8f'
-  required: false
+  # Empty URL/SHA-1 serves the exact pack embedded in this plugin. Set both for
+  # your own CDN; administrator-owned external URLs are preserved on upgrades.
+  url: ''
+  sha1: ''
+  required: true
+  # Seconds a player may spend downloading all required Java packs before the kick.
+  # Slow connections need several minutes; the larger value of both plugins applies.
+  required-timeout-seconds: 600
+  # Public copies of the packs, named by a fingerprint of their contents. At startup the
+  # server downloads each copy once and offers it only if it holds exactly the same files;
+  # players then fetch it there first, with this server's own host as the fallback.
+  # Outbound HTTPS is enough, so this works on hosts that expose only the game port.
+  # [] = serve the packs only from this server.
+  mirrors:
+  - https://raw.githubusercontent.com/40000years/Evergarden2/packs/{pack}/{fingerprint}.zip
   host:
-    enabled: false
+    enabled: true
+    # Serve the pack through the Minecraft port itself, so hosting panels need
+    # no extra port. false = listen on the separate port below instead.
+    use-server-port: true
     bind: '0.0.0.0'
-    # Must be reachable by Java clients when using the bundled pack.
+    # Must be reachable by Java clients when use-server-port is false.
     port: 8187
     # Empty = hostname the player joined. Set explicitly for proxies/SRV records.
     public-host: ''
-    # Optional HTTP(S) reverse-proxy base URL. The pack path is appended.
+    # Optional HTTP(S) reverse-proxy base URL for the separate port (also turns
+    # off use-server-port). The pack path is appended.
     public-url: ''
   geyser:
     # Copies Advance Magic's own files during onLoad, before Geyser starts.
     auto-install: true
+
+legendary-weapons:
+  enabled: true
+  # A short authored circle appears once when equipping a legendary weapon.
+  equip-sigil: true
+  # Holder-only equip resonance and a quiet chime every 12 seconds.
+  sounds: true
+  volume: 0.45
+  combat:
+    enabled: true
+    # Durations and cooldowns below are seconds; damage uses Minecraft HP (2 HP = 1 heart).
+    pulse-seconds: 1
+    excalibur:
+      damage: 50
+      charge-seconds: 3
+      skill-damage: 100
+      range: 16
+      wave-width: 3
+      cooldown-seconds: 180
+    tyrfing:
+      damage: 35
+      max-damage: 60
+      per-hit: 5
+      decay-delay-seconds: 10
+      decay-per-second: 5
+      duration-seconds: 10
+      radius: 3
+      cooldown-seconds: 180
+    longinus:
+      damage: 20
+      max-damage: 30
+      slow-seconds: 3
+      skill-damage: 10
+      cast-range: 16
+      radius: 8
+      duration-seconds: 10
+      cooldown-seconds: 180
+    mjolnir:
+      damage: 15
+      smash-multiplier: 4
+      skill-damage: 10
+      radius: 8
+      duration-seconds: 30
+      cooldown-seconds: 180
+    vajra:
+      damage: 30
+      root-seconds: 3
+      root-cooldown-seconds: 120
+      skill-damage: 50
+      radius: 8
+      cooldown-seconds: 180
 
 compatibility:
   # false: player roots use Slowness V; mobs retain the full root.

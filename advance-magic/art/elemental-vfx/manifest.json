@@ -1,0 +1,917 @@
+{
+  "format": 2,
+  "spells": {
+    "fireball": {
+      "element": "fire",
+      "shape": "flame",
+      "model": "advance_magic:elemental_fireball"
+    },
+    "flame_burst": {
+      "element": "fire",
+      "shape": "burst",
+      "model": "advance_magic:elemental_flame_burst"
+    },
+    "burning_ground": {
+      "element": "fire",
+      "shape": "cracks",
+      "model": "advance_magic:elemental_burning_ground"
+    },
+    "flame_dash": {
+      "element": "fire",
+      "shape": "streak",
+      "model": "advance_magic:elemental_flame_dash"
+    },
+    "inferno_spear": {
+      "element": "fire",
+      "shape": "spear",
+      "model": "advance_magic:elemental_inferno_spear"
+    },
+    "magma_eruption": {
+      "element": "fire",
+      "shape": "eruption",
+      "model": "advance_magic:elemental_magma_eruption"
+    },
+    "hellfire_chain": {
+      "element": "fire",
+      "shape": "chain",
+      "model": "advance_magic:elemental_hellfire_chain"
+    },
+    "scorching_vortex": {
+      "element": "fire",
+      "shape": "vortex",
+      "model": "advance_magic:elemental_scorching_vortex"
+    },
+    "meteor_rain": {
+      "element": "fire",
+      "shape": "meteor",
+      "model": "advance_magic:elemental_meteor_rain"
+    },
+    "phoenix_rebirth": {
+      "element": "fire",
+      "shape": "phoenix",
+      "model": "advance_magic:elemental_phoenix_rebirth"
+    },
+    "aqua_bullet": {
+      "element": "water",
+      "shape": "drop",
+      "model": "advance_magic:elemental_aqua_bullet"
+    },
+    "water_blade": {
+      "element": "water",
+      "shape": "blade",
+      "model": "advance_magic:elemental_water_blade"
+    },
+    "healing_spring": {
+      "element": "water",
+      "shape": "flower",
+      "model": "advance_magic:elemental_healing_spring"
+    },
+    "bubble_prison": {
+      "element": "water",
+      "shape": "bubble",
+      "model": "advance_magic:elemental_bubble_prison"
+    },
+    "tidal_push": {
+      "element": "water",
+      "shape": "wave",
+      "model": "advance_magic:elemental_tidal_push"
+    },
+    "aqua_shield": {
+      "element": "water",
+      "shape": "shield",
+      "model": "advance_magic:elemental_aqua_shield"
+    },
+    "rain_blessing": {
+      "element": "water",
+      "shape": "rain",
+      "model": "advance_magic:elemental_rain_blessing"
+    },
+    "whirlpool": {
+      "element": "water",
+      "shape": "vortex",
+      "model": "advance_magic:elemental_whirlpool"
+    },
+    "tsunami": {
+      "element": "water",
+      "shape": "wave",
+      "model": "advance_magic:elemental_tsunami"
+    },
+    "leviathans_wrath": {
+      "element": "water",
+      "shape": "dragon",
+      "model": "advance_magic:elemental_leviathans_wrath"
+    },
+    "frost_bolt": {
+      "element": "ice",
+      "shape": "crystal",
+      "model": "advance_magic:elemental_frost_bolt"
+    },
+    "ice_spike": {
+      "element": "ice",
+      "shape": "spike",
+      "model": "advance_magic:elemental_ice_spike"
+    },
+    "frozen_armor": {
+      "element": "ice",
+      "shape": "armor",
+      "model": "advance_magic:elemental_frozen_armor"
+    },
+    "glacial_path": {
+      "element": "ice",
+      "shape": "cracks",
+      "model": "advance_magic:elemental_glacial_path"
+    },
+    "crystal_prison": {
+      "element": "ice",
+      "shape": "prison",
+      "model": "advance_magic:elemental_crystal_prison"
+    },
+    "blizzard": {
+      "element": "ice",
+      "shape": "snow",
+      "model": "advance_magic:elemental_blizzard"
+    },
+    "absolute_zero": {
+      "element": "ice",
+      "shape": "star",
+      "model": "advance_magic:elemental_absolute_zero"
+    },
+    "wind_cutter": {
+      "element": "wind",
+      "shape": "blade",
+      "model": "advance_magic:elemental_wind_cutter"
+    },
+    "gale_step": {
+      "element": "wind",
+      "shape": "streak",
+      "model": "advance_magic:elemental_gale_step"
+    },
+    "updraft": {
+      "element": "wind",
+      "shape": "updraft",
+      "model": "advance_magic:elemental_updraft"
+    },
+    "wind_barrier": {
+      "element": "wind",
+      "shape": "shield",
+      "model": "advance_magic:elemental_wind_barrier"
+    },
+    "cyclone_trap": {
+      "element": "wind",
+      "shape": "vortex",
+      "model": "advance_magic:elemental_cyclone_trap"
+    },
+    "thousand_wind_blades": {
+      "element": "wind",
+      "shape": "fan",
+      "model": "advance_magic:elemental_thousand_wind_blades"
+    },
+    "tempest_dominion": {
+      "element": "wind",
+      "shape": "tempest",
+      "model": "advance_magic:elemental_tempest_dominion"
+    },
+    "stone_bullet": {
+      "element": "earth",
+      "shape": "stone",
+      "model": "advance_magic:elemental_stone_bullet"
+    },
+    "earth_spike": {
+      "element": "earth",
+      "shape": "spike",
+      "model": "advance_magic:elemental_earth_spike"
+    },
+    "stone_wall": {
+      "element": "earth",
+      "shape": "wall",
+      "model": "advance_magic:elemental_stone_wall"
+    },
+    "iron_skin": {
+      "element": "earth",
+      "shape": "armor",
+      "model": "advance_magic:elemental_iron_skin"
+    },
+    "quicksand": {
+      "element": "earth",
+      "shape": "sand",
+      "model": "advance_magic:elemental_quicksand"
+    },
+    "seismic_slam": {
+      "element": "earth",
+      "shape": "cracks",
+      "model": "advance_magic:elemental_seismic_slam"
+    },
+    "golem_guardian": {
+      "element": "earth",
+      "shape": "guardian",
+      "model": "advance_magic:elemental_golem_guardian"
+    },
+    "titans_judgment": {
+      "element": "earth",
+      "shape": "fist",
+      "model": "advance_magic:elemental_titans_judgment"
+    },
+    "radiant_bolt": {
+      "element": "light",
+      "shape": "spear",
+      "model": "advance_magic:elemental_radiant_bolt"
+    },
+    "holy_sanctuary": {
+      "element": "light",
+      "shape": "shrine",
+      "model": "advance_magic:elemental_holy_sanctuary"
+    },
+    "purification": {
+      "element": "light",
+      "shape": "feather",
+      "model": "advance_magic:elemental_purification"
+    },
+    "divine_judgment": {
+      "element": "light",
+      "shape": "lightblade",
+      "model": "advance_magic:elemental_divine_judgment"
+    },
+    "heavens_descent": {
+      "element": "light",
+      "shape": "wings",
+      "model": "advance_magic:elemental_heavens_descent"
+    },
+    "shadow_bolt": {
+      "element": "dark",
+      "shape": "dart",
+      "model": "advance_magic:elemental_shadow_bolt"
+    },
+    "life_drain": {
+      "element": "dark",
+      "shape": "ribbon",
+      "model": "advance_magic:elemental_life_drain"
+    },
+    "cursed_mark": {
+      "element": "dark",
+      "shape": "eye",
+      "model": "advance_magic:elemental_cursed_mark"
+    },
+    "shadow_doppelganger": {
+      "element": "dark",
+      "shape": "ghost",
+      "model": "advance_magic:elemental_shadow_doppelganger"
+    },
+    "abyssal_collapse": {
+      "element": "dark",
+      "shape": "rift",
+      "model": "advance_magic:elemental_abyssal_collapse"
+    },
+    "spark_shot": {
+      "element": "lightning",
+      "shape": "bolt",
+      "model": "advance_magic:elemental_spark_shot"
+    },
+    "lightning_chain": {
+      "element": "lightning",
+      "shape": "bolt",
+      "model": "advance_magic:elemental_lightning_chain"
+    },
+    "thunder_dash": {
+      "element": "lightning",
+      "shape": "streak",
+      "model": "advance_magic:elemental_thunder_dash"
+    },
+    "static_field": {
+      "element": "lightning",
+      "shape": "grid",
+      "model": "advance_magic:elemental_static_field"
+    },
+    "thunder_spear": {
+      "element": "lightning",
+      "shape": "spear",
+      "model": "advance_magic:elemental_thunder_spear"
+    },
+    "wrath_of_raijin": {
+      "element": "lightning",
+      "shape": "storm",
+      "model": "advance_magic:elemental_wrath_of_raijin"
+    }
+  },
+  "assets": [
+    {
+      "id": "elemental_fireball",
+      "element": "fire",
+      "shape": "flame"
+    },
+    {
+      "id": "elemental_flame_burst",
+      "element": "fire",
+      "shape": "burst"
+    },
+    {
+      "id": "elemental_burning_ground",
+      "element": "fire",
+      "shape": "cracks"
+    },
+    {
+      "id": "elemental_flame_dash",
+      "element": "fire",
+      "shape": "streak"
+    },
+    {
+      "id": "elemental_inferno_spear",
+      "element": "fire",
+      "shape": "spear"
+    },
+    {
+      "id": "elemental_magma_eruption",
+      "element": "fire",
+      "shape": "eruption"
+    },
+    {
+      "id": "elemental_hellfire_chain",
+      "element": "fire",
+      "shape": "chain"
+    },
+    {
+      "id": "elemental_scorching_vortex",
+      "element": "fire",
+      "shape": "vortex"
+    },
+    {
+      "id": "elemental_meteor_rain",
+      "element": "fire",
+      "shape": "meteor"
+    },
+    {
+      "id": "elemental_phoenix_rebirth",
+      "element": "fire",
+      "shape": "phoenix"
+    },
+    {
+      "id": "elemental_aqua_bullet",
+      "element": "water",
+      "shape": "drop"
+    },
+    {
+      "id": "elemental_water_blade",
+      "element": "water",
+      "shape": "blade"
+    },
+    {
+      "id": "elemental_healing_spring",
+      "element": "water",
+      "shape": "flower"
+    },
+    {
+      "id": "elemental_bubble_prison",
+      "element": "water",
+      "shape": "bubble"
+    },
+    {
+      "id": "elemental_tidal_push",
+      "element": "water",
+      "shape": "wave"
+    },
+    {
+      "id": "elemental_aqua_shield",
+      "element": "water",
+      "shape": "shield"
+    },
+    {
+      "id": "elemental_rain_blessing",
+      "element": "water",
+      "shape": "rain"
+    },
+    {
+      "id": "elemental_whirlpool",
+      "element": "water",
+      "shape": "vortex"
+    },
+    {
+      "id": "elemental_tsunami",
+      "element": "water",
+      "shape": "wave"
+    },
+    {
+      "id": "elemental_leviathans_wrath",
+      "element": "water",
+      "shape": "dragon"
+    },
+    {
+      "id": "elemental_frost_bolt",
+      "element": "ice",
+      "shape": "crystal"
+    },
+    {
+      "id": "elemental_ice_spike",
+      "element": "ice",
+      "shape": "spike"
+    },
+    {
+      "id": "elemental_frozen_armor",
+      "element": "ice",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_glacial_path",
+      "element": "ice",
+      "shape": "cracks"
+    },
+    {
+      "id": "elemental_crystal_prison",
+      "element": "ice",
+      "shape": "prison"
+    },
+    {
+      "id": "elemental_blizzard",
+      "element": "ice",
+      "shape": "snow"
+    },
+    {
+      "id": "elemental_absolute_zero",
+      "element": "ice",
+      "shape": "star"
+    },
+    {
+      "id": "elemental_wind_cutter",
+      "element": "wind",
+      "shape": "blade"
+    },
+    {
+      "id": "elemental_gale_step",
+      "element": "wind",
+      "shape": "streak"
+    },
+    {
+      "id": "elemental_updraft",
+      "element": "wind",
+      "shape": "updraft"
+    },
+    {
+      "id": "elemental_wind_barrier",
+      "element": "wind",
+      "shape": "shield"
+    },
+    {
+      "id": "elemental_cyclone_trap",
+      "element": "wind",
+      "shape": "vortex"
+    },
+    {
+      "id": "elemental_thousand_wind_blades",
+      "element": "wind",
+      "shape": "fan"
+    },
+    {
+      "id": "elemental_tempest_dominion",
+      "element": "wind",
+      "shape": "tempest"
+    },
+    {
+      "id": "elemental_stone_bullet",
+      "element": "earth",
+      "shape": "stone"
+    },
+    {
+      "id": "elemental_earth_spike",
+      "element": "earth",
+      "shape": "spike"
+    },
+    {
+      "id": "elemental_stone_wall",
+      "element": "earth",
+      "shape": "wall"
+    },
+    {
+      "id": "elemental_iron_skin",
+      "element": "earth",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_quicksand",
+      "element": "earth",
+      "shape": "sand"
+    },
+    {
+      "id": "elemental_seismic_slam",
+      "element": "earth",
+      "shape": "cracks"
+    },
+    {
+      "id": "elemental_golem_guardian",
+      "element": "earth",
+      "shape": "guardian"
+    },
+    {
+      "id": "elemental_titans_judgment",
+      "element": "earth",
+      "shape": "fist"
+    },
+    {
+      "id": "elemental_radiant_bolt",
+      "element": "light",
+      "shape": "spear"
+    },
+    {
+      "id": "elemental_holy_sanctuary",
+      "element": "light",
+      "shape": "shrine"
+    },
+    {
+      "id": "elemental_purification",
+      "element": "light",
+      "shape": "feather"
+    },
+    {
+      "id": "elemental_divine_judgment",
+      "element": "light",
+      "shape": "lightblade"
+    },
+    {
+      "id": "elemental_heavens_descent",
+      "element": "light",
+      "shape": "wings"
+    },
+    {
+      "id": "elemental_shadow_bolt",
+      "element": "dark",
+      "shape": "dart"
+    },
+    {
+      "id": "elemental_life_drain",
+      "element": "dark",
+      "shape": "ribbon"
+    },
+    {
+      "id": "elemental_cursed_mark",
+      "element": "dark",
+      "shape": "eye"
+    },
+    {
+      "id": "elemental_shadow_doppelganger",
+      "element": "dark",
+      "shape": "ghost"
+    },
+    {
+      "id": "elemental_abyssal_collapse",
+      "element": "dark",
+      "shape": "rift"
+    },
+    {
+      "id": "elemental_spark_shot",
+      "element": "lightning",
+      "shape": "bolt"
+    },
+    {
+      "id": "elemental_lightning_chain",
+      "element": "lightning",
+      "shape": "bolt"
+    },
+    {
+      "id": "elemental_thunder_dash",
+      "element": "lightning",
+      "shape": "streak"
+    },
+    {
+      "id": "elemental_static_field",
+      "element": "lightning",
+      "shape": "grid"
+    },
+    {
+      "id": "elemental_thunder_spear",
+      "element": "lightning",
+      "shape": "spear"
+    },
+    {
+      "id": "elemental_wrath_of_raijin",
+      "element": "lightning",
+      "shape": "storm"
+    },
+    {
+      "id": "elemental_fire_head",
+      "element": "fire",
+      "shape": "flame"
+    },
+    {
+      "id": "elemental_fire_trail",
+      "element": "fire",
+      "shape": "trail"
+    },
+    {
+      "id": "elemental_fire_burst",
+      "element": "fire",
+      "shape": "burst"
+    },
+    {
+      "id": "elemental_fire_mark",
+      "element": "fire",
+      "shape": "crystal"
+    },
+    {
+      "id": "elemental_fire_facet",
+      "element": "fire",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_water_head",
+      "element": "water",
+      "shape": "drop"
+    },
+    {
+      "id": "elemental_water_trail",
+      "element": "water",
+      "shape": "trail"
+    },
+    {
+      "id": "elemental_water_burst",
+      "element": "water",
+      "shape": "burst"
+    },
+    {
+      "id": "elemental_water_mark",
+      "element": "water",
+      "shape": "crystal"
+    },
+    {
+      "id": "elemental_water_facet",
+      "element": "water",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_ice_head",
+      "element": "ice",
+      "shape": "crystal"
+    },
+    {
+      "id": "elemental_ice_trail",
+      "element": "ice",
+      "shape": "trail"
+    },
+    {
+      "id": "elemental_ice_burst",
+      "element": "ice",
+      "shape": "star"
+    },
+    {
+      "id": "elemental_ice_mark",
+      "element": "ice",
+      "shape": "crystal"
+    },
+    {
+      "id": "elemental_ice_facet",
+      "element": "ice",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_wind_head",
+      "element": "wind",
+      "shape": "blade"
+    },
+    {
+      "id": "elemental_wind_trail",
+      "element": "wind",
+      "shape": "trail"
+    },
+    {
+      "id": "elemental_wind_burst",
+      "element": "wind",
+      "shape": "burst"
+    },
+    {
+      "id": "elemental_wind_mark",
+      "element": "wind",
+      "shape": "crystal"
+    },
+    {
+      "id": "elemental_wind_facet",
+      "element": "wind",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_earth_head",
+      "element": "earth",
+      "shape": "stone"
+    },
+    {
+      "id": "elemental_earth_trail",
+      "element": "earth",
+      "shape": "trail"
+    },
+    {
+      "id": "elemental_earth_burst",
+      "element": "earth",
+      "shape": "burst"
+    },
+    {
+      "id": "elemental_earth_mark",
+      "element": "earth",
+      "shape": "crystal"
+    },
+    {
+      "id": "elemental_earth_facet",
+      "element": "earth",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_light_head",
+      "element": "light",
+      "shape": "spear"
+    },
+    {
+      "id": "elemental_light_trail",
+      "element": "light",
+      "shape": "trail"
+    },
+    {
+      "id": "elemental_light_burst",
+      "element": "light",
+      "shape": "burst"
+    },
+    {
+      "id": "elemental_light_mark",
+      "element": "light",
+      "shape": "crystal"
+    },
+    {
+      "id": "elemental_light_facet",
+      "element": "light",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_dark_head",
+      "element": "dark",
+      "shape": "dart"
+    },
+    {
+      "id": "elemental_dark_trail",
+      "element": "dark",
+      "shape": "trail"
+    },
+    {
+      "id": "elemental_dark_burst",
+      "element": "dark",
+      "shape": "burst"
+    },
+    {
+      "id": "elemental_dark_mark",
+      "element": "dark",
+      "shape": "eye"
+    },
+    {
+      "id": "elemental_dark_facet",
+      "element": "dark",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_lightning_head",
+      "element": "lightning",
+      "shape": "bolt"
+    },
+    {
+      "id": "elemental_lightning_trail",
+      "element": "lightning",
+      "shape": "trail"
+    },
+    {
+      "id": "elemental_lightning_burst",
+      "element": "lightning",
+      "shape": "burst"
+    },
+    {
+      "id": "elemental_lightning_mark",
+      "element": "lightning",
+      "shape": "crystal"
+    },
+    {
+      "id": "elemental_lightning_facet",
+      "element": "lightning",
+      "shape": "armor"
+    },
+    {
+      "id": "elemental_rare_meteor_rain",
+      "element": "fire",
+      "shape": "rare_hero_meteor_rain"
+    },
+    {
+      "id": "elemental_rare_phoenix_rebirth",
+      "element": "fire",
+      "shape": "rare_hero_phoenix_rebirth"
+    },
+    {
+      "id": "elemental_rare_tsunami",
+      "element": "water",
+      "shape": "rare_hero_tsunami"
+    },
+    {
+      "id": "elemental_rare_leviathans_wrath",
+      "element": "water",
+      "shape": "rare_hero_leviathans_wrath"
+    },
+    {
+      "id": "elemental_rare_absolute_zero",
+      "element": "ice",
+      "shape": "rare_hero_absolute_zero"
+    },
+    {
+      "id": "elemental_rare_tempest_dominion",
+      "element": "wind",
+      "shape": "rare_hero_tempest_dominion"
+    },
+    {
+      "id": "elemental_rare_titans_judgment",
+      "element": "earth",
+      "shape": "rare_hero_titans_judgment"
+    },
+    {
+      "id": "elemental_rare_heavens_descent",
+      "element": "light",
+      "shape": "rare_hero_heavens_descent"
+    },
+    {
+      "id": "elemental_rare_abyssal_collapse",
+      "element": "dark",
+      "shape": "rare_hero_abyssal_collapse"
+    },
+    {
+      "id": "elemental_rare_wrath_of_raijin",
+      "element": "lightning",
+      "shape": "rare_hero_wrath_of_raijin"
+    },
+    {
+      "id": "elemental_rare_fire_plume",
+      "element": "fire",
+      "shape": "rare_plume"
+    },
+    {
+      "id": "elemental_rare_fire_ground",
+      "element": "fire",
+      "shape": "rare_ground"
+    },
+    {
+      "id": "elemental_rare_water_crest",
+      "element": "water",
+      "shape": "rare_crest"
+    },
+    {
+      "id": "elemental_rare_water_ground",
+      "element": "water",
+      "shape": "rare_ground"
+    },
+    {
+      "id": "elemental_rare_ice_shards",
+      "element": "ice",
+      "shape": "rare_shards"
+    },
+    {
+      "id": "elemental_rare_ice_ground",
+      "element": "ice",
+      "shape": "rare_ground"
+    },
+    {
+      "id": "elemental_rare_wind_ribbon",
+      "element": "wind",
+      "shape": "rare_ribbon"
+    },
+    {
+      "id": "elemental_rare_wind_ground",
+      "element": "wind",
+      "shape": "rare_ground"
+    },
+    {
+      "id": "elemental_rare_earth_fragments",
+      "element": "earth",
+      "shape": "rare_fragments"
+    },
+    {
+      "id": "elemental_rare_earth_ground",
+      "element": "earth",
+      "shape": "rare_ground"
+    },
+    {
+      "id": "elemental_rare_light_rays",
+      "element": "light",
+      "shape": "rare_rays"
+    },
+    {
+      "id": "elemental_rare_light_ground",
+      "element": "light",
+      "shape": "rare_ground"
+    },
+    {
+      "id": "elemental_rare_dark_fragments",
+      "element": "dark",
+      "shape": "rare_fragments"
+    },
+    {
+      "id": "elemental_rare_dark_ground",
+      "element": "dark",
+      "shape": "rare_ground"
+    },
+    {
+      "id": "elemental_rare_lightning_forks",
+      "element": "lightning",
+      "shape": "rare_forks"
+    },
+    {
+      "id": "elemental_rare_lightning_ground",
+      "element": "lightning",
+      "shape": "rare_ground"
+    }
+  ]
+}

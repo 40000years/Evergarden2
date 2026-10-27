@@ -6,9 +6,12 @@ import java.util.function.Predicate;
 
 public final class SpellRegistry {
     private final EnumMap<Spell,Predicate<Player>> spells=new EnumMap<>(Spell.class);
+    private final BasicSpells basic;
     public SpellRegistry(MagicContext c,AreaSpells area,ProjectileSpells projectile) {
+        basic=new BasicSpells(c);
         MobilitySpells mobility=new MobilitySpells(c);ChannelSpells channel=new ChannelSpells(c);
         MythicSpells mythic=new MythicSpells(c);
+        LegendarySpells legendary=new LegendarySpells(c);
         spells.put(Spell.LIGHTNING_STRIKE,area::lightning);
         spells.put(Spell.FROST_NOVA,area::frost);
         spells.put(Spell.SHADOW_STEP,mobility::shadowStep);
@@ -27,7 +30,11 @@ public final class SpellRegistry {
         spells.put(Spell.SOLAR_APOCALYPSE,mythic::solar);
         spells.put(Spell.CHRONOS_FINAL_HOUR,mythic::chronos);
         spells.put(Spell.HEAVENS_JUDGMENT,mythic::judgment);
+        spells.put(Spell.VERDANT_SOVEREIGN,legendary::verdant);
+        spells.put(Spell.LUNAR_REQUIEM,legendary::lunar);
+        spells.put(Spell.CRIMSON_OBLIVION,legendary::crimson);
         if(spells.size()!=Spell.values().length)throw new IllegalStateException("Missing spell implementation");
     }
     public boolean cast(Player player,Spell spell){return spells.get(spell).test(player);}
+    public BasicSpells basic(){return basic;}
 }

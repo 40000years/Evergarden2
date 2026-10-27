@@ -32,10 +32,8 @@ public final class WorldBossTempleLayout {
         if(random.nextDouble()>=chance)return null;
         int x=(gx*spacing+8+random.nextInt(spacing-16))*16,z=(gz*spacing+8+random.nextInt(spacing-16))*16;
         if(Math.hypot(x,z)<640)return null;
-        for(var temple:temples.nearby(x,z))
-            if(Math.abs(x-temple.x())<WorldBossTemple.RADIUS+temple.radius()+40
-                &&Math.abs(z-temple.z())<WorldBossTemple.RADIUS+temple.radius()+40)return null;
-        // The grids can differ in size; inspect all cells touched by this footprint.
+        // Sanctum dungeons give way to the temple (DungeonLayout.reserve).
+// The grids can differ in size; inspect all cells touched by this footprint.
         int ws=whales.spacingChunks()*16,ls=landmarks.spacingChunks()*16;
         for(int a=Math.floorDiv(x-260,ws);a<=Math.floorDiv(x+260,ws);a++)
             for(int b=Math.floorDiv(z-260,ws);b<=Math.floorDiv(z+260,ws);b++){

@@ -1,5 +1,6 @@
-"""Validate release assets, model routing, fallback and embedded binary integrity."""
+﻿"""Validate release assets, model routing, fallback and embedded binary integrity."""
 import hashlib
+import io
 import json
 import re
 import runpy
@@ -8,20 +9,49 @@ import sys
 import zipfile
 import zlib
 from pathlib import Path
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT.parent / 'tools'))
 from bedrock_particle_checks import check_direction_modes
+from legendary_effect_assets import PLANES as LEGENDARY_PLANES, RAYS as LEGENDARY_RAYS
+from check_retired_core_cleanup import assert_no_retired, assert_mapping_cleanup
 check_direction_modes(ROOT / 'dist/advance-magic-bedrock.mcpack')
-catalog = runpy.run_path(str(ROOT / 'tools/build_packs.py'))['spells']()
+builder = runpy.run_path(str(ROOT / 'tools/build_packs.py'))
+catalog = builder['spells']()
+staff_ids = builder['STAFF_IDS']
+preserved_wands = builder['PRESERVED_WANDS']
+retired_wands = tuple(name for name, _, _ in catalog if name not in preserved_wands) + (
+    'invisibility_shroud', 'poison_spores', 'soul_drain', 'time_dilation')
 dist = ROOT / 'dist'
+for pack_name in ('advance-magic-java.zip', 'advance-magic-bedrock.mcpack'):
+    with zipfile.ZipFile(dist / pack_name) as retired_check:
+        assert_no_retired(retired_check)
 hashes = json.loads((dist / 'pack-hashes.json').read_text())
 service_source = (ROOT / 'src/main/java/com/example/advancemagic/pack/ResourcePackService.java').read_text()
 pack_config = (ROOT / 'src/main/resources/config.yml').read_text()
-assert "url: 'https://raw.githubusercontent.com/40000years/Evergarden2/0e6a864979528b50e00e48baa98e267993803ba4/advance-magic/dist/advance-magic-java.zip'" in pack_config
-assert "sha1: '278eef0ea167e62d84152f57bb32c60483b62e8f'" in pack_config
-assert 'host:\n    enabled: false' in pack_config
+assert "url: ''" in pack_config
+assert "sha1: ''" in pack_config
+assert 'host:\n    enabled: true' in pack_config
 assert 'CURRENT_SHA1' not in service_source
+
+cleanup = json.loads((ROOT.parent / 'docs/elemental-staff-cleanup.json').read_text())
+for row in cleanup['removed']:
+    assert not (ROOT.parent / row['path']).exists(), f'Retired asset reintroduced: {row["path"]}'
+for row in cleanup['preserved_sha256']:
+    assert hashlib.sha256((ROOT.parent / row['path']).read_bytes()).hexdigest() == row['sha256'], f'Preserved shared source changed: {row["path"]}'
+with zipfile.ZipFile(dist / 'elemental-staff-sources.zip') as sources:
+    assert sources.testzip() is None
+    assert all(info.date_time == (2026, 9, 9, 0, 0, 0) for info in sources.infolist()), 'Source ZIP timestamps must be deterministic'
+    models = [name for name in sources.namelist() if name.endswith('.bbmodel')]
+    assert len(models) == len(staff_ids) == 8
+    for path in models:
+        assert sources.read(path) == (ROOT / 'art/elemental-staffs' / path).read_bytes()
+        model = json.loads(sources.read(path))
+        assert model['elements'] and model['textures'], f'Empty source model: {path}'
+    assert json.loads(sources.read('metadata.json')) == json.loads((ROOT / 'art/elemental-staffs/metadata.json').read_bytes())
+    assert sources.read('README.md') == (ROOT / 'art/elemental-staffs/README.md').read_bytes()
+    assert sources.read('elemental_staff_assets.py') == (ROOT.parent / 'tools/elemental_staff_assets.py').read_bytes()
 
 
 def check_png(data, core=False):
@@ -67,17 +97,29 @@ for name, digest in hashes.items():
     with zipfile.ZipFile(dist / name) as z:
         assert z.testzip() is None
         for file in z.namelist():
+            assert not any(token in file for token in ("armor_aegis", "armor_kavacha", "armor_aegishjalmur", "legendary_armor/", "legendary_armor_hidden")), file
             if file.endswith(('.json', '.mcmeta')): json.loads(z.read(file))
             if file.endswith('.png'):
-                if 'flying_staff' in file:
+                if 'elemental_staffs/' in file:
+                    image=z.read(file)
+                    assert image[:8] == b'\x89PNG\r\n\x1a\n'
+                    assert struct.unpack('>II',image[16:24]) in {(128,128),(128,1024)}
+                    with Image.open(io.BytesIO(image)) as png_image:
+                        assert png_image.mode == 'RGBA'
+                        png_image.verify()  # Verify every PNG chunk CRC, not only its signature.
+                elif 'legendary_weapons/' in file or ('legendary_' in file and '_sigil' in file) or 'legendary_longinus_rain' in file:
+                    image=z.read(file)
+                    assert image[:8] == b'\x89PNG\r\n\x1a\n'
+                    assert struct.unpack('>II',image[16:24]) in {(128,128),(128,1024),(256,256)}
+                elif 'flying_staff' in file:
                     image=z.read(file)
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
                     assert struct.unpack('>II',image[16:24]) in {(16,16),(64,64),(64,1024),(128,128)}
-                elif any(name in file for name in ('judgment_seal','solar_corona','solar_orbit','chronos_dial','chronos_minute','chronos_hour','chronos_ripple')):
+                elif any(name in file for name in ('judgment_seal','solar_corona','solar_orbit','chronos_dial','chronos_minute','chronos_hour','chronos_ripple','shulker_prism',*LEGENDARY_PLANES)):
                     image=z.read(file)
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
                     assert struct.unpack('>II',image[16:24]) == (1024,1024)
-                elif any(name in file for name in ('solar_ray','chronos_ray','chronos_echo')):
+                elif any(name in file for name in ('solar_ray','chronos_ray','chronos_echo',*LEGENDARY_RAYS)):
                     image=z.read(file)
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
                     assert struct.unpack('>II',image[16:24]) == (256,256)
@@ -90,40 +132,41 @@ for name, digest in hashes.items():
                     assert image[:8] == b'\x89PNG\r\n\x1a\n'
                     assert struct.unpack('>II',image[16:24]) == (64,64)
                 else:
-                    try: check_png(z.read(file), core='core_' in file)
+                    try: check_png(z.read(file), core='core_' in file or 'mana_potion_' in file)
                     except AssertionError as error: raise AssertionError(f'{file}: {error}') from error
 
-# The new colour adapter must never reference an emitter missing from either pack.
+# Advance Magic owns its emitters; Evergarden must not override them when both packs load.
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as magic, zipfile.ZipFile(ROOT.parent / 'evergarden/dist/evergarden-bedrock.mcpack') as garden:
-    for tint in ('gold', 'white', 'orange', 'cyan', 'violet'):
+    for tint in ('gold', 'white', 'orange', 'cyan', 'violet', 'emerald', 'jade', 'silver', 'crimson', 'ruby'):
         path=f'particles/mythic_{tint}.particle.json'
-        assert json.loads(magic.read(path))==json.loads(garden.read(path))
+        assert path not in garden.namelist()
         effect=json.loads(magic.read(path))['particle_effect']
         assert effect['description']['identifier']==f'advance_magic:mythic_{tint}'
         texture=effect['description']['basic_render_parameters']['texture']+'.png'
-        assert magic.read(texture)==garden.read(texture)
+        assert magic.read(texture) and texture not in garden.namelist()
         components=effect['components']
         assert components['minecraft:emitter_rate_instant']['num_particles']==1
         assert components['minecraft:particle_lifetime_expression']['max_lifetime']<=1
         assert all('variable.magic_size' in expression for expression in components['minecraft:particle_appearance_billboard']['size'])
 
 with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
-    names=('solar_corona','solar_orbit','chronos_dial','chronos_minute','chronos_hour','chronos_ripple','solar_ray','chronos_ray','chronos_echo')
+    names=('solar_corona','solar_orbit','chronos_dial','chronos_minute','chronos_hour','chronos_ripple','shulker_prism','solar_ray','chronos_ray','chronos_echo')
     with zipfile.ZipFile(ROOT.parent/'evergarden/dist/evergarden-java.zip') as garden_java, zipfile.ZipFile(dist/'advance-magic-bedrock.mcpack') as bedrock, zipfile.ZipFile(ROOT.parent/'evergarden/dist/evergarden-bedrock.mcpack') as garden_bedrock:
         for name in names:
             source=(ROOT/f'art/effects/{name}.png').read_bytes()
             texture=f'assets/advance_magic/textures/effect/{name}.png'
-            assert z.read(texture)==garden_java.read(texture)==source
+            assert z.read(texture)==source and texture not in garden_java.namelist()
             mesh=json.loads(z.read(f'assets/advance_magic/models/effect/{name}.json'))
             assert all(not element['shade'] for element in mesh['elements'])
             sides=set(mesh['elements'][0]['faces'])
             assert sides==({'north','south','east','west'} if name.endswith(('_ray','_echo')) else {'north','south'})
-            assert bedrock.read(f'textures/particle/{name}.png')==garden_bedrock.read(f'textures/particle/{name}.png')==source
+            assert bedrock.read(f'textures/particle/{name}.png')==source
+            assert f'textures/particle/{name}.png' not in garden_bedrock.namelist()
             ray=name.endswith(('_ray','_echo'))
             for suffix,mode in (('', 'direction_y' if ray else 'direction_z'),('_flat','direction_y' if ray else 'emitter_transform_xz')):
                 path=f'particles/{name}{suffix}.particle.json'
                 particle=json.loads(bedrock.read(path))
-                assert particle==json.loads(garden_bedrock.read(path))
+                assert path not in garden_bedrock.namelist()
                 effect=particle['particle_effect']
                 assert effect['description']['identifier']==f'advance_magic:{name}{suffix}'
                 assert effect['description']['basic_render_parameters']['material']=='particles_blend', 'World planes must support views from below/behind and translucent stroke alpha'
@@ -151,14 +194,26 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
     pack = json.loads(z.read('pack.mcmeta'))['pack']
     assert pack['min_format'] == [75, 0] and pack['max_format'] == [88, 0]
     assert 'assets/minecraft/items/carrot_on_a_stick.json' not in z.namelist()
-    for name, _, _ in catalog:
+    for name in preserved_wands:
         item = json.loads(z.read(f'assets/advance_magic/items/{name}.json'))
         assert item['model']['model'] == f'advance_magic:item/{name}'
         model = json.loads(z.read(f'assets/advance_magic/models/item/{name}.json'))
         assert model['parent'] == 'minecraft:item/handheld'
-        assert 'elements' not in model, 'Wands retain flat pixel art instead of authored 3D geometry'
+        assert 'elements' not in model, 'Preserved compatibility art retains its original flat model'
         assert model['textures']['layer0'] == f'advance_magic:item/{name}'
         assert z.read(f'assets/advance_magic/textures/item/{name}.png') == (ROOT / f'art/wands/{name}.png').read_bytes()
+    for name in retired_wands:
+        for folder, extension in (('items', 'json'), ('models/item', 'json'), ('textures/item', 'png')):
+            assert f'assets/advance_magic/{folder}/{name}.{extension}' not in z.namelist(), f'Retired ordinary wand remains: {name}'
+    for name in staff_ids:
+        item = json.loads(z.read(f'assets/advance_magic/items/staff_{name}.json'))['model']
+        assert item['type'] == 'minecraft:select' and item['property'] == 'minecraft:display_context'
+        assert item['fallback']['model'] == f'advance_magic:item/elemental_staffs/{name}'
+        model = json.loads(z.read(f'assets/advance_magic/models/item/elemental_staffs/{name}.json'))
+        assert len(model['elements']) > 40, 'Each staff must contain authored 3D geometry'
+        for texture in model['textures'].values():
+            if texture.startswith('advance_magic:'):
+                assert z.read('assets/' + texture.replace(':', '/textures/', 1) + '.png'), texture
     for name in ('wand_repair', 'wand_damage', 'wand_cooldown'):
         item = json.loads(z.read(f'assets/advance_magic/items/{name}.json'))
         assert item['model']['model'] == f'advance_magic:item/{name}'
@@ -175,16 +230,32 @@ with zipfile.ZipFile(dist / 'advance-magic-java.zip') as z:
         assert len(definition['entries'])==count
 
 mapping = json.loads((dist / 'geyser-mappings.json').read_text())
+assert_mapping_cleanup(mapping)
 assert mapping['format_version'] == 2
 definitions = mapping['items']['minecraft:carrot_on_a_stick']
-assert len(definitions) == len(catalog) == 18
-assert len({row['bedrock_identifier'] for row in definitions}) == 18
+assert len(definitions) == len(staff_ids) == 8
+assert {row['model'] for row in definitions} == {f'advance_magic:staff_{name}' for name in staff_ids}
+assert len({row['bedrock_identifier'] for row in definitions}) == 8
+all_definitions = [row for rows in mapping['items'].values() for row in rows]
+assert not any(row['model'] == f'advance_magic:{name}' for row in all_definitions for name, _, _ in catalog), 'Per-spell wands are no longer registered'
 with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     manifest = json.loads(z.read('manifest.json'))
-    assert manifest['header']['version'] == [2, 7, 1]
+    assert manifest['header']['version'] == builder['BEDROCK_PACK_VERSION'] == [2, 15, 1]
     assert manifest['modules'][0]['version'] == manifest['header']['version']
     assert tuple(manifest['header']['version']) > (1, 1, 40161), 'v2 Bedrock pack must supersede the Afterdeath release'
     atlas = json.loads(z.read('textures/item_texture.json'))['texture_data']
+    potion_rows=mapping['items']['minecraft:potion']
+    assert len(potion_rows)==4
+    with zipfile.ZipFile(dist / 'advance-magic-java.zip') as java:
+        for row,quality in zip(potion_rows,('low','medium','good','supreme')):
+            name='mana_potion_'+quality
+            assert row['model']==row['bedrock_identifier']==f'advance_magic:{name}'
+            assert row['bedrock_options']['allow_offhand'] and not row['bedrock_options']['display_handheld']
+            assert z.read(atlas[row['bedrock_options']['icon']]['textures']+'.png')==java.read(f'assets/advance_magic/textures/item/{name}.png')==(ROOT/f'art/potions/{name}.png').read_bytes()
+            model=json.loads(java.read(f'assets/advance_magic/models/item/{name}.json'))
+            assert model=={'parent':'minecraft:item/generated','textures':{'layer0':f'advance_magic:item/{name}'}}
+            item=json.loads(java.read(f'assets/advance_magic/items/{name}.json'))
+            assert item['model']=={'type':'minecraft:model','model':f'advance_magic:item/{name}'}
     effect=json.loads(z.read('particles/judgment_beam.particle.json'))['particle_effect']
     assert effect['description']['identifier']=='advance_magic:judgment_beam'
     billboard=effect['components']['minecraft:particle_appearance_billboard']
@@ -194,28 +265,36 @@ with zipfile.ZipFile(dist / 'advance-magic-bedrock.mcpack') as z:
     assert billboard['uv']['uv'][1]==0 and billboard['uv']['uv_size'][1]==128, 'Beam texture must reach both vertical edges'
     assert 'variable.beam_width' in billboard['size'][0] and 'variable.beam_height' in billboard['size'][1]
     with zipfile.ZipFile(ROOT.parent/'evergarden/dist/evergarden-bedrock.mcpack') as garden:
-        assert json.loads(garden.read('particles/judgment_beam.particle.json'))==json.loads(z.read('particles/judgment_beam.particle.json'))
-        assert garden.read('textures/particle/judgment_beam.png')==z.read('textures/particle/judgment_beam.png')
+        assert 'particles/judgment_beam.particle.json' not in garden.namelist()
+        assert 'textures/particle/judgment_beam.png' not in garden.namelist()
         for variant in range(2):
             name=f'judgment_seal_{variant}'
             particle=f'particles/{name}.particle.json'
             seal=json.loads(z.read(particle))['particle_effect']
             assert seal['components']['minecraft:particle_appearance_billboard']['facing_camera_mode']=='emitter_transform_xz'
-            assert json.loads(garden.read(particle))==json.loads(z.read(particle))
-            assert garden.read(f'textures/particle/{name}.png')==z.read(f'textures/particle/{name}.png')
-    for definition, (name, _, _) in zip(definitions, catalog):
-        assert definition['model'] == f'advance_magic:{name}'
+            assert particle not in garden.namelist()
+            assert f'textures/particle/{name}.png' not in garden.namelist()
+    for definition, name in zip(definitions, staff_ids):
+        assert definition['model'] == definition['bedrock_identifier'] == f'advance_magic:staff_{name}'
         assert 'predicate' not in definition
         assert definition['bedrock_options']['creative_category'] == 'equipment'
-        assert z.read(atlas[definition['bedrock_options']['icon']]['textures'] + '.png') == (ROOT / f'art/wands/{name}.png').read_bytes()
+        assert z.read(atlas[definition['bedrock_options']['icon']]['textures'] + '.png') == (ROOT / f'art/elemental-staffs/bedrock/textures/elemental_staffs/{name}_icon.png').read_bytes()
+        attach = json.loads(z.read(f'attachables/elemental_staffs/{name}.json'))['minecraft:attachable']['description']
+        assert attach['identifier'] == definition['bedrock_identifier']
+        for texture in attach['textures'].values():
+            assert z.read(texture + '.png'), f'Missing attachable texture: {texture}'
+    for name in retired_wands:
+        assert f'textures/items/{name}.png' not in z.namelist(), name
+        assert f'advance_magic.{name}' not in atlas, name
+    for name in preserved_wands:
+        assert z.read(f'textures/items/{name}.png') == (ROOT / f'art/wands/{name}.png').read_bytes()
     for name, material in (('wand_repair', 'prismarine_shard'), ('wand_damage', 'blaze_powder'), ('wand_cooldown', 'amethyst_shard')):
         definition = mapping['items'][f'minecraft:{material}'][0]
         assert definition['model'] == f'advance_magic:{name}'
         assert 'predicate' not in definition
         assert z.read(atlas[definition['bedrock_options']['icon']]['textures'] + '.png') == (ROOT / f'art/upgrades/{name}.png').read_bytes()
-    for definition, (name, _, _) in zip(mapping['items']['minecraft:heart_of_the_sea'], catalog):
-        assert definition['model'] == f'advance_magic:core_{name}'
-        assert 'predicate' not in definition
+    assert_mapping_cleanup(mapping)
+    assert_no_retired(z)
     for name,material in (('restoration_wand','blaze_rod'),('restoration_core','prismarine_crystals')):
         definition=mapping['items'][f'minecraft:{material}'][0]
         assert definition['model'] == f'advance_magic:{name}'
@@ -237,8 +316,10 @@ if '--assets-only' not in sys.argv:
     from release_jar_checks import check_jar
     check_jar(ROOT.parent / 'dist/advance-magic.jar')
     with zipfile.ZipFile(ROOT.parent / 'dist/advance-magic.jar') as jar:
-        for name in (*hashes, 'geyser-mappings.json', 'pack-hashes.json', 'wand-preview.html', 'advance-magic-guide-th.png'):
+        for name in (*hashes, 'geyser-mappings.json', 'pack-hashes.json'):
             assert jar.read('resource-packs/' + name) == (dist / name).read_bytes(), f'Stale/missing embedded asset: {name}'
         assert not any('IntegrationChecks' in name or 'AccountingChecks' in name or name.startswith('net/minecraft/') for name in jar.namelist())
     assert (ROOT / 'target/advance-magic.jar').read_bytes() == (ROOT.parent / 'dist/advance-magic.jar').read_bytes()
-print('PASS: wand/core/upgrade textures, Java models, Geyser model mappings, PNG CRCs, archives, hashes and embedded assets')
+print('PASS: eight elemental staff routes, 21 retired crafting cores absent, active utility cores and legendary compatibility art preserved, effect textures, models, Geyser mappings, PNGs, archives and hashes'
+      + (' (assets only)' if '--assets-only' in sys.argv else ' and embedded assets'))
+

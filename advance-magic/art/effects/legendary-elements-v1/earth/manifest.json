@@ -1,0 +1,62 @@
+{
+  "element": "earth",
+  "spell": "titans_judgment",
+  "tool": "built-in image_gen.imagegen",
+  "prompts": "generation-prompts.json",
+  "assets": [
+    {
+      "file": "titans_judgment_sigil.png",
+      "selected_source": "source/titans_judgment_sigil-v2.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a16916-a998-7c30-9ecd-449eba531abb\\exec-b58aad1e-f955-4ca9-9aac-4c31d358b59d.png",
+      "sha256": "31eaba1f4eb45e256974f28bc42d3807e4954b17137dacb19c51761669c72f7a",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_fraction": 0.523765735928919,
+      "opaque_fraction": 0.0005691516016371217,
+      "alpha_bbox": [
+        0,
+        17,
+        1228,
+        1254
+      ],
+      "prompt_id": "earth-sigil-v2",
+      "source_identical": true,
+      "visual_review": "Inspected built-in output. Sigil full outer ornament selected after reframing; impact selected as hollow radial shockwave with a clear center."
+    },
+    {
+      "file": "titans_judgment_impact.png",
+      "selected_source": "source/titans_judgment_impact-ring-v3.png",
+      "generated_source": "C:\\Users\\User\\.codex\\generated_images\\01a16916-a998-7c30-9ecd-449eba531abb\\exec-3aafbb6e-bbe3-44a6-b1f9-842ba301bfb5.png",
+      "sha256": "21a681afba3fce37dd1998ab0af2aa51731d3fdaa0a86d0c806da5f3582a8dbb",
+      "dimensions": [
+        1274,
+        1234
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "transparent_fraction": 0.4628055436112857,
+      "opaque_fraction": 4.452597645466365e-06,
+      "alpha_bbox": [
+        0,
+        0,
+        1274,
+        1234
+      ],
+      "prompt_id": "earth-impact-ring-v3",
+      "source_identical": true,
+      "visual_review": "Inspected built-in output. Sigil full outer ornament selected after reframing; impact selected as hollow radial shockwave with a clear center."
+    }
+  ],
+  "hand_model": "Reuse existing boss hand; see boss-hand-reuse.json. No new hand texture or model drawn.",
+  "runtime_status": "Texture production only; not yet integrated into gameplay."
+}

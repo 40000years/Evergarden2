@@ -1,0 +1,14 @@
+{
+  "version": "1.9.4-legendary-hand-size",
+  "bedrock_pack": "2.12.4",
+  "first_person_size_multiplier": 1.5,
+  "weapons_verified": 5,
+  "accepted_grip_positions": "Identical to 1.9.3",
+  "other_bedrock_files": "Identical except manifest version and five first-person scale vectors",
+  "java_pack": "Identical to 1.9.3",
+  "runtime": "PASS 58",
+  "assets": "PASS 225",
+  "hand_profiles": "PASS 145",
+  "relative_scale_checks": "PASS 32",
+  "sha256": "8d9c35515f287dfeb29f8f23d0dacf05c9c6d1e1fda01cf283e6f6180ea95a3a"
+}

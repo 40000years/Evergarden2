@@ -1,0 +1,301 @@
+{
+  "format_version": "1.16.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.advance_magic.staff_lightning_fx",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 4,
+        "visible_bounds_height": 4,
+        "visible_bounds_offset": [
+          0,
+          1,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            24,
+            0
+          ],
+          "binding": "q.item_slot_to_bone_name(context.item_slot)"
+        },
+        {
+          "name": "grip",
+          "parent": "root",
+          "pivot": [
+            0,
+            12.5,
+            0
+          ],
+          "locators": {
+            "hand_contact": [
+              0,
+              12.5,
+              0
+            ]
+          }
+        },
+        {
+          "name": "glint_1",
+          "parent": "grip",
+          "pivot": [
+            2.9,
+            25.6,
+            -0.6
+          ],
+          "cubes": [
+            {
+              "origin": [
+                2.79,
+                25.43,
+                -0.72
+              ],
+              "size": [
+                0.22,
+                0.34,
+                0.24
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "glint_2",
+          "parent": "grip",
+          "pivot": [
+            -2.9,
+            29.0,
+            0.7
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3.02,
+                28.81,
+                0.59
+              ],
+              "size": [
+                0.24,
+                0.38,
+                0.22
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    96,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    96,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    96,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    96,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    96,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    96,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "glint_3",
+          "parent": "grip",
+          "pivot": [
+            -0.7,
+            31.2,
+            0.2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -0.8,
+                31.06,
+                0.1
+              ],
+              "size": [
+                0.2,
+                0.28,
+                0.2
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    80,
+                    80
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

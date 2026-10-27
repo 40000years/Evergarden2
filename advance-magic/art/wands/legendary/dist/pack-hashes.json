@@ -1,0 +1,12 @@
+{
+  "advance-magic-legendary-java-preview.zip": {
+    "sha1": "36d93ec7d0178b9741823ed08bd4a37c0a58968f",
+    "sha256": "04db1c032d9d79dd9a44ab3cfc3e998c541cf5821e0f8ad8551d955517734e08",
+    "bytes": 36485
+  },
+  "advance-magic-legendary-bedrock-preview.mcpack": {
+    "sha1": "b9bce5e44a47447f53b5aa3b6c1ac46e64a245fb",
+    "sha256": "f6e4db07ee6bbe6b5bbba9b74a9760828be5eeb7577a2bbb45a5d35affde4559",
+    "bytes": 35000
+  }
+}

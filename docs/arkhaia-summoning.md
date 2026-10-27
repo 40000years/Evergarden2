@@ -1,0 +1,19 @@
+# Arkhaia — summon, movement and sword combat
+
+Release: `3.0.0-e2.61-arkhaia-fluid-combat`. The full state diagram, timing table and Java examples are in [arkhaia-ai.md](arkhaia-ai.md).
+
+- Hold a **Netherite Block in the main hand**, then right-click Red Glazed Terracotta in the central circle of an enabled Arkhaia castle in Evergarden. Side decorations and trap blocks do not summon the boss. Java players must finish accepting the World Boss pack first.
+- Holding the block is the requirement; it is not consumed. One Arkhaia can be active per castle. There is no respawn cooldown in this initial version.
+- Fixed **7,000 virtual HP**, shown in a boss bar, without player-count scaling. Player melee, projectiles and attributed spell damage use final damage; repeated hits by one player have a 10-tick interval. Environmental damage does not reduce boss HP. There are no boss phases or rewards yet.
+- Arkhaia maintains a 5–7 block distance, orbits, eases acceleration and turning every tick, and retreats after heavy damage. Low flight uses damped vertical movement. Clearance checks and the 36-block leash keep the body in the arena. The controller is intended for this open arena, rather than a maze.
+- Weighted, conditional skill decisions have independent cooldowns. The melee combo is light slash → heavy slash → backstep. Violet Rift marks the player's original position; Dreadrose Nova becomes available below 65% HP. Every action has windup, release and recovery, with one attributed impact and normal protection events. `arkhaia.combat.attack-damage` (default 12) is the common damage base; `stagger-threshold` defaults to 350. See the AI document for exact timing and multipliers.
+- Both clients now have intermediate sword poses, eight stride frames, four hover frames and four channel frames. They use the same body/hitbox position. The animation system preserves phase boundaries and locomotion phase; it still uses discrete meshes rather than full skeletal blending.
+- The existing model and admin preview are twice their original size. Java uses a 3.2 display scale and translation Y=4. Bedrock uses doubled geometry around the original feet with an ordinary invisible, non-marker Armor Stand at Y+0.5; this avoids Geyser's fixed adult Armor Stand scale. Bedrock pack version is `3.24.7`.
+- Custom identity: `arkhaia_boss` PDC, `evergarden_unique` and `arkhaia` scoreboard tags, plus existing boss/LM ignore markers. Tags are present before creature spawn listeners run. The optional LevelledMobs dependency loads first; the compatibility listener cancels its current and legacy `MobPreLevelEvent` for marked Evergarden mobs. The [official event source](https://github.com/ArcanePlugins/LevelledMobs/blob/master/levelledmobs-plugin/src/main/kotlin/io/github/arcaneplugins/levelledmobs/events/MobPreLevelEvent.kt) documents this cancellable hook.
+- Death, shutdown, invalid carriers, or an empty arena for 60 seconds clean up the encounter. Existing orphan cleanup also recognizes Arkhaia's owned entities.
+
+Use `dist/evergarden.jar` and restart the server. The JAR embeds the updated resource pack; when Geyser runs separately, install `evergarden/dist/evergarden-bedrock.mcpack` and the combined `evergarden/dist/geyser-mappings.json` there as well.
+
+Validation: `tests/arkhaia/run.py` runs an isolated Paper server with real summoning and damage handlers. Its LevelledMobs fixture reproduces the cancellable API event and emits it during creature spawn; it is not the full third-party plugin. Java/Bedrock mesh parity, rotation pivots, UVs and enlarged culling bounds are checked by `evergarden/tests/check_faction_boss_assets.py`. A physical Bedrock client was not connected.
+
+The real exported geometry is shown in `previews/faction-bosses/arkhaia-combat-poses.png` and the accompanying pose GIF; regenerate with `python tools/preview_arkhaia_combat.py`.

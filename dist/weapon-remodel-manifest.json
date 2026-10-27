@@ -1,0 +1,64 @@
+{
+  "release": "weapon-remodel-20261023",
+  "result": "PASS_ASSETS_AND_TRANSFORMS_CLIENT_CHECK_PENDING",
+  "advance_magic": {
+    "plugin_version": "1.20.2-weapon-remodel",
+    "bedrock_pack_version": "2.19.0",
+    "jar_sha256": "a3ff15e862193f5f96b547651402dc0273985c77fb36ace08efcdd5304d3ff8f",
+    "jar_entries_changed": [
+      "plugin.yml",
+      "resource-packs/advance-magic-bedrock.mcpack",
+      "resource-packs/advance-magic-java.zip",
+      "resource-packs/pack-hashes.json"
+    ],
+    "pack_sha1": {
+      "advance-magic-java.zip": "72719183eb789287d792ee8243e99863d23f426b",
+      "advance-magic-bedrock.mcpack": "165c972f12357fa803c81c85baaff3ea750c33db"
+    }
+  },
+  "evergarden": {
+    "plugin_version": "3.0.0-e2.120-airborne-boss-combat (built by another session; only packs and judge-design.json version patched)",
+    "bedrock_pack_version": "3.50.0",
+    "jar_sha256": "ac0cabbcf12fd17de573cd06515c8279d0d645a4abb68354140c853174e8ad24",
+    "jar_entries_changed": [
+      "resource-packs/evergarden-java.zip",
+      "resource-packs/evergarden-bedrock.mcpack",
+      "resource-packs/pack-hashes.json",
+      "judge-design.json"
+    ],
+    "pack_sha1": {
+      "evergarden-java.zip": "c44a5ebdb2554a7196bfcc04fbd402252e4183df",
+      "evergarden-bedrock.mcpack": "69cc80aab69a9c0b561741e8a594117e7dc81171"
+    }
+  },
+  "weapons": {
+    "legendary": 5,
+    "rare_enabled": 18,
+    "rare_disabled_unchanged": [
+      "thornwhisper",
+      "runelock"
+    ]
+  },
+  "checks": {
+    "bedrock_java_hold": 876,
+    "adventurer_assets": 727,
+    "legendary_assets": 236,
+    "legendary_hand_fit": 80,
+    "legendary_first_person": 20,
+    "disabled_ranged": 22,
+    "banshee_river": 30515,
+    "judge": 17947
+  },
+  "geyser_mappings_changed": false,
+  "unrelated_pack_entries_byte_identical": true,
+  "connected_client_playtest": false,
+  "live_server_modified": false,
+  "limitation": "Third person is verified arithmetically against Java for every cube corner; first person uses java2bedrock base poses, not a camera simulation. No Java/Bedrock client was opened.",
+  "previews": [
+    "previews/weapon-remodel/designs-before-after.png",
+    "previews/weapon-remodel/bedrock-hold-before-after.png",
+    "previews/legendary-weapons/legendary-weapons.png",
+    "previews/adventurer-weapons/adventurer-weapons.png"
+  ],
+  "backup": "output/weapon-remodel-20261023/before/"
+}

@@ -17,7 +17,7 @@ PALETTE = [(223,215,186),(157,155,146),(214,169,76),(102,77,46),
            (31,24,36),(255,134,114),(238,62,94),(208,213,197)]
 FALLBACK = ['SMOOTH_QUARTZ','POLISHED_TUFF','RAW_GOLD_BLOCK','WAXED_COPPER_BLOCK',
             'CRYING_OBSIDIAN','OCHRE_FROGLIGHT','REDSTONE_BLOCK','CHISELED_QUARTZ_BLOCK']
-BEDROCK_VERSION = [3,19,0]
+BEDROCK_VERSION = [3,27,0]
 DESIGN_REVISION = 'cathedral-wings-v2'
 
 def meshes():
@@ -245,7 +245,9 @@ def assets():
                 'visible_bounds_width':bounds['bedrock-width'],'visible_bounds_height':bounds['bedrock-height'],'visible_bounds_offset':bounds['bedrock-offset']},
             'bones':[{'name':'head','pivot':[0,24,0],'cubes':cubes}]}]})
         bedrock[f'attachables/{name}.json']=json_bytes({'format_version':'1.10.0','minecraft:attachable':{'description':{
-            'identifier':'voidscape:'+name,'materials':{'default':'entity_alphatest'},'textures':{'default':'textures/items/judge_atlas'},
+            # These meshes are worn in an invisible armor stand's helmet slot.
+            # Use the vanilla helmet material, as opposed to the entity material.
+            'identifier':'voidscape:'+name,'materials':{'default':'armor'},'textures':{'default':'textures/items/judge_atlas'},
             'geometry':{'default':'geometry.voidscape.'+name},'render_controllers':['controller.render.evergarden_judge_glow' if name.endswith('_light') or name=='judge_heart' else 'controller.render.evergarden_judge']}}})
     bedrock['render_controllers/judge.json']=json_bytes({'format_version':'1.8.0','render_controllers':{
         'controller.render.evergarden_judge':{'geometry':'Geometry.default','materials':[{'*':'Material.default'}],'textures':['Texture.default']},
@@ -253,6 +255,15 @@ def assets():
     from judge_sigils import assets as sigil_assets
     sigil_java,sigil_bedrock=sigil_assets(json_bytes)
     java.update(sigil_java);bedrock.update(sigil_bedrock)
+    from arkhaia_effect_assets import assets as arkhaia_effect_assets
+    ark_java,ark_bedrock=arkhaia_effect_assets(json_bytes,sigil_java,sigil_bedrock)
+    java.update(ark_java);bedrock.update(ark_bedrock)
+    from arkhaia_river_assets import assets as river_assets
+    river_java,river_bedrock=river_assets(json_bytes,sigil_java,sigil_bedrock)
+    java.update(river_java);bedrock.update(river_bedrock)
+    from seraph_preview_assets import assets as seraph_assets
+    seraph_java,seraph_bedrock,_=seraph_assets()
+    java.update(seraph_java);bedrock.update(seraph_bedrock)
     bedrock['textures/particle/judge_glint.png']=aether_texture()
     for tint,color in [('cyan',[.46,.87,.95,1]),('violet',[.75,.56,1,1]),('amber',[1,.68,.35,1]),('red',[1,.18,.28,1])]:
         bedrock[f'particles/judge_{tint}.particle.json']=json_bytes({'format_version':'1.10.0','particle_effect':{
@@ -277,6 +288,10 @@ def build():
     with zipfile.ZipFile(dist/'evergarden-bedrock.mcpack') as source:
         files={n:source.read(n) for n in source.namelist() if not n.endswith('/')}
     files.update(bedrock)
+    from arkhaia_bedrock_assets import assets as arkhaia_native_assets
+    files.update(arkhaia_native_assets())
+    from pet_bedrock_assets import assets as pet_native_assets
+    files.update(pet_native_assets())
     manifest=json.loads(files['manifest.json']);manifest['header']['version']=BEDROCK_VERSION
     for module in manifest['modules']:module['version']=BEDROCK_VERSION
     files['manifest.json']=json_bytes(manifest)
@@ -284,10 +299,15 @@ def build():
     mappings=json.loads((dist/'geyser-mappings.json').read_text())
     entries=mappings['items'].setdefault('minecraft:iron_helmet',[])
     entries[:]=[e for e in entries if not e.get('bedrock_identifier','').startswith('voidscape:judge_')]
-    for name in shape:
-        atlas_data['texture_data']['voidscape.'+name]={'textures':'textures/items/judge_atlas'}
+    from seraph_preview_assets import assets as seraph_assets, PREFIX as SERAPH_PREFIX, REVISION as SERAPH_REVISION, ATLAS_SIZE as SERAPH_ATLAS_SIZE
+    _,_,seraph_names=seraph_assets()
+    entries[:]=[e for e in entries if not e.get('bedrock_identifier','').startswith('voidscape:'+SERAPH_PREFIX)]
+    for name in [*shape,*seraph_names]:
+        atlas_data['texture_data']['voidscape.'+name]={'textures':'textures/items/'+('judge_seraph' if name in seraph_names else 'judge_atlas')}
         entries.append({'type':'definition','model':'voidscape:'+name,'bedrock_identifier':'voidscape:'+name,
             'display_name':'Ancient Judge Sculpture','bedrock_options':{'icon':'voidscape.'+name,'allow_offhand':False,'display_handheld':False}})
+    # Arkhaia and Seraphon render only as ModelEngine / native Geyser rigs (tools/update_evergarden_bosses.py).
+    entries[:]=[e for e in entries if not e.get('bedrock_identifier','').startswith(('voidscape:boss_seraphon_','voidscape:boss_arkhaia_'))]
     files['textures/item_texture.json']=json_bytes(atlas_data)
     archive(files,dist/'evergarden-bedrock.mcpack');(dist/'geyser-mappings.json').write_bytes(json_bytes(mappings))
     hashes=json.loads((dist/'pack-hashes.json').read_text())
@@ -297,7 +317,8 @@ def build():
     (ROOT/'src/main/resources/judge-shape.yml').write_bytes(json_bytes(shape))
     (ROOT/'src/main/resources/judge-design.json').write_bytes(json_bytes({
         'revision':DESIGN_REVISION,'name':'Cathedral wings + suspended mantle',
-        'models':len(shape),'components':len(shape)+11,'bedrock-version':'.'.join(map(str,BEDROCK_VERSION))}))
+        'models':len(shape),'components':len(shape)+11,'bedrock-version':'.'.join(map(str,BEDROCK_VERSION)),
+        'admin-preview':{'revision':SERAPH_REVISION,'texture-size':SERAPH_ATLAS_SIZE,'poses':seraph_names}}))
     print('Judge assets:',len(shape),'models;',sum(len(m['cubes']) for m in shape.values()),'cuboids;',hashes['judge-java.zip'])
 
 if __name__=='__main__':build()

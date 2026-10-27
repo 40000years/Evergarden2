@@ -10,11 +10,6 @@ See [the guide and patch infographic](player-guide-update.md).
 Evergarden migrates official pack URLs to the immutable published Java pack;
 administrator-owned private CDN URLs continue to require their own pack update.
 
-Evergarden e2.14 also fixes Ancient Astral Root consumption: its `DRAGON_BREATH`
-effect now supplies the required `Float` power (`1.0f`), matching the other dragon
-particle calls. Mana gains and daily-use limits are unchanged. This fix was built
-with `-DskipTests`; no live consumption test was run for this revision.
-
 ## Abilities
 
 | Wand | Mana | Base cooldown | Timeline | Base damage on a target hit by every stage |

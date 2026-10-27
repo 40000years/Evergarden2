@@ -80,6 +80,7 @@ public final class MythicSpellChecks implements Listener {
         handle.setPos(.5,100,.5);server.getPlayerList().getPlayers().add(handle);server.getPlayerList().getPlayersByUUID().put(profile.id(),handle);
         level.addNewPlayer(handle);player=handle.getBukkitEntity();player.setOp(true);player.setGravity(false);player.setInvulnerable(true);
         player.teleport(new Location(world,.5,100,.5,0,0));
+        RecipeMenuChecks.menu(garden,magic,player);
         target=mob(world,.5,12.5,1000);ally=mob(world,-3,12.5,1000);protectedTarget=mob(world,3,12.5,1000);ordinary=mob(world,5,12.5,80);
         var team=Bukkit.getScoreboardManager().getMainScoreboard().registerNewTeam("mythic-test");team.addEntry(player.getName());team.addEntry(ally.getUniqueId().toString());
         Bukkit.getPluginManager().registerEvents(this,host);
@@ -219,10 +220,11 @@ public final class MythicSpellChecks implements Listener {
         garden.wandGui().open(player);inventory=player.getOpenInventory().getTopInventory();
         for(var spell:Spell.values()) {
             check(magic.wands().spell(inventory.getItem(spell.ordinal()))==spell,"Evergarden GUI wand "+spell.id());
-            check(magic.wands().coreSpell(inventory.getItem(18+spell.ordinal()))==spell,"Evergarden GUI core "+spell.id());
+            check(magic.wands().coreSpell(inventory.getItem(27+spell.ordinal()))==spell,"Evergarden GUI core "+spell.id());
         }
         check(magic.flyingStaff().isStaff(inventory.getItem(50)),"Evergarden GUI staff stays separate");
-        for(var spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR,Spell.HEAVENS_JUDGMENT)) {
+        for(var spell:List.of(Spell.SOLAR_APOCALYPSE,Spell.CHRONOS_FINAL_HOUR,Spell.HEAVENS_JUDGMENT,
+                Spell.VERDANT_SOVEREIGN,Spell.LUNAR_REQUIEM,Spell.CRIMSON_OBLIVION)) {
             var recipe=(org.bukkit.inventory.ShapedRecipe)Bukkit.getRecipe(new NamespacedKey(magic,spell.id()+"_ni_c"));
             check(recipe!=null&&magic.wands().spell(recipe.getResult())==spell,"new recipe returns the matching wand");
             check(recipe.getChoiceMap().get(recipe.getShape()[1].charAt(1)).test(garden.relics().createMagicCore(spell.id())),"recipe accepts the Evergarden core");
@@ -233,7 +235,8 @@ public final class MythicSpellChecks implements Listener {
         var rarity=com.example.voidscape.item.RelicService.class.getDeclaredMethod("mythicCore",com.example.voidscape.item.RelicService.MagicCore.class);rarity.setAccessible(true);
         var mythicIds=new HashSet<String>();
         for(var core:com.example.voidscape.item.RelicService.MAGIC_CORES)if((boolean)rarity.invoke(null,core))mythicIds.add(core.id());
-        check(mythicIds.equals(Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment")),"Vault Mythic pool contains exactly all four cores");
+        check(mythicIds.equals(Set.of("shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment",
+                "verdant_sovereign","lunar_requiem","crimson_oblivion")),"Vault Mythic pool contains all seven cores");
         check(com.example.voidscape.item.RelicService.MAGIC_CORES.size()-mythicIds.size()==14,"normal Vault pool retains fourteen cores");
         judgmentGrounding();castingMotion();judgmentPull();lineGeometry();bedrockParticles();team.unregister();
     }
@@ -427,7 +430,7 @@ public final class MythicSpellChecks implements Listener {
             var packet=session.particles.getLast();
             check(packet.getIdentifier().equals("advance_magic:mythic_"+color.getKey())&&packet.getPosition().getX()==2&&packet.getPosition().getY()==105,"Bedrock receives matching world-space "+color.getKey());
             check(packet.getMolangVariablesJson().orElseThrow().contains("2.5"),"Bedrock receives Java particle size");
-            for(var owner:List.of(magic,garden))try(var pack=new java.util.zip.ZipFile(owner.getDataFolder().toPath().resolve("resource-packs/"+(owner==magic?"advance-magic":"evergarden")+"-bedrock.mcpack").toFile())) {
+            for(var owner:List.of(magic))try(var pack=new java.util.zip.ZipFile(owner.getDataFolder().toPath().resolve("resource-packs/"+(owner==magic?"advance-magic":"evergarden")+"-bedrock.mcpack").toFile())) {
                 check(pack.getEntry("particles/mythic_"+color.getKey()+".particle.json")!=null&&pack.getEntry("textures/particle/mythic_dot.png")!=null,"served pack contains "+packet.getIdentifier());
             }
         }
@@ -477,11 +480,12 @@ public final class MythicSpellChecks implements Listener {
         check(values.get("variable.line_rotation")==0&&Math.abs(values.get("variable.line_normal_y")-direction.getY())<1e-12,"Bedrock ray carries the endpoint direction and zero spin");
         player.teleport(saved);
         chronosBedrockLayout(visuals,session);
-        for(var owner:List.of(magic,garden))try(var pack=new java.util.zip.ZipFile(owner.getDataFolder().toPath().resolve("resource-packs/"+(owner==magic?"advance-magic":"evergarden")+"-bedrock.mcpack").toFile())) {
+        for(var owner:List.of(magic))try(var pack=new java.util.zip.ZipFile(owner.getDataFolder().toPath().resolve("resource-packs/"+(owner==magic?"advance-magic":"evergarden")+"-bedrock.mcpack").toFile())) {
             for(String name:List.of("solar_corona","solar_orbit","chronos_dial","chronos_minute","chronos_hour","chronos_ripple","solar_ray","chronos_ray","chronos_echo")) {
                 check(pack.getEntry("particles/"+name+".particle.json")!=null&&pack.getEntry("particles/"+name+"_flat.particle.json")!=null&&pack.getEntry("textures/particle/"+name+".png")!=null,"served Bedrock pack contains every orientation of "+name);
             }
         }
+        LegendaryBedrockChecks.run(host,magic,garden,player);
     }
     Map<String,Double> particleVariables(SpawnParticleEffectPacket packet) {
         var result=new HashMap<String,Double>();

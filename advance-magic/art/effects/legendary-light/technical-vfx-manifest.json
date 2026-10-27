@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "generator": "tools/generate_legendary_light_beams.py",
+  "method": "Deterministic Pillow technical profiles and curved white petal mask; no generated scene or painted smoke.",
+  "preserved_artwork": [
+    "elemental_legendary_light_sigil.png",
+    "elemental_legendary_light_halo.png",
+    "elemental_legendary_light_mist.png"
+  ],
+  "textures": [
+    {
+      "id": "elemental_legendary_light_beacon",
+      "size": [
+        256,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        30,
+        21,
+        226,
+        1003
+      ],
+      "coverage_alpha_ge_64": 0.23792,
+      "sha256": "0c3860b32fbb8d56efbd8faa6185c02a8691972d58889446bc6d113cad26de0f"
+    },
+    {
+      "id": "elemental_legendary_light_shot",
+      "size": [
+        256,
+        1024
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        71,
+        22,
+        185,
+        1002
+      ],
+      "coverage_alpha_ge_64": 0.1217,
+      "sha256": "ea721849821de0f7da6ef695c5d321473553199fbe40b6542cd98947c9c74de4"
+    },
+    {
+      "id": "elemental_legendary_light_mote",
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "alpha_bbox": [
+        14,
+        10,
+        47,
+        52
+      ],
+      "coverage_alpha_ge_64": 0.06494,
+      "sha256": "ba0bd84123e776a6ad474982c1224f2b7d5318a5486757996540eee71599f658"
+    }
+  ]
+}

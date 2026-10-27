@@ -1,0 +1,41 @@
+{
+  "revision": "seraphon-gilded-verdict-v1",
+  "cubes": 788,
+  "bones": 68,
+  "scale": 3.2,
+  "texture": {
+    "size": 1024,
+    "density": 9.0,
+    "tiles": 532,
+    "coverage": 0.265
+  },
+  "aura_bones": [
+    "halo",
+    "halo_ring",
+    "orbit",
+    "sigil",
+    "orb"
+  ],
+  "animations": {
+    "idle": 3.0,
+    "walk": 1.6,
+    "hover": 1.2,
+    "cast_windup": 1.0,
+    "cast_active": 0.6,
+    "cast_recover": 0.8,
+    "smite_windup": 0.8,
+    "smite_active": 0.5,
+    "smite_recover": 0.9,
+    "verdict_windup": 2.0,
+    "verdict_active": 1.2,
+    "verdict_recover": 1.4,
+    "wings_windup": 0.9,
+    "wings_active": 0.5,
+    "wings_recover": 0.8,
+    "stun": 1.8,
+    "transition": 3.5,
+    "spawn": 3.0,
+    "aura": 12.0
+  },
+  "worst_ik_reach_error": 0.0
+}

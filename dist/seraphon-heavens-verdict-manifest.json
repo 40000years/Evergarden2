@@ -1,0 +1,42 @@
+{
+  "version": "3.0.0-e2.122-seraphon-heavens-verdict",
+  "health": 10000,
+  "artifact": "dist/evergarden.jar",
+  "sha256": "b486150ea004eb3a8e0b86b8ecc3956e25a8dc990a4ea78e43612196593ffea8",
+  "base_sha256": "22c74c311d96372f55d50468528e9b5426c465be3518205f6e8634d8c1da7273",
+  "paper_checks": 272,
+  "asset_checks": 1884,
+  "pure_combat_checks": 67143,
+  "reports": {
+    "seraphon_native": {
+      "checks": 51,
+      "report": "output/seraphon-native-v4-20261023/arkhaia-result.txt",
+      "result": "PASS 51 Paper checks"
+    },
+    "hitbox": {
+      "checks": 80,
+      "report": "output/seraphon-hitbox-delivery-20261023/arkhaia-result.txt",
+      "result": "PASS 80 Paper checks"
+    },
+    "sanctuary": {
+      "checks": 141,
+      "report": "output/seraphon-sanctuary-final-20261023/arkhaia-result.txt",
+      "result": "PASS 141 Paper checks"
+    }
+  },
+  "models_preserved_byte_for_byte": 73,
+  "bedrock_pack_version": [
+    3,
+    51,
+    0
+  ],
+  "build_manifest": "output/seraphon-release-20261023/build-v5/build-manifest.json",
+  "preview": "previews/seraphon-encounter/index.html",
+  "preview_is_offline": true,
+  "connected_client_playtest": false,
+  "test_sources": {
+    "tests/arkhaia/SeraphonProbe.java": "b847204e394f92217de38afa1f68b521d5ac0682fe2939efa172bf90c6e34293",
+    "tests/arkhaia/run.py": "02fb90f4889ad4a12e095c961dcf90727c9f88ebc451e493ca7ccc3119d07bd3",
+    "tests/model-engine/check_seraphon_encounter.py": "68d727f7f81355b9acbfbd2914021098664d64e9d2e61d3f8763bb5bfefe7a92"
+  }
+}

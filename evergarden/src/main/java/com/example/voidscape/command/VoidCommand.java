@@ -6,6 +6,7 @@ import com.example.voidscape.enchant.UniqueEnchant;
 import com.example.voidscape.item.RelicService;
 import com.example.voidscape.item.RelicService.Relic;
 import com.example.voidscape.world.DungeonLayout;
+import com.example.voidscape.world.BiomeTerrain;
 import org.bukkit.*;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
@@ -27,7 +28,13 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
             return true;
         }
         String sub=args.length==0?"help":args[0].toLowerCase(Locale.ROOT);
-        if(Set.of("give","pregen","reload","status","pack","test","dev","kit","menu","enter","leave","tp","wands","wand","magic","cores","core","relics","relic","items","item").contains(sub)&&!isAdmin(sender)){
+        if(sub.equals("pets")) {
+            if(args.length>=2&&args[1].equalsIgnoreCase("wild"))return plugin.wildPets().command(sender,args);
+            if(args.length>=2&&Set.of("perf","give","egg","rush").contains(args[1].toLowerCase(Locale.ROOT))&&plugin.pets()!=null)return plugin.pets().command(sender,args);
+            return plugin.petPreviews().command(sender,args);
+        }
+        if((sub.equals("seraph")||sub.equals("shop"))&&plugin.seraphTrader()!=null)return plugin.seraphTrader().command(sender,args);
+        if(Set.of("give","pregen","reload","status","pack","test","dev","kit","menu","enter","leave","tp","wands","wand","magic","cores","core","relics","relic","items","item","weapons","weapon","armoury").contains(sub)&&!isAdmin(sender)){
             if(sub.equals("enter")) {
                 plugin.message(sender,"คำสั่งนี้สำหรับแอดมินเท่านั้น · กรุณาสร้างประตูควอตซ์ (Block of Quartz 4x5) แล้วโยนดอกไม้เพื่อเดินทางเข้าสู่ Evergarden");
                 return true;
@@ -40,9 +47,36 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
             return true;
         }
         switch(sub) {
+            case "biome" -> {
+                var terrain=plugin.biomeTerrain();
+                if(args.length>2&&args[1].equalsIgnoreCase("locate")){
+                    if(!isAdmin(sender)){plugin.message(sender,"ไม่มีสิทธิ์แอดมิน");return true;}
+                    var kind=BiomeTerrain.Kind.fromId(args[2].toLowerCase(Locale.ROOT));
+                    if(kind==null){plugin.message(sender,"/evergarden biome locate gardens|glacier|ancient-forest|lunar-city");return true;}
+                    int x=p!=null&&p.getWorld()==plugin.world()?p.getLocation().getBlockX():0;
+                    int z=p!=null&&p.getWorld()==plugin.world()?p.getLocation().getBlockZ():0;
+                    var site=terrain.locate(kind,x,z);
+                    plugin.message(sender,site==null?"ไม่พบไบโอมใหม่ในระยะค้นหา · พื้นที่เดิมอาจถูกสำรวจแล้ว":
+                        kind.title+" · X="+site.x()+" Z="+site.z()+" · /evergarden tp "+kind.id);
+                }else if(p!=null&&p.getWorld()==plugin.world()){
+                    int x=p.getLocation().getBlockX(),z=p.getLocation().getBlockZ();
+                    plugin.message(p,terrain.newWeight(x,z)<.5?"สวน Evergarden เดิม · พื้นที่ก่อนอัปเกรด":terrain.kind(x,z).title);
+                    if(isAdmin(sender))plugin.message(p,"/evergarden biome locate gardens|glacier|ancient-forest|lunar-city");
+                }else plugin.message(sender,"/evergarden biome locate gardens|glacier|ancient-forest|lunar-city");
+            }
+            case "protection" -> {
+                if(p==null){plugin.message(sender,"ใช้คำสั่งนี้ในเกม แล้วมองไปที่บล็อกที่ต้องการตรวจสอบ");return true;}
+                var block=p.getTargetBlockExact(8);
+                if(block==null){plugin.message(p,"มองไปที่บล็อกในระยะ 8 บล็อกก่อนตรวจสอบ");return true;}
+                boolean protectedBlock=plugin.structureProtection().protects(block)
+                    ||plugin.dungeons().isSpawnIsland(block)
+                    ||block.getWorld()==plugin.world()&&block.getY()>=94&&block.getY()<=140&&plugin.layout().at(block.getX(),block.getZ(),0)!=null;
+                plugin.message(p,"Evergarden "+plugin.getPluginMeta().getVersion()+" · "+block.getWorld().getName()+" "+block.getX()+","+block.getY()+","+block.getZ());
+                plugin.message(p,(protectedBlock?"พื้นที่ได้รับการป้องกัน":"ไม่พบเขตป้องกัน")+" · "+p.getGameMode()+" · ข้ามการป้องกัน: "+plugin.dungeons().canBypassProtection(p));
+            }
             case "boss" -> {
                 if(args.length>1&&args[1].equalsIgnoreCase("pack")){
-                    if(args.length>2&&args[2].equalsIgnoreCase("resend")&&p!=null)plugin.judgePack().offer(p);
+                    if(args.length>2&&args[2].equalsIgnoreCase("resend")&&p!=null)plugin.judgePack().resend(p);
                     plugin.judgePack().describe(sender);return true;
                 }
                 if(p==null){plugin.message(sender,"ใช้คำสั่งนี้ในเกมภายในวิหารใหญ่");return true;}
@@ -52,7 +86,22 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                 else if(!isAdmin(sender))plugin.message(p,"อัญเชิญด้วยมือเปล่าคลิกขวา Amethyst กลางลาน · คำสั่งควบคุมสำหรับแอดมิน");
                 else if(action.equals("start"))plugin.worldBoss().start(p,true);
                 else if(action.equals("stop"))plugin.worldBoss().stop(p);
-                else plugin.message(p,"/evergarden boss status|claim|start|stop");
+                else if(action.equals("model")){
+                    // Main-boss showcase rigs (Arkhaia / Seraphon): spawn, pose program, clear.
+                    String what=args.length>2?args[2].toLowerCase(Locale.ROOT):"menu";
+                    switch(what){
+                        case "arkhaia"->plugin.worldBoss().spawnArkhaiaPreview(p);
+                        case "seraphon"->plugin.worldBoss().spawnSeraphonPreview(p);
+                        case "both"->plugin.worldBoss().spawnBossShowcase(p);
+                        case "clear"->plugin.worldBoss().removeFactionPreviews(p);
+                        case "pose"->{
+                            if(args.length>3)plugin.worldBoss().bossShowcaseMode(p,args[3].toLowerCase(Locale.ROOT));
+                            else plugin.message(p,"/evergarden boss model pose "+String.join("|",com.example.voidscape.boss.WorldBossManager.bossShowcaseModes()));
+                        }
+                        default->plugin.testGui().openMainBosses(p);
+                    }
+                }
+                else plugin.message(p,"/evergarden boss status|claim|start|stop|model");
             }
             case "upgrade", "up", "enchant", "forge" -> {
                 if(p==null){plugin.message(sender,"คำสั่งนี้ใช้ได้เฉพาะผู้เล่นในเกมเท่านั้น");return true;}
@@ -62,10 +111,6 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                 if(!isAdmin(sender)){plugin.message(sender,"ไม่มีสิทธิ์แอดมิน");return true;}
                 if(p==null){plugin.message(sender,"คำสั่งนี้ใช้ได้เฉพาะผู้เล่นในเกมเท่านั้น");return true;}
                 plugin.testGui().open(p);
-            }
-            case "crops", "farm", "crop", "seeds" -> {
-                if(p==null){plugin.message(sender,"คำสั่งนี้ใช้ได้เฉพาะผู้เล่นในเกมเท่านั้น");return true;}
-                plugin.cropGui().open(p);
             }
             case "wands", "wand", "magic", "cores", "core" -> {
                 if(!isAdmin(sender)){plugin.message(sender,"ไม่มีสิทธิ์แอดมิน");return true;}
@@ -77,12 +122,17 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                 if(p==null){plugin.message(sender,"คำสั่งนี้ใช้ได้เฉพาะผู้เล่นในเกมเท่านั้น");return true;}
                 if(plugin.relicGui() != null) plugin.relicGui().open(p);
             }
+            case "weapons", "weapon", "armoury" -> {
+                if(!isAdmin(sender)){plugin.message(sender,"ไม่มีสิทธิ์แอดมิน");return true;}
+                if(p==null){plugin.message(sender,"คำสั่งนี้ใช้ได้เฉพาะผู้เล่นในเกมเท่านั้น");return true;}
+                if(plugin.adventurerWeapons() != null) plugin.adventurerWeapons().openGui(p);
+            }
             case "pack" -> {
                 if(args.length>1&&args[1].equalsIgnoreCase("resend")) {
                     Player target=args.length>2?Bukkit.getPlayerExact(args[2]):p;
                     if(target==null) {sender.sendMessage("Usage: /evergarden pack resend <online-player>");return true;}
-                    plugin.packs().offer(target);
-                    plugin.judgePack().offer(target);
+                    plugin.packs().resend(target);
+                    plugin.judgePack().resend(target);
                 }
                 plugin.packs().describe(sender);
                 plugin.judgePack().describe(sender);
@@ -111,6 +161,48 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                 if(p==null){plugin.message(sender,"คำสั่งนี้ใช้ได้เฉพาะผู้เล่นในเกมเท่านั้น");return true;}
                 if(args.length>1) {
                     String dest=args[1].toLowerCase(Locale.ROOT);
+                    var biome=BiomeTerrain.Kind.fromId(dest);
+                    if(biome!=null){teleportBiome(p,biome);return true;}
+                    var small=com.example.voidscape.world.ExplorationLayout.Kind.fromId(dest);
+                    if(small!=null){
+                        int x=p.getWorld()==plugin.world()?p.getLocation().getBlockX():0;
+                        int z=p.getWorld()==plugin.world()?p.getLocation().getBlockZ():0;
+                        var site=plugin.exploration().nearest(small,x,z,48,true);
+                        if(site==null&&small.medium())site=plugin.exploration().nearest(small,x,z,96,true);
+                        if(site==null){plugin.message(p,"ไม่พบสถานที่สำรวจในพื้นที่ใหม่ · ตรวจ structures.exploration.enabled");return true;}
+                        int[] target=site.transform(0,site.entryZ());int y=site.floorY()+1;
+                        var arrival=new Location(plugin.world(),target[0]+.5,y,target[1]+.5);
+                        if(!plugin.world().getWorldBorder().isInside(arrival)){plugin.message(p,"สถานที่นี้อยู่นอกขอบโลก");return true;}
+                        plugin.world().getChunkAtAsync(Math.floorDiv(target[0],16),Math.floorDiv(target[1],16),true).whenComplete((chunk,error)->
+                            Bukkit.getScheduler().runTask(plugin,()->{
+                                if(!p.isOnline())return;
+                                if(error!=null||!plugin.world().getBlockAt(target[0],y-1,target[1]).getType().isSolid()
+                                    ||!plugin.world().getBlockAt(target[0],y,target[1]).isPassable()
+                                    ||!plugin.world().getBlockAt(target[0],y+1,target[1]).isPassable()){
+                                    plugin.message(p,"ทางเข้าถูกเปลี่ยนหรือโหลดไม่สำเร็จ");return;
+                                }
+                                p.teleport(arrival);plugin.message(p,small.title+" · X="+arrival.getBlockX()+" Z="+arrival.getBlockZ());
+                            }));return true;
+                    }
+                    var bossKind=com.example.voidscape.world.BossStructureLayout.Kind.fromId(dest);
+                    if(bossKind!=null){
+                        if(!plugin.bossStructures().enabled(bossKind)||!plugin.getConfig().getBoolean("structures.boss-structures."+bossKind.id+".enabled",true)){
+                            plugin.message(p,"Structure นี้ถูกปิดใน config");return true;
+                        }
+                        int x=p.getWorld()==plugin.world()?p.getLocation().getBlockX():0;
+                        int z=p.getWorld()==plugin.world()?p.getLocation().getBlockZ():0;
+                        var site=plugin.bossStructures().nearest(bossKind,x,z,32,true);
+                        if(site==null){plugin.message(p,"ไม่พบ structure ในระยะค้นหา · ลองสำรวจพื้นที่ใหม่");return true;}
+                        int tx=site.x(),tz=site.z()+bossKind.arrivalZ,y=bossKind.floorY+1;
+                        var expected=site.blueprint().at(0,y-1,bossKind.arrivalZ);
+                        if(plugin.world().getBlockAt(tx,y-1,tz).getType()!=expected
+                                ||!plugin.world().getBlockAt(tx,y,tz).getType().isAir()
+                                ||!plugin.world().getBlockAt(tx,y+1,tz).getType().isAir()){
+                            plugin.message(p,"จุดนี้ยังไม่มีทางเข้าที่ปลอดภัย · กรุณาหา structure ในพื้นที่ใหม่");return true;
+                        }
+                        p.teleport(new Location(plugin.world(),tx+.5,y,tz+.5,180,0));
+                        plugin.message(p,bossKind.title+" · X="+site.x()+" Z="+site.z());return true;
+                    }
                     if(dest.equals("spawn")) {
                         p.teleport(new Location(plugin.world(),0.5,97.0,0.5));
                         plugin.message(p,"วาร์ปมายังจุดเกิดเกาะกลางมิติ (Y=97)");
@@ -168,11 +260,13 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                     var kind=dest.contains("astral")?DungeonLayout.Kind.SANCTUM_ASTRAL:
                              dest.contains("time")?DungeonLayout.Kind.SANCTUM_TIME:
                              DungeonLayout.Kind.SANCTUM_DARK;
+                    int targetTier=0;
+                    if(args.length>2){try{targetTier=Math.clamp(Integer.parseInt(args[2]),1,5);}catch(NumberFormatException ignored){}}
                     int x=p.getWorld()==plugin.world()?p.getLocation().getBlockX():0,z=p.getWorld()==plugin.world()?p.getLocation().getBlockZ():0;
-                    var s=plugin.layout().locate(x,z,kind,12);
+                    var s=plugin.layout().locate(x,z,kind,targetTier,targetTier>0?32:12);
                     if(s==null){plugin.message(sender,"ไม่พบสิ่งก่อสร้างในระยะค้นหา");return true;}
                     p.teleport(new Location(plugin.world(),s.x()+0.5,97,s.z()+8.5));
-                    plugin.message(p,"วาร์ปไปยัง "+s.kind().displayName+" พิกัด X="+s.x()+" Y=97 Z="+(s.z()+8));
+                    plugin.message(p,"วาร์ปไปยัง "+s.kind().displayName+" "+s.tierColorCode()+"[Tier "+s.romanTier()+"] §fพิกัด X="+s.x()+" Y=97 Z="+(s.z()+8));
                     return true;
                 }
                 if(p.getWorld()==plugin.world())plugin.travel().leave(p,false);
@@ -252,12 +346,35 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                     return true;
                 }
 
+                if ((itemQuery.equalsIgnoreCase("all_weapons") || itemQuery.equalsIgnoreCase("adventurer_weapons")) && plugin.adventurerWeapons() != null) {
+                    List<Player> recipients = new ArrayList<>();
+                    if(allPlayers) recipients.addAll(Bukkit.getOnlinePlayers());
+                    else if(singleTarget != null) recipients.add(singleTarget);
+                    else if(p != null) recipients.add(p);
+                    if(recipients.isEmpty()) {
+                        plugin.message(sender, "ไม่พบผู้เล่นออนไลน์ที่จะมอบไอเทมให้");
+                        return true;
+                    }
+                    for (Player recipient : recipients) {
+                        for (var w : com.example.voidscape.item.AdventurerWeaponService.AdventurerWeapon.values()) {
+                            var leftover = recipient.getInventory().addItem(plugin.adventurerWeapons().create(w));
+                            if (!leftover.isEmpty()) {
+                                leftover.values().forEach(drop -> recipient.getWorld().dropItemNaturally(recipient.getLocation(), drop));
+                            }
+                        }
+                        recipient.updateInventory();
+                        recipient.playSound(recipient.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.2f);
+                    }
+                    plugin.message(sender, "มอบอาวุธนักผจญภัยครบทั้ง 20 ชิ้นแล้ว");
+                    return true;
+                }
+
                 ItemStack item = resolveItem(itemQuery, count);
                 if(item == null) {
                     item = resolveItem(itemQuery.replace(" ", "_"), count);
                 }
                 if(item == null) {
-                    plugin.message(sender, "ไม่พบไอเทม: " + itemQuery + " (ลองพิมพ์ชื่อตรงๆ เช่น ricochet, sharpness, storm_bow, eternity, shulker_levitation)");
+                    plugin.message(sender, "ไม่พบไอเทม: " + itemQuery + " (ลองพิมพ์ชื่อตรงๆ เช่น ricochet, sharpness, eternity, shulker_levitation)");
                     return true;
                 }
 
@@ -301,12 +418,14 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                 return true;
             }
             case "pregen" -> pregen(sender,args);
-            case "reload" -> {plugin.reloadConfig();plugin.message(sender,"โหลดการตั้งค่าแล้ว · ตำแหน่งวิหารคงเดิมตาม world-layout.yml");}
+            case "reload" -> {plugin.reloadConfig();plugin.petPreviews().reload();plugin.pets().reload();if(plugin.seraphTrader()!=null)plugin.seraphTrader().reload();plugin.message(sender,"โหลดการตั้งค่าแล้ว · ตำแหน่งวิหารคงเดิมตาม world-layout.yml");}
             case "status" -> plugin.message(sender,"Evergarden 3.0 · "+plugin.world().getName()+" · การต่อสู้ "+plugin.dungeons().activeCount()+" · มอน "+plugin.dungeons().mobCount()+" · pregen "+generated+"/"+total);
             default -> {
                 plugin.message(sender,"Evergarden 3.0 · พิมพ์ /evergarden guide เพื่อดูคู่มือมิติ");
                 plugin.message(sender,"สร้างกรอบประตู Block of Quartz (ขนาด 4x5) แล้วโยนดอกไม้เข้าไปในช่องว่างเพื่อเปิดประตู");
-                if(isAdmin(sender))plugin.message(sender,"แอดมิน: enter · leave · tp [dark|astral|time|whale|observatory|garden|boss-temple|spawn] · menu · test · crops · wands · relics · give · status · pregen · reload");
+                plugin.message(sender,"/evergarden biome · ดูชื่อดินแดนที่กำลังสำรวจ");
+                if(isAdmin(sender))plugin.message(sender,"แอดมิน: enter · leave · tp [dark|astral|time|whale|observatory|garden|boss-temple|arkhaia|valkyrie|seraphon|spawn] · menu · test · pets · wands · relics · give · status · pregen · reload");
+                if(isAdmin(sender))plugin.message(sender,"ไบโอมใหม่: /evergarden tp gardens|glacier|ancient-forest|lunar-city · /evergarden biome locate <ชื่อไบโอม>");
             }
         }
         return true;
@@ -347,19 +466,13 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
         if(raw == null || raw.isBlank()) return null;
         String clean = raw.toLowerCase(Locale.ROOT).trim().replace("-", "_");
 
-        // 0. Shulker / Levitation / Mythic Core shortcuts
-        if(clean.equals("shulker") || clean.equals("levitation") || clean.equals("shulker_levitation") ||
-           clean.equals("shulker_core") || clean.equals("levitation_core") || clean.equals("mythic_core") ||
-           clean.equals("mythic") || clean.equals("core_shulker_levitation") || clean.equals("wand_shulker_levitation")) {
-            ItemStack is = plugin.relics().createMagicCore("shulker_levitation");
-            if(count > 1) is.setAmount(Math.min(count, 64));
-            return is;
+        if(clean.startsWith("staff_")){
+            var addon=Bukkit.getPluginManager().getPlugin("advance-magic");
+            var element=com.example.advancemagic.item.ElementalStaffService.Element.parse(clean.substring(6));
+            if(element!=null&&addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic&&magic.isEnabled())return magic.staffs().create(element);
+            return null;
         }
-
         // 0. Guide books
-        if (clean.equals("guide_crops") || clean.equals("crop_guide") || clean.equals("guide_crop") || clean.equals("book_crops")) {
-            return plugin.relics().createCropGuideBook();
-        }
         if (clean.equals("guide_relics") || clean.equals("relic_guide") || clean.equals("guide_relic") || clean.equals("book_relics")) {
             return plugin.relics().createRelicGuideBook();
         }
@@ -375,20 +488,6 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
             ItemStack is = plugin.relics().createScrollEternity();
             if(count > 1) is.setAmount(Math.min(count, 64));
             return is;
-        }
-
-        // 2. Magic Cores with prefix (core_ or wand_)
-        if(clean.startsWith("core_") || clean.startsWith("core") || clean.startsWith("wand_")) {
-            String coreId = clean;
-            if(coreId.startsWith("core_")) coreId = coreId.substring(5);
-            else if(coreId.startsWith("wand_")) coreId = coreId.substring(5);
-            else if(coreId.startsWith("core")) coreId = coreId.substring(4);
-            if(coreId.startsWith("_")) coreId = coreId.substring(1);
-            if(!coreId.isEmpty()) {
-                ItemStack is = plugin.relics().createMagicCore(coreId);
-                if(count > 1) is.setAmount(Math.min(count, 64));
-                return is;
-            }
         }
 
         // 3. Limit Break with prefix (lb_ or limit_break_)
@@ -436,17 +535,13 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
         // 7. Common aliases & shortcuts
         switch(clean) {
             case "key", "void_key", "voidkey" -> { return plugin.relics().createVoidKey(); }
-            case "shard", "key_shard", "keyshard" -> { return plugin.relics().createKeyShard(Math.max(1, count)); }
-            case "dust", "astral_dust", "astraldust" -> { return plugin.relics().createAstralDust(Math.max(1, count)); }
-            case "repair", "repair_stone", "repairstone" -> { return plugin.relics().createRepairStone(Math.max(1, count)); }
-            case "elixir", "void_elixir", "voidelixir" -> { return plugin.relics().createVoidElixir(Math.max(1, count)); }
+            case "key_t1", "void_key_1", "key1" -> { return plugin.relics().createVoidKey(1); }
+            case "key_t2", "void_key_2", "key2" -> { return plugin.relics().createVoidKey(2); }
+            case "key_t3", "void_key_3", "key3" -> { return plugin.relics().createVoidKey(3); }
+            case "key_t4", "void_key_4", "key4" -> { return plugin.relics().createVoidKey(4); }
+            case "key_t5", "void_key_5", "key5" -> { return plugin.relics().createVoidKey(5); }
             case "pickaxe", "rift_pickaxe", "riftpickaxe" -> { return plugin.relics().create(Relic.RIFT_PICKAXE, 1); }
             case "smelter", "smelter_pickaxe", "smelterpickaxe" -> { return plugin.relics().create(Relic.SMELTER_PICKAXE, 1); }
-            case "blade", "sword", "rift_blade", "riftblade", "rift_sword" -> { return plugin.relics().create(Relic.RIFT_BLADE, 1); }
-            case "aegis", "shield", "eternal_aegis", "eternalaegis" -> { return plugin.relics().create(Relic.ETERNAL_AEGIS, 1); }
-            case "storm", "storm_bow", "stormbow" -> { return plugin.relics().create(Relic.STORM_BOW, 1); }
-            case "nova", "nova_bow", "novabow" -> { return plugin.relics().create(Relic.NOVA_BOW, 1); }
-            case "mythic_core", "shulker_core", "levitation_core" -> { return plugin.relics().createMagicCore("shulker_levitation"); }
         }
 
         // 8. Relic enum match
@@ -459,58 +554,16 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                 }
                 if(r == Relic.SCROLL_LIMIT_BREAK) return plugin.relics().createScrollLimitBreak(LimitBreakType.SHARPNESS);
                 if(r == Relic.SCROLL_UNIQUE) return plugin.relics().createScrollUnique(UniqueEnchant.COLOSSUS_SLAYER);
-                if(r == Relic.KEY_SHARD) return plugin.relics().createKeyShard(Math.max(1, count));
-                if(r == Relic.ASTRAL_DUST) return plugin.relics().createAstralDust(Math.max(1, count));
-                if(r == Relic.REPAIR_STONE) return plugin.relics().createRepairStone(Math.max(1, count));
-                if(r == Relic.VOID_ELIXIR) return plugin.relics().createVoidElixir(Math.max(1, count));
                 return plugin.relics().create(r, 1);
             }
         }
 
-        // 9. Magic Cores DIRECT match (e.g. "lightning_strike", "frost_nova")
-        for(var core : RelicService.MAGIC_CORES) {
-            if(core.id().equalsIgnoreCase(clean) || core.id().replace("_", "").equalsIgnoreCase(clean.replace("_", ""))) {
-                ItemStack is = plugin.relics().createMagicCore(core);
-                if(count > 1) is.setAmount(Math.min(count, 64));
-                return is;
+        // 9. Adventurer Weapons (20 Sanctum Weapons)
+        if (plugin.adventurerWeapons() != null) {
+            var weapon = com.example.voidscape.item.AdventurerWeaponService.AdventurerWeapon.parse(clean);
+            if (weapon != null) {
+                return plugin.adventurerWeapons().create(weapon);
             }
-        }
-
-        // 10. Magic Wands (e.g. "lightning_strike_wand", "lightning_wand", "wand_lightning_strike")
-        if (clean.contains("wand")) {
-            String spellName = clean.replace("wand_", "").replace("_wand", "").replace("wand", "");
-            for (var core : RelicService.MAGIC_CORES) {
-                if (core.id().equalsIgnoreCase(spellName)
-                        || core.id().replace("_", "").equalsIgnoreCase(spellName)
-                        || core.wandTitle().replace(" ", "").equalsIgnoreCase(spellName)
-                        || core.title().replace(" ", "").equalsIgnoreCase(spellName)) {
-                    ItemStack wand = createWandViaAdvanceMagic(core.id());
-                    if (wand != null) {
-                        if (count > 1) wand.setAmount(Math.min(count, 64));
-                        return wand;
-                    }
-                }
-            }
-        }
-
-        // 11. Crops and Seeds
-        if (clean.startsWith("seed_") || clean.startsWith("seeds_")) {
-            String cName = clean.replace("seeds_", "").replace("seed_", "");
-            var type = com.example.voidscape.crop.CropType.fromId(cName);
-            if (type != null) {
-                return plugin.crops().factory().createSeed(type, count);
-            }
-        }
-        if (clean.startsWith("crop_") || clean.startsWith("crops_")) {
-            String cName = clean.replace("crops_", "").replace("crop_", "");
-            var type = com.example.voidscape.crop.CropType.fromId(cName);
-            if (type != null) {
-                return plugin.crops().factory().createFood(type, count);
-            }
-        }
-        var cropType = com.example.voidscape.crop.CropType.fromId(clean);
-        if (cropType != null) {
-            return plugin.crops().factory().createFood(cropType, count);
         }
 
         return null;
@@ -531,18 +584,60 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
         return null;
     }
 
+    private void teleportBiome(Player player,BiomeTerrain.Kind kind){
+        int x=player.getWorld()==plugin.world()?player.getLocation().getBlockX():0;
+        int z=player.getWorld()==plugin.world()?player.getLocation().getBlockZ():0;
+        var site=plugin.biomeTerrain().locate(kind,x,z);
+        if(site==null){plugin.message(player,"ไม่พบไบโอมใหม่ในระยะค้นหา · ลองค้นหาจากพิกัดที่ไกลออกไป");return;}
+        plugin.message(player,"กำลังเตรียมจุดสำรวจ · "+kind.title);
+        plugin.world().getChunkAtAsync(Math.floorDiv(site.x(),16),Math.floorDiv(site.z(),16),true).whenComplete((chunk,error)->
+            Bukkit.getScheduler().runTask(plugin,()->{
+                if(!player.isOnline())return;
+                if(error!=null){plugin.message(player,"โหลดพื้นที่ไม่สำเร็จ · ลองอีกครั้ง");return;}
+                for(int radius=0;radius<=7;radius++)for(int dx=-radius;dx<=radius;dx++)for(int dz=-radius;dz<=radius;dz++){
+                    int px=site.x()+dx,pz=site.z()+dz;
+                    if(Math.floorDiv(px,16)!=chunk.getX()||Math.floorDiv(pz,16)!=chunk.getZ())continue;
+                    int y=plugin.world().getHighestBlockYAt(px,pz);
+                    var floor=plugin.world().getBlockAt(px,y,pz);
+                    if(y>=plugin.world().getMaxHeight()-2||!floor.getType().isSolid()||floor.isLiquid())continue;
+                    if(!plugin.world().getBlockAt(px,y+1,pz).isPassable()||!plugin.world().getBlockAt(px,y+2,pz).isPassable())continue;
+                    player.teleport(new Location(plugin.world(),px+.5,y+1,pz+.5));
+                    plugin.message(player,kind.title+" · X="+px+" Z="+pz);return;
+                }
+                plugin.message(player,"ไม่พบจุดยืนที่ปลอดภัย · /evergarden biome locate "+kind.id);
+            }));
+    }
+
     @Override public List<String> onTabComplete(CommandSender sender,Command command,String alias,String[] args) {
         List<String> c=new ArrayList<>();
         if(args.length==1){
-            c.addAll(List.of("help","guide","upgrade","boss"));
-            if(isAdmin(sender))c.addAll(List.of("enter","leave","tp","test","menu","crops","wands","magic","relics","items","give","status","reload","pregen","pack"));
+            c.addAll(List.of("help","guide","upgrade","boss","protection","biome","shop"));
+            if(isAdmin(sender))c.addAll(List.of("enter","leave","tp","test","menu","wands","magic","relics","items","weapons","give","status","reload","pregen","pack","pets","seraph"));
         }
+        if(args.length==2&&args[0].equalsIgnoreCase("seraph")&&isAdmin(sender))c.addAll(List.of("status","here","reset","respawn"));
+        if(args.length>=2&&args[0].equalsIgnoreCase("pets")) {
+            if(args[1].equalsIgnoreCase("wild"))return plugin.wildPets().complete(sender,args);
+            if(isAdmin(sender)&&Set.of("give","egg","rush").contains(args[1].toLowerCase(Locale.ROOT))&&plugin.pets()!=null)return plugin.pets().complete(args);
+            var pets=new ArrayList<>(plugin.petPreviews().complete(sender,args));
+            if(args.length==2&&isAdmin(sender))for(String extra:List.of("wild","perf","give","egg","rush"))if(extra.startsWith(args[1].toLowerCase(Locale.ROOT)))pets.add(extra);
+            return pets;
+        }
+        if(args.length==2&&args[0].equalsIgnoreCase("biome")&&isAdmin(sender))c.add("locate");
+        if(isAdmin(sender)&&(args.length==2&&args[0].equalsIgnoreCase("tp")
+                ||args.length==3&&args[0].equalsIgnoreCase("biome")&&args[1].equalsIgnoreCase("locate")))
+            for(var kind:BiomeTerrain.Kind.values())c.add(kind.id);
         if(args.length==2&&args[0].equalsIgnoreCase("guide")) {
-            c.addAll(List.of("1","2","3","crops","relics","magic"));
+            c.addAll(List.of("2","3","relics","magic"));
         }
-        if(args.length==2&&args[0].equalsIgnoreCase("boss")){c.addAll(List.of("status","claim","pack"));if(isAdmin(sender))c.addAll(List.of("start","stop"));}
+        if(args.length==2&&args[0].equalsIgnoreCase("boss")){c.addAll(List.of("status","claim","pack"));if(isAdmin(sender))c.addAll(List.of("start","stop","model"));}
+        if(args.length==3&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("model")&&isAdmin(sender))c.addAll(List.of("arkhaia","seraphon","both","clear","pose"));
+        if(args.length==4&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("model")&&args[2].equalsIgnoreCase("pose")&&isAdmin(sender))
+            c.addAll(com.example.voidscape.boss.WorldBossManager.bossShowcaseModes());
         if(args.length==3&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("pack"))c.add("resend");
-        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","whale","observatory","garden","boss-temple","spawn"));
+        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","whale","observatory","garden","boss-temple","arkhaia","valkyrie","seraphon","spawn"));
+        if(args.length==3&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender)&&Set.of("dark","astral","time").contains(args[1].toLowerCase(Locale.ROOT)))c.addAll(List.of("1","2","3","4","5"));
+        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))
+            for(var kind:com.example.voidscape.world.ExplorationLayout.Kind.values())c.add(kind.id);
         if(args.length==2&&args[0].equalsIgnoreCase("give")&&isAdmin(sender)) {
             // Relics & Equipment
             for(Relic r:Relic.values()) c.add(r.id());
@@ -556,21 +651,9 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                 c.add(lb.name().toLowerCase(Locale.ROOT));
                 c.add("lb_"+lb.name().toLowerCase(Locale.ROOT));
             }
-            // Magic Cores (both direct and prefixed)
-            for(var core : RelicService.MAGIC_CORES) {
-                c.add(core.id());
-                c.add("core_"+core.id());
-                c.add(core.id()+"_wand");
-                c.add("wand_"+core.id());
-            }
-            // Crops & Seeds
-            for(var crop : com.example.voidscape.crop.CropType.values()) {
-                c.add(crop.id);
-                c.add("seed_"+crop.id);
-                c.add("crop_"+crop.id);
-            }
-            // Shortcuts
-            c.addAll(List.of("smelter","pickaxe","eternity","key","shard","dust","repair","elixir","storm","nova","blade","aegis","shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment","shulker","wand","crops","seeds","guide","guide_crops","guide_relics","guide_magic"));
+            for(var element:com.example.advancemagic.item.ElementalStaffService.Element.values())c.add("staff_"+element.id());
+            for(var w:com.example.voidscape.item.AdventurerWeaponService.AdventurerWeapon.values())c.add(w.id());
+            c.addAll(List.of("all_weapons","smelter","pickaxe","eternity","key","guide","guide_relics","guide_magic"));
         }
         if(args.length==3&&args[0].equalsIgnoreCase("give")&&isAdmin(sender)) {
             c.addAll(List.of("@a","@p","@s","1","2","4","8","16","32","64"));

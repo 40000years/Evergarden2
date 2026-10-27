@@ -1,0 +1,6 @@
+name: WandInventoryProbe
+version: '1'
+main: WandInventoryProbe
+api-version: '26.2'
+depend: [advance-magic]
+softdepend: [Evergarden]

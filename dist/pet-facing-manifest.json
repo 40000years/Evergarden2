@@ -1,0 +1,24 @@
+{
+  "version": "3.0.0-e2.116-pet-facing",
+  "result": "PASS",
+  "jar_sha256": "aea8acaefd462597bec81e975410b73d7ef55ec8e68db99cf9ba70f641792612",
+  "previous_jar_sha256": "cb7b83a139f7a84a782547205b4680bbef3a95fb2618104f0744944b05acf38b",
+  "changed_jar_entries_since_e2_115": [
+    "com/example/voidscape/pet/PetBody.class",
+    "plugin.yml"
+  ],
+  "facing_native": "PASS: pet facing and forward travel / 12255 checks",
+  "pet_system_native": "PASS: pet system and Seraph / 165 checks",
+  "regression_previous_release": "FAIL: pet facing and forward travel / 4 checks",
+  "rare_species": 12,
+  "native_growth_forms": 36,
+  "editable_blueprints": 51,
+  "polished_growth_forms": 9,
+  "unchanged_other_pet_forms": 42,
+  "unchanged_boss_blueprints": 8,
+  "bedrock_pack_version": "3.44.0",
+  "arkhaia_unchanged": true,
+  "all_other_e2_115_classes_and_resources_byte_identical": true,
+  "connected_client_playtest": false,
+  "live_server_modified": false
+}

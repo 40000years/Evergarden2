@@ -1,0 +1,73 @@
+{
+  "acheron": {
+    "v2_valuable_construction_blocks": 39,
+    "v2_materials": {
+      "CAULDRON": 2,
+      "IRON_BLOCK": 36,
+      "SEA_LANTERN": 1
+    },
+    "v3_valuable_construction_blocks": 0
+  },
+  "phlegethon": {
+    "v2_valuable_construction_blocks": 5970,
+    "v2_materials": {
+      "RAW_IRON_BLOCK": 1080,
+      "RAW_COPPER_BLOCK": 276,
+      "ANVIL": 96,
+      "BLAST_FURNACE": 78,
+      "WAXED_CUT_COPPER": 4263,
+      "IRON_BLOCK": 176,
+      "SEA_LANTERN": 1
+    },
+    "v3_valuable_construction_blocks": 0
+  },
+  "cocytus": {
+    "v2_valuable_construction_blocks": 61471,
+    "v2_materials": {
+      "QUARTZ_BRICKS": 61285,
+      "CAULDRON": 4,
+      "IRON_BLOCK": 36,
+      "QUARTZ_PILLAR": 64,
+      "GOLD_BLOCK": 24,
+      "BLUE_ICE": 56,
+      "SEA_LANTERN": 2
+    },
+    "v3_valuable_construction_blocks": 0
+  },
+  "banshee": {
+    "v2_valuable_construction_blocks": 24474,
+    "v2_materials": {
+      "DARK_PRISMARINE": 24433,
+      "CAULDRON": 4,
+      "IRON_BLOCK": 36,
+      "SEA_LANTERN": 1
+    },
+    "v3_valuable_construction_blocks": 0
+  },
+  "malefeasance": {
+    "v2_valuable_construction_blocks": 77014,
+    "v2_materials": {
+      "SMOOTH_QUARTZ": 30679,
+      "WAXED_OXIDIZED_CUT_COPPER": 16624,
+      "AMETHYST_BLOCK": 1602,
+      "QUARTZ_BRICKS": 27179,
+      "SEA_LANTERN": 8,
+      "CAULDRON": 3,
+      "IRON_BLOCK": 36,
+      "WAXED_CUT_COPPER": 673,
+      "BREWING_STAND": 2,
+      "GOLD_BLOCK": 201,
+      "END_ROD": 7
+    },
+    "v3_valuable_construction_blocks": 0
+  },
+  "styx": {
+    "v2_valuable_construction_blocks": 3155,
+    "v2_materials": {
+      "GOLD_BLOCK": 2048,
+      "IRON_BLOCK": 1106,
+      "SEA_LANTERN": 1
+    },
+    "v3_valuable_construction_blocks": 0
+  }
+}

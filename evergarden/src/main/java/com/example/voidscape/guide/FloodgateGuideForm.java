@@ -47,7 +47,7 @@ public final class FloodgateGuideForm {
     public static boolean sendBookSelector(VoidscapePlugin plugin, Player player) {
         SimpleForm.Builder builder = SimpleForm.builder();
         builder.title("§e§lเลือกคู่มือมิติ Evergarden");
-        builder.content("§fระบบคู่มือถูกแบ่งออกเป็น 3 เล่มเพื่อความสะดวกในการศึกษา:\n§7กรุณาเลือกเล่มที่ต้องการอ่านด้านล่างนี้");
+        builder.content("§fระบบคู่มือถูกแบ่งออกเป็น 2 เล่มเพื่อความสะดวกในการศึกษา:\n§7กรุณาเลือกเล่มที่ต้องการอ่านด้านล่างนี้");
 
         List<Consumer<Player>> buttonActions = new ArrayList<>();
 
@@ -74,7 +74,7 @@ public final class FloodgateGuideForm {
     }
 
     public static boolean sendPage(VoidscapePlugin plugin, Player player, GuideBookType type, int pageIndex) {
-        if (type == null) type = GuideBookType.CROPS;
+        if (type == null) type = GuideBookType.RELICS;
         List<GuidePage> pages = GuideData.pagesFor(type);
         if (pageIndex < 0) pageIndex = 0;
         if (pageIndex >= pages.size()) pageIndex = pages.size() - 1;
@@ -107,7 +107,7 @@ public final class FloodgateGuideForm {
         buttonActions.add(p -> BedrockGuideService.openIndex(plugin, p, finalType, finalPageIndex));
 
         // Switch book button
-        builder.button("📚 เลือกอ่านเล่มอื่น (3 เล่ม)");
+        builder.button("📚 เลือกอ่านเล่มอื่น (2 เล่ม)");
         buttonActions.add(p -> sendBookSelector(plugin, p));
 
         // Close button
@@ -129,11 +129,11 @@ public final class FloodgateGuideForm {
     }
 
     public static boolean sendPage(VoidscapePlugin plugin, Player player, int pageIndex) {
-        return sendPage(plugin, player, GuideBookType.CROPS, pageIndex);
+        return sendPage(plugin, player, GuideBookType.RELICS, pageIndex);
     }
 
     public static boolean sendIndex(VoidscapePlugin plugin, Player player, GuideBookType type, int returnPageIndex) {
-        if (type == null) type = GuideBookType.CROPS;
+        if (type == null) type = GuideBookType.RELICS;
         List<GuidePage> pages = GuideData.pagesFor(type);
         GuideBookType finalType = type;
 
@@ -153,7 +153,7 @@ public final class FloodgateGuideForm {
         builder.button("⬅️ กลับไปหน้าที่อ่านค้างไว้ (หน้า " + (returnPageIndex + 1) + ")");
         buttonActions.add(p -> BedrockGuideService.openGuide(plugin, p, finalType, returnPageIndex));
 
-        builder.button("📚 เลือกอ่านเล่มอื่น (3 เล่ม)");
+        builder.button("📚 เลือกอ่านเล่มอื่น (2 เล่ม)");
         buttonActions.add(p -> sendBookSelector(plugin, p));
 
         builder.button("❌ ปิด");
@@ -174,6 +174,6 @@ public final class FloodgateGuideForm {
     }
 
     public static boolean sendIndex(VoidscapePlugin plugin, Player player, int returnPageIndex) {
-        return sendIndex(plugin, player, GuideBookType.CROPS, returnPageIndex);
+        return sendIndex(plugin, player, GuideBookType.RELICS, returnPageIndex);
     }
 }

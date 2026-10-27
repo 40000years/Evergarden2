@@ -1,0 +1,17 @@
+{
+  "version": "1.9.7-legendary-native-mechanics",
+  "bedrock_pack": "2.12.7",
+  "changes": [
+    "Dedicated Longinus projectile model on Java and Bedrock",
+    "Mjolnir base MACE with vanilla smash",
+    "Migrate tagged legacy hammers retaining metadata"
+  ],
+  "held_assets": "Byte-identical to accepted 1.9.6 release (Java and Bedrock); manifest version increment only",
+  "runtime": "PASS 74 on Paper 26.2, real attack smash comparison",
+  "integration": "PASS 46 with installed Geyser and ModelEngine 4.1.1",
+  "assets": "PASS 714",
+  "hand_fit": "PASS 145",
+  "camera_profiles": "PASS 32 approximate projection checks",
+  "client_rendering": "Not tested with actual Java/Bedrock clients",
+  "sha256": "72446b210029640ae2d28234bc2eb394a9874543b0b6289e6a6346612e768843"
+}

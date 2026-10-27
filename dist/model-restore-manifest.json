@@ -1,0 +1,32 @@
+{
+  "version": "3.0.0-e2.104-model-restore",
+  "jar_sha256": "a4dd3267fdfab074a0acb940cd1cc9ce40085f045713a0190df3329d0d618da2",
+  "previous_jar_sha256": "d17a2891f1afd92711eb4e124c79433e88a55ce5ddd093a87d1ef6a8edcfac7e",
+  "native_cases": [
+    {
+      "runtime": "output/model-restore-native-default-v3-20261021",
+      "checks": 209,
+      "result": "PASS: model restore after existing 51-pet installation / 209 checks / selected="
+    },
+    {
+      "runtime": "output/model-restore-native-manta-v1-20261021",
+      "checks": 246,
+      "result": "PASS: model restore after existing 51-pet installation / 246 checks / selected=abyssal_manta"
+    }
+  ],
+  "native_checks": 455,
+  "staging_preservation_checks": 13,
+  "boss_model_count": 8,
+  "pet_model_count": 51,
+  "preserved_resource_entries": 101,
+  "model_assets_changed": false,
+  "resource_pack_changed": false,
+  "melee_impact_classes_changed": false,
+  "default_active_pet_species": [],
+  "tested_selected_species": [
+    "abyssal_manta"
+  ],
+  "internal_fire_imported": true,
+  "live_server_modified": false,
+  "connected_client_playtest": false
+}

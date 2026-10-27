@@ -1,0 +1,6350 @@
+{
+  "id": "thornwhisper",
+  "cubes": [
+    {
+      "name": "leaf_light_000",
+      "from": [
+        2.0,
+        2.0,
+        7.75
+      ],
+      "to": [
+        3.5,
+        2.25,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_001",
+      "from": [
+        2.0,
+        2.0,
+        8.0
+      ],
+      "to": [
+        3.0,
+        2.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_002",
+      "from": [
+        2.0,
+        2.25,
+        7.75
+      ],
+      "to": [
+        3.0,
+        2.5,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_003",
+      "from": [
+        2.25,
+        1.5,
+        7.75
+      ],
+      "to": [
+        3.25,
+        2.0,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_004",
+      "from": [
+        2.25,
+        1.5,
+        8.0
+      ],
+      "to": [
+        3.25,
+        1.75,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_005",
+      "from": [
+        2.25,
+        1.75,
+        8.0
+      ],
+      "to": [
+        3.0,
+        2.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_006",
+      "from": [
+        2.25,
+        2.5,
+        7.75
+      ],
+      "to": [
+        2.75,
+        2.75,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_007",
+      "from": [
+        2.25,
+        2.75,
+        7.75
+      ],
+      "to": [
+        2.5,
+        3.0,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_008",
+      "from": [
+        2.25,
+        3.0,
+        7.75
+      ],
+      "to": [
+        2.5,
+        4.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_009",
+      "from": [
+        2.5,
+        1.0,
+        7.75
+      ],
+      "to": [
+        3.0,
+        1.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_010",
+      "from": [
+        2.5,
+        1.25,
+        7.75
+      ],
+      "to": [
+        2.75,
+        1.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_011",
+      "from": [
+        2.5,
+        1.75,
+        7.5
+      ],
+      "to": [
+        2.75,
+        3.5,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_012",
+      "from": [
+        2.5,
+        1.75,
+        8.25
+      ],
+      "to": [
+        2.75,
+        5.0,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_013",
+      "from": [
+        2.5,
+        2.75,
+        7.75
+      ],
+      "to": [
+        3.5,
+        3.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_014",
+      "from": [
+        2.5,
+        3.0,
+        7.75
+      ],
+      "to": [
+        3.25,
+        3.25,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_015",
+      "from": [
+        2.5,
+        3.25,
+        7.75
+      ],
+      "to": [
+        2.75,
+        4.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_016",
+      "from": [
+        2.5,
+        3.5,
+        7.5
+      ],
+      "to": [
+        3.0,
+        3.75,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_017",
+      "from": [
+        2.5,
+        3.75,
+        7.5
+      ],
+      "to": [
+        2.75,
+        4.5,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_018",
+      "from": [
+        2.5,
+        4.25,
+        7.75
+      ],
+      "to": [
+        2.75,
+        4.5,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_019",
+      "from": [
+        2.5,
+        4.25,
+        8.0
+      ],
+      "to": [
+        3.0,
+        4.5,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_020",
+      "from": [
+        2.5,
+        4.5,
+        7.5
+      ],
+      "to": [
+        3.0,
+        5.0,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_021",
+      "from": [
+        2.5,
+        4.5,
+        7.75
+      ],
+      "to": [
+        2.75,
+        5.0,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_022",
+      "from": [
+        2.5,
+        5.0,
+        7.75
+      ],
+      "to": [
+        3.0,
+        5.5,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_023",
+      "from": [
+        2.5,
+        5.5,
+        7.75
+      ],
+      "to": [
+        2.75,
+        5.75,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_024",
+      "from": [
+        2.75,
+        -0.5,
+        7.75
+      ],
+      "to": [
+        4.0,
+        -0.25,
+        8.25
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_025",
+      "from": [
+        2.75,
+        -0.25,
+        7.75
+      ],
+      "to": [
+        3.25,
+        0.0,
+        8.25
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_026",
+      "from": [
+        2.75,
+        0.25,
+        7.75
+      ],
+      "to": [
+        3.25,
+        0.5,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_027",
+      "from": [
+        2.75,
+        0.5,
+        7.75
+      ],
+      "to": [
+        3.0,
+        1.0,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_028",
+      "from": [
+        2.75,
+        1.0,
+        7.5
+      ],
+      "to": [
+        3.0,
+        1.5,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_029",
+      "from": [
+        2.75,
+        1.0,
+        8.25
+      ],
+      "to": [
+        3.0,
+        1.25,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_030",
+      "from": [
+        2.75,
+        1.25,
+        7.75
+      ],
+      "to": [
+        3.0,
+        1.5,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_031",
+      "from": [
+        2.75,
+        1.25,
+        8.25
+      ],
+      "to": [
+        3.0,
+        1.75,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_032",
+      "from": [
+        2.75,
+        1.5,
+        7.5
+      ],
+      "to": [
+        3.0,
+        2.75,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_033",
+      "from": [
+        2.75,
+        1.75,
+        8.25
+      ],
+      "to": [
+        3.0,
+        4.25,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_034",
+      "from": [
+        2.75,
+        2.5,
+        7.75
+      ],
+      "to": [
+        3.25,
+        2.75,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_035",
+      "from": [
+        2.75,
+        2.5,
+        8.0
+      ],
+      "to": [
+        3.5,
+        2.75,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_036",
+      "from": [
+        2.75,
+        2.75,
+        7.5
+      ],
+      "to": [
+        3.0,
+        3.5,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_037",
+      "from": [
+        2.75,
+        3.25,
+        7.75
+      ],
+      "to": [
+        3.25,
+        3.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_038",
+      "from": [
+        2.75,
+        3.5,
+        7.75
+      ],
+      "to": [
+        3.25,
+        4.25,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_039",
+      "from": [
+        2.75,
+        3.75,
+        7.5
+      ],
+      "to": [
+        3.25,
+        4.25,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_040",
+      "from": [
+        2.75,
+        4.25,
+        7.5
+      ],
+      "to": [
+        3.0,
+        4.5,
+        8.0
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_041",
+      "from": [
+        2.75,
+        4.25,
+        8.25
+      ],
+      "to": [
+        3.0,
+        5.0,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_042",
+      "from": [
+        2.75,
+        4.5,
+        7.75
+      ],
+      "to": [
+        3.0,
+        5.0,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_043",
+      "from": [
+        2.75,
+        5.0,
+        7.5
+      ],
+      "to": [
+        3.0,
+        6.25,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_044",
+      "from": [
+        2.75,
+        5.0,
+        8.25
+      ],
+      "to": [
+        3.25,
+        5.25,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_045",
+      "from": [
+        2.75,
+        5.25,
+        8.25
+      ],
+      "to": [
+        3.0,
+        6.25,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_046",
+      "from": [
+        2.75,
+        5.5,
+        7.75
+      ],
+      "to": [
+        4.25,
+        5.75,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_047",
+      "from": [
+        2.75,
+        5.5,
+        8.0
+      ],
+      "to": [
+        3.25,
+        6.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_048",
+      "from": [
+        2.75,
+        5.75,
+        7.75
+      ],
+      "to": [
+        3.5,
+        6.0,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_049",
+      "from": [
+        2.75,
+        6.0,
+        7.75
+      ],
+      "to": [
+        3.0,
+        6.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_050",
+      "from": [
+        2.75,
+        6.25,
+        7.75
+      ],
+      "to": [
+        3.25,
+        6.75,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_051",
+      "from": [
+        3.0,
+        -0.75,
+        7.75
+      ],
+      "to": [
+        3.75,
+        -0.5,
+        8.25
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_052",
+      "from": [
+        3.0,
+        -0.5,
+        7.5
+      ],
+      "to": [
+        3.75,
+        0.25,
+        7.75
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_053",
+      "from": [
+        3.0,
+        -0.5,
+        8.25
+      ],
+      "to": [
+        3.75,
+        0.25,
+        8.5
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_054",
+      "from": [
+        3.0,
+        0.0,
+        7.75
+      ],
+      "to": [
+        3.5,
+        0.25,
+        8.25
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_055",
+      "from": [
+        3.0,
+        0.25,
+        7.5
+      ],
+      "to": [
+        3.25,
+        0.5,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_056",
+      "from": [
+        3.0,
+        0.25,
+        8.25
+      ],
+      "to": [
+        3.25,
+        0.5,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_057",
+      "from": [
+        3.0,
+        0.5,
+        7.5
+      ],
+      "to": [
+        3.25,
+        1.25,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_058",
+      "from": [
+        3.0,
+        1.25,
+        7.75
+      ],
+      "to": [
+        3.25,
+        1.5,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_059",
+      "from": [
+        3.0,
+        1.5,
+        8.25
+      ],
+      "to": [
+        3.25,
+        2.0,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_060",
+      "from": [
+        3.0,
+        1.75,
+        8.0
+      ],
+      "to": [
+        3.25,
+        2.5,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_061",
+      "from": [
+        3.0,
+        2.25,
+        7.75
+      ],
+      "to": [
+        3.25,
+        2.5,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_062",
+      "from": [
+        3.0,
+        3.75,
+        8.25
+      ],
+      "to": [
+        3.25,
+        5.0,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_063",
+      "from": [
+        3.0,
+        4.25,
+        7.5
+      ],
+      "to": [
+        3.25,
+        5.5,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_064",
+      "from": [
+        3.0,
+        4.25,
+        7.75
+      ],
+      "to": [
+        3.5,
+        4.5,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_065",
+      "from": [
+        3.0,
+        4.5,
+        7.75
+      ],
+      "to": [
+        3.25,
+        5.0,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_066",
+      "from": [
+        3.0,
+        5.0,
+        7.75
+      ],
+      "to": [
+        4.25,
+        5.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_067",
+      "from": [
+        3.0,
+        5.25,
+        8.25
+      ],
+      "to": [
+        3.5,
+        5.5,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_068",
+      "from": [
+        3.0,
+        5.5,
+        7.5
+      ],
+      "to": [
+        3.25,
+        7.25,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_069",
+      "from": [
+        3.0,
+        5.5,
+        8.25
+      ],
+      "to": [
+        3.25,
+        7.25,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_070",
+      "from": [
+        3.0,
+        6.0,
+        7.75
+      ],
+      "to": [
+        3.5,
+        6.25,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_071",
+      "from": [
+        3.0,
+        6.75,
+        7.75
+      ],
+      "to": [
+        3.5,
+        7.5,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_072",
+      "from": [
+        3.0,
+        7.5,
+        7.75
+      ],
+      "to": [
+        3.25,
+        7.75,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_073",
+      "from": [
+        3.25,
+        -0.75,
+        7.5
+      ],
+      "to": [
+        3.5,
+        -0.5,
+        7.75
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_074",
+      "from": [
+        3.25,
+        -0.75,
+        8.25
+      ],
+      "to": [
+        3.5,
+        -0.5,
+        8.5
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_075",
+      "from": [
+        3.25,
+        -0.25,
+        7.75
+      ],
+      "to": [
+        3.5,
+        0.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_076",
+      "from": [
+        3.25,
+        0.25,
+        7.75
+      ],
+      "to": [
+        3.5,
+        1.25,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_077",
+      "from": [
+        3.25,
+        1.75,
+        7.75
+      ],
+      "to": [
+        3.5,
+        2.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_078",
+      "from": [
+        3.25,
+        2.0,
+        8.0
+      ],
+      "to": [
+        3.5,
+        2.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_079",
+      "from": [
+        3.25,
+        2.25,
+        7.75
+      ],
+      "to": [
+        3.5,
+        2.75,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_080",
+      "from": [
+        3.25,
+        4.5,
+        7.75
+      ],
+      "to": [
+        3.5,
+        5.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_081",
+      "from": [
+        3.25,
+        4.75,
+        7.5
+      ],
+      "to": [
+        3.5,
+        6.5,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_082",
+      "from": [
+        3.25,
+        4.75,
+        8.25
+      ],
+      "to": [
+        3.5,
+        5.25,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_083",
+      "from": [
+        3.25,
+        5.5,
+        8.0
+      ],
+      "to": [
+        3.75,
+        5.75,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_084",
+      "from": [
+        3.25,
+        5.5,
+        8.25
+      ],
+      "to": [
+        3.5,
+        6.5,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_085",
+      "from": [
+        3.25,
+        5.75,
+        8.0
+      ],
+      "to": [
+        3.5,
+        6.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_086",
+      "from": [
+        3.25,
+        6.25,
+        7.75
+      ],
+      "to": [
+        4.0,
+        6.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_087",
+      "from": [
+        3.25,
+        6.5,
+        7.5
+      ],
+      "to": [
+        3.5,
+        6.75,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_088",
+      "from": [
+        3.25,
+        6.75,
+        7.5
+      ],
+      "to": [
+        3.75,
+        7.25,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_089",
+      "from": [
+        3.25,
+        6.75,
+        8.25
+      ],
+      "to": [
+        3.5,
+        8.0,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_090",
+      "from": [
+        3.25,
+        7.25,
+        7.5
+      ],
+      "to": [
+        3.5,
+        7.75,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_091",
+      "from": [
+        3.25,
+        7.5,
+        7.75
+      ],
+      "to": [
+        3.5,
+        8.0,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_092",
+      "from": [
+        3.25,
+        7.5,
+        8.0
+      ],
+      "to": [
+        3.75,
+        7.75,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_093",
+      "from": [
+        3.25,
+        7.75,
+        7.5
+      ],
+      "to": [
+        3.75,
+        8.0,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_094",
+      "from": [
+        3.25,
+        7.75,
+        8.0
+      ],
+      "to": [
+        3.5,
+        8.0,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_095",
+      "from": [
+        3.25,
+        8.0,
+        7.75
+      ],
+      "to": [
+        3.75,
+        8.25,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_096",
+      "from": [
+        3.5,
+        -0.25,
+        7.75
+      ],
+      "to": [
+        4.0,
+        0.0,
+        8.25
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_097",
+      "from": [
+        3.5,
+        0.0,
+        7.75
+      ],
+      "to": [
+        3.75,
+        0.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_098",
+      "from": [
+        3.5,
+        4.75,
+        7.75
+      ],
+      "to": [
+        4.0,
+        5.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_099",
+      "from": [
+        3.5,
+        5.75,
+        7.5
+      ],
+      "to": [
+        3.75,
+        6.0,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_100",
+      "from": [
+        3.5,
+        5.75,
+        7.75
+      ],
+      "to": [
+        3.75,
+        6.25,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_101",
+      "from": [
+        3.5,
+        5.75,
+        8.0
+      ],
+      "to": [
+        3.75,
+        6.0,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_102",
+      "from": [
+        3.5,
+        5.75,
+        8.25
+      ],
+      "to": [
+        3.75,
+        7.25,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_103",
+      "from": [
+        3.5,
+        6.0,
+        7.5
+      ],
+      "to": [
+        3.75,
+        6.75,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_104",
+      "from": [
+        3.5,
+        6.0,
+        8.0
+      ],
+      "to": [
+        4.25,
+        6.25,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_105",
+      "from": [
+        3.5,
+        6.5,
+        7.75
+      ],
+      "to": [
+        4.0,
+        6.75,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_106",
+      "from": [
+        3.5,
+        6.75,
+        7.75
+      ],
+      "to": [
+        4.25,
+        7.25,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_107",
+      "from": [
+        3.5,
+        7.25,
+        7.25
+      ],
+      "to": [
+        3.75,
+        7.5,
+        8.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_108",
+      "from": [
+        3.5,
+        7.5,
+        7.5
+      ],
+      "to": [
+        3.75,
+        7.75,
+        8.0
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_109",
+      "from": [
+        3.5,
+        7.5,
+        8.25
+      ],
+      "to": [
+        3.75,
+        8.0,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_110",
+      "from": [
+        3.5,
+        7.75,
+        7.75
+      ],
+      "to": [
+        3.75,
+        8.0,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_111",
+      "from": [
+        3.5,
+        8.0,
+        7.5
+      ],
+      "to": [
+        4.0,
+        8.75,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_112",
+      "from": [
+        3.5,
+        8.0,
+        8.25
+      ],
+      "to": [
+        4.0,
+        8.25,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_113",
+      "from": [
+        3.5,
+        8.25,
+        7.75
+      ],
+      "to": [
+        4.0,
+        9.0,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_114",
+      "from": [
+        3.5,
+        8.25,
+        8.25
+      ],
+      "to": [
+        3.75,
+        8.75,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_115",
+      "from": [
+        3.75,
+        0.25,
+        7.75
+      ],
+      "to": [
+        4.0,
+        0.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_116",
+      "from": [
+        3.75,
+        5.5,
+        8.0
+      ],
+      "to": [
+        4.25,
+        6.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_117",
+      "from": [
+        3.75,
+        5.75,
+        7.75
+      ],
+      "to": [
+        4.25,
+        6.25,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_118",
+      "from": [
+        3.75,
+        6.5,
+        7.5
+      ],
+      "to": [
+        4.0,
+        8.0,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_119",
+      "from": [
+        3.75,
+        6.5,
+        8.25
+      ],
+      "to": [
+        4.0,
+        8.0,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_120",
+      "from": [
+        3.75,
+        7.25,
+        7.75
+      ],
+      "to": [
+        4.25,
+        8.0,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_121",
+      "from": [
+        3.75,
+        7.5,
+        7.25
+      ],
+      "to": [
+        4.0,
+        8.0,
+        7.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_122",
+      "from": [
+        3.75,
+        7.5,
+        8.5
+      ],
+      "to": [
+        4.0,
+        8.0,
+        8.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_123",
+      "from": [
+        3.75,
+        8.0,
+        7.25
+      ],
+      "to": [
+        4.0,
+        8.5,
+        7.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_124",
+      "from": [
+        3.75,
+        8.0,
+        7.75
+      ],
+      "to": [
+        4.0,
+        8.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_125",
+      "from": [
+        3.75,
+        8.0,
+        8.5
+      ],
+      "to": [
+        4.0,
+        8.5,
+        8.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_126",
+      "from": [
+        3.75,
+        8.25,
+        8.25
+      ],
+      "to": [
+        4.5,
+        8.5,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_127",
+      "from": [
+        3.75,
+        8.5,
+        8.25
+      ],
+      "to": [
+        4.25,
+        9.25,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_128",
+      "from": [
+        3.75,
+        8.75,
+        7.5
+      ],
+      "to": [
+        4.25,
+        9.25,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_129",
+      "from": [
+        3.75,
+        9.0,
+        7.75
+      ],
+      "to": [
+        4.25,
+        9.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_130",
+      "from": [
+        3.75,
+        9.25,
+        7.75
+      ],
+      "to": [
+        4.0,
+        9.5,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_131",
+      "from": [
+        3.75,
+        9.5,
+        7.25
+      ],
+      "to": [
+        4.0,
+        9.75,
+        8.75
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_132",
+      "from": [
+        3.75,
+        9.75,
+        7.5
+      ],
+      "to": [
+        4.0,
+        10.0,
+        8.5
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_133",
+      "from": [
+        4.0,
+        0.5,
+        7.75
+      ],
+      "to": [
+        4.25,
+        1.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_134",
+      "from": [
+        4.0,
+        7.0,
+        7.5
+      ],
+      "to": [
+        4.25,
+        8.5,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_135",
+      "from": [
+        4.0,
+        7.0,
+        8.25
+      ],
+      "to": [
+        4.25,
+        8.25,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_136",
+      "from": [
+        4.0,
+        8.0,
+        7.25
+      ],
+      "to": [
+        4.25,
+        8.5,
+        7.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_137",
+      "from": [
+        4.0,
+        8.0,
+        7.75
+      ],
+      "to": [
+        4.75,
+        8.5,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_138",
+      "from": [
+        4.0,
+        8.0,
+        8.5
+      ],
+      "to": [
+        4.25,
+        8.5,
+        8.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_139",
+      "from": [
+        4.0,
+        8.5,
+        7.25
+      ],
+      "to": [
+        4.25,
+        9.0,
+        7.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_140",
+      "from": [
+        4.0,
+        8.5,
+        7.5
+      ],
+      "to": [
+        4.25,
+        8.75,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_141",
+      "from": [
+        4.0,
+        8.5,
+        8.5
+      ],
+      "to": [
+        4.25,
+        9.0,
+        8.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_142",
+      "from": [
+        4.0,
+        8.75,
+        7.75
+      ],
+      "to": [
+        4.25,
+        9.0,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_143",
+      "from": [
+        4.0,
+        9.25,
+        7.0
+      ],
+      "to": [
+        4.25,
+        9.5,
+        9.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_144",
+      "from": [
+        4.0,
+        9.5,
+        7.25
+      ],
+      "to": [
+        4.25,
+        9.75,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_145",
+      "from": [
+        4.0,
+        9.75,
+        7.25
+      ],
+      "to": [
+        4.5,
+        10.0,
+        8.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_146",
+      "from": [
+        4.0,
+        10.0,
+        7.5
+      ],
+      "to": [
+        4.25,
+        10.25,
+        8.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_147",
+      "from": [
+        4.0,
+        10.25,
+        7.75
+      ],
+      "to": [
+        4.5,
+        10.5,
+        8.25
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_148",
+      "from": [
+        4.25,
+        0.75,
+        7.75
+      ],
+      "to": [
+        4.5,
+        1.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_149",
+      "from": [
+        4.25,
+        7.5,
+        7.75
+      ],
+      "to": [
+        4.5,
+        8.0,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_150",
+      "from": [
+        4.25,
+        7.75,
+        7.5
+      ],
+      "to": [
+        4.5,
+        9.0,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_151",
+      "from": [
+        4.25,
+        7.75,
+        8.25
+      ],
+      "to": [
+        4.5,
+        8.25,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_152",
+      "from": [
+        4.25,
+        8.5,
+        7.25
+      ],
+      "to": [
+        4.5,
+        9.0,
+        7.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_153",
+      "from": [
+        4.25,
+        8.5,
+        7.75
+      ],
+      "to": [
+        4.75,
+        8.75,
+        8.0
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_154",
+      "from": [
+        4.25,
+        8.5,
+        8.0
+      ],
+      "to": [
+        4.5,
+        9.0,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_155",
+      "from": [
+        4.25,
+        8.5,
+        8.25
+      ],
+      "to": [
+        4.5,
+        8.75,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_156",
+      "from": [
+        4.25,
+        8.5,
+        8.5
+      ],
+      "to": [
+        4.5,
+        9.0,
+        8.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_157",
+      "from": [
+        4.25,
+        8.75,
+        7.75
+      ],
+      "to": [
+        4.5,
+        9.0,
+        8.0
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_158",
+      "from": [
+        4.25,
+        8.75,
+        8.25
+      ],
+      "to": [
+        4.5,
+        9.0,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_159",
+      "from": [
+        4.25,
+        9.0,
+        7.0
+      ],
+      "to": [
+        4.5,
+        9.25,
+        9.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_160",
+      "from": [
+        4.25,
+        9.25,
+        7.0
+      ],
+      "to": [
+        4.5,
+        9.5,
+        9.0
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_161",
+      "from": [
+        4.25,
+        9.5,
+        7.0
+      ],
+      "to": [
+        4.75,
+        9.75,
+        9.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_162",
+      "from": [
+        4.25,
+        10.0,
+        7.25
+      ],
+      "to": [
+        4.5,
+        10.25,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_163",
+      "from": [
+        4.25,
+        10.25,
+        7.5
+      ],
+      "to": [
+        4.5,
+        10.5,
+        7.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_164",
+      "from": [
+        4.25,
+        10.25,
+        8.25
+      ],
+      "to": [
+        4.5,
+        10.5,
+        8.5
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_165",
+      "from": [
+        4.25,
+        10.5,
+        7.75
+      ],
+      "to": [
+        4.5,
+        10.75,
+        8.0
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_166",
+      "from": [
+        4.25,
+        10.5,
+        8.0
+      ],
+      "to": [
+        4.5,
+        10.75,
+        8.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_167",
+      "from": [
+        4.5,
+        1.0,
+        7.75
+      ],
+      "to": [
+        4.75,
+        1.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_168",
+      "from": [
+        4.5,
+        8.25,
+        7.5
+      ],
+      "to": [
+        4.75,
+        8.75,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_169",
+      "from": [
+        4.5,
+        8.25,
+        8.25
+      ],
+      "to": [
+        4.75,
+        8.75,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_170",
+      "from": [
+        4.5,
+        8.5,
+        8.0
+      ],
+      "to": [
+        4.75,
+        8.75,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_171",
+      "from": [
+        4.5,
+        8.75,
+        7.25
+      ],
+      "to": [
+        5.0,
+        9.0,
+        8.75
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_172",
+      "from": [
+        4.5,
+        9.0,
+        7.25
+      ],
+      "to": [
+        5.0,
+        9.25,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_173",
+      "from": [
+        4.5,
+        9.25,
+        7.0
+      ],
+      "to": [
+        4.75,
+        9.5,
+        9.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_174",
+      "from": [
+        4.5,
+        9.75,
+        7.0
+      ],
+      "to": [
+        4.75,
+        10.0,
+        9.0
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_175",
+      "from": [
+        4.5,
+        10.0,
+        7.0
+      ],
+      "to": [
+        5.25,
+        10.25,
+        9.0
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_176",
+      "from": [
+        4.5,
+        10.25,
+        7.0
+      ],
+      "to": [
+        5.0,
+        10.75,
+        9.0
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_177",
+      "from": [
+        4.5,
+        10.75,
+        7.5
+      ],
+      "to": [
+        4.75,
+        11.0,
+        8.0
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_178",
+      "from": [
+        4.5,
+        10.75,
+        8.0
+      ],
+      "to": [
+        4.75,
+        11.0,
+        8.5
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_179",
+      "from": [
+        4.75,
+        1.5,
+        7.75
+      ],
+      "to": [
+        5.0,
+        1.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_180",
+      "from": [
+        4.75,
+        8.5,
+        7.5
+      ],
+      "to": [
+        5.0,
+        8.75,
+        8.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_181",
+      "from": [
+        4.75,
+        9.25,
+        7.25
+      ],
+      "to": [
+        5.0,
+        9.5,
+        8.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_182",
+      "from": [
+        4.75,
+        9.5,
+        7.0
+      ],
+      "to": [
+        5.0,
+        9.75,
+        9.0
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_183",
+      "from": [
+        4.75,
+        9.75,
+        7.0
+      ],
+      "to": [
+        5.5,
+        10.0,
+        9.0
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_184",
+      "from": [
+        4.75,
+        10.75,
+        7.0
+      ],
+      "to": [
+        5.5,
+        11.0,
+        9.0
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_light_185",
+      "from": [
+        4.75,
+        11.0,
+        7.5
+      ],
+      "to": [
+        5.0,
+        11.25,
+        8.0
+      ],
+      "mat": "gold_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_186",
+      "from": [
+        4.75,
+        11.0,
+        8.0
+      ],
+      "to": [
+        5.0,
+        11.25,
+        8.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_187",
+      "from": [
+        5.0,
+        1.75,
+        7.75
+      ],
+      "to": [
+        5.25,
+        2.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_188",
+      "from": [
+        5.0,
+        8.75,
+        7.75
+      ],
+      "to": [
+        5.25,
+        9.0,
+        8.25
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_189",
+      "from": [
+        5.0,
+        9.0,
+        7.5
+      ],
+      "to": [
+        5.25,
+        9.25,
+        8.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_190",
+      "from": [
+        5.0,
+        9.25,
+        7.25
+      ],
+      "to": [
+        5.25,
+        9.75,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_core_191",
+      "from": [
+        5.0,
+        10.25,
+        7.0
+      ],
+      "to": [
+        5.75,
+        10.5,
+        9.0
+      ],
+      "mat": "nature_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_192",
+      "from": [
+        5.0,
+        10.5,
+        7.0
+      ],
+      "to": [
+        5.25,
+        10.75,
+        9.0
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_193",
+      "from": [
+        5.0,
+        11.0,
+        7.25
+      ],
+      "to": [
+        5.25,
+        11.25,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_194",
+      "from": [
+        5.0,
+        11.25,
+        7.5
+      ],
+      "to": [
+        5.5,
+        11.5,
+        8.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_195",
+      "from": [
+        5.25,
+        2.0,
+        7.75
+      ],
+      "to": [
+        5.5,
+        2.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_196",
+      "from": [
+        5.25,
+        9.0,
+        7.75
+      ],
+      "to": [
+        5.5,
+        9.5,
+        8.25
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_197",
+      "from": [
+        5.25,
+        9.25,
+        7.5
+      ],
+      "to": [
+        5.5,
+        9.5,
+        7.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_198",
+      "from": [
+        5.25,
+        9.25,
+        8.25
+      ],
+      "to": [
+        5.5,
+        9.5,
+        8.5
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_199",
+      "from": [
+        5.25,
+        9.5,
+        7.25
+      ],
+      "to": [
+        5.5,
+        9.75,
+        8.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_core_200",
+      "from": [
+        5.25,
+        10.0,
+        7.0
+      ],
+      "to": [
+        5.5,
+        10.25,
+        9.0
+      ],
+      "mat": "nature_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_core_201",
+      "from": [
+        5.25,
+        10.5,
+        7.0
+      ],
+      "to": [
+        5.5,
+        10.75,
+        9.0
+      ],
+      "mat": "nature_core",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_202",
+      "from": [
+        5.25,
+        11.0,
+        7.25
+      ],
+      "to": [
+        5.75,
+        11.25,
+        8.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_203",
+      "from": [
+        5.25,
+        11.25,
+        7.25
+      ],
+      "to": [
+        5.5,
+        11.5,
+        7.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_204",
+      "from": [
+        5.25,
+        11.25,
+        8.5
+      ],
+      "to": [
+        5.5,
+        11.5,
+        8.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_205",
+      "from": [
+        5.25,
+        11.5,
+        7.5
+      ],
+      "to": [
+        5.75,
+        11.75,
+        8.5
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_206",
+      "from": [
+        5.5,
+        2.25,
+        7.75
+      ],
+      "to": [
+        5.75,
+        2.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_207",
+      "from": [
+        5.5,
+        9.25,
+        7.75
+      ],
+      "to": [
+        5.75,
+        9.75,
+        8.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_208",
+      "from": [
+        5.5,
+        9.5,
+        7.5
+      ],
+      "to": [
+        5.75,
+        9.75,
+        7.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_209",
+      "from": [
+        5.5,
+        9.5,
+        8.25
+      ],
+      "to": [
+        5.75,
+        9.75,
+        8.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_210",
+      "from": [
+        5.5,
+        9.75,
+        7.25
+      ],
+      "to": [
+        5.75,
+        10.0,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_211",
+      "from": [
+        5.5,
+        10.0,
+        7.0
+      ],
+      "to": [
+        5.75,
+        10.25,
+        9.0
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_212",
+      "from": [
+        5.5,
+        10.5,
+        7.0
+      ],
+      "to": [
+        5.75,
+        10.75,
+        9.0
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_213",
+      "from": [
+        5.5,
+        10.75,
+        7.0
+      ],
+      "to": [
+        5.75,
+        11.0,
+        9.0
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_214",
+      "from": [
+        5.5,
+        11.0,
+        7.0
+      ],
+      "to": [
+        5.75,
+        11.25,
+        7.25
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_215",
+      "from": [
+        5.5,
+        11.0,
+        8.75
+      ],
+      "to": [
+        5.75,
+        11.25,
+        9.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_216",
+      "from": [
+        5.5,
+        11.25,
+        7.25
+      ],
+      "to": [
+        6.0,
+        11.5,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_217",
+      "from": [
+        5.5,
+        11.5,
+        7.25
+      ],
+      "to": [
+        5.75,
+        11.75,
+        7.5
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_218",
+      "from": [
+        5.5,
+        11.5,
+        8.5
+      ],
+      "to": [
+        5.75,
+        11.75,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_219",
+      "from": [
+        5.5,
+        11.75,
+        7.5
+      ],
+      "to": [
+        5.75,
+        12.0,
+        8.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_220",
+      "from": [
+        5.75,
+        2.5,
+        7.75
+      ],
+      "to": [
+        6.0,
+        3.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_221",
+      "from": [
+        5.75,
+        9.75,
+        7.5
+      ],
+      "to": [
+        6.0,
+        10.0,
+        8.5
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_222",
+      "from": [
+        5.75,
+        10.0,
+        7.25
+      ],
+      "to": [
+        6.0,
+        10.25,
+        8.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_223",
+      "from": [
+        5.75,
+        10.25,
+        7.25
+      ],
+      "to": [
+        6.25,
+        10.5,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_224",
+      "from": [
+        5.75,
+        10.5,
+        7.0
+      ],
+      "to": [
+        6.0,
+        10.75,
+        9.0
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_225",
+      "from": [
+        5.75,
+        10.75,
+        7.0
+      ],
+      "to": [
+        6.0,
+        11.0,
+        9.0
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_226",
+      "from": [
+        5.75,
+        11.0,
+        7.0
+      ],
+      "to": [
+        6.25,
+        11.25,
+        9.0
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_227",
+      "from": [
+        5.75,
+        11.25,
+        7.0
+      ],
+      "to": [
+        6.0,
+        11.5,
+        7.25
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_228",
+      "from": [
+        5.75,
+        11.25,
+        8.75
+      ],
+      "to": [
+        6.0,
+        11.5,
+        9.0
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_229",
+      "from": [
+        5.75,
+        11.5,
+        7.25
+      ],
+      "to": [
+        6.0,
+        11.75,
+        8.75
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_230",
+      "from": [
+        6.0,
+        2.75,
+        7.75
+      ],
+      "to": [
+        6.25,
+        3.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_231",
+      "from": [
+        6.0,
+        10.0,
+        7.5
+      ],
+      "to": [
+        6.25,
+        10.25,
+        8.5
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_232",
+      "from": [
+        6.0,
+        10.5,
+        7.25
+      ],
+      "to": [
+        6.5,
+        10.75,
+        8.75
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_233",
+      "from": [
+        6.0,
+        10.75,
+        7.25
+      ],
+      "to": [
+        6.5,
+        11.0,
+        8.75
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_234",
+      "from": [
+        6.0,
+        11.25,
+        7.0
+      ],
+      "to": [
+        6.25,
+        11.5,
+        9.0
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_235",
+      "from": [
+        6.0,
+        11.5,
+        7.5
+      ],
+      "to": [
+        6.75,
+        11.75,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_236",
+      "from": [
+        6.0,
+        11.75,
+        7.75
+      ],
+      "to": [
+        7.25,
+        12.0,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_237",
+      "from": [
+        6.25,
+        3.25,
+        7.75
+      ],
+      "to": [
+        6.5,
+        3.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_238",
+      "from": [
+        6.25,
+        10.25,
+        7.5
+      ],
+      "to": [
+        6.5,
+        10.5,
+        8.5
+      ],
+      "mat": "leather",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_239",
+      "from": [
+        6.25,
+        11.0,
+        7.25
+      ],
+      "to": [
+        6.75,
+        11.25,
+        8.75
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_240",
+      "from": [
+        6.25,
+        11.25,
+        7.25
+      ],
+      "to": [
+        6.5,
+        11.75,
+        7.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_241",
+      "from": [
+        6.25,
+        11.25,
+        7.5
+      ],
+      "to": [
+        6.5,
+        11.5,
+        8.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_242",
+      "from": [
+        6.25,
+        11.5,
+        8.5
+      ],
+      "to": [
+        6.75,
+        11.75,
+        8.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_243",
+      "from": [
+        6.25,
+        11.75,
+        7.5
+      ],
+      "to": [
+        6.75,
+        12.0,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_244",
+      "from": [
+        6.25,
+        11.75,
+        8.25
+      ],
+      "to": [
+        7.25,
+        12.0,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_245",
+      "from": [
+        6.25,
+        12.0,
+        7.75
+      ],
+      "to": [
+        7.0,
+        12.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_246",
+      "from": [
+        6.5,
+        3.5,
+        7.75
+      ],
+      "to": [
+        6.75,
+        3.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leather_light_247",
+      "from": [
+        6.5,
+        10.5,
+        7.75
+      ],
+      "to": [
+        6.75,
+        10.75,
+        8.25
+      ],
+      "mat": "leather_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_248",
+      "from": [
+        6.5,
+        10.75,
+        7.5
+      ],
+      "to": [
+        6.75,
+        11.0,
+        8.5
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_249",
+      "from": [
+        6.5,
+        11.25,
+        7.25
+      ],
+      "to": [
+        7.0,
+        11.5,
+        7.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_250",
+      "from": [
+        6.5,
+        11.25,
+        7.5
+      ],
+      "to": [
+        6.75,
+        11.5,
+        8.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_251",
+      "from": [
+        6.5,
+        11.5,
+        7.25
+      ],
+      "to": [
+        6.75,
+        11.75,
+        7.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_252",
+      "from": [
+        6.5,
+        12.0,
+        7.5
+      ],
+      "to": [
+        7.0,
+        12.25,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_253",
+      "from": [
+        6.5,
+        12.0,
+        8.25
+      ],
+      "to": [
+        7.5,
+        12.25,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_254",
+      "from": [
+        6.75,
+        3.75,
+        7.75
+      ],
+      "to": [
+        7.0,
+        4.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "gold_255",
+      "from": [
+        6.75,
+        10.75,
+        7.75
+      ],
+      "to": [
+        7.0,
+        11.0,
+        8.25
+      ],
+      "mat": "gold",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_256",
+      "from": [
+        6.75,
+        11.0,
+        7.5
+      ],
+      "to": [
+        7.0,
+        11.25,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_257",
+      "from": [
+        6.75,
+        11.0,
+        7.75
+      ],
+      "to": [
+        7.0,
+        11.5,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_258",
+      "from": [
+        6.75,
+        11.0,
+        8.0
+      ],
+      "to": [
+        7.25,
+        11.75,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_259",
+      "from": [
+        6.75,
+        11.0,
+        8.25
+      ],
+      "to": [
+        7.0,
+        11.75,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_260",
+      "from": [
+        6.75,
+        11.25,
+        7.5
+      ],
+      "to": [
+        7.0,
+        12.0,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_261",
+      "from": [
+        6.75,
+        11.25,
+        8.5
+      ],
+      "to": [
+        7.0,
+        11.75,
+        8.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_262",
+      "from": [
+        6.75,
+        11.5,
+        7.25
+      ],
+      "to": [
+        7.25,
+        11.75,
+        7.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_263",
+      "from": [
+        6.75,
+        11.5,
+        7.75
+      ],
+      "to": [
+        8.0,
+        11.75,
+        8.0
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_264",
+      "from": [
+        6.75,
+        11.75,
+        7.25
+      ],
+      "to": [
+        7.25,
+        12.0,
+        7.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_265",
+      "from": [
+        6.75,
+        11.75,
+        8.5
+      ],
+      "to": [
+        7.25,
+        12.0,
+        8.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_266",
+      "from": [
+        6.75,
+        12.25,
+        7.75
+      ],
+      "to": [
+        7.0,
+        12.5,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_267",
+      "from": [
+        7.0,
+        4.0,
+        7.75
+      ],
+      "to": [
+        7.25,
+        4.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_268",
+      "from": [
+        7.0,
+        11.0,
+        7.75
+      ],
+      "to": [
+        7.25,
+        11.5,
+        8.0
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_269",
+      "from": [
+        7.0,
+        11.25,
+        7.5
+      ],
+      "to": [
+        7.5,
+        11.5,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_270",
+      "from": [
+        7.0,
+        11.25,
+        8.25
+      ],
+      "to": [
+        7.5,
+        11.75,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_271",
+      "from": [
+        7.0,
+        11.5,
+        7.5
+      ],
+      "to": [
+        7.25,
+        12.25,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_272",
+      "from": [
+        7.0,
+        11.5,
+        8.5
+      ],
+      "to": [
+        7.25,
+        11.75,
+        8.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_273",
+      "from": [
+        7.0,
+        12.0,
+        7.75
+      ],
+      "to": [
+        7.25,
+        12.5,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_274",
+      "from": [
+        7.0,
+        12.25,
+        7.5
+      ],
+      "to": [
+        8.0,
+        12.5,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_275",
+      "from": [
+        7.0,
+        12.25,
+        8.25
+      ],
+      "to": [
+        8.0,
+        12.5,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_276",
+      "from": [
+        7.25,
+        4.25,
+        7.75
+      ],
+      "to": [
+        7.5,
+        4.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_277",
+      "from": [
+        7.25,
+        11.25,
+        7.75
+      ],
+      "to": [
+        7.5,
+        11.5,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_278",
+      "from": [
+        7.25,
+        11.5,
+        7.5
+      ],
+      "to": [
+        7.75,
+        12.0,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_279",
+      "from": [
+        7.25,
+        11.5,
+        8.0
+      ],
+      "to": [
+        8.0,
+        12.0,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_280",
+      "from": [
+        7.25,
+        11.75,
+        7.25
+      ],
+      "to": [
+        7.5,
+        12.0,
+        7.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_281",
+      "from": [
+        7.25,
+        11.75,
+        7.75
+      ],
+      "to": [
+        8.5,
+        12.0,
+        8.0
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_282",
+      "from": [
+        7.25,
+        11.75,
+        8.25
+      ],
+      "to": [
+        8.25,
+        12.0,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_283",
+      "from": [
+        7.25,
+        11.75,
+        8.5
+      ],
+      "to": [
+        7.5,
+        12.0,
+        8.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_284",
+      "from": [
+        7.25,
+        12.0,
+        7.25
+      ],
+      "to": [
+        7.5,
+        12.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_285",
+      "from": [
+        7.25,
+        12.0,
+        8.5
+      ],
+      "to": [
+        7.5,
+        12.25,
+        8.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_286",
+      "from": [
+        7.25,
+        12.25,
+        7.75
+      ],
+      "to": [
+        7.5,
+        12.5,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_287",
+      "from": [
+        7.25,
+        12.5,
+        7.75
+      ],
+      "to": [
+        8.5,
+        12.75,
+        8.0
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_288",
+      "from": [
+        7.25,
+        12.5,
+        8.0
+      ],
+      "to": [
+        7.5,
+        12.75,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_289",
+      "from": [
+        7.5,
+        4.5,
+        7.75
+      ],
+      "to": [
+        7.75,
+        5.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_290",
+      "from": [
+        7.5,
+        11.5,
+        8.25
+      ],
+      "to": [
+        7.75,
+        11.75,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_291",
+      "from": [
+        7.5,
+        12.0,
+        7.25
+      ],
+      "to": [
+        7.75,
+        12.25,
+        8.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_292",
+      "from": [
+        7.5,
+        12.25,
+        7.75
+      ],
+      "to": [
+        8.0,
+        12.5,
+        8.0
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_293",
+      "from": [
+        7.5,
+        12.25,
+        8.0
+      ],
+      "to": [
+        7.75,
+        12.75,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_294",
+      "from": [
+        7.5,
+        12.5,
+        7.5
+      ],
+      "to": [
+        8.5,
+        12.75,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_295",
+      "from": [
+        7.5,
+        12.5,
+        8.25
+      ],
+      "to": [
+        7.75,
+        12.75,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_296",
+      "from": [
+        7.75,
+        5.0,
+        7.75
+      ],
+      "to": [
+        8.0,
+        5.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_297",
+      "from": [
+        7.75,
+        11.75,
+        7.5
+      ],
+      "to": [
+        8.25,
+        12.25,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_298",
+      "from": [
+        7.75,
+        12.0,
+        7.75
+      ],
+      "to": [
+        8.75,
+        12.25,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_299",
+      "from": [
+        7.75,
+        12.25,
+        8.0
+      ],
+      "to": [
+        8.0,
+        13.0,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_300",
+      "from": [
+        7.75,
+        12.5,
+        8.25
+      ],
+      "to": [
+        9.0,
+        12.75,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_301",
+      "from": [
+        7.75,
+        12.75,
+        7.75
+      ],
+      "to": [
+        8.75,
+        13.0,
+        8.0
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_302",
+      "from": [
+        8.0,
+        5.25,
+        7.75
+      ],
+      "to": [
+        8.25,
+        5.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_303",
+      "from": [
+        8.0,
+        11.75,
+        8.0
+      ],
+      "to": [
+        8.5,
+        12.0,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_304",
+      "from": [
+        8.0,
+        12.25,
+        7.5
+      ],
+      "to": [
+        9.0,
+        12.5,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_305",
+      "from": [
+        8.0,
+        12.25,
+        7.75
+      ],
+      "to": [
+        8.5,
+        12.5,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_306",
+      "from": [
+        8.0,
+        12.25,
+        8.25
+      ],
+      "to": [
+        9.0,
+        12.5,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_307",
+      "from": [
+        8.0,
+        12.5,
+        8.0
+      ],
+      "to": [
+        8.5,
+        13.0,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_308",
+      "from": [
+        8.0,
+        12.75,
+        7.5
+      ],
+      "to": [
+        9.0,
+        13.0,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_309",
+      "from": [
+        8.0,
+        12.75,
+        8.25
+      ],
+      "to": [
+        9.0,
+        13.0,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_310",
+      "from": [
+        8.25,
+        5.5,
+        7.75
+      ],
+      "to": [
+        8.5,
+        5.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_311",
+      "from": [
+        8.25,
+        12.0,
+        7.5
+      ],
+      "to": [
+        8.75,
+        12.25,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_312",
+      "from": [
+        8.25,
+        13.0,
+        7.75
+      ],
+      "to": [
+        8.5,
+        13.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_313",
+      "from": [
+        8.5,
+        5.75,
+        7.75
+      ],
+      "to": [
+        8.75,
+        6.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_314",
+      "from": [
+        8.5,
+        12.25,
+        7.75
+      ],
+      "to": [
+        10.25,
+        12.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_315",
+      "from": [
+        8.5,
+        12.5,
+        7.5
+      ],
+      "to": [
+        9.5,
+        12.75,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_316",
+      "from": [
+        8.5,
+        12.5,
+        7.75
+      ],
+      "to": [
+        9.25,
+        12.75,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_317",
+      "from": [
+        8.5,
+        12.5,
+        8.0
+      ],
+      "to": [
+        9.0,
+        12.75,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_318",
+      "from": [
+        8.5,
+        12.75,
+        8.0
+      ],
+      "to": [
+        8.75,
+        13.0,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_319",
+      "from": [
+        8.5,
+        13.0,
+        7.5
+      ],
+      "to": [
+        9.75,
+        13.25,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_320",
+      "from": [
+        8.5,
+        13.0,
+        7.75
+      ],
+      "to": [
+        9.0,
+        13.25,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_321",
+      "from": [
+        8.5,
+        13.0,
+        8.25
+      ],
+      "to": [
+        9.75,
+        13.25,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_322",
+      "from": [
+        8.5,
+        13.25,
+        7.75
+      ],
+      "to": [
+        8.75,
+        13.5,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_323",
+      "from": [
+        8.75,
+        6.0,
+        7.75
+      ],
+      "to": [
+        9.0,
+        6.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_324",
+      "from": [
+        8.75,
+        12.0,
+        7.75
+      ],
+      "to": [
+        10.0,
+        12.25,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_325",
+      "from": [
+        8.75,
+        12.75,
+        7.75
+      ],
+      "to": [
+        9.5,
+        13.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_326",
+      "from": [
+        8.75,
+        13.25,
+        7.75
+      ],
+      "to": [
+        9.5,
+        13.5,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_327",
+      "from": [
+        9.0,
+        6.25,
+        7.75
+      ],
+      "to": [
+        9.25,
+        6.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_328",
+      "from": [
+        9.0,
+        12.5,
+        8.0
+      ],
+      "to": [
+        9.5,
+        12.75,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_329",
+      "from": [
+        9.0,
+        12.5,
+        8.25
+      ],
+      "to": [
+        9.5,
+        13.0,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_330",
+      "from": [
+        9.0,
+        12.75,
+        7.5
+      ],
+      "to": [
+        9.5,
+        13.0,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_331",
+      "from": [
+        9.0,
+        13.0,
+        7.75
+      ],
+      "to": [
+        10.5,
+        13.25,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_332",
+      "from": [
+        9.25,
+        6.75,
+        7.75
+      ],
+      "to": [
+        9.5,
+        7.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_333",
+      "from": [
+        9.25,
+        12.5,
+        7.75
+      ],
+      "to": [
+        9.75,
+        12.75,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_334",
+      "from": [
+        9.25,
+        13.25,
+        7.5
+      ],
+      "to": [
+        9.75,
+        13.5,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_335",
+      "from": [
+        9.25,
+        13.25,
+        8.25
+      ],
+      "to": [
+        10.25,
+        13.5,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_336",
+      "from": [
+        9.5,
+        7.0,
+        7.75
+      ],
+      "to": [
+        9.75,
+        7.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_337",
+      "from": [
+        9.5,
+        12.5,
+        8.0
+      ],
+      "to": [
+        10.5,
+        13.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_338",
+      "from": [
+        9.5,
+        12.75,
+        7.5
+      ],
+      "to": [
+        10.0,
+        13.0,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_339",
+      "from": [
+        9.5,
+        12.75,
+        7.75
+      ],
+      "to": [
+        9.75,
+        13.0,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_340",
+      "from": [
+        9.5,
+        12.75,
+        8.25
+      ],
+      "to": [
+        10.25,
+        13.0,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_341",
+      "from": [
+        9.5,
+        13.25,
+        7.75
+      ],
+      "to": [
+        9.75,
+        13.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_342",
+      "from": [
+        9.5,
+        13.5,
+        7.75
+      ],
+      "to": [
+        10.0,
+        13.75,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_343",
+      "from": [
+        9.75,
+        7.25,
+        7.75
+      ],
+      "to": [
+        10.0,
+        7.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_344",
+      "from": [
+        9.75,
+        12.5,
+        7.75
+      ],
+      "to": [
+        10.5,
+        13.0,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_345",
+      "from": [
+        9.75,
+        13.0,
+        7.5
+      ],
+      "to": [
+        10.0,
+        13.5,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_346",
+      "from": [
+        9.75,
+        13.0,
+        8.25
+      ],
+      "to": [
+        10.75,
+        13.25,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_347",
+      "from": [
+        9.75,
+        13.25,
+        7.75
+      ],
+      "to": [
+        10.25,
+        13.5,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_348",
+      "from": [
+        10.0,
+        7.5,
+        7.75
+      ],
+      "to": [
+        10.25,
+        8.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_349",
+      "from": [
+        10.0,
+        12.75,
+        7.5
+      ],
+      "to": [
+        10.25,
+        13.25,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_350",
+      "from": [
+        10.0,
+        13.25,
+        7.5
+      ],
+      "to": [
+        10.25,
+        13.75,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_351",
+      "from": [
+        10.0,
+        13.5,
+        7.75
+      ],
+      "to": [
+        10.25,
+        13.75,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_352",
+      "from": [
+        10.0,
+        13.5,
+        8.0
+      ],
+      "to": [
+        10.25,
+        13.75,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_353",
+      "from": [
+        10.25,
+        7.75,
+        7.75
+      ],
+      "to": [
+        10.5,
+        8.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_354",
+      "from": [
+        10.25,
+        13.0,
+        7.5
+      ],
+      "to": [
+        10.75,
+        13.5,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_355",
+      "from": [
+        10.25,
+        13.25,
+        7.75
+      ],
+      "to": [
+        11.75,
+        13.5,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_356",
+      "from": [
+        10.25,
+        13.25,
+        8.25
+      ],
+      "to": [
+        11.5,
+        13.5,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_357",
+      "from": [
+        10.25,
+        13.5,
+        7.5
+      ],
+      "to": [
+        11.0,
+        13.75,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_358",
+      "from": [
+        10.25,
+        13.5,
+        7.75
+      ],
+      "to": [
+        10.5,
+        14.0,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_359",
+      "from": [
+        10.25,
+        13.5,
+        8.25
+      ],
+      "to": [
+        11.0,
+        13.75,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_360",
+      "from": [
+        10.5,
+        8.0,
+        7.75
+      ],
+      "to": [
+        10.75,
+        8.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_361",
+      "from": [
+        10.5,
+        13.0,
+        7.75
+      ],
+      "to": [
+        11.25,
+        13.25,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_362",
+      "from": [
+        10.5,
+        13.5,
+        7.75
+      ],
+      "to": [
+        11.0,
+        14.0,
+        8.0
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_363",
+      "from": [
+        10.5,
+        13.5,
+        8.0
+      ],
+      "to": [
+        11.0,
+        13.75,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_364",
+      "from": [
+        10.5,
+        13.75,
+        8.0
+      ],
+      "to": [
+        11.0,
+        14.0,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_365",
+      "from": [
+        10.75,
+        8.5,
+        7.75
+      ],
+      "to": [
+        11.0,
+        8.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_366",
+      "from": [
+        10.75,
+        13.25,
+        7.5
+      ],
+      "to": [
+        11.5,
+        13.5,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_367",
+      "from": [
+        10.75,
+        13.75,
+        7.5
+      ],
+      "to": [
+        12.0,
+        14.0,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_368",
+      "from": [
+        10.75,
+        13.75,
+        8.25
+      ],
+      "to": [
+        12.0,
+        14.0,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_369",
+      "from": [
+        11.0,
+        8.75,
+        7.75
+      ],
+      "to": [
+        11.25,
+        9.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_370",
+      "from": [
+        11.0,
+        13.5,
+        7.5
+      ],
+      "to": [
+        12.25,
+        13.75,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_371",
+      "from": [
+        11.0,
+        13.5,
+        7.75
+      ],
+      "to": [
+        11.5,
+        13.75,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_372",
+      "from": [
+        11.0,
+        13.5,
+        8.25
+      ],
+      "to": [
+        11.25,
+        13.75,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_373",
+      "from": [
+        11.0,
+        13.75,
+        7.75
+      ],
+      "to": [
+        11.75,
+        14.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_374",
+      "from": [
+        11.25,
+        9.0,
+        7.75
+      ],
+      "to": [
+        11.5,
+        9.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_375",
+      "from": [
+        11.25,
+        13.5,
+        8.25
+      ],
+      "to": [
+        12.5,
+        13.75,
+        8.5
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_376",
+      "from": [
+        11.5,
+        9.25,
+        7.75
+      ],
+      "to": [
+        11.75,
+        9.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_377",
+      "from": [
+        11.5,
+        13.5,
+        7.75
+      ],
+      "to": [
+        12.75,
+        13.75,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_378",
+      "from": [
+        11.5,
+        13.5,
+        8.0
+      ],
+      "to": [
+        12.25,
+        13.75,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_379",
+      "from": [
+        11.75,
+        9.5,
+        7.75
+      ],
+      "to": [
+        12.0,
+        10.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_380",
+      "from": [
+        11.75,
+        13.25,
+        7.75
+      ],
+      "to": [
+        13.25,
+        13.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_381",
+      "from": [
+        11.75,
+        13.75,
+        7.75
+      ],
+      "to": [
+        13.75,
+        14.0,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_382",
+      "from": [
+        11.75,
+        14.0,
+        7.5
+      ],
+      "to": [
+        13.5,
+        14.25,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_383",
+      "from": [
+        11.75,
+        14.0,
+        7.75
+      ],
+      "to": [
+        12.0,
+        14.25,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_384",
+      "from": [
+        11.75,
+        14.0,
+        8.25
+      ],
+      "to": [
+        13.75,
+        14.25,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_385",
+      "from": [
+        12.0,
+        9.75,
+        7.75
+      ],
+      "to": [
+        12.25,
+        10.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_386",
+      "from": [
+        12.0,
+        13.75,
+        7.5
+      ],
+      "to": [
+        13.25,
+        14.0,
+        7.75
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_387",
+      "from": [
+        12.0,
+        13.75,
+        8.25
+      ],
+      "to": [
+        14.5,
+        14.0,
+        8.5
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_dark_388",
+      "from": [
+        12.0,
+        14.0,
+        7.75
+      ],
+      "to": [
+        12.25,
+        14.25,
+        8.25
+      ],
+      "mat": "vine_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_389",
+      "from": [
+        12.0,
+        14.25,
+        7.75
+      ],
+      "to": [
+        13.5,
+        14.5,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_390",
+      "from": [
+        12.25,
+        10.25,
+        7.75
+      ],
+      "to": [
+        12.5,
+        10.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_391",
+      "from": [
+        12.25,
+        13.5,
+        8.0
+      ],
+      "to": [
+        13.0,
+        13.75,
+        8.25
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_392",
+      "from": [
+        12.25,
+        14.0,
+        7.75
+      ],
+      "to": [
+        13.75,
+        14.25,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_393",
+      "from": [
+        12.5,
+        10.5,
+        7.75
+      ],
+      "to": [
+        12.75,
+        10.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_394",
+      "from": [
+        12.75,
+        10.75,
+        7.75
+      ],
+      "to": [
+        13.0,
+        11.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_395",
+      "from": [
+        12.75,
+        13.5,
+        7.75
+      ],
+      "to": [
+        13.25,
+        13.75,
+        8.0
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_396",
+      "from": [
+        13.0,
+        11.0,
+        7.75
+      ],
+      "to": [
+        13.25,
+        11.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_397",
+      "from": [
+        13.0,
+        13.5,
+        8.0
+      ],
+      "to": [
+        13.5,
+        13.75,
+        8.25
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_398",
+      "from": [
+        13.25,
+        11.25,
+        7.75
+      ],
+      "to": [
+        13.5,
+        11.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "leaf_light_399",
+      "from": [
+        13.25,
+        13.5,
+        7.75
+      ],
+      "to": [
+        13.5,
+        13.75,
+        8.0
+      ],
+      "mat": "leaf_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_400",
+      "from": [
+        13.25,
+        13.75,
+        7.5
+      ],
+      "to": [
+        13.75,
+        14.0,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_401",
+      "from": [
+        13.5,
+        11.5,
+        7.75
+      ],
+      "to": [
+        13.75,
+        12.0,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_402",
+      "from": [
+        13.5,
+        13.5,
+        7.75
+      ],
+      "to": [
+        14.75,
+        13.75,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "vine_403",
+      "from": [
+        13.5,
+        14.0,
+        7.5
+      ],
+      "to": [
+        13.75,
+        14.25,
+        7.75
+      ],
+      "mat": "vine",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_404",
+      "from": [
+        13.75,
+        12.0,
+        7.75
+      ],
+      "to": [
+        14.0,
+        12.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_405",
+      "from": [
+        13.75,
+        13.75,
+        7.5
+      ],
+      "to": [
+        14.5,
+        14.0,
+        8.25
+      ],
+      "mat": "wood",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_406",
+      "from": [
+        13.75,
+        14.0,
+        7.75
+      ],
+      "to": [
+        15.0,
+        14.25,
+        8.25
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_407",
+      "from": [
+        14.0,
+        12.25,
+        7.75
+      ],
+      "to": [
+        14.25,
+        12.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_408",
+      "from": [
+        14.25,
+        12.5,
+        7.75
+      ],
+      "to": [
+        14.5,
+        12.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_409",
+      "from": [
+        14.5,
+        12.75,
+        7.75
+      ],
+      "to": [
+        14.75,
+        13.25,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_410",
+      "from": [
+        14.5,
+        13.75,
+        7.5
+      ],
+      "to": [
+        15.0,
+        14.0,
+        7.75
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_411",
+      "from": [
+        14.5,
+        13.75,
+        7.75
+      ],
+      "to": [
+        14.75,
+        14.0,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_412",
+      "from": [
+        14.75,
+        13.0,
+        7.75
+      ],
+      "to": [
+        15.0,
+        13.5,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_413",
+      "from": [
+        14.75,
+        13.5,
+        7.75
+      ],
+      "to": [
+        15.0,
+        14.0,
+        8.25
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "wood_dark_414",
+      "from": [
+        14.75,
+        13.75,
+        8.25
+      ],
+      "to": [
+        15.0,
+        14.0,
+        8.5
+      ],
+      "mat": "wood_dark",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_415",
+      "from": [
+        15.0,
+        13.25,
+        7.5
+      ],
+      "to": [
+        15.5,
+        14.25,
+        7.75
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "string_light_416",
+      "from": [
+        15.0,
+        13.25,
+        7.75
+      ],
+      "to": [
+        15.25,
+        13.75,
+        8.25
+      ],
+      "mat": "string_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_417",
+      "from": [
+        15.0,
+        13.25,
+        8.25
+      ],
+      "to": [
+        15.5,
+        14.25,
+        8.5
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_418",
+      "from": [
+        15.0,
+        13.75,
+        7.75
+      ],
+      "to": [
+        16.0,
+        14.0,
+        8.25
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_419",
+      "from": [
+        15.0,
+        14.0,
+        7.75
+      ],
+      "to": [
+        15.75,
+        14.25,
+        8.25
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_420",
+      "from": [
+        15.25,
+        13.25,
+        7.75
+      ],
+      "to": [
+        15.75,
+        13.75,
+        8.25
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_421",
+      "from": [
+        15.5,
+        13.5,
+        7.5
+      ],
+      "to": [
+        15.75,
+        14.0,
+        7.75
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    },
+    {
+      "name": "nature_light_422",
+      "from": [
+        15.5,
+        13.5,
+        8.25
+      ],
+      "to": [
+        15.75,
+        14.0,
+        8.5
+      ],
+      "mat": "nature_light",
+      "bone": "weapon"
+    }
+  ]
+}

@@ -7,6 +7,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.*;
 import org.bukkit.event.player.*;
 import org.bukkit.plugin.java.JavaPlugin;
+import com.example.advancemagic.pack.delivery.MirrorLookup;
+import com.example.advancemagic.pack.delivery.PackMirror;
+import com.example.advancemagic.pack.delivery.ResourcePackManager;
+import com.example.advancemagic.pack.delivery.RequiredPackSettings;
+import com.example.advancemagic.pack.delivery.ServerPortPackHost;
 import java.io.*;
 import java.net.*;
 import java.nio.file.*;
@@ -16,21 +21,20 @@ import java.util.jar.JarFile;
 
 public final class ResourcePackService implements Listener, AutoCloseable {
     public static final UUID PACK_ID=UUID.fromString("c8f2b94e-4a35-4d1b-9b67-0d2a6ef4f821");
+    /** Previous managed release URL, retained for identifying older installs. */
     public static final String DEFAULT_CDN_URL = "https://raw.githubusercontent.com/40000years/Evergarden2/0e6a864979528b50e00e48baa98e267993803ba4/evergarden/dist/evergarden-java.zip";
-    private static final String CURRENT_SHA1 = "764b727583b67d39a9445ce5bb99fc243f16d683";
-    public static final UUID AETERNUM_PACK_ID=UUID.fromString("8d2af8f1-f85c-4b4e-8a37-a55a359ce496");
-    public static final String AETERNUM_PACK_URL="https://raw.githubusercontent.com/40000years/Evergarden2/2408a45/evergarden/dist/Aeternum-Foods-26.x.zip";
-    public static final String AETERNUM_PACK_SHA1="f7137350c381dfb933f96e869bfaced4a292bcff";
     private static final List<String> FILES=List.of("evergarden-java.zip","evergarden-bedrock.mcpack",
             "geyser-mappings.json","pack-hashes.json");
     private final JavaPlugin plugin;
     private final Map<UUID,String> statuses=new HashMap<>();
-    private final Map<UUID,String> aeternumStatuses=new HashMap<>();
     private PackHttpServer http;
+    private ResourcePackManager.Client delivery;
+    private byte[] extractedJavaPack;
     private String bedrockPackInfo="Bedrock pack not extracted";
-    private String aeternumBedrockStatus="Aeternum Bedrock: auto-install disabled, plugin absent, or no local Geyser.";
     private String sha1="",failure="",geyserStatus="External Geyser: copy files from resource-packs/ manually.";
-    public ResourcePackService(JavaPlugin plugin){this.plugin=plugin;}
+    /** The public copy of the embedded pack, offered before this server's own host once verified. */
+    private final MirrorLookup mirror;
+    public ResourcePackService(JavaPlugin plugin){this.plugin=plugin;mirror=new MirrorLookup(plugin,"evergarden",30,p->offer(p,false));}
 
     /** Runs in onLoad, before Geyser reads mappings and packs. */
     public void extract() throws IOException {
@@ -38,7 +42,9 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         for(String name:FILES) {
             try(InputStream input=plugin.getResource("resource-packs/"+name)) {
                 if(input==null)throw new IOException("Missing embedded asset: "+name+". Rebuild with evergarden/build.ps1.");
-                writeChanged(output.resolve(name),input.readAllBytes());
+                byte[] bytes=input.readAllBytes();
+                if(name.equals("evergarden-java.zip"))extractedJavaPack=bytes;
+                writeChanged(output.resolve(name),bytes);
             }
         }
         try(var zip=new java.util.zip.ZipFile(output.resolve("evergarden-bedrock.mcpack").toFile());
@@ -76,26 +82,6 @@ public final class ResourcePackService implements Listener, AutoCloseable {
             writeChanged(geyser.resolve("custom_mappings/voidscape.json"),Files.readAllBytes(output.resolve("geyser-mappings.json")));
             geyserStatus="Bedrock files copied to "+geyser.toAbsolutePath()+" (restart Geyser and reconnect to use).";
             plugin.getLogger().info(geyserStatus);
-            if(plugin.getConfig().getBoolean("compatibility.aeternum-seasons.resource-pack.enabled",true)
-                    &&plugin.getConfig().getBoolean("compatibility.aeternum-seasons.bedrock.auto-install",true)
-                    &&AeternumBedrockInstaller.isPresent(plugins)) {
-                try {
-                    Path bundled=output.resolve("aeternum-bedrock");
-                    for(String name:AeternumBedrockInstaller.FILES) {
-                        try(InputStream input=plugin.getResource("aeternum-bedrock/"+name)) {
-                            if(input==null)throw new IOException("Missing bundled Aeternum asset: "+name);
-                            writeChanged(bundled.resolve(name),input.readAllBytes());
-                        }
-                    }
-                    int installed=AeternumBedrockInstaller.install(geyser,bundled);
-                    aeternumBedrockStatus="Aeternum Bedrock: pack + item/block mappings ready in "+geyser.toAbsolutePath()
-                            +" ("+installed+" files installed; existing files preserved).";
-                    plugin.getLogger().info(aeternumBedrockStatus);
-                }catch(IOException e) {
-                    aeternumBedrockStatus="Aeternum Bedrock auto-install failed: "+e.getMessage();
-                    plugin.getLogger().warning(aeternumBedrockStatus);
-                }
-            }
         }
     }
     private static void writeChanged(Path target,byte[] bytes) throws IOException {
@@ -109,54 +95,66 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         }finally{Files.deleteIfExists(staged);}
     }
     public void start() {
-        try(InputStream input=plugin.getResource("resource-packs/evergarden-java.zip")) {
-            if(input==null)throw new IOException("Embedded Java pack is missing");
-            byte[] pack=input.readAllBytes();
+        if(RequiredPackSettings.upgrade(plugin.getConfig(),true)){
+            plugin.saveConfig();plugin.getLogger().info("Evergarden and Judge Java resource packs are now required; existing download hosts are preserved.");
+        }
+        delivery=ResourcePackManager.connect(plugin,PACK_ID);
+        try {
+            byte[] pack=extractedJavaPack;
+            if(pack==null)try(InputStream input=plugin.getResource("resource-packs/evergarden-java.zip")) {
+                if(input==null)throw new IOException("Embedded Java pack is missing");
+                pack=input.readAllBytes();
+            }
             sha1=HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(pack));
-            if(migrateAeternumPackConfig(plugin.getConfig())) {
+            if(migratePackConfig(plugin.getConfig(),sha1)) {
                 plugin.saveConfig();
-                plugin.getLogger().info("Updated Aeternum food pack to the verified GitHub mirror (no Modrinth CDN required).");
+                plugin.getLogger().info("Updated previous official Evergarden pack settings to the current embedded pack; private CDNs and public host settings are preserved.");
             }
-            if(migratePackConfig(plugin.getConfig())) {
-                plugin.saveConfig();
-                plugin.getLogger().info("Updated the official Evergarden Java pack URL and SHA-1 for the bundled assets; private CDN URLs are preserved.");
-            }
-            if(!plugin.getConfig().getBoolean("resource-pack.enabled",true))return;
             String configuredUrl=plugin.getConfig().getString("resource-pack.url","").trim();
-            if(!configuredUrl.isBlank()) {
-                plugin.getLogger().info("Evergarden pack configured to use external CDN: "+configuredUrl);
+            if(configuredUrl.isBlank()&&plugin.getConfig().getBoolean("resource-pack.enabled",true)) {
+                mirror.start(PackMirror.fingerprint(pack),mirrors());
+            }
+            boolean mainNeedsLocal=plugin.getConfig().getBoolean("resource-pack.enabled",true)
+                &&configuredUrl.isBlank()&&plugin.getConfig().getBoolean("resource-pack.host.enabled",false);
+            boolean judgeNeedsLocal=plugin.getConfig().getBoolean("world-boss.visuals.pack.enabled",true);
+            if(!mainNeedsLocal&&!judgeNeedsLocal) {
+                if(!configuredUrl.isBlank())plugin.getLogger().info("Evergarden pack configured to use external CDN: "+configuredUrl);
+                else if(plugin.getConfig().getBoolean("resource-pack.enabled",true)) {
+                    failure="The bundled pack host is disabled and no external pack URL is configured.";
+                    plugin.getLogger().warning(failure);
+                }
                 return;
             }
-            if(!plugin.getConfig().getBoolean("resource-pack.host.enabled",false)) {
-                plugin.getLogger().info("Evergarden bundled pack host disabled; using the verified GitHub pack.");
+            if(sharesServerPort())try {
+                http=new PackHttpServer(plugin,pack,sha1);
+                plugin.getLogger().info("Evergarden and Judge Java packs served through the Minecraft port; no extra TCP port is needed. /evergarden pack shows status.");
                 return;
-            }
+            }catch(IOException e){plugin.getLogger().warning(e.getMessage()+"; using the separate pack port instead.");}
             http=new PackHttpServer(plugin.getConfig().getString("resource-pack.host.bind","0.0.0.0"),
                     plugin.getConfig().getInt("resource-pack.host.port",8188),pack,sha1);
-            plugin.getLogger().info("Bundled Java pack served on TCP "+http.port()+". Allow this port through your host/firewall; /evergarden pack shows status.");
+            plugin.getLogger().info("Shared Evergarden and Judge Java packs served on TCP "+http.port()+"; /evergarden pack shows status.");
         }catch(IOException|GeneralSecurityException|IllegalArgumentException e) {
-            failure=e.getMessage();plugin.getLogger().warning("Pack host could not start: "+failure+". Using the verified GitHub pack.");
-        }
+            failure=e.getMessage();plugin.getLogger().warning("Pack host could not start: "+failure);
+        }finally{extractedJavaPack=null;}
     }
-    static boolean migratePackConfig(org.bukkit.configuration.file.FileConfiguration config) {
+    static boolean migratePackConfig(org.bukkit.configuration.file.FileConfiguration config,String bundledSha1) {
         String url=config.getString("resource-pack.url","").trim();
-        // Only migrate our published GitHub packs; private CDN/host settings remain administrator-owned.
+        // A shipped URL for an older release does not contain this JAR's new
+        // item/effect art. Switch only our managed URLs to the actual bundle.
+        // Configured ports, bind address, proxy and administrator CDNs remain
+        // unchanged. An unavailable embedded pack must not trigger migration.
+        if(bundledSha1==null||!bundledSha1.matches("[a-fA-F0-9]{40}"))return false;
         if(!url.matches("https://raw\\.githubusercontent\\.com/40000years/(?:Afterdeath|Evergarden2)/(?:DEV|main|[a-fA-F0-9]{7,40})/evergarden/dist/evergarden-java\\.zip"))return false;
-        if(url.equals(DEFAULT_CDN_URL)&&config.getString("resource-pack.sha1","").equalsIgnoreCase(CURRENT_SHA1))return false;
-        config.set("resource-pack.url",DEFAULT_CDN_URL);
-        config.set("resource-pack.host.enabled",false);
-        config.set("resource-pack.sha1",CURRENT_SHA1);
+        config.set("resource-pack.url","");
+        config.set("resource-pack.host.enabled",true);
+        config.set("resource-pack.sha1","");
         return true;
     }
-    static boolean migrateAeternumPackConfig(org.bukkit.configuration.file.FileConfiguration config) {
-        String key="compatibility.aeternum-seasons.resource-pack";
-        String url=config.getString(key+".url",AETERNUM_PACK_URL).trim();
-        boolean oldModrinth=url.equals("https://cdn.modrinth.com/data/4hkZZzlQ/versions/VveNYYee/Aeternum-Foods-26.x.zip");
-        boolean oldGitHub=url.matches("https://raw\\.githubusercontent\\.com/40000years/Afterdeath/(?:DEV|main|[a-fA-F0-9]{7,40})/evergarden/dist/Aeternum-Foods-26\\.x\\.zip");
-        if(!oldModrinth&&!oldGitHub)return false;
-        config.set(key+".url",AETERNUM_PACK_URL);
-        config.set(key+".sha1",AETERNUM_PACK_SHA1);
-        return true;
+    static String packDigest(org.bukkit.configuration.file.FileConfiguration config,String bundledSha1) {
+        // The embedded HTTP server serves these exact bytes. A saved digest
+        // from a former CDN must never be paired with that content-addressed URL.
+        return config.getString("resource-pack.url","").isBlank()?bundledSha1
+                :config.getString("resource-pack.sha1","").trim();
     }
     private boolean bedrock(Player player) {
         for(String name:List.of("org.geysermc.floodgate.api.FloodgateApi","org.geysermc.geyser.api.GeyserApi")) {
@@ -171,20 +169,38 @@ public final class ResourcePackService implements Listener, AutoCloseable {
     public String url(Player player) {
         String external=plugin.getConfig().getString("resource-pack.url","").trim();
         if(!external.isEmpty())return validateUrl(external);
-        if(!plugin.getConfig().getBoolean("resource-pack.host.enabled",false)) {
-            return DEFAULT_CDN_URL;
-        }
-        if(http==null)return DEFAULT_CDN_URL;
-        String base=plugin.getConfig().getString("resource-pack.host.public-url","").trim();
-        if(!base.isEmpty())return validateUrl(base.replaceAll("/+$","")+http.path());
-        String host=plugin.getConfig().getString("resource-pack.host.public-host","").trim();
+        if(!plugin.getConfig().getBoolean("resource-pack.host.enabled",false)||http==null)return "";
+        return urlForPath(http.path(),player,"","");
+    }
+    /** Public copy templates shared by the relic and Judge packs; [] serves only from this server. */
+    public List<String> mirrors(){return plugin.getConfig().getStringList("resource-pack.mirrors");}
+    /** Register an immutable addon ZIP beside the bundled Evergarden ZIP. */
+    public String publishAddition(byte[] bytes,String digest) {
+        return http==null?"":http.addPack(bytes,digest);
+    }
+    public int hostPort(){return http==null?-1:http.port();}
+    public String hostLabel(){return http==null?"off":http.sharesServerPort()?"Minecraft port":"TCP "+http.port();}
+    /** A reverse proxy (public-url) keeps pointing at the separate pack port. */
+    private boolean sharesServerPort() {
+        return plugin.getConfig().getBoolean("resource-pack.host.use-server-port",true)
+            &&plugin.getConfig().getString("resource-pack.host.public-url","").isBlank();
+    }
+    /** Build a URL for an addon using the same public listener as the main pack. */
+    public String urlForPath(String path,Player player,String publicUrl,String publicHost) {
+        if(http==null||path==null||!path.startsWith("/evergarden/"))return "";
+        String base=publicUrl==null?"":publicUrl.trim();
+        if(base.isBlank())base=plugin.getConfig().getString("resource-pack.host.public-url","").trim();
+        if(!base.isBlank())return validateUrl(base.replaceAll("/+$","")+path);
+        String host=publicHost==null?"":publicHost.trim();
+        if(host.isBlank())host=plugin.getConfig().getString("resource-pack.host.public-host","").trim();
         if(host.isBlank()&&player!=null) {
             InetSocketAddress address=player.getVirtualHost();
             if(address!=null)host=address.getHostString();
         }
-        if(host.isBlank())return DEFAULT_CDN_URL;
-        try{return validateUrl(new URI("http",null,host,http.port(),http.path(),null,null).toASCIIString());}
-        catch(URISyntaxException e){return DEFAULT_CDN_URL;}
+        if(host.isBlank())return "";
+        int port=http.sharesServerPort()?ServerPortPackHost.port(player):http.port();
+        try{return validateUrl(new URI("http",null,host,port,path,null,null).toASCIIString());}
+        catch(URISyntaxException e){return "";}
     }
     private String validateUrl(String value) {
         try {
@@ -194,78 +210,69 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         }catch(IllegalArgumentException e){return "";}
     }
     public void offer(Player player) {
+        offer(player,false);
+    }
+    public void resend(Player player) {
+        offer(player,true);
+    }
+    private void offer(Player player,boolean force) {
         if(!plugin.getConfig().getBoolean("resource-pack.enabled",true)||bedrock(player))return;
+        // While the public copy is being checked the batch waits, so it never goes out with only this server's address.
+        if(mirror.defer(player,delivery))return;
+        List<String> urls=new ArrayList<>(),hashes=new ArrayList<>();
+        // A verified public copy first, then this server's own host as the fallback.
+        PackMirror.Copy copy=mirror.copy();
+        if(copy!=null&&plugin.getConfig().getString("resource-pack.url","").isBlank()){urls.add(copy.url());hashes.add(copy.sha1());}
         String url=url(player);
-        if(url.isEmpty()) {statuses.put(player.getUniqueId(),"NOT_OFFERED: configure the public host/URL");return;}
-        String digest=plugin.getConfig().getString("resource-pack.sha1","").trim();
-        if(digest.isEmpty())digest=sha1;
-        if(!digest.matches("[a-fA-F0-9]{40}")) {statuses.put(player.getUniqueId(),"INVALID_SHA1");return;}
+        if(!url.isEmpty()){urls.add(url);hashes.add(packDigest(plugin.getConfig(),sha1));}
+        if(urls.isEmpty()) {statuses.put(player.getUniqueId(),"NOT_OFFERED: configure the public host/URL");unavailable(player);return;}
+        if(!hashes.stream().allMatch(h->h.matches("[a-fA-F0-9]{40}"))) {statuses.put(player.getUniqueId(),"INVALID_SHA1");unavailable(player);return;}
         try {
-            player.addResourcePack(PACK_ID,url,HexFormat.of().parseHex(digest),"Evergarden: relics, keys and sanctuary creatures",
-                    plugin.getConfig().getBoolean("resource-pack.required",false));
-            statuses.put(player.getUniqueId(),"OFFERED");
-        }catch(IllegalArgumentException e){statuses.put(player.getUniqueId(),"INVALID_URL");}
-        offerAeternum(player);
+            if(delivery!=null&&delivery.offer(player,urls,hashes,"Evergarden: relics, keys and sanctuary creatures",
+                    plugin.getConfig().getBoolean("resource-pack.required",true),force))
+                statuses.put(player.getUniqueId(),"QUEUED");
+        }catch(IllegalArgumentException e){statuses.put(player.getUniqueId(),"INVALID_URL");unavailable(player);}
     }
-    private boolean aeternumEnabled() {
-        return plugin.getConfig().getBoolean("compatibility.aeternum-seasons.resource-pack.enabled",true)
-                && Bukkit.getPluginManager().isPluginEnabled("AeternumSeasons");
-    }
-    private void offerAeternum(Player player) {
-        if(!aeternumEnabled())return;
-        String url=validateUrl(plugin.getConfig().getString("compatibility.aeternum-seasons.resource-pack.url",AETERNUM_PACK_URL).trim());
-        String digest=plugin.getConfig().getString("compatibility.aeternum-seasons.resource-pack.sha1",AETERNUM_PACK_SHA1).trim();
-        if(url.isEmpty()||!digest.matches("[a-fA-F0-9]{40}")) {
-            aeternumStatuses.put(player.getUniqueId(),"INVALID_URL_OR_SHA1");
-            plugin.getLogger().warning("Invalid Aeternum food pack URL/SHA-1; check compatibility.aeternum-seasons.resource-pack.");
-            return;
-        }
-        // Add last: Aeternum owns shared food carriers such as honey_bottle.
-        // Our elixir uses voidscape:void_elixir, independent of that override.
-        player.addResourcePack(AETERNUM_PACK_ID,url,HexFormat.of().parseHex(digest),
-                "Aeternum Seasons: crops and foods",plugin.getConfig().getBoolean("resource-pack.required",false));
-        aeternumStatuses.put(player.getUniqueId(),"OFFERED");
-    }
+    private void unavailable(Player player){if(delivery!=null&&plugin.getConfig().getBoolean("resource-pack.required",true))delivery.unavailable(player);}
     @EventHandler public void join(PlayerJoinEvent event) {
-        Bukkit.getScheduler().runTaskLater(plugin,()->{if(event.getPlayer().isOnline())offer(event.getPlayer());},2);
+        offer(event.getPlayer());
     }
     @EventHandler public void status(PlayerResourcePackStatusEvent event) {
-        if(AETERNUM_PACK_ID.equals(event.getID())) {
-            String status=event.getStatus().name();aeternumStatuses.put(event.getPlayer().getUniqueId(),status);
-            if(status.startsWith("FAILED")||status.equals("INVALID_URL")||status.equals("DISCARDED")) {
-                plugin.getLogger().warning("Aeternum food pack for "+event.getPlayer().getName()+": "+status);
-                event.getPlayer().sendMessage(ChatColor.YELLOW+"Aeternum crop textures could not load. Check /evergarden pack and retry /evergarden pack resend.");
-            }
-            return;
-        }
         if(!PACK_ID.equals(event.getID()))return;
         String status=event.getStatus().name();statuses.put(event.getPlayer().getUniqueId(),status);
+        // The coordinator is already sending it again (from the next address, or on its own).
+        if(delivery!=null&&List.of("QUEUED","OFFERED","ACCEPTED","DOWNLOADED").contains(delivery.status(event.getPlayer())))return;
         if(status.startsWith("FAILED")||status.equals("INVALID_URL")||status.equals("DISCARDED")) {
-            plugin.getLogger().warning("Evergarden pack for "+event.getPlayer().getName()+": "+status+". Check TCP port/public URL and /evergarden pack.");
-            event.getPlayer().sendMessage(ChatColor.YELLOW+"Evergarden textures could not load. Items still work; ask an admin to check /evergarden pack.");
+            plugin.getLogger().warning("Evergarden pack for "+event.getPlayer().getName()+": "+status+" from "+url(event.getPlayer())+". Check TCP port/public URL and /evergarden pack; Pack HTTP lines show whether the download reached this server.");
+            event.getPlayer().sendMessage(ChatColor.YELLOW+(plugin.getConfig().getBoolean("resource-pack.required",true)
+                ?"Evergarden textures are required to play. Allow server resource packs and reconnect; ask an admin if loading fails."
+                :"Evergarden textures could not load. Items still work; ask an admin to check /evergarden pack."));
         }
     }
-    @EventHandler public void quit(PlayerQuitEvent event){statuses.remove(event.getPlayer().getUniqueId());aeternumStatuses.remove(event.getPlayer().getUniqueId());}
+    @EventHandler public void quit(PlayerQuitEvent event){statuses.remove(event.getPlayer().getUniqueId());mirror.forget(event.getPlayer());}
     public void describe(CommandSender sender) {
         sender.sendMessage(ChatColor.LIGHT_PURPLE+"Evergarden resource pack");
-        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Bundled host: "+(http==null?"off (GitHub pack active)":"TCP "+http.port()));
+        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Required: "+plugin.getConfig().getBoolean("resource-pack.required",true)+" | Bundled host: "+hostLabel());
         sender.sendMessage("Bundled SHA-1: "+sha1);
         String url=url(sender instanceof Player p?p:null);sender.sendMessage("URL: "+(url.isEmpty()?"unavailable":url));
+        sender.sendMessage("Public copy: "+(mirror.copy()!=null?mirror.copy().url():mirror.fingerprint().isEmpty()?"not used"
+            :(mirror.pending()?"checking ":"none verified for ")+mirror.fingerprint().substring(0,12)));
         sender.sendMessage(geyserStatus);
         sender.sendMessage(bedrockPackInfo);
-        sender.sendMessage(aeternumBedrockStatus);
-        sender.sendMessage("Aeternum Java food pack: "+(aeternumEnabled()?"enabled (added after Evergarden)":"off or plugin absent"));
-        if(aeternumEnabled()) {
-            if(sender instanceof Player p)sender.sendMessage("Your Aeternum pack: "+aeternumStatuses.getOrDefault(p.getUniqueId(),"not offered (or Bedrock)"));
-            else for(Player p:Bukkit.getOnlinePlayers())sender.sendMessage(p.getName()+" Aeternum pack: "+aeternumStatuses.getOrDefault(p.getUniqueId(),"not offered (or Bedrock)"));
-        }
         if(!failure.isEmpty())sender.sendMessage(ChatColor.RED+failure);
-        if(sender instanceof Player p)sender.sendMessage("Your pack: "+statuses.getOrDefault(p.getUniqueId(),"not offered (or Bedrock)"));
+        if(sender instanceof Player p){
+            sender.sendMessage("Your pack: "+clientStatus(p));
+            if(delivery!=null)sender.sendMessage(delivery.describe(p));
+        }
         else for(Player player:Bukkit.getOnlinePlayers()) {
-            sender.sendMessage(player.getName()+": "+(bedrock(player)?"BEDROCK: delivered by Geyser; Java status unavailable":statuses.getOrDefault(player.getUniqueId(),"NOT_OFFERED")));
+            sender.sendMessage(player.getName()+": "+(bedrock(player)?"BEDROCK: delivered by Geyser; Java status unavailable":clientStatus(player)));
             if(!bedrock(player))sender.sendMessage("  URL: "+url(player));
         }
         sender.sendMessage("Files: plugins/Evergarden/resource-packs/ | Retry: /evergarden pack resend");
     }
-    @Override public void close(){if(http!=null){http.close();http=null;}statuses.clear();aeternumStatuses.clear();}
+    private String clientStatus(Player player){
+        String status=delivery==null?"NOT_OFFERED":delivery.status(player);
+        return status.equals("NOT_OFFERED")?statuses.getOrDefault(player.getUniqueId(),"not offered (or Bedrock)"):status;
+    }
+    @Override public void close(){if(delivery!=null){delivery.close();delivery=null;}if(http!=null){http.close();http=null;}extractedJavaPack=null;statuses.clear();}
 }

@@ -6,12 +6,13 @@ import shutil
 import socket
 import subprocess
 import uuid
+import struct
+import gzip
 
 p = argparse.ArgumentParser()
 p.add_argument('--source-server', type=Path, required=True)
 p.add_argument('--garden-jar', type=Path)
 p.add_argument('--magic-jar', type=Path)
-p.add_argument('--aeternum-jar', type=Path)
 p.add_argument('--server', type=Path)
 args = p.parse_args()
 root = Path(__file__).resolve().parents[2]
@@ -28,8 +29,8 @@ plugins = server / 'plugins'
 plugins.mkdir(exist_ok=True)
 shutil.copy2(args.garden_jar or root / 'dist/evergarden.jar', plugins / 'evergarden.jar')
 shutil.copy2(args.magic_jar or root / 'dist/advance-magic.jar', plugins / 'advance-magic.jar')
-for name in ('Geyser-Spigot.jar', 'AeternumSeasons-4.7.jar'):
-    source = args.aeternum_jar if name.startswith('Aeternum') and args.aeternum_jar else args.source_server / 'plugins' / name
+for name in ('Geyser-Spigot.jar',):
+    source = args.source_server / 'plugins' / name
     shutil.copy2(source, plugins / name)
 for name in ('Evergarden', 'advance-magic'):
     folder = plugins / name
@@ -49,7 +50,11 @@ deps = [*plugins.glob('*.jar'), *(server / 'versions').rglob('*.jar'), *(server 
         *Path.home().joinpath('.m2/repository/org/jetbrains/annotations').rglob('*.jar')]
 subprocess.run(['javac', '-proc:none', '-encoding', 'UTF-8', '-cp', os.pathsep.join(map(str, deps)),
                 '-d', str(classes), str(Path(__file__).with_name('BedrockItemChecks.java')),
+                str(Path(__file__).with_name('PortalTravelChecks.java')),
+                str(Path(__file__).with_name('RetiredRelicChecks.java')),
+                str(Path(__file__).with_name('RecipeMenuChecks.java')),
                 str(Path(__file__).with_name('MythicSpellChecks.java')),
+                str(Path(__file__).with_name('LegendaryBedrockChecks.java')),
                 str(root / 'tests/ancient-judge/JudgeBedrockChecks.java')], check=True)
 (classes / 'plugin.yml').write_text("name: BedrockItemChecks\nversion: '1.0'\nmain: BedrockItemChecks\napi-version: '26.2'\ndepend: [Evergarden, advance-magic, Geyser-Spigot]\n", encoding='utf-8')
 subprocess.run(['jar', '--create', '--file', str(plugins / 'bedrock-item-checks.jar'), '-C', str(classes), '.'], check=True)
@@ -61,6 +66,26 @@ result = server / 'bedrock-items-result.txt'
 if result.exists():
     result.unlink()
 print('Isolated server:', server, flush=True)
+# Existing player recipe books must be migrated during onLoad, before any login deserialization.
+def utf(text):
+    encoded=text.encode('utf8')
+    return struct.pack('>H',len(encoded))+encoded
+def tag(kind,name,payload):
+    return bytes([kind])+utf(name)+payload
+def strings(values):
+    return bytes([8])+struct.pack('>i',len(values))+b''.join(utf(value) for value in values)
+removed=[namespace+':'+name for namespace in ('voidscape','evergarden') for name in ('craft_repair_stone','craft_void_key','craft_void_key_shapeless','craft_void_elixir')]
+keep=['minecraft:crafting_table','another_plugin:craft_void_key']
+def fixture(legacy):
+    book=tag(9,'recipes',strings(keep+(removed if legacy else [])))+tag(9,'toBeDisplayed',strings(keep+(removed if legacy else [])))+tag(1,'isGuiOpen',b'\1')+b'\0'
+    opaque=bytes(range(256))
+    body=tag(7,'inventory-fixture',struct.pack('>i',len(opaque))+opaque)+tag(6,'max_mana',struct.pack('>d',172.0))+tag(10,'recipeBook',book)+tag(8,'other-data',utf('unchanged'))+b'\0'
+    return tag(10,'Player',body)
+data=server/'bedrock_test/playerdata'
+data.mkdir(parents=True,exist_ok=True)
+for suffix in ('.dat','.dat_old'):
+    (data/('12345678-1234-1234-1234-123456789abc'+suffix)).write_bytes(gzip.compress(fixture(True)))
+(server/'recipe-fixture-expected.nbt').write_bytes(fixture(False))
 with (server / 'console.log').open('w', encoding='utf-8') as log:
     subprocess.run(['java', '-Xms256M', '-Xmx1536M', '-Dterminal.jline=false', '-Dterminal.ansi=false', '-jar', 'paper.jar', '--nogui', '--noconsole'],
                    cwd=server, stdout=log, stderr=subprocess.STDOUT, timeout=240, check=True,

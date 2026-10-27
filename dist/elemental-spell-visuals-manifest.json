@@ -1,0 +1,20 @@
+{
+  "version": "1.16.0-rare-spell-vfx",
+  "plugin": {
+    "bytes": 21885560,
+    "sha256": "d379d842d3f3564109e8426ce18ea10cc5a0bd184f88bb19422ccbd8401de211"
+  },
+  "java_pack_sha1": "100610e2478ead3dedbfd102de22fde75425efc4",
+  "bedrock_pack_sha1": "465f29780feae533c6926d5c05526f25ba4e2554",
+  "scroll_icons": 58,
+  "spell_vfx_signatures": 58,
+  "effect_textures": 124,
+  "rare_effect_textures": 26,
+  "ultimate_heroes": 10,
+  "validation_reports": {
+    "elemental-vfx-checks-1.16.0": "PASS 1451",
+    "elemental-vfx-geyser-checks-1.16.0": "PASS 280 checks; actual Paper, Advance Magic and Evergarden; 58-spell rarity pools, deterministic treasure, refill guards, full chests, exploration hook, lazy sanctuary loot"
+  },
+  "client_visual_playtest": false,
+  "deployment": "workspace artifacts only"
+}

@@ -1,0 +1,488 @@
+{
+  "collection": "legendary-elements-v1",
+  "phase": "Native texture production only",
+  "tool": "built-in image_gen.imagegen",
+  "textures": 14,
+  "elements": [
+    {
+      "element": "fire",
+      "spell": "meteor_rain",
+      "textures": [
+        {
+          "file": "fire/meteor_rain_sigil.png",
+          "role": "sigil",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "1c5650848cd7db595b7e7ebd87b52718c406db59b85d04c25bb05d7ebf44eec4",
+          "transparent_fraction": 0.3314026693528079,
+          "alpha_bbox": [
+            0,
+            9,
+            1253,
+            1254
+          ],
+          "suggested_plane": "horizontal XZ",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        },
+        {
+          "file": "fire/meteor_rain_meteor.png",
+          "role": "meteor",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "3e636ed0f458465f135112094b80b91fb09ee31afb7a8c26aab6e8a8a605e5b1",
+          "transparent_fraction": 0.6935630543663784,
+          "alpha_bbox": [
+            0,
+            0,
+            1246,
+            1254
+          ],
+          "suggested_plane": "world-facing effect plane",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        }
+      ],
+      "prompt_manifest": "fire/manifest.json",
+      "reuse_model_reference": null
+    },
+    {
+      "element": "water",
+      "spell": "leviathans_wrath",
+      "textures": [
+        {
+          "file": "water/leviathans_wrath_sigil.png",
+          "role": "sigil",
+          "dimensions": [
+            1274,
+            1234
+          ],
+          "mode": "RGBA",
+          "sha256": "5b6a7afd043fa5a074f754942949cb880311ee73890c16c916d0396138fde976",
+          "transparent_fraction": 0.25275297751565406,
+          "alpha_bbox": [
+            0,
+            0,
+            1274,
+            1234
+          ],
+          "suggested_plane": "horizontal XZ",
+          "bedrock_uv": {
+            "texture_width": 1274,
+            "texture_height": 1234,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1274,
+              1234
+            ]
+          }
+        },
+        {
+          "file": "water/leviathans_wrath_leviathan.png",
+          "role": "leviathan",
+          "dimensions": [
+            1312,
+            1199
+          ],
+          "mode": "RGBA",
+          "sha256": "3f182e33844feeb85474384f72d574137da400f35807b3bc211e0fab6e767b84",
+          "transparent_fraction": 0.4241746170589312,
+          "alpha_bbox": [
+            0,
+            0,
+            1312,
+            1199
+          ],
+          "suggested_plane": "world-facing effect plane",
+          "bedrock_uv": {
+            "texture_width": 1312,
+            "texture_height": 1199,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1312,
+              1199
+            ]
+          }
+        }
+      ],
+      "prompt_manifest": "water/manifest.json",
+      "reuse_model_reference": null
+    },
+    {
+      "element": "ice",
+      "spell": "absolute_zero",
+      "textures": [
+        {
+          "file": "ice/absolute_zero_sigil.png",
+          "role": "sigil",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "958ae58f3dcb0416a4b22dcf9ea5064a9c76ec38a88c1fd1a88ff637375e4107",
+          "transparent_fraction": 0.28775287501049274,
+          "alpha_bbox": [
+            0,
+            0,
+            1254,
+            1254
+          ],
+          "suggested_plane": "horizontal XZ",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        },
+        {
+          "file": "ice/absolute_zero_crystal.png",
+          "role": "crystal",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "139a0e5eca3ee48cb6661aec69850d999210c4f3dfb6a5594649b1670b96b1ab",
+          "transparent_fraction": 0.5357465361242747,
+          "alpha_bbox": [
+            0,
+            15,
+            1238,
+            1254
+          ],
+          "suggested_plane": "world-facing effect plane",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        }
+      ],
+      "prompt_manifest": "ice/manifest.json",
+      "reuse_model_reference": null
+    },
+    {
+      "element": "wind",
+      "spell": "tempest_dominion",
+      "textures": [
+        {
+          "file": "wind/tempest_dominion_sigil.png",
+          "role": "sigil",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "95d95145a608e98b15a45a5bfd2ab2da089969fa21fce8ee68eeff53fa0137f8",
+          "transparent_fraction": 0.2621836598164979,
+          "alpha_bbox": [
+            0,
+            0,
+            1254,
+            1254
+          ],
+          "suggested_plane": "horizontal XZ",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        },
+        {
+          "file": "wind/tempest_dominion_vortex.png",
+          "role": "vortex",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "6011484e030a54670a3f578c557d673da7a9bbb91429d0e0c520cf0cb9b7d9d4",
+          "transparent_fraction": 0.571566203459933,
+          "alpha_bbox": [
+            0,
+            9,
+            1242,
+            1254
+          ],
+          "suggested_plane": "world-facing effect plane",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        }
+      ],
+      "prompt_manifest": "wind/manifest.json",
+      "reuse_model_reference": null
+    },
+    {
+      "element": "earth",
+      "spell": "titans_judgment",
+      "textures": [
+        {
+          "file": "earth/titans_judgment_sigil.png",
+          "role": "sigil",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "31eaba1f4eb45e256974f28bc42d3807e4954b17137dacb19c51761669c72f7a",
+          "transparent_fraction": 0.523765735928919,
+          "alpha_bbox": [
+            0,
+            17,
+            1228,
+            1254
+          ],
+          "suggested_plane": "horizontal XZ",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        },
+        {
+          "file": "earth/titans_judgment_impact.png",
+          "role": "impact",
+          "dimensions": [
+            1274,
+            1234
+          ],
+          "mode": "RGBA",
+          "sha256": "21a681afba3fce37dd1998ab0af2aa51731d3fdaa0a86d0c806da5f3582a8dbb",
+          "transparent_fraction": 0.4628055436112857,
+          "alpha_bbox": [
+            0,
+            0,
+            1274,
+            1234
+          ],
+          "suggested_plane": "horizontal XZ",
+          "bedrock_uv": {
+            "texture_width": 1274,
+            "texture_height": 1234,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1274,
+              1234
+            ]
+          }
+        }
+      ],
+      "prompt_manifest": "earth/manifest.json",
+      "reuse_model_reference": "earth/boss-hand-reuse.json"
+    },
+    {
+      "element": "dark",
+      "spell": "abyssal_collapse",
+      "textures": [
+        {
+          "file": "dark/abyssal_collapse_sigil.png",
+          "role": "sigil",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "9376a88af0781a8ddbc3cc9de0ea81c5cfe5e9e1d3e8e2151273dc69aeb45a16",
+          "transparent_fraction": 0.37909312210495794,
+          "alpha_bbox": [
+            0,
+            0,
+            1254,
+            1254
+          ],
+          "suggested_plane": "horizontal XZ",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        },
+        {
+          "file": "dark/abyssal_collapse_core.png",
+          "role": "core",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "acfa189a08e2a41183144542a86be505899113167a653f2757a789a48b6981bc",
+          "transparent_fraction": 0.41186099219340216,
+          "alpha_bbox": [
+            0,
+            0,
+            1251,
+            1254
+          ],
+          "suggested_plane": "world-facing effect plane",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        }
+      ],
+      "prompt_manifest": "dark/manifest.json",
+      "reuse_model_reference": null
+    },
+    {
+      "element": "lightning",
+      "spell": "wrath_of_raijin",
+      "textures": [
+        {
+          "file": "lightning/wrath_of_raijin_sigil.png",
+          "role": "sigil",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "463dc1bec1414d5d523dce6fa6af6f057c040835658c971fd96993afcc12a1fa",
+          "transparent_fraction": 0.19044003367851264,
+          "alpha_bbox": [
+            0,
+            0,
+            1254,
+            1254
+          ],
+          "suggested_plane": "horizontal XZ",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        },
+        {
+          "file": "lightning/wrath_of_raijin_drums.png",
+          "role": "drums",
+          "dimensions": [
+            1254,
+            1254
+          ],
+          "mode": "RGBA",
+          "sha256": "dc7eaee535f9c9d0488ee01e073f7c071fc7006c43362e23d9934a8022f5579b",
+          "transparent_fraction": 0.354418015460574,
+          "alpha_bbox": [
+            0,
+            9,
+            1240,
+            1254
+          ],
+          "suggested_plane": "world-facing effect plane",
+          "bedrock_uv": {
+            "texture_width": 1254,
+            "texture_height": 1254,
+            "uv": [
+              0,
+              0
+            ],
+            "uv_size": [
+              1254,
+              1254
+            ]
+          }
+        }
+      ],
+      "prompt_manifest": "lightning/manifest.json",
+      "reuse_model_reference": null
+    }
+  ],
+  "native_pixels": "Selected generated PNGs copied unchanged; only review thumbnails are resized",
+  "runtime_changed": false,
+  "packs_changed": false,
+  "earth_hand": "Existing Ancient Judge model; see earth/boss-hand-reuse.json"
+}

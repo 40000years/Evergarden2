@@ -3,13 +3,6 @@ package com.example.voidscape.guide;
 import org.bukkit.Material;
 
 public enum GuideBookType {
-    CROPS(
-        "คู่มือพฤกษา Evergarden",
-        "Evergarden Botany Guide",
-        "นักพฤกษศาสตร์มิติ",
-        Material.WHEAT,
-        "§aระบบฟาร์ม, เวลาเติบโต และพืช 30 ชนิด"
-    ),
     RELICS(
         "คู่มือยุทธภัณฑ์ Evergarden",
         "Evergarden Relics & Vault Guide",
@@ -22,7 +15,7 @@ public enum GuideBookType {
         "Advance Magic Arcana",
         "มหาจอมเวทบรรพกาล",
         Material.BLAZE_ROD,
-        "§b18 ธาตุ, มานา, การซ่อมคทา และไม้เท้าบิน"
+        "§bคทา 8 ธาตุ, มานา, การฟื้นฟู และไม้เท้าบิน"
     );
 
     public final String bookTitle;
@@ -42,7 +35,6 @@ public enum GuideBookType {
     public static GuideBookType fromId(String id) {
         if (id == null) return null;
         String s = id.trim().toUpperCase();
-        if (s.equals("1") || s.contains("CROP") || s.contains("PLANT") || s.contains("BOTANY")) return CROPS;
         if (s.equals("2") || s.contains("RELIC") || s.contains("ITEM") || s.contains("VAULT") || s.contains("SANCTUM")) return RELICS;
         if (s.equals("3") || s.contains("MAGIC") || s.contains("WAND") || s.contains("CORE")) return MAGIC;
         return null;

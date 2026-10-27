@@ -1,0 +1,32 @@
+{
+  "paper_result": "PASS 103 boss armor exchange checks",
+  "pure_rule_checks": 67143,
+  "assets": {
+    "result": "PASS",
+    "checks": 17,
+    "preserved_entries": {
+      "evergarden-java.zip": 275,
+      "evergarden-bedrock.mcpack": 674
+    },
+    "bedrock_version": [
+      3,
+      52,
+      0
+    ],
+    "art_tool": "built-in image_gen"
+  },
+  "shop": "legends",
+  "cores_per_selected_piece": 1,
+  "live_server_modified": false,
+  "connected_client_playtest": false,
+  "artifacts": {
+    "advance-magic.jar": {
+      "sha256": "3c72846e52964aa188dcd8b9a22093478b9b2d4f3d69083ab619c93f30220e78",
+      "bytes": 22375751
+    },
+    "evergarden.jar": {
+      "sha256": "0194ac96b3b7ec0d40f72aa6c4b508db00ce940077e5a7a7a6f8383b972f4e57",
+      "bytes": 53245387
+    }
+  }
+}

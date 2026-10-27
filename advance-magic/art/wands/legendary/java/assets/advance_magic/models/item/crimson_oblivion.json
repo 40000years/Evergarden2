@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "advance_magic:item/crimson_oblivion"
+  }
+}

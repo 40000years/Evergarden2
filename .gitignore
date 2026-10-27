@@ -6,3 +6,14 @@
 **/*.pyc
 .audit-plugins/
 *.jar
+
+# Local-only build state (test servers, licensed/third-party jars): see docs/new-machine-setup.md
+output/
+logs/
+*.whl
+*.jar.staged
+.vscode/
+# Old pack-release archives in dist/ are kept locally; current packs live in */dist/.
+/dist/*.zip
+# Preview images are local unless a document links them (force-added).
+previews/

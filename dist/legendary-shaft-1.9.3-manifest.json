@@ -1,0 +1,9 @@
+{
+  "version": "1.9.3-legendary-shaft-frame",
+  "sha256": "379ef0d4ce7d3d26ed82abc87468229d10df5700491808bb09a7fd93ea4efe04",
+  "runtime": "PASS 58",
+  "asset_checks": 225,
+  "hand_profile_checks": 145,
+  "approximate_camera_frame_checks": 32,
+  "client_rendering": "Not verified in a real game client. Camera fit uses an approximate projection calibrated to the supplied screenshot."
+}

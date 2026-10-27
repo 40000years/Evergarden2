@@ -1,0 +1,23 @@
+{
+  "version": "1.9.9-longinus-bedrock-anchor",
+  "bedrock_pack": "2.12.9",
+  "changes": [
+    "Bedrock uses a non-predicted marker carrier following the real trident",
+    "Correct Bedrock pitch sign with native axis conversion",
+    "Java first-person wind-up uses original orientation; accepted third-person wind-up unchanged"
+  ],
+  "unchanged": [
+    "Java projectile model, anchor and physics",
+    "Third-person Java wind-up",
+    "All normal held poses and scales",
+    "Other four weapons",
+    "Bedrock charge mechanics"
+  ],
+  "runtime": "PASS 88",
+  "integration": "PASS 66 including actual AddEntityPacket generation and stationary marker checks",
+  "assets": "PASS 744",
+  "hand_fit": "PASS 145",
+  "approximate_camera_profiles": "PASS 32",
+  "real_client_rendering": "Not tested",
+  "sha256": "054ad7e03cec272802bd039244c94d4cee9f7b0545fece84aa6d27ea1e3746bf"
+}

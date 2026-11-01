@@ -1,0 +1,288 @@
+{
+  "tool": "built-in imagegen",
+  "version": [
+    0,
+    5,
+    1
+  ],
+  "texture_size": 64,
+  "conversion": "nearest-neighbor downscale only",
+  "items": [
+    {
+      "model": "evergarden_forge:gem/fire_1",
+      "source": "evergarden-forge/art/generated-v2/source/gem_fire_1.png",
+      "source_sha256": "5007ee70c92d2c434b6f10cd4b57e4c271b63e71668a1da35b57127f1374e940",
+      "texture_sha256": "71a5ce1fe721a62ae6737f44ec6c64406a73233468e089ad74c050472202576e"
+    },
+    {
+      "model": "evergarden_forge:gem/fire_2",
+      "source": "evergarden-forge/art/generated-v2/source/gem_fire_2.png",
+      "source_sha256": "7499588ae28169a7678ccbf0fb6a0b73d560904107bf40b60550d6a2e680a8d1",
+      "texture_sha256": "7e64c022bcd0f71013b8642d63b66baed14e3a0a67ee00ed5c0d010d7f8a19ec"
+    },
+    {
+      "model": "evergarden_forge:gem/fire_3",
+      "source": "evergarden-forge/art/generated-v2/source/gem_fire_3.png",
+      "source_sha256": "d17472b03dc93c16c51ff805d6a147593f66572c81de84ddede4d7eb66215919",
+      "texture_sha256": "9ebcb2f7f3d4e82a786f7861172c37a81c6dfbf17a9d4d75c7e4b5ea6a06abaf"
+    },
+    {
+      "model": "evergarden_forge:gem/fire_4",
+      "source": "evergarden-forge/art/generated-v2/source/gem_fire_4.png",
+      "source_sha256": "c4335aab25a8ef347d759b3a9204da374ee6b1d2f829419af8d04b5b2655776e",
+      "texture_sha256": "8ab9825904e5d2946f7fbd1260ffb85a6a8508faacaa8d1995bdfdace76ce3e7"
+    },
+    {
+      "model": "evergarden_forge:gem/fire_5",
+      "source": "evergarden-forge/art/generated-v2/source/gem_fire_5.png",
+      "source_sha256": "7e4f12af6edfc1cf7c1a804534e53e147b4873bdb0f1c3164574c30c1c5b8553",
+      "texture_sha256": "44d2e36f3c946f195c2eda2244a9024deea7581a30da12985774fe6107117bea"
+    },
+    {
+      "model": "evergarden_forge:gem/water_1",
+      "source": "evergarden-forge/art/generated-v2/source/gem_water_1.png",
+      "source_sha256": "0ba0d492438811c31907819bf850c97e88155ca84e7307a9db64b3de21a8b2c4",
+      "texture_sha256": "34270ef537c8c9c5214d6d05fd81b304f18ed4fa19e71f7e30f2a88adb404170"
+    },
+    {
+      "model": "evergarden_forge:gem/water_2",
+      "source": "evergarden-forge/art/generated-v2/source/gem_water_2.png",
+      "source_sha256": "03ecd808d51b5260b5a5e5b7f9a6ab7bdd41d1e8b9081ff1d4a9fff1bbafa17c",
+      "texture_sha256": "0931359ddb910f9e74c20fe77ae387fd710ab9e67618cd16852e72060699b6ac"
+    },
+    {
+      "model": "evergarden_forge:gem/water_3",
+      "source": "evergarden-forge/art/generated-v2/source/gem_water_3.png",
+      "source_sha256": "b0ccacbb52c35713bea96004d9a322b1597f803405d70ffbbdeadfbfa8edcd86",
+      "texture_sha256": "99dfdc117d39e57a891bfbd0a1d10d85df7e891839aa8002ff7e10555a5b0b34"
+    },
+    {
+      "model": "evergarden_forge:gem/water_4",
+      "source": "evergarden-forge/art/generated-v2/source/gem_water_4.png",
+      "source_sha256": "20acbbfbe795d8d74f0650583fb9a31d526fb5a6ec4779d3968516381e01d29e",
+      "texture_sha256": "486758773859c654a38026290d4001ef09f9e2dddbe95c012140b4d38e4431ab"
+    },
+    {
+      "model": "evergarden_forge:gem/water_5",
+      "source": "evergarden-forge/art/generated-v2/source/gem_water_5.png",
+      "source_sha256": "905a0cd5e4225f95d2d19850fee22d7b0e3b5d3230748fbc9820e84f7a9a6ae1",
+      "texture_sha256": "544cdb2f615b232d6ca560a84b3840f5c9af7a7d2e70fdc39c78128dbd9b5ecd"
+    },
+    {
+      "model": "evergarden_forge:gem/wind_1",
+      "source": "evergarden-forge/art/generated-v2/source/gem_wind_1.png",
+      "source_sha256": "eecbbff63908f2654459511ec4c8c50f51ea096307ccd3042407611cd2c02dcd",
+      "texture_sha256": "88d26520a7a6e4f0baff0945a732afc9e742f340b3b785a1a22eb63b8ec2a5eb"
+    },
+    {
+      "model": "evergarden_forge:gem/wind_2",
+      "source": "evergarden-forge/art/generated-v2/source/gem_wind_2.png",
+      "source_sha256": "5f6765f38b63ec04b7ed2edca913357184ecb22ef1a9ab21d5abf8b42e91882d",
+      "texture_sha256": "39f59337a8d6225c009d0de85af191112346a812ac483fc1ea4085b120ed2be2"
+    },
+    {
+      "model": "evergarden_forge:gem/wind_3",
+      "source": "evergarden-forge/art/generated-v2/source/gem_wind_3.png",
+      "source_sha256": "e27185f9ca1a51ae15fdb9dd29aaf13e83d4a52d35c560c0f3849b903311a42c",
+      "texture_sha256": "3c7a0b465b4ca9fc9291647551f8db5271bd0ba3f3e9535139230a7199ff0efa"
+    },
+    {
+      "model": "evergarden_forge:gem/wind_4",
+      "source": "evergarden-forge/art/generated-v2/source/gem_wind_4.png",
+      "source_sha256": "81400f77eac6a03488e709e6a602486c766fc31d559c9a871f3d79425c8e9b12",
+      "texture_sha256": "9fd2ab98acbaefff46d477ca7c254535fd6d9602992791267bddc29b129f6be9"
+    },
+    {
+      "model": "evergarden_forge:gem/wind_5",
+      "source": "evergarden-forge/art/generated-v2/source/gem_wind_5.png",
+      "source_sha256": "6aea7ea43292215036f8cacc46005ea241e6adb75ea99b7f3c43485cc9579ca4",
+      "texture_sha256": "587aa08a4e5dd90440c83db3463c042a8c8176ccb3d8c33e16207662e73faf35"
+    },
+    {
+      "model": "evergarden_forge:gem/earth_1",
+      "source": "evergarden-forge/art/generated-v2/source/gem_earth_1.png",
+      "source_sha256": "81a70735640ba5b3d57ccc1d18783f899d1c982a668bb7bc297cb8a023ab2f16",
+      "texture_sha256": "110406e9a8699f2f8cad79b812715c44f89ac0025641b91d91d238a4ccb74c07"
+    },
+    {
+      "model": "evergarden_forge:gem/earth_2",
+      "source": "evergarden-forge/art/generated-v2/source/gem_earth_2.png",
+      "source_sha256": "1f0984e4013afdded7705fe539148c7b3a83e6195672399da404d6511500464f",
+      "texture_sha256": "f6ac280f5491b7abb924fd05c5f872c60756a03a7db372145bd9e71f3902013c"
+    },
+    {
+      "model": "evergarden_forge:gem/earth_3",
+      "source": "evergarden-forge/art/generated-v2/source/gem_earth_3.png",
+      "source_sha256": "e5636e0f64e1f418d4258d4143a5be7955ab7cc543d91ff8c653569707485559",
+      "texture_sha256": "93273a6ef5798b216f2724bc07b4e5b0da1f0d84e732372be14540cda7fd8df8"
+    },
+    {
+      "model": "evergarden_forge:gem/earth_4",
+      "source": "evergarden-forge/art/generated-v2/source/gem_earth_4.png",
+      "source_sha256": "3c630ef2be3c01182b8d676742d28c1e52816f814f7a8918920df85416d85d61",
+      "texture_sha256": "3999e151ff6353079a4de314536d4e383e6119e757f5ed07c5237dd91b05fb4e"
+    },
+    {
+      "model": "evergarden_forge:gem/earth_5",
+      "source": "evergarden-forge/art/generated-v2/source/gem_earth_5.png",
+      "source_sha256": "815069da6a18a0716ee63b130f6333496f1b00969f3afd59b962a615d9012a81",
+      "texture_sha256": "fec671e0245840987c1527fea9e336ebcc2915d861983b01518c20d3c0c11866"
+    },
+    {
+      "model": "evergarden_forge:gem/lightning_1",
+      "source": "evergarden-forge/art/generated-v2/source/gem_lightning_1.png",
+      "source_sha256": "948f5ddd940a526ac03c534971c2070cd719bf17fb6edf7fbeaf5308c9193de4",
+      "texture_sha256": "3e98ba523fcd3e1ce71d1cdd1e6b78f9bff5090292b2b810ed8a07e649c095fb"
+    },
+    {
+      "model": "evergarden_forge:gem/lightning_2",
+      "source": "evergarden-forge/art/generated-v2/source/gem_lightning_2.png",
+      "source_sha256": "6fbe95faf5b161aa1c33161682b4a548de70d03f7bc15175e7d3e73efb801b91",
+      "texture_sha256": "71beb13133b932e5ae5ec3ca5c70cf1e7c6a21c95f1782878807f48e76441ce9"
+    },
+    {
+      "model": "evergarden_forge:gem/lightning_3",
+      "source": "evergarden-forge/art/generated-v2/source/gem_lightning_3.png",
+      "source_sha256": "3c9251b7e9abae9c31565e0fe6c6df604586a4650f2c287288e451da6f81b64c",
+      "texture_sha256": "7c3ae78775561ef08ce609177417f9d4ece1e4d227babefa2724a2daf0fecb92"
+    },
+    {
+      "model": "evergarden_forge:gem/lightning_4",
+      "source": "evergarden-forge/art/generated-v2/source/gem_lightning_4.png",
+      "source_sha256": "c5b49d4bae37f76fb5c8d9b0630f6af8c06fc60b6358b718a789f91ea2c85b05",
+      "texture_sha256": "28f60a6dadf0c2e416ed0f18715d4c9acff5154159f652ace77d05ff73275b03"
+    },
+    {
+      "model": "evergarden_forge:gem/lightning_5",
+      "source": "evergarden-forge/art/generated-v2/source/gem_lightning_5.png",
+      "source_sha256": "6a2c50970b0f2dc717938663e42bb6a9c540844b16168e6068b1fa46e801e39c",
+      "texture_sha256": "820abfeaea7aa6dddb4bbebf480af373b1996efee948ae29e9650776aa9f7263"
+    },
+    {
+      "model": "evergarden_forge:gem/light_1",
+      "source": "evergarden-forge/art/generated-v2/source/gem_light_1.png",
+      "source_sha256": "11325104c5225c566917bf751c34f66cc9f56c78db04e94cede40611075b77d0",
+      "texture_sha256": "7bcdf5d5c4160d873a4f404bc6d117d3599dc87a5426e9f9d3cf520e0930c7ae"
+    },
+    {
+      "model": "evergarden_forge:gem/light_2",
+      "source": "evergarden-forge/art/generated-v2/source/gem_light_2.png",
+      "source_sha256": "76c058da19fc2d502a7b6d79d6b8bbad809c7663ea6387b60ab47d26f3a71643",
+      "texture_sha256": "d855426aecaa11ce3fc9018c3724c9b61adee822d05f53a970ef4992360b5ce7"
+    },
+    {
+      "model": "evergarden_forge:gem/light_3",
+      "source": "evergarden-forge/art/generated-v2/source/gem_light_3.png",
+      "source_sha256": "e982a21c32c9e9a8b00f4127fc2206f3c2bda9415fcd4d00097c5a4747c9d5e8",
+      "texture_sha256": "5ee51e2213aac2f03cac4f0f8c5d1bcd97786a31269ea3886432fab752fc9943"
+    },
+    {
+      "model": "evergarden_forge:gem/light_4",
+      "source": "evergarden-forge/art/generated-v2/source/gem_light_4.png",
+      "source_sha256": "92847961048225dc30a4e379da79684fb798fc930c958e9da243a560cb4fbcb1",
+      "texture_sha256": "1621cc126af8c03fd63b040c6f4c4db2165e2224945ec27191a1c257cb0c1721"
+    },
+    {
+      "model": "evergarden_forge:gem/light_5",
+      "source": "evergarden-forge/art/generated-v2/source/gem_light_5.png",
+      "source_sha256": "58b2defef9c1d5fa2b3ef0b9ec43b49d5bee9f78b54f7c953244d8fdb22debb7",
+      "texture_sha256": "2c7b742b3fc67ad639d225f1b09d41ff0fc8ad4e6e6b3f1c3c306aa0cf1cb606"
+    },
+    {
+      "model": "evergarden_forge:gem/dark_1",
+      "source": "evergarden-forge/art/generated-v2/source/gem_dark_1.png",
+      "source_sha256": "ce09182e4f37aa1c3ec6da2fa00968acb9310b072c23e0c71cce7757fd039a6d",
+      "texture_sha256": "5ec0f1ba2cae3ff59523c249e251f7ac99b30f261349a15b5fc3cb9401fecb2f"
+    },
+    {
+      "model": "evergarden_forge:gem/dark_2",
+      "source": "evergarden-forge/art/generated-v2/source/gem_dark_2.png",
+      "source_sha256": "ae52b0852f7d3a8aaf2fe1960fb3e494861bba9eed8c5af909ccefdd04875c8f",
+      "texture_sha256": "cebf4927583a35d16c0bc269fa764a9ea89724d43fe3a5eb98afa3d026c00c85"
+    },
+    {
+      "model": "evergarden_forge:gem/dark_3",
+      "source": "evergarden-forge/art/generated-v2/source/gem_dark_3.png",
+      "source_sha256": "579ed515f6e77024af9b175a8a66a848357fe7c2b3831d00adafde3c4ccd0314",
+      "texture_sha256": "4aaf13fe60ebd246f478bfa677e2dd873806946705d4c6e3fdb7c5ec8de0023f"
+    },
+    {
+      "model": "evergarden_forge:gem/dark_4",
+      "source": "evergarden-forge/art/generated-v2/source/gem_dark_4.png",
+      "source_sha256": "f7b45ffcbc88907e2d139f73e9e5ab903e6c5d8b0036944032098d144cf2a78a",
+      "texture_sha256": "8f0076766ec4fa317660c605bd7048f1e43b86e36c11b034dee0b2c54b361f28"
+    },
+    {
+      "model": "evergarden_forge:gem/dark_5",
+      "source": "evergarden-forge/art/generated-v2/source/gem_dark_5.png",
+      "source_sha256": "e5215d934293ddcb5c46fc4b66dfe376caf1ab0c371b94583c0264faf5d956eb",
+      "texture_sha256": "c9625ebaca21ee9c0735d32f23015cc6c91a1a30324236b53feaa3ac186ad99f"
+    },
+    {
+      "model": "evergarden_forge:gem/life_1",
+      "source": "evergarden-forge/art/generated-v2/source/gem_life_1.png",
+      "source_sha256": "fd9ea6480c634e309088f859c6aa020984a37ea98dc7e7a53c04f1cf38b6aa8b",
+      "texture_sha256": "e75c32f71b3474d646ce86b7b7db15073ff1963938fd9dd9a4fe4ba580309ecc"
+    },
+    {
+      "model": "evergarden_forge:gem/life_2",
+      "source": "evergarden-forge/art/generated-v2/source/gem_life_2.png",
+      "source_sha256": "7d26b0d33fc4d5375414a1d0f39b318d7186244e24f6aa4cb19c1af51a6e7100",
+      "texture_sha256": "43479cae6e01f6d3ab929f844474afb5bd1718a6510af9d959242989b42f67f8"
+    },
+    {
+      "model": "evergarden_forge:gem/life_3",
+      "source": "evergarden-forge/art/generated-v2/source/gem_life_3.png",
+      "source_sha256": "a265e362390e4c1ca621c2c0a7522ce9af5eb0a3145f569cb2d993b588c41d8f",
+      "texture_sha256": "e044d43011d74f17f8a063380204acfad01ca638840a15c151e58af122e3eb75"
+    },
+    {
+      "model": "evergarden_forge:gem/life_4",
+      "source": "evergarden-forge/art/generated-v2/source/gem_life_4.png",
+      "source_sha256": "bf3eeaa69209de47d992998113f562bc94780f56575e20db198b34278ddb6284",
+      "texture_sha256": "fe897bf44d0f9031460d130099b843c527720f25499a04d0a071c31a6a7efb94"
+    },
+    {
+      "model": "evergarden_forge:gem/life_5",
+      "source": "evergarden-forge/art/generated-v2/source/gem_life_5.png",
+      "source_sha256": "6b10798eed7190f26a21c2bf83b4fb92b7d3c14cbbac507331891c7ddb6cbf6c",
+      "texture_sha256": "5927f345aa87351485d620e75203accc2029b63528df98b77fa8a09f24cc0a61"
+    },
+    {
+      "model": "evergarden_forge:material/common",
+      "source": "evergarden-forge/art/generated-v2/source/material_common.png",
+      "source_sha256": "3230b04d3fde13c005fb21aa2e58bce080fc240b7ee665ca8b137347b48b0a28",
+      "texture_sha256": "c4d5fb9bbaa3aad186b3c6a08c7881e34d9d4a6d608eb76c1ede5ec8d5a6ebd7"
+    },
+    {
+      "model": "evergarden_forge:material/uncommon",
+      "source": "evergarden-forge/art/generated-v2/source/material_uncommon.png",
+      "source_sha256": "bcf812304d2bda08b83991e99260033fd28bbe27d9e8908eb32bea57bf40012a",
+      "texture_sha256": "1f78129667dfcbf080a9c0d1164bea4ccf9b8f4b99319a5e89da8ca0bc4ffa06"
+    },
+    {
+      "model": "evergarden_forge:material/rare",
+      "source": "evergarden-forge/art/generated-v2/source/material_rare.png",
+      "source_sha256": "0cd17ec24c64d998cca4803a82928fdfcddb3bd72830450ea9c40f6a87739cbb",
+      "texture_sha256": "ae5229d71ee3de789236b609eacc450f417e0f92a3af348308eb1f4d0f577f5a"
+    },
+    {
+      "model": "evergarden_forge:material/epic",
+      "source": "evergarden-forge/art/generated-v2/source/material_epic.png",
+      "source_sha256": "93f6e078de51c99357f6521db5765599fb8e6b6cc7c533f0e684a66d3d1045a9",
+      "texture_sha256": "17eb9a68d6258c164afb3e675e1d05522349fb8b77dea4d47595439e7a2428c9"
+    },
+    {
+      "model": "evergarden_forge:material/mythic",
+      "source": "evergarden-forge/art/generated-v2/source/material_mythic.png",
+      "source_sha256": "d898fd463b404fa96754f12f7d90edc7f6899b45c567267761a0df25d8e2ff4f",
+      "texture_sha256": "bdd7b9965dc88070c7b4ce2a21902ef8d5e86ae022ec5af5344c2a0576c4abef"
+    },
+    {
+      "model": "evergarden_forge:gem_dust",
+      "source": "evergarden-forge/art/generated-v2/source/gem_dust.png",
+      "source_sha256": "2bcc34c8764c7b9312d01b5c15072f0ce473dcf8b0205efd57d8c9c163123ef8",
+      "texture_sha256": "64748af146b0b11f76a9ee393a4aba3a4c37688eac532f228e4a28b944520301"
+    }
+  ]
+}

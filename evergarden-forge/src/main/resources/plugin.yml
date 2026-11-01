@@ -1,0 +1,23 @@
+name: EvergardenForge
+version: '0.5.7-soft-farm-guard'
+main: com.example.forge.ForgePlugin
+api-version: '26.2'
+description: Affix gear, reforging with three choices, salvaging, gems with sockets and purity, elite monsters and affix structure loot.
+softdepend: [advance-magic, Evergarden, floodgate]
+loadbefore: [Geyser-Spigot]
+commands:
+  forge:
+    aliases: [reforge]
+    description: Open the Evergarden Forge (reforge, salvage, gems, cutting, gem codex)
+    usage: /forge [salvage|gems|cut|codex|inspect]
+  salvage:
+    description: Open the Forge salvage page
+    usage: /salvage
+  gems:
+    description: Open the gem codex (what every gem does on every kind of gear)
+    usage: /gems
+permissions:
+  forge.use:
+    default: true
+  forge.admin:
+    default: op

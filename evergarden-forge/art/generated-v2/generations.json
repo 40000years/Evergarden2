@@ -1,0 +1,234 @@
+{
+  "tool": "built-in imagegen",
+  "records": [
+    {
+      "key": "gem_fire_5",
+      "reuse": "evergarden-forge/art/redesign-v1/gem-fire-pixel.png"
+    },
+    {
+      "key": "gem_water_5",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-30a97f13-ca7f-4cb1-ba1d-9e9eae94dcca.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_water_5.png"
+    },
+    {
+      "key": "gem_lightning_5",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-8d56af1c-5962-4e23-9205-573069e53881.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_lightning_5.png"
+    },
+    {
+      "key": "gem_wind_5",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-268a6deb-7a40-4504-b1fe-3de3cc5b3b0d.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_wind_5.png"
+    },
+    {
+      "key": "gem_light_5",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-8145d9b1-36c9-4c49-894b-1bd79b1e1caf.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_light_5.png"
+    },
+    {
+      "key": "gem_earth_5",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-7b041be6-7723-4f8b-b765-c7a79940bc76.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_earth_5.png"
+    },
+    {
+      "key": "gem_dark_5",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-9a1fba0c-30b4-4fb4-a9b4-a76baadf2cf1.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_dark_5.png"
+    },
+    {
+      "key": "gem_life_5",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-2b3b80ce-daf0-4c0a-b28c-15a7e5f3f209.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_life_5.png"
+    },
+    {
+      "key": "material_common",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-dc3542bc-df86-4b80-a2c8-cf2f07ed0896.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\material_common.png"
+    },
+    {
+      "key": "material_uncommon",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-44fa1ba6-07d9-4b83-a5ab-cd74907927f6.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\material_uncommon.png"
+    },
+    {
+      "key": "material_epic",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-d67187cc-9b75-433f-b4bb-084351bcb4e2.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\material_epic.png"
+    },
+    {
+      "key": "material_rare",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-e8f0d272-b632-445a-9f45-9d936d97147c.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\material_rare.png"
+    },
+    {
+      "key": "material_mythic",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-db107417-ab09-4b03-850f-ff04908b1d1a.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\material_mythic.png"
+    },
+    {
+      "key": "gem_dust",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-0e73a172-3f09-4e60-bfda-7da1e963415c.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_dust.png"
+    },
+    {
+      "key": "gem_fire_1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-be6c3655-efb6-4a15-8e5d-2d7d85859f2c.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_fire_1.png"
+    },
+    {
+      "key": "gem_fire_2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-c92a4c77-557a-495b-860b-29eeb6d70e8e.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_fire_2.png"
+    },
+    {
+      "key": "gem_water_1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-e70f9337-d017-4eb1-982e-c126cc8f254c.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_water_1.png"
+    },
+    {
+      "key": "gem_water_2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-e6053b48-09e4-49d4-9987-5f81d8004334.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_water_2.png"
+    },
+    {
+      "key": "gem_fire_3",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-c93b79b7-3307-4279-ac80-8c4f5eaf9d57.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_fire_3.png"
+    },
+    {
+      "key": "gem_water_3",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-5de2a58c-a938-4dfb-811d-b6842945fab6.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_water_3.png"
+    },
+    {
+      "key": "gem_water_4",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-d53fe7fe-4778-4bae-a3db-6290cf59d9ac.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_water_4.png"
+    },
+    {
+      "key": "gem_wind_2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-ceaa375b-2aa3-4c8a-abc3-a22762a5ba4b.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_wind_2.png"
+    },
+    {
+      "key": "gem_wind_1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-76ec2087-3f92-4a8a-bdd1-1f9d00d00e81.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_wind_1.png"
+    },
+    {
+      "key": "gem_fire_4",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-1f6a2b52-ac45-4b96-ab0e-b5a95d782e17.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_fire_4.png"
+    },
+    {
+      "key": "gem_wind_3",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-e436825c-b20f-4ad8-a036-b2a45b15738a.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_wind_3.png"
+    },
+    {
+      "key": "gem_wind_4",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-51620293-f282-4be4-b4c9-3495d2a852a3.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_wind_4.png"
+    },
+    {
+      "key": "gem_earth_1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-68d1c146-4e4e-4644-b8ad-99184088a4d3.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_earth_1.png"
+    },
+    {
+      "key": "gem_earth_4",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-ca8c44d7-2cb8-4c24-b7af-6f4784e6fc5d.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_earth_4.png"
+    },
+    {
+      "key": "gem_lightning_1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-45a2ff91-408f-4335-b034-3bbfcd07f872.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_lightning_1.png"
+    },
+    {
+      "key": "gem_earth_3",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-431d5a99-f47c-42b2-b21a-8abeeaf4e8ad.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_earth_3.png"
+    },
+    {
+      "key": "gem_earth_2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-1d9684e3-90cf-4e7b-8af7-b56f8e03c82c.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_earth_2.png"
+    },
+    {
+      "key": "gem_lightning_2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-7a917c16-7119-4b26-9f4e-b9774f438742.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_lightning_2.png"
+    },
+    {
+      "key": "gem_lightning_3",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-870067d9-d9e5-4cb4-ae48-f416bc37b95a.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_lightning_3.png"
+    },
+    {
+      "key": "gem_lightning_4",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-6b60067c-c500-42be-8daa-3e68015fb9e5.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_lightning_4.png"
+    },
+    {
+      "key": "gem_light_2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-750c9903-c959-40d3-a94a-68fbcea5c826.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_light_2.png"
+    },
+    {
+      "key": "gem_light_1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-8c83c9de-6633-4dc0-9120-4ef251af439f.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_light_1.png"
+    },
+    {
+      "key": "gem_light_3",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-0b18c082-0345-4346-9adf-4f8041f9a320.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_light_3.png"
+    },
+    {
+      "key": "gem_light_4",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-19347288-2fca-41f7-85fb-d6a94a9d391c.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_light_4.png"
+    },
+    {
+      "key": "gem_dark_1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-aa158ad4-c1fc-4378-b3e9-611c8a4f998e.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_dark_1.png"
+    },
+    {
+      "key": "gem_dark_2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-9b736331-70e7-444f-ad4b-bd7df4134138.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_dark_2.png"
+    },
+    {
+      "key": "gem_dark_3",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-0f9fae6f-d932-4f8a-98e0-d252f9879a18.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_dark_3.png"
+    },
+    {
+      "key": "gem_life_1",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-0366f29a-2b40-4c24-91a6-e4d9561a287b.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_life_1.png"
+    },
+    {
+      "key": "gem_dark_4",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-ce483335-e7ea-4363-a40c-d48abcd2f44f.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_dark_4.png"
+    },
+    {
+      "key": "gem_life_3",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-82b7a18e-2c6a-4dee-90e9-8d8b2f9912fb.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_life_3.png"
+    },
+    {
+      "key": "gem_life_2",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-356521df-ff6c-4ca3-821b-c5ec1edb5364.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_life_2.png"
+    },
+    {
+      "key": "gem_life_4",
+      "source": "C:\\Users\\User\\.codex\\generated_images\\01a19512-f819-7f50-b173-9205772d829b\\exec-81057000-b1d6-4beb-b9d2-1c4ca8288aff.png",
+      "target": "C:\\Users\\User\\Afterdeath\\evergarden2\\evergarden-forge\\art\\generated-v2\\source\\gem_life_4.png"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+name: ForgeProbe
+version: '1.0'
+main: ForgeProbe
+api-version: '26.2'
+depend: [EvergardenForge]

@@ -1,0 +1,267 @@
+# Evergarden Forge — Affix, Reforge, Salvage, Gems, Elite monsters
+# Every number here is a starting point for playtests, not a proven balance.
+
+# Bumped when defaults change in a way an old file must not keep (the old file is backed up and replaced).
+config-version: 7
+
+# Open the forge with /forge anywhere. When false, only sneak + right-click on a smithing table opens it.
+command-opens-anywhere: true
+station-block: SMITHING_TABLE
+
+# Item models for menu icons. These ship in the Advance Magic pack (Skill Tree / menu set), so this
+# Forge gems and materials ship in a separate Java/Bedrock addon pack.
+gui:
+  icon-namespace: advance_magic
+
+resource-pack:
+  enabled: true
+  geyser-auto-install: true
+  # Uses Evergarden's existing pack host when installed. Standalone fallback:
+  bind: 0.0.0.0
+  port: 25569
+  public-host: ''
+  # Optional exact URL; {sha1} expands to the bundled ZIP digest.
+  public-url: ''
+
+# weight: chance share when a rarity is rolled for chest loot.
+# affixes: number of stat lines. level: roll window (0 = weakest, 1 = strongest value of each affix).
+# sockets: [min, max] gem sockets (max 3). Reforging never lowers an item's socket count.
+# reforge: base cost for choice 1; choices 2 and 3 multiply it by reforge.choice-multipliers.
+# salvage: [min, max] materials of the same rarity returned per item. Keep this below the reforge cost.
+rarities:
+  COMMON:   {weight: 50, affixes: 1, level: [0.00, 0.25], sockets: [0, 0], reforge: {materials: 2, levels: 3},  salvage: [1, 2]}
+  UNCOMMON: {weight: 30, affixes: 2, level: [0.15, 0.40], sockets: [0, 1], reforge: {materials: 2, levels: 6},  salvage: [1, 2]}
+  RARE:     {weight: 14, affixes: 3, level: [0.30, 0.60], sockets: [1, 1], reforge: {materials: 3, levels: 10}, salvage: [1, 2]}
+  EPIC:     {weight: 5,  affixes: 3, level: [0.50, 0.80], sockets: [1, 2], reforge: {materials: 3, levels: 15}, salvage: [1, 2]}
+  MYTHIC:   {weight: 1,  affixes: 4, level: [0.70, 1.00], sockets: [2, 3], reforge: {materials: 4, levels: 25}, salvage: [1, 1]}
+
+reforge:
+  choice-multipliers: [1, 2, 3]
+  max-rarity: MYTHIC
+
+# Plain gear (no rarity yet) can be salvaged too: this chance gives 1 common material per piece.
+salvage-plain-chance: 0.5
+
+# Value of each affix at level 0 and level 1. enabled: false removes it from new rolls and stops
+# applying it to existing items.
+affixes:
+  sharp:       {enabled: true, min: 0.5,  max: 3.0}
+  swift:       {enabled: true, min: 0.03, max: 0.15}
+  heavy:       {enabled: true, min: 0.2,  max: 1.0}
+  sweep:       {enabled: true, min: 0.1,  max: 0.5}
+  vigor:       {enabled: true, min: 0.5,  max: 2.5}
+  fleet:       {enabled: true, min: 0.02, max: 0.06}
+  lucky:       {enabled: true, min: 0.5,  max: 2.0}
+  arrow_power: {enabled: true, min: 0.05, max: 0.25}
+  arrow_speed: {enabled: true, min: 0.04, max: 0.15}
+  armored:     {enabled: true, min: 0.5,  max: 2.5}
+  tough:       {enabled: true, min: 0.5,  max: 2.0}
+  steadfast:   {enabled: true, min: 0.03, max: 0.12}
+  fireward:    {enabled: true, min: -0.10, max: -0.40}
+  feather:     {enabled: true, min: 0.5,  max: 2.5}
+  blastguard:  {enabled: true, min: 0.10, max: 0.40}
+  breath:      {enabled: true, min: 0.5,  max: 2.0}
+  swim:        {enabled: true, min: 0.10, max: 0.40}
+  haste:       {enabled: true, min: 0.05, max: 0.25}
+  delve:       {enabled: true, min: 1.0,  max: 6.0}
+  tide:        {enabled: true, min: 0.10, max: 0.50}
+
+gems:
+  # Purity I..V multiply each gem's base value (see docs/evergarden-forge.md for the table).
+  tier-multipliers: [1.0, 1.5, 2.1, 2.8, 3.6]
+  # Cutting tier N -> N+1 takes 2 gems of tier N, dust and materials of the next rarity
+  # (I->II uncommon, II->III rare, III->IV epic, IV->V mythic).
+  cut-dust: [2, 4, 8, 12]
+  cut-materials: [1, 1, 2, 2]
+  # Gem dust from salvaging one gem of purity I..V.
+  salvage-dust: [1, 2, 4, 7, 11]
+  # Chance that an ordinary hostile mob (not from a spawner) killed by a player drops a purity I gem.
+  mob-drop-chance: 0.01
+  # Purity range [min, max] of a gem dropped by an elite or found in a chest of each rarity.
+  tier-by-rarity:
+    COMMON: [1, 1]
+    UNCOMMON: [1, 1]
+    RARE: [1, 2]
+    EPIC: [2, 3]
+    MYTHIC: [3, 4]
+
+# Gear kinds that drop from elites and appear as bonus chest gear. weight = how often that kind is picked.
+gear:
+  kinds:
+    sword: 10
+    axe: 6
+    spear: 5
+    mace: 1
+    trident: 1
+    bow: 7
+    crossbow: 5
+    shield: 6
+    pickaxe: 5
+    shovel: 3
+    hoe: 2
+    fishing_rod: 2
+    helmet: 7
+    chestplate: 7
+    leggings: 7
+    boots: 7
+  # Netherite in any list below (or in elite armor) is read as diamond unless this is true.
+  allow-netherite: false
+  # Base material family by world environment (NORMAL = Overworld, NETHER, THE_END) and rarity.
+  # Overworld gear stops at iron; diamond only comes from the Nether and the End. Nothing is netherite.
+  # A family missing an item kind (no wooden helmet, no leather sword) is simply rerolled.
+  # Kinds without a family (bow, shield, mace, trident, fishing rod) ignore this.
+  materials:
+    NORMAL:
+      COMMON: [WOODEN, STONE, LEATHER]
+      UNCOMMON: [STONE, LEATHER, COPPER, CHAINMAIL, GOLDEN, IRON]
+      RARE: [COPPER, CHAINMAIL, GOLDEN, IRON, IRON]
+      EPIC: [IRON]
+      MYTHIC: [IRON]
+    NETHER:
+      COMMON: [STONE, GOLDEN]
+      UNCOMMON: [GOLDEN, IRON]
+      RARE: [IRON, DIAMOND]
+      EPIC: [DIAMOND]
+      MYTHIC: [DIAMOND]
+    THE_END:
+      COMMON: [IRON]
+      UNCOMMON: [IRON]
+      RARE: [IRON, DIAMOND]
+      EPIC: [DIAMOND]
+      MYTHIC: [DIAMOND]
+
+# Elite monsters: a natural spawn becomes an elite of a rarity, with a name, an aura, worn armor and
+# boosted stats. A player kill drops affix gear of the same rarity, maybe a gem and materials.
+# The Overworld only has uncommon and rare elites; epic and mythic live in the Nether and the End.
+elites:
+  enabled: true
+  chance: 0.05
+  max-per-world: 20
+  blocked-worlds: []
+  types: [ZOMBIE, HUSK, DROWNED, ZOMBIE_VILLAGER, SKELETON, STRAY, BOGGED, PARCHED, SPIDER, CAVE_SPIDER, CREEPER, WITCH, ENDERMAN,
+          ZOMBIFIED_PIGLIN, PIGLIN, PIGLIN_BRUTE, HOGLIN, ZOGLIN, WITHER_SKELETON, BLAZE, GHAST, VINDICATOR, PILLAGER, EVOKER, RAVAGER,
+          SLIME, MAGMA_CUBE, PHANTOM, GUARDIAN, ELDER_GUARDIAN, SHULKER, BREEZE, WARDEN]
+  # How a mob appeared, and the multiplier on chance. NATURAL covers the Warden a sculk shrieker summons;
+  # CHUNK_GEN covers structure mobs (mansion evokers/vindicators, bastion brutes, elder guardians, end city shulkers);
+  # raids and trial chambers count half. Classic spawners, evoker vexes, eggs and plugin spawns never become elites.
+  spawn-reasons: {NATURAL: 1.0, CHUNK_GEN: 1.0, PATROL: 1.0, RAID: 0.5, TRIAL_SPAWNER: 0.5}
+  # These gain the health multiplier but not the damage multiplier (a Warden already nearly one-shots).
+  damage-exempt: [WARDEN]
+  # Natural spawns carrying any of these persistent-data namespaces are left alone (other plugins' mobs).
+  skip-namespaces: [evergarden, voidscape, advance-magic, advance_magic, modelengine]
+  weights:
+    NORMAL: {UNCOMMON: 65, RARE: 35}
+    NETHER: {EPIC: 80, MYTHIC: 20}
+    THE_END: {EPIC: 75, MYTHIC: 25}
+  # health / damage: total multipliers (2.5 = 150% stronger). Skeleton arrows use the damage multiplier too.
+  # armor: families the elite may wear, one picked per elite (repeat a family to make it likelier);
+  # armor-chance: chance of each of the four pieces. Worn armor never drops.
+  # gear: affix gear pieces dropped; gem-chance: chance of one gem; materials: [min, max].
+  rarities:
+    UNCOMMON: {health: 2.5, damage: 2.5, speed: 0.05, knockback-resist: 0.2,  armor: [IRON, GOLDEN, CHAINMAIL], armor-chance: 0.5,
+               gear: 1, gem-chance: 0.35, materials: [0, 1], xp: 3}
+    RARE:     {health: 4.0, damage: 4.0, speed: 0.08, knockback-resist: 0.3,  armor: [IRON, IRON, GOLDEN, CHAINMAIL], armor-chance: 0.8,
+               gear: 1, gem-chance: 0.6, materials: [1, 2], xp: 5}
+    EPIC:     {health: 6.0, damage: 6.0, speed: 0.10, knockback-resist: 0.45, armor: [DIAMOND], armor-chance: 1.0,
+               gear: 1, gem-chance: 0.85, materials: [1, 3], xp: 8}
+    MYTHIC:   {health: 9.0, damage: 9.0, speed: 0.12, knockback-resist: 0.6,  armor: [DIAMOND], armor-chance: 1.0,
+               gear: 2, gem-chance: 1.0, materials: [2, 4], xp: 12}
+
+# Items carrying any of these persistent-data keys never get affixes and cannot be salvaged.
+# A trailing * matches a key prefix. Legendary weapons, boss armor sets, staffs, wands and relics.
+protected-keys:
+  - advance-magic:legendary_weapon
+  - advance_magic:legendary_weapon
+  - advance-magic:armor_set
+  - advance_magic:armor_set
+  - advance-magic:wooden_staff
+  - advance-magic:elemental_staff*
+  - advance-magic:flying_staff*
+  - advance-magic:wand*
+  - advance_magic:core
+  - advance-magic:core
+  - evergarden:relic
+  - evergarden:relic_v2
+  - evergarden:void_key
+  - evergarden:guide_book
+
+# Mob farms keep their vanilla drops and XP; only the forge's own chances (ordinary-mob gems, elite
+# spawns, elite rewards) drop, silently, where many mobs have just died. Exploring keeps the full rate.
+#  - Every hostile death adds 1 heat to its chunk; heat halves every half-life-minutes; the chunks within
+#    area-radius-chunks are summed (1 = 3x3).
+#  - Up to free-kills heat the rate is full; above it the rate is multiplied by exp(-(heat - free) / falloff).
+#    Defaults (5, 10): 10 kills in a row = 61%, 15 = 37%, 20 = 22%, 40 = 3%; a kill chamber gets ~0.
+#    Walk a few chunks on, or wait (half-life 5 minutes), and the rate is back.
+#  - A mob that took one of these kinds of environmental damage before dying gives no forge rewards
+#    (drop-and-one-hit farms). Sunlight fire is not listed, so zombies burning at dawn still count.
+#  - ordinary-gems-per-hour caps ordinary-mob gems per player; -1 = no cap.
+farm-guard:
+  enabled: true
+  area-radius-chunks: 1
+  half-life-minutes: 5
+  free-kills: 5
+  falloff: 10
+  environmental-damage: [FALL, LAVA, HOT_FLOOR, SUFFOCATION, CRAMMING, DROWNING, CONTACT, FREEZE]
+  ordinary-gems-per-hour: -1
+
+# Mining: one roll per block a player breaks with a tool that drops it (Fortune and Silk Touch do not
+# change the chance). Ores a player placed never roll. The gem is a random element of purity I or II.
+# About 1-2 gems per long strip-mining trip; Nether gold ore is lower because the Nether is full of it.
+ore-gems:
+  enabled: true
+  blocked-worlds: []
+  # Purity weights: I 85, II 15.
+  tier-weights: [85, 15]
+  chances:
+    STONE: 0.00005
+    DEEPSLATE: 0.00005
+    COAL_ORE: 0.005
+    DEEPSLATE_COAL_ORE: 0.005
+    COPPER_ORE: 0.0075
+    DEEPSLATE_COPPER_ORE: 0.0075
+    LAPIS_ORE: 0.0075
+    DEEPSLATE_LAPIS_ORE: 0.0075
+    REDSTONE_ORE: 0.0075
+    DEEPSLATE_REDSTONE_ORE: 0.0075
+    NETHER_QUARTZ_ORE: 0.0075
+    IRON_ORE: 0.015
+    DEEPSLATE_IRON_ORE: 0.015
+    GOLD_ORE: 0.015
+    DEEPSLATE_GOLD_ORE: 0.015
+    NETHER_GOLD_ORE: 0.0025
+    DIAMOND_ORE: 0.04
+    DEEPSLATE_DIAMOND_ORE: 0.04
+    EMERALD_ORE: 0.04
+    DEEPSLATE_EMERALD_ORE: 0.04
+    ANCIENT_DEBRIS: 0.04
+
+# Evergarden's own chests (landmarks, exploration sites, sky whales, boss vaults, sanctuaries).
+# Evergarden fills them itself and marks the chunk; the first time a player opens a non-empty chest in
+# such a chunk, it gains extra loot once. Chests placed by players are never touched.
+# gem / gear: chance of the first one, then extra-chance for each further one, up to max.
+# Defaults: gem 60% (15% for 2+, ~4% for 3), affix gear 40% (8% for 2).
+evergarden-chests:
+  enabled: true
+  chunk-markers: [evergarden:*_treasure_v1, evergarden:exploration_chest_*, evergarden:*_vault_*, evergarden:elemental_staff_*,
+                  evergarden:elemental_scroll_*, evergarden:*_flying_staff_v1, evergarden:ods_seal]
+  # Evergarden sanctuaries fill chests from the End City table outside the End: treat those as Evergarden chests.
+  end-city-outside-end: true
+  gem: {chance: 0.6, extra-chance: 0.25, max: 3}
+  gear: {chance: 0.4, extra-chance: 0.2, max: 2}
+  # Rarity of each gem (purity follows gems.tier-by-rarity) and each gear piece. Overworld gear stays wood-to-iron.
+  weights: {COMMON: 15, UNCOMMON: 35, RARE: 32, EPIC: 14, MYTHIC: 4}
+
+# Vanilla structure chests (loot tables under chests/). Chests filled by plugins are never touched.
+loot:
+  enabled: true
+  blocked-worlds: []
+  # Chance that each affix-able gear piece already in the chest becomes affix gear.
+  convert-chance: 0.6
+  # Chance to add one extra affix gear piece, one stack of salvage material, one gem.
+  bonus-gear-chance: 0.15
+  material-chance: 0.20
+  material-amount: [1, 2]
+  gem-chance: 0.25
+  # Loot tables whose key contains one of these use rich-weights instead of the rarity weights.
+  rich-tables: [ancient_city, end_city_treasure, bastion_treasure, woodland_mansion, stronghold, trial_chambers/reward]
+  rich-weights: {COMMON: 20, UNCOMMON: 35, RARE: 28, EPIC: 13, MYTHIC: 4}

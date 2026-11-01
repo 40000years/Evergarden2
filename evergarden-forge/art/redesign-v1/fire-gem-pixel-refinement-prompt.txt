@@ -1,0 +1,7 @@
+Use case: style-transfer
+Asset type: final small inventory sprite, one FIRE GEM.
+Input image 1 is the edit target.
+Keep the fiery ruby gemstone idea, orange/garnet palette, broad faceted body, and flame-shaped pointed silhouette.
+Change the rendering to authentic low-resolution 32x32 pixel art, displayed enlarged with nearest-neighbor scaling. This must look like a meticulously hand-placed Minecraft-compatible inventory sprite. One square logical pixel should be visibly large on the output. Use approximately 12 flat colors only. Each facet is a bold flat polygon of clustered square pixels, with only 2 or 3 stepped value bands. NO smooth gradients, no soft shading, no blurry or noisy fine detail, no subpixel diagonal lines. Use fewer, much larger facets: 5 to 7 clear planes, one strong upper-left yellow-white glint and a readable dark red lower-right silhouette.
+Inset the entire item with at least 4 logical pixels of transparent space on EVERY side. No tip or highlight may touch the canvas edge.
+One gem only, centered in a square canvas. Transparent background with real alpha. No text, runes, UI, detached particles, extra gemstones, ground shadow, frame, or drawn checkerboard. Preserve the distinctive broad ruby body rather than turning it into an ordinary flame.

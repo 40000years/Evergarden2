@@ -1,0 +1,8 @@
+Use case: stylized-concept
+Asset type: ONE transparent inventory item sprite for the Minecraft RPG plugin Evergarden Forge.
+Primary request: redesign a FIRE GEM as polished, carefully authored fantasy pixel art that remains readable at small inventory size.
+Subject: one unmounted precious fire crystal, an asymmetric flame-shaped cut ruby with a sharp swept upper tip, broad lower body, and a small opposing chipped notch. Distinctive solid silhouette. Rich garnet shadows, luminous vermilion facets, amber internal molten seams, a tiny ivory specular highlight on the upper-left facet. The material is a translucent faceted gemstone, not a flame icon, ore pile, pendant, or emoji.
+Style/medium: premium 64-by-64 logical-pixel RPG item sprite, deliberate hard square pixel clusters, controlled ramps of roughly 16 colors, sharp angular facet planes, restrained dithering. Outline made of dark maroon pixels with selective colored edge lighting. Actual pixel art, no vector appearance, no smooth painterly surfaces or 3D render.
+Composition: exactly one centered isolated item occupying approximately 80 percent of a square canvas, fully visible with generous transparent padding. Main crystal is the only object. Light comes from upper left. Crystal must read clearly even downscaled to 32 pixels.
+Backdrop: genuinely transparent alpha everywhere outside the crystal; no checkerboard drawn into the image.
+Constraints: original game asset, no text, no letters, no runes or overlaid symbols, no stars, no tier dots, no detached sparks, no pedestal, no cast shadow, no UI card, no border. Do not produce a sprite sheet, multiple icons, or a comparison. Render enlarged with crisp nearest-neighbor-like pixel edges.

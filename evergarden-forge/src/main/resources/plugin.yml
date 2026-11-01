@@ -1,5 +1,5 @@
 name: EvergardenForge
-version: '0.5.7-soft-farm-guard'
+version: '0.5.8-rate-audit'
 main: com.example.forge.ForgePlugin
 api-version: '26.2'
 description: Affix gear, reforging with three choices, salvaging, gems with sockets and purity, elite monsters and affix structure loot.

@@ -15,8 +15,11 @@ models=set();images=set()
 with zipfile.ZipFile(io.BytesIO(java_bytes)) as java,zipfile.ZipFile(io.BytesIO(bedrock_bytes)) as bedrock:
     assert java.testzip() is None and bedrock.testzip() is None
     atlas=json.loads(bedrock.read('textures/item_texture.json'))['texture_data']
-    manifest=json.loads(bedrock.read('manifest.json'));assert manifest['header']['version']==version
-    assert manifest['modules'][0]['version']==version
+    manifest=json.loads(bedrock.read('manifest.json'));pack_version=manifest['header']['version']
+    # Gameplay-only releases retain the existing pack version and SHA. A resource version
+    # need not equal the plugin's version (0.5.7 still bundles the unchanged 0.5.1 art).
+    assert len(pack_version)==3 and all(type(v) is int and v>=0 for v in pack_version)
+    assert manifest['modules'][0]['version']==pack_version
     for base,items in maps['items'].items():
         assert base.startswith('minecraft:')
         for row in items:

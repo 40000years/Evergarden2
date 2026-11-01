@@ -7,7 +7,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /** Evergarden Forge: affix gear, reforging, salvaging, gems and sockets, elite monsters, affix structure loot. */
 public final class ForgePlugin extends JavaPlugin {
@@ -117,16 +118,29 @@ public final class ForgePlugin extends JavaPlugin {
         int target = defaults == null ? 0 : defaults.getInt("config-version");
         int current = getConfig().getInt("config-version", 0);
         if (current >= target) return;
+        Map<String, Object> retained = new LinkedHashMap<>();
+        for (String key : getConfig().getKeys(true)) {
+            if (getConfig().isConfigurationSection(key) || !getConfig().isSet(key)) continue;
+            if (key.startsWith("resource-pack.") || key.equals("gui.icon-namespace")
+                || key.equals("command-opens-anywhere") || key.equals("station-block")) {
+                retained.put(key, getConfig().get(key));
+            }
+        }
         Path file = getDataFolder().toPath().resolve("config.yml");
         Path backup = getDataFolder().toPath().resolve("config-v" + current + "-backup.yml");
+        for (int suffix = 1; Files.exists(backup); suffix++) {
+            backup = getDataFolder().toPath().resolve("config-v" + current + "-backup-" + suffix + ".yml");
+        }
         try {
-            Files.move(file, backup, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(file, backup);
         } catch (IOException e) {
             getLogger().warning("Could not back up outdated config.yml: " + e.getMessage());
             return;
         }
         saveDefaultConfig();
         reloadConfig();
+        retained.forEach((key, value) -> getConfig().set(key, value));
+        saveConfig();
         getLogger().warning("config.yml was version " + current + "; replaced with version " + target + " defaults. Old file: " + backup.getFileName());
     }
 

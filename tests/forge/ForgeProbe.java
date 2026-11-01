@@ -317,7 +317,7 @@ public class ForgeProbe extends JavaPlugin {
         oreWorld.setChunkForceLoaded(14, 14, true);
         org.bukkit.block.Block ore = oreWorld.getBlockAt(226, oreWorld.getHighestBlockYAt(226, 226) + 1, 226);
         ore.setType(Material.DIAMOND_ORE);
-        Bukkit.getPluginManager().callEvent(new org.bukkit.event.block.BlockPlaceEvent(ore, ore.getState(), ore,
+        ores.onPlace(new org.bukkit.event.block.BlockPlaceEvent(ore, ore.getState(), ore,
             new ItemStack(Material.DIAMOND_ORE), null, true, org.bukkit.inventory.EquipmentSlot.HAND));
         check(ore.getChunk().getPersistentDataContainer().has(new NamespacedKey("evergardenforge",
             "ore_placed_" + ore.getX() + "_" + ore.getY() + "_" + ore.getZ()), PersistentDataType.BYTE), "player-placed ore is marked (never rolls)");

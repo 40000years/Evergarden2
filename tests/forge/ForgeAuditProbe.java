@@ -51,7 +51,7 @@ public final class ForgeAuditProbe extends ForgeProbe {
     }
     @Override protected void additionalChecks(ForgePlugin plugin)throws Exception{
         forge=plugin;player=fake("ForgeAuditor").getBukkitEntity();player.setLevel(200);
-        models();reforge();gems();cutAndSalvage();guards();attributes();protectedItems();death(false);death(true);pack();
+        models();reforge();gems();cutAndSalvage();guards();attributes();protectedItems();oreMoves();death(false);death(true);configMigration();pack();
         player.closeInventory();
     }
     private void models(){
@@ -151,6 +151,73 @@ public final class ForgeAuditProbe extends ForgeProbe {
             upgraded.editMeta(m->m.getPersistentDataContainer().set(new NamespacedKey(namespace,"relic_eternity"),org.bukkit.persistence.PersistentDataType.BYTE,(byte)1));
             check(forge.affixes().affix(upgraded,Rarity.RARE,new Random(8)),"Eternity upgrade remains forge-compatible: "+namespace);
         }
+    }
+    private NamespacedKey oreKey(org.bukkit.block.Block block){
+        return new NamespacedKey(forge,"ore_placed_"+block.getX()+"_"+block.getY()+"_"+block.getZ());
+    }
+    private boolean marked(org.bukkit.block.Block block){
+        return block.getChunk().getPersistentDataContainer().has(oreKey(block),org.bukkit.persistence.PersistentDataType.BYTE);
+    }
+    private void oreMoves(){
+        var world=player.getWorld();world.setChunkForceLoaded(15,14,true);
+        var piston=world.getBlockAt(238,90,226);piston.setType(Material.PISTON);
+        var first=world.getBlockAt(239,90,226);var next=first.getRelative(org.bukkit.block.BlockFace.EAST);
+        first.setType(Material.DIAMOND_ORE);next.setType(Material.DIAMOND_ORE);
+        forge.oreGems().onPlace(new org.bukkit.event.block.BlockPlaceEvent(first,first.getState(),first,
+            new ItemStack(Material.DIAMOND_ORE),player,true,EquipmentSlot.HAND));
+        var cancelled=new org.bukkit.event.block.BlockPistonExtendEvent(piston,List.of(first,next),org.bukkit.block.BlockFace.EAST);
+        cancelled.setCancelled(true);Bukkit.getPluginManager().callEvent(cancelled);
+        check(marked(first)&&!marked(next),"cancelled piston preserves placed-ore provenance");
+        Bukkit.getPluginManager().callEvent(new org.bukkit.event.block.BlockPistonExtendEvent(piston,List.of(first,next),org.bukkit.block.BlockFace.EAST));
+        check(!marked(first)&&marked(next)&&!marked(next.getRelative(org.bukkit.block.BlockFace.EAST)),
+            "piston chain carries only placed-ore marker across a chunk boundary");
+        first.setType(Material.AIR);next.setType(Material.DIAMOND_ORE);
+        var pulled=next.getRelative(org.bukkit.block.BlockFace.WEST);
+        Bukkit.getPluginManager().callEvent(new org.bukkit.event.block.BlockPistonRetractEvent(piston,List.of(next),org.bukkit.block.BlockFace.WEST));
+        check(marked(pulled)&&!marked(next),"sticky piston preserves placed-ore marker when pulling back");
+        pulled.setType(Material.DIAMOND_ORE);
+        var cancelledBreak=new org.bukkit.event.block.BlockBreakEvent(pulled,player);cancelledBreak.setCancelled(true);
+        Bukkit.getPluginManager().callEvent(cancelledBreak);
+        check(marked(pulled),"cancelled mining cannot erase placed-ore protection");
+        double chance=forge.settings().oreGemChances.get(Material.DIAMOND_ORE);
+        forge.settings().oreGemChances.put(Material.DIAMOND_ORE,1.0);
+        player.getInventory().setItemInMainHand(new ItemStack(Material.DIAMOND_PICKAXE));
+        try{
+            long before=oreGemDrops(world);
+            Bukkit.getPluginManager().callEvent(new org.bukkit.event.block.BlockBreakEvent(pulled,player));
+            check(!marked(pulled)&&oreGemDrops(world)==before,
+                "mining moved player-placed ore never drops a gem even at a forced 100% rate");
+            Bukkit.getPluginManager().callEvent(new org.bukkit.event.block.BlockBreakEvent(pulled,player));
+            check(oreGemDrops(world)==before+1,"eligible unmarked ore really drops one gem at a forced 100% rate");
+        }finally{forge.settings().oreGemChances.put(Material.DIAMOND_ORE,chance);}
+        first.setType(Material.AIR);next.setType(Material.AIR);piston.setType(Material.AIR);
+    }
+    private long oreGemDrops(World world){
+        return world.getEntitiesByClass(Item.class).stream().filter(item->forge.gems().read(item.getItemStack())!=null).count();
+    }
+    private void configMigration()throws Exception{
+        var file=forge.getDataFolder().toPath().resolve("config.yml");
+        String original=java.nio.file.Files.readString(file);var backup=forge.getDataFolder().toPath().resolve("config-v6-backup.yml");
+        java.nio.file.Files.writeString(backup,"keep existing backup");
+        try{
+            forge.getConfig().set("config-version",6);forge.getConfig().set("elites.chance",0.99);
+            forge.getConfig().set("resource-pack.public-host","packs.example.invalid");
+            forge.getConfig().set("resource-pack.public-url","https://packs.example.invalid/forge-{sha1}.zip");
+            forge.getConfig().set("resource-pack.port",25580);forge.getConfig().set("resource-pack.geyser-auto-install",false);
+            forge.getConfig().set("command-opens-anywhere",false);forge.getConfig().set("station-block","ANVIL");
+            forge.saveConfig();forge.reload();
+            check(forge.getConfig().getInt("config-version")==7&&Math.abs(forge.settings().eliteChance-.05)<1e-12,
+                "old config migrates to current 5% elite rate");
+            check("packs.example.invalid".equals(forge.getConfig().getString("resource-pack.public-host"))
+                &&"https://packs.example.invalid/forge-{sha1}.zip".equals(forge.getConfig().getString("resource-pack.public-url"))
+                &&forge.getConfig().getInt("resource-pack.port")==25580&&!forge.getConfig().getBoolean("resource-pack.geyser-auto-install"),
+                "rate migration preserves server pack URL, port and Geyser settings");
+            check(!forge.settings().commandAnywhere&&forge.settings().stationBlock==Material.ANVIL,
+                "rate migration preserves station access settings");
+            check(java.nio.file.Files.readString(backup).equals("keep existing backup")
+                &&java.nio.file.Files.readString(forge.getDataFolder().toPath().resolve("config-v6-backup-1.yml")).contains("0.99"),
+                "migration keeps existing backup and saves the old config separately");
+        }finally{java.nio.file.Files.writeString(file,original);forge.reload();}
     }
     private void death(boolean keep){
         Player previous=player;var actor=fake(keep?"ForgeKeep":"ForgeDrop");player=actor.getBukkitEntity();

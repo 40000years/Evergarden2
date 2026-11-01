@@ -6,16 +6,20 @@ import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Random;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -36,10 +40,33 @@ public final class OreGemDrops implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
         Block block = event.getBlockPlaced();
-        // Only ores are tracked: stone's 0.01% is not worth a chunk entry per placed block.
+        // Only ores are tracked: stone's 0.005% is not worth a chunk entry per placed block.
         if (block.getType() == Material.STONE || block.getType() == Material.DEEPSLATE) return;
         if (plugin.settings().oreGemChances.containsKey(block.getType())) {
             block.getChunk().getPersistentDataContainer().set(placedKey(block), PersistentDataType.BYTE, (byte) 1);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onExtend(BlockPistonExtendEvent event) {
+        movePlaced(event.getBlocks(), event.getDirection());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onRetract(BlockPistonRetractEvent event) {
+        // For a non-empty retract Paper supplies the actual pull direction, not the piston facing.
+        movePlaced(event.getBlocks(), event.getDirection());
+    }
+
+    private void movePlaced(List<Block> blocks, BlockFace movement) {
+        // Snapshot the whole chain before clearing sources: one block's destination can be
+        // another source, and a move may cross the chunk boundary where the marker is stored.
+        List<Block> placed = blocks.stream().filter(block -> block.getChunk().getPersistentDataContainer()
+            .has(placedKey(block), PersistentDataType.BYTE)).toList();
+        for (Block block : placed) block.getChunk().getPersistentDataContainer().remove(placedKey(block));
+        for (Block block : placed) {
+            Block target = block.getRelative(movement);
+            target.getChunk().getPersistentDataContainer().set(placedKey(target), PersistentDataType.BYTE, (byte) 1);
         }
     }
 

@@ -117,6 +117,9 @@ def main():
         print('Verified',name,flush=True)
     if release['draft']:
         release=request('PATCH',release['url'],secret,json.dumps(dict(draft=False,make_latest='false',body=notes)).encode())
+    # Draft assets can use an untagged URL. Refresh after publication before checking public links.
+    release=request('GET',release['url'],secret)
+    assets={asset['name']:asset for asset in release['assets']}
     for name,value in files.items():
         downloaded=request('GET',assets[name]['browser_download_url'],binary=True)
         assert sha(downloaded)==sha(value),'Public download mismatch '+name

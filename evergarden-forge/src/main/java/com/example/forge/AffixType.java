@@ -12,8 +12,8 @@ public enum AffixType {
     SWIFT(Stat.ATTACK_SPEED, "ว่องไว", "ความว่องไว", MELEE),
     HEAVY(Stat.KNOCKBACK, "หนักหน่วง", "แรงทลาย", MELEE),
     SWEEP(Stat.SWEEP, "กวาดล้าง", "พายุคมดาบ", MELEE),
-    VIGOR(Stat.MAX_HEALTH, "ทรหด", "ชีวิต", MELEE, RANGED, SHIELD, TOOL, HELMET, CHESTPLATE, LEGGINGS, BOOTS),
-    FLEET(Stat.MOVE_SPEED, "ปราดเปรียว", "สายลม", MELEE, RANGED, SHIELD, TOOL, LEGGINGS, BOOTS),
+    VIGOR(Stat.MAX_HEALTH, "ทรหด", "ชีวิต", MELEE, RANGED, SHIELD, TOOL, HELMET, CHESTPLATE, LEGGINGS, BOOTS, STAFF),
+    FLEET(Stat.MOVE_SPEED, "ปราดเปรียว", "สายลม", MELEE, RANGED, SHIELD, TOOL, LEGGINGS, BOOTS, STAFF),
     LUCKY(Stat.LUCK, "นำโชค", "โชคลาภ", MELEE, RANGED, TOOL, HELMET),
     ARROW_POWER(Stat.ARROW_DAMAGE, "ทะลวง", "การทะลวง", RANGED),
     ARROW_SPEED(Stat.ARROW_SPEED, "พุ่งทะยาน", "ดาวตก", RANGED),
@@ -27,7 +27,12 @@ public enum AffixType {
     SWIM(Stat.WATER_MOVEMENT, "ว่ายคล่อง", "กระแสธาร", LEGGINGS, BOOTS),
     HASTE(Stat.BREAK_SPEED, "เร่งขุด", "ความเร่งรีบ", TOOL),
     DELVE(Stat.MINING_EFFICIENCY, "เจาะลึก", "ใต้พิภพ", TOOL),
-    TIDE(Stat.SUBMERGED_MINING, "ดำดิ่ง", "ท้องทะเล", TOOL);
+    TIDE(Stat.SUBMERGED_MINING, "ดำดิ่ง", "ท้องทะเล", TOOL),
+    ARCANE(Stat.SPELL_POWER, "อาคม", "เวทมนตร์", STAFF),
+    MENDING(Stat.HEALING_POWER, "เยียวยา", "การเยียวยา", STAFF),
+    WELLSPRING(Stat.MAX_MANA, "ล้นมานา", "ตาน้ำมานา", STAFF),
+    FRUGAL(Stat.MANA_COST, "ประหยัด", "ความสมถะ", STAFF),
+    FLOW(Stat.MANA_REGEN, "ไหลเวียน", "สายธารมานา", STAFF);
 
     public final Stat stat;
     /** Adjective after the base name ("ดาบเพชร คมกริบ") and noun for the second title ("แห่งสายลม"). */

@@ -5,7 +5,7 @@ import org.bukkit.attribute.AttributeModifier.Operation;
 
 /**
  * Native bonuses affect the mechanics governed by each attribute. The two arrow stats are
- * applied when the bow fires; attack damage is not a spell-damage multiplier.
+ * applied when the bow fires; attack damage is not a spell-damage multiplier: spells use the staff stats.
  * Percent stats use MULTIPLY_SCALAR_1 (multiply total) so "+10% attack speed" is 10% of the weapon's speed.
  */
 public enum Stat {
@@ -29,9 +29,22 @@ public enum Stat {
     BREAK_SPEED(Attribute.BLOCK_BREAK_SPEED, Operation.MULTIPLY_SCALAR_1, true, "ความเร็วทุบบล็อก"),
     MINING_EFFICIENCY(Attribute.MINING_EFFICIENCY, Operation.ADD_NUMBER, false, "ประสิทธิภาพการขุด"),
     SUBMERGED_MINING(Attribute.SUBMERGED_MINING_SPEED, Operation.ADD_NUMBER, true, "ความเร็วขุดใต้น้ำ"),
-    WATER_MOVEMENT(Attribute.WATER_MOVEMENT_EFFICIENCY, Operation.ADD_NUMBER, true, "ความคล่องในน้ำ");
+    WATER_MOVEMENT(Attribute.WATER_MOVEMENT_EFFICIENCY, Operation.ADD_NUMBER, true, "ความคล่องในน้ำ"),
+    // Staff stats feed Advance Magic's cast stats (MagicStats) while the staff is in the main hand.
+    SPELL_POWER(null, Operation.ADD_NUMBER, true, "พลังเวท"),
+    HEALING_POWER(null, Operation.ADD_NUMBER, true, "พลังรักษา"),
+    MAX_MANA(null, Operation.ADD_NUMBER, false, "มานาสูงสุด"),
+    MANA_COST(null, Operation.ADD_NUMBER, true, "ประหยัดมานา"),
+    MANA_REGEN(null, Operation.ADD_NUMBER, true, "ฟื้นฟูมานา"),
+    ELEMENT_FIRE(null, Operation.ADD_NUMBER, true, "พลังธาตุไฟ"),
+    ELEMENT_WATER(null, Operation.ADD_NUMBER, true, "พลังธาตุน้ำและน้ำแข็ง"),
+    ELEMENT_WIND(null, Operation.ADD_NUMBER, true, "พลังธาตุลม"),
+    ELEMENT_EARTH(null, Operation.ADD_NUMBER, true, "พลังธาตุดิน"),
+    ELEMENT_LIGHTNING(null, Operation.ADD_NUMBER, true, "พลังธาตุสายฟ้า"),
+    ELEMENT_LIGHT(null, Operation.ADD_NUMBER, true, "พลังธาตุแสง"),
+    ELEMENT_DARK(null, Operation.ADD_NUMBER, true, "พลังธาตุมืด");
 
-    /** Null for the arrow stats. */
+    /** Null for the arrow and staff stats. */
     public final Attribute attribute;
     public final Operation operation;
     public final boolean percent;

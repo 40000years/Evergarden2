@@ -95,7 +95,7 @@ public final class ForgeListener implements Listener {
         List<ItemStack> loot = event.getLoot();
         int converted = 0;
         for (ItemStack item : loot) {
-            if (affixes.category(item) == null || affixes.read(item) != null) continue;
+            if (affixes.category(item) == null || affixes.salvageLocked(item) || affixes.read(item) != null) continue;
             if (random.nextDouble() < settings.convertChance && affixes.affix(item, affixes.rollRarity(random, weights), random)) converted++;
         }
         StringBuilder extra = new StringBuilder();

@@ -1,5 +1,5 @@
 name: advance-magic
-version: '1.38.2-spell-audit'
+version: '1.38.3-forge-gear'
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
 description: 58 elemental spells, cross-element loadouts, scroll extraction and craftable wooden starter staffs.

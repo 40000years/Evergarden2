@@ -72,13 +72,27 @@ public final class AffixService {
     /** Category of gear that may roll or reforge affixes; null for anything else. */
     public LootCategory category(ItemStack item) {
         if (item == null || item.getType().isAir() || item.getAmount() != 1) return null;
-        LootCategory category = LootCategory.of(item.getType());
-        return category == null || isProtected(item) ? null : category;
+        LootCategory category = LootCategory.of(item);
+        // A staff migrated from a retired wand keeps the wand's keys; its staff identity is what counts.
+        return category == null || category != LootCategory.STAFF && isProtected(item) ? null : category;
     }
 
-    /** Affix gear always salvages; plain gear does too (for a chance at common material). */
+    /**
+     * Magic gear (legendary weapons, armor sets, staffs) can be reforged and socketed but is never
+     * salvaged or turned into loot: it cannot be replaced from a chest.
+     */
+    public boolean salvageLocked(ItemStack item) {
+        if (item == null || !item.hasItemMeta()) return false;
+        if (LootCategory.of(item) == LootCategory.STAFF) return true;
+        for (NamespacedKey key : item.getItemMeta().getPersistentDataContainer().getKeys()) {
+            if (settings().salvageLockedKeys.contains(key.toString().toLowerCase(Locale.ROOT))) return true;
+        }
+        return false;
+    }
+
+    /** Affix gear always salvages; plain gear does too (for a chance at common material). Magic gear never does. */
     public boolean salvageable(ItemStack item) {
-        return category(item) != null;
+        return category(item) != null && !salvageLocked(item);
     }
 
     // ---- reading and rolling -------------------------------------------------------------
@@ -155,7 +169,7 @@ public final class AffixService {
 
     /** Sum of one stat from affixes and gems on an item (used for the arrow stats). */
     public double total(ItemStack item, Stat stat) {
-        LootCategory category = item == null ? null : LootCategory.of(item.getType());
+        LootCategory category = item == null ? null : LootCategory.of(item);
         if (category == null) return 0;
         double total = 0;
         for (Planned planned : plan(item, category)) if (planned.stat() == stat) total += planned.value();
@@ -169,7 +183,7 @@ public final class AffixService {
      * already installed stay in their sockets.
      */
     public void apply(ItemStack item, AffixData data) {
-        if (LootCategory.of(item.getType()) == null) return;
+        if (LootCategory.of(item) == null) return;
         int sockets = Math.max(data.sockets(), sockets(item));
         item.editMeta(meta -> {
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
@@ -194,7 +208,7 @@ public final class AffixService {
 
     /** Re-applies name, lore and modifiers if another plugin removed them. True when it changed the item. */
     public boolean ensure(ItemStack item) {
-        if (read(item) == null || LootCategory.of(item.getType()) == null) return false;
+        if (read(item) == null || LootCategory.of(item) == null) return false;
         if (intact(item)) return false;
         render(item);
         return true;
@@ -202,7 +216,7 @@ public final class AffixService {
 
     /** True when every planned modifier is present with its value and operation and our lore block is still there. */
     boolean intact(ItemStack item) {
-        LootCategory category = LootCategory.of(item.getType());
+        LootCategory category = LootCategory.of(item);
         Map<NamespacedKey, Planned> expected = new LinkedHashMap<>();
         for (Planned planned : plan(item, category)) if (planned.stat().attribute != null) expected.put(planned.key(), planned);
         Map<NamespacedKey, ItemAttributeModifiers.Entry> found = new LinkedHashMap<>();
@@ -271,7 +285,7 @@ public final class AffixService {
     }
 
     private void render(ItemStack item) {
-        LootCategory category = LootCategory.of(item.getType());
+        LootCategory category = LootCategory.of(item);
         AffixData data = read(item);
         if (category == null || data == null) return;
         Map<AffixType, Double> active = active(data);

@@ -192,7 +192,7 @@ public final class ForgeMenu implements Listener {
     private void drawReforge(Holder holder) {
         Inventory inv = holder.inventory;
         inv.setItem(GEAR_LABEL, icon("menu_pick", "ช่องอุปกรณ์ ↓", NamedTextColor.WHITE,
-            List.of("อาวุธ ธนู โล่ เครื่องมือ เบ็ด หรือชุดเกราะ", "อุปกรณ์ธรรมดาก็รีฟอร์จให้มีเกรดได้", "Gem ที่ใส่อยู่ไม่หาย ช่อง Gem ไม่ลดลง")));
+            List.of("อาวุธ ธนู โล่ เครื่องมือ เบ็ด ชุดเกราะ หรือคทาเวท", "อาวุธตำนานและชุดเกราะเซตก็รีฟอร์จได้ (ย่อยไม่ได้)", "อุปกรณ์ธรรมดาก็รีฟอร์จให้มีเกรดได้", "Gem ที่ใส่อยู่ไม่หาย ช่อง Gem ไม่ลดลง")));
         List<String> materialLore = new ArrayList<>(List.of("วัสดุกำหนดเกรดของผลลัพธ์:"));
         for (Rarity rarity : Rarity.values()) materialLore.add(rarity.materialName + " → เกรด " + rarity.thai);
         inv.setItem(MATERIAL_LABEL, icon("menu_socket", "ช่องวัสดุช่าง ↓", NamedTextColor.WHITE, materialLore));
@@ -269,7 +269,7 @@ public final class ForgeMenu implements Listener {
         if (gemsBack > 0) lore.add("Gem ที่ใส่อยู่ " + gemsBack + " เม็ด คืนเข้ากระเป๋า");
         boolean any = !lore.isEmpty();
         if (!any) lore.add("วางอุปกรณ์หรือ Gem ในช่องว่างด้านบน");
-        if (ignored > 0) lore.add(ignored + " ชิ้นย่อยไม่ได้ จะคืนตอนปิดเมนู");
+        if (ignored > 0) lore.add(ignored + " ชิ้นย่อยไม่ได้ (อาวุธตำนาน ชุดเกราะเซต คทา ของพิเศษ) จะคืนตอนปิดเมนู");
         inv.setItem(SALVAGE_PREVIEW, icon("menu_stats", "ผลที่จะได้รับ", NamedTextColor.AQUA, lore));
         if (!any) {
             inv.setItem(INFO, icon("menu_upgrade_off", "ย่อย", NamedTextColor.DARK_GRAY, List.of("ยังไม่มีของที่ย่อยได้")));

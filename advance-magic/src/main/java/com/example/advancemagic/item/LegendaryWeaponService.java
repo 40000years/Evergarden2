@@ -101,10 +101,16 @@ public final class LegendaryWeaponService implements Listener, AutoCloseable {
         if(legacy||outdated||meta.getPersistentDataContainer().getOrDefault(new NamespacedKey(plugin,"legendary_combat_version"),PersistentDataType.INTEGER,0)!=1){
             item.setType(weapon.material);configureCombat(item,weapon);return true;
         }
-        if(!tooltip().equals(meta.lore())||!meta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)){
-            meta.lore(tooltip());meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);item.setItemMeta(meta);return true;
+        List<Component> lore=withTooltip(meta.lore());
+        if(!lore.equals(meta.lore())||!meta.hasItemFlag(ItemFlag.HIDE_ATTRIBUTES)){
+            meta.lore(lore);meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);item.setItemMeta(meta);return true;
         }
         return false;
+    }
+    /** Lines other plugins add (EvergardenForge's affix block) stay; the skill hint closes the lore. */
+    private List<Component> withTooltip(List<Component> current){
+        List<Component> lore=new ArrayList<>(current==null?List.of():current);
+        lore.removeAll(tooltip());lore.addAll(tooltip());return lore;
     }
     /** Bedrock does not target distant entities with a Java reach attribute.
      * Resolve a distant swing on the server, then use native attack/events/cooldown. */

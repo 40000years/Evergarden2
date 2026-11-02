@@ -1,9 +1,12 @@
 package com.example.forge;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
-/** Which affixes a piece of gear can roll, decided by its base material. */
+/** Which affixes a piece of gear can roll, decided by its base material (Advance Magic staffs by their own keys). */
 public enum LootCategory {
     MELEE(EquipmentSlotGroup.MAINHAND, Group.WEAPON),
     RANGED(EquipmentSlotGroup.MAINHAND, Group.RANGED),
@@ -13,7 +16,8 @@ public enum LootCategory {
     HELMET(EquipmentSlotGroup.HEAD, Group.ARMOR),
     CHESTPLATE(EquipmentSlotGroup.CHEST, Group.ARMOR),
     LEGGINGS(EquipmentSlotGroup.LEGS, Group.ARMOR),
-    BOOTS(EquipmentSlotGroup.FEET, Group.ARMOR);
+    BOOTS(EquipmentSlotGroup.FEET, Group.ARMOR),
+    STAFF(EquipmentSlotGroup.MAINHAND, Group.STAFF);
 
     /** Gem effects are defined per group. */
     public enum Group {
@@ -21,7 +25,8 @@ public enum LootCategory {
         RANGED("ธนู / หน้าไม้"),
         ARMOR("ชุดเกราะ"),
         SHIELD("โล่"),
-        TOOL("เครื่องมือ / เบ็ด");
+        TOOL("เครื่องมือ / เบ็ด"),
+        STAFF("คทาเวท");
 
         public final String thai;
 
@@ -36,6 +41,19 @@ public enum LootCategory {
     LootCategory(EquipmentSlotGroup slot, Group group) {
         this.slot = slot;
         this.group = group;
+    }
+
+    private static final NamespacedKey STAFF_ELEMENT = new NamespacedKey("advance_magic", "staff_element");
+    private static final NamespacedKey STAFF_KIND = new NamespacedKey("advance_magic", "staff_kind");
+
+    /** Advance Magic staffs (elemental or wooden) are carrot-on-a-stick items marked with the staff keys. */
+    public static LootCategory of(ItemStack item) {
+        if (item == null) return null;
+        if (item.getType() == Material.CARROT_ON_A_STICK && item.hasItemMeta()) {
+            var data = item.getItemMeta().getPersistentDataContainer();
+            if (data.has(STAFF_ELEMENT, PersistentDataType.STRING) || "wood".equals(data.get(STAFF_KIND, PersistentDataType.STRING))) return STAFF;
+        }
+        return of(item.getType());
     }
 
     public static LootCategory of(Material material) {

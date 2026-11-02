@@ -22,6 +22,7 @@ parser.add_argument('--forge', type=Path, default=root / 'output/forge-build/eve
 parser.add_argument('--template', type=Path, default=root / 'output/entry-items-check-20261031')
 parser.add_argument('--audit', action='store_true')
 parser.add_argument('--with-core', action='store_true')
+parser.add_argument('--magic-jar', type=Path, default=root / 'dist/advance-magic.jar', help='Advance Magic JAR for --with-core')
 parser.add_argument('--with-geyser', action='store_true')
 args = parser.parse_args()
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -48,7 +49,7 @@ shutil.copy2(args.forge, plugins / 'evergarden-forge.jar')
 forge_config=plugins/'EvergardenForge';forge_config.mkdir()
 (forge_config/'config.yml').write_text('config-version: 7\nresource-pack:\n  port: 0\n  public-host: 127.0.0.1\n',encoding='utf8')
 if args.with_core:
-    for name in ('evergarden.jar','advance-magic.jar'):shutil.copy2(root/'dist'/name,plugins/name)
+    shutil.copy2(root/'dist/evergarden.jar',plugins/'evergarden.jar');shutil.copy2(args.magic_jar,plugins/'advance-magic.jar')
     data=plugins/'Evergarden';data.mkdir()
     (data/'config.yml').write_text('resource-pack:\n  host:\n    use-server-port: false\n    port: 0\n    public-host: 127.0.0.1\n',encoding='utf8')
 if args.with_geyser:
@@ -61,6 +62,10 @@ classes.mkdir()
 source_dir = Path(__file__).parent
 compiler_args = ['--release', '25', '-proc:none', '-encoding', 'UTF-8', '-cp', os.pathsep.join(classpath), '-d', str(classes), str(source_dir / 'ForgeProbe.java')]
 if args.audit:compiler_args.append(str(source_dir/'ForgeAuditProbe.java'))
+if args.with_core:
+    # Real legendary weapons, armor sets and staffs through the forge (needs Advance Magic's classes).
+    compiler_args[compiler_args.index('-cp')+1]+=os.pathsep+str(plugins/'advance-magic.jar')
+    compiler_args.append(str(source_dir/'ForgeMagicGearChecks.java'))
 argfile = server / 'probe-javac.args'
 argfile.write_text('\n'.join('"' + value.replace('\\', '/') + '"' for value in compiler_args), encoding='utf8')
 subprocess.run(['java', str(root / 'tools/CompileJava.java'), str(argfile)], check=True)
@@ -89,4 +94,5 @@ if not summary.startswith('PASS'):
 assert sha(args.forge)==candidate_sha
 assert all(sha(root/p)==h for p,h in source_hashes.items()),'Source changed during test'
 (server/'forge-test-receipt.json').write_text(json.dumps(dict(result=summary.splitlines()[0],candidate_sha256=candidate_sha,
-    sources=source_hashes,with_core=args.with_core,with_geyser=args.with_geyser,audit=args.audit),indent=2)+'\n',encoding='utf8')
+    sources=source_hashes,with_core=args.with_core,with_geyser=args.with_geyser,audit=args.audit,
+    magic_sha256=sha(args.magic_jar) if args.with_core else None),indent=2)+'\n',encoding='utf8')

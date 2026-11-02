@@ -1,5 +1,5 @@
 name: EvergardenForge
-version: '0.5.8-rate-audit'
+version: '0.6.0-magic-gear'
 main: com.example.forge.ForgePlugin
 api-version: '26.2'
 description: Affix gear, reforging with three choices, salvaging, gems with sockets and purity, elite monsters and affix structure loot.

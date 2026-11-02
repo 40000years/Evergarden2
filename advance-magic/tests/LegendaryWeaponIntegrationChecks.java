@@ -122,7 +122,18 @@ public final class LegendaryWeaponIntegrationChecks extends JavaPlugin {
             .invoke(field.get(null),org.geysermc.geyser.entity.type.player.SessionPlayerEntity.class);
         context.testPlayer.uuid(UUID.randomUUID());context.testLoop=new io.netty.channel.embedded.EmbeddedChannel().eventLoop();
         punchReach(magic,context);
-        check(magic.legendaryWeapons().projectiles()==null,"Longinus projectile rendering system is disabled");
+        check(!classPresent("com.example.advancemagic.item.LonginusProjectileService"),"Longinus projectile rendering system is removed");
+        // EvergardenForge writes its affix block at the top of the lore; the held-weapon upkeep must keep it.
+        net.kyori.adventure.text.Component affix=net.kyori.adventure.text.Component.text("✦ เกรด ตำนาน");
+        for(Weapon weapon:Weapon.values()){
+            ItemStack forged=magic.legendaryWeapons().create(weapon);
+            var hint=forged.getItemMeta().lore();
+            forged.editMeta(m->{var lore=new ArrayList<net.kyori.adventure.text.Component>(List.of(affix));lore.addAll(hint);m.lore(lore);});
+            check(!magic.legendaryWeapons().migrate(forged)&&forged.getItemMeta().lore().getFirst().equals(affix),"held-weapon upkeep keeps another plugin's lore on "+weapon.id());
+            forged.editMeta(m->m.lore(List.of(affix)));
+            check(magic.legendaryWeapons().migrate(forged)&&forged.getItemMeta().lore().equals(List.of(affix,hint.getFirst())),"a missing skill hint returns after the foreign lore on "+weapon.id());
+            check(!magic.legendaryWeapons().migrate(forged)&&magic.legendaryWeapons().identify(forged)==weapon,"repaired lore is stable and still identifies "+weapon.id());
+        }
         for(Weapon weapon:Weapon.values()){
             String id="advance_magic:legendary_"+weapon.id();
             ItemStack item=magic.legendaryWeapons().create(weapon);
@@ -160,6 +171,9 @@ public final class LegendaryWeaponIntegrationChecks extends JavaPlugin {
         Path installed=Path.of("plugins/Geyser-Spigot/packs/advance-magic-bedrock.mcpack");
         check(Arrays.equals(Files.readAllBytes(installed),Files.readAllBytes(Path.of("plugins/advance-magic/resource-packs/advance-magic-bedrock.mcpack"))),"installed Geyser pack matches bundled release");
         check(Files.exists(Path.of("plugins/ModelEngine/resource pack.zip")),"ModelEngine compiled editable source assets");
+    }
+    boolean classPresent(String name){
+        try{Class.forName(name,false,Bukkit.getPluginManager().getPlugin("advance-magic").getClass().getClassLoader());return true;}catch(ClassNotFoundException missing){return false;}
     }
     void finish(Throwable error){
         if(error!=null)getLogger().log(java.util.logging.Level.SEVERE,"WEAPON INTEGRATION FAILED after "+checks,error);

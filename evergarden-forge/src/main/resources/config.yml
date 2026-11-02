@@ -65,6 +65,13 @@ affixes:
   haste:       {enabled: true, min: 0.05, max: 0.25}
   delve:       {enabled: true, min: 1.0,  max: 6.0}
   tide:        {enabled: true, min: 0.10, max: 0.50}
+  # Staff affixes (Advance Magic): spell power and healing are percent of the cast stat, wellspring is flat
+  # maximum mana, frugal lowers mana cost (Advance Magic caps all reductions at 40%), flow speeds regeneration.
+  arcane:      {enabled: true, min: 0.03, max: 0.15}
+  mending:     {enabled: true, min: 0.04, max: 0.20}
+  wellspring:  {enabled: true, min: 5.0,  max: 25.0}
+  frugal:      {enabled: true, min: 0.02, max: 0.08}
+  flow:        {enabled: true, min: 0.05, max: 0.25}
 
 gems:
   # Purity I..V multiply each gem's base value (see docs/evergarden-forge.md for the table).
@@ -168,12 +175,9 @@ elites:
                gear: 2, gem-chance: 1.0, materials: [2, 4], xp: 12}
 
 # Items carrying any of these persistent-data keys never get affixes and cannot be salvaged.
-# A trailing * matches a key prefix. Legendary weapons, boss armor sets, staffs, wands and relics.
+# A trailing * matches a key prefix. Flying staffs, retired wands, cores, relics, keys and guide books.
+# (Elemental and wooden staffs are recognised as staffs and stay forgeable.)
 protected-keys:
-  - advance-magic:legendary_weapon
-  - advance_magic:legendary_weapon
-  - advance-magic:armor_set
-  - advance_magic:armor_set
   - advance-magic:wooden_staff
   - advance-magic:elemental_staff*
   - advance-magic:flying_staff*
@@ -184,6 +188,15 @@ protected-keys:
   - evergarden:relic_v2
   - evergarden:void_key
   - evergarden:guide_book
+
+# Magic gear: Advance Magic legendary weapons and armor sets (Seraph, Revenant) and its staffs can be
+# reforged and take gems, but are never salvaged, and chests never turn them into affix loot.
+# A key here also overrides the same key in an older protected-keys list.
+salvage-locked-keys:
+  - advance-magic:legendary_weapon
+  - advance_magic:legendary_weapon
+  - advance-magic:armor_set
+  - advance_magic:armor_set
 
 # Mob farms keep their vanilla drops and XP; only the forge's own chances (ordinary-mob gems, elite
 # spawns, elite rewards) drop, silently, where many mobs have just died. Exploring keeps the full rate.

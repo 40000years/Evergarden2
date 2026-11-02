@@ -170,10 +170,38 @@ public class ForgeProbe extends JavaPlugin {
         }
         passed.removeIf(name -> name.equals("generated gear is epic affix gear"));
         passed.add("300 generated epic pieces all carry epic affixes");
-        check(kinds.size() == LootCategory.values().length, "generated gear covers every category: " + kinds);
+        // Staffs come only from Advance Magic; generated gear covers every other category.
+        check(kinds.size() == LootCategory.values().length - 1 && !kinds.contains("STAFF"), "generated gear covers every category but staffs: " + kinds);
         ItemStack legendary = new ItemStack(Material.NETHERITE_SWORD);
         legendary.editMeta(meta -> meta.getPersistentDataContainer().set(new NamespacedKey("advance-magic", "legendary_weapon"), PersistentDataType.STRING, "excalibur"));
-        check(!ForgeApi.affix(legendary, "COMMON", new Random(3)) && affixes.category(legendary) == null, "legendary weapon refused");
+        check(ForgeApi.affix(legendary, "COMMON", new Random(3)) && affixes.category(legendary) == LootCategory.MELEE, "legendary weapon takes affixes");
+        check(!affixes.salvageable(legendary) && affixes.salvageLocked(legendary), "legendary weapon can never be salvaged");
+        ItemStack seraph = new ItemStack(Material.NETHERITE_CHESTPLATE);
+        seraph.editMeta(meta -> meta.getPersistentDataContainer().set(new NamespacedKey("advance-magic", "armor_set"), PersistentDataType.STRING, "seraph_chestplate"));
+        check(ForgeApi.affix(seraph, "MYTHIC", new Random(4)) && affixes.category(seraph) == LootCategory.CHESTPLATE && affixes.read(seraph).levels().size() == 4,
+            "armor set piece takes 4 mythic chestplate affixes");
+        check(!affixes.salvageable(seraph), "armor set piece can never be salvaged");
+        // 6b. Advance Magic staffs: carrot-on-a-stick items with the staff keys, a pool of their own, never salvaged.
+        ItemStack fireStaff = staff("staff_element", "fire");
+        check(affixes.category(fireStaff) == LootCategory.STAFF && affixes.category(staff("staff_kind", "wood")) == LootCategory.STAFF, "elemental and wooden staffs are staffs");
+        check(affixes.category(new ItemStack(Material.CARROT_ON_A_STICK)) == null && affixes.category(staff("staff_kind", "other")) == null, "a plain carrot on a stick is not a staff");
+        ItemStack migratedStaff = staff("staff_element", "dark");
+        migratedStaff.editMeta(meta -> meta.getPersistentDataContainer().set(new NamespacedKey("advance-magic", "wand"), PersistentDataType.STRING, "wither_ray"));
+        check(affixes.category(migratedStaff) == LootCategory.STAFF, "a staff migrated from a retired wand keeps its staff identity");
+        Set<AffixType> staffPool = Set.of(AffixType.ARCANE, AffixType.MENDING, AffixType.WELLSPRING, AffixType.FRUGAL, AffixType.FLOW, AffixType.VIGOR, AffixType.FLEET);
+        check(Set.copyOf(affixes.pool(LootCategory.STAFF)).equals(staffPool), "staff affix pool: " + affixes.pool(LootCategory.STAFF));
+        check(ForgeApi.affix(fireStaff, "MYTHIC", new Random(5)) && staffPool.containsAll(affixes.read(fireStaff).levels().keySet())
+            && affixes.read(fireStaff).levels().size() == 4, "mythic staff rolls 4 staff affixes: " + affixes.read(fireStaff));
+        check(!affixes.salvageable(fireStaff), "staff can never be salvaged");
+        affixes.apply(fireStaff, new AffixData(Rarity.MYTHIC, Map.of(AffixType.ARCANE, 1.0, AffixType.WELLSPRING, 0.5), 2));
+        affixes.setGem(fireStaff, 0, new Gem(GemType.FIRE, 3));
+        affixes.setGem(fireStaff, 1, new Gem(GemType.LIFE, 1));
+        check(Math.abs(affixes.total(fireStaff, Stat.SPELL_POWER) - 0.15) < 1e-9 && Math.abs(affixes.total(fireStaff, Stat.MAX_MANA) - 15) < 1e-9
+            && Math.abs(affixes.total(fireStaff, Stat.ELEMENT_FIRE) - 0.03 * 2.1) < 1e-9 && Math.abs(affixes.total(fireStaff, Stat.HEALING_POWER) - 0.03) < 1e-9,
+            "staff totals: arcane 15% spell power, wellspring +15 mana, fire III +6.3% fire, life I +3% healing");
+        check(lore(fireStaff).contains(" ▸ +15% พลังเวท  (100%)") && lore(fireStaff).stream().anyMatch(l -> l.startsWith(" ◆ อัญมณีเพลิง III: +6.3% พลังธาตุไฟ")),
+            "staff lore shows spell stats: " + lore(fireStaff));
+        check(ours(fireStaff).isEmpty() && !affixes.ensure(fireStaff), "spell stats add no attribute modifiers and the staff is intact");
         ItemStack staff = new ItemStack(Material.IRON_SWORD);
         staff.editMeta(meta -> meta.getPersistentDataContainer().set(new NamespacedKey("advance-magic", "elemental_staff_fire"), PersistentDataType.STRING, "x"));
         check(affixes.category(staff) == null, "prefix-protected key refused");
@@ -185,6 +213,10 @@ public class ForgeProbe extends JavaPlugin {
         Location origin = new Location(world, 0.5, world.getHighestBlockYAt(0, 0) + 1, 0.5);
         List<ItemStack> loot = new ArrayList<>();
         for (int i = 0; i < 60; i++) loot.add(new ItemStack(Material.IRON_SWORD));
+        ItemStack lootLegendary = new ItemStack(Material.NETHERITE_SWORD);
+        lootLegendary.editMeta(meta -> meta.getPersistentDataContainer().set(new NamespacedKey("advance-magic", "legendary_weapon"), PersistentDataType.STRING, "tyrfing"));
+        for (int i = 0; i < 20; i++) loot.add(lootLegendary.clone());
+        loot.add(staff("staff_element", "ice"));
         loot.add(new ItemStack(Material.BREAD, 4));
         LootContext context = new LootContext.Builder(origin).build();
         LootGenerateEvent event = new LootGenerateEvent(world, null, null, LootTables.SIMPLE_DUNGEON.getLootTable(), context, loot, false);
@@ -192,6 +224,7 @@ public class ForgeProbe extends JavaPlugin {
         long converted = event.getLoot().stream().filter(i -> affixes.read(i) != null && i.getType() == Material.IRON_SWORD).count();
         check(converted >= 20 && converted <= 60, "chest converts about 60% of swords: " + converted);
         check(event.getLoot().stream().anyMatch(i -> i.getType() == Material.BREAD && !i.hasItemMeta()), "bread untouched");
+        check(event.getLoot().stream().filter(i -> affixes.salvageLocked(i)).allMatch(i -> affixes.read(i) == null), "chests never turn legendary weapons or staffs into affix loot");
         List<ItemStack> pluginLoot = new ArrayList<>(List.of(new ItemStack(Material.IRON_SWORD)));
         Bukkit.getPluginManager().callEvent(new LootGenerateEvent(world, null, null, LootTables.SIMPLE_DUNGEON.getLootTable(), context, pluginLoot, true));
         check(affixes.read(pluginLoot.getFirst()) == null, "plugin-filled chest untouched");
@@ -467,6 +500,7 @@ public class ForgeProbe extends JavaPlugin {
                 check(Math.abs(wardenHealth - 1024) < 1e-6 && Math.abs(warden.getAttribute(Attribute.ATTACK_DAMAGE).getValue() - wardenDamage) < 1e-6,
                     "rare warden elite: health " + wardenHealth + " (vanilla cap 1024), damage unchanged " + wardenDamage);
                 check(forge.elites().count(world) == 3, "three elites tracked");
+                magicGear(forge);
                 additionalChecks(forge);
                 finish("PASS " + passed.size() + " forge checks\n" + String.join("\n", passed));
             } catch (Throwable error) {
@@ -475,4 +509,27 @@ public class ForgeProbe extends JavaPlugin {
         }, 20L);
     }
     protected void additionalChecks(ForgePlugin forge)throws Exception {}
+
+    /** Real Advance Magic items, when run.py --with-core compiled ForgeMagicGearChecks against Advance Magic. */
+    private void magicGear(ForgePlugin forge) throws Throwable {
+        Class<?> checks;
+        try {
+            checks = Class.forName("ForgeMagicGearChecks");
+        } catch (ClassNotFoundException absent) {
+            return;
+        }
+        var run = checks.getDeclaredMethod("run", ForgeProbe.class, ForgePlugin.class);
+        run.setAccessible(true);
+        try {
+            run.invoke(null, this, forge);
+        } catch (java.lang.reflect.InvocationTargetException error) {
+            throw error.getCause();
+        }
+    }
+
+    private static ItemStack staff(String key, String value) {
+        ItemStack item = new ItemStack(Material.CARROT_ON_A_STICK);
+        item.editMeta(meta -> meta.getPersistentDataContainer().set(new NamespacedKey("advance_magic", key), PersistentDataType.STRING, value));
+        return item;
+    }
 }

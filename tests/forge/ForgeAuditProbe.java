@@ -151,6 +151,14 @@ public final class ForgeAuditProbe extends ForgeProbe {
             upgraded.editMeta(m->m.getPersistentDataContainer().set(new NamespacedKey(namespace,"relic_eternity"),org.bukkit.persistence.PersistentDataType.BYTE,(byte)1));
             check(forge.affixes().affix(upgraded,Rarity.RARE,new Random(8)),"Eternity upgrade remains forge-compatible: "+namespace);
         }
+        // A server config from before 0.6.0 still lists legendary weapons and armor sets as protected.
+        var config=org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(forge.getDataFolder().toPath().resolve("config.yml").toFile());
+        config.set("protected-keys",List.of("advance-magic:legendary_weapon","advance-magic:armor_set","evergarden:relic"));
+        var old=new ForgeSettings(config,forge.getLogger());
+        check(!old.isProtectedKey("advance-magic:legendary_weapon")&&!old.isProtectedKey("advance-magic:armor_set")&&old.isProtectedKey("evergarden:relic"),
+            "an old protected-keys list no longer blocks legendary weapons or armor sets");
+        config.set("salvage-locked-keys",List.of());
+        check(new ForgeSettings(config,forge.getLogger()).isProtectedKey("advance-magic:legendary_weapon"),"emptying salvage-locked-keys protects them again");
     }
     private NamespacedKey oreKey(org.bukkit.block.Block block){
         return new NamespacedKey(forge,"ore_placed_"+block.getX()+"_"+block.getY()+"_"+block.getZ());

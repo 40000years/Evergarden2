@@ -60,6 +60,8 @@ public final class ForgePlugin extends JavaPlugin {
             }
         }
         elites.start();
+        // Advance Magic may enable after the forge; hook its cast stats once every plugin is up.
+        getServer().getScheduler().runTask(this, () -> MagicStats.register(this));
         ForgeApi.bind(this);
         resources.start();
         getLogger().info("EvergardenForge ready: " + AffixType.values().length + " affixes, " + GemType.values().length

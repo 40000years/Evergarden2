@@ -41,6 +41,8 @@ public final class ForgeSettings {
     public final double salvagePlainChance;
     public final Map<AffixType, Range> affixes = new EnumMap<>(AffixType.class);
     public final Set<String> protectedKeys = new HashSet<>();
+    /** Magic gear identities: forgeable and socketable, never salvaged; they override an older protected-keys entry. */
+    public final Set<String> salvageLockedKeys = new HashSet<>();
     public final List<String> protectedPrefixes = new ArrayList<>();
 
     public final double[] gemTierMultipliers = {1.0, 1.5, 2.1, 2.8, 3.6};
@@ -131,8 +133,11 @@ public final class ForgeSettings {
             affixes.put(type, new Range(config.getBoolean(path + "enabled", false),
                 config.getDouble(path + "min", 0), config.getDouble(path + "max", 0)));
         }
+        for (String key : config.getStringList("salvage-locked-keys")) salvageLockedKeys.add(key.trim().toLowerCase(Locale.ROOT));
         for (String key : config.getStringList("protected-keys")) {
             String value = key.trim().toLowerCase(Locale.ROOT);
+            // Configs from before 0.6.0 still protect legendary weapons and armor sets: the forge now accepts them.
+            if (salvageLockedKeys.contains(value)) continue;
             // Eternity marks a player-applied upgrade, not the identity of a special relic.
             if (value.equals("evergarden:relic_eternity") || value.equals("voidscape:relic_eternity")) continue;
             if (value.endsWith("*")) protectedPrefixes.add(value.substring(0, value.length() - 1));

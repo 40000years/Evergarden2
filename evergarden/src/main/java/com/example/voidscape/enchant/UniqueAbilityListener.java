@@ -26,6 +26,8 @@ import java.util.*;
 
 public final class UniqueAbilityListener implements Listener {
     private static final ThreadLocal<Boolean> GENERATED_DAMAGE = ThreadLocal.withInitial(() -> false);
+    private record AttackCharge(UUID target, int tick, float strength) {}
+    private static final Map<UUID, AttackCharge> ATTACK_CHARGES = new HashMap<>();
     private final VoidscapePlugin plugin;
     private final NamespacedKey arrowUniqueKey, arrowShooterKey;
     private final Map<UUID, Integer> thunderHits = new HashMap<>();
@@ -244,6 +246,34 @@ public final class UniqueAbilityListener implements Listener {
     // ⚔️ 2. MELEE COMBAT & COLOSSUS SLAYER
     // ==========================================
 
+    /** Paper resets the attack ticker before the damage event; capture it before the swing. */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onAttackStart(io.papermc.paper.event.player.PrePlayerAttackEntityEvent event) {
+        Player player = event.getPlayer();
+        ATTACK_CHARGES.put(player.getUniqueId(), new AttackCharge(event.getAttacked().getUniqueId(),
+            Bukkit.getCurrentTick(), player.getCooledAttackStrength(0.5f)));
+    }
+
+    @EventHandler
+    public void onAttackPlayerQuit(PlayerQuitEvent event) { ATTACK_CHARGES.remove(event.getPlayer().getUniqueId()); }
+
+    /** Missing pre-attack events are scripted ability damage, not an uncharged player swing. */
+    public static float attackStrength(Player player, Entity victim) {
+        AttackCharge charge = ATTACK_CHARGES.get(player.getUniqueId());
+        return hasAttackStart(player, victim) ? Math.clamp(charge.strength(), 0f, 1f) : 1f;
+    }
+
+    public static boolean hasAttackStart(Player player, Entity victim) {
+        AttackCharge charge = ATTACK_CHARGES.get(player.getUniqueId());
+        return charge != null && charge.tick() == Bukkit.getCurrentTick() && charge.target().equals(victim.getUniqueId());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onAttackFinished(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player player && hasAttackStart(player, event.getEntity()))
+            ATTACK_CHARGES.remove(player.getUniqueId());
+    }
+
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         // Virtual Thorns Retaliation (Levels 4-10) when player is attacked
@@ -292,14 +322,14 @@ public final class UniqueAbilityListener implements Listener {
         // Virtual Sharpness Bonus (Levels 6-10)
         int lbSharp = plugin.relics().getLimitBreakLevel(weapon, LimitBreakType.SHARPNESS);
         if (lbSharp > 5) {
-            double bonusSharp = (lbSharp - 5) * 1.5;
+            double bonusSharp = (lbSharp - 5) * 1.5 * attackStrength(player, victim);
             event.setDamage(event.getDamage() + bonusSharp);
         }
 
         // Virtual Smite Bonus (Levels 6-10) against undead
         int lbSmite = plugin.relics().getLimitBreakLevel(weapon, LimitBreakType.SMITE);
         if (lbSmite > 5 && isUndead(victim)) {
-            double bonusSmite = (lbSmite - 5) * 2.5;
+            double bonusSmite = (lbSmite - 5) * 2.5 * attackStrength(player, victim);
             event.setDamage(event.getDamage() + bonusSmite);
             victim.getWorld().spawnParticle(Particle.CRIT, victim.getLocation().add(0, 1, 0), 6, 0.2, 0.3, 0.2, 0.1);
         }
@@ -402,11 +432,15 @@ public final class UniqueAbilityListener implements Listener {
                 victim.getWorld().strikeLightningEffect(victim.getLocation());
                 victim.setNoDamageTicks(0);
                 double trueDamage = 25.0;
-                double oldHp = victim.getHealth();
-                double newHp = Math.max(0.0, oldHp - trueDamage);
-                victim.setHealth(newHp);
-                if (newHp <= 0.001) {
-                    abilityDamage(victim, 1.0, player);
+                if (isBoss(victim)) {
+                    double armorBefore = event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR) ? event.getDamage(EntityDamageEvent.DamageModifier.ARMOR) : 0.0;
+                    event.setDamage(event.getDamage() + trueDamage);
+                    if (event.isApplicable(EntityDamageEvent.DamageModifier.ARMOR)) event.setDamage(EntityDamageEvent.DamageModifier.ARMOR, armorBefore);
+                } else {
+                    double oldHp = victim.getHealth();
+                    double newHp = Math.max(0.0, oldHp - trueDamage);
+                    victim.setHealth(newHp);
+                    if (newHp <= 0.001) abilityDamage(victim, 1.0, player);
                 }
                 player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 0.8f, 1.2f);
                 player.sendActionBar(Component.text("✦ สายฟ้าทัณฑ์สวรรค์! (True Damage เจาะเกราะ)", NamedTextColor.AQUA));

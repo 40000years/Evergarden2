@@ -10,9 +10,9 @@ elemental-visuals:
   sounds: true
   # Cosmetic limits do not consume combat EffectEngine slots or change damage.
   max-scenes: 96
-  max-native-particles-per-world-tick: 1200
-  max-native-particles-per-viewer-tick: 220
-  max-native-displays-per-world: 80
+  max-native-particles-per-world-tick: 2400
+  max-native-particles-per-viewer-tick: 360
+  max-native-displays-per-world: 160
   max-native-projectiles-per-world: 48
   # Limits for the optional authored renderer.
   max-planes-per-world: 128
@@ -71,7 +71,7 @@ elemental-combat:
   target-cap: 12
   # A single cast (including its DoT and reactions) can remove at most 5% boss HP.
   boss-damage-cap-percent: 5
-  healing-per-cast-percent: 35
+  healing-per-cast-percent: 60
   healing-pulse-lock-ticks: 15
   phoenix-health-percent: 25
   summon-goal-range: 12
@@ -94,122 +94,11 @@ max-targets-per-effect: 32
 # Native staff models, now carrying an item-owned elemental spell loadout.
 elemental-staffs:
   ambient-effects: true
-# Legacy spell configuration remains for bosses and internal API integrations.
-basic-casting:
-  max-active-per-world: 32
-  max-pulse-targets: 6
-  particle-budget-per-frame: 64
-  # Reduced basic damage to players, before their usual damage defenses.
-  player-damage-multiplier: 0.6
-  profiles:
-    bolt:
-      mana: 3
-      cooldown-seconds: 1.4
-      damage: 14.0
-      range: 22.0
-    beam:
-      mana: 3
-      cooldown-seconds: 1.25
-      damage: 12.0
-      range: 20.0
-    pulse:
-      mana: 4
-      cooldown-seconds: 1.75
-      damage: 10.0
-      range: 3.0
-    mythic:
-      mana: 5
-      cooldown-seconds: 1.75
-      damage: 18.0
-      range: 24.0
-    legendary:
-      mana: 7
-      cooldown-seconds: 2.25
-      # Total per target across every pulse, projectile and decorative shard.
-      damage: 24.0
-      range: 24.0
-# Bound the new cinematic spells' packet work independently of older spells.
-mythic-max-active-per-world: 4
-# Layered dragon sigils, sixteen lunar needle portals and sequential crimson impacts.
-# Opening attacks and the finale
-# belong to one cast; no additional mana or cooldown is charged between stages.
-legendary:
-  max-active-per-world: 2
-  radius: 14
-  # Scales the authored structures and directional beam hit widths together.
-  visual-scale: 1.0
-  particle-budget-per-frame: 220
 mythic-terrain:
-  # Solar lava and Chronos blue ice restore the original ground after each cast.
+  # Restores ground that a retired Solar/Chronos cast left behind before a crash.
   radius: 16
   duration-seconds: 15
   chronos-ice-duration-seconds: 6
-meteor:
-  ignite-terrain: true
-  # Explosions damage entities but never remove terrain blocks.
-  damage: 135.0
-damage:
-  # Direct full-scene exposure: Verdant beam 775, one Lunar column 760, Crimson 800.
-  # Keep the established keys when upgrading. Verdant's former thorns key now
-  # controls its four opening forward-beam pulses; Lunar's slash/moonfall keys
-  # control repeated column pulses / the simultaneous sixteen-column finale.
-  # Crimson distributes collapse + twice aftershock evenly across eight shard hits.
-  verdant-thorns: 65.0
-  verdant-dragon-breath: 55.0
-  verdant-final: 240.0
-  lunar-slash: 70.0
-  lunar-moonfall: 260.0
-  lunar-final: 110.0
-  crimson-heartbeat: 75.0
-  crimson-collapse: 300.0
-  crimson-aftershock: 100.0
-  # Full direct exposure: Solar 745, Shulker 750, Chronos 895 (before fire/Wither damage).
-  solar-beam: 45.0
-  solar-apocalypse: 250.0
-  solar-lava: 18.0
-  # Heaven's Judgment: eight 0.5-second pulses and one closing pulse = 760 damage.
-  heavens-judgment-pulse: 85.0
-  heavens-judgment-final: 80.0
-  chronos-blade: 30.0
-  chronos-shatter: 180.0
-  chronos-final-burst: 160.0
-  chronos-ice-pulse: 50.0
-  sonic-boom: 112.5
-  blaze-barrage: 37.5
-  guardian-tidal-burst: 67.5
-  poison-impact: 30.0
-  lightning: 90.0
-  lightning-secondary: 45.0
-  frost-shatter: 52.5
-  earth-wall-rupture: 37.5
-  dragon-per-second: 45.0
-  wither-skull: 60.0
-  shulker-impact: 30.0
-  shulker-singularity-burst: 180.0
-  void-collapse: 67.5
-  shadow-step-rupture: 37.5
-  soul-nova: 52.5
-  shroud-ambush: 75.0
-  natures-bloom-thorns: 30.0
-# Automatic extra stage from the same cast, with no additional mana or cooldown.
-# Existing customized base damage settings are preserved when upgrading.
-follow-up:
-  damage:
-    lightning_strike: 27.0
-    frost_nova: 37.5
-    shadow_step: 30.0
-    natures_bloom: 22.5
-    earth_wall: 37.5
-    dragons_breath: 45.0
-    void_pull: 30.0
-    sonic_boom: 37.5
-    blaze_barrage: 30.0
-    wither_ray: 22.5
-    shulker_levitation: 30.0
-    meteor_strike: 22.5
-    iron_armor: 37.5
-    vex_legion: 37.5
-    guardian_beam: 30.0
 # Bundled pack is automatically offered one tick after joining.
 flying-staff:
   enabled: true
@@ -243,9 +132,9 @@ resource-pack:
   # your own CDN; administrator-owned external URLs are preserved on upgrades.
   url: ''
   sha1: ''
-  required: true
-  # Seconds a player may spend downloading all required Java packs before the kick.
-  # Slow connections need several minutes; the larger value of both plugins applies.
+  # Resource packs are optional. Players can still join if loading fails.
+  required: false
+  # Warn after this many seconds if a Java pack is still loading; players are not kicked.
   required-timeout-seconds: 600
   # Public copies of the packs, named by a fingerprint of their contents. At startup the
   # server downloads each copy once and offers it only if it holds exactly the same files;

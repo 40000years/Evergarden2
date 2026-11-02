@@ -1,0 +1,18 @@
+{
+  "revision": "realm-bosses-merged-v1",
+  "models": [
+    "cinder_colossus",
+    "soul_hound",
+    "crystal_moth",
+    "unlit_sun"
+  ],
+  "codes": {
+    "cinder_colossus": "cc",
+    "soul_hound": "sh",
+    "crystal_moth": "cm",
+    "unlit_sun": "us"
+  },
+  "cubes": 1903,
+  "displays": 1030,
+  "clips": 60
+}

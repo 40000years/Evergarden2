@@ -23,7 +23,36 @@ final class MythicVisuals {
     MythicVisuals(MagicContext c,java.util.function.Predicate<Player> packetPermit,int range){this.c=c;this.packetPermit=packetPermit;this.range=range;}
     boolean hasJavaViewers(){return viewers.stream().anyMatch(v->(v.session==null||disabled)&&c.plugin.packs().hasApplied(v.player));}
     boolean hasViewers(){return !viewers.isEmpty();}
+    /** Bedrock viewers can receive cube props: Geyser is running and the full-pose rig registered at its startup. */
+    boolean blocksAvailable(){return bridge!=null&&!disabled&&!blocksDisabled&&c.plugin.blockModels()!=null&&c.plugin.blockModels().ready();}
+    boolean hasBedrockViewers(){return !disabled&&viewers.stream().anyMatch(v->v.session!=null);}
+    /** True when this player is drawn by a Bedrock client (a Geyser session in the current frame). */
+    boolean isBedrock(Player player){for(var v:viewers)if(v.player==player)return v.session!=null;return false;}
     void clear(){viewers=List.of();}
+    /** The Geyser session of a player, or null for Java players and servers without Geyser. */
+    Object session(Player player){
+        if(bridge==null&&!disabled){
+            var geyser=Bukkit.getPluginManager().getPlugin("Geyser-Spigot");
+            if(geyser!=null&&geyser.isEnabled())try{bridge=new Bridge(geyser.getClass().getClassLoader());}
+            catch(ReflectiveOperationException|LinkageError e){disable(e);}
+        }
+        if(bridge==null||disabled)return null;
+        try{return bridge.connection.invoke(bridge.instance,player.getUniqueId());}
+        catch(ReflectiveOperationException|LinkageError e){disable(e);return null;}
+    }
+    /** One advance_magic particle with float Molang variables, sent straight to a Geyser session. */
+    boolean particle(Object session,String identifier,Location at,String variablesJson){
+        if(bridge==null||disabled||session==null)return false;
+        try{
+            Object packet=bridge.packet.newInstance();
+            bridge.identifier.invoke(packet,identifier);
+            bridge.position.invoke(packet,bridge.vector.invoke(null,at.getX(),at.getY(),at.getZ()));
+            bridge.setDimension.invoke(packet,(int)bridge.dimension.invoke(null,session));
+            bridge.variables.invoke(packet,Optional.of(variablesJson));
+            bridge.send.invoke(session,packet);
+            return true;
+        }catch(ReflectiveOperationException|LinkageError e){disable(e);return false;}
+    }
 
     void frame(Location center) {
         if(bridge==null&&!disabled) {
@@ -50,6 +79,23 @@ final class MythicVisuals {
     }
     boolean needsSealFallback() {
         return viewers.stream().anyMatch(viewer->(viewer.session==null||disabled)&&!c.plugin.packs().hasApplied(viewer.player));
+    }
+    /** Sends one sized mythic-tint glow to a Bedrock viewer; false when that viewer must be drawn with Java dust instead. */
+    boolean glow(Player player,Location at,Color color,float size) {
+        if(bridge==null||disabled||!c.loaded(at))return false;
+        for(var viewer:viewers)if(viewer.player==player) {
+            if(viewer.session==null)return false;
+            try {
+                Object packet=bridge.packet.newInstance();
+                bridge.identifier.invoke(packet,"advance_magic:mythic_"+tint(color));
+                bridge.position.invoke(packet,bridge.vector.invoke(null,at.getX(),at.getY(),at.getZ()));
+                bridge.setDimension.invoke(packet,viewer.dimension);
+                bridge.variables.invoke(packet,Optional.of("[{\"name\":\"variable.magic_size\",\"value\":{\"type\":\"float\",\"value\":"+size+"}}]"));
+                bridge.send.invoke(viewer.session,packet);
+                return true;
+            }catch(ReflectiveOperationException|LinkageError e){disable(e);return false;}
+        }
+        return false;
     }
     private void dust(Location at,Color color,float size,boolean fallbackOnly) {
         if(!c.loaded(at))return;
@@ -91,6 +137,10 @@ final class MythicVisuals {
     }
     /** A centred, fully rotatable cube rig; the vanilla falling-block renderer cannot reproduce display transforms. */
     void block(BlockProp prop,Location at,double size,org.joml.Quaternionf rotation,int ticks) {
+        block(prop,at,size,rotation,ticks,1,1,1);
+    }
+    /** A centred cube of {@code size} scaled per axis (sx, sy, sz) in its own rotated frame, for Bedrock viewers. */
+    void block(BlockProp prop,Location at,double size,org.joml.Quaternionf rotation,int ticks,float sx,float sy,float sz) {
         var active=new HashMap<UUID,Viewer>();
         if(!disabled&&!blocksDisabled)for(Viewer viewer:viewers)if(viewer.session!=null&&viewer.player.isOnline()&&viewer.player.getWorld()==at.getWorld())active.put(viewer.player.getUniqueId(),viewer);
         for(var entry:List.copyOf(prop.bodies.entrySet())){
@@ -106,7 +156,7 @@ final class MythicVisuals {
         for(var entry:active.entrySet()){
             Viewer viewer=entry.getValue();
             BlockBody body=prop.bodies.computeIfAbsent(entry.getKey(),id->new BlockBody(this,blockBridge,viewer.session,viewer.dimension,at.getWorld().getUID(),c.plugin.blockModels().material(prop.material)));
-            body.update(at.getX(),at.getY(),at.getZ(),(float)size,rotation.x,rotation.y,rotation.z,rotation.w,ticks);
+            body.update(at.getX(),at.getY(),at.getZ(),(float)size,rotation.x,rotation.y,rotation.z,rotation.w,ticks,sx,sy,sz);
         }
     }
     private void blockFailure(Throwable failure){
@@ -121,7 +171,7 @@ final class MythicVisuals {
     }
     private static final class BlockBody {
         final MythicVisuals owner;final BlockBridge bridge;final Object session;final int dimension,material;final UUID world;
-        Object entity;double anchorX,anchorY,anchorZ;float[] previous;int revision;volatile boolean closed,failed;
+        Object entity;double anchorX,anchorY,anchorZ;float[] previous;int revision,idle;volatile boolean closed,failed;
         BlockBody(MythicVisuals owner,BlockBridge bridge,Object session,int dimension,UUID world,int material){
             this.owner=owner;this.bridge=bridge;this.session=session;this.dimension=dimension;this.world=world;this.material=material;
         }
@@ -129,7 +179,7 @@ final class MythicVisuals {
             try{bridge.execute.invoke(session,work);}catch(ReflectiveOperationException|RuntimeException failure){fail(failure);}
         }
         void fail(Throwable failure){if(!failed){failed=true;owner.blockFailure(failure);}}
-        void update(double x,double y,double z,float size,float qx,float qy,float qz,float qw,int ticks){
+        void update(double x,double y,double z,float size,float qx,float qy,float qz,float qw,int ticks,float sx,float sy,float sz){
             if(closed||failed)return;
             enqueue(()->{
                 if(closed||failed)return;
@@ -150,8 +200,12 @@ final class MythicVisuals {
                         // rotated 180 degrees around its own spawn point.
                         bridge.yaw.invoke(entity,180f);bridge.headYaw.invoke(entity,180f);
                     }
-                    float[] target={(float)(x-anchorX),(float)(y-anchorY),(float)(z-anchorZ),qx,qy,qz,qw,size};
+                    float[] target={(float)(x-anchorX),(float)(y-anchorY),(float)(z-anchorZ),qx,qy,qz,qw,size,sx,sy,sz};
                     boolean first=previous==null;
+                    // A resting prop costs Bedrock almost nothing: an unchanged pose is re-sent only about once a
+                    // second, so a client that missed the spawn's pose (a static wall would stay at size 0) recovers.
+                    if(!first&&java.util.Arrays.equals(target,previous)&&++idle<20)return;
+                    idle=0;
                     if(!first&&previous[3]*qx+previous[4]*qy+previous[5]*qz+previous[6]*qw<0)for(int i=3;i<7;i++)target[i]=-target[i];
                     bridge.models.pose(entity,material,++revision,first?target:previous,target,first?0:ticks/20f);
                     previous=target;
@@ -223,6 +277,12 @@ final class MythicVisuals {
         if(bridge==null||disabled)return;
         for(var viewer:viewers)if(viewer.session!=null&&viewer.player.isOnline())
             linePacket(viewer,model,at,width,height,right,up,radiansPerTick);
+    }
+    /** A camera-facing sprite ({@code <model>_bb}) for Bedrock viewers, the twin of a Java CENTER-billboard display. */
+    void lineBillboard(String model,Location at,double width,double height) {
+        if(bridge==null||disabled)return;
+        for(var viewer:viewers)if(viewer.session!=null&&viewer.player.isOnline())
+            sendLinePacket(viewer,model+"_bb",at,width,height,0,new Vector(0,0,1),true,null);
     }
     void lineRay(String model,Location at,double width,double height,Vector direction) {
         if(bridge==null||disabled)return;

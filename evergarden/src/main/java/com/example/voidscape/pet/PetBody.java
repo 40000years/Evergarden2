@@ -43,6 +43,8 @@ final class PetBody {
     final PetCatalog.Stage stage;
     /** A small body that sits on its owner's head; its receiver is never shown, so it cannot block clicks. */
     boolean perched;
+    /** The owner is driving this full-size mythical; ordinary following and assist pause. */
+    boolean ridden;
     /** Assist mode: what it is fighting, when it may bite again and whether this target was struck yet. */
     org.bukkit.entity.LivingEntity target;
     int nextStrike,struck;

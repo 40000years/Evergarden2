@@ -1,0 +1,39 @@
+{
+  "revision": "unlit-sun-v1",
+  "title": "Unlit Sun",
+  "cubes": 477,
+  "bones": 25,
+  "displays": 262,
+  "scale": 3.6,
+  "texture": {
+    "size": 1024,
+    "density": 7.0,
+    "tiles": 354,
+    "coverage": 0.112
+  },
+  "aura_bones": [
+    "corona",
+    "ring",
+    "monoliths",
+    "debris",
+    "sigil"
+  ],
+  "animations": {
+    "idle": 4.0,
+    "walk": 2.0,
+    "attack_windup": 0.9,
+    "attack_active": 0.5,
+    "attack_recover": 0.8,
+    "skill_windup": 1.2,
+    "skill_active": 0.6,
+    "skill_recover": 0.8,
+    "ultimate_windup": 2.0,
+    "ultimate_active": 1.6,
+    "ultimate_recover": 1.6,
+    "stun": 2.0,
+    "transition": 3.0,
+    "spawn": 3.0,
+    "aura": 40.0
+  },
+  "worst_ik_reach_error": 0.0
+}

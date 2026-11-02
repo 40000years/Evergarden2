@@ -17,6 +17,7 @@ public final class StructureProtection implements Listener {
     public boolean protects(Block block){
         if(block==null)return false;
         if(plugin.overworldSanctuaries()!=null&&plugin.overworldSanctuaries().habitat().protectedAt(block.getLocation()))return true;
+        if(plugin.dimensionalSanctuaries()!=null&&plugin.dimensionalSanctuaries().protects(block))return true;
         if(block.getWorld()!=plugin.world())return false;
         int x=block.getX(),y=block.getY(),z=block.getZ();
         if(plugin.bossStructures()!=null&&y>=BossStructure.MIN_Y){

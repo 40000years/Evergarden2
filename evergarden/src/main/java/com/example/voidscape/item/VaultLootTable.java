@@ -1,17 +1,37 @@
 package com.example.voidscape.item;
 
-/**
- * 10,000-ticket balanced loot table for Evergarden Vault (Long-term server economy):
- * 0..1499    (15.0%) : Limit Break Scrolls (14 abilities including Mace & Thorns)
- * 1500..2699 (12.0%) : Unique Enchant Scrolls (22 abilities)
- * 2700..3399  (7.0%) : Advance Magic Cores (14 elements)
- * 3400..3899  (5.0%) : Special Relic Tools (Rift Pickaxe, Smelter Pickaxe)
- * 3900..9749 (58.5%) : Mana Potions (Medium 60%, Good 30%, Supreme 10%)
- * 9750..9899  (1.5%) : Flying Staff
- * 9900..9949  (0.5%) : Mythic Core (Levitation / Solar Apocalypse / Chronos: Final Hour / Heaven's Judgment, equally likely)
- * 9950..9999  (0.5%) : Scroll of Eternity (Unbreakable 100% Mythic)
- */
+/** One 10,000-ticket primary draw. Only diamond gear and books can award a second item. */
 public final class VaultLootTable {
+    public enum PrimaryReward {
+        DIAMOND_GEAR, ENCHANT_BOOK, LIMIT_BREAK, UNIQUE_SCROLL, EQUIPMENT,
+        RARE_WEAPON, LEGENDARY_WEAPON, ELEMENTAL_STAFF, FLYING_STAFF, SCROLL_ETERNITY,
+        FLYING_STAFF_TIER2
+    }
+    private static final int[][] PRIMARY_WEIGHTS = {
+        {6500,3000,300,180,20,0,0,0,0,0,0},
+        {6125,3100,300,200,120,100,0,50,0,5,0},
+        {5660,3000,350,300,200,300,30,100,50,10,0},
+        {3380,2200,500,400,500,1700,400,400,200,20,300},
+        {2670,1800,500,400,600,2200,600,500,200,30,500}
+    };
+    private static int index(int tier) { return Math.clamp(tier,1,5)-1; }
+    private static void ticket(int ticket) {
+        if(ticket<0||ticket>=10000)throw new IllegalArgumentException("Vault ticket must be 0..9999");
+    }
+    public static PrimaryReward primaryReward(int tier,int ticket) {
+        ticket(ticket);
+        int[] weights=PRIMARY_WEIGHTS[index(tier)];
+        for(PrimaryReward reward:PrimaryReward.values())if((ticket-=weights[reward.ordinal()])<0)return reward;
+        throw new IllegalStateException("Vault weights must total 10000");
+    }
+    public static int chanceBps(int tier,PrimaryReward reward) { return PRIMARY_WEIGHTS[index(tier)][reward.ordinal()]; }
+    public static int doubleChanceBps(int tier) { return new int[]{0,1000,1500,2000,2500}[index(tier)]; }
+    public static boolean canDouble(PrimaryReward reward) {
+        return reward==PrimaryReward.DIAMOND_GEAR||reward==PrimaryReward.ENCHANT_BOOK;
+    }
+    public static PrimaryReward bonusReward(int ticket) {
+        ticket(ticket);return ticket<6500?PrimaryReward.DIAMOND_GEAR:PrimaryReward.ENCHANT_BOOK;
+    }
     public enum WeaponReward { NONE, RARE, LEGENDARY }
 
     public enum Reward {
@@ -27,49 +47,36 @@ public final class VaultLootTable {
 
     private VaultLootTable() {}
 
-    /** One bonus per Vault: T2 0.25% Rare only; T3-5 5/10/15%, split 80% Rare / 20% Legendary. */
+    /** Compatibility API for explicit bonus callers; normal openings use the unified primary draw. */
     public static WeaponReward weaponReward(int tier, int ticket) {
         if (ticket < 0 || ticket >= 10000) throw new IllegalArgumentException("Vault weapon ticket must be 0..9999");
-        int chance = switch (tier) {
-            case 2 -> 25;
-            case 3 -> 500;
-            case 4 -> 1000;
-            case 5 -> 1500;
-            default -> 0;
-        };
+        int legendary=chanceBps(tier,PrimaryReward.LEGENDARY_WEAPON);
+        int chance=legendary+chanceBps(tier,PrimaryReward.RARE_WEAPON);
         if (ticket >= chance) return WeaponReward.NONE;
         if (tier == 2) return WeaponReward.RARE;
-        return ticket < chance / 5 ? WeaponReward.LEGENDARY : WeaponReward.RARE;
+        return ticket < legendary ? WeaponReward.LEGENDARY : WeaponReward.RARE;
     }
 
-    /** One independent elemental staff attempt per opening, regardless of major reward count. */
+    /** Elemental staff share of the primary pool; never rolled again during a normal opening. */
     public static int staffChanceBps(int tier) {
-        return switch (tier) {
-            case 2 -> 25;
-            case 3 -> 1000;
-            case 4 -> 1500;
-            case 5 -> 2000;
-            default -> 0;
-        };
+        return chanceBps(tier,PrimaryReward.ELEMENTAL_STAFF);
     }
 
-    /** Early-tier books replace part of the ordinary major reward pool. */
+    /** Compatibility helper for the current primary book category. */
     public static boolean enchantBookReward(int tier, int ticket) {
         if (ticket < 0 || ticket >= 10000) throw new IllegalArgumentException("Vault book ticket must be 0..9999");
-        return ticket < switch (tier) {
-            case 1 -> 3500;
-            case 2 -> 4500;
-            default -> 0;
-        };
+        return primaryReward(tier,ticket)==PrimaryReward.ENCHANT_BOOK;
     }
 
-    /** Model-first phase: remove retired core tickets and retain relative odds of supported rewards. */
+    /** Historical table retained for binary compatibility; live Vaults use primaryReward. */
+    @Deprecated
     public static Reward activeReward(int ticket){
         if(ticket<0||ticket>=9250)throw new IllegalArgumentException("Active Vault ticket must be 0..9249");
         int original=ticket>=2700?ticket+700:ticket;
         if(original>=9900)original+=50;
         return reward(original);
     }
+    @Deprecated
     public static Reward reward(int ticket) {
         if (ticket < 0 || ticket >= 10000) throw new IllegalArgumentException("Vault ticket must be 0..9999");
         if (ticket < 1500) return Reward.LIMIT_BREAK;

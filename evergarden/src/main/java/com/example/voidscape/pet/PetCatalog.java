@@ -67,14 +67,11 @@ public final class PetCatalog {
         }
     }
     public static final List<String> ANIMATIONS=List.of("idle","walk","fly","sit","greet");
-    /** Species that can turn up in the wild: everything but the mythical five. */
+    /** Ordinary wild species; mythical encounters have their own much rarer roll. */
     public static int wildSpecies() {return Species.values().length-5;}
-    /**
-     * Species that ship models. The mythical five stay in the enum (ordinals and saved records keep
-     * their meaning) but have no blueprints until the legendary tier opens.
-     */
+    /** Every species has native Java/Bedrock models, including the mythical five. */
     public static List<Species> available() {
-        return Arrays.stream(Species.values()).filter(species->!species.mythical()).toList();
+        return List.of(Species.values());
     }
     public static List<String> modelIds() {
         List<String> ids=new ArrayList<>();

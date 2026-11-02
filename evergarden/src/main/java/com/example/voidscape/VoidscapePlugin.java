@@ -25,10 +25,16 @@ public final class VoidscapePlugin extends JavaPlugin {
     private BiomeTerrain biomeTerrain;
     private ExplorationLayout exploration;
     private OverworldSanctuaries overworldSanctuaries;
+    private DimensionalSanctuaries dimensionalSanctuaries;
+    public DimensionalSanctuaries dimensionalSanctuaries(){return dimensionalSanctuaries;}
+    private NetherArenaWorldgen netherArenaWorldgen;
+    public NetherArenaWorldgen netherArenaWorldgen(){return netherArenaWorldgen;}
     private com.example.voidscape.boss.SanctuaryEncounters sanctuaryEncounters;
     private com.example.voidscape.boss.SeraphonBoss seraphonBoss;
     public com.example.voidscape.boss.SeraphonBoss seraphonBoss(){return seraphonBoss;}
     public com.example.voidscape.boss.SanctuaryEncounters sanctuaryEncounters(){return sanctuaryEncounters;}
+    private com.example.voidscape.boss.RealmSanctuaryEncounters realmSanctuaryEncounters;
+    public com.example.voidscape.boss.RealmSanctuaryEncounters realmSanctuaryEncounters(){return realmSanctuaryEncounters;}
     public OverworldSanctuaries overworldSanctuaries(){return overworldSanctuaries;}
     private RestorationLayout restorationLayout;
     private RestorationAltars restorationAltars;
@@ -292,6 +298,8 @@ public final class VoidscapePlugin extends JavaPlugin {
             com.example.voidscape.compat.LevelledMobsCompat.register(this);
             relics=new RelicService(this);adventurerWeapons=new com.example.voidscape.item.AdventurerWeaponService(this);dungeons=new DungeonManager(this);travel=new TravelListener(this);
             var pm=getServer().getPluginManager();pm.registerEvents(relics,this);pm.registerEvents(adventurerWeapons,this);pm.registerEvents(dungeons,this);pm.registerEvents(travel,this);
+            netherArenaWorldgen=new NetherArenaWorldgen(this);
+            dimensionalSanctuaries=new DimensionalSanctuaries(this);
             overworldSanctuaries=new OverworldSanctuaries(this);
             pm.registerEvents(retiredRecipes,this);
             pm.registerEvents(new com.example.voidscape.item.RemovedRelics(),this);
@@ -319,6 +327,7 @@ public final class VoidscapePlugin extends JavaPlugin {
             if(petCommand!=null){petCommand.setExecutor(pets.menu());petCommand.setTabCompleter(pets.menu());}
             seraphTrader=new com.example.voidscape.trade.SeraphTrader(this);
             sanctuaryEncounters=new com.example.voidscape.boss.SanctuaryEncounters(this);
+            realmSanctuaryEncounters=new com.example.voidscape.boss.RealmSanctuaryEncounters(this);
             seraphonBoss=new com.example.voidscape.boss.SeraphonBoss(this);
             var whaleTreasure = new WhaleTreasure(this);
             var magicPlugin=pm.getPlugin("advance-magic");
@@ -362,7 +371,7 @@ public final class VoidscapePlugin extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
     }
-    @Override public void onDisable(){if(seraphonBoss!=null)seraphonBoss.close();if(seraphTrader!=null)seraphTrader.close();if(pets!=null)pets.close();if(petPreviews!=null)petPreviews.close();if(sanctuaryEncounters!=null)sanctuaryEncounters.close();if(overworldSanctuaries!=null)overworldSanctuaries.close();if(bossEnchantEffects!=null)bossEnchantEffects.close();if(worldBoss!=null)worldBoss.close();if(arkhaiaBedrock!=null)arkhaiaBedrock.close();if(arkhaiaModels!=null)arkhaiaModels.close();if(judgePack!=null)judgePack.close();if(restorationAltars!=null)restorationAltars.close();if(travel!=null)travel.close();if(packs!=null)packs.close();if(dungeons!=null)dungeons.close();}
+    @Override public void onDisable(){if(seraphonBoss!=null)seraphonBoss.close();if(seraphTrader!=null)seraphTrader.close();if(pets!=null)pets.close();if(petPreviews!=null)petPreviews.close();if(realmSanctuaryEncounters!=null)realmSanctuaryEncounters.close();if(sanctuaryEncounters!=null)sanctuaryEncounters.close();if(overworldSanctuaries!=null)overworldSanctuaries.close();if(dimensionalSanctuaries!=null)dimensionalSanctuaries.close();if(netherArenaWorldgen!=null)netherArenaWorldgen.close();if(bossEnchantEffects!=null)bossEnchantEffects.close();if(worldBoss!=null)worldBoss.close();if(arkhaiaBedrock!=null)arkhaiaBedrock.close();if(arkhaiaModels!=null)arkhaiaModels.close();if(judgePack!=null)judgePack.close();if(restorationAltars!=null)restorationAltars.close();if(travel!=null)travel.close();if(packs!=null)packs.close();if(dungeons!=null)dungeons.close();}
 
     public NamespacedKey key(String value){return new NamespacedKey("voidscape",value);}
     public int integer(String path,int value,int min,int max){return Math.max(min,Math.min(max,getConfig().getInt(path,value)));}

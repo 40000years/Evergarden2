@@ -1,5 +1,260 @@
 [
   {
+    "id": "everpet_aetherius_baby",
+    "species": "aetherius",
+    "stage": "baby",
+    "title": "Aetherius",
+    "rarity": "mythical",
+    "cubes": 151,
+    "bones": 14,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "85d1a3ff6741f98b454f4d98e44d0400cdf905493ca18ea6d52858432cf430b8"
+  },
+  {
+    "id": "everpet_aetherius_medium",
+    "species": "aetherius",
+    "stage": "medium",
+    "title": "Aetherius",
+    "rarity": "mythical",
+    "cubes": 331,
+    "bones": 14,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "e051e7bff01800f25a8802e9468092f438ad26a96f901e9238117c2da587fa0a"
+  },
+  {
+    "id": "everpet_aetherius_adult",
+    "species": "aetherius",
+    "stage": "adult",
+    "title": "Aetherius",
+    "rarity": "mythical",
+    "cubes": 366,
+    "bones": 14,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "b3d4de93705b7877087b795a01779d6a8b7e82bc432053ec8274346c48f7a27c"
+  },
+  {
+    "id": "everpet_ignis_draconis_baby",
+    "species": "ignis_draconis",
+    "stage": "baby",
+    "title": "Ignis Draconis",
+    "rarity": "mythical",
+    "cubes": 229,
+    "bones": 18,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "63a3a37b2ce53dc412338c7a6082e51153da9f8e7242975da3da576a9e7ac1b5"
+  },
+  {
+    "id": "everpet_ignis_draconis_medium",
+    "species": "ignis_draconis",
+    "stage": "medium",
+    "title": "Ignis Draconis",
+    "rarity": "mythical",
+    "cubes": 514,
+    "bones": 18,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "6c6236c72bf1c15b69db40eccce1ca2c6b83d5050c6f859b0775f7bd5bd53a65"
+  },
+  {
+    "id": "everpet_ignis_draconis_adult",
+    "species": "ignis_draconis",
+    "stage": "adult",
+    "title": "Ignis Draconis",
+    "rarity": "mythical",
+    "cubes": 516,
+    "bones": 18,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "0b51f8d58748ce1a3c6693937b9fea215c16349eff17608c5c76cfc7642cef65"
+  },
+  {
+    "id": "everpet_zephyros_baby",
+    "species": "zephyros",
+    "stage": "baby",
+    "title": "Zephyros",
+    "rarity": "mythical",
+    "cubes": 221,
+    "bones": 18,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "e40ec89c0fd984d04e1d5126109160f810e1f8958c029449652981a3905f1da1"
+  },
+  {
+    "id": "everpet_zephyros_medium",
+    "species": "zephyros",
+    "stage": "medium",
+    "title": "Zephyros",
+    "rarity": "mythical",
+    "cubes": 654,
+    "bones": 18,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "ad6e08de13f72397270d090e6f415223b46c3eeec39e830538009de5e6bad987"
+  },
+  {
+    "id": "everpet_zephyros_adult",
+    "species": "zephyros",
+    "stage": "adult",
+    "title": "Zephyros",
+    "rarity": "mythical",
+    "cubes": 708,
+    "bones": 18,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "d9f5c124c84bf2e7202c4a637542b05bdfb73eec21ebf0020a8b21656a410593"
+  },
+  {
+    "id": "everpet_solaris_baby",
+    "species": "solaris",
+    "stage": "baby",
+    "title": "Solaris",
+    "rarity": "mythical",
+    "cubes": 205,
+    "bones": 12,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "26cdb45aac9a81b6dd18db2947c3de1eb7505bfaf24b1d33421730ebbc500042"
+  },
+  {
+    "id": "everpet_solaris_medium",
+    "species": "solaris",
+    "stage": "medium",
+    "title": "Solaris",
+    "rarity": "mythical",
+    "cubes": 568,
+    "bones": 13,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "545dfff60668ff4ff2b7484de06a9f96afd0df29b410df853c35b1936d7ee0b1"
+  },
+  {
+    "id": "everpet_solaris_adult",
+    "species": "solaris",
+    "stage": "adult",
+    "title": "Solaris",
+    "rarity": "mythical",
+    "cubes": 700,
+    "bones": 13,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "d08b2e4307732dc1ca4d23192d0624e848b0714bbfac32e609d18cda2e93f56b"
+  },
+  {
+    "id": "everpet_fenrir_baby",
+    "species": "fenrir",
+    "stage": "baby",
+    "title": "Fenrir",
+    "rarity": "mythical",
+    "cubes": 183,
+    "bones": 14,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "e945688e1fe556afbef1376ff5a7d20f15cef70e0c5db640ceae10f993d88eab"
+  },
+  {
+    "id": "everpet_fenrir_medium",
+    "species": "fenrir",
+    "stage": "medium",
+    "title": "Fenrir",
+    "rarity": "mythical",
+    "cubes": 432,
+    "bones": 14,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "874597dca0d6474b62719e99f478a7f3c3f018bb3f8e5eb487f07f1228ce511b"
+  },
+  {
+    "id": "everpet_fenrir_adult",
+    "species": "fenrir",
+    "stage": "adult",
+    "title": "Fenrir",
+    "rarity": "mythical",
+    "cubes": 484,
+    "bones": 14,
+    "animations": [
+      "idle",
+      "walk",
+      "fly",
+      "sit",
+      "greet"
+    ],
+    "sha256": "6b58035d202e18d40e8cf0bcbdb2ac68dca5c0dd053bb8ff7f68e02cba047b1e"
+  },
+  {
     "id": "everpet_arcane_nine_tails_baby",
     "species": "arcane_nine_tails",
     "stage": "baby",

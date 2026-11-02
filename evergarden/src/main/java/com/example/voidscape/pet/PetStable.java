@@ -7,7 +7,11 @@ import java.util.*;
 /** A player's owned pets, which one follows them, and their breeding nest. */
 final class PetStable {
     final UUID owner;
+    /** Base slots; every pet raised from a baby to adulthood adds {@link #perRaised} more, up to {@link #maxSlots}. */
     int slots;
+    int perRaised=2,maxSlots=Integer.MAX_VALUE;
+    /** Pets this owner raised from babies to adults. The slots they opened stay even if the pet is released. */
+    final LinkedHashSet<UUID> raised=new LinkedHashSet<>();
     UUID active;
     /** The owner wants the active pet out; it returns after relogging or a suspension. */
     boolean out;
@@ -16,6 +20,8 @@ final class PetStable {
     long nestReady;
     long eggDay;
     int eggsToday;
+    /** Receipt for the most recent nest collection, saved with its quota and parent cooldowns. */
+    String lastEggCollected;
     final LinkedHashMap<UUID,PetRecord> pets=new LinkedHashMap<>();
     boolean dirty;
     /** Its file exists but could not be read: shown empty, never saved over the original. */
@@ -23,7 +29,13 @@ final class PetStable {
 
     PetStable(UUID owner,int slots){this.owner=owner;this.slots=slots;}
 
-    boolean full(){return pets.size()>=slots;}
+    int capacity(){return (int)Math.max(slots,Math.min((long)maxSlots,(long)slots+(long)perRaised*raised.size()));}
+    boolean full(){return pets.size()>=capacity();}
+    /** Records a pet raised here from a baby that is now an adult; false if it already counted. */
+    boolean raise(PetRecord record){
+        if(locked||record.stage!=PetCatalog.Stage.ADULT||!owner.equals(record.raisedBy)||!raised.add(record.id))return false;
+        dirty=true;return true;
+    }
     PetRecord get(UUID id){return id==null?null:pets.get(id);}
     PetRecord activeRecord(){return get(active);}
     boolean nesting(UUID id){return id!=null&&(id.equals(nestA)||id.equals(nestB));}
@@ -40,6 +52,8 @@ final class PetStable {
         file.set("active",active==null?null:active.toString());file.set("out",out);file.set("hide-others",hideOthers);
         if(nestA!=null&&nestB!=null){file.set("nest.a",nestA.toString());file.set("nest.b",nestB.toString());file.set("nest.ready",nestReady);}
         file.set("eggs.day",eggDay);file.set("eggs.today",eggsToday);
+        file.set("eggs.last-collected",lastEggCollected);
+        file.set("raised-adults",raised.stream().map(UUID::toString).toList());
         for(PetRecord record:pets.values())record.save(file.createSection("pets."+record.id));
         return file.saveToString();
     }
@@ -47,12 +61,20 @@ final class PetStable {
         PetStable stable=new PetStable(owner,Math.clamp(file.getInt("slots",defaultSlots),1,28));
         stable.out=file.getBoolean("out");stable.hideOthers=file.getBoolean("hide-others");
         stable.eggDay=file.getLong("eggs.day");stable.eggsToday=Math.max(0,file.getInt("eggs.today"));
+        stable.lastEggCollected=file.getString("eggs.last-collected");
         ConfigurationSection pets=file.getConfigurationSection("pets");
+        if(file.contains("pets")&&pets==null)stable.locked=true;
         if(pets!=null)for(String key:pets.getKeys(false)){
             UUID id=uuid(key);ConfigurationSection section=pets.getConfigurationSection(key);
-            if(id==null||section==null)continue;
-            PetRecord record=PetRecord.load(id,section);if(record!=null)stable.pets.put(id,record);
+            if(id==null||section==null){stable.locked=true;continue;}
+            PetRecord record=PetRecord.load(id,section);if(record!=null)stable.pets.put(id,record);else stable.locked=true;
+            // Records from before e2.177: babies, and hatched pets (a later generation), were raised here.
+            if(record!=null&&!section.contains("raised-by")&&(record.stage==PetCatalog.Stage.BABY||record.generation>0)){
+                record.raisedBy=owner;stable.dirty=true;
+            }
         }
+        for(String value:file.getStringList("raised-adults")){UUID id=uuid(value);if(id!=null)stable.raised.add(id);}
+        for(PetRecord record:stable.pets.values())stable.raise(record);
         stable.active=uuid(file.getString("active"));
         if(!stable.pets.containsKey(stable.active)){stable.active=null;stable.out=false;}
         UUID a=uuid(file.getString("nest.a")),b=uuid(file.getString("nest.b"));

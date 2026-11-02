@@ -41,6 +41,7 @@ public final class RelicService implements Listener {
     }
 
     private final VoidscapePlugin plugin;
+    private VaultEnchantRewards vaultEnchants;
     private final NamespacedKey type,voidKeyTag;
     private final Set<UUID> mining=new HashSet<>();
 
@@ -129,7 +130,8 @@ public final class RelicService implements Listener {
         ItemMeta meta=item.getItemMeta();
         meta.displayName(Component.text("✦ คัมภีร์ศิลานิรันดร์ (Scroll of Eternity)",NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false));
         meta.lore(List.of(
-            Component.text("§4§k||§r §c[ระดับตำนานสูงสุด · MYTHIC 0.5%] §4§k||§r"),
+            Component.text("[ระดับตำนานสูงสุด · MYTHIC]",NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC,false),
+            Component.text("โอกาสได้รับจาก Vault ขึ้นกับ Tier",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
             Component.text("ลากคัมภีร์นี้ไปแตะที่อาวุธ ชุดเกราะ หรือเครื่องมือ",NamedTextColor.WHITE).decoration(TextDecoration.ITALIC,false),
             Component.text("ไอเทมนั้นจะได้รับสถานะ 'ไม่มีวันพังเสียหาย (Unbreakable 100%)'",NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false),
             Component.text("หลอดความทนทานจะหายไปตลอดกาล",NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC,false),
@@ -141,17 +143,33 @@ public final class RelicService implements Listener {
     }
 
     public ItemStack createScrollLimitBreak(LimitBreakType lb) {
+        return createLimitBreakScroll(lb,0);
+    }
+
+    /** Newly earned scrolls carry their own grade and upgrade ceiling. */
+    public ItemStack createScrollLimitBreak(LimitBreakType lb,int tier) {
+        if(tier<1||tier>5)throw new IllegalArgumentException("Limit Break tier must be 1..5");
+        return createLimitBreakScroll(lb,tier);
+    }
+
+    private ItemStack createLimitBreakScroll(LimitBreakType lb,int tier) {
+        int cap=tier==0?lb.maxLevel():VaultProgression.limitBreakCap(lb.enchantment(),lb.maxLevel(),tier);
         ItemStack item=create(Relic.SCROLL_LIMIT_BREAK,1);
         ItemMeta meta=item.getItemMeta();
-        meta.displayName(Component.text("✦ คัมภีร์ทลายขีดจำกัด: "+lb.title(),NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false));
+        meta.displayName(Component.text("✦ คัมภีร์ทลายขีดจำกัด: "+lb.title()
+            +(tier==0?"":" · Tier "+toRoman(tier)),NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false));
         meta.lore(List.of(
             Component.text("✦ "+lb.thaiTitle(),NamedTextColor.AQUA).decoration(TextDecoration.ITALIC,false),
             Component.text("ใช้สำหรับ: "+lb.targetDescription(),NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
             Component.text("วิธีใช้: พิมพ์ /upgrade หรือลากแตะทับไอเทมในกระเป๋า",NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC,false),
-            Component.text("เพื่อเพิ่มเลเวลเอนแชนต์เดิมขึ้น +1 (สูงสุดเลเวล "+lb.maxLevel()+")",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
+            Component.text("เพื่อเพิ่มเลเวลเอนแชนต์เดิมขึ้น +1 (สูงสุดเลเวล "+cap+")",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
             Component.text("[อัตราสำเร็จ 100% · แตะเพื่อใช้งาน]",NamedTextColor.GREEN).decoration(TextDecoration.ITALIC,false)
         ));
         meta.getPersistentDataContainer().set(plugin.key("limit_break_type"),PersistentDataType.STRING,lb.name());
+        if(tier>0){
+            meta.getPersistentDataContainer().set(plugin.key("limit_break_tier"),PersistentDataType.INTEGER,tier);
+            meta.getPersistentDataContainer().set(plugin.key("limit_break_cap"),PersistentDataType.INTEGER,cap);
+        }
         item.setItemMeta(meta);return item;
     }
 
@@ -183,6 +201,30 @@ public final class RelicService implements Listener {
         String raw=item.getItemMeta().getPersistentDataContainer().get(plugin.key("limit_break_type"),PersistentDataType.STRING);
         if(raw==null) return null;
         try{return LimitBreakType.valueOf(raw);}catch(Exception e){return null;}
+    }
+
+    /** Zero identifies old ungraded scrolls; malformed grades fail closed. */
+    public int getLimitBreakTier(ItemStack item) {
+        if(getLimitBreakType(item)==null)return 0;
+        var data=item.getItemMeta().getPersistentDataContainer();
+        var tierKey=plugin.key("limit_break_tier");
+        if(!data.has(tierKey))return data.has(plugin.key("limit_break_cap"))?-1:0;
+        if(!data.has(tierKey,PersistentDataType.INTEGER))return -1;
+        int tier=data.get(tierKey,PersistentDataType.INTEGER);
+        return tier>=1&&tier<=5?tier:-1;
+    }
+
+    public int getLimitBreakCap(ItemStack scroll) {
+        var type=getLimitBreakType(scroll);
+        if(type==null)return 0;
+        int tier=getLimitBreakTier(scroll);
+        if(tier==0)return type.maxLevel(); // Existing earned scrolls retain their original entitlement.
+        if(tier<1)return 0;
+        var data=scroll.getItemMeta().getPersistentDataContainer();
+        var capKey=plugin.key("limit_break_cap");
+        if(!data.has(capKey,PersistentDataType.INTEGER))return 0;
+        int cap=data.get(capKey,PersistentDataType.INTEGER);
+        return cap>0?Math.min(cap,VaultProgression.limitBreakCap(type.enchantment(),type.maxLevel(),tier)):0;
     }
 
     public UniqueEnchant getUniqueEnchant(ItemStack item) {
@@ -276,7 +318,7 @@ public final class RelicService implements Listener {
         if (type != null) {
             if (!type.category().matches(target.getType())) return null;
             int current = getLimitBreakUpgradeLevel(target, type);
-            if (current <= 0 || current >= type.maxLevel()) return null;
+            if (current <= 0 || current >= getLimitBreakCap(scroll)) return null;
             int next = current + 1;
             ItemMeta meta = target.getItemMeta();
             if (meta == null) return null;
@@ -500,36 +542,75 @@ public final class RelicService implements Listener {
         return rollVaultRewards(site, java.util.concurrent.ThreadLocalRandom.current());
     }
 
-    /**
-     * Tier-scaled & element-biased Vault reward generator:
-     * - Tier 1-2: 35/45% native over-cap enchant books; no Tier 1 weapons or staffs.
-     * - Tier 2: independent 0.25% Rare weapon and 0.25% elemental staff bonuses.
-     * - Tier 3-5: weapon bonuses 5/10/15%, elemental staff bonuses 10/15/20%, plus supplies.
-     * - Tier 4-5: guaranteed non-consumable majors; Tier 5 rolls two majors.
-     */
+    /** One primary; only diamond gear/books can roll one extra normal item (two items maximum). */
     public List<ItemStack> rollVaultRewards(com.example.voidscape.world.DungeonLayout.Site site, java.util.random.RandomGenerator random) {
-        int tier = site == null ? 1 : Math.clamp(site.tier(), 1, 5);
-        var kind = site == null ? null : site.kind();
-        List<ItemStack> results = new ArrayList<>(4);
-
-        int majorRolls = tier >= 5 ? 2 : 1;
-        boolean forceMajor = tier >= 4;
-
-        for (int r = 0; r < majorRolls; r++) {
-            results.add(rollSingleTieredReward(kind, tier, forceMajor, random));
-        }
-
-        // Tier 3-5 bonus supply drop alongside major reward(s)
-        if (tier >= 3) {
-            ItemStack bonus = createBonusSupply(tier, random);
-            if (bonus != null) results.add(bonus);
-        }
-        // Draw once per opening, even when Tier 5 grants two major rewards.
-        ItemStack weapon = rollVaultWeaponBonus(site, random);
-        if (weapon != null) results.add(weapon);
-        ItemStack staff = rollVaultStaffBonus(site, random);
-        if (staff != null) results.add(staff);
+        int tier=site==null?1:Math.clamp(site.tier(),1,5);
+        var kind=site==null?null:site.kind();
+        var category=VaultLootTable.primaryReward(tier,random.nextInt(10000));
+        List<ItemStack> results=new ArrayList<>(2);
+        results.add(createVaultPrimary(kind,tier,category,random));
+        int doubleChance=VaultLootTable.doubleChanceBps(tier);
+        if(VaultLootTable.canDouble(category)&&doubleChance>0&&random.nextInt(10000)<doubleChance)
+            results.add(createVaultPrimary(kind,tier,VaultLootTable.bonusReward(random.nextInt(10000)),random));
         return results;
+    }
+
+    private VaultEnchantRewards vaultEnchants() {
+        if(vaultEnchants==null)vaultEnchants=new VaultEnchantRewards(plugin);
+        return vaultEnchants;
+    }
+    public ItemStack createVaultDiamondGear(int tier,java.util.random.RandomGenerator random) {
+        return vaultEnchants().gear(tier,random);
+    }
+    /** Keeps configured book weights and ceilings, with quality determined by Vault tier. */
+    public ItemStack createVaultEnchantBook(int tier,java.util.random.RandomGenerator random) {
+        return vaultEnchants().book(tier,random);
+    }
+    private ItemStack createVaultPrimary(com.example.voidscape.world.DungeonLayout.Kind kind,int tier,
+            VaultLootTable.PrimaryReward category,java.util.random.RandomGenerator random) {
+        return switch(category) {
+            case DIAMOND_GEAR -> createVaultDiamondGear(tier,random);
+            case ENCHANT_BOOK -> createVaultEnchantBook(tier,random);
+            case LIMIT_BREAK -> createScrollLimitBreak(pickThematicLimitBreak(kind,random),tier);
+            case UNIQUE_SCROLL -> createScrollUnique(pickThematicUnique(kind,random));
+            case EQUIPMENT -> {
+                Relic[] tools={Relic.RIFT_PICKAXE,Relic.SMELTER_PICKAXE};
+                yield create(tools[random.nextInt(tools.length)],1);
+            }
+            case RARE_WEAPON,LEGENDARY_WEAPON -> createVaultModeledWeapon(kind,
+                category==VaultLootTable.PrimaryReward.LEGENDARY_WEAPON,random);
+            case ELEMENTAL_STAFF -> {
+                ItemStack staff=createVaultElementalStaff(random);
+                yield staff==null?createVaultEnchantBook(tier,random):staff;
+            }
+            case FLYING_STAFF,FLYING_STAFF_TIER2 -> {
+                var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");
+                yield addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic&&magic.isEnabled()
+                    &&magic.flyingStaff()!=null?magic.flyingStaff().create(
+                        category==VaultLootTable.PrimaryReward.FLYING_STAFF_TIER2?2:1):createVaultEnchantBook(tier,random);
+            }
+            case SCROLL_ETERNITY -> createScrollEternity();
+        };
+    }
+    private ItemStack createVaultModeledWeapon(com.example.voidscape.world.DungeonLayout.Kind kind,boolean legendary,
+            java.util.random.RandomGenerator random) {
+        var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");
+        if(legendary&&addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic&&magic.isEnabled()
+            &&magic.legendaryWeapons()!=null) {
+            var weapons=com.example.advancemagic.item.LegendaryWeaponService.Weapon.values();
+            return magic.legendaryWeapons().create(weapons[random.nextInt(weapons.length)]);
+        }
+        var weapons=plugin.adventurerWeapons();
+        return weapons==null?createVaultDiamondGear(1,random):weapons.create(weapons.pickThematicWeapon(kind,random));
+    }
+    private ItemStack createVaultElementalStaff(java.util.random.RandomGenerator random) {
+        if(!plugin.getConfig().getBoolean("staff-loot.enabled",true))return null;
+        var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");
+        if(!(addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic)||!magic.isEnabled()
+            ||magic.staffSpells()==null||magic.staffs()==null)return null;
+        var elements=com.example.advancemagic.item.ElementalStaffService.Element.values();
+        return magic.staffSpells().createStaff(elements[random.nextInt(elements.length)],
+            com.example.advancemagic.elemental.StaffSpellService.Tier.APPRENTICE);
     }
 
     /** Modeled weapon bonus, independent of the normal major rewards and supplies. */
@@ -538,155 +619,16 @@ public final class RelicService implements Listener {
         if (site == null || site.tier() < 2) return null;
         var reward = VaultLootTable.weaponReward(site.tier(), random.nextInt(10000));
         if (reward == VaultLootTable.WeaponReward.NONE) return null;
-        if (reward == VaultLootTable.WeaponReward.LEGENDARY) {
-            var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
-            if (addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic
-                    && magic.isEnabled() && magic.legendaryWeapons() != null) {
-                var weapons = com.example.advancemagic.item.LegendaryWeaponService.Weapon.values();
-                return magic.legendaryWeapons().create(weapons[random.nextInt(weapons.length)]);
-            }
-            // Advance Magic is optional: retain the weapon drop as an enabled Rare instead.
-        }
-        var weapons = plugin.adventurerWeapons();
-        return weapons == null ? null : weapons.create(weapons.pickThematicWeapon(site.kind(), random));
+        return createVaultModeledWeapon(site.kind(),reward==VaultLootTable.WeaponReward.LEGENDARY,random);
     }
 
-    /** Tier-aware staff bonus; never repeats for Astral or Tier 5's second major reward. */
+    /** Compatibility API for explicit callers; no independent bonus is added to real openings. */
     public ItemStack rollVaultStaffBonus(com.example.voidscape.world.DungeonLayout.Site site,
                                         java.util.random.RandomGenerator random) {
-        int chance = site == null ? 0 : VaultLootTable.staffChanceBps(site.tier());
-        if (chance == 0 || !plugin.getConfig().getBoolean("staff-loot.enabled", true)) return null;
-        var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
-        if (!(addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic) || !magic.isEnabled()
-                || magic.staffSpells() == null || magic.staffs() == null) return null;
-        if (random.nextInt(10000) >= chance) return null;
-        var elements = com.example.advancemagic.item.ElementalStaffService.Element.values();
-        return magic.staffSpells().createStaff(elements[random.nextInt(elements.length)],
-                com.example.advancemagic.elemental.StaffSpellService.Tier.APPRENTICE);
-    }
-
-    /** Real stored enchants, stamped for the existing scoped high-level anvil transfer. */
-    public ItemStack createVaultEnchantBook(int tier, java.util.random.RandomGenerator random) {
-        Enchantment[] enchants = {Enchantment.SHARPNESS, Enchantment.PROTECTION, Enchantment.LOOTING,
-                Enchantment.FORTUNE, Enchantment.EFFICIENCY, Enchantment.UNBREAKING};
-        Enchantment enchant = enchants[random.nextInt(enchants.length)];
-        int level = switch (enchant.getKey().getKey()) {
-            case "sharpness", "protection", "efficiency" -> 6;
-            default -> 4;
-        };
-        if (tier >= 2 && random.nextInt(100) < 30) level++;
-        ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
-        var meta = (org.bukkit.inventory.meta.EnchantmentStorageMeta) item.getItemMeta();
-        meta.setDisplayName(ChatColor.AQUA + "สมุดมนตราแห่ง Vault");
-        meta.setLore(List.of(ChatColor.GRAY + "ใช้กับอุปกรณ์ที่รองรับบนทั่งตีเหล็ก"));
-        meta.addStoredEnchant(enchant, level, true);
-        plugin.bossEnchants().markGenerated(meta);
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    private ItemStack createBonusSupply(int tier, java.util.random.RandomGenerator random) {
-        int roll = random.nextInt(100);
-        if (roll < 40) {
-            int feathers = tier >= 5 ? 3 : tier >= 4 ? 2 : 1;
-            return com.example.voidscape.trade.SeraphFeathers.feather(plugin, feathers);
-        }
-        var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
-        if (addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()) {
-            if (roll < 75 && magic.staffSpells() != null) {
-                var spells = com.example.advancemagic.elemental.ElementalSpell.values();
-                ItemStack scroll = magic.staffSpells().createScroll(spells[random.nextInt(spells.length)]);
-                scroll.setAmount(tier >= 5 ? 2 : 1);
-                return scroll;
-            }
-            var qualities = com.example.advancemagic.mana.ManaPotionService.Quality.values();
-            var q = tier >= 4 ? qualities[3] : qualities[2]; // Supreme for Tier 4-5, Good for Tier 3
-            ItemStack pot = magic.manaPotions().create(q);
-            pot.setAmount(tier >= 5 ? 2 : 1);
-            return pot;
-        }
-        return com.example.voidscape.trade.SeraphFeathers.feather(plugin, tier >= 4 ? 2 : 1);
-    }
-
-    private ItemStack rollSingleTieredReward(com.example.voidscape.world.DungeonLayout.Kind kind, int tier,
-                                             boolean forceMajor, java.util.random.RandomGenerator random) {
-        if (tier <= 2 && VaultLootTable.enchantBookReward(tier, random.nextInt(10000)))
-            return createVaultEnchantBook(tier, random);
-
-        // Extra Mythic bonus roll for Tier 3-5
-        int mythicBonusBps = switch (tier) {
-            case 1 -> 0;
-            case 2 -> 60;   // +0.6%
-            case 3 -> 150;  // +1.5%
-            case 4 -> 320;  // +3.2%
-            default -> 550; // +5.5% on Tier 5
-        };
-        if (mythicBonusBps > 0 && random.nextInt(10000) < mythicBonusBps) {
-            boolean preferEternity = kind == com.example.voidscape.world.DungeonLayout.Kind.SANCTUM_TIME
-                    ? random.nextInt(100) < 65
-                    : kind == com.example.voidscape.world.DungeonLayout.Kind.SANCTUM_ASTRAL
-                    ? random.nextInt(100) < 30
-                    : random.nextBoolean();
-            if (preferEternity || tier < 3) {
-                return createScrollEternity();
-            } else {
-                var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
-                if (addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()) {
-                    return magic.flyingStaff().create();
-                }
-                return createScrollEternity();
-            }
-        }
-
-        VaultLootTable.Reward category = VaultLootTable.activeReward(random.nextInt(9250));
-        // All staffs start at Tier 3, apart from the explicit tiny Tier 2 elemental bonus.
-        if (tier < 3 && category == VaultLootTable.Reward.FLYING_STAFF)
-            category = VaultLootTable.Reward.EQUIPMENT;
-        if (category == VaultLootTable.Reward.CONSUMABLE) {
-            int rerollChance = switch (tier) {
-                case 1 -> 0;
-                case 2 -> 38;
-                case 3 -> 68;
-                default -> 100; // Tier 4 & 5 never roll plain consumable
-            };
-            if (forceMajor || random.nextInt(100) < rerollChance) {
-                // Reroll directly into the major non-consumable band (0..3199 in activeReward: Limit Break, Unique, Equipment)
-                // with thematic boost for Time Sanctum toward Equipment (Rift/Smelter Pickaxe)
-                if (kind == com.example.voidscape.world.DungeonLayout.Kind.SANCTUM_TIME && random.nextInt(100) < 25) {
-                    category = VaultLootTable.Reward.EQUIPMENT;
-                } else {
-                    category = VaultLootTable.activeReward(random.nextInt(3200));
-                }
-            }
-        }
-
-        return switch (category) {
-            case FLYING_STAFF -> {
-                var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
-                yield addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()
-                        ? magic.flyingStaff().create() : createScrollEternity();
-            }
-            case SCROLL_ETERNITY -> createScrollEternity();
-            case MYTHIC_CORE, CORE -> throw new IllegalStateException("Retired core ticket in active Vault table");
-            case LIMIT_BREAK -> createScrollLimitBreak(pickThematicLimitBreak(kind, random));
-            case UNIQUE_SCROLL -> createScrollUnique(pickThematicUnique(kind, random));
-            case EQUIPMENT -> {
-                Relic[] equipment = {Relic.RIFT_PICKAXE, Relic.SMELTER_PICKAXE};
-                yield create(equipment[random.nextInt(equipment.length)], 1);
-            }
-            case CONSUMABLE -> {
-                var addon = plugin.getServer().getPluginManager().getPlugin("advance-magic");
-                if (addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic && magic.isEnabled()) {
-                    var qualities = com.example.advancemagic.mana.ManaPotionService.Quality.values();
-                    int draw = random.nextInt(100);
-                    var quality = tier >= 2
-                            ? (draw < 55 ? qualities[2] : qualities[3])
-                            : (draw < 60 ? qualities[1] : draw < 90 ? qualities[2] : qualities[3]);
-                    yield magic.manaPotions().create(quality);
-                }
-                yield new ItemStack(Material.ECHO_SHARD, random.nextInt(2) + tier);
-            }
-        };
+        int chance=site==null?0:VaultLootTable.staffChanceBps(site.tier());
+        if(chance==0||!plugin.getConfig().getBoolean("staff-loot.enabled",true))return null;
+        if(random.nextInt(10000)>=chance)return null;
+        return createVaultElementalStaff(random);
     }
 
     public ItemStack rollVaultReward() {
@@ -695,7 +637,7 @@ public final class RelicService implements Listener {
 
     /** Untiered admin previews use the same Tier 1 major reward pool as real Vaults. */
     public ItemStack rollVaultReward(java.util.random.RandomGenerator random) {
-        return rollSingleTieredReward(null, 1, false, random);
+        return createVaultPrimary(null,1,VaultLootTable.primaryReward(1,random.nextInt(10000)),random);
     }
 
     public ItemStack createGuideBook(com.example.voidscape.guide.GuideBookType type) {

@@ -1,0 +1,37 @@
+{
+  "revision": "cinder-colossus-v1",
+  "title": "Cinder Colossus",
+  "cubes": 513,
+  "bones": 38,
+  "displays": 207,
+  "scale": 3.6,
+  "texture": {
+    "size": 1024,
+    "density": 5.18,
+    "tiles": 1622,
+    "coverage": 0.763
+  },
+  "aura_bones": [
+    "debris_near",
+    "debris_far",
+    "magma"
+  ],
+  "animations": {
+    "idle": 6.4,
+    "walk": 2.0,
+    "attack_windup": 1.1,
+    "attack_active": 0.5,
+    "attack_recover": 1.0,
+    "skill_windup": 1.4,
+    "skill_active": 0.6,
+    "skill_recover": 1.2,
+    "ultimate_windup": 1.8,
+    "ultimate_active": 2.4,
+    "ultimate_recover": 1.6,
+    "stun": 2.2,
+    "transition": 3.4,
+    "spawn": 3.4,
+    "aura": 48.0
+  },
+  "worst_ik_reach_error": 0.0
+}

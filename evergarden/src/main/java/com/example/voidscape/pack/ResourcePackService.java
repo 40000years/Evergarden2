@@ -96,7 +96,7 @@ public final class ResourcePackService implements Listener, AutoCloseable {
     }
     public void start() {
         if(RequiredPackSettings.upgrade(plugin.getConfig(),true)){
-            plugin.saveConfig();plugin.getLogger().info("Evergarden and Judge Java resource packs are now required; existing download hosts are preserved.");
+            plugin.saveConfig();plugin.getLogger().info("Evergarden and Judge Java resource packs are optional; existing download hosts are preserved.");
         }
         delivery=ResourcePackManager.connect(plugin,PACK_ID);
         try {
@@ -229,11 +229,14 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         if(!hashes.stream().allMatch(h->h.matches("[a-fA-F0-9]{40}"))) {statuses.put(player.getUniqueId(),"INVALID_SHA1");unavailable(player);return;}
         try {
             if(delivery!=null&&delivery.offer(player,urls,hashes,"Evergarden: relics, keys and sanctuary creatures",
-                    plugin.getConfig().getBoolean("resource-pack.required",true),force))
+                    false,force))
                 statuses.put(player.getUniqueId(),"QUEUED");
         }catch(IllegalArgumentException e){statuses.put(player.getUniqueId(),"INVALID_URL");unavailable(player);}
     }
-    private void unavailable(Player player){if(delivery!=null&&plugin.getConfig().getBoolean("resource-pack.required",true))delivery.unavailable(player);}
+    private void unavailable(Player player){
+        if(delivery!=null)delivery.unavailable(player);
+        player.sendMessage(ChatColor.YELLOW+"ส่งแพ็กภาพ Evergarden ไม่สำเร็จ คุณยังเล่นได้ แต่บางไอเทมหรือโมเดลอาจแสดงไม่ครบ ลองใหม่ด้วย /evergarden pack resend");
+    }
     @EventHandler public void join(PlayerJoinEvent event) {
         offer(event.getPlayer());
     }
@@ -242,17 +245,15 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         String status=event.getStatus().name();statuses.put(event.getPlayer().getUniqueId(),status);
         // The coordinator is already sending it again (from the next address, or on its own).
         if(delivery!=null&&List.of("QUEUED","OFFERED","ACCEPTED","DOWNLOADED").contains(delivery.status(event.getPlayer())))return;
-        if(status.startsWith("FAILED")||status.equals("INVALID_URL")||status.equals("DISCARDED")) {
+        if(status.startsWith("FAILED")||status.equals("INVALID_URL")||status.equals("DISCARDED")||status.equals("DECLINED")) {
             plugin.getLogger().warning("Evergarden pack for "+event.getPlayer().getName()+": "+status+" from "+url(event.getPlayer())+". Check TCP port/public URL and /evergarden pack; Pack HTTP lines show whether the download reached this server.");
-            event.getPlayer().sendMessage(ChatColor.YELLOW+(plugin.getConfig().getBoolean("resource-pack.required",true)
-                ?"Evergarden textures are required to play. Allow server resource packs and reconnect; ask an admin if loading fails."
-                :"Evergarden textures could not load. Items still work; ask an admin to check /evergarden pack."));
+            event.getPlayer().sendMessage(ChatColor.YELLOW+"โหลดแพ็กภาพ Evergarden ไม่สำเร็จ คุณยังเล่นได้ แต่บางไอเทมหรือโมเดลอาจแสดงไม่ครบ ลองใหม่ด้วย /evergarden pack resend");
         }
     }
     @EventHandler public void quit(PlayerQuitEvent event){statuses.remove(event.getPlayer().getUniqueId());mirror.forget(event.getPlayer());}
     public void describe(CommandSender sender) {
         sender.sendMessage(ChatColor.LIGHT_PURPLE+"Evergarden resource pack");
-        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Required: "+plugin.getConfig().getBoolean("resource-pack.required",true)+" | Bundled host: "+hostLabel());
+        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Required: false | Bundled host: "+hostLabel());
         sender.sendMessage("Bundled SHA-1: "+sha1);
         String url=url(sender instanceof Player p?p:null);sender.sendMessage("URL: "+(url.isEmpty()?"unavailable":url));
         sender.sendMessage("Public copy: "+(mirror.copy()!=null?mirror.copy().url():mirror.fingerprint().isEmpty()?"not used"

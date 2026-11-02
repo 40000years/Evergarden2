@@ -219,17 +219,15 @@ public final class FloodgateUpgradeForm {
 
         // 2. Limit Break Scrolls
         for (LimitBreakType type : LimitBreakType.values()) {
-            int count = countLimitBreak(plugin, player, type);
-            if (count > 0 && type.category().matches(target.getType())) {
-                ItemMeta meta = target.getItemMeta();
-                if (meta != null) {
-                    int currentLevel = plugin.relics().getLimitBreakUpgradeLevel(target, type);
-                    if (currentLevel > 0 && currentLevel < type.maxLevel()) {
-                        availableOptions++;
-                        builder.button("📜 ทลายขีดจำกัด: " + type.thaiTitle() + " (มี " + count + " ชิ้น)\n§bเพิ่ม " + type.title() + " เป็นระดับ " + toRoman(currentLevel + 1));
-                        buttonActions.add(p -> applyLimitBreak(plugin, p, targetSlot, type));
-                    }
-                }
+            int count = countUsableLimitBreak(plugin, player, type, target);
+            int scrollSlot = findLimitBreakSlot(plugin, player, type, target);
+            if (count > 0 && scrollSlot >= 0) {
+                int currentLevel = plugin.relics().getLimitBreakUpgradeLevel(target, type);
+                int cap = plugin.relics().getLimitBreakCap(player.getInventory().getItem(scrollSlot));
+                availableOptions++;
+                builder.button("📜 ทลายขีดจำกัด: " + type.thaiTitle() + " (ใช้ได้ " + count + " ชิ้น)\n§bระดับ " + toRoman(currentLevel + 1) + " · ใช้คัมภีร์เพดาน " + toRoman(cap) + " ก่อน");
+                ItemStack expected = target.clone();
+                buttonActions.add(p -> applyLimitBreak(plugin, p, targetSlot, type, expected));
             }
         }
 
@@ -294,25 +292,38 @@ public final class FloodgateUpgradeForm {
         sendUpgradeOptions(plugin, player, targetSlot);
     }
 
-    private static void applyLimitBreak(VoidscapePlugin plugin, Player player, int targetSlot, LimitBreakType type) {
-        ItemStack target = player.getInventory().getItem(targetSlot);
-        if (!isEquipment(target)) return;
-
-        ItemMeta meta = target.getItemMeta();
-        if (meta == null) return;
-        int current = plugin.relics().getLimitBreakUpgradeLevel(target, type);
-        if (current <= 0 || current >= type.maxLevel()) return;
-
-        if (!consumeOne(player, it -> plugin.relics().getLimitBreakType(it) == type)) {
-            player.sendMessage("§cไม่พบคัมภีร์ทลายขีดจำกัด " + type.title() + " ในกระเป๋า");
+    private static void applyLimitBreak(VoidscapePlugin plugin, Player player, int targetSlot,
+                                       LimitBreakType type, ItemStack expected) {
+        if (!player.isOnline()) return;
+        if (!expected.equals(player.getInventory().getItem(targetSlot))) {
+            player.sendMessage("§cอุปกรณ์เปลี่ยนไปแล้ว กรุณาเลือกคัมภีร์ใหม่");
+            sendUpgradeOptions(plugin, player, targetSlot);
             return;
         }
+        applyLimitBreak(plugin, player, targetSlot, type);
+    }
 
-        int next = current + 1;
-        plugin.relics().applyLimitBreakMeta(target.getType(), meta, type, next);
-        target.setItemMeta(meta);
+    private static void applyLimitBreak(VoidscapePlugin plugin, Player player, int targetSlot, LimitBreakType type) {
+        if (!player.isOnline()) return;
+        ItemStack target = player.getInventory().getItem(targetSlot);
+        if (!isEquipment(target) || target.getAmount() != 1) return;
+        int scrollSlot = findLimitBreakSlot(plugin, player, type, target);
+        if (scrollSlot < 0) {
+            player.sendMessage("§cไม่พบคัมภีร์ " + type.title() + " ที่อัปอุปกรณ์นี้ต่อได้ · ตรวจชนิดและเพดานคัมภีร์");
+            return;
+        }
+        ItemStack source = player.getInventory().getItem(scrollSlot).clone();
+        ItemStack upgraded = plugin.relics().evaluateScrollCraft(source, target);
+        if (upgraded == null) return;
 
-        player.getInventory().setItem(targetSlot, target);
+        // Commit the exact eligible stack only after the shared grade/compatibility check succeeds.
+        // Lower usable grades are selected first; capped scrolls are never spent.
+        if (!target.equals(player.getInventory().getItem(targetSlot))
+                || !source.equals(player.getInventory().getItem(scrollSlot))) return;
+        int next = plugin.relics().getLimitBreakUpgradeLevel(upgraded, type);
+        source.setAmount(source.getAmount() - 1);
+        player.getInventory().setItem(scrollSlot, source.getAmount() == 0 ? null : source);
+        player.getInventory().setItem(targetSlot, upgraded);
         playSuccessEffects(player, "✦ ทลายขีดจำกัดสำเร็จ! " + type.title() + " ระดับ " + toRoman(next));
         sendUpgradeOptions(plugin, player, targetSlot);
     }
@@ -388,12 +399,34 @@ public final class FloodgateUpgradeForm {
         return count;
     }
 
-    private static int countLimitBreak(VoidscapePlugin plugin, Player player, LimitBreakType type) {
+    private static boolean usableLimitBreak(VoidscapePlugin plugin, ItemStack scroll,
+                                           LimitBreakType type, ItemStack target) {
+        if (!isEquipment(target) || target.getAmount() != 1 || scroll == null || scroll.getAmount() <= 0
+                || plugin.relics().getLimitBreakType(scroll) != type || !type.category().matches(target.getType())) return false;
+        int current = plugin.relics().getLimitBreakUpgradeLevel(target, type);
+        return current > 0 && current < plugin.relics().getLimitBreakCap(scroll);
+    }
+
+    private static int countUsableLimitBreak(VoidscapePlugin plugin, Player player,
+                                            LimitBreakType type, ItemStack target) {
         int count = 0;
         for (ItemStack it : player.getInventory().getContents()) {
-            if (it != null && plugin.relics().getLimitBreakType(it) == type) count += it.getAmount();
+            if (usableLimitBreak(plugin, it, type, target)) count += it.getAmount();
         }
         return count;
+    }
+
+    private static int findLimitBreakSlot(VoidscapePlugin plugin, Player player,
+                                         LimitBreakType type, ItemStack target) {
+        int selected = -1, lowestCap = Integer.MAX_VALUE;
+        ItemStack[] contents = player.getInventory().getContents();
+        for (int slot = 0; slot < contents.length; slot++) {
+            ItemStack scroll = contents[slot];
+            if (!usableLimitBreak(plugin, scroll, type, target)) continue;
+            int cap = plugin.relics().getLimitBreakCap(scroll);
+            if (cap < lowestCap) { selected = slot; lowestCap = cap; }
+        }
+        return selected;
     }
 
     private static int countUnique(VoidscapePlugin plugin, Player player, UniqueEnchant ue) {

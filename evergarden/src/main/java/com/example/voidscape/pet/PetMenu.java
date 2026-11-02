@@ -34,17 +34,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.geysermc.cumulus.form.CustomForm;
-import org.geysermc.cumulus.form.ModalForm;
-import org.geysermc.cumulus.form.SimpleForm;
-import org.geysermc.cumulus.util.FormImage;
-import org.geysermc.floodgate.api.FloodgateApi;
 import java.util.*;
 
 /**
  * {@code /pet}: the stable, one pet's card with its skills and mode, renaming, release and the
- * breeding nest. Chest menus on Java, forms on Bedrock. Renaming uses a sign editor (or a Name
- * Tag, or {@code /pet name}), so it works for players whose chat is disabled.
+ * breeding nest. Both editions use the same chest menus. Renaming uses a sign editor on Java
+ * and a text-entry form on Bedrock (or a Name Tag, or {@code /pet name}).
  * Menu art (pet portraits, buttons) comes from Advance Magic's pack: advance_magic:menu_* models.
  */
 public final class PetMenu implements Listener,CommandExecutor,TabCompleter,AutoCloseable {
@@ -57,7 +52,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         @Override public Inventory getInventory(){return inventory;}
     }
     private static final int[] SLOTS={10,11,12,13,14,15,16,19,20,21,22,23,24,25,28,29,30,31,32,33,34,37,38,39,40,41,42,43};
-    private static final int[] CANDIDATES={28,29,30,31,32,33,34,35,37,38,39,40,41,42,43,44,46,47,48,49,50,51,52,53};
+    private static final int[] CANDIDATES={28,29,30,31,32,33,34,35,37,38,39,40,41,42,43,44,47,48,49,50,51,52};
     private final VoidscapePlugin plugin;
     private final PetCompanions companions;
     private final PetBreeding breeding;
@@ -66,6 +61,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
     private record SignPrompt(UUID pet,Location block){}
     private final Map<UUID,SignPrompt> signs=new HashMap<>();
     private final Map<UUID,UUID[]> drafts=new HashMap<>();
+    private final Map<UUID,Integer> stablePages=new HashMap<>(),nestPages=new HashMap<>();
 
     PetMenu(VoidscapePlugin plugin,PetCompanions companions,PetBreeding breeding,PetTaming taming){
         this.plugin=plugin;this.companions=companions;this.breeding=breeding;this.taming=taming;
@@ -90,7 +86,6 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
     private static NamespacedKey portrait(PetRecord record,boolean dim){
         return new NamespacedKey("evergarden","menu_pet_"+record.species.id+"_"+record.stage.id+(dim?"_dim":""));
     }
-    private static String formImage(PetRecord record){return "textures/menu/pet_"+record.species.id+"_"+record.stage.id;}
     private boolean bedrock(Player player){return JudgePackService.bedrock(player)&&Bukkit.getPluginManager().getPlugin("floodgate")!=null;}
     private static String hours(long millis){return Math.max(1,(millis+3_599_999L)/3_600_000L)+" ชม.";}
     private static String minutes(long millis){return Math.max(1,(millis+59_999L)/60_000L)+" นาที";}
@@ -99,13 +94,18 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
     /** The card text shared by chest lore and Bedrock forms. */
     List<String> describe(PetStable stable,PetRecord record){
         List<String> lines=new ArrayList<>();
-        lines.add(record.species.display+" · "+record.species.thai);
+        lines.add(record.species.display+" · "+record.species.thai+(record.species.mythical()?" · ✦ ระดับตำนาน":""));
         PetCatalog.Stage next=next(record);
         lines.add(record.stage.thai+(next==null?" · โตเต็มวัย":" · เติบโต "+record.growth+"/"+companions.threshold(next)));
+        if(record.species.mythical())lines.add(record.species==PetCatalog.Species.FENRIR
+            ?"ขี่วิ่งเร็วและกระโดดสูง · บินไม่ได้ · ไม่ใช้มานา":"ขี่และบินได้เมื่อโตเต็มวัย · ไม่ใช้มานา");
+        if(record.species==PetCatalog.Species.AETHERIUS)lines.add("ขณะขี่: ตาสว่าง · ฟื้นฟู · พลังโจมตี · โล่ · ความเร็ว I");
+        if(stable.raised.contains(record.id))lines.add("✔ เลี้ยงมาตั้งแต่เด็กจนโต · เปิดช่องคอกเพิ่มแล้ว");
+        else if(stable.owner.equals(record.raisedBy))lines.add("เลี้ยงมาตั้งแต่เด็ก · โตเต็มวัยแล้วคอกเพิ่ม "+stable.perRaised+" ช่อง");
         lines.add("ความผูกพัน "+record.bond+"/"+PetRecord.BOND_MAX);
         lines.add("พลังชีวิต "+record.vitality+" · ว่องไว "+record.agility+" · มนตรา "+record.affinity);
         lines.add("ขนาด "+Math.round(record.size*100)+"% · รุ่นที่ "+record.generation+(record.aura?" · ✦ ออร่า":""));
-        long now=System.currentTimeMillis(),rest=record.bred+breeding.cooldownMillis()-now;
+        long now=System.currentTimeMillis(),rest=record.bred+breeding.cooldownMillis(record)-now;
         Player owner=Bukkit.getPlayer(stable.owner);
         if(record.id.equals(stable.active)&&stable.out&&owner!=null)lines.add("★ "+companions.state(owner));
         if(stable.nesting(record.id))lines.add("อยู่ในรังผสมพันธุ์");
@@ -159,11 +159,10 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
 
     // ---- entry points ----
     public void open(Player player){
-        if(bedrock(player))try{if(formStable(player))return;}catch(Throwable error){plugin.getLogger().warning("Pet form unavailable for "+player.getName()+": "+error);}
+        breeding.retryDeliveries(player);
         chestStable(player);
     }
     void openPet(Player player,UUID id){
-        if(bedrock(player))try{if(formPet(player,id))return;}catch(Throwable error){plugin.getLogger().warning("Pet form unavailable for "+player.getName()+": "+error);}
         chestPet(player,id);
     }
 
@@ -176,6 +175,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
     }
     private void release(Player player,UUID id){
         PetStable stable=companions.stable(player);PetRecord record=stable.get(id);if(record==null)return;
+        if(stable.locked){plugin.message(player,"อ่านหรือบันทึกข้อมูลคอกสัตว์ไม่ได้ · แจ้งแอดมินก่อนปล่อยสัตว์");return;}
         if(id.equals(stable.active))companions.despawn(player.getUniqueId());
         stable.remove(id);
         UUID[] draft=drafts.get(player.getUniqueId());
@@ -258,9 +258,10 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         List<String> weak=chosen.stream().filter(r->r.bond<need).map(r->r.name()+" "+r.bond+"/"+need).toList();
         list.add(new Check("bond",!weak.isEmpty()?Boolean.FALSE:both?Boolean.TRUE:null,"ความผูกพันถึง "+need+" ทั้งคู่",
             weak.isEmpty()?"เพิ่มความผูกพันด้วยการพาออกมาเดินและป้อนอาหาร":"ยังไม่ถึง: "+String.join(", ",weak)));
-        List<String> tired=chosen.stream().filter(r->r.bred>0&&now<r.bred+breeding.cooldownMillis()).map(r->r.name()+" อีก "+hours(r.bred+breeding.cooldownMillis()-now)).toList();
+        List<String> tired=chosen.stream().filter(r->r.bred>0&&now<r.bred+breeding.cooldownMillis(r)).map(r->r.name()+" อีก "+hours(r.bred+breeding.cooldownMillis(r)-now)).toList();
+        PetRecord first=a!=null?a:b;
         list.add(new Check("rest",!tired.isEmpty()?Boolean.FALSE:both?Boolean.TRUE:null,"ไม่อยู่ในช่วงพักหลังผสม",
-            tired.isEmpty()?"ผสมแล้วต้องพัก "+hours(breeding.cooldownMillis()):"ยังพักอยู่: "+String.join(", ",tired)));
+            tired.isEmpty()?"ผสมแล้วต้องพัก "+hours(first==null?breeding.cooldownMillis():breeding.cooldownMillis(first)):"ยังพักอยู่: "+String.join(", ",tired)));
         int eggs=stable.eggsToday(now);
         list.add(new Check("daily",eggs<breeding.dailyEggs(),"โควตาไข่วันนี้ "+eggs+"/"+breeding.dailyEggs(),eggs<breeding.dailyEggs()?"ยังเก็บไข่ได้อีก":"ครบแล้ว กลับมาพรุ่งนี้"));
         PetRecord any=a!=null?a:b;
@@ -276,7 +277,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         if(record.stage!=PetCatalog.Stage.ADULT)return "ยังไม่โตเต็มวัย ("+record.stage.thai+")";
         if(other!=null&&other.species!=record.species)return "ต่างชนิดกับ "+other.name();
         if(record.bond<breeding.bondNeeded())return "ความผูกพัน "+record.bond+"/"+breeding.bondNeeded();
-        if(record.bred>0&&now<record.bred+breeding.cooldownMillis())return "พักหลังผสม อีก "+hours(record.bred+breeding.cooldownMillis()-now);
+        if(record.bred>0&&now<record.bred+breeding.cooldownMillis(record))return "พักหลังผสม อีก "+hours(record.bred+breeding.cooldownMillis(record)-now);
         return null;
     }
 
@@ -311,17 +312,31 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
     void chestStable(Player player){
         PetStable stable=companions.stable(player);
         Holder holder=frame(player,Page.STABLE,null,54,"✦ คอกสัตว์เลี้ยง · คลิกสัตว์เพื่อจัดการ");
+        int pages=1+(Math.max(stable.capacity(),stable.pets.size())-1)/SLOTS.length;
+        int page=Math.clamp(stablePages.getOrDefault(player.getUniqueId(),0),0,pages-1);
+        stablePages.put(player.getUniqueId(),page);
+        int offset=page*SLOTS.length;
         PetRecord active=stable.activeRecord();
         List<String> guide=new ArrayList<>(List.of("§fคลิกสัตว์ = ดูข้อมูล เรียก ตั้งชื่อ เปลี่ยนโหมด","§fปุ่มรังด้านบน = ผสมพันธุ์ (ตัวโตเต็มวัย ชนิดเดียวกัน)",
             "","วิธีผูกมิตร: คลิกขวาสัตว์ป่าพร้อมอาหารที่ชอบจนไว้ใจ 100%","ร่างกลางและโตเต็มวัยต้องมีเชือกจูง (Lead) พากลับ","","อาหารที่ชอบ:"));
         for(var species:WildPetSpawns.eligibleSpecies())guide.add(species.thai+": "+PetTaming.foodNameThai(taming.food(species)));
+        guide.add("");guide.add("เลี้ยงจากเด็กจนโตเต็มวัย = คอกเพิ่ม "+stable.perRaised+" ช่องถาวรต่อตัว");
+        guide.add("รับได้ครั้งเดียวต่อตัว · จับตอนโตหรือร่างกลางไม่นับ");
         put(holder,0,art("skilltree_help","วิธีใช้ · อาหารที่ชอบ",NamedTextColor.AQUA,guide),null);
+        List<String> legends=new ArrayList<>(List.of("หายากกว่าสัตว์ป่าทั่วไปมาก · ครั้งละ 1 ตัวในโลก",
+            "เรทพื้นฐาน "+String.format(Locale.ROOT,"%.2f%%",plugin.wildPets().legendChance()*100)+" ต่อชนิดต่อการพบในถิ่นที่ถูกต้อง",
+            "เวลาและอากาศเพิ่มโอกาส · ไม่มีการันตีตำนาน",""));
+        for(var species:WildPetSpawns.mythicalSpecies()){
+            legends.add("✦ "+species.thai+": "+PetTaming.foodNameThai(taming.food(species)));
+            legends.add(WildPetSpawns.legendHint(species));
+        }
+        put(holder,1,art("menu_skills","✦ สัตว์เลี้ยงระดับตำนาน",NamedTextColor.GOLD,legends),null);
         if(active!=null){
             boolean out=stable.out;
             put(holder,2,art(out?"menu_dismiss":"menu_summon",out?"เก็บ "+active.name()+" เข้าคอก":"เรียก "+active.name()+" ออกมา",out?NamedTextColor.GOLD:NamedTextColor.GREEN,
                 List.of(companions.state(player))),()->{toggleSummon(player,active.id);chestStable(player);});
             put(holder,4,icon(stable,active,"ตัวที่ติดตามคุณ · คลิกเพื่อจัดการ"),()->chestPet(player,active.id));
-        }else put(holder,4,art("menu_socket","คอกสัตว์เลี้ยง "+stable.pets.size()+"/"+stable.slots,NamedTextColor.GOLD,List.of("ยังไม่มีตัวที่ติดตาม","คลิกสัตว์ด้านล่าง แล้วกด เรียกออกมา")),null);
+        }else put(holder,4,art("menu_socket","คอกสัตว์เลี้ยง "+stable.pets.size()+"/"+stable.capacity(),NamedTextColor.GOLD,List.of("ยังไม่มีตัวที่ติดตาม","คลิกสัตว์ด้านล่าง แล้วกด เรียกออกมา")),null);
         long now=System.currentTimeMillis();
         String nestModel=!stable.nestBusy()?"menu_nest":now<stable.nestReady?"menu_nest_wait":"menu_egg_ready";
         List<String> nestLore=new ArrayList<>(List.of(nestStatus(stable),"ตัวโตเต็มวัยชนิดเดียวกันสองตัว"));
@@ -331,10 +346,14 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
             List.of("ช่วยให้เครื่องลื่นขึ้นในที่คนเยอะ","คลิกเพื่อสลับ")),()->{stable.hideOthers=!stable.hideOthers;stable.dirty=true;chestStable(player);});
         put(holder,8,art("skilltree_close","ปิด",NamedTextColor.RED,List.of()),player::closeInventory);
         List<PetRecord> pets=new ArrayList<>(stable.pets.values());
-        for(int i=0;i<Math.min(SLOTS.length,stable.slots);i++){
-            if(i<pets.size()){PetRecord record=pets.get(i);put(holder,SLOTS[i],icon(stable,record,"คลิกเพื่อจัดการ"),()->chestPet(player,record.id));}
+        for(int i=0;i<Math.min(SLOTS.length,Math.max(stable.capacity(),pets.size())-offset);i++){
+            if(offset+i<pets.size()){PetRecord record=pets.get(offset+i);put(holder,SLOTS[i],icon(stable,record,"คลิกเพื่อจัดการ"),()->chestPet(player,record.id));}
             else put(holder,SLOTS[i],art("menu_socket","ช่องว่าง",NamedTextColor.GRAY,List.of("หาสัตว์ป่าใน Evergarden","แล้วคลิกขวาพร้อมอาหารที่มันชอบ")),null);
         }
+        put(holder,49,art("menu_socket","คอก "+pets.size()+"/"+stable.capacity()+" · หน้า "+(page+1)+"/"+pages,NamedTextColor.GOLD,
+            List.of("เลี้ยงจากเด็กจนโตแล้ว "+stable.raised.size()+" ตัว","โตเต็มวัยอีกตัว = เพิ่ม "+stable.perRaised+" ช่องถาวร")),null);
+        if(page>0)put(holder,46,button(Material.ARROW,"« หน้าก่อน",NamedTextColor.YELLOW,List.of()),()->{stablePages.put(player.getUniqueId(),page-1);chestStable(player);});
+        if(page+1<pages)put(holder,52,button(Material.ARROW,"หน้าถัดไป »",NamedTextColor.YELLOW,List.of()),()->{stablePages.put(player.getUniqueId(),page+1);chestStable(player);});
         show(player,holder);
     }
     void chestPet(Player player,UUID id){
@@ -357,10 +376,22 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         put(holder,15,art("menu_stats","ค่าพลัง",NamedTextColor.AQUA,List.of("พลังชีวิต "+record.vitality+"/"+PetRecord.STAT_MAX+" · เพิ่มเลือด",
             "ว่องไว "+record.agility+"/"+PetRecord.STAT_MAX+" · กัดถี่ขึ้น","มนตรา "+record.affinity+"/"+PetRecord.STAT_MAX+" · กัดแรงขึ้น",
             "ขนาด "+Math.round(record.size*100)+"% · รุ่นที่ "+record.generation+(record.aura?" · ✦ ออร่า":""),"ลูกได้ค่าพลังจากพ่อแม่")),null);
+        if(record.species.mythical()){
+            boolean riding=companions.riding().riding(player.getUniqueId());
+            boolean fenrir=record.species==PetCatalog.Species.FENRIR;
+            List<String> saddle=new ArrayList<>(List.of(fenrir?"วิ่งเร็ว · กระโดดสูง · บินไม่ได้":"บินได้เมื่อโตเต็มวัย",
+                fenrir?"เดินเพื่อวิ่ง · กระโดดสูงราว 6 บล็อก":"เดินเพื่อบิน · กระโดดขึ้น · ก้มแล้วเดินหน้าลง",
+                "Sprint เร่ง · ย่องลงจากสัตว์","หรือคลิกขวาตัวที่เรียกออกมาด้วยมือเปล่า"));
+            if(record.species==PetCatalog.Species.AETHERIUS)saddle.add("ตาสว่าง · ฟื้นฟู · พลังโจมตี · โล่ · ความเร็ว I ขณะขี่");
+            put(holder,16,button(Material.SADDLE,riding?"ลงจากสัตว์":fenrir?"ขี่วิ่ง · ไม่ใช้มานา":"ขี่และบิน · ไม่ใช้มานา",NamedTextColor.GOLD,saddle),()->{
+                if(riding){companions.riding().stop(player.getUniqueId(),true);player.closeInventory();}
+                else{String problem=companions.riding().start(player,id);if(problem!=null)plugin.message(player,problem);}
+            });
+        }
         boolean following=stable.out&&id.equals(stable.active);
         put(holder,28,art(following?"menu_dismiss":"menu_summon",following?"เก็บเข้าคอก":"เรียกออกมา",following?NamedTextColor.GOLD:NamedTextColor.GREEN,
             List.of(following?companions.state(player):"ติดตามคุณไปทุกที่ เติบโตเมื่ออยู่ด้วยกัน")),()->{toggleSummon(player,id);chestPet(player,id);});
-        put(holder,30,art("menu_rename","ตั้งชื่อ",NamedTextColor.AQUA,List.of("เปิดป้ายให้พิมพ์ชื่อ (ไม่ต้องใช้แชท)",
+        put(holder,30,art("menu_rename","ตั้งชื่อ",NamedTextColor.AQUA,List.of(bedrock(player)?"เปิดช่องให้พิมพ์ชื่อ (ไม่ต้องใช้แชท)":"เปิดป้ายให้พิมพ์ชื่อ (ไม่ต้องใช้แชท)",
             "หรือคลิกขวาที่สัตว์ด้วย Name Tag ที่ตั้งชื่อแล้ว","หรือพิมพ์ /pet name <ชื่อ>")),()->promptRename(player,id));
         String unfit=unfit(stable,record,null,System.currentTimeMillis());
         put(holder,32,art(unfit==null?"menu_breed":"menu_breed_off","ผสมพันธุ์ · หาคู่",unfit==null?NamedTextColor.LIGHT_PURPLE:NamedTextColor.GRAY,
@@ -431,10 +462,16 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         put(holder,27,art("menu_label_pets","เลือกคู่จากสัตว์ในคอก",NamedTextColor.GOLD,List.of("สีปกติ = เลือกได้ · สีเทา = เลือกไม่ได้ (ดูเหตุผล)","คลิกตัวที่เลือกแล้วด้านบนเพื่อเอาออก")),null);
         PetRecord other=a!=null?a:b;
         List<PetRecord> pets=new ArrayList<>(stable.pets.values());
+        pets.removeIf(r->r==a||r==b);
         // Pickable pets first.
         pets.sort(Comparator.comparing(r->unfit(stable,r,other,now)!=null));
+        int pages=Math.max(1,1+(pets.size()-1)/CANDIDATES.length);
+        int page=Math.clamp(nestPages.getOrDefault(player.getUniqueId(),0),0,pages-1);
+        nestPages.put(player.getUniqueId(),page);
+        if(page>0)put(holder,46,button(Material.ARROW,"« คู่หน้าก่อน",NamedTextColor.YELLOW,List.of()),()->{nestPages.put(player.getUniqueId(),page-1);chestNest(player);});
+        if(page+1<pages)put(holder,53,button(Material.ARROW,"คู่หน้าถัดไป »",NamedTextColor.YELLOW,List.of()),()->{nestPages.put(player.getUniqueId(),page+1);chestNest(player);});
         int shown=0;
-        for(PetRecord record:pets){
+        for(PetRecord record:pets.subList(page*CANDIDATES.length,Math.min(pets.size(),(page+1)*CANDIDATES.length))){
             if(shown>=CANDIDATES.length)break;
             if(record==a||record==b)continue;
             String why=unfit(stable,record,other,now);
@@ -469,7 +506,18 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
      * an unchecked sign change. Chat can be off (missing profile key, chat hidden) and this still works.
      */
     void promptRename(Player player,UUID id){
-        if(bedrock(player)){formRename(player,id);return;}
+        if(bedrock(player)){
+            player.closeInventory();
+            try{
+                PetRecord record=companions.stable(player).get(id);if(record==null)return;
+                boolean sent=PetNameForm.send(plugin,player,record.species.display,record.name(),name->{applyName(player,id,name);chestPet(player,id);});
+                if(!sent)plugin.message(player,"เปิดช่องตั้งชื่อไม่ได้ · ใช้ /pet name <ชื่อ> หรือคลิกขวาด้วย Name Tag แทน");
+            }catch(Throwable error){
+                plugin.getLogger().warning("Pet name form unavailable for "+player.getName()+": "+error);
+                plugin.message(player,"เปิดช่องตั้งชื่อไม่ได้ · ใช้ /pet name <ชื่อ> หรือคลิกขวาด้วย Name Tag แทน");
+            }
+            return;
+        }
         PetRecord record=companions.stable(player).get(id);if(record==null)return;
         player.closeInventory();
         restoreSign(player);
@@ -538,133 +586,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         return true;
     }
     @EventHandler public void quit(PlayerQuitEvent event){
-        UUID id=event.getPlayer().getUniqueId();signs.remove(id);drafts.remove(id);
-    }
-
-    // ---- Bedrock forms ----
-    private boolean send(Player player,org.geysermc.cumulus.form.Form form){return FloodgateApi.getInstance().sendForm(player.getUniqueId(),form);}
-    private SimpleForm.Builder handle(SimpleForm.Builder builder,List<Runnable> actions){
-        return builder.validResultHandler(response->{
-            int index=response.clickedButtonId();
-            if(index>=0&&index<actions.size())Bukkit.getScheduler().runTask(plugin,actions.get(index));
-        });
-    }
-    boolean formStable(Player player){
-        PetStable stable=companions.stable(player);PetRecord active=stable.activeRecord();
-        List<Runnable> actions=new ArrayList<>();
-        SimpleForm.Builder builder=SimpleForm.builder().title("คอกสัตว์เลี้ยง "+stable.pets.size()+"/"+stable.slots)
-            .content((active==null?"ยังไม่มีตัวที่ติดตาม":active.name()+" · "+companions.state(player))+"\n"+nestStatus(stable)+"\n§7แตะสัตว์เพื่อดูข้อมูล เรียก ตั้งชื่อ หรือผสมพันธุ์");
-        for(PetRecord record:stable.pets.values()){
-            builder.button(record.name()+(record.id.equals(stable.active)&&stable.out?" ★":"")+"\n§7"+record.species.thai+" · "+record.stage.thai+" · ผูกพัน "+record.bond,FormImage.Type.PATH,formImage(record));
-            actions.add(()->formPet(player,record.id));
-        }
-        if(active!=null){builder.button(stable.out?"เก็บ "+active.name()+" เข้าคอก":"เรียก "+active.name(),FormImage.Type.PATH,stable.out?"textures/menu/dismiss":"textures/menu/summon");actions.add(()->{toggleSummon(player,active.id);formStable(player);});}
-        builder.button("รังผสมพันธุ์\n§7"+nestStatus(stable),FormImage.Type.PATH,"textures/menu/nest");actions.add(()->formNest(player));
-        builder.button("ซ่อนสัตว์เลี้ยงของคนอื่น: "+(stable.hideOthers?"เปิด":"ปิด"));actions.add(()->{stable.hideOthers=!stable.hideOthers;stable.dirty=true;formStable(player);});
-        builder.button("วิธีผูกมิตร · อาหารที่ชอบ",FormImage.Type.PATH,"textures/skilltree/help");actions.add(()->formGuide(player));
-        return send(player,handle(builder,actions).build());
-    }
-    private void formGuide(Player player){
-        StringBuilder text=new StringBuilder("หาสัตว์ป่าใน Evergarden แล้วคลิกขวาพร้อมอาหารที่มันชอบจนความไว้ใจครบ 100%\nร่างกลางและโตเต็มวัยต้องมีเชือกจูง (Lead) พากลับ\n");
-        for(var species:WildPetSpawns.eligibleSpecies())text.append("\n§e").append(species.thai).append(" (").append(species.display).append(")\n§f  ชอบ: §a").append(PetTaming.foodNameThai(taming.food(species)));
-        send(player,handle(SimpleForm.builder().title("วิธีผูกมิตร · อาหารที่ชอบ").content(text.toString()).button("« กลับ"),List.of(()->formStable(player))).build());
-    }
-    boolean formPet(Player player,UUID id){
-        PetStable stable=companions.stable(player);PetRecord record=stable.get(id);
-        if(record==null)return formStable(player);
-        boolean following=stable.out&&id.equals(stable.active);
-        List<Runnable> actions=new ArrayList<>();
-        SimpleForm.Builder builder=SimpleForm.builder().title(record.name()).content(String.join("\n",describe(stable,record)));
-        builder.button(following?"เก็บเข้าคอก":"เรียกออกมา",FormImage.Type.PATH,following?"textures/menu/dismiss":"textures/menu/summon");actions.add(()->{toggleSummon(player,id);formPet(player,id);});
-        builder.button("โหมด: "+PetSkills.modeName(record.mode)+"\n§7ติดตาม · อยู่กับที่ · เกาะหัว · ช่วยสู้",FormImage.Type.PATH,"textures/menu/mode_"+record.mode+"_on");actions.add(()->formMode(player,id));
-        builder.button("สกิลและพลังต่อสู้",FormImage.Type.PATH,"textures/menu/skills");actions.add(()->send(player,handle(SimpleForm.builder().title("สกิลของ "+record.name())
-            .content(String.join("\n",skillPage(record))).button("« กลับ"),List.of(()->formPet(player,id))).build()));
-        builder.button("ตั้งชื่อ",FormImage.Type.PATH,"textures/menu/rename");actions.add(()->formRename(player,id));
-        String unfit=unfit(stable,record,null,System.currentTimeMillis());
-        builder.button("ผสมพันธุ์ · หาคู่\n§7"+(unfit==null?"เลือกคู่ชนิดเดียวกันอีกหนึ่งตัว":"✖ "+unfit),FormImage.Type.PATH,unfit==null?"textures/menu/breed":"textures/menu/breed_off");
-        actions.add(()->{toNest(player,id);formNest(player);});
-        builder.button("§cปล่อยคืนธรรมชาติ",FormImage.Type.PATH,"textures/menu/release");actions.add(()->send(player,ModalForm.builder().title("ปล่อย "+record.name()+"?")
-            .content("สัตว์ตัวนี้จะหายไปจากคอกถาวร").button1("ปล่อย").button2("ยกเลิก")
-            .validResultHandler(answer->Bukkit.getScheduler().runTask(plugin,()->{if(answer.clickedFirst())release(player,id);formStable(player);})).build()));
-        builder.button("« กลับ");actions.add(()->formStable(player));
-        return send(player,handle(builder,actions).build());
-    }
-    private void formMode(Player player,UUID id){
-        PetRecord record=companions.stable(player).get(id);if(record==null)return;
-        String[][] modes={{"follow","เดินตามคุณ ไม่ร่วมต่อสู้"},{"stay","ยืนรอตรงที่อยู่ ไปไกลเกิน 64 บล็อกจะวิ่งตามมา"},
-            {"perch","ตัวเล็กลงแล้วเกาะบนหัวคุณ"},{"assist","ไล่กัดศัตรู · สวนกลับได้ สลบแล้วพักฟื้น 1 วันในเกม"}};
-        List<Runnable> actions=new ArrayList<>();
-        SimpleForm.Builder builder=SimpleForm.builder().title("โหมดของ "+record.name()).content("ตอนนี้: "+PetSkills.modeName(record.mode));
-        for(String[] mode:modes){
-            boolean current=mode[0].equals(record.mode);
-            builder.button((current?"● ":"")+PetSkills.modeName(mode[0])+"\n§7"+mode[1],FormImage.Type.PATH,"textures/menu/mode_"+mode[0]+(current?"_on":""));
-            actions.add(()->{setMode(player,id,mode[0]);formPet(player,id);});
-        }
-        builder.button("« กลับ");actions.add(()->formPet(player,id));
-        send(player,handle(builder,actions).build());
-    }
-    private void formRename(Player player,UUID id){
-        PetRecord record=companions.stable(player).get(id);if(record==null)return;
-        send(player,CustomForm.builder().title("ตั้งชื่อ").input("ชื่อใหม่ (สูงสุด 16 ตัวอักษร)",record.species.display,record.name())
-            .validResultHandler(response->{String name=response.asInput(0);
-                Bukkit.getScheduler().runTask(plugin,()->{applyName(player,id,name);formPet(player,id);});}).build());
-    }
-    private void formNest(Player player){
-        PetStable stable=companions.stable(player);UUID[] draft=draft(player);boolean busy=stable.nestBusy();
-        PetRecord a=stable.get(busy?stable.nestA:draft[0]),b=stable.get(busy?stable.nestB:draft[1]);
-        List<Runnable> actions=new ArrayList<>();long now=System.currentTimeMillis();
-        StringBuilder content=new StringBuilder(nestStatus(stable));
-        List<String> eggs=eggLines(player);
-        if(!eggs.isEmpty())content.append("\n§b").append(String.join("\n§b",eggs));
-        boolean ready=false;
-        if(!busy){
-            List<Check> checks=checks(player,stable,a,b,now);
-            ready=checks.stream().allMatch(c->Boolean.TRUE.equals(c.ok()))&&breeding.check(stable,a,b,now)==null;
-            content.append("\n\n§fตัวที่ 1: ").append(a==null?"§7ยังไม่เลือก":a.name()).append("\n§fตัวที่ 2: ").append(b==null?"§7ยังไม่เลือก":b.name()).append("\n");
-            for(Check check:checks)content.append("\n").append(check.ok()==null?"§7… ":check.ok()?"§a✔ ":"§c✖ ").append(check.label())
-                .append(Boolean.TRUE.equals(check.ok())?"":"§7 · "+check.detail());
-        }
-        SimpleForm.Builder builder=SimpleForm.builder().title("รังผสมพันธุ์").content(content.toString());
-        long hatchable=breeding.carried(player).stream().filter(e->e.percent()>=100).count();
-        if(hatchable>0){
-            builder.button("ฟักไข่!\n§7พร้อม "+hatchable+" ฟอง",FormImage.Type.PATH,"textures/items/pet_egg");
-            actions.add(()->{hatchCarried(player);formNest(player);});
-        }
-        if(!busy){
-            for(int side=0;side<2;side++){
-                PetRecord record=side==0?a:b;final int chosen=side;
-                if(record==null)builder.button("เลือกตัวที่ "+(side+1),FormImage.Type.PATH,"textures/menu/pick");
-                else builder.button("ตัวที่ "+(side+1)+": "+record.name()+"\n§7แตะเพื่อเปลี่ยน",FormImage.Type.PATH,formImage(record));
-                actions.add(()->formPick(player,chosen));
-            }
-            if(ready){
-                builder.button("เริ่มผสมพันธุ์\n§7"+PetTaming.foodName(taming.food(a.species))+" ×"+breeding.foodCost(),FormImage.Type.PATH,"textures/menu/breed");
-                actions.add(()->{startNest(player);formNest(player);});
-            }
-        }else if(now>=stable.nestReady){builder.button("เก็บไข่!",FormImage.Type.PATH,"textures/menu/egg_ready");actions.add(()->{collect(player);formNest(player);});}
-        else{builder.button("รีเฟรช",FormImage.Type.PATH,"textures/menu/nest_wait");actions.add(()->formNest(player));}
-        if(busy){builder.button("§cยกเลิกรัง",FormImage.Type.PATH,"textures/menu/cancel");actions.add(()->send(player,ModalForm.builder().title("ยกเลิกรัง?").content("ไม่คืนอาหารที่ใช้ไป")
-            .button1("ยกเลิกรัง").button2("ไม่").validResultHandler(answer->Bukkit.getScheduler().runTask(plugin,()->{if(answer.clickedFirst())breeding.cancel(player);formNest(player);})).build()));}
-        builder.button("« กลับ");actions.add(()->formStable(player));
-        send(player,handle(builder,actions).build());
-    }
-    private void formPick(Player player,int side){
-        PetStable stable=companions.stable(player);UUID[] draft=draft(player);long now=System.currentTimeMillis();
-        PetRecord other=stable.get(draft[1-side]);
-        List<Runnable> actions=new ArrayList<>();List<String> unfit=new ArrayList<>();
-        SimpleForm.Builder builder=SimpleForm.builder().title("เลือกตัวที่ "+(side+1));
-        for(PetRecord record:stable.pets.values()){
-            if(record==other)continue;
-            String why=unfit(stable,record,other,now);
-            if(why!=null){unfit.add("§7"+record.name()+" · "+why);continue;}
-            builder.button(record.name()+"\n§7"+record.species.thai+" · ผูกพัน "+record.bond,FormImage.Type.PATH,formImage(record));
-            actions.add(()->{draft[side]=record.id;formNest(player);});
-        }
-        builder.content(actions.isEmpty()?"ยังไม่มีตัวที่เลือกได้ · ต้องโตเต็มวัย ชนิดเดียวกัน และความผูกพันถึง "+breeding.bondNeeded()
-            :"ตัวโตเต็มวัย ชนิดเดียวกับอีกตัว ความผูกพันถึง "+breeding.bondNeeded()+(unfit.isEmpty()?"":"\n\nเลือกไม่ได้:\n"+String.join("\n",unfit)));
-        if(draft[side]!=null){builder.button("เอาตัวที่ "+(side+1)+" ออก");actions.add(()->{draft[side]=null;formNest(player);});}
-        builder.button("« กลับ");actions.add(()->formNest(player));
-        send(player,handle(builder,actions).build());
+        UUID id=event.getPlayer().getUniqueId();signs.remove(id);drafts.remove(id);stablePages.remove(id);nestPages.remove(id);
     }
 
     // ---- /pet ----
@@ -684,6 +606,12 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
                 plugin.message(player,problem!=null?problem:target.name()+" ออกมาเดินกับคุณแล้ว");
             }
             case "dismiss"->{companions.dismiss(player);plugin.message(player,"สัตว์เลี้ยงกลับเข้าคอกแล้ว");}
+            case "ride","mount"->{
+                PetRecord target=stable.activeRecord();
+                if(target==null){plugin.message(player,"เรียกสัตว์ตำนานของคุณด้วย /pet summon ก่อนขึ้นขี่");return true;}
+                String problem=companions.riding().start(player,target.id);if(problem!=null)plugin.message(player,problem);
+            }
+            case "dismount","unmount"->{companions.riding().stop(player.getUniqueId(),true);plugin.message(player,"ลงจากสัตว์แล้ว");}
             case "name","rename"->{
                 PetRecord target=stable.activeRecord();
                 if(target==null){plugin.message(player,"ยังไม่มีตัวที่ติดตาม · เรียกออกมาก่อนด้วย /pet summon");return true;}
@@ -703,18 +631,22 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
                 for(String line:skillPage(target))player.sendMessage(Component.text(line,NamedTextColor.GRAY));
             }
             case "foods","food","guide","tame","taming"->{
-                plugin.message(player,"=== รายการอาหารสำหรับเทมสัตว์เลี้ยง "+WildPetSpawns.eligibleSpecies().size()+" ชนิด ===");
-                for(var sp:WildPetSpawns.eligibleSpecies()){
+                plugin.message(player,"=== รายการอาหารสำหรับเทมสัตว์เลี้ยง "+PetCatalog.available().size()+" ชนิด ===");
+                for(var sp:PetCatalog.available()){
                     Material f=taming.food(sp);
                     player.sendMessage(Component.text("✦ "+sp.thai+" ("+sp.display+"): ",NamedTextColor.AQUA)
                         .append(Component.text(PetTaming.foodNameThai(f),NamedTextColor.YELLOW)));
+                    if(sp.mythical())player.sendMessage(Component.text("  "+WildPetSpawns.legendHint(sp),NamedTextColor.GOLD));
                 }
                 player.sendMessage(Component.text("วิธีเทม: คลิกขวาป้อนอาหารจนไว้ใจครบ 100% (ตัวโตต้องมีเชือกจูง Lead พากลับ)",NamedTextColor.GRAY));
+                player.sendMessage(Component.text("ตำนาน: พื้นฐาน "+String.format(Locale.ROOT,"%.2f%%",plugin.wildPets().legendChance()*100)
+                    +" ต่อชนิดต่อการพบในถิ่น · โบนัสสูงสุด ×3 · ไม่มีการันตี",NamedTextColor.GOLD));
+                player.sendMessage(Component.text("เลี้ยงตั้งแต่เด็กจนโตเต็มวัย: คอกเพิ่ม "+stable.perRaised+" ช่องถาวรต่อตัว (ครั้งเดียว)",NamedTextColor.GREEN));
             }
-            case "nest","breed"->{if(bedrock(player))formNest(player);else chestNest(player);}
+            case "nest","breed"->chestNest(player);
             case "hide"->{stable.hideOthers=!stable.hideOthers;stable.dirty=true;plugin.message(player,"ซ่อนสัตว์เลี้ยงของคนอื่น: "+(stable.hideOthers?"เปิด":"ปิด"));}
             case "list"->{
-                int index=1;plugin.message(player,"คอกสัตว์เลี้ยง "+stable.pets.size()+"/"+stable.slots+" · "+companions.state(player));
+                int index=1;plugin.message(player,"คอกสัตว์เลี้ยง "+stable.pets.size()+"/"+stable.capacity()+" · "+companions.state(player));
                 for(PetRecord record:stable.pets.values())player.sendMessage(Component.text(" "+(index++)+". "+record.name()+" · "+record.species.display+" · "+record.stage.thai
                     +" · ผูกพัน "+record.bond+" · "+PetSkills.modeName(record.mode)+(companions.faintLeft(record)>0?" · สลบ อีก "+companions.recovery(record):""),NamedTextColor.GRAY));
             }
@@ -725,7 +657,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
     @Override public List<String> onTabComplete(CommandSender sender,Command command,String alias,String[] args){
         if(args.length==2&&args[0].equalsIgnoreCase("mode"))return PetSkills.MODES.stream().filter(v->v.startsWith(args[1].toLowerCase(Locale.ROOT))).toList();
         if(args.length!=1)return List.of();
-        return List.of("summon","dismiss","list","name","mode","skills","nest","hide","foods","guide").stream().filter(v->v.startsWith(args[0].toLowerCase(Locale.ROOT))).toList();
+        return List.of("summon","dismiss","ride","dismount","list","name","mode","skills","nest","hide","foods","guide").stream().filter(v->v.startsWith(args[0].toLowerCase(Locale.ROOT))).toList();
     }
     @Override public void close(){HandlerList.unregisterAll(this);}
 }

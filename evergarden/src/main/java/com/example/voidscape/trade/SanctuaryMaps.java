@@ -2,6 +2,7 @@ package com.example.voidscape.trade;
 
 import com.example.voidscape.VoidscapePlugin;
 import com.example.voidscape.world.BossStructureLayout;
+import com.example.voidscape.world.DimensionalSanctuaries;
 import com.example.voidscape.world.OverworldSanctuaries;
 import com.example.voidscape.world.WorldBossTemple;
 import net.kyori.adventure.text.Component;
@@ -32,22 +33,31 @@ import java.util.function.Supplier;
 /** Personal, fixed-destination explorer maps sold by the Seraph. Searches never generate chunks. */
 public final class SanctuaryMaps implements Listener, AutoCloseable {
     public enum Destination {
-        ACHERON("Acheron", OverworldSanctuaries.Kind.ACHERON, null),
-        PHLEGETHON("Phlegethon", OverworldSanctuaries.Kind.PHLEGETHON, null),
-        COCYTUS("Cocytus", OverworldSanctuaries.Kind.COCYTUS, null),
-        BANSHEE("Banshee", OverworldSanctuaries.Kind.BANSHEE, null),
-        MALEFEASANCE("Malefeasance", OverworldSanctuaries.Kind.MALEFEASANCE, null),
-        STYX("Styx", OverworldSanctuaries.Kind.STYX, null),
-        JUDGE("Bodiless Judge", null, null),
-        ARKHAIA("Arkhaia", null, BossStructureLayout.Kind.ARKHAIA),
-        SERAPHON("Seraphon", null, BossStructureLayout.Kind.SERAPHON);
+        ACHERON("Acheron", OverworldSanctuaries.Kind.ACHERON, null, null),
+        PHLEGETHON("Phlegethon", OverworldSanctuaries.Kind.PHLEGETHON, null, null),
+        COCYTUS("Cocytus", OverworldSanctuaries.Kind.COCYTUS, null, null),
+        BANSHEE("Banshee", OverworldSanctuaries.Kind.BANSHEE, null, null),
+        MALEFEASANCE("Malefeasance", OverworldSanctuaries.Kind.MALEFEASANCE, null, null),
+        STYX("Styx", OverworldSanctuaries.Kind.STYX, null, null),
+        JUDGE("Bodiless Judge", null, null, null),
+        ARKHAIA("Arkhaia", null, BossStructureLayout.Kind.ARKHAIA, null),
+        SERAPHON("Seraphon", null, BossStructureLayout.Kind.SERAPHON, null),
+        // The four Nether and End sanctuaries, named after the boss each one keeps.
+        CROWN_FORTRESS("Cinder Colossus", null, null, DimensionalSanctuaries.Kind.CROWN_FORTRESS),
+        BONE_TEMPLE("Soul-Eater Hound", null, null, DimensionalSanctuaries.Kind.BONE_TEMPLE),
+        CRYSTAL_CITY("Crystal Moth Queen", null, null, DimensionalSanctuaries.Kind.CRYSTAL_CITY),
+        VOID_RING("Unlit Sun", null, null, DimensionalSanctuaries.Kind.VOID_RING);
         public final String title;
         private final OverworldSanctuaries.Kind sanctuary;
         private final BossStructureLayout.Kind boss;
-        Destination(String title, OverworldSanctuaries.Kind sanctuary, BossStructureLayout.Kind boss) {
-            this.title=title; this.sanctuary=sanctuary; this.boss=boss;
+        private final DimensionalSanctuaries.Kind realm;
+        Destination(String title, OverworldSanctuaries.Kind sanctuary, BossStructureLayout.Kind boss, DimensionalSanctuaries.Kind realm) {
+            this.title=title; this.sanctuary=sanctuary; this.boss=boss; this.realm=realm;
         }
         public boolean overworld() { return sanctuary!=null; }
+        public boolean dimensional() { return realm!=null; }
+        /** Evergarden's main bosses are paid in Golden Seraph Feathers; every sanctuary in plain feathers. */
+        public boolean golden() { return sanctuary==null&&realm==null; }
     }
     public record MapTarget(UUID world, Destination destination, int x, int z) {}
     private record StoredMap(MapTarget target, UUID owner, boolean reached, boolean purchased) {}
@@ -87,8 +97,21 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
         }
     }
     public int price(Destination destination) {
-        return plugin.integer("seraph-trader.maps."+(destination.overworld()?"overworld-feathers":"evergarden-golden-feathers"),
-            destination.overworld()?30:10,1,64);
+        if(destination.golden())return plugin.integer("seraph-trader.maps.evergarden-golden-feathers",10,1,64);
+        int sanctuary=plugin.integer("seraph-trader.maps.overworld-feathers",30,1,64);
+        // Nether and End sanctuaries cost what an Overworld sanctuary costs unless set on their own.
+        return destination.dimensional()?plugin.integer("seraph-trader.maps.dimensional-feathers",sanctuary,1,64):sanctuary;
+    }
+    private ItemStack currency(Destination destination,int amount) {
+        return destination.golden()?SeraphFeathers.golden(plugin,amount):SeraphFeathers.feather(plugin,amount);
+    }
+    /** The Nether or End world that hosts this sanctuary kind, preferring the one the player is in. */
+    private World realmWorld(Destination destination,World current) {
+        var service=plugin.dimensionalSanctuaries();
+        if(service==null)return null;
+        if(current!=null&&current.getEnvironment()==destination.realm.environment&&service.enabled(current))return current;
+        for(World world:Bukkit.getWorlds())if(world.getEnvironment()==destination.realm.environment&&service.enabled(world))return world;
+        return null;
     }
     private static Component text(String value, NamedTextColor color) {
         return Component.text(value,color).decoration(TextDecoration.ITALIC,false);
@@ -115,7 +138,7 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
         List<World> overworlds=plugin.overworldSanctuaries().mapWorlds();
         World normal=overworlds.contains(player.getWorld())?player.getWorld():overworlds.stream().findFirst().orElse(null);
         for(Destination destination:Destination.values()) {
-            World world=destination.overworld()?normal:plugin.world();
+            World world=destination.overworld()?normal:destination.dimensional()?realmWorld(destination,player.getWorld()):plugin.world();
             if(world==null){request.reasons.put(destination,"ไม่พบโลกของสถานที่นี้");searches.put(destination,()->null);continue;}
             if(!destination.overworld()&&!bossEnabled(destination)){request.reasons.put(destination,"สถานที่นี้ปิดใช้งานอยู่");searches.put(destination,()->null);continue;}
             MapTarget cached=null;
@@ -130,7 +153,8 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
                     origin.getBlockX(),origin.getBlockZ(),site->!visited.contains(targetKey(new MapTarget(worldId,destination,site.x(),site.z()))),
                     ()->pending.get(owner)!=request);
                 searches.put(destination,lookup==null?()->null:()->{var site=lookup.get();return site==null?null:new MapTarget(worldId,destination,site.x(),site.z());});
-            } else searches.put(destination,bossSearch(world,destination,origin,owner,request,Set.copyOf(visited),player.getWorld()!=world));
+            } else if(destination.dimensional())searches.put(destination,realmSearch(world,destination,origin,owner,request,Set.copyOf(visited),player.getWorld()!=world));
+            else searches.put(destination,bossSearch(world,destination,origin,owner,request,Set.copyOf(visited),player.getWorld()!=world));
         }
         plugin.message(player,"กำลังเตรียมแผนที่สำหรับหน้าแลกเปลี่ยน...");
         Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
@@ -163,7 +187,9 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
                 ItemStack result;int id=-1;
                 if(target!=null) {
                     id=prepareMap(player.getUniqueId(),target);
-                    result=mapItem(id,target,reached(player.getUniqueId(),target));
+                    // The merchant sends every offer to the client before payment. Never put
+                    // a real map ID, map pixels, marker or coordinate-bearing lore here.
+                    result=offerItem(destination,reached(player.getUniqueId(),target));
                 } else {
                     result=new ItemStack(Material.MAP);var meta=result.getItemMeta();
                     meta.displayName(text("แผนที่ · "+destination.title,NamedTextColor.GOLD));
@@ -172,7 +198,7 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
                 }
                 int cost=price(destination);
                 MerchantRecipe recipe=new MerchantRecipe(result,0,target!=null&&!owned.contains(target)?1:0,false,0,0,0,0,true);
-                recipe.addIngredient(destination.overworld()?SeraphFeathers.feather(plugin,cost):SeraphFeathers.golden(plugin,cost));
+                recipe.addIngredient(currency(destination,cost));
                 recipes.add(recipe);offers.add(new PreparedTrade(destination,target,id,cost));
             }
             // Map IDs/markers are durable before the native merchant can deliver any result.
@@ -200,12 +226,25 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
         ItemStack item=new ItemStack(Material.FILLED_MAP);MapMeta meta=(MapMeta)item.getItemMeta();
         meta.setMapView(Objects.requireNonNull(Bukkit.getMap(id)));
         meta.displayName(text("แผนที่ · "+target.destination.title,NamedTextColor.GOLD));
-        List<Component> lore=new ArrayList<>(List.of(text(target.destination.overworld()?"Sanctuary · Overworld":"บอสใหญ่ · Evergarden",NamedTextColor.AQUA),
+        Destination destination=target.destination;
+        String kind=destination.overworld()?"Sanctuary · Overworld":destination.dimensional()
+            ?"Sanctuary · "+(destination.realm.environment==World.Environment.NETHER?"Nether":"The End")+" ("+destination.realm.id+")":"บอสใหญ่ · Evergarden";
+        List<Component> lore=new ArrayList<>(List.of(text(kind,NamedTextColor.AQUA),
             text("โลก: "+world.getName(),NamedTextColor.GRAY),text("เครื่องหมาย X คือจุดหมาย · ถือแผนที่เพื่อดูทิศทาง",NamedTextColor.GRAY),
             text("แผนที่นี้ผูกกับสถานที่เดิม",NamedTextColor.GRAY)));
+        // Nether and End maps are mostly roof and void, so name the spot outright.
+        if(destination.dimensional())lore.add(2,text("พิกัด X "+target.x+" · Z "+target.z+" (ในมิตินั้น)",NamedTextColor.YELLOW));
         if(revisit)lore.add(text("คุณเคยไปถึงที่นี่แล้ว · ไม่มีที่ใหม่ในระยะ แต่บอสเกิดใหม่ได้",NamedTextColor.YELLOW));
         meta.lore(lore);
         meta.getPersistentDataContainer().set(plugin.key("sanctuary_map"),PersistentDataType.BYTE,(byte)1);
+        item.setItemMeta(meta);return item;
+    }
+    private ItemStack offerItem(Destination destination,boolean revisit) {
+        ItemStack item=new ItemStack(Material.MAP);var meta=item.getItemMeta();
+        meta.displayName(text("แผนที่ · "+destination.title,NamedTextColor.GOLD));
+        List<Component> lore=new ArrayList<>(List.of(text("พิกัดและแผนที่จะได้รับหลังแลกเปลี่ยน",NamedTextColor.GRAY)));
+        if(revisit)lore.add(text("คุณเคยไปถึงที่นี่แล้ว · บอสเกิดใหม่ได้",NamedTextColor.YELLOW));
+        meta.lore(lore);
         item.setItemMeta(meta);return item;
     }
     private Set<MapTarget> ownedTargets(Player player) {
@@ -214,13 +253,49 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
         MapTarget cursor=target(player.getItemOnCursor());if(cursor!=null)targets.add(cursor);
         return Set.copyOf(targets);
     }
-    /** Capture before Paper places a pickup result on the cursor or a number-key result in the hotbar. */
-    @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+    /** The merchant advertises a blank map; perform the paid exchange without exposing the real map beforehand. */
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void click(InventoryClickEvent event) {
         if(!(event.getWhoClicked() instanceof Player player)||event.getRawSlot()!=2)return;
         TradeSession session=sessions.get(player.getUniqueId());
         if(session==null||!(event.getInventory() instanceof MerchantInventory inventory)||inventory.getMerchant()!=session.merchant)return;
+        event.setCancelled(true);
+        int index=inventory.getSelectedRecipeIndex();
+        if(index<0||index>=session.offers.size())return;
+        PreparedTrade offer=session.offers.get(index);MerchantRecipe recipe=session.merchant.getRecipe(index);
+        if(offer.target==null||recipe.getUses()>=recipe.getMaxUses()||!offerItem(offer.destination,reached(player.getUniqueId(),offer.target)).equals(recipe.getResult()))return;
+        int inputSlot=inventory.getItem(0)==null||inventory.getItem(0).isEmpty()?1:0;
+        ItemStack input=inventory.getItem(inputSlot),second=inventory.getItem(1-inputSlot),expected=currency(offer.destination,offer.cost);
+        if(input==null||!input.isSimilar(expected)||input.getAmount()<offer.cost||second!=null&&!second.isEmpty())return;
+        int destinationSlot=-1;
+        switch(event.getAction()) {
+            case PICKUP_ALL, PICKUP_HALF, PICKUP_ONE, PICKUP_SOME -> {
+                if(player.getItemOnCursor()!=null&&!player.getItemOnCursor().isEmpty())return;
+            }
+            case MOVE_TO_OTHER_INVENTORY -> {
+                destinationSlot=player.getInventory().firstEmpty();if(destinationSlot<0||destinationSlot>=36)return;
+            }
+            case HOTBAR_SWAP, HOTBAR_MOVE_AND_READD -> {
+                destinationSlot=event.getHotbarButton();
+                if(destinationSlot<0||destinationSlot>8||player.getInventory().getItem(destinationSlot)!=null&&!player.getInventory().getItem(destinationSlot).isEmpty())return;
+            }
+            default -> {return;}
+        }
+        ItemStack paidMap=mapItem(offer.mapId,offer.target,reached(player.getUniqueId(),offer.target));
         session.ownedBefore=ownedTargets(player);session.clickTick=Bukkit.getCurrentTick();
+        PlayerPurchaseEvent purchase=new PlayerPurchaseEvent(player,session.merchant,recipe,false,true);
+        Bukkit.getPluginManager().callEvent(purchase);
+        if(purchase.isCancelled())return;
+        // Other listeners may change the trade. Never charge for an altered offer.
+        if(!purchase.getTrade().getResult().equals(offerItem(offer.destination,reached(player.getUniqueId(),offer.target)))
+                ||purchase.getTrade().getIngredients().size()!=1||!purchase.getTrade().getIngredients().getFirst().equals(expected)) {
+            purchase.setCancelled(true);return;
+        }
+        if(destinationSlot<0)player.setItemOnCursor(paidMap);else player.getInventory().setItem(destinationSlot,paidMap);
+        if(input.getAmount()==offer.cost)inventory.setItem(inputSlot,null);
+        else {input.setAmount(input.getAmount()-offer.cost);inventory.setItem(inputSlot,input);}
+        recipe.setUses(recipe.getMaxUses());session.merchant.setRecipe(index,recipe);
+        player.updateInventory();
     }
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void purchase(PlayerPurchaseEvent event) {
@@ -230,13 +305,12 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
         if(index<0&&player.getOpenInventory().getTopInventory() instanceof MerchantInventory inventory)index=inventory.getSelectedRecipeIndex();
         if(index<0||index>=session.offers.size()){event.setCancelled(true);return;}
         PreparedTrade offer=session.offers.get(index);StoredMap stored=maps.get(offer.mapId);
-        ItemStack expected=offer.destination.overworld()?SeraphFeathers.feather(plugin,offer.cost):SeraphFeathers.golden(plugin,offer.cost);
+        ItemStack expected=currency(offer.destination,offer.cost);
         List<ItemStack> ingredients=event.getTrade().getIngredients();
         ItemStack result=event.getTrade().getResult();
-        int resultId=result.getItemMeta() instanceof MapMeta meta&&meta.hasMapView()&&meta.getMapView()!=null?meta.getMapView().getId():-1;
         if(closed||!healthy||!player.isOnline()||player.isDead()||session.clickTick!=Bukkit.getCurrentTick()
                 ||offer.target==null||stored==null||!stored.owner.equals(player.getUniqueId())
-                ||result.getAmount()!=1||resultId!=offer.mapId||!offer.target.equals(target(result))||session.ownedBefore.contains(offer.target)
+                ||result.getAmount()!=1||!result.equals(offerItem(offer.destination,reached(player.getUniqueId(),offer.target)))||session.ownedBefore.contains(offer.target)
                 ||ingredients.size()!=1||!ingredients.getFirst().equals(expected)||event.getTrade().getSpecialPrice()!=0
                 ||!event.getTrade().getAdjustedIngredient1().equals(expected)
                 ||!validTarget(player.getUniqueId(),offer.target)) {
@@ -282,6 +356,8 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
         Request request=pending.remove(owner);if(request!=null)request.result.complete(null);
     }
     private boolean bossEnabled(Destination destination) {
+        if(destination.dimensional())
+            return plugin.dimensionalSanctuaries()!=null&&plugin.getConfig().getBoolean("dimensional-sanctuaries.enabled",true);
         if(destination==Destination.JUDGE)
             return plugin.bossTemples()!=null&&plugin.getConfig().getBoolean("world-boss.enabled",true)
                 &&plugin.getConfig().getBoolean("structures.world-boss-temple.enabled",true);
@@ -326,6 +402,42 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
             return null;
         };
     }
+    /**
+     * Nearest planned sanctuary of the kind, preferring one this player has not reached yet; a reached one
+     * is offered again only when it is the closest left, since its boss respawns. Planning never loads chunks.
+     */
+    private Supplier<MapTarget> realmSearch(World world,Destination destination,Location origin,UUID owner,Request request,Set<String> visited,boolean fromSpawn) {
+        var service=plugin.dimensionalSanctuaries();UUID worldId=world.getUID();DimensionalSanctuaries.Kind kind=destination.realm;
+        int x=origin.getBlockX(),z=origin.getBlockZ(),rings=plugin.integer("seraph-trader.maps.dimensional-search-regions",8,1,32);
+        WorldBorder border=world.getWorldBorder();
+        double half=border.getSize()/2,centerX=border.getCenter().getX(),centerZ=border.getCenter().getZ();
+        return ()->{
+            if(service==null)return null;
+            Map<String,MapTarget> found=new LinkedHashMap<>();
+            DimensionalSanctuaries.Site nearest=service.findNearest(world,kind,x,z,rings);
+            if(nearest!=null)found.put(nearest.x()+":"+nearest.z(),new MapTarget(worldId,destination,nearest.x(),nearest.z()));
+            if(nearest!=null&&visited.contains(targetKey(found.values().iterator().next()))) {
+                // Each region holds at most one site of a kind: sample the regions around the origin for an unreached one.
+                for(int dx=-2;dx<=2;dx++)for(int dz=-2;dz<=2;dz++) {
+                    if(pending.get(owner)!=request)return null;
+                    var site=service.findNearest(world,kind,x+dx*kind.regionBlocks,z+dz*kind.regionBlocks,0);
+                    if(site!=null)found.putIfAbsent(site.x()+":"+site.z(),new MapTarget(worldId,destination,site.x(),site.z()));
+                }
+            }
+            MapTarget best=null,revisit=null;double distance=Double.POSITIVE_INFINITY,revisitDistance=Double.POSITIVE_INFINITY;
+            for(MapTarget target:found.values()) {
+                if(Math.abs(target.x-centerX)>=half||Math.abs(target.z-centerZ)>=half)continue;
+                double d=Math.hypot((double)target.x-x,(double)target.z-z);
+                if(visited.contains(targetKey(target))){if(d<revisitDistance){revisit=target;revisitDistance=d;}continue;}
+                if(d<distance){best=target;distance=d;}
+            }
+            if(best!=null)return best;
+            if(revisit!=null)return revisit;
+            String from=fromSpawn?" (นับจากจุดเกิดของโลก "+world.getName()+")":"";
+            request.reasons.put(destination,"ไม่พบวิหาร "+destination.realm.id+" ในระยะค้นหา"+from);
+            return null;
+        };
+    }
     private boolean validTarget(UUID owner,MapTarget target) {
         if(!healthy)return false;
         Destination destination=target.destination;
@@ -335,6 +447,11 @@ public final class SanctuaryMaps implements Listener, AutoCloseable {
         if(destination.overworld()) {
             if(!plugin.overworldSanctuaries().mapTargetInsideBorder(world,destination.sanctuary,target.x,target.z))
                 return false;
+        } else if(destination.dimensional()) {
+            var service=plugin.dimensionalSanctuaries();
+            if(!bossEnabled(destination)||world.getEnvironment()!=destination.realm.environment||!service.enabled(world))return false;
+            var site=service.siteAt(world,target.x,target.z);
+            if(site==null||site.kind()!=destination.realm||site.x()!=target.x||site.z()!=target.z)return false;
         } else {
             if(world!=plugin.world()||!bossEnabled(destination))return false;
             WorldBorder border=world.getWorldBorder();

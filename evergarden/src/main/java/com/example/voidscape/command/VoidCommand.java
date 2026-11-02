@@ -98,7 +98,11 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                             if(args.length>3)plugin.worldBoss().bossShowcaseMode(p,args[3].toLowerCase(Locale.ROOT));
                             else plugin.message(p,"/evergarden boss model pose "+String.join("|",com.example.voidscape.boss.WorldBossManager.bossShowcaseModes()));
                         }
-                        default->plugin.testGui().openMainBosses(p);
+                        case "realm"->plugin.testGui().openRealmBosses(p);
+                        default->{
+                            if(com.example.voidscape.boss.RealmBosses.realm(what))plugin.worldBoss().spawnRealmBoss(p,what);
+                            else plugin.testGui().openMainBosses(p);
+                        }
                     }
                 }
                 else plugin.message(p,"/evergarden boss status|claim|start|stop|model");
@@ -630,7 +634,9 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
             c.addAll(List.of("2","3","relics","magic"));
         }
         if(args.length==2&&args[0].equalsIgnoreCase("boss")){c.addAll(List.of("status","claim","pack"));if(isAdmin(sender))c.addAll(List.of("start","stop","model"));}
-        if(args.length==3&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("model")&&isAdmin(sender))c.addAll(List.of("arkhaia","seraphon","both","clear","pose"));
+        if(args.length==3&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("model")&&isAdmin(sender)){
+            c.addAll(List.of("arkhaia","seraphon","both","clear","pose","realm"));c.addAll(com.example.voidscape.boss.RealmBosses.MODELS);
+        }
         if(args.length==4&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("model")&&args[2].equalsIgnoreCase("pose")&&isAdmin(sender))
             c.addAll(com.example.voidscape.boss.WorldBossManager.bossShowcaseModes());
         if(args.length==3&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("pack"))c.add("resend");

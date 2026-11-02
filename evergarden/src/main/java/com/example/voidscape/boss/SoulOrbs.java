@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import java.util.*;
 
-/** Public identity of the six sanctuary Soul Orbs and the Core of Legend fused from them. */
+/** Public identity of the six sanctuary Soul Orbs and the Core of Legend sold by Seraph. */
 public final class SoulOrbs {
     public enum Orb {
         ACHERON(ArkhaiaWaves.Kind.ACHERON), PHLEGETHON(ArkhaiaWaves.Kind.PHLEGETHON), COCYTUS(ArkhaiaWaves.Kind.COCYTUS),
@@ -46,7 +46,7 @@ public final class SoulOrbs {
             name=name.append(Component.text(String.valueOf(title.charAt(i)),TextColor.color(orbs[i%orbs.length].rgb())).decoration(TextDecoration.BOLD,true));
         meta.displayName(name.append(Component.text(" ✦",NamedTextColor.GOLD)).decoration(TextDecoration.ITALIC,false));
         meta.lore(List.of(
-            Component.text("แก่นตำนาน หลอมจาก Soul Orb 100 ลูก",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
+            Component.text("แก่นตำนาน แลกได้ที่ร้าน Seraph ใน Evergarden",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
             Component.text("ใช้แลกอาวุธตำนานและคัมภีร์ Legendary",NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false),
             Component.text("กับ Seraph ที่จุดเกิด Evergarden",NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false)));
         meta.setItemModel(LEGEND_MODEL);

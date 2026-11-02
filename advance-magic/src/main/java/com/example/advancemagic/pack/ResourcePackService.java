@@ -91,7 +91,7 @@ public final class ResourcePackService implements Listener, AutoCloseable {
     }
     public void start() {
         if(RequiredPackSettings.upgrade(plugin.getConfig(),false)){
-            plugin.saveConfig();plugin.getLogger().info("Java resource pack is now required; existing download hosts are preserved.");
+            plugin.saveConfig();plugin.getLogger().info("Java resource pack is now optional; existing download hosts are preserved.");
         }
         delivery=ResourcePackManager.connect(plugin,PACK_ID);
         try {
@@ -222,30 +222,33 @@ public final class ResourcePackService implements Listener, AutoCloseable {
         if(urls.isEmpty()) {statuses.put(player.getUniqueId(),"NOT_OFFERED: configure the public host/URL");unavailable(player);return;}
         if(!hashes.stream().allMatch(h->h.matches("[a-fA-F0-9]{40}"))) {statuses.put(player.getUniqueId(),"INVALID_SHA1");unavailable(player);return;}
         try {
-            if(delivery!=null&&delivery.offer(player,urls,hashes,"Advance Magic: wands and flying staff",
-                    plugin.getConfig().getBoolean("resource-pack.required",true),force))
+            if(delivery!=null&&delivery.offer(player,urls,hashes,"Advance Magic: wands and flying staff",false,force))
                 statuses.put(player.getUniqueId(),"QUEUED");
         }catch(IllegalArgumentException e){statuses.put(player.getUniqueId(),"INVALID_URL");unavailable(player);}
     }
-    private void unavailable(Player player){if(delivery!=null&&plugin.getConfig().getBoolean("resource-pack.required",true))delivery.unavailable(player);}
+    private void unavailable(Player player){
+        if(delivery!=null)delivery.unavailable(player);
+        warnNotLoaded(player);
+    }
+    private void warnNotLoaded(Player player){
+        player.sendMessage(ChatColor.YELLOW+"โหลด Resource Pack ของ Advance Magic ไม่สำเร็จหรือถูกปฏิเสธ คุณยังเข้าเล่นได้ แต่ภาพบางอย่างอาจแสดงไม่ถูกต้อง");
+    }
     @EventHandler public void join(PlayerJoinEvent event){offer(event.getPlayer());}
     @EventHandler public void status(PlayerResourcePackStatusEvent event) {
         if(!PACK_ID.equals(event.getID()))return;
         String status=event.getStatus().name();statuses.put(event.getPlayer().getUniqueId(),status);
         // The coordinator is already sending it again (from the next address, or on its own).
         if(delivery!=null&&List.of("QUEUED","OFFERED","ACCEPTED","DOWNLOADED").contains(delivery.status(event.getPlayer())))return;
-        if(status.startsWith("FAILED")||status.equals("INVALID_URL")||status.equals("DISCARDED")) {
+        if(status.startsWith("FAILED")||status.equals("INVALID_URL")||status.equals("DISCARDED")||status.equals("DECLINED")) {
             plugin.getLogger().warning("Advance Magic pack for "+event.getPlayer().getName()+": "+status+" from "+url(event.getPlayer())+". Check TCP port/public URL and /magic pack; Pack HTTP lines show whether the download reached this server.");
-            event.getPlayer().sendMessage(ChatColor.YELLOW+(plugin.getConfig().getBoolean("resource-pack.required",true)
-                ?"Advance Magic textures are required to play. Allow server resource packs and reconnect; ask an admin if loading fails."
-                :"Advance Magic textures could not load. Wands still work; ask an admin to check /magic pack."));
+            warnNotLoaded(event.getPlayer());
         }
     }
     public boolean hasApplied(Player player){return "SUCCESSFULLY_LOADED".equals(statuses.get(player.getUniqueId()));}
     @EventHandler public void quit(PlayerQuitEvent event){statuses.remove(event.getPlayer().getUniqueId());mirror.forget(event.getPlayer());}
     public void describe(CommandSender sender) {
         sender.sendMessage(ChatColor.LIGHT_PURPLE+"Advance Magic resource pack");
-        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Required: "+plugin.getConfig().getBoolean("resource-pack.required",true)+" | Bundled host: "+(http==null?"off":http.sharesServerPort()?"Minecraft port":"TCP "+http.port()));
+        sender.sendMessage("Enabled: "+plugin.getConfig().getBoolean("resource-pack.enabled",true)+" | Required: false | Bundled host: "+(http==null?"off":http.sharesServerPort()?"Minecraft port":"TCP "+http.port()));
         sender.sendMessage("Bundled SHA-1: "+sha1);
         String url=url(sender instanceof Player p?p:null);sender.sendMessage("URL: "+(url.isEmpty()?"unavailable":url));
         sender.sendMessage("Public copy: "+(mirror.copy()!=null?mirror.copy().url():mirror.fingerprint().isEmpty()?"not used"

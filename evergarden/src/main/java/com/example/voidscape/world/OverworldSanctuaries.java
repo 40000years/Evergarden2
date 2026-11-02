@@ -282,8 +282,11 @@ public final class OverworldSanctuaries implements Listener, CommandExecutor, Ta
     public void prepareLoot(Chunk chunk){for(BlockState state:chunk.getTileEntities())if(state instanceof Chest chest)prepareLoot(chest);}
     private void prepareLoot(Chest initial){
         if(initial.getPersistentDataContainer().getOrDefault(plugin.key("sanctuary_loot_profile"),PersistentDataType.INTEGER,0)!=2)return;
+        boolean isNether=initial.getWorld()!=null&&initial.getWorld().getEnvironment()==World.Environment.NETHER;
         boolean awarded=initial.getPersistentDataContainer().getOrDefault(plugin.key("sanctuary_loot_awarded"),PersistentDataType.INTEGER,0)==2;
-        if(awarded&&initial.getPersistentDataContainer().has(plugin.key("sanctuary_trim_profile"),PersistentDataType.INTEGER))return;
+        boolean trimDone=initial.getPersistentDataContainer().has(plugin.key("sanctuary_trim_profile"),PersistentDataType.INTEGER);
+        boolean netheriteDone=!isNether||initial.getPersistentDataContainer().has(plugin.key("sanctuary_netherite_profile"),PersistentDataType.INTEGER);
+        if(awarded&&trimDone&&netheriteDone)return;
         var items=initial.getBlockInventory().getContents();
         if(!(initial.getBlock().getState() instanceof Chest chest))return;
         long seed=chest.getPersistentDataContainer().getOrDefault(plugin.key("sanctuary_loot_seed"),PersistentDataType.LONG,0L);
@@ -294,15 +297,23 @@ public final class OverworldSanctuaries implements Listener, CommandExecutor, Ta
         Random random=new Random(seed^0x454e444349545932L);
         var live=chest.getBlockInventory();
         if(awarded){
-            // Only migrate old, wholly untouched caches. Player edits and empty caches survive.
-            var expected=Bukkit.createInventory(null,27);
-            LootTables.END_CITY_TREASURE.getLootTable().fillInventory(expected,new Random(seed),new LootContext.Builder(chest.getLocation()).build());
-            var before=expected.getContents();
-            for(int slot=0;slot<before.length;slot++)before[slot]=SanctuaryLoot.upgrade(before[slot],random,chance,plugin);
-            if(Arrays.equals(items,before))SanctuaryLoot.replaceTrims(live,seed);
+            if(!trimDone){
+                // Only migrate old, wholly untouched caches. Player edits and empty caches survive.
+                var expected=Bukkit.createInventory(null,27);
+                LootTables.END_CITY_TREASURE.getLootTable().fillInventory(expected,new Random(seed),new LootContext.Builder(chest.getLocation()).build());
+                var before=expected.getContents();
+                for(int slot=0;slot<before.length;slot++)before[slot]=SanctuaryLoot.upgrade(before[slot],random,chance,plugin);
+                if(Arrays.equals(items,before))SanctuaryLoot.replaceTrims(live,seed);
+            }
+            if(!netheriteDone){
+                filterNetheriteUpgrades(live,seed);
+            }
         }else{
+            if(isNether)filterNetheriteUpgrades(live,seed);
+            items=live.getContents();
             for(int slot=0;slot<items.length;slot++){
-                var item=items[slot];var upgraded=SanctuaryLoot.upgrade(item,random,chance,plugin);
+                var item=items[slot];
+                var upgraded=SanctuaryLoot.upgrade(item,random,chance,plugin);
                 if(upgraded!=item)live.setItem(slot,upgraded);
             }
             SanctuaryLoot.replaceTrims(live,seed);
@@ -310,7 +321,23 @@ public final class OverworldSanctuaries implements Listener, CommandExecutor, Ta
             ElementalStaffTreasure.add(plugin,chest,"overworld-chest");
         }
         chest=(Chest)chest.getBlock().getState();
-        chest.getPersistentDataContainer().set(plugin.key("sanctuary_trim_profile"),PersistentDataType.INTEGER,1);chest.update(false,false);
+        chest.getPersistentDataContainer().set(plugin.key("sanctuary_trim_profile"),PersistentDataType.INTEGER,1);
+        if(isNether)chest.getPersistentDataContainer().set(plugin.key("sanctuary_netherite_profile"),PersistentDataType.INTEGER,1);
+        chest.update(false,false);
+    }
+    private void filterNetheriteUpgrades(org.bukkit.inventory.Inventory live,long seed){
+        double upgradeChance=plugin.getConfig().getDouble("dimensional-sanctuaries.treasure.netherite-upgrade-chance",0.05);
+        upgradeChance=Double.isFinite(upgradeChance)?Math.clamp(upgradeChance,0,1):0.05;
+        Random rng=new Random(seed^0x4e45544855504731L);
+        var contents=live.getContents();
+        for(int slot=0;slot<contents.length;slot++){
+            var item=contents[slot];
+            if(item!=null&&item.getType()==Material.NETHERITE_UPGRADE_SMITHING_TEMPLATE){
+                if(upgradeChance<=0||rng.nextDouble()>=upgradeChance){
+                    live.setItem(slot,new org.bukkit.inventory.ItemStack(Material.NETHERITE_SCRAP,1+rng.nextInt(2)));
+                }
+            }
+        }
     }
     public void queueUpgrade(Chunk chunk,Site site){
         Placement layout=worlds.get(chunk.getWorld().getUID());
@@ -635,19 +662,35 @@ public final class OverworldSanctuaries implements Listener, CommandExecutor, Ta
     private boolean admin(CommandSender s){return s.isOp()||s.hasPermission("evergarden.admin");}
     @Override public boolean onCommand(CommandSender sender,Command command,String label,String[] args){
         if(!admin(sender)){sender.sendMessage("คำสั่งนี้สำหรับแอดมิน");return true;}
-        if(!(sender instanceof Player player)){sender.sendMessage("Use this command in an Overworld.");return true;}
-        Placement layout=worlds.get(player.getWorld().getUID());
+        if(!(sender instanceof Player player)){sender.sendMessage("Use this command as a player.");return true;}
+        if((args.length>0&&args[0].equalsIgnoreCase("boss"))||(args.length>1&&DimensionalSanctuaries.Kind.parse(args[1])!=null)){
+            if(plugin.dimensionalSanctuaries()!=null)return plugin.dimensionalSanctuaries().command(player,args);
+            player.sendMessage("Dimensional sanctuaries service is not active");return true;
+        }
+        World targetWorld=player.getWorld().getEnvironment()==World.Environment.NORMAL&&worlds.containsKey(player.getWorld().getUID())
+                ?player.getWorld()
+                :Bukkit.getWorlds().stream().filter(w->w.getEnvironment()==World.Environment.NORMAL&&worlds.containsKey(w.getUID())).findFirst().orElse(null);
+        if(targetWorld==null){
+            if(plugin.dimensionalSanctuaries()!=null)return plugin.dimensionalSanctuaries().command(player,args);
+            player.sendMessage("ไม่พบโลก Overworld ที่เปิดใช้งาน Sanctuary");return true;
+        }
+        Placement layout=worlds.get(targetWorld.getUID());
         Kind kind=args.length>1?Kind.parse(args[1]):null;
-        if(layout==null||kind==null||(args.length!=2&&args.length!=3)||!Set.of("locate","tp").contains(args[0].toLowerCase(Locale.ROOT))){
-            sender.sendMessage("/sanctuary locate|tp acheron|phlegethon|cocytus|banshee|malefeasance|styx [24-256] (Overworld)");return true;
+        if(kind==null||(args.length!=2&&args.length!=3)||!Set.of("locate","tp").contains(args[0].toLowerCase(Locale.ROOT))){
+            String over=String.join("|",Arrays.stream(Kind.values()).map(k->k.id).toList());
+            String dim=plugin.dimensionalSanctuaries()!=null?"\n/sanctuary locate|tp "+String.join("|",plugin.dimensionalSanctuaries().kindIds())+" [1-32] (Nether / End)":"";
+            sender.sendMessage("/sanctuary locate|tp "+over+" [24-256] (Overworld)"+dim);return true;
         }
         int requested=plugin.getConfig().getInt("overworld-sanctuaries.search-max-cells",128);
         if(args.length==3)try{requested=Integer.parseInt(args[2]);}catch(NumberFormatException ex){sender.sendMessage("ระยะค้นหาต้องเป็นจำนวนเซลล์ 24–256");return true;}
         final int limit=Math.clamp(requested,24,256);
-        World world=player.getWorld();int gx=Math.floorDiv(player.getLocation().getBlockX(),layout.spacing*16),gz=Math.floorDiv(player.getLocation().getBlockZ(),layout.spacing*16);
+        final World world=targetWorld;
+        int px=world==player.getWorld()?player.getLocation().getBlockX():0;
+        int pz=world==player.getWorld()?player.getLocation().getBlockZ():0;
+        int gx=Math.floorDiv(px,layout.spacing*16),gz=Math.floorDiv(pz,layout.spacing*16);
         boolean teleport=args[0].equalsIgnoreCase("tp");
         UUID user=player.getUniqueId(),token=UUID.randomUUID();searches.put(user,token);
-        sender.sendMessage("กำลังค้นหาสถานที่ในไบโอม "+kind.biome.getKey().getKey()+" สูงสุด "+limit+" เซลล์ …");
+        sender.sendMessage("กำลังค้นหา "+kind.id+" ในโลก "+world.getName()+" สูงสุด "+limit+" เซลล์ …");
         Bukkit.getScheduler().runTaskAsynchronously(plugin,()->{
             Site found=layout.nearest(kind,gx,gz,limit,r->{
                 if(token.equals(searches.get(user))&&plugin.isEnabled())Bukkit.getScheduler().runTask(plugin,()->{
@@ -656,18 +699,23 @@ public final class OverworldSanctuaries implements Listener, CommandExecutor, Ta
             },()->!token.equals(searches.get(user))||!plugin.isEnabled());
             if(!token.equals(searches.get(user))||!plugin.isEnabled())return;
             Bukkit.getScheduler().runTask(plugin,()->{
-                if(!searches.remove(user,token)||!player.isOnline()||player.getWorld()!=world)return;
+                if(!searches.remove(user,token)||!player.isOnline())return;
                 if(found==null){player.sendMessage("ไม่พบสถานที่ในระยะ "+limit+" เซลล์ · ลอง /sanctuary "+(teleport?"tp ":"locate ")+kind.id+" 256");return;}
                 player.sendMessage(kind.id+" · "+world.getName()+" · X="+found.x+" Z="+found.z+" · 8 treasure caches");
-                if(teleport&&admin(player)&&player.getWorld()==world)
-                    player.teleportAsync(new Location(world,found.x+.5,kind.floor+(kind==Kind.BANSHEE?5:1),found.z+90.5,180,0))
-                        .thenAccept(ok->{if(!ok&&player.isOnline())Bukkit.getScheduler().runTask(plugin,()->player.sendMessage("วาร์ปไม่สำเร็จ · ใช้พิกัดที่แสดงเพื่อลองอีกครั้ง"));});
+                if(teleport&&admin(player)){
+                    Location targetLoc=new Location(world,found.x+.5,kind.floor+(kind==Kind.BANSHEE?5:1),found.z+90.5,180,0);
+                    player.teleportAsync(targetLoc).thenAccept(ok->{
+                        if(!ok&&player.isOnline()){
+                            if(!player.teleport(targetLoc))player.sendMessage("วาร์ปไม่สำเร็จ · ใช้พิกัดที่แสดงเพื่อลองอีกครั้ง");
+                        }
+                    });
+                }
             });
         });return true;
     }
     @Override public List<String> onTabComplete(CommandSender sender,Command cmd,String alias,String[] args){
         if(!admin(sender))return List.of();
-        List<String> options=args.length==1?List.of("locate","tp"):args.length==2?Arrays.stream(Kind.values()).map(k->k.id).toList():List.of();
+        List<String> options=args.length==1?List.of("locate","tp","boss"):args.length==2&&args[0].equalsIgnoreCase("boss")?List.of("status","spawn","reset","skill"):args.length==2?java.util.stream.Stream.of(Arrays.stream(Kind.values()).map(k->k.id),Arrays.stream(DimensionalSanctuaries.Kind.values()).map(k->k.id)).flatMap(s->s).toList():List.of();
         String prefix=args.length==0?"":args[args.length-1].toLowerCase(Locale.ROOT);
         return options.stream().filter(s->s.startsWith(prefix)).toList();
     }

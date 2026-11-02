@@ -22,6 +22,8 @@ public final class PetRecord {
     String mode="follow";
     /** Server game tick until which a companion knocked out in a fight rests in the stable. */
     long faintedUntil;
+    /** The owner who had it as a baby (tamed or hatched): raising it to adulthood opens stable slots. */
+    UUID raisedBy;
     /** Health in fights; never saved, so it is full after a restart. Ticks are the server's current tick. */
     double health=-1;
     transient long combatTick,healthTick;
@@ -68,6 +70,8 @@ public final class PetRecord {
         section.set("parents",parents.stream().map(UUID::toString).toList());
         section.set("born",born);section.set("bred",bred);section.set("fed",fed);
         section.set("mode",mode);section.set("fainted-until",faintedUntil);
+        // Always written (empty when unknown), so records from before e2.177 can be told apart.
+        section.set("raised-by",raisedBy==null?"":raisedBy.toString());
     }
     static PetRecord load(UUID id,ConfigurationSection section){
         var species=PetCatalog.Species.find(section.getString("species"));
@@ -87,6 +91,7 @@ public final class PetRecord {
         record.born=section.getLong("born");record.bred=section.getLong("bred");record.fed=section.getLong("fed");
         String mode=section.getString("mode","follow");record.mode=PetSkills.MODES.contains(mode)?mode:"follow";
         record.faintedUntil=Math.max(0,section.getLong("fainted-until"));
+        record.raisedBy=PetStable.uuid(section.getString("raised-by"));
         return record;
     }
 }

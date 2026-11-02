@@ -17,6 +17,9 @@ final class MythicLineVisuals implements AutoCloseable {
     private final MythicVisuals.BlockProp block;
     private final String model;
     private boolean firstFrame=true;
+    /** False skips the Bedrock particle for this update (its 0.26 s plane is still showing); Java always updates. */
+    private boolean bedrock=true;
+    MythicLineVisuals bedrock(boolean send){bedrock=send;return this;}
     MythicLineVisuals(EffectEngine.Effect effect,Location at,String model) {
         this(at,model);effect.track(display);display.setViewRange(6);
     }
@@ -61,7 +64,7 @@ final class MythicLineVisuals implements AutoCloseable {
         planeTransform(visuals,at,right,up,width,height,angle,ticks);
         Vector rotatedRight=right.clone().multiply(Math.cos(angle)).add(up.clone().multiply(Math.sin(angle)));
         Vector rotatedUp=up.clone().multiply(Math.cos(angle)).subtract(right.clone().multiply(Math.sin(angle)));
-        visuals.linePlane(model,at,width,height,rotatedRight,rotatedUp);
+        if(bedrock)visuals.linePlane(model,at,width,height,rotatedRight,rotatedUp);
     }
     /** Continuous authored rotation, including native client spin between Bedrock redraws. */
     void planeSpin(MythicVisuals visuals,Location at,Vector right,Vector up,double diameter,double angle,double radiansPerTick) {
@@ -76,7 +79,7 @@ final class MythicLineVisuals implements AutoCloseable {
         planeTransform(visuals,at,right,up,width,height,targetAngle,3);
         Vector rotatedRight=right.clone().multiply(Math.cos(angle)).add(up.clone().multiply(Math.sin(angle)));
         Vector rotatedUp=up.clone().multiply(Math.cos(angle)).subtract(right.clone().multiply(Math.sin(angle)));
-        visuals.linePlaneSpin(model,at,width,height,rotatedRight,rotatedUp,radiansPerTick);
+        if(bedrock)visuals.linePlaneSpin(model,at,width,height,rotatedRight,rotatedUp,radiansPerTick);
     }
     private void planeTransform(MythicVisuals visuals,Location at,Vector right,Vector up,double width,double height,double angle,int ticks) {
         Vector normal=right.clone().crossProduct(up).normalize();
@@ -85,6 +88,13 @@ final class MythicLineVisuals implements AutoCloseable {
             (float)normal.getX(),(float)normal.getY(),(float)normal.getZ());
         Quaternionf rotation=new Quaternionf().setFromNormalized(basis).rotateZ((float)angle);
         transform(visuals,at,rotation,(float)width,(float)height,1,ticks);
+    }
+    /** A sprite that always faces the camera: Java CENTER billboard, Bedrock rotate_xyz particle. */
+    void billboard(MythicVisuals visuals,Location at,double size,int ticks) {
+        if(!display.isValid())return;
+        if(display.getBillboard()!=Display.Billboard.CENTER)display.setBillboard(Display.Billboard.CENTER);
+        transform(visuals,at,new Quaternionf(),(float)size,(float)size,1,ticks);
+        if(bedrock)visuals.lineBillboard(model,at,size,size);
     }
     void ray(MythicVisuals visuals,Location from,Location to,double width) {ray(visuals,from,to,width,0);}
     /** {@code ticks} above zero interpolates a sweeping beam; zero snaps a pulsed one into place. */

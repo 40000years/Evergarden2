@@ -51,7 +51,7 @@ final class PetTaming {
         DEFAULT_FOOD.put(PetCatalog.Species.CELESTIAL_KOI,Material.BREAD);
         DEFAULT_FOOD.put(PetCatalog.Species.STARLIGHT_PEACOCK,Material.PUMPKIN_SEEDS);
         DEFAULT_FOOD.put(PetCatalog.Species.AURORA_JELLY,Material.GLOW_INK_SAC);
-        // Legendary companions only arrive by other means but still eat.
+        // The mythical five, met only in their own realms and hours (WildPetSpawns.omen).
         DEFAULT_FOOD.put(PetCatalog.Species.AETHERIUS,Material.GOLDEN_CARROT);
         DEFAULT_FOOD.put(PetCatalog.Species.IGNIS_DRACONIS,Material.BLAZE_POWDER);
         DEFAULT_FOOD.put(PetCatalog.Species.ZEPHYROS,Material.FEATHER);
@@ -139,10 +139,12 @@ final class PetTaming {
     /** A player holding this pet's favourite food. */
     boolean tempted(PetBody body,Player player){ItemStack hand=player.getInventory().getItemInMainHand();return hand.getType()==food(body.species)&&plain(hand);}
     private int setting(String key,int fallback,int min,int max){return plugin.integer("pets.taming."+key,fallback,min,max);}
+    private double mythicalTrust(){double value=plugin.getConfig().getDouble("pets.mythical.trust-multiplier",.5);
+        return Double.isFinite(value)?Math.clamp(value,.05,1):.5;}
 
     /** Handles a right-click on a wild pet; false lets the pet simply greet. */
     boolean feed(PetBody body,Player player){
-        if(!body.wild())return false;
+        if(!body.wild()||!wild.contains(body))return false;
         long now=System.currentTimeMillis();
         boolean mine=player.getUniqueId().equals(body.tamer)&&now<body.tamerUntil;
         if(mine&&body.trust>=100){bringHome(body,player);return true;}
@@ -180,7 +182,7 @@ final class PetTaming {
         }
         PetStable stable=companions.stable(player);
         if(stable.locked){plugin.message(player,"อ่านข้อมูลคอกสัตว์ของคุณไม่ได้ · แจ้งแอดมิน");return true;}
-        if(stable.full()){plugin.message(player,"คอกสัตว์เต็ม ("+stable.pets.size()+"/"+stable.slots+") · ปล่อยตัวหนึ่งใน /pet ก่อน");return true;}
+        if(stable.full()){plugin.message(player,"คอกสัตว์เต็ม ("+stable.pets.size()+"/"+stable.capacity()+") · ปล่อยตัวหนึ่งใน /pet ก่อน");return true;}
         feedingNotice.remove(player.getUniqueId());
         consume(player,hand);
         body.tamer=player.getUniqueId();body.tamerUntil=now+60_000;body.lastFeed=now;
@@ -192,6 +194,8 @@ final class PetTaming {
             if(body.stage==PetCatalog.Stage.ADULT&&random.nextDouble()<.08){flee(body,player);return true;}
         }else{
             int gain=switch(body.stage){case BABY->18+random.nextInt(13);case MEDIUM->9+random.nextInt(8);case ADULT->4+random.nextInt(5);};
+            // A mythical companion trusts far more slowly.
+            if(body.species.mythical())gain=Math.max(1,(int)Math.round(gain*mythicalTrust()));
             body.trust=Math.min(100,body.trust+gain);
             at.getWorld().spawnParticle(Particle.HEART,at,1+gain/8,.35,.3,.35,0);
             player.playSound(at,Sound.ENTITY_GENERIC_EAT,.7f,1.3f);
@@ -214,6 +218,8 @@ final class PetTaming {
         player.sendMessage(Component.text("✦ สัตว์เลี้ยงป่า: ", NamedTextColor.GOLD)
             .append(Component.text(body.species.thai + " (" + body.species.display + ")", NamedTextColor.AQUA))
             .append(Component.text(" · " + body.stage.thai, NamedTextColor.LIGHT_PURPLE)));
+        if(body.species.mythical())
+            player.sendMessage(Component.text(" ✦ สัตว์ระดับตำนาน · ไว้ใจคนยากกว่าสัตว์ทั่วไปครึ่งหนึ่ง", NamedTextColor.GOLD));
         player.sendMessage(Component.text(" • อาหารที่ชอบ: ", NamedTextColor.GRAY)
             .append(Component.text(wantedNameThai, NamedTextColor.YELLOW)));
         player.sendMessage(Component.text(" • ความไว้ใจ: ", NamedTextColor.GRAY)
@@ -239,15 +245,20 @@ final class PetTaming {
     }
     private void bringHome(PetBody body,Player player){
         PetStable stable=companions.stable(player);
+        if(stable.locked){plugin.message(player,"อ่านหรือบันทึกข้อมูลคอกสัตว์ไม่ได้ · แจ้งแอดมินก่อนพาสัตว์กลับ");return;}
         if(stable.full()){plugin.message(player,"คอกสัตว์เต็ม · ปล่อยตัวหนึ่งใน /pet ก่อนพากลับ");return;}
+        int slot=-1;
         if(body.stage!=PetCatalog.Stage.BABY&&player.getGameMode()!=GameMode.CREATIVE){
-            int slot=-1;ItemStack[] contents=player.getInventory().getStorageContents();
+            ItemStack[] contents=player.getInventory().getStorageContents();
             for(int i=0;i<contents.length&&slot<0;i++)if(contents[i]!=null&&contents[i].getType()==Material.LEAD&&plain(contents[i]))slot=i;
             if(slot<0){plugin.message(player,body.species.display+" ไว้ใจคุณแล้ว · ต้องมีเชือกจูง (Lead) 1 เส้นเพื่อพาตัวที่โตแล้วกลับ แล้วคลิกอีกครั้ง");return;}
-            ItemStack lead=player.getInventory().getItem(slot);lead.setAmount(lead.getAmount()-1);
         }
         PetRecord record=PetRecord.tamed(body.species,body.stage,random);
         record.growth=companions.growthFloor(body.stage);
+        // Raising a baby to adulthood opens stable slots (PetStable.raise).
+        if(body.stage==PetCatalog.Stage.BABY)record.raisedBy=player.getUniqueId();
+        if(!companions.reserveAdoption(player,record)){plugin.message(player,"บันทึกสัตว์เลี้ยงไม่ได้ · กรุณาแจ้งแอดมิน");return;}
+        if(slot>=0){ItemStack lead=player.getInventory().getItem(slot);lead.setAmount(lead.getAmount()-1);}
         Location at=body.location().add(0,1,0);
         wild.release(body);
         companions.adopt(player,record,body);
@@ -257,6 +268,8 @@ final class PetTaming {
         player.showTitle(Title.title(Component.text("ผูกมิตรสำเร็จ!",NamedTextColor.GOLD),
             Component.text(body.species.display+" · "+body.stage.thai,NamedTextColor.AQUA),Title.Times.times(Duration.ofMillis(200),Duration.ofSeconds(2),Duration.ofMillis(500))));
         plugin.getLogger().info("Pet tamed: "+player.getName()+" "+body.species.id+"/"+body.stage.id+" "+record.id);
+        if(body.species.mythical())Bukkit.broadcast(Component.text("✦ "+player.getName()+" ผูกมิตรกับ "+body.species.thai
+            +" ("+body.species.display+") สัตว์ระดับตำนานได้สำเร็จ!",NamedTextColor.GOLD));
         if(plugin.seraphTrader()!=null)plugin.seraphTrader().feathers().firstTime(player,"tame."+body.species.id,
             plugin.integer("seraph-trader.feathers.first-tame",5,0,64),"เทม "+body.species.display+" ครั้งแรก");
     }

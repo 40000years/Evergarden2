@@ -151,13 +151,35 @@ public final class StaffSpellService implements Listener {
         ElementalSpell spell=scroll(item);if(spell==null)return SpellLevels.BASE;
         return SpellLevels.clamp(spell,item.getItemMeta().getPersistentDataContainer().getOrDefault(LEVEL,PersistentDataType.INTEGER,SpellLevels.BASE));
     }
-    /** Rewrites scrolls made before levels (or with stale lore) as their current level-V or leveled form, so equal scrolls stack. */
+    /** Rewrites unmodified old scrolls so they stack, without destroying player or third-party data. */
     public void migrateScrolls(Inventory inventory){
         serverThread();
         for(int slot=0;slot<inventory.getSize();slot++){
             ItemStack item=inventory.getItem(slot);ElementalSpell spell=scroll(item);if(spell==null)continue;
             ItemStack canonical=createScroll(spell,scrollLevel(item));
-            if(!canonical.isSimilar(item)){canonical.setAmount(item.getAmount());inventory.setItem(slot,canonical);}
+            if(canonical.isSimilar(item))continue;
+            var original=item.getItemMeta();var expected=canonical.getItemMeta();
+            // The pre-level scroll name did not have the level suffix. Any other
+            // name is player-owned and must not be silently overwritten on close.
+            String name=ChatColor.stripColor(original.getDisplayName()),current=ChatColor.stripColor(expected.getDisplayName());
+            if(!Objects.equals(name,current)&&!Objects.equals(name,spell.title()+" Scroll"))continue;
+            boolean legacy=SpellLevels.leveled(spell)&&!original.getPersistentDataContainer().has(LEVEL,PersistentDataType.INTEGER);
+            // Upgrade only the known pre-level lore. Unknown lore may belong to a
+            // player/plugin; leaving such a scroll alone still reads it as level V.
+            List<String> oldLore=List.of(ChatColor.GRAY+spell.element().title+" · "+spell.rarity(),
+                ChatColor.AQUA+"Mana "+spell.mana()+" · CD "+format(spell.cooldown())+"s",
+                ChatColor.GRAY+spell.description(),ChatColor.YELLOW+"ถือคทา แล้วใช้ /spell imprint (ใส่ข้ามธาตุได้)",
+                ChatColor.GRAY+"ธาตุตรง: Damage +50% · ต่างธาตุ/คทาไม้: −50%",
+                ChatColor.DARK_GRAY+"ประทับสำเร็จจะใช้คัมภีร์ 1 ชิ้น");
+            if(!Objects.equals(original.getLore(),expected.getLore())&&(!legacy||!Objects.equals(original.getLore(),oldLore)))continue;
+            ItemStack normalized=item.clone();var test=normalized.getItemMeta();
+            test.setDisplayName(expected.getDisplayName());test.setLore(expected.getLore());test.setItemModel(expected.getItemModel());
+            test.setCustomModelDataComponent(expected.getCustomModelDataComponent());
+            if(SpellLevels.leveled(spell))test.getPersistentDataContainer().set(LEVEL,PersistentDataType.INTEGER,scrollLevel(item));
+            normalized.setItemMeta(test);
+            // Any remaining difference is a component or PDC we do not own.
+            if(!normalized.isSimilar(canonical))continue;
+            canonical.setAmount(item.getAmount());inventory.setItem(slot,canonical);
         }
     }
     public boolean isScroll(ItemStack item){return scroll(item)!=null;}

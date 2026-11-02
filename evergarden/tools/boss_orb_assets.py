@@ -17,6 +17,11 @@ EXTRAS = {
     'pet_egg': (ROOT / 'art/pets/pet_egg.png', 'paper', 'Pet Egg', False),
     'seraph_feather': (ROOT / 'art/seraph/seraph_feather.png', 'feather', 'Seraph Feather', False),
     'seraph_feather_golden': (ROOT / 'art/seraph/seraph_feather_golden.png', 'feather', 'Golden Seraph Feather', False),
+    # Nether / End sanctuary boss cores (realm_core_art.py)
+    'realm_core_cinder_colossus': (ROOT / 'art/realm-cores/textures/realm_core_cinder_colossus.png', 'heart_of_the_sea', 'Core of Cinder Colossus', True),
+    'realm_core_soul_hound': (ROOT / 'art/realm-cores/textures/realm_core_soul_hound.png', 'heart_of_the_sea', 'Core of Soul-Eater Hound', True),
+    'realm_core_crystal_moth': (ROOT / 'art/realm-cores/textures/realm_core_crystal_moth.png', 'heart_of_the_sea', 'Core of Crystal Moth Queen', True),
+    'realm_core_unlit_sun': (ROOT / 'art/realm-cores/textures/realm_core_unlit_sun.png', 'heart_of_the_sea', 'Core of Unlit Sun', True),
 }
 
 

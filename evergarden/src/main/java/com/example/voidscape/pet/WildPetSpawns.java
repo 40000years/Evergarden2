@@ -5,12 +5,14 @@ import com.example.voidscape.boss.JudgePackService;
 import com.example.voidscape.world.BiomeTerrain;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.title.Title;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
+import java.time.Duration;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.random.RandomGenerator;
@@ -19,15 +21,21 @@ import java.util.random.RandomGenerator;
  * Rare, peaceful encounters that players can befriend with {@link PetTaming}.
  * Java players see {@link NativePetRenderer} displays; Bedrock players see a Geyser
  * custom entity on a separate carrier, exactly like the sanctuary bosses.
+ * Very rarely an encounter is one of the mythical five instead: each only in its own
+ * realm at its own hour ({@link #omen}), one at a time in the world.
  */
 public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
     private static final List<PetCatalog.Species> SPECIES=Arrays.stream(PetCatalog.Species.values())
         .filter(s->!s.mythical()).toList();
+    /** Never chosen by an ordinary roll; see {@link #legend}. */
+    private static final List<PetCatalog.Species> MYTHICAL=Arrays.stream(PetCatalog.Species.values())
+        .filter(PetCatalog.Species::mythical).toList();
     private static final Set<PetCatalog.Species> FLYING=EnumSet.of(PetCatalog.Species.FROST_WYVERN,
         PetCatalog.Species.ASTRAL_OWL,PetCatalog.Species.BLOOD_GARGOYLE,
         PetCatalog.Species.ABYSSAL_MANTA,PetCatalog.Species.CHRONO_FAIRY,PetCatalog.Species.CLOVER_BUMBLE,
         PetCatalog.Species.TITAN_BEETLE,PetCatalog.Species.BONE_DRAKE,PetCatalog.Species.JADE_LUNG,
-        PetCatalog.Species.LUNA_MOTH,PetCatalog.Species.CELESTIAL_KOI,PetCatalog.Species.AURORA_JELLY);
+        PetCatalog.Species.LUNA_MOTH,PetCatalog.Species.CELESTIAL_KOI,PetCatalog.Species.AURORA_JELLY,
+        PetCatalog.Species.SOLARIS,PetCatalog.Species.ZEPHYROS,PetCatalog.Species.IGNIS_DRACONIS);
     /** Each species is found everywhere, but three times as often in the regions it calls home. */
     private static final Map<PetCatalog.Species,Set<BiomeTerrain.Kind>> HABITAT=new EnumMap<>(PetCatalog.Species.class);
     static {
@@ -118,6 +126,35 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
         for(int i=0;i<weights.length;i++)if((roll-=weights[i])<0)return SPECIES.get(i);
         return SPECIES.getLast();
     }
+    /**
+     * How strongly a mythical companion is drawn to this place and moment: 0 where it never appears,
+     * 1 in its realm, 2 or 3 at its favourite moment (noon, a new or full moon, a storm).
+     * Time and weather only boost encounters: Evergarden normally has a frozen night and clear sky.
+     * {@code time} is the world's day time, {@code moon} its phase (0 full, 4 new).
+     */
+    static int omen(PetCatalog.Species species,BiomeTerrain.Kind region,long time,boolean storm,boolean thunder,int moon){
+        long hour=Math.floorMod(time,24000L);boolean day=hour<12500;
+        return switch(species){
+            case SOLARIS->region==BiomeTerrain.Kind.GARDENS?(day&&!storm&&hour>=5000&&hour<7000?2:1):0;
+            case AETHERIUS->region==BiomeTerrain.Kind.GARDENS?(!day&&!storm&&moon==4?2:1):0;
+            case FENRIR->region==BiomeTerrain.Kind.ANCIENT_FOREST?(!day&&moon==0?2:1):0;
+            case ZEPHYROS->region==BiomeTerrain.Kind.GLACIER?(thunder?3:storm?2:1):0;
+            case IGNIS_DRACONIS->region==BiomeTerrain.Kind.LUNAR_CITY?(!day&&!storm?2:1):0;
+            default->0;
+        };
+    }
+    /** Where and when to look for a mythical companion, for the /pet guide. */
+    static String legendHint(PetCatalog.Species species){
+        return switch(species){
+            case SOLARIS->BiomeTerrain.Kind.GARDENS.title+" · ทุกเวลา (เที่ยงวันฟ้าโปร่งโอกาส ×2)";
+            case AETHERIUS->BiomeTerrain.Kind.GARDENS.title+" · ทุกเวลา (คืนเดือนมืดฟ้าโปร่งโอกาส ×2)";
+            case FENRIR->BiomeTerrain.Kind.ANCIENT_FOREST.title+" · ทุกเวลา (คืนจันทร์เต็มดวงโอกาส ×2)";
+            case ZEPHYROS->BiomeTerrain.Kind.GLACIER.title+" · ทุกเวลา (ฝนหรือหิมะ ×2 · พายุฟ้าคะนอง ×3)";
+            case IGNIS_DRACONIS->BiomeTerrain.Kind.LUNAR_CITY.title+" · ทุกเวลา (กลางคืนฟ้าโปร่งโอกาส ×2)";
+            default->"";
+        };
+    }
+    public static List<PetCatalog.Species> mythicalSpecies(){return MYTHICAL;}
     public static PetCatalog.Stage stageForRoll(double roll,int baby,int medium,int adult) {
         if(!Double.isFinite(roll))throw new IllegalArgumentException("Finite growth roll required");
         double b=Math.max(0,baby),m=Math.max(0,medium),a=Math.max(0,adult),total=b+m+a;
@@ -127,6 +164,38 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
     }
     public static boolean flies(PetCatalog.Species species){return FLYING.contains(species);}
     private int setting(String key,int fallback,int min,int max){return plugin.integer("pets.wild-spawns."+key,fallback,min,max);}
+    private int legendSetting(String key,int fallback,int min,int max){return plugin.integer("pets.mythical."+key,fallback,min,max);}
+    double legendChance(){double value=plugin.getConfig().getDouble("pets.mythical.chance",.001);
+        return Double.isFinite(value)?Math.clamp(value,0,1):.001;}
+    /** At most one mythical companion roams the world at a time. */
+    private boolean legendAbroad(){return active.values().stream().anyMatch(p->p.species.mythical());}
+    /** The mythical companions that could answer an encounter here now, each with its omen. */
+    private Map<PetCatalog.Species,Integer> omens(BiomeTerrain.Kind region,World world){
+        Map<PetCatalog.Species,Integer> found=new EnumMap<>(PetCatalog.Species.class);
+        if(region==null)return found;
+        int moon=(int)Math.floorMod(world.getFullTime()/24000L,8L);
+        for(var species:MYTHICAL){
+            int omen=omen(species,region,world.getTime(),world.hasStorm(),world.isThundering(),moon);
+            if(omen>0)found.put(species,omen);
+        }
+        return found;
+    }
+    /** Rarely, an encounter is a mythical companion instead: {@code pets.mythical.chance} times its omen. */
+    private PetCatalog.Species legend(BiomeTerrain.Kind region,World world){
+        double chance=legendChance();
+        if(chance<=0||legendAbroad())return null;
+        return legendForRoll(random.nextDouble(),chance,omens(region,world));
+    }
+    /** Disjoint intervals give every eligible species its exact chance without enum-order bias. */
+    static PetCatalog.Species legendForRoll(double roll,double chance,Map<PetCatalog.Species,Integer> omens){
+        double total=omens.values().stream().mapToInt(Integer::intValue).sum()*chance;
+        double unit=chance/Math.max(1,total),cursor=0;
+        for(var entry:omens.entrySet()){
+            cursor+=unit*entry.getValue();
+            if(roll<cursor)return entry.getKey();
+        }
+        return null;
+    }
     public void reload() {
         clear();if(attempts!=null)attempts.cancel();attempts=null;
         enabled=plugin.getConfig().getBoolean("pets.wild-spawns.enabled",true);
@@ -134,6 +203,7 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
             attempts=Bukkit.getScheduler().runTaskTimer(plugin,this::attemptSpawns,period,period);}
     }
     public int count(){return active.size();}
+    boolean contains(PetBody body){return active.get(body.shell.getUniqueId())==body;}
     Collection<PetBody> bodies(){return active.values();}
     private boolean bedrockReady(){return plugin.arkhaiaBedrock()!=null&&plugin.arkhaiaBedrock().ready();}
     public String status(){return (enabled?"เปิด":"ปิด")+" · สัตว์เลี้ยงป่า "+count()+"/"+setting("max-active-world",16,1,64)
@@ -179,8 +249,14 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
             if(!guaranteed&&random.nextDouble()>=chance()){
                 rolls.put(id,"สุ่มไม่ผ่าน ("+Math.round(chance()*100)+"%) · การันตีในอีก "+Math.max(0,(guaranteeTicks()-waited)/1200)+" นาทีเกม");continue;
             }
-            var stage=stageForRoll(random.nextDouble(),setting("stage-weights.baby",85,0,100000),
-                setting("stage-weights.medium",13,0,100000),setting("stage-weights.adult",2,0,100000));
+            // Very rarely a mythical companion answers instead, in its own realm and hour.
+            Location feet=player.getLocation();
+            var legend=legend(region(feet.getWorld().getBiome(feet.getBlockX(),feet.getBlockY(),feet.getBlockZ())),feet.getWorld());
+            double stageRoll=random.nextDouble();
+            var stage=legend!=null?stageForRoll(stageRoll,legendSetting("stage-weights.baby",80,0,100000),
+                    legendSetting("stage-weights.medium",17,0,100000),legendSetting("stage-weights.adult",3,0,100000))
+                :stageForRoll(stageRoll,setting("stage-weights.baby",85,0,100000),
+                    setting("stage-weights.medium",13,0,100000),setting("stage-weights.adult",2,0,100000));
             Location at=findNaturalSpot(player,stage);
             if(at==null&&stage!=PetCatalog.Stage.BABY){
                 stage=stage==PetCatalog.Stage.ADULT?PetCatalog.Stage.MEDIUM:PetCatalog.Stage.BABY;
@@ -192,15 +268,25 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
             }
             if(at==null){rolls.put(id,lastRoll);continue;}
             BiomeTerrain.Kind region=region(at.getWorld().getBiome(at.getBlockX(),at.getBlockY(),at.getBlockZ()));
-            var species=chooseSpecies(random,region,recentHistory.get(id));
+            // The spot must still lie in the legend's realm; otherwise it is an ordinary encounter.
+            if(legend!=null&&!omens(region,at.getWorld()).containsKey(legend)){
+                legend=null;
+                // Preserve the ordinary age distribution if a boundary crossing cancels the legend.
+                var ordinary=stageForRoll(stageRoll,setting("stage-weights.baby",85,0,100000),
+                    setting("stage-weights.medium",13,0,100000),setting("stage-weights.adult",2,0,100000));
+                if(ordinary.ordinal()<stage.ordinal())stage=ordinary;
+            }
+            var species=legend!=null?legend:chooseSpecies(random,region,recentHistory.get(id));
             if(!spawn(species,stage,at)){rolls.put(id,"พบพื้นแต่เกิดไม่สำเร็จ · "+lastFailure);continue;}
             drought.remove(id);
-            recentHistory.computeIfAbsent(id,k->new ArrayList<>()).add(species);
-            if(recentHistory.get(id).size()>4)recentHistory.get(id).remove(0);
-            announce(player,at);
+            if(legend==null){
+                recentHistory.computeIfAbsent(id,k->new ArrayList<>()).add(species);
+                if(recentHistory.get(id).size()>4)recentHistory.get(id).remove(0);
+                announce(player,at);
+            }else announceLegend(player,at,legend);
             String where=region==null?"":" · "+region.title+(home(species,region)?" (ถิ่นของมัน)":"");
-            rolls.put(id,"เกิด "+species.display+" · "+stage.thai+" ที่ "+at.getBlockX()+" "+at.getBlockY()+" "+at.getBlockZ()+where+(guaranteed?" (การันตี)":""));
-            plugin.getLogger().info("Wild pet "+species.id+"/"+stage.id+" appeared near "+player.getName()+" at "+at.getBlockX()+" "+at.getBlockY()+" "+at.getBlockZ()+(guaranteed?" (guaranteed)":""));
+            rolls.put(id,(legend!=null?"✦ ตำนาน ":"")+"เกิด "+species.display+" · "+stage.thai+" ที่ "+at.getBlockX()+" "+at.getBlockY()+" "+at.getBlockZ()+where+(guaranteed?" (การันตี)":""));
+            plugin.getLogger().info((legend!=null?"Mythical pet ":"Wild pet ")+species.id+"/"+stage.id+" appeared near "+player.getName()+" at "+at.getBlockX()+" "+at.getBlockY()+" "+at.getBlockZ()+(guaranteed?" (guaranteed)":""));
         }
     }
     /** A soft chime and sparkle where a pet appears, and for the player it came for, which way to look. */
@@ -213,6 +299,22 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
         player.sendActionBar(Component.text("✦ สัมผัสได้ถึงสัตว์วิเศษ"+direction(wrap(yawTowards(dx,dz)-eye.getYaw()))
             +" ห่างราว "+Math.round(Math.sqrt(dx*dx+dz*dz))+" บล็อก",NamedTextColor.LIGHT_PURPLE));
     }
+    /** A mythical arrival: a deeper chime, a column of light and a title for the player it came for. */
+    private void announceLegend(Player player,Location at,PetCatalog.Species species){
+        Location glow=at.clone().add(0,1.2,0);
+        at.getWorld().spawnParticle(Particle.END_ROD,glow,60,.8,1.4,.8,.06);
+        at.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,glow,40,.6,1,.6,.3);
+        at.getWorld().playSound(glow,Sound.BLOCK_BEACON_ACTIVATE,SoundCategory.NEUTRAL,3f,1.3f);
+        at.getWorld().playSound(glow,Sound.BLOCK_AMETHYST_BLOCK_CHIME,SoundCategory.NEUTRAL,3f,.7f);
+        Location eye=player.getLocation();double dx=at.getX()-eye.getX(),dz=at.getZ()-eye.getZ();
+        String where=direction(wrap(yawTowards(dx,dz)-eye.getYaw()))+" ห่างราว "+Math.round(Math.sqrt(dx*dx+dz*dz))+" บล็อก";
+        player.showTitle(Title.title(Component.text("✦ สัตว์ระดับตำนาน ✦",NamedTextColor.GOLD),
+            Component.text(species.thai+" ปรากฏ"+where,NamedTextColor.YELLOW),
+            Title.Times.times(Duration.ofMillis(300),Duration.ofSeconds(4),Duration.ofMillis(800))));
+        Material food=taming==null?null:taming.food(species);
+        plugin.message(player,"✦ "+species.display+" ("+species.thai+") ปรากฏ"+where
+            +(food==null?"":" · ชอบ "+PetTaming.foodNameThai(food)+" · ไว้ใจคนยากกว่าสัตว์ทั่วไปมาก"));
+    }
     /** Where something lies relative to the way a player faces (positive is to their right). */
     static String direction(float relative){
         String[] names={"ด้านหน้า","ทางหน้าเยื้องขวา","ทางขวา","ทางหลังเยื้องขวา","ด้านหลัง","ทางหลังเยื้องซ้าย","ทางซ้าย","ทางหน้าเยื้องซ้าย"};
@@ -222,7 +324,13 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
     public String status(Player player){
         if(player.getWorld()!=plugin.world())return "คุณอยู่นอกโลก Evergarden · สัตว์ป่าเกิดเฉพาะใน Evergarden";
         String blocked=why(player);
-        return "คุณ: "+(blocked!=null?blocked:rolls.getOrDefault(player.getUniqueId(),"รอการสุ่มรอบถัดไป (ทุก "+setting("attempt-interval-seconds",45,5,3600)+" วินาทีเกม)"));
+        Location feet=player.getLocation();
+        var omens=omens(region(feet.getWorld().getBiome(feet.getBlockX(),feet.getBlockY(),feet.getBlockZ())),feet.getWorld());
+        StringBuilder legends=new StringBuilder();
+        omens.forEach((species,omen)->legends.append(legends.isEmpty()?"":", ").append(species.display).append(" ")
+            .append(String.format(Locale.ROOT,"%.1f%%",legendChance()*omen*100)));
+        return "คุณ: "+(blocked!=null?blocked:rolls.getOrDefault(player.getUniqueId(),"รอการสุ่มรอบถัดไป (ทุก "+setting("attempt-interval-seconds",45,5,3600)+" วินาทีเกม)"))
+            +" · ตำนานที่นี่ตอนนี้: "+(legends.isEmpty()?"ไม่มี":legends+" ต่อการพบ"+(legendAbroad()?" (มีตัวหนึ่งออกมาอยู่แล้ว)":""));
     }
     /** The ground a player stands on, or the ground below a flying player; their own height when over void. */
     private static double groundLevel(Player player){
@@ -283,7 +391,8 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
     /** Also used by the explicit admin preview of a natural encounter. */
     public boolean spawn(PetCatalog.Species species,PetCatalog.Stage stage,Location at){return spawn(species,stage,at,false);}
     private boolean spawn(PetCatalog.Species species,PetCatalog.Stage stage,Location at,boolean preview) {
-        if(closed||species==null||species.mythical()||stage==null)return false;
+        if(closed||species==null||stage==null)return false;
+        if(species.mythical()&&legendAbroad()){lastFailure="มีสัตว์ตำนานอยู่ในโลกแล้ว";return false;}
         if(!enabled){lastFailure="ระบบสัตว์ป่าปิดอยู่ (pets.wild-spawns.enabled)";return false;}
         if(!renderer.ready()){lastFailure="โมเดลสัตว์ยังไม่พร้อม: "+renderer.status();return false;}
         if(count()>=setting("max-active-world",16,1,64)){lastFailure="สัตว์ป่าครบจำนวนสูงสุดของโลกแล้ว";return false;}
@@ -293,7 +402,8 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
         if(!preview&&!withinLocalCaps(at)){lastFailure="บริเวณนี้มีสัตว์ป่าครบแล้ว";return false;}
         PetBody body=PetBody.spawn(plugin,renderer,species,stage,at,null,null);
         if(body==null){lastFailure="ดู console: ผูกโมเดลสัตว์เลี้ยงไม่สำเร็จ หรือระบบอื่นกันการเกิด";return false;}
-        body.expires=System.currentTimeMillis()+setting("lifetime-seconds",1800,60,7200)*1000L;
+        body.expires=System.currentTimeMillis()+(species.mythical()?legendSetting("lifetime-seconds",1200,60,7200)
+            :setting("lifetime-seconds",1800,60,7200))*1000L;
         body.deadline=body.expires+LINGER_MS;
         body.modeUntil=clock+20+random.nextInt(40);
         active.put(body.shell.getUniqueId(),body);bodies.add(body,this);bodies.refreshSoon();
@@ -508,7 +618,7 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
         if(action.equals("clear")){plugin.message(sender,"ล้างสัตว์เลี้ยงป่าแล้ว "+clear()+" ตัว");return true;}
         if(action.equals("spawn")&&args.length==5) {
             var species=PetCatalog.Species.find(args[3]);var stage=PetCatalog.Stage.find(args[4]);
-            if(species==null||species.mythical()){plugin.message(sender,"เลือกสัตว์เลี้ยงป่า "+SPECIES.size()+" ชนิด · ยังไม่เปิดระดับตำนาน");return true;}
+            if(species==null){plugin.message(sender,"เลือกสัตว์เลี้ยง "+PetCatalog.available().size()+" ชนิด (รวมระดับตำนาน)");return true;}
             if(stage==null){plugin.message(sender,"ระบุวัย baby · medium · adult");return true;}
             if(!(sender instanceof Player player)||player.getWorld()!=plugin.world()){plugin.message(sender,"ใช้คำสั่งนี้ในโลก Evergarden");return true;}
             if(!JudgePackService.bedrock(player))plugin.judgePack().offer(player);
@@ -526,7 +636,7 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
     public List<String> complete(CommandSender sender,String[] args) {
         if(!admin(sender))return List.of();List<String> values=new ArrayList<>();
         if(args.length==3)values.addAll(List.of("status","spawn","clear"));
-        if(args.length==4&&args[2].equalsIgnoreCase("spawn"))SPECIES.forEach(s->values.add(s.id));
+        if(args.length==4&&args[2].equalsIgnoreCase("spawn"))PetCatalog.available().forEach(s->values.add(s.id));
         if(args.length==5&&args[2].equalsIgnoreCase("spawn"))for(var stage:PetCatalog.Stage.values())values.add(stage.id);
         String prefix=args[args.length-1].toLowerCase(Locale.ROOT);return values.stream().filter(v->v.startsWith(prefix)).toList();
     }

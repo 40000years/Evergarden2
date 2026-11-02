@@ -59,9 +59,32 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
                     plugin.getDataFolder().toPath().resolve("modelengine/"+id+".sha256"),engineFolder.resolve(id+"-evergarden.sha256"),input.readAllBytes());
             }
         }
+        // Realm-boss showcase rigs are optional: never part of requiredModels, so a failed import cannot hide a fight.
+        // All four share one merged blueprint, a single ModelEngine slot; the per-rig blueprints of e2.159 are retired.
+        boolean realm=RealmBosses.enabled(plugin);
+        for(String id:RealmBosses.MODELS)retire(id,"modelengine/realm/"+id+".bbmodel");
+        if(realm)try(var input=plugin.getResource("modelengine/realm/"+RealmBosses.BLUEPRINT+".bbmodel")){
+            if(input==null)plugin.getLogger().warning("Missing merged realm boss blueprint");
+            else ArkhaiaBlueprintInstaller.install(engineFolder.resolve("blueprints/"+RealmBosses.BLUEPRINT+".bbmodel"),
+                plugin.getDataFolder().toPath().resolve("modelengine/"+RealmBosses.BLUEPRINT+".sha256"),
+                engineFolder.resolve(RealmBosses.BLUEPRINT+"-evergarden.sha256"),input.readAllBytes());
+        }
+        else retire(RealmBosses.BLUEPRINT,"modelengine/realm/"+RealmBosses.BLUEPRINT+".bbmodel");
+        plugin.getLogger().info("Realm rigs for ModelEngine: "+(realm?"all four in "+RealmBosses.BLUEPRINT:"disabled"));
         Bukkit.getPluginManager().registerEvents(this,plugin);
         // An Evergarden reload can happen after ME has already finished importing.
         Bukkit.getScheduler().runTask(plugin,()->refresh(false));
+    }
+    /** Remove a blueprint this plugin installed (shipped bytes or recorded hash); edited files stay put. */
+    private void retire(String id,String resource)throws IOException{
+        Path rig=engineFolder.resolve("blueprints/"+id+".bbmodel");
+        if(!Files.exists(rig))return;
+        Path marker=plugin.getDataFolder().toPath().resolve("modelengine/"+id+".sha256"),engineMarker=engineFolder.resolve(id+"-evergarden.sha256");
+        String present=ArkhaiaBlueprintInstaller.digest(Files.readAllBytes(rig));
+        boolean ours=Files.exists(marker)&&present.equals(Files.readString(marker).trim())||Files.exists(engineMarker)&&present.equals(Files.readString(engineMarker).trim());
+        if(!ours)try(var input=plugin.getResource(resource)){ours=input!=null&&present.equals(ArkhaiaBlueprintInstaller.digest(input.readAllBytes()));}
+        if(ours){Files.delete(rig);Files.deleteIfExists(marker);Files.deleteIfExists(engineMarker);plugin.getLogger().info("Retired "+id+" from ModelEngine");}
+        else plugin.getLogger().warning("Edited realm blueprint left in place: "+rig);
     }
     private void installBlueprint(Path blueprint,byte[] bundled)throws IOException{
         Path managed=plugin.getDataFolder().toPath().resolve("modelengine/arkhaia.sha256");
@@ -106,12 +129,15 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
         return true;
     }
     @Override public boolean ready(String model){
-        return published&&!closed&&ModelEngineAPI.getBlueprint("internal_fire")!=null&&ModelEngineAPI.getBlueprint(model)!=null;
+        String blueprint=RealmBosses.realm(model)?RealmBosses.BLUEPRINT:model;
+        return published&&!closed&&ModelEngineAPI.getBlueprint("internal_fire")!=null&&ModelEngineAPI.getBlueprint(blueprint)!=null;
     }
     @Override public String modelInfo(){return modelInfo+" | "+readiness;}
     @Override public ArkhaiaModelSupport.Rig attach(Slime target){return new Rig(target,"arkhaia",3.2);}
     @Override public ArkhaiaModelSupport.Rig attachRiver(Mob target,String model){return new Rig(target,model,RiverVisual.scale(model));}
-    @Override public ArkhaiaModelSupport.Rig attachBoss(Mob target,String model,double scale){return new Rig(target,model,scale);}
+    @Override public ArkhaiaModelSupport.Rig attachBoss(Mob target,String model,double scale){
+        return RealmBosses.realm(model)?new Rig(target,RealmBosses.BLUEPRINT,scale,model):new Rig(target,model,scale);
+    }
     @Override public void close(){closed=true;ready=false;published=false;HandlerList.unregisterAll(this);}
 
     /** Culling uses UUID snapshots; no Bukkit calls from our animation worker. */
@@ -130,12 +156,16 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
         private final ModeledEntity entity;
         private final ActiveModel model;
         private final IStateMachineHandler animation;
+        private final String prefix;
         private String clip="";
         private boolean destroyed;
         private float gazeYaw,gazePitch;
-        Rig(Mob target,String modelId,double scale){
-            if(!ready(modelId))
+        Rig(Mob target,String modelId,double scale){this(target,modelId,scale,null);}
+        /** show: one rig of a merged blueprint; its clips are named show_clip and the other rigs' bones are dropped. */
+        Rig(Mob target,String modelId,double scale,String show){
+            if(!ready(show==null?modelId:show))
                 throw new IllegalStateException("ModelEngine renderer unavailable for "+modelId+": "+readiness);
+            this.prefix=show==null?"":show+"_";
             this.target=target;
             // The real slime remains the damage receiver; ME must not resize its hitbox.
             BukkitEntity base=new BukkitEntity(target){
@@ -147,6 +177,11 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
                 @Override public boolean isJumping(){return false;}
             };
             entity=ModelEngineAPI.createModeledEntity(base);
+            // Their floating geometry is lowered into melee range, leaving the anchor under the
+            // arena floor. A blocked-view test against that anchor can hide the visible bones.
+            // Keep the normal distance, camera and accepted-viewer culling for these models.
+            if("crystal_moth".equals(show)||"unlit_sun".equals(show))
+                base.getData().setBlockedCull(false);
             ActiveModel created=null;
             try{
                 entity.setSaved(false);entity.setModelRotationLocked(true);
@@ -156,13 +191,20 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
                 model.setBlockLight(14);model.setSkyLight(15);model.setLockPitch(true);model.setLockYaw(true);
                 entity.addModel(model,false);
                 if(entity.getModel(modelId).orElse(null)!=model)throw new IllegalStateException("ModelEngine attachment cancelled: "+modelId);
+                if(show!=null){
+                    // Bones exist once the model is attached. Only this rig's bones stay, so the instance renders and
+                    // costs like a single model; any bone ModelEngine will not remove is hidden instead.
+                    for(String bone:new ArrayList<>(model.getBones().keySet()))
+                        if(!RealmBosses.owns(show,bone)&&model.getBones().containsKey(bone))model.removeBone(bone);
+                    for(var bone:model.getBones().entrySet())if(!RealmBosses.owns(show,bone.getKey()))bone.getValue().setVisible(false);
+                }
                 // R4 reads locked angles only when the attached ActiveModel is
                 // explicitly locked. The entity lock alone freezes its old yaw.
                 model.setModelRotationLocked(true);
                 animation=(IStateMachineHandler)model.getAnimationHandler();
                 // The aura (halo, flames, sigils) loops on its own lower lane; combat
                 // clips never key those bones, so switching clips cannot reset them.
-                if(model.getBlueprint().getAnimations().containsKey("aura"))animation.playAnimation(AURA_LANE,"aura",0,0,1,true);
+                if(model.getBlueprint().getAnimations().containsKey(prefix+"aura"))animation.playAnimation(AURA_LANE,prefix+"aura",0,0,1,true);
                 play("idle",1);
                 entity.setBaseEntityVisible(false);
             }catch(RuntimeException|Error error){
@@ -178,8 +220,8 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
                 // One explicit priority lane: switch directly between authored poses.
                 // Release clips start at the held windup pose. Avoid delaying
                 // their contact keyframe beyond the brain's damage tick.
-                animation.playAnimation(10,next,next.endsWith("_active")?0:.04,.06,speed,true);clip=next;
-            }else{var property=animation.getAnimation(10,next);if(property!=null)property.setSpeed(speed);}
+                animation.playAnimation(10,prefix+next,next.endsWith("_active")?0:.04,.06,speed,true);clip=next;
+            }else{var property=animation.getAnimation(10,prefix+next);if(property!=null)property.setSpeed(speed);}
         }
         @Override public void frame(ArkhaiaBrain.Frame frame,double speed,boolean airborne,Location at){
             if(destroyed)return;

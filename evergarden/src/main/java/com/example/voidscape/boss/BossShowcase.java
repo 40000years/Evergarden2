@@ -13,9 +13,19 @@ import java.util.*;
 final class BossShowcase implements AutoCloseable {
     enum Kind {
         ARKHAIA("arkhaia","Arkhaia",3.2,6.95,BossAura.Style.ARKHAIA),
-        SERAPHON("seraphon","Seraphon",3.2,6.9,BossAura.Style.SERAPHON);
-        final String model,title;final double scale,eye;final BossAura.Style aura;
-        Kind(String model,String title,double scale,double eye,BossAura.Style aura){this.model=model;this.title=title;this.scale=scale;this.eye=eye;this.aura=aura;}
+        SERAPHON("seraphon","Seraphon",3.2,6.9,BossAura.Style.SERAPHON),
+        // Realm bosses: spawned farther out, each needing its own clear volume (ahead, height, half-width in blocks).
+        CINDER_COLOSSUS("cinder_colossus","Cinder Colossus",3.6,10.6,BossAura.Style.COLOSSUS,18,14,3),
+        SOUL_HOUND("soul_hound","Soul-Eater Hound",2.8,4.9,BossAura.Style.HOUND,16,7,3),
+        CRYSTAL_MOTH("crystal_moth","Crystal Moth Queen",3.5,8.0,BossAura.Style.MOTH,18,12,3),
+        UNLIT_SUN("unlit_sun","Unlit Sun",3.6,8.1,BossAura.Style.SUN,20,14,3);
+        final String model,title;final double scale,eye;final BossAura.Style aura;final int ahead,height,reach;
+        Kind(String model,String title,double scale,double eye,BossAura.Style aura){this(model,title,scale,eye,aura,12,10,2);}
+        Kind(String model,String title,double scale,double eye,BossAura.Style aura,int ahead,int height,int reach){
+            this.model=model;this.title=title;this.scale=scale;this.eye=eye;this.aura=aura;this.ahead=ahead;this.height=height;this.reach=reach;
+        }
+        boolean realm(){return RealmBosses.realm(model);}
+        static Kind of(String model){for(Kind k:values())if(k.model.equals(model))return k;return null;}
     }
     static final List<String> MODES=List.of("showcase","idle","walk","hover","attack","spell","ultimate","stun","phase");
     private static final int LIFETIME=20*600;
@@ -43,7 +53,30 @@ final class BossShowcase implements AutoCloseable {
         var t=ArkhaiaCombatTiming.of(ArkhaiaBrain.Action.valueOf(action.toUpperCase(Locale.ROOT)));
         return cast(action,List.of(t.windup()/20.0,t.active()/20.0,t.recovery()/20.0));
     }
+    /** Realm rigs share one clip set; each step plays for the clip's authored length. */
+    private static List<Step> realm(Kind kind,String mode){
+        java.util.function.Function<String,Step> clip=name->new Step(name,BossHitbox.clipLength(kind.model,name));
+        java.util.function.Function<String,List<Step>> trio=prefix->List.of(clip.apply(prefix+"_windup"),clip.apply(prefix+"_active"),clip.apply(prefix+"_recover"));
+        var steps=new ArrayList<Step>();
+        switch(mode){
+            case "idle"->steps.add(clip.apply("idle"));
+            case "walk","hover"->steps.add(clip.apply("walk"));
+            case "attack"->{steps.addAll(trio.apply("attack"));steps.add(new Step("idle",1.2));}
+            case "spell"->{steps.addAll(trio.apply("skill"));steps.add(new Step("idle",1.2));}
+            case "ultimate"->{steps.addAll(trio.apply("ultimate"));steps.add(new Step("idle",1.6));}
+            case "stun"->{steps.add(clip.apply("stun"));steps.add(new Step("idle",1.4));}
+            case "phase"->{steps.add(clip.apply("transition"));steps.add(new Step("idle",1.6));}
+            default->{
+                steps.add(clip.apply("spawn"));steps.add(new Step("idle",4.0));steps.add(new Step("walk",clip.apply("walk").seconds()*2));
+                steps.addAll(trio.apply("attack"));steps.add(new Step("idle",1.2));steps.addAll(trio.apply("skill"));steps.add(new Step("idle",1.2));
+                steps.addAll(trio.apply("ultimate"));steps.add(clip.apply("transition"));steps.add(clip.apply("stun"));
+            }
+        }
+        steps.removeIf(step->step.seconds()<=0);
+        return steps;
+    }
     private static List<Step> program(Kind kind,String mode){
+        if(kind.realm())return realm(kind,mode);
         var steps=new ArrayList<Step>();
         if(kind==Kind.ARKHAIA)switch(mode){
             case "idle"->steps.add(new Step("idle",2.4));
@@ -98,12 +131,14 @@ final class BossShowcase implements AutoCloseable {
         var right=new org.bukkit.util.Vector(-forward.getZ(),0,forward.getX());
         List<Location> spots=new ArrayList<>();
         for(int i=0;i<kinds.size();i++){
-            Location at=p.getLocation().clone().add(forward.clone().multiply(12)).add(right.clone().multiply(kinds.size()==1?0:(i==0?-8:8)));
+            Kind kind=kinds.get(i);
+            Location at=p.getLocation().clone().add(forward.clone().multiply(kind.ahead)).add(right.clone().multiply(kinds.size()==1?0:(i==0?-8:8)));
             at.setY(Math.floor(at.getY()));at.setPitch(0);
             at.setDirection(p.getLocation().toVector().subtract(at.toVector()).setY(0));
             boolean clear=at.clone().subtract(0,.1,0).getBlock().getType().isSolid();
-            for(int y=0;y<10&&clear;y++)for(int x=-2;x<=2&&clear;x++)for(int z=-2;z<=2;z++)if(!at.clone().add(x,y,z).getBlock().isPassable()){clear=false;break;}
-            if(!clear){plugin.message(p,"ต้องการพื้นราบและที่ว่างสูง 10 บล็อก ห่างไปข้างหน้า 12 บล็อก"+(kinds.size()>1?" ทั้งซ้ายและขวา":""));return false;}
+            for(int y=0;y<kind.height&&clear;y++)for(int x=-kind.reach;x<=kind.reach&&clear;x++)for(int z=-kind.reach;z<=kind.reach;z++)
+                if(!at.clone().add(x,y,z).getBlock().isPassable()){clear=false;break;}
+            if(!clear){plugin.message(p,"ต้องการพื้นราบและที่ว่างสูง "+kind.height+" บล็อก ห่างไปข้างหน้า "+kind.ahead+" บล็อก"+(kinds.size()>1?" ทั้งซ้ายและขวา":""));return false;}
             spots.add(at);
         }
         var shows=active.computeIfAbsent(p.getUniqueId(),k->new EnumMap<>(Kind.class));
@@ -116,7 +151,8 @@ final class BossShowcase implements AutoCloseable {
             }
         }
         p.getWorld().playSound(p.getLocation(),Sound.BLOCK_BEACON_ACTIVATE,1,.8f);
-        plugin.message(p,"เสกโมเดลบอสหลักแล้ว · เลือกท่าได้ในเมนู World Boss Test หรือ /evergarden boss model pose <ท่า> · อยู่ได้ 10 นาที");
+        plugin.message(p,(kinds.getFirst().realm()?"เสกโมเดลบอสประจำมิติแล้ว":"เสกโมเดลบอสหลักแล้ว")
+            +" · เลือกท่าได้ในเมนู World Boss Test หรือ /evergarden boss model pose <ท่า> · อยู่ได้ 10 นาที");
         return true;
     }
     private Show create(Player owner,Kind kind,Location at){

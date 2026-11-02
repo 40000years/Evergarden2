@@ -5,6 +5,7 @@ import com.example.voidscape.enchant.ItemCategory;
 import com.example.voidscape.enchant.LimitBreakType;
 import com.example.voidscape.enchant.UniqueEnchant;
 import com.example.voidscape.item.RelicService;
+import com.example.voidscape.item.VaultLootTable;
 import com.example.voidscape.world.DungeonLayout;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -40,7 +41,24 @@ public final class AdminTestGui implements InventoryHolder, Listener {
     private static final class MainBossHolder implements InventoryHolder {
         @Override public Inventory getInventory(){return null;}
     }
+    private static final class RealmBossHolder implements InventoryHolder {
+        @Override public Inventory getInventory(){return null;}
+    }
     private static final class ManaPotionHolder implements InventoryHolder {
+        @Override public Inventory getInventory(){return null;}
+    }
+    private static final class ForgeItemsHolder implements InventoryHolder {
+        @Override public Inventory getInventory(){return null;}
+    }
+    /** EvergardenForge gem types and rarities in its own order; items come from its ForgeApi by reflection. */
+    private static final String[] FORGE_GEMS={"fire","water","wind","earth","lightning","light","dark","life"};
+    private static final String[] FORGE_RARITIES={"COMMON","UNCOMMON","RARE","EPIC","MYTHIC"};
+    private static final class VaultTestHolder implements InventoryHolder {
+        private final DungeonLayout.Kind kind;
+        private final int[] opens=new int[5];
+        private final int[][] counts=new int[5][VaultLootTable.PrimaryReward.values().length];
+        private VaultTestHolder(DungeonLayout.Kind kind){this.kind=kind;}
+        private DungeonLayout.Kind kind(){return kind;}
         @Override public Inventory getInventory(){return null;}
     }
     private record SpellScrollHolder(com.example.advancemagic.item.ElementalStaffService.Element element,
@@ -85,12 +103,12 @@ public final class AdminTestGui implements InventoryHolder, Listener {
             List.of("§7เริ่มเฟส 1 / 2 / 3 ได้ทันที พร้อมวาร์ปเข้าลาน", "§7เรียกท่าชาร์จเฟส 3 · รีเซ็ต · หยุดไฟต์", "§eไฟต์ทดสอบไม่มีรางวัลและไม่เปลี่ยนคูลดาวน์จริง")));
         inv.setItem(6, createActionItem(Material.NETHERITE_SPEAR, "§6§l⚔ อาวุธนักผจญภัย 20 เล่ม (Sanctum Armoury)",
             List.of("§7คลังอาวุธหายากประจำวิหารทั้ง 3 ธาตุ", "§7ดาบ · หอก · ค้อน · ธนู · หน้าไม้ (Java + Bedrock 3D)", "§eคลิกเพื่อเปิดดูและเสกอาวุธทั้ง 20 ชิ้น")));
-        inv.setItem(7, createActionItem(Material.BOOK, "§a§l📚 ชุดคู่มือมิติ Evergarden (3 เล่ม)",
-            List.of("§eคลิกซ้าย: §aเปิดเมนูเลือกคู่มือ (Guide Menu)",
-                    "§6Shift+คลิก: §7รับคู่มือครบทั้ง 3 เล่มลงกระเป๋าทันที")));
+        inv.setItem(7, createActionItem(Material.BOOK, "§a§l📚 ชุดคู่มือมิติ Evergarden (2 เล่ม)",
+                    List.of("§eคลิกซ้าย: §aเปิดเมนูเลือกคู่มือ (Guide Menu)",
+                    "§6Shift+คลิก: §7รับคู่มือครบทั้ง 2 เล่มลงกระเป๋าทันที")));
         inv.setItem(8, createActionItem(Material.NETHER_STAR, "§6§l🏆 คลังเรลิก & วัตถุโบราณ (Relics Showcase)",
             List.of("§eคลิกซ้าย: §aเปิดคลังวัตถุโบราณและอาวุธเทพ (Showcase GUI)",
-                    "§6คลิกขวา: §7จำลองการเปิด Evergarden Vault สุ่มของ",
+                    "§6คลิกขวา: §7เลือกทดสอบ Vault Tier I–V",
                     "\u00a7cShift+คลิก: \u00a77\u0e23\u0e31\u0e1a\u0e40\u0e04\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e21\u0e37\u0e2d\u0e42\u0e1a\u0e23\u0e32\u0e13 2 \u0e0a\u0e34\u0e49\u0e19")));
 
         // ==========================================
@@ -126,6 +144,8 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         // ==========================================
         // Row 3 (27-35): Farming & Melee Unique Enchants (9 ชิ้น)
         // ==========================================
+        inv.setItem(27, createActionItem(Material.VAULT, "ทดสอบ Vault · Tier I–V",
+            List.of("เลือกวิหารและ Tier แล้วสุ่มด้วยเรตจริง", "คลิก 1 ครั้ง · Shift+คลิก 10 ครั้ง")));
         inv.setItem(28, plugin.relics().createScrollUnique(UniqueEnchant.TITAN_BREACH));
         inv.setItem(29, plugin.relics().createScrollUnique(UniqueEnchant.TELEPATHY));
         inv.setItem(30, plugin.relics().createScrollUnique(UniqueEnchant.GUILLOTINE));
@@ -142,6 +162,8 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         inv.setItem(37, plugin.relics().createScrollUnique(UniqueEnchant.SHADOW_STEP));
         inv.setItem(38, plugin.relics().createScrollUnique(UniqueEnchant.TITAN_STANCE));
         inv.setItem(39, plugin.relics().createScrollUnique(UniqueEnchant.SOULBOUND));
+        inv.setItem(40, createActionItem(Material.AMETHYST_SHARD, "§d§l💎 Evergarden Forge · Gem / ผง / วัสดุช่าง",
+            List.of("§7Gem 8 ธาตุ × 5 ขั้น · ผงอัญมณี · วัสดุช่าง 5 เกรด", "§eคลิกเพื่อเปิด", "§8ต้องติดตั้งปลั๊กอิน EvergardenForge")));
         inv.setItem(41, createGodSword());
         inv.setItem(42, createGodBow());
         inv.setItem(43, createGodPickaxe());
@@ -175,6 +197,54 @@ public final class AdminTestGui implements InventoryHolder, Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
+        if(event.getInventory().getHolder() instanceof VaultTestHolder holder){
+            event.setCancelled(true);
+            if(!isAdmin(player)){player.closeInventory();return;}
+            boolean rollClick=switch(event.getClick()){
+                case LEFT,RIGHT,SHIFT_LEFT,SHIFT_RIGHT -> true;
+                default -> false;
+            };
+            if(!rollClick)return;
+            int slot=event.getRawSlot();
+            if(slot==40||slot==2||slot==4||slot==6){
+                Bukkit.getScheduler().runTask(plugin,()->{
+                    if(!player.isOnline()||!isAdmin(player))return;
+                    if(slot==40)open(player);
+                    else openVaultTests(player,DungeonLayout.Kind.values()[(slot-2)/2]);
+                });
+                return;
+            }
+            if(slot<20||slot>24)return;
+            int tier=slot-19,openings=event.isShiftClick()?10:1;
+            var site=new DungeonLayout.Site(holder.kind(),0,0,0L,tier);
+            var rewards=new ArrayList<ItemStack>();
+            List<ItemStack> last=List.of();
+            for(int i=0;i<openings;i++){
+                last=plugin.relics().rollVaultRewards(site,java.util.concurrent.ThreadLocalRandom.current());
+                rewards.addAll(last);
+            }
+            int[] batchCounts=new int[VaultLootTable.PrimaryReward.values().length];
+            for(var reward:rewards)batchCounts[vaultCategory(reward).ordinal()]+=reward.getAmount();
+            // Commit only if the entire batch fits. Test rolls never claim sites or consume keys.
+            Inventory storage=Bukkit.createInventory(null,36);
+            var contents=player.getInventory().getStorageContents();
+            for(int i=0;i<contents.length;i++)storage.setItem(i,contents[i]==null?null:contents[i].clone());
+            for(var reward:rewards)if(!storage.addItem(reward.clone()).isEmpty()){
+                player.sendMessage(Component.text("ไม่ได้เปิดเพิ่ม: กระเป๋าเต็ม กรุณาเว้นที่ก่อนทดสอบ Vault",NamedTextColor.RED));
+                return;
+            }
+            player.getInventory().setStorageContents(storage.getContents());
+            holder.opens[tier-1]+=openings;
+            for(int category=0;category<batchCounts.length;category++)holder.counts[tier-1][category]+=batchCounts[category];
+            event.getInventory().setItem(30,last.getFirst().clone());
+            event.getInventory().setItem(31,last.size()>1?last.getLast().clone():null);
+            event.getInventory().setItem(34,vaultStatsItem(holder,tier));
+            player.sendMessage(Component.text("สำเร็จ "+openings+" รอบ (สะสม Tier "+RelicService.toRoman(tier)+
+                " "+holder.opens[tier-1]+" รอบ) · รับ "+rewards.size()+" ชิ้น",NamedTextColor.GREEN));
+            player.sendMessage(Component.text("รอบนี้: "+vaultBatchSummary(batchCounts),NamedTextColor.GRAY));
+            player.playSound(player.getLocation(),Sound.BLOCK_VAULT_OPEN_SHUTTER,.7f,1.1f);
+            return;
+        }
         if(event.getInventory().getHolder() instanceof SpellScrollHolder holder){
             event.setCancelled(true);
             if(!isAdmin(player)){player.closeInventory();return;}
@@ -219,6 +289,20 @@ public final class AdminTestGui implements InventoryHolder, Listener {
             for(int count=0;count<amount;count++)giveOrDrop(player,magic.manaPotions().create(quality));
             return;
         }
+        if(event.getInventory().getHolder() instanceof ForgeItemsHolder){
+            event.setCancelled(true);
+            if(!isAdmin(player)){player.closeInventory();return;}
+            int raw=event.getRawSlot();
+            if(raw==49){Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline())open(player);});return;}
+            int amount=event.isShiftClick()?16:event.isRightClick()?4:1;
+            ItemStack item=raw==45?forgeItem("dust",amount)
+                :raw>=0&&raw<45&&raw%9==8?forgeItem("material",FORGE_RARITIES[raw/9],amount)
+                :raw>=0&&raw<45?forgeItem("gem",FORGE_GEMS[raw%9],raw/9+1,amount):null;
+            if(item==null)return;
+            giveOrDrop(player,item);
+            player.playSound(player.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_CHIME,.4f,1.4f);
+            return;
+        }
         if(event.getInventory().getHolder() instanceof MainBossHolder){
             event.setCancelled(true);if(!isAdmin(player)){player.closeInventory();return;}
             int slot=event.getRawSlot();if(slot<0||slot>=36||event.getCurrentItem()==null)return;
@@ -230,9 +314,27 @@ public final class AdminTestGui implements InventoryHolder, Listener {
                     case 12->{player.closeInventory();plugin.worldBoss().spawnSeraphonPreview(player);}
                     case 14->{player.closeInventory();plugin.worldBoss().spawnBossShowcase(player);}
                     case 16->{plugin.worldBoss().removeFactionPreviews(player);openMainBosses(player);}
+                    case 31->openRealmBosses(player);
                     case 27->openBossTests(player);
                     case 35->player.closeInventory();
                     default->{if(slot>=18&&slot<18+modes.size()){plugin.worldBoss().bossShowcaseMode(player,modes.get(slot-18));openMainBosses(player);}}
+                }
+            });return;
+        }
+        if(event.getInventory().getHolder() instanceof RealmBossHolder){
+            event.setCancelled(true);if(!isAdmin(player)){player.closeInventory();return;}
+            int slot=event.getRawSlot();if(slot<0||slot>=36||event.getCurrentItem()==null)return;
+            Bukkit.getScheduler().runTask(plugin,()->{
+                if(!player.isOnline()||!isAdmin(player))return;
+                var modes=com.example.voidscape.boss.WorldBossManager.bossShowcaseModes();
+                var kinds=com.example.voidscape.boss.RealmBosses.Kind.values();
+                if(slot>=10&&slot<=16&&slot%2==0){player.closeInventory();plugin.worldBoss().spawnRealmBoss(player,kinds[(slot-10)/2].model);}
+                else if(slot>=18&&slot<18+modes.size()){plugin.worldBoss().bossShowcaseMode(player,modes.get(slot-18));openRealmBosses(player);}
+                else switch(slot){
+                    case 31->{plugin.worldBoss().removeFactionPreviews(player);openRealmBosses(player);}
+                    case 27->openMainBosses(player);
+                    case 35->player.closeInventory();
+                    default->{}
                 }
             });return;
         }
@@ -272,6 +374,7 @@ public final class AdminTestGui implements InventoryHolder, Listener {
                     case 16 -> plugin.worldBoss().triggerTestRupture(player);
                     case 0 -> plugin.worldBoss().spawnSeraphonPreview(player);
                     case 1 -> openMainBosses(player);
+                    case 8 -> openRealmBosses(player);
                     case 2 -> plugin.worldBoss().spawnArkhaiaPreview(player);
                     case 6 -> plugin.worldBoss().removeFactionPreviews(player);
                     case 7 -> openRiverTests(player);
@@ -307,8 +410,12 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         int slot = event.getRawSlot();
 
         switch (slot) {
+            case 27 -> Bukkit.getScheduler().runTask(plugin,()->{
+                if(player.isOnline())openVaultTests(player,DungeonLayout.Kind.SANCTUM_DARK);
+            });
             case 4 -> Bukkit.getScheduler().runTask(plugin,()->openSpellScrolls(player,null,0));
             case 2 -> Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline())openManaPotions(player);});
+            case 40 -> Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline())openForgeItems(player);});
             case 3 -> Bukkit.getScheduler().runTask(plugin,()->openRiverTests(player));
             case 5 -> Bukkit.getScheduler().runTask(plugin,()->openBossTests(player));
             case 6 -> Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline()&&plugin.adventurerWeapons()!=null)plugin.adventurerWeapons().openGui(player);});
@@ -323,14 +430,9 @@ public final class AdminTestGui implements InventoryHolder, Listener {
                     player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.2f);
                     plugin.message(player, "\u0e44\u0e14\u0e49\u0e23\u0e31\u0e1a\u0e40\u0e04\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e21\u0e37\u0e2d\u0e42\u0e1a\u0e23\u0e32\u0e13 2 \u0e0a\u0e34\u0e49\u0e19 (Rift Pickaxe \u0e41\u0e25\u0e30 Smelter Pickaxe)!");
                 } else if (event.isRightClick()) {
-                    ItemStack reward = plugin.relics().rollVaultReward();
-                    giveOrDrop(player, reward);
-                    player.playSound(player.getLocation(), Sound.BLOCK_VAULT_OPEN_SHUTTER, 1.0f, 1.0f);
-                    player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.7f, 1.3f);
-                    String name = reward.getItemMeta() != null && reward.getItemMeta().hasDisplayName()
-                        ? net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(reward.getItemMeta().displayName())
-                        : reward.getType().name();
-                    plugin.message(player, "สุ่มเปิด Vault ได้รับ: " + name + " ×" + reward.getAmount());
+                    Bukkit.getScheduler().runTask(plugin,()->{
+                        if(player.isOnline())openVaultTests(player,DungeonLayout.Kind.SANCTUM_DARK);
+                    });
                 } else {
                     if (plugin.relicGui() != null) {
                         plugin.relicGui().open(player);
@@ -343,7 +445,7 @@ public final class AdminTestGui implements InventoryHolder, Listener {
                         giveOrDrop(player, plugin.relics().createGuideBook(gType));
                     }
                     player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.9f, 1.2f);
-                    plugin.message(player, "ได้รับชุดคู่มือแนะนำการเล่นครบทั้ง 3 เล่ม!");
+                    plugin.message(player, "ได้รับชุดคู่มือแนะนำการเล่นครบทั้ง 2 เล่ม!");
                 } else {
                     plugin.guideMenu().open(player);
                 }
@@ -445,13 +547,120 @@ public final class AdminTestGui implements InventoryHolder, Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onInventoryDrag(InventoryDragEvent event) {
-        if (event.getInventory().getHolder() instanceof AdminTestGui||event.getInventory().getHolder() instanceof BossTestHolder||event.getInventory().getHolder() instanceof ManaPotionHolder||event.getInventory().getHolder() instanceof RiverTestHolder||event.getInventory().getHolder() instanceof MainBossHolder||event.getInventory().getHolder() instanceof SpellScrollHolder) {
+        if (event.getInventory().getHolder() instanceof AdminTestGui||event.getInventory().getHolder() instanceof BossTestHolder||event.getInventory().getHolder() instanceof ManaPotionHolder||event.getInventory().getHolder() instanceof ForgeItemsHolder||event.getInventory().getHolder() instanceof RiverTestHolder||event.getInventory().getHolder() instanceof MainBossHolder||event.getInventory().getHolder() instanceof RealmBossHolder||event.getInventory().getHolder() instanceof SpellScrollHolder||event.getInventory().getHolder() instanceof VaultTestHolder) {
             event.setCancelled(true);
         }
     }
     private com.example.advancemagic.AdvanceMagicPlugin magic(){
         var addon=Bukkit.getPluginManager().getPlugin("advance-magic");
         return addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic&&magic.isEnabled()?magic:null;
+    }
+    private static String vaultChance(int tier,VaultLootTable.PrimaryReward reward){
+        return String.format(Locale.ROOT,"%.2f%%",VaultLootTable.chanceBps(tier,reward)/100.0);
+    }
+    private VaultLootTable.PrimaryReward vaultCategory(ItemStack item){
+        var magic=magic();
+        if(magic!=null){
+            if(magic.legendaryWeapons()!=null&&magic.legendaryWeapons().identify(item)!=null)return VaultLootTable.PrimaryReward.LEGENDARY_WEAPON;
+            if(magic.flyingStaff()!=null&&magic.flyingStaff().isStaff(item))return magic.flyingStaff().tier(item)==2
+                ?VaultLootTable.PrimaryReward.FLYING_STAFF_TIER2:VaultLootTable.PrimaryReward.FLYING_STAFF;
+            if(magic.staffs()!=null&&magic.staffs().isStaff(item))return VaultLootTable.PrimaryReward.ELEMENTAL_STAFF;
+        }
+        if(plugin.adventurerWeapons()!=null&&plugin.adventurerWeapons().identify(item)!=null)return VaultLootTable.PrimaryReward.RARE_WEAPON;
+        if(item.getType()==Material.ENCHANTED_BOOK)return VaultLootTable.PrimaryReward.ENCHANT_BOOK;
+        if(plugin.relics().getLimitBreakType(item)!=null)return VaultLootTable.PrimaryReward.LIMIT_BREAK;
+        if(plugin.relics().getUniqueEnchant(item)!=null)return VaultLootTable.PrimaryReward.UNIQUE_SCROLL;
+        if(plugin.relics().isScrollEternity(item))return VaultLootTable.PrimaryReward.SCROLL_ETERNITY;
+        var relic=plugin.relics().type(item);
+        if(relic==RelicService.Relic.RIFT_PICKAXE||relic==RelicService.Relic.SMELTER_PICKAXE)return VaultLootTable.PrimaryReward.EQUIPMENT;
+        return switch(item.getType()){
+            case DIAMOND_HELMET,DIAMOND_CHESTPLATE,DIAMOND_LEGGINGS,DIAMOND_BOOTS,
+                 DIAMOND_SWORD,DIAMOND_PICKAXE,DIAMOND_AXE,DIAMOND_SHOVEL,BOW->VaultLootTable.PrimaryReward.DIAMOND_GEAR;
+            default->throw new IllegalStateException("Unknown Vault test reward "+item.getType());
+        };
+    }
+    private static String vaultCategoryLabel(VaultLootTable.PrimaryReward category){
+        return switch(category){
+            case DIAMOND_GEAR->"อุปกรณ์";
+            case ENCHANT_BOOK->"สมุด";
+            case LIMIT_BREAK->"Limit Break";
+            case UNIQUE_SCROLL->"Unique";
+            case EQUIPMENT->"เครื่องมือโบราณ";
+            case RARE_WEAPON->"Rare";
+            case LEGENDARY_WEAPON->"ตำนาน";
+            case ELEMENTAL_STAFF->"คทาธาตุ";
+            case FLYING_STAFF->"คทาบินธรรมดา";
+            case SCROLL_ETERNITY->"Eternity";
+            case FLYING_STAFF_TIER2->"คทาบินสองคน";
+        };
+    }
+    private static String vaultBatchSummary(int[] counts){
+        var parts=new ArrayList<String>();
+        for(var category:VaultLootTable.PrimaryReward.values())if(counts[category.ordinal()]>0)
+            parts.add(vaultCategoryLabel(category)+" "+counts[category.ordinal()]);
+        return String.join(" · ",parts);
+    }
+    private ItemStack vaultStatsItem(VaultTestHolder holder,int tier){
+        var lore=new ArrayList<String>();
+        if(tier==0){
+            lore.add("ยังไม่มีรอบที่เปิดสำเร็จ");
+            lore.add("สถิตินับแยก Tier เฉพาะหน้าต่างนี้");
+        }else{
+            int[] counts=holder.counts[tier-1];
+            lore.add("Tier "+RelicService.toRoman(tier)+" · เปิดสำเร็จ "+holder.opens[tier-1]+" รอบ");
+            lore.add("ได้รับจริง "+java.util.Arrays.stream(counts).sum()+" ชิ้น");
+            lore.add("Rare "+counts[VaultLootTable.PrimaryReward.RARE_WEAPON.ordinal()]+" · ตำนาน "+counts[VaultLootTable.PrimaryReward.LEGENDARY_WEAPON.ordinal()]);
+            lore.add("คทาบินธรรมดา "+counts[VaultLootTable.PrimaryReward.FLYING_STAFF.ordinal()]+" · คทาบินสองคน "+counts[VaultLootTable.PrimaryReward.FLYING_STAFF_TIER2.ordinal()]);
+            lore.add("Eternity "+counts[VaultLootTable.PrimaryReward.SCROLL_ETERNITY.ordinal()]+" · คทาธาตุ "+counts[VaultLootTable.PrimaryReward.ELEMENTAL_STAFF.ordinal()]);
+            lore.add("อุปกรณ์ "+counts[VaultLootTable.PrimaryReward.DIAMOND_GEAR.ordinal()]+" · สมุด "+counts[VaultLootTable.PrimaryReward.ENCHANT_BOOK.ordinal()]);
+            lore.add("Limit Break "+counts[VaultLootTable.PrimaryReward.LIMIT_BREAK.ordinal()]+" · Unique "+counts[VaultLootTable.PrimaryReward.UNIQUE_SCROLL.ordinal()]+" · เครื่องมือโบราณ "+counts[VaultLootTable.PrimaryReward.EQUIPMENT.ordinal()]);
+            lore.add("นับเฉพาะ Tier นี้ในหน้าต่างนี้");
+        }
+        lore.add("ภาพตัวอย่างแสดงเฉพาะรอบสุดท้าย");
+        lore.add("รุ่นปลั๊กอิน "+plugin.getPluginMeta().getVersion());
+        return createActionItem(Material.WRITABLE_BOOK,"สถิติรางวัลที่ได้รับจริง"+(tier==0?"":" · Tier "+RelicService.toRoman(tier)),lore);
+    }
+    public void openVaultTests(Player player,DungeonLayout.Kind kind){
+        if(!isAdmin(player))return;
+        if(kind==null)kind=DungeonLayout.Kind.SANCTUM_DARK;
+        var magic=magic();
+        String magicStatus=magic==null?"ปิดใช้งาน · คทาแทนด้วยสมุด":magic.getPluginMeta().getVersion();
+        Inventory inv=Bukkit.createInventory(new VaultTestHolder(kind),45,
+            Component.text("ทดสอบ Vault · "+kind.displayName,NamedTextColor.DARK_PURPLE));
+        for(var theme:DungeonLayout.Kind.values()){
+            var icon=createActionItem(Material.CHISELED_STONE_BRICKS,theme.displayName,
+                List.of(theme==kind?"กำลังเลือกวิหารนี้":"คลิกเพื่อเปลี่ยนวิหาร"));
+            var meta=icon.getItemMeta();meta.setEnchantmentGlintOverride(theme==kind);icon.setItemMeta(meta);
+            inv.setItem(2+theme.ordinal()*2,icon);
+        }
+        inv.setItem(13,createActionItem(Material.BOOK,"จำลองเปิดด้วยลูตจริง",List.of(
+            "คลิก Tier เพื่อรับรางวัลลงกระเป๋า", "คลิก 1 ครั้ง · Shift+คลิก 10 ครั้ง",
+            "ไม่ใช้กุญแจ และไม่เปลี่ยนประวัติเปิด Vault", "ภาพตัวอย่างแสดงเฉพาะรอบสุดท้าย กดหยิบซ้ำไม่ได้",
+            "สถิตินับแยก Tier เฉพาะหน้าต่างนี้", "รุ่นปลั๊กอิน "+plugin.getPluginMeta().getVersion(),
+            "Advance Magic "+magicStatus)));
+        for(int tier=1;tier<=5;tier++){
+            var lore=new ArrayList<String>();
+            lore.add("คลิกสุ่ม 1 ครั้ง · Shift+คลิก 10 ครั้ง");
+            lore.add("คุณภาพเอนชานต์: "+switch(tier){
+                case 1 -> "ช่วงเริ่มต้น";
+                case 2 -> "ช่วงต้นที่แน่นอน";
+                case 3 -> "ช่วงกลาง";
+                case 4 -> "ช่วงสูง";
+                default -> "ค่าสูงสุดของเอนชานต์ที่สุ่มได้";
+            });
+            lore.add("อาวุธ Rare: "+vaultChance(tier,VaultLootTable.PrimaryReward.RARE_WEAPON));
+            lore.add("คทาบินธรรมดา: "+vaultChance(tier,VaultLootTable.PrimaryReward.FLYING_STAFF));
+            lore.add("คทาบินสองคน: "+vaultChance(tier,VaultLootTable.PrimaryReward.FLYING_STAFF_TIER2));
+            lore.add("อาวุธตำนาน: "+vaultChance(tier,VaultLootTable.PrimaryReward.LEGENDARY_WEAPON));
+            lore.add("Eternity (Unbreakable): "+vaultChance(tier,VaultLootTable.PrimaryReward.SCROLL_ETERNITY));
+            lore.add("Limit Break เป็นเกรด Tier "+new String[]{"I","II","III","IV","V"}[tier-1]);
+            lore.add("ต่อรอบได้ 1–2 ชิ้น ตามเงื่อนไข Vault จริง");
+            var icon=createActionItem(Material.VAULT,"Vault Tier "+new String[]{"I","II","III","IV","V"}[tier-1],lore);
+            icon.setAmount(tier);inv.setItem(19+tier,icon);
+        }
+        inv.setItem(40,createActionItem(Material.ARROW,"กลับ Evergarden Test",List.of()));
+        inv.setItem(34,vaultStatsItem((VaultTestHolder)inv.getHolder(),0));
+        player.openInventory(inv);
     }
     public void openSpellScrolls(Player player,com.example.advancemagic.item.ElementalStaffService.Element element,int requestedPage){
         if(!isAdmin(player))return;
@@ -489,6 +698,38 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         inventory.setItem(22,createActionItem(Material.ARROW,"§eกลับเมนูทดสอบ",List.of()));
         player.openInventory(inventory);
     }
+    /** EvergardenForge items: gems (8 elements × purity I–V), gem dust and the five salvage materials. */
+    public void openForgeItems(Player player){
+        if(!isAdmin(player))return;
+        if(forgeItem("dust",1)==null){player.sendMessage(Component.text("ต้องเปิดใช้งาน EvergardenForge ก่อน",NamedTextColor.RED));return;}
+        Inventory inventory=Bukkit.createInventory(new ForgeItemsHolder(),54,Component.text("Evergarden Forge · Gem / ผง / วัสดุ",NamedTextColor.DARK_PURPLE));
+        List<Component> hint=List.of(Component.empty(),Component.text("ซ้าย 1 · ขวา 4 · Shift 16",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false));
+        for(int tier=1;tier<=5;tier++){
+            for(int type=0;type<FORGE_GEMS.length;type++)inventory.setItem((tier-1)*9+type,withHint(forgeItem("gem",FORGE_GEMS[type],tier,1),hint));
+            inventory.setItem((tier-1)*9+8,withHint(forgeItem("material",FORGE_RARITIES[tier-1],1),hint));
+        }
+        inventory.setItem(45,withHint(forgeItem("dust",1),hint));
+        inventory.setItem(49,createActionItem(Material.ARROW,"§eกลับเมนูทดสอบ",List.of()));
+        player.openInventory(inventory);
+    }
+    private static ItemStack withHint(ItemStack item,List<Component> hint){
+        if(item==null)return null;
+        var meta=item.getItemMeta();var lore=meta.lore()==null?new java.util.ArrayList<Component>():new java.util.ArrayList<>(meta.lore());
+        lore.addAll(hint);meta.lore(lore);item.setItemMeta(meta);return item;
+    }
+    /** Calls com.example.forge.ForgeApi.<method>(args) in the EvergardenForge plugin; null when it is absent. */
+    private ItemStack forgeItem(String method,Object... args){
+        var forge=Bukkit.getPluginManager().getPlugin("EvergardenForge");
+        if(forge==null||!forge.isEnabled())return null;
+        try{
+            Class<?> api=Class.forName("com.example.forge.ForgeApi",true,forge.getClass().getClassLoader());
+            Class<?>[] types=new Class<?>[args.length];
+            for(int i=0;i<args.length;i++)types[i]=args[i] instanceof Integer?int.class:String.class;
+            return (ItemStack)api.getMethod(method,types).invoke(null,args);
+        }catch(ReflectiveOperationException|LinkageError|ClassCastException e){
+            plugin.getLogger().warning("[AdminTest] EvergardenForge "+method+" unavailable: "+e);return null;
+        }
+    }
     private void openBossTests(Player player){
         if(!isAdmin(player))return;
         Inventory inv=Bukkit.createInventory(new BossTestHolder(),27,Component.text("✦ World Boss Test",NamedTextColor.DARK_PURPLE,TextDecoration.BOLD));
@@ -496,6 +737,7 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         inv.setItem(1,createActionItem(Material.NETHER_STAR,"§d§lบอสหลัก Evergarden",List.of("§7เสก Arkhaia / Seraphon / ทั้งคู่", "§7เลือกท่า: เดิน · บิน · โจมตี · ร่าย · ท่าไม้ตาย · ชะงัก · เปลี่ยนเฟส")));
         inv.setItem(2,createActionItem(Material.NETHERITE_SWORD,"§5§lเสกโมเดล Arkhaia",List.of("§7จอมราชันกุหลาบทมิฬ · ปีกค้างคาว · ดาบรูนวิญญาณ", "§7Model Engine + Bedrock · วนท่าและออร่า · อยู่ได้ 10 นาที")));
         inv.setItem(7,createActionItem(Material.ECHO_SHARD,"§d§lลูกน้อง Arkhaia V2",List.of("§7เลือกดูโมเดลหรือทดสอบต่อสู้ ทั้งหกชนิด")));
+        inv.setItem(8,createActionItem(Material.RESPAWN_ANCHOR,"§c§lบอสประจำมิติ (Nether / End)",List.of("§7Cinder Colossus · Soul-Eater Hound", "§7Crystal Moth Queen · Unlit Sun", "§7เสกดูโมเดลและท่าทาง · ยังไม่มีไฟต์จริง")));
         inv.setItem(6,createActionItem(Material.SHEARS,"§cลบโมเดล Seraphon / Arkhaia",List.of("§7ลบโมเดลบอสหลักที่คุณเสกไว้")));
         inv.setItem(4,createActionItem(Material.BOOK,"§e§lเลือกเฟสเพื่อเริ่มหรือรีเซ็ตไฟต์ทดสอบ",
             List.of("§7วาร์ปเข้าวิหารใหญ่และเข้า Survival ให้อัตโนมัติ", "§7คืนโหมดเดิมเมื่อจบหรือหยุดไฟต์ทดสอบ", "§7ไม่มีรางวัล · ไม่เปลี่ยนคูลดาวน์ · ไม่แทนที่ไฟต์จริง", "§aเฟส 3: ตีแกนได้ตลอด · ทำลายผลึกขัดท่าทั้งคู่เพื่อ ×3")));
@@ -529,6 +771,35 @@ public final class AdminTestGui implements InventoryHolder, Listener {
         var modes=com.example.voidscape.boss.WorldBossManager.bossShowcaseModes();
         for(int i=0;i<modes.size();i++)inv.setItem(18+i,createActionItem(icons[i],labels[i],List.of("§7ใช้กับโมเดลบอสหลักที่คุณเสกไว้")));
         inv.setItem(27,createActionItem(Material.ARROW,"§eกลับ World Boss Test",List.of()));
+        inv.setItem(31,createActionItem(Material.RESPAWN_ANCHOR,"§c§lบอสประจำมิติ (Nether / End)",List.of("§7โมเดลบอสใหม่สี่ตัวของ Sanctuary ใน Nether และ The End")));
+        inv.setItem(35,createActionItem(Material.BARRIER,"§cปิดเมนู",List.of("§7โมเดลยังอยู่จนลบหรือครบ 10 นาที")));
+        player.openInventory(inv);
+    }
+
+    public void openRealmBosses(Player player){
+        if(!isAdmin(player))return;
+        Inventory inv=Bukkit.createInventory(new RealmBossHolder(),36,Component.text("บอสประจำมิติ · Nether / End",NamedTextColor.DARK_RED,TextDecoration.BOLD));
+        inv.setItem(4,createActionItem(Material.BOOK,"§eโมเดลบอสประจำมิติ (โมเดล ท่าทาง ออร่า)",List.of(
+            "§7เสกหน้าคุณ 16–20 บล็อก · ต้องมีพื้นราบและที่ว่างสูง","§7ไม่โจมตี ไม่มีรางวัล · อยู่ได้ 10 นาที","§7Java: Model Engine · Bedrock: โมเดล Geyser ของจริง",
+            "§7ทั้งสี่ตัวรวมอยู่ใน ModelEngine โมเดลเดียว · เสกได้ทุกตัวไม่ต้องรีสตาร์ต")));
+        Material[] icons={Material.MAGMA_BLOCK,Material.BONE_BLOCK,Material.AMETHYST_CLUSTER,Material.CRYING_OBSIDIAN};
+        String[] lore={"§7ยักษ์หินดำร้อยลาวา · มงกุฎสิบสองแฉก · ผลึกหัวใจใต้แผ่นหลัง",
+            "§7หมาป่ากระดูกยักษ์ · ไฟวิญญาณในซี่โครง · ปลอกคอโซ่ขาด",
+            "§7ผีเสื้อกลางคืนปีกกระจกผลึก · หัวใจผลึกชมพู · เหล็กไนคริสตัล",
+            "§7ดวงอาทิตย์มืดแตกร้าว · ดวงตาใต้เปลือก · วงแหวนและเสาหินลอย"};
+        var kinds=com.example.voidscape.boss.RealmBosses.Kind.values();
+        boolean enabled=com.example.voidscape.boss.RealmBosses.enabled(plugin);
+        for(int i=0;i<kinds.length;i++){
+            boolean ready=enabled&&plugin.arkhaiaModels()!=null&&plugin.arkhaiaModels().ready(kinds[i].model);
+            String state=ready?"§aพร้อมเสก · คลิกเพื่อเสก":enabled?"§eModelEngine กำลังโหลดโมเดล · รอสักครู่":"§7ปิดไว้ใน config (realm-bosses.model-preview.enabled)";
+            inv.setItem(10+i*2,createActionItem(icons[i],"§6§lเสก "+kinds[i].title,List.of("§8"+kinds[i].home,lore[i],state)));
+        }
+        Material[] poses={Material.CLOCK,Material.ARMOR_STAND,Material.LEATHER_BOOTS,Material.ELYTRA,Material.IRON_SWORD,Material.BLAZE_POWDER,Material.DRAGON_HEAD,Material.ANVIL,Material.END_CRYSTAL};
+        String[] labels={"§aวนโชว์ทุกท่า","§fยืน · หายใจ · หันมองผู้เล่น","§fเดิน / บิน","§fเดิน / บิน","§fท่าโจมตี","§fท่าสกิล","§fท่าไม้ตาย","§fท่าชะงัก","§fเปลี่ยนเฟส"};
+        var modes=com.example.voidscape.boss.WorldBossManager.bossShowcaseModes();
+        for(int i=0;i<modes.size()&&i<labels.length;i++)inv.setItem(18+i,createActionItem(poses[i],labels[i],List.of("§7ใช้กับโมเดลบอสที่คุณเสกไว้")));
+        inv.setItem(27,createActionItem(Material.ARROW,"§eกลับบอสหลัก Evergarden",List.of()));
+        inv.setItem(31,createActionItem(Material.SHEARS,"§cลบโมเดลของฉัน",List.of("§7ลบบอสทุกตัวที่คุณเสกไว้")));
         inv.setItem(35,createActionItem(Material.BARRIER,"§cปิดเมนู",List.of("§7โมเดลยังอยู่จนลบหรือครบ 10 นาที")));
         player.openInventory(inv);
     }

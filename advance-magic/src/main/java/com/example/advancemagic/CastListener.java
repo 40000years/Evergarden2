@@ -1,8 +1,6 @@
 package com.example.advancemagic;
 
-import com.example.advancemagic.api.MagicCastEvent;
 import com.example.advancemagic.spell.Spell;
-import com.example.advancemagic.spell.BasicSpellProfile;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -16,7 +14,6 @@ import java.util.*;
 public final class CastListener implements Listener {
     private final AdvanceMagicPlugin plugin;
     private final Map<UUID,Long> lastInput=new HashMap<>();
-    private final Set<UUID> casting=new HashSet<>();
     private final Set<UUID> repairing=new HashSet<>();
     private final Map<UUID,Integer> staffInputTick=new HashMap<>();
     public void repairing(Player player,boolean active){if(active)repairing.add(player.getUniqueId());else repairing.remove(player.getUniqueId());}
@@ -67,112 +64,22 @@ public final class CastListener implements Listener {
                 &&cause!=org.bukkit.event.entity.EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK)return;
         if(preview(p,p.getInventory().getItemInMainHand()))e.setCancelled(true);
     }
-    public boolean cast(Player p,Spell spell) {
-        ItemStack item=plugin.wands().spell(p.getInventory().getItemInMainHand())==spell?p.getInventory().getItemInMainHand()
-            :plugin.wands().spell(p.getInventory().getItemInOffHand())==spell?p.getInventory().getItemInOffHand():null;
-        return cast(p,spell,item);
-    }
     public boolean canCast(Player player) {
         if(player==null) return true;
         if(player.isOp()) return true;
         return !player.isPermissionSet("advance-magic.cast") || player.hasPermission("advance-magic.cast");
     }
     public boolean canUseElemental(Player player){return canCast(player)&&!repairing.contains(player.getUniqueId());}
-    public boolean cast(Player p,Spell spell,ItemStack wandItem) {
-        return cast(p,spell,wandItem,false);
+    /** Compatibility entry points: the retired wand spells no longer cast; a held staff shows its loadout. */
+    public boolean cast(Player p,Spell spell) {
+        return castInput(p,spell,p==null?null:p.getInventory().getItemInMainHand());
     }
-    /** Compatibility entry point: player-owned staff models do not invoke retired spells. */
+    public boolean cast(Player p,Spell spell,ItemStack wandItem) {
+        return castInput(p,spell,wandItem);
+    }
     public boolean castInput(Player p,Spell spell,ItemStack wandItem) {
         if(p!=null&&wandItem!=null)preview(p,wandItem);
         return false;
     }
-    private boolean cast(Player p,Spell spell,ItemStack wandItem,boolean basic) {
-        if(spell==null||p==null)return false;
-        if(wandItem!=null&&plugin.staffs().isRetiredOrStaff(wandItem)){preview(p,wandItem);return false;}
-        if(repairing.contains(p.getUniqueId()))return false;
-        long now=System.currentTimeMillis();UUID id=p.getUniqueId();
-        if(!canCast(p)){actionbar(p,"You cannot cast spells.");return false;}
-        if(wandItem!=null&&plugin.wands().usesLeft(wandItem)<=0){actionbar(p,"Wand durability is depleted.");return false;}
-        if(!p.isOnline()||p.isDead()||p.getGameMode()==GameMode.SPECTATOR)return false;
-        if(casting.contains(id)||now-lastInput.getOrDefault(id,0L)<150)return false;
-        lastInput.put(id,now);casting.add(id);
-        try {
-            MagicCastEvent event=new MagicCastEvent(p,spell,basic);Bukkit.getPluginManager().callEvent(event);
-            if(event.isCancelled()){actionbar(p,"Magic is blocked here.");return false;}
-
-            var account=plugin.mana().account(p);
-            BasicSpellProfile profile=plugin.spells().basic().profile(spell);
-            int cost=basic?profile.mana():spell.mana;
-            String cooldownKey=basic?BasicSpellProfile.COOLDOWN_KEY:spell.id();
-            long remaining=account.remaining(cooldownKey,now);
-            if(remaining>0){actionbar(p,spell.title+": "+String.format(Locale.ROOT,"%.1fs",remaining/1000.0));return false;}
-            if(!plugin.effects().hasCapacity()||(basic&&!plugin.spells().basic().hasCapacity(p))){actionbar(p,"Too many active spells. Try again shortly.");return false;}
-
-            double manaBefore=account.manaExact(),bloodCost=0;
-            if(account.manaExact()<cost) {
-                if(event.isBloodCast()) {
-                    double missing = cost - account.manaExact();
-                    double hpCost = Math.max(1.0, missing * 0.1);
-                    if(p.getHealth() > hpCost) {
-                        p.setHealth(p.getHealth() - hpCost);
-                        bloodCost=hpCost;
-                        p.getWorld().playSound(p.getLocation(), Sound.ENTITY_PLAYER_HURT, 0.8f, 1.4f);
-                        p.getWorld().spawnParticle(Particle.DAMAGE_INDICATOR, p.getLocation().add(0, 1, 0), 4, 0.2, 0.2, 0.2, 0.05);
-                        account.setMana(cost);
-                    } else {
-                        actionbar(p, "Need " + cost + " mana (insufficient HP for Blood Cast).");
-                        return false;
-                    }
-                } else {
-                    actionbar(p,"Need "+cost+" mana.");return false;
-                }
-            }
-            double effectiveCd=basic?profile.cooldown():wandItem!=null?plugin.wands().getEffectiveCooldown(wandItem,spell):spell.cooldown;
-            effectiveCd=Math.max(basic?.75:.1, effectiveCd * event.getCooldownMultiplier());
-            if(!account.reserve(cooldownKey,cost,effectiveCd,now)){
-                if(bloodCost>0){account.setMana(manaBefore);p.setHealth(Math.min(p.getMaxHealth(),p.getHealth()+bloodCost));}
-                return false;
-            }
-            boolean success=false;
-            plugin.context().setCastVelocityMultiplier(p.getUniqueId(), event.getVelocityMultiplier());
-            plugin.context().setCastDamageMultiplier(p.getUniqueId(),wandItem==null?1.0:plugin.wands().damageMultiplier(wandItem));
-            try { success=basic?plugin.spells().basic().cast(p,spell,profile):plugin.spells().cast(p,spell); }
-            catch(RuntimeException ex){plugin.getLogger().log(java.util.logging.Level.SEVERE,"Cast failed: "+spell,ex);}
-            finally { plugin.context().clearCastVelocityMultiplier(p.getUniqueId());plugin.context().clearCastDamageMultiplier(p.getUniqueId()); }
-            if(!success){
-                account.refund(cooldownKey,cost);
-                if(bloodCost>0){account.setMana(manaBefore);p.setHealth(Math.min(p.getMaxHealth(),p.getHealth()+bloodCost));}
-                actionbar(p,"No valid target or safe destination.");
-            }
-            else {
-                Bukkit.getPluginManager().callEvent(new com.example.advancemagic.api.MagicCastSuccessEvent(p, spell,basic));
-                if(!basic&&wandItem!=null)plugin.wands().consumeUse(wandItem);
-                int casts=!basic&&wandItem!=null?plugin.wands().recordCast(wandItem,spell):0;
-                String cdStr=String.format(Locale.ROOT,"%.1f",effectiveCd);
-                actionbar(p,spell.title+(basic?" · Basic":" · Main")+" | CD "+cdStr+"s"+(casts>0?" ("+casts+" casts)":""));
-
-                int extra = event.getExtraCasts();
-                if(!basic&&extra > 0 && p.isOnline()) {
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                        if(p.isOnline() && !p.isDead()) {
-                            try {
-                                plugin.context().setCastVelocityMultiplier(p.getUniqueId(), event.getVelocityMultiplier());
-                                plugin.context().setCastDamageMultiplier(p.getUniqueId(),wandItem==null?1.0:plugin.wands().damageMultiplier(wandItem));
-                                try {
-                                    plugin.spells().cast(p, spell);
-                                } finally {
-                                    plugin.context().clearCastVelocityMultiplier(p.getUniqueId());
-                                    plugin.context().clearCastDamageMultiplier(p.getUniqueId());
-                                }
-                                p.getWorld().playSound(p.getLocation(), Sound.BLOCK_AMETHYST_BLOCK_RESONATE, 0.8f, 1.6f);
-                                p.getWorld().spawnParticle(Particle.WITCH, p.getLocation().add(0, 1, 0), 15, 0.3, 0.4, 0.3, 0.05);
-                            } catch (Throwable ignored) {}
-                        }
-                    }, 5L);
-                }
-            }
-            plugin.mana().save(p);return success;
-        } finally {casting.remove(id);}
-    }
-    public void quit(Player p){lastInput.remove(p.getUniqueId());staffInputTick.remove(p.getUniqueId());casting.remove(p.getUniqueId());repairing.remove(p.getUniqueId());}
+    public void quit(Player p){lastInput.remove(p.getUniqueId());staffInputTick.remove(p.getUniqueId());repairing.remove(p.getUniqueId());}
 }

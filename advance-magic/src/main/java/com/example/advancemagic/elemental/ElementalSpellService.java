@@ -38,6 +38,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
     private final Set<EffectEngine.Effect> effects = new HashSet<>();
     private final Set<Wall> walls = new HashSet<>();
     private final Map<UUID, Shadow> shadows = new HashMap<>();
+    private final Map<UUID, Guardian> guardians = new HashMap<>();
     private final Map<String, Long> healingPulses = new HashMap<>();
     private final NamespacedKey slowKey;
     private final NamespacedKey summonKey;
@@ -45,8 +46,9 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
 
     private static final Set<String> DIRECT_TARGET = Set.of("bubble_prison", "crystal_prison", "life_drain", "cursed_mark", "hellfire_chain", "lightning_chain");
     private static final Set<String> GROUND_TARGET = Set.of("burning_ground", "magma_eruption", "scorching_vortex", "meteor_rain", "healing_spring", "whirlpool", "ice_spike", "blizzard", "absolute_zero", "cyclone_trap", "earth_spike", "quicksand", "titans_judgment", "holy_sanctuary", "divine_judgment", "abyssal_collapse", "static_field", "wrath_of_raijin");
-    private static final Set<String> CLEANSE = Set.of("burn", "wet", "frost", "shock", "curse", "curse_mark", "slow");
-    private static final Set<PotionEffectType> CLEANSE_POTIONS = Set.of(PotionEffectType.POISON, PotionEffectType.WITHER, PotionEffectType.SLOWNESS, PotionEffectType.WEAKNESS, PotionEffectType.BLINDNESS);
+    private static final List<String> CLEANSE = List.of("burn", "curse_mark", "curse", "shock", "frost", "slow", "wet", "healing_reduction");
+    private static final Set<PotionEffectType> CLEANSE_POTIONS = Set.of(PotionEffectType.POISON, PotionEffectType.WITHER, PotionEffectType.SLOWNESS, PotionEffectType.WEAKNESS,
+            PotionEffectType.BLINDNESS, PotionEffectType.NAUSEA, PotionEffectType.DARKNESS, PotionEffectType.HUNGER, PotionEffectType.MINING_FATIGUE);
 
     private static final class Mark {
         int stacks;
@@ -67,7 +69,14 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
     private static final class Buff {
         long until;
         double value;
-        Buff(long until, double value) { this.until = until; this.value = value; }
+        final Cast source;
+        Buff(long until, double value, Cast source) { this.until = until; this.value = value; this.source = source; }
+    }
+    private static final class Guardian {
+        final IronGolem golem;
+        final Cast cast;
+        int hits;
+        Guardian(IronGolem golem, Cast cast) { this.golem = golem; this.cast = cast; }
     }
     private final class Cast {
         final Player player;
@@ -78,6 +87,8 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         final Set<UUID> targets = new HashSet<>(), statusApplied = new HashSet<>();
         final Map<UUID, Double> bossSpent = new HashMap<>(), healed = new HashMap<>();
         final Map<String, Double> reactionSpent = new HashMap<>();
+        int cost;
+        Object reservation;
         Cast(Player player, ElementalSpell spell, double multiplier) { this(player, spell, multiplier, 1); }
         /** levelFactor scales damage, shields and healing by the imprinted spell level (V = 1). */
         Cast(Player player, ElementalSpell spell, double multiplier, double levelFactor) {
@@ -184,7 +195,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         Location ground = GROUND_TARGET.contains(spell.id()) ? groundPoint(player, 24) : null;
         if (GROUND_TARGET.contains(spell.id()) && ground == null) { player.sendActionBar(ChatColor.RED + "ต้องเล็งพื้นภายใน 24 บล็อก"); return false; }
         Location dash = spell.id().endsWith("_dash") || spell.id().equals("gale_step") ? dashPoint(player, spell.id().equals("flame_dash") ? 6 : 7) : null;
-        if ((spell.id().endsWith("_dash") || spell.id().equals("gale_step")) && dash == null) return false;
+        if ((spell.id().endsWith("_dash") || spell.id().equals("gale_step")) && dash == null) { player.sendActionBar(ChatColor.RED + "ไม่มีที่ว่างให้พุ่งไปข้างหน้า"); return false; }
         ElementalCastEvent event = new ElementalCastEvent(player, spell); Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) return false;
         var stats = plugin.elementalStats().snapshot(player);
@@ -198,6 +209,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             return false;
         }
         Cast c = new Cast(player, spell, event.getDamageMultiplier(), SpellLevels.damageFactor(spell, level));
+        c.cost = cost;c.reservation = plugin.mana().reservationToken(player, spell);
         try {
             if (!execute(c, target, ground, dash)) { c.art.close(); plugin.mana().rollbackElemental(player, spell, cost); return false; }
             c.art.startup();
@@ -224,11 +236,11 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             case "flame_dash", "gale_step", "thunder_dash" -> {
                 if (!context.affect(p, p, null) || !p.teleport(dash, PlayerTeleportEvent.TeleportCause.PLUGIN)) return false;
                 Location start = c.origin.clone().add(0, .8, 0), end = dash.clone().add(0, .8, 0);
-                if (!id.equals("gale_step")) line(c, start, end, 1.2, targetCap(), 1, true);
-                else beam(c, start, end);
-                if (id.equals("flame_dash")) {
-                    // Trail is the visual tell for the single 0.8x corridor hit, without extra unbudgeted damage.
-                    effect(c, 40, (e, age) -> { if (age % 5 == 0) beam(c, start, end); return true; });
+                switch (id) {
+                    // Half on the corridor, half from the burning trail it leaves behind.
+                    case "flame_dash" -> { line(c, start, end, 1.2, targetCap(), .5, true); flameTrail(c, c.origin.clone().add(0, .3, 0), dash.clone().add(0, .3, 0)); }
+                    case "gale_step" -> { beam(c, start, end); galeBurst(c, c.origin.clone()); speed(p, 60, 1); }
+                    default -> line(c, start, end, 1.2, targetCap(), 1, true);
                 }
                 p.setFallDistance(0);
             }
@@ -241,37 +253,52 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             case "lightning_chain" -> chain(c, target, 4, 6);
             case "scorching_vortex" -> field(c, at, 4, 100, 5, .55, false, false, false);
             case "meteor_rain" -> telegraph(c, at, 50, 6, () -> meteors(c, at));
-            case "healing_spring" -> field(c, at, 3.5, 100, 5, 0, true, false, false);
-            case "bubble_prison" -> { if (!permitted(c, target)) return false; hit(c, target, 1, true); if (lastHitAccepted) { freeze(c, target, 40); bubble(target); } }
-            case "tidal_push" -> cone(c, 7, .25, true);
-            case "aqua_shield" -> { if (!context.affect(p, p, null)) return false; shield(c, p, 120, Math.min(c.utilityPower * 1.8, maxHealth(p) * .6)); ring(c, p.getLocation(), 1.2); }
-            case "rain_blessing" -> field(c, p.getLocation(), 5, 160, 8, 0, true, true, false);
+            case "healing_spring" -> field(c, at, 5, 100, 5, 0, true, false, false);
+            case "bubble_prison", "crystal_prison" -> { if (!permitted(c, target)) return false; hit(c, target, .5, true); if (lastHitAccepted) prison(c, target); }
+            case "tidal_push" -> { cone(c, 8, .25, 1.5); tide(c); }
+            case "aqua_shield" -> { if (!partyBuff(c, 6, ally -> shield(c, ally, 160, Math.min(c.utilityPower * 1.8, maxHealth(ally) * .4)))) return false; }
+            case "rain_blessing" -> field(c, p.getLocation(), 7, 160, 8, 0, true, true, false);
             case "whirlpool" -> field(c, at, 4, 80, 4, .5, false, false, false);
             case "tsunami" -> wave(c, 16, 5, 1, true);
             case "leviathans_wrath" -> repeatedWaves(c, 5, 24, 24, 4);
             case "ice_spike", "earth_spike" -> { pillar(c, at, 3.5); area(c, at, 2.5, 1, false, id.equals("earth_spike")); }
-            case "frozen_armor" -> buff(c, p, "reduction", 140, .2);
-            case "glacial_path" -> aimedLine(c, 8, 1.5, targetCap(), 1);
-            case "crystal_prison" -> { if (!permitted(c, target)) return false; hit(c, target, 1, true); if (lastHitAccepted) { freeze(c, target, 50); bubble(target); } }
+            case "frozen_armor" -> { if (!partyBuff(c, 6, ally -> { buff(c, ally, "reduction", 160, .2); buff(c, ally, "chill", 160, 1); })) return false; }
+            case "glacial_path" -> { if (!glacialPath(c)) return false; }
             case "blizzard" -> field(c, at, 6, 120, 6, 0, false, false, false);
             case "absolute_zero" -> telegraph(c, at, 40, 6, () -> absoluteZero(c, at));
             case "updraft" -> { area(c, p.getLocation(), 5, 1, false, false); for (LivingEntity e : nearby(c, p.getLocation(), 5, false)) if (c.statusApplied.contains(e.getUniqueId()) && permitted(c, e) && !isBoss(e)) context.velocity(e, new Vector(0, .8, 0)); }
-            case "wind_barrier" -> buff(c, p, "projectile_reduction", 100, .35);
+            case "wind_barrier" -> {
+                if (!partyBuff(c, 8, ally -> { buff(c, ally, "projectile_reduction", 160, .5); speed(ally, 160, 0); })) return false;
+                for (LivingEntity e : nearby(c, p.getLocation(), 4, false)) if (permitted(c, e) && !isBoss(e)) push(c, e, p.getLocation(), 1.0);
+            }
             case "cyclone_trap" -> field(c, at, 4, 80, 4, .5, false, false, false);
             case "thousand_wind_blades" -> effect(c, 37, (e, age) -> { if (age % 3 == 0 && age / 3 < 12) aimedLine(c, 22, .7, 3, 1.0 / 12); return true; });
             case "tempest_dominion" -> tempestDominion(c, p.getLocation().clone());
             case "stone_wall" -> { if (!stoneWall(c)) return false; }
-            case "iron_skin" -> buff(c, p, "reduction", 140, .25);
+            case "iron_skin" -> { if (!partyBuff(c, 6, ally -> { buff(c, ally, "reduction", 160, .25); buff(c, ally, "steadfast", 160, 1); })) return false; }
             case "quicksand" -> field(c, at, 4, 100, 5, 0, false, false, false);
             case "seismic_slam" -> { pillar(c, p.getLocation(), 2); area(c, p.getLocation(), 5, 1, false, true); }
             case "golem_guardian" -> { if (!golem(c)) return false; }
             case "titans_judgment" -> telegraph(c, at, 40, 6, () -> titansJudgment(c, at));
-            case "holy_sanctuary" -> field(c, at, 5, 120, 6, 0, true, false, true);
-            case "purification" -> { for (LivingEntity e : nearby(c, p.getLocation(), 5, true)) if (e instanceof Player ally && context.affect(p, ally, null)) cleanse(ally); ring(c, p.getLocation(), 5); }
+            case "holy_sanctuary" -> field(c, at, 6, 120, 6, 0, true, false, true);
+            case "purification" -> { if (!partyBuff(c, 8, ally -> { if (ally instanceof Player player) { cleanse(player); heal(c, player, c.healing * c.spell.multiplier()); } buff(c, ally, "reduction", 60, .2); })) return false; }
             case "divine_judgment" -> telegraph(c, at, 12, 3, () -> { pillar(c, at, 10); area(c, at, 3, 1, false, false); });
             case "heavens_descent" -> heavensDescent(c);
-            case "life_drain" -> { if (!permitted(c, target)) return false; double actual = hit(c, target, 1, true); heal(c, p, Math.min(actual * .2, maxHealth(p) * (isBoss(target) ? .05 : .2))); beam(c, target.getEyeLocation(), p.getEyeLocation()); }
-            case "cursed_mark" -> { if (!permitted(c, target)) return false; put(c, target, "curse_mark", 1, 120); bubble(target); }
+            case "life_drain" -> {
+                if (!permitted(c, target)) return false;
+                double actual = hit(c, target, 1, true), amount = Math.min(actual * .4, maxHealth(p) * (isBoss(target) ? .05 : .2));
+                heal(c, p, amount); beam(c, target.getEyeLocation(), p.getEyeLocation());
+                // Half of the stolen life flows on to nearby allied players.
+                for (LivingEntity ally : nearby(c, p.getLocation(), 6, true)) if (ally instanceof Player other && other != p) { heal(c, other, amount * .5); beam(c, p.getEyeLocation(), other.getEyeLocation()); }
+            }
+            case "cursed_mark" -> {
+                if (!permitted(c, target)) return false;
+                for (LivingEntity e : nearby(c, target.getLocation(), 3, false)) {
+                    if (e != target && !permitted(c, e)) continue;
+                    put(c, e, "curse_mark", 1, 160); add(c, e, "curse", 3, 5, 160);
+                }
+                c.art.area(target.getLocation(), 3);
+            }
             case "shadow_doppelganger" -> { if (!shadow(c)) return false; }
             case "abyssal_collapse" -> telegraph(c, at, 30, 6, () -> abyssalCollapse(c, at));
             case "static_field" -> field(c, at, 5, 100, 5, 0, false, false, false);
@@ -283,8 +310,20 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
 
     private LivingEntity target(Player p, double range) {
         RayTraceResult trace = context.target(p, range);
-        return trace != null && trace.getHitEntity() instanceof LivingEntity e
-                && visible(p, p.getEyeLocation(), trace.getHitPosition().toLocation(p.getWorld())) ? e : null;
+        if (trace != null && trace.getHitEntity() instanceof LivingEntity e
+                && visible(p, p.getEyeLocation(), trace.getHitPosition().toLocation(p.getWorld()))) return e;
+        // Aim assist: the visible enemy nearest the crosshair inside a narrow cone.
+        Location eye = p.getEyeLocation(); Vector look = eye.getDirection().normalize();
+        LivingEntity best = null; double bestDot = Math.cos(Math.toRadians(8));
+        for (Entity entity : p.getWorld().getNearbyEntities(eye, range, range, range)) {
+            if (!(entity instanceof LivingEntity living) || !context.enemy(p, living)) continue;
+            Vector toward = living.getLocation().add(0, living.getHeight() * .5, 0).toVector().subtract(eye.toVector());
+            double distance = toward.length();
+            if (distance < .5 || distance > range) continue;
+            double dot = toward.multiply(1 / distance).dot(look);
+            if (dot > bestDot && visible(p, eye, living.getEyeLocation())) { best = living; bestDot = dot; }
+        }
+        return best;
     }
     private Location endPoint(Player p, double range) {
         Location eye = p.getEyeLocation(); Vector dir = eye.getDirection(); double distance = 0;
@@ -375,7 +414,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         }
         return visible;
     }
-    private void cone(Cast c, double range, double cosine, boolean push) {
+    private void cone(Cast c, double range, double cosine, double push) {
         Vector forward = c.player.getLocation().getDirection().setY(0);
         if (forward.lengthSquared() < .001) forward = new Vector(0, 0, 1);
         forward.normalize();
@@ -384,7 +423,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             Vector delta = target.getLocation().toVector().subtract(c.player.getLocation().toVector()).setY(0);
             if (delta.lengthSquared() > .01 && delta.normalize().dot(forward) < cosine) continue;
             hit(c, target, 1, true);
-            if (lastHitAccepted && push && permitted(c, target) && !isBoss(target)) push(c, target, c.player.getLocation(), 1.1);
+            if (lastHitAccepted && push > 0 && permitted(c, target) && !isBoss(target)) push(c, target, c.player.getLocation(), push);
         }
     }
     private void area(Cast c, Location at, double radius, double fraction, boolean push, boolean stagger) {
@@ -394,6 +433,98 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             if (lastHitAccepted && push && permitted(c, target) && !isBoss(target)) push(c, target, at, .8);
             if (lastHitAccepted && stagger && permitted(c, target)) addStagger(c, target, 15);
         }
+    }
+    /** Flame Dash leaves a 3 s burning lane: three 1/6 pulses on enemies, Kindled power (+15%) and speed for allies. */
+    private void flameTrail(Cast c, Location from, Location to) {
+        EffectEngine.Effect trail = effect(c, 60, (e, age) -> {
+            if (!context.loaded(from)) return false;
+            c.art.trail(from, to, age, 60);
+            if (age % 20 != 10) return true;
+            // The corridor hit already applied Burn; the lane only adds its share of damage.
+            for (LivingEntity enemy : lineTargets(c, from, to, 1, targetCap(), false)) hit(c, enemy, 1.0 / 6, false);
+            for (LivingEntity ally : laneAllies(c, from, to)) { buff(c, ally, "power", 120, .15); speed(ally, 120, 0); }
+            return true;
+        });
+        trail.onClose(() -> c.art.clear("trail"));
+    }
+    /** Allied players standing on a lane, including the caster. */
+    private List<LivingEntity> laneAllies(Cast c, Location from, Location to) {
+        List<LivingEntity> allies = new ArrayList<>(lineTargets(c, from, to, 1, targetCap(), true));
+        BoundingBox body = c.player.getBoundingBox().expand(1);
+        Vector delta = to.toVector().subtract(from.toVector());
+        if (delta.lengthSquared() > .01 && (body.contains(from.toVector()) || body.rayTrace(from.toVector(), delta.clone().normalize(), delta.length()) != null))
+            allies.add(c.player);
+        return allies;
+    }
+    /** Gale Step's take-off gust: pushes enemies away from where the caster stood and leaves two Air stacks. */
+    private void galeBurst(Cast c, Location at) {
+        c.art.area(at, 3);
+        for (LivingEntity enemy : nearby(c, at, 3, false)) {
+            hit(c, enemy, 1, true);
+            if (lastHitAccepted && permitted(c, enemy) && !isBoss(enemy)) push(c, enemy, at, 1.2);
+        }
+    }
+    /** Bubble/Crystal Prison: half the damage now, half when the prison bursts (Crystal shatters on nearby enemies). */
+    private void prison(Cast c, LivingEntity target) {
+        int duration = target instanceof Player ? 30 : 60;
+        freeze(c, target, duration);
+        boolean crystal = c.spell.id().equals("crystal_prison");
+        effect(c, duration + 1, (e, age) -> {
+            if (age < duration) return target.isValid() && !target.isDead();
+            Location at = target.getLocation();
+            c.art.area(at, crystal ? 3 : 1.5);
+            if (crystal) for (LivingEntity enemy : nearby(c, at, 3, false)) {
+                hit(c, enemy, .5, true);
+                if (lastHitAccepted && permitted(c, enemy)) frost(c, enemy, 1);
+            }
+            else { hit(c, target, .5, false); if (lastHitAccepted && permitted(c, target)) put(c, target, "wet", 1, 100); }
+            return false;
+        });
+    }
+    /** Tidal Push also douses and quickens allied players inside the wave's cone. */
+    private void tide(Cast c) {
+        Vector forward = c.player.getLocation().getDirection().setY(0);
+        if (forward.lengthSquared() < .001) return;
+        forward.normalize();
+        for (LivingEntity ally : nearby(c, c.player.getLocation(), 8, true)) {
+            if (ally == c.player || !(ally instanceof Player)) continue;
+            Vector delta = ally.getLocation().toVector().subtract(c.player.getLocation().toVector()).setY(0);
+            if (delta.lengthSquared() > .01 && delta.normalize().dot(forward) < .25) continue;
+            State s = states.get(ally.getUniqueId()); if (s != null) s.marks.remove("burn");
+            ally.setFireTicks(0); speed(ally, 60, 0);
+        }
+    }
+    /**
+     * Glacial Path freezes a 10-block lane of floor for 5 s. The first sweep spends 0.4 of the budget;
+     * five pulses of 0.12 chill enemies on the lane, while allied players on it run faster.
+     */
+    private boolean glacialPath(Cast c) {
+        Location origin = c.player.getLocation().clone();
+        Vector forward = origin.getDirection().setY(0);
+        if (forward.lengthSquared() < .01) return false;
+        forward.normalize();
+        Location end = origin.clone();
+        for (double d = .5; d <= 10; d += .5) {
+            Location next = origin.clone().add(forward.clone().multiply(d));
+            if (!context.loaded(next) || !context.safeBody(next) || wallBlocks(c.player, origin.clone().add(0, .8, 0), next.clone().add(0, .8, 0))) break;
+            end = next;
+        }
+        if (end.distanceSquared(origin) < 4) { c.player.sendActionBar(ChatColor.RED + "ไม่มีพื้นที่ให้สร้างทางน้ำแข็ง"); return false; }
+        Location from = origin.clone().add(0, .5, 0), to = end.clone().add(0, .5, 0);
+        line(c, from, to, 1.2, targetCap(), .4, true);
+        EffectEngine.Effect lane = effect(c, 100, (e, age) -> {
+            if (!context.loaded(from)) return false;
+            c.art.trail(from, to, age, 100);
+            if (age % 20 != 10) return true;
+            for (LivingEntity enemy : lineTargets(c, from, to, 1, targetCap(), false)) {
+                hit(c, enemy, .12, false);
+                if (lastHitAccepted && permitted(c, enemy)) { slow(c, enemy, .35, 30); frost(c, enemy, 1); }
+            }
+            for (LivingEntity ally : laneAllies(c, from, to)) speed(ally, 30, 1);
+            return true;
+        });
+        lane.onClose(() -> c.art.clear("trail"));
+        return true;
     }
     private void chain(Cast c, LivingEntity first, int count, double range) {
         Set<UUID> visited = new HashSet<>(); LivingEntity current = first; Location from = c.player.getEyeLocation();
@@ -408,7 +539,8 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         boolean[] completed = {false};
         EffectEngine.Effect channel=effect(c, delay + 1, (e, age) -> {
             if (!context.loaded(at) || c.player.getLocation().distanceSquared(c.origin) > 4 || hasStatus(c.player, "frozen")) {
-                c.player.sendActionBar(ChatColor.RED + "การร่ายถูกขัดจังหวะ"); return false;
+                plugin.mana().refundInterrupted(c.player, c.spell, c.cost, c.reservation);
+                c.player.sendActionBar(ChatColor.YELLOW + "การร่ายถูกขัดจังหวะ · คืนมานาแล้ว กดร่ายใหม่ได้ทันที"); return false;
             }
             c.art.telegraph(at,radius,age,delay);
             if (age % 4 == 0) outline(c, at, radius);
@@ -639,7 +771,14 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             c.art.field(center,radius,age,duration);
             if (age % 4 == 0) outline(c, center, radius);
             if (age % interval != 0 || age / interval >= pulses) return true;
-            if (healing) healArea(c, center, radius, c.spell.multiplier() / pulses);
+            if (healing) {
+                healArea(c, center, radius, c.spell.multiplier() / pulses);
+                if (c.spell.id().equals("healing_spring")) for (LivingEntity ally : nearby(c, center, radius, true)) {
+                    State s = states.get(ally.getUniqueId());
+                    if (s != null) { s.marks.remove("burn"); if (s.marks.remove("slow") != null) clearSlow(s); }
+                    ally.setFireTicks(0);
+                }
+            }
             else for (LivingEntity target : nearby(c, center, radius, false)) {
                 hit(c, target, fraction / pulses, true);
                 if (lastHitAccepted && permitted(c, target)) {
@@ -647,12 +786,16 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
                         Vector delta = center.toVector().subtract(target.getLocation().toVector()).setY(.08);
                         if (delta.lengthSquared() > .04) context.velocity(target, delta.normalize().multiply(pull));
                     }
-                    if (c.spell.id().equals("quicksand")) slow(c, target, .35, 25);
+                    if (c.spell.id().equals("quicksand")) {
+                        slow(c, target, .5, 25);
+                        if (!isBoss(target)) context.velocity(target, center.toVector().subtract(target.getLocation().toVector()).setY(0).multiply(.08).setY(-.35));
+                    }
                     if (c.spell.id().equals("blizzard")) slow(c, target, .2, 25);
                     if (c.spell.id().equals("cyclone_trap")) spread(c, target);
                 }
             }
-            if (sanctuary) for (LivingEntity target : nearby(c, center, radius, true)) if (target instanceof Player ally) buff(c, ally, "reduction", 25, .1);
+            if (sanctuary) for (LivingEntity target : nearby(c, center, radius, true)) if (target instanceof Player ally) buff(c, ally, "reduction", 25, .15);
+            if (c.spell.id().equals("static_field")) for (LivingEntity ally : nearby(c, center, radius, true)) { buff(c, ally, "power", 25, .1); speed(ally, 25, 0); }
             return true;
         });
         e.onClose(()->{c.art.clear("field");c.art.clear("boundary");});
@@ -803,10 +946,13 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             if (c.spell.element() == Element.WIND && stacks(target, "air") >= 3) { remove(target, "air"); slow(c, target, .15, 40); }
             reaction(c, target);
             switch (c.spell.element()) {
-                case FIRE -> add(c, target, "burn", 1, 5, id.equals("fireball") ? 60 : 80);
+                case FIRE -> add(c, target, "burn", id.equals("flame_burst") ? 2 : 1, 5, id.equals("fireball") ? 60 : 80);
                 case WATER -> put(c, target, "wet", 1, 100);
                 case ICE -> { frost(c, target, 1); slow(c, target, .2, 60); }
-                case WIND -> { if (Set.of("wind_cutter", "updraft", "cyclone_trap").contains(id)) add(c, target, "air", 1, 3, 120); }
+                case WIND -> {
+                    int air = switch (id) { case "wind_cutter", "cyclone_trap" -> 1; case "updraft", "gale_step" -> 2; default -> 0; };
+                    if (air > 0) add(c, target, "air", air, 3, 120);
+                }
                 case EARTH -> { put(c, target, "earth", 1, 100); addStagger(c, target, id.equals("seismic_slam") ? 35 : 20); }
                 case LIGHT -> { if (id.equals("radiant_bolt")) put(c, target, "radiance", 1, 120); }
                 case DARK -> { if (!id.equals("abyssal_collapse")) add(c, target, "curse", 1, 5, 160); }
@@ -823,7 +969,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
                     && !Set.of("shadow_doppelganger", "golem_guardian", "healing_spring", "rain_blessing", "holy_sanctuary", "aqua_shield").contains(id)
                     && shadow.remaining > 0 && context.loaded(shadow.entity.getLocation())
                     && visible(c.player, shadow.entity.getEyeLocation(), target.getEyeLocation())) {
-                double echo = Math.min(shadow.remaining, c.power * c.spell.multiplier() * .35);
+                double echo = Math.min(shadow.remaining, c.power * c.spell.multiplier() * .5);
                 shadow.remaining -= echo;
                 beam(shadow.cast, shadow.entity.getEyeLocation(), target.getEyeLocation());
                 // Uses its summon cast budget; raw damage never calls hit(), so echoes cannot echo or react.
@@ -948,17 +1094,37 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         AttributeInstance attribute = entity.getAttribute(Attribute.MAX_HEALTH);
         return attribute == null ? 20 : Math.max(1, attribute.getValue());
     }
+    /** Buff keys drawn on the wearer; riders such as chill or steadfast share the main buff's art. */
+    private static final Set<String> SHOWN_BUFFS = Set.of("reduction", "shield", "projectile_reduction", "power");
     private void buff(Cast c, LivingEntity target, String key, int duration, double amount) {
         if (!context.ally(c.player, target) || !context.affect(c.player, target, null)) return;
         State s = state(target); Buff previous = s.buffs.get(key);
         // A weaker application cannot extend the stronger value indefinitely.
         if (previous == null || previous.until <= clock || amount >= previous.value) {
-            s.buffs.put(key, new Buff(clock + duration, amount));
-            c.art.buff(target,key,duration,()->buffValue(target,key)>0);
+            boolean fresh = previous == null || previous.until <= clock;
+            s.buffs.put(key, new Buff(clock + duration, amount, c));
+            if (SHOWN_BUFFS.contains(key) && (fresh || duration > 30)) c.art.buff(target,key,duration,()->buffValue(target,key)>0);
         }
-        ring(c, target.getLocation(), 1.2);
+    }
+    /** Applies a team buff to the caster and visible allies in range; false when nothing could receive it. */
+    private boolean partyBuff(Cast c, double radius, java.util.function.Consumer<LivingEntity> apply) {
+        if (!context.affect(c.player, c.player, null)) return false;
+        int count = 0;
+        for (LivingEntity ally : nearby(c, c.player.getLocation(), radius, true)) {
+            if (!context.ally(c.player, ally) || !context.affect(c.player, ally, null)) continue;
+            apply.accept(ally); count++;
+        }
+        if (count > 0) c.art.aura(c.player.getLocation(), radius);
+        return count > 0;
+    }
+    private static void speed(LivingEntity target, int ticks, int amplifier) {
+        target.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, ticks, amplifier, true, false, true));
     }
     private void shield(Cast c, LivingEntity target, int duration, double amount) { buff(c, target, "shield", duration, amount); }
+    private Buff buffOf(LivingEntity target, String key) {
+        State s = states.get(target.getUniqueId()); Buff b = s == null ? null : s.buffs.get(key);
+        return b != null && b.until > clock && b.value > 0 ? b : null;
+    }
     private double buffValue(LivingEntity target, String key) {
         State s = states.get(target.getUniqueId()); Buff b = s == null ? null : s.buffs.get(key);
         return b != null && b.until > clock ? b.value : 0;
@@ -982,16 +1148,11 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         if(player.getHealth()>before)c.art.heal(player);
     }
     private void cleanse(Player player) {
-        State s = states.get(player.getUniqueId()); int remaining = 2;
-        if (s != null) for (String key : List.of("burn", "curse_mark", "curse", "shock", "frost", "slow", "wet")) {
-            if (remaining == 0) break;
-            if (CLEANSE.contains(key) && s.marks.remove(key) != null) { if (key.equals("slow")) clearSlow(s); remaining--; }
-        }
-        for (PotionEffect effect : List.copyOf(player.getActivePotionEffects())) {
-            if (remaining == 0) break;
-            if (CLEANSE_POTIONS.contains(effect.getType())) { player.removePotionEffect(effect.getType()); remaining--; }
-        }
-        context.particles(player.getEyeLocation(), Particle.END_ROD, 20, .5);
+        State s = states.get(player.getUniqueId());
+        if (s != null) for (String key : CLEANSE) if (s.marks.remove(key) != null && key.equals("slow")) clearSlow(s);
+        for (PotionEffect effect : List.copyOf(player.getActivePotionEffects()))
+            if (CLEANSE_POTIONS.contains(effect.getType())) player.removePotionEffect(effect.getType());
+        player.setFireTicks(0);
     }
     private void beam(Cast c, Location from, Location to) {
         if(c.art.enabled()){c.art.beam(from,to);return;}
@@ -1025,7 +1186,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             case WATER -> at.getWorld().spawnParticle(Particle.SPLASH,at,2,.08,.06,.08,.01);
             case ICE -> at.getWorld().spawnParticle(Particle.SNOWFLAKE,at,1,.03,.03,.03,0);
             case WIND -> at.getWorld().spawnParticle(Particle.CLOUD,at,1,.04,.04,.04,.005);
-            case EARTH -> at.getWorld().spawnParticle(Particle.BLOCK,at,2,.06,.04,.06,.03,Material.MOSS_BLOCK.createBlockData());
+            case EARTH -> at.getWorld().spawnParticle(Particle.FALLING_DUST,at,1,.06,.04,.06,0,Material.MOSS_BLOCK.createBlockData());
             case LIGHT -> at.getWorld().spawnParticle(Particle.END_ROD,at,1,.025,.025,.025,.005);
             case DARK -> at.getWorld().spawnParticle(Particle.REVERSE_PORTAL,at,2,.04,.04,.04,.01);
             case LIGHTNING -> at.getWorld().spawnParticle(Particle.ELECTRIC_SPARK,at,2,.04,.04,.04,.02);
@@ -1033,7 +1194,6 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
     }
     private void pillar(Cast c, Location at, double height) { if(c.art.enabled())c.art.pillar(at,height);else beam(c, at, at.clone().add(0, height, 0)); ring(c, at, 2); }
     private void sound(Location at, Sound sound, float volume) { if (context.loaded(at)) at.getWorld().playSound(at, sound, volume, 1); }
-    private void bubble(LivingEntity target) { context.particles(target.getLocation().add(0, 1, 0), Particle.CLOUD, 18, .8); }
 
     private boolean stoneWall(Cast c) {
         Location base = c.player.getLocation().clone(); Vector forward = base.getDirection().setY(0);
@@ -1049,11 +1209,11 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         List<Location> cells = new ArrayList<>();
         for (int lateral = -2; lateral <= 2; lateral++) for (int rise = 0; rise < 3; rise++) {
             Location cell = new Location(base.getWorld(), x + (northSouth ? lateral : 0), y + rise, z + (northSouth ? 0 : lateral));
-            if (!context.loaded(cell) || !cell.getBlock().isPassable()) return false;
+            if (!context.loaded(cell) || !cell.getBlock().isPassable()) { c.player.sendActionBar(ChatColor.RED + "มีสิ่งกีดขวาง วางกำแพงไม่ได้"); return false; }
             cells.add(cell);
         }
         // Do not create a barrier intersecting any living body.
-        if (base.getWorld().getNearbyEntities(box).stream().anyMatch(e -> e instanceof LivingEntity && !(e instanceof ArmorStand))) return false;
+        if (base.getWorld().getNearbyEntities(box).stream().anyMatch(e -> e instanceof LivingEntity && !(e instanceof ArmorStand))) { c.player.sendActionBar(ChatColor.RED + "มีสิ่งมีชีวิตขวางอยู่ วางกำแพงไม่ได้"); return false; }
         EffectEngine.Effect active = effect(c, 120, (e, age) -> {
             if (!context.loaded(base)) return false;
             if(age%4==0)c.art.wall(box);
@@ -1086,37 +1246,57 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         }
         unique(c, "wall", active); sound(base, Sound.BLOCK_STONE_PLACE, .8f); return true;
     }
+    /**
+     * The guardian walks with the vanilla pathfinder (no vanilla goals, so it never picks its own fights).
+     * Its blows come from this effect: one 1/15 hit per second while an enemy stands within reach,
+     * and every 2 s it draws nearby monsters' attention away from the caster's team.
+     */
     private boolean golem(Cast c) {
-        Location at = dashPoint(c.player, 2.5); if (at == null || !context.safeBody(at.clone().add(0, 1.2, 0))) return false;
+        Location at = dashPoint(c.player, 2.5);
+        if (at == null || !context.safeBody(at.clone().add(0, 1.2, 0))) { c.player.sendActionBar(ChatColor.RED + "ไม่มีพื้นที่ให้เรียกโกเลม"); return false; }
         IronGolem guardian = at.getWorld().spawn(at, IronGolem.class, entity -> {
-            entity.setAI(false); entity.setInvulnerable(true); entity.setSilent(true); entity.setCollidable(false);
+            entity.setInvulnerable(true); entity.setCollidable(false);
             entity.setPersistent(false); entity.setRemoveWhenFarAway(false); entity.setPlayerCreated(true);
             entity.getPersistentDataContainer().set(summonKey, PersistentDataType.STRING, c.player.getUniqueId().toString());
-            entity.getPersistentDataContainer().set(new NamespacedKey(plugin, "allied_vex"), PersistentDataType.STRING, c.player.getUniqueId().toString());
         });
+        Bukkit.getMobGoals().removeAllGoals(guardian);
+        Guardian state = new Guardian(guardian, c); guardians.put(guardian.getUniqueId(), state);
         EffectEngine.Effect active = effect(c, 300, (e, age) -> {
             if (!guardian.isValid() || !context.loaded(guardian.getLocation())) return false;
             c.art.summon(guardian,age);
+            Location home = c.player.getLocation();
+            if (guardian.getWorld() != home.getWorld() || guardian.getLocation().distanceSquared(home) > 400) {
+                Location near = dashPoint(c.player, 2); if (near != null) guardian.teleport(near);
+            }
             double range = configured("summon-goal-range", 12, 4, 16);
-            LivingEntity target = nearby(c, guardian.getLocation(), range, false).stream().findFirst().orElse(null);
-            if (target == null) return true;
-            if (age % 5 == 0 && guardian.getLocation().distanceSquared(target.getLocation()) > 6.25) {
-                Vector step = target.getLocation().toVector().subtract(guardian.getLocation().toVector()).setY(0);
-                if (step.lengthSquared() > .01) {
-                    Location next = guardian.getLocation().add(step.normalize().multiply(.65));
-                    next.setDirection(target.getLocation().toVector().subtract(next.toVector()));
-                    if (context.safeBody(next) && context.safeBody(next.clone().add(0, 1.2, 0))) guardian.teleport(next);
-                }
+            LivingEntity target = nearby(c, home, range, false).stream()
+                    .min(Comparator.comparingDouble(enemy -> enemy.getLocation().distanceSquared(guardian.getLocation()))).orElse(null);
+            if (age % 10 == 0) {
+                if (target != null) guardian.getPathfinder().moveTo(target, 1.15);
+                else if (guardian.getLocation().distanceSquared(home) > 16) guardian.getPathfinder().moveTo(home, 1.0);
             }
-            if (age % 20 == 0 && guardian.getLocation().distanceSquared(target.getLocation()) <= 9) {
-                guardian.swingMainHand(); hit(c, target, 1.0 / 15, false); ring(c, guardian.getLocation(), 2);
+            if (target != null) guardian.lookAt(target);
+            if (age % 20 == 0 && target != null && state.hits < 15 && guardian.getLocation().distanceSquared(target.getLocation()) <= 9) {
+                state.hits++; guardian.playEffect(EntityEffect.ENTITY_ATTACK);
+                hit(c, target, 1.0 / 15, false);
+                if (lastHitAccepted && permitted(c, target) && !isBoss(target)) context.velocity(target, new Vector(0, .45, 0));
+                c.art.area(target.getLocation(), 1.2);
             }
+            if (age % 40 == 0) taunt(c, guardian);
             return true;
         });
-        active.track(guardian);active.onClose(()->c.art.clear("summon:"+guardian.getUniqueId())); unique(c, "golem", active); return true;
+        active.track(guardian);
+        active.onClose(() -> { guardians.remove(guardian.getUniqueId()); c.art.clear("summon:" + guardian.getUniqueId()); });
+        unique(c, "golem", active); return true;
+    }
+    /** Monsters near the guardian that are chasing the caster's team turn on the (invulnerable) guardian instead. */
+    private void taunt(Cast c, IronGolem guardian) {
+        for (Entity entity : guardian.getNearbyEntities(8, 4, 8))
+            if (entity instanceof Mob mob && !guardians.containsKey(mob.getUniqueId()) && !isBoss(mob) && context.enemy(c.player, mob)
+                    && mob.getTarget() instanceof Player victim && context.ally(c.player, victim)) mob.setTarget(guardian);
     }
     private boolean shadow(Cast c) {
-        Location at = dashPoint(c.player, 1.8); if (at == null) return false;
+        Location at = dashPoint(c.player, 1.8); if (at == null) { c.player.sendActionBar(ChatColor.RED + "ไม่มีพื้นที่ให้ร่างเงา"); return false; }
         ArmorStand entity = at.getWorld().spawn(at, ArmorStand.class, stand -> {
             stand.setGravity(false); stand.setInvulnerable(true); stand.setVisible(true); stand.setArms(true); stand.setBasePlate(false);
             stand.setMarker(true); stand.setPersistent(false); stand.setSilent(true);
@@ -1170,7 +1350,20 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void damage(EntityDamageEvent event) {
         if (!(event.getEntity() instanceof LivingEntity target)) return;
-        double multiplier = (hasStatus(target, "curse_mark") ? 1.08 : 1) * (hasStatus(target, "break") ? 1.1 : 1);
+        double multiplier = (hasStatus(target, "curse_mark") ? 1.15 : 1) * (hasStatus(target, "break") ? 1.1 : 1);
+        if (event instanceof EntityDamageByEntityEvent by) {
+            Entity source = by.getDamager();
+            if (source instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter) source = shooter;
+            if (guardians.containsKey(source.getUniqueId())) { event.setCancelled(true); return; }
+            if (source instanceof LivingEntity attacker && attacker != target) {
+                multiplier *= 1 + Math.min(.3, buffValue(attacker, "power"));
+                // Frozen Armor chills whoever strikes its wearer in melee, at most once per two seconds each.
+                Buff chill = buffOf(target, "chill");
+                if (chill != null && chill.source != null && chill.source.alive() && !(by.getDamager() instanceof Projectile)
+                        && context.enemy(chill.source.player, attacker) && reactionReady(attacker, "chill") && permitted(chill.source, attacker))
+                    frost(chill.source, attacker, 1);
+            }
+        }
         double reduction = buffValue(target, "reduction");
         if (event instanceof EntityDamageByEntityEvent by && by.getDamager() instanceof Projectile) reduction = Math.max(reduction, buffValue(target, "projectile_reduction"));
         event.setDamage(event.getDamage() * multiplier * (1 - Math.min(.5, reduction)));
@@ -1247,6 +1440,9 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void summonTarget(EntityTargetLivingEntityEvent event) { if (event.getEntity().getPersistentDataContainer().has(summonKey)) event.setCancelled(true); }
+    /** Iron Skin holds its wearers in place against knockback. */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void steadfast(EntityKnockbackEvent event) { if (buffValue(event.getEntity(), "steadfast") > 0) event.setCancelled(true); }
     @EventHandler(priority = EventPriority.HIGHEST)
     public void summonDeath(EntityDeathEvent event) {
         if (event.getEntity().getPersistentDataContainer().has(summonKey)) { event.getDrops().clear(); event.setDroppedExp(0); }

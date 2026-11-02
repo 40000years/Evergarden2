@@ -85,7 +85,7 @@ public final class PetModelPreviews implements Listener, AutoCloseable {
         }
         if(action.equals("spawn")&&args.length==4) {
             var species=PetCatalog.Species.find(args[2]);var stage=PetCatalog.Stage.find(args[3]);
-            if(species==null||species.mythical()) {plugin.message(sender,"ไม่พบสัตว์เลี้ยง "+args[2]+" · ใช้ /evergarden pets list");return true;}
+            if(species==null) {plugin.message(sender,"ไม่พบสัตว์เลี้ยง "+args[2]+" · ใช้ /evergarden pets list");return true;}
             if(stage==null) {plugin.message(sender,"ระบุวัย baby · medium · adult");return true;}
             if(!canPreview(player))return true;
             String id=species.model(stage);
@@ -100,7 +100,7 @@ public final class PetModelPreviews implements Listener, AutoCloseable {
         }
         if(action.equals("growth")&&args.length==3) {
             var species=PetCatalog.Species.find(args[2]);
-            if(species==null||species.mythical()) {plugin.message(sender,"ไม่พบสัตว์เลี้ยง "+args[2]+" · ใช้ /evergarden pets list");return true;}
+            if(species==null) {plugin.message(sender,"ไม่พบสัตว์เลี้ยง "+args[2]+" · ใช้ /evergarden pets list");return true;}
             if(!canPreview(player))return true;
             if(limit()<3) {plugin.message(sender,"เปรียบเทียบวัยต้องตั้ง pets.model-preview.max-per-admin อย่างน้อย 3");return true;}
             Vector facing=player.getLocation().getDirection().setY(0);

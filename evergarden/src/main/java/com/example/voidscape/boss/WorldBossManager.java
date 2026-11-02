@@ -1,5 +1,6 @@
 package com.example.voidscape.boss;
 
+import com.example.advancemagic.elemental.ElementalSpell;
 import com.example.voidscape.VoidscapePlugin;
 import com.example.voidscape.compat.LevelledMobsCompat;
 import com.example.voidscape.item.RelicService;
@@ -104,6 +105,16 @@ public final class WorldBossManager implements Listener,AutoCloseable {
     public boolean spawnSeraphonPreview(Player p){return showcase.spawn(p,List.of(BossShowcase.Kind.SERAPHON));}
     public boolean spawnArkhaiaPreview(Player p){return showcase.spawn(p,List.of(BossShowcase.Kind.ARKHAIA));}
     public boolean spawnBossShowcase(Player p){return showcase.spawn(p,List.of(BossShowcase.Kind.ARKHAIA,BossShowcase.Kind.SERAPHON));}
+    /** Realm-boss rig (RealmBosses.MODELS), shown harmlessly in front of the admin like the main bosses. */
+    public boolean spawnRealmBoss(Player p,String model){
+        var kind=BossShowcase.Kind.of(model);
+        if(kind==null||!kind.realm())return false;
+        if(!RealmBosses.enabled(plugin)){
+            plugin.message(p,"ปิดโมเดลบอสประจำมิติไว้ใน config (realm-bosses.model-preview.enabled: false)");
+            return false;
+        }
+        return showcase.spawn(p,List.of(kind));
+    }
     /** showcase, idle, walk, hover, attack, spell, ultimate, stun or phase. */
     public void bossShowcaseMode(Player p,String mode){showcase.mode(p,mode);}
     public static List<String> bossShowcaseModes(){return BossShowcase.MODES;}
@@ -112,7 +123,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
     public void riverPose(Player p,String pose){arkhaia.riverPose(p,pose);}
     public boolean removeFactionPreviews(Player p){
         boolean removed=showcase.remove(p);
-        plugin.message(p,removed?"ลบโมเดล Seraphon / Arkhaia แล้ว":"ไม่มีโมเดล Seraphon / Arkhaia ที่คุณเสกไว้");
+        plugin.message(p,removed?"ลบโมเดลบอสที่คุณเสกไว้แล้ว":"ไม่มีโมเดลบอสที่คุณเสกไว้");
         return removed;
     }
     public boolean removeSeraphPreview(Player p){
@@ -469,7 +480,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
     }
     @EventHandler public void load(ChunkLoadEvent e){for(Entity entity:e.getChunk().getEntities())if(marked(entity)&&!owners.containsKey(entity.getUniqueId())){
         boolean owned=sealOwners.containsKey(entity.getUniqueId())||summonOwners.containsKey(entity.getUniqueId())
-            ||arkhaia.owns(entity)||plugin.seraphonBoss()!=null&&plugin.seraphonBoss().owns(entity)||seraphPreview.owns(entity)||showcase.owns(entity)||active.values().stream().anyMatch(r->r.sealMarkers.containsValue(entity)||r.runeMarkers.containsValue(entity)||r.body!=null&&r.body.owns(entity));
+            ||arkhaia.owns(entity)||plugin.seraphonBoss()!=null&&plugin.seraphonBoss().owns(entity)||plugin.sanctuaryEncounters()!=null&&plugin.sanctuaryEncounters().owns(entity)||plugin.realmSanctuaryEncounters()!=null&&plugin.realmSanctuaryEncounters().owns(entity)||seraphPreview.owns(entity)||showcase.owns(entity)||active.values().stream().anyMatch(r->r.sealMarkers.containsValue(entity)||r.runeMarkers.containsValue(entity)||r.body!=null&&r.body.owns(entity));
         if(!owned)entity.remove();
     }}
     public void tick(){
@@ -840,6 +851,15 @@ public final class WorldBossManager implements Listener,AutoCloseable {
             return true;
         }catch(IOException e){healthy=false;plugin.getLogger().log(java.util.logging.Level.SEVERE,"Cannot persist world-boss ledger; new encounters disabled",e);return false;}
     }
+    /** The optional magic plugin owns this pool; null keeps a roll queued until it is available. */
+    private String rollLegendarySpell(){
+        var addon=Bukkit.getPluginManager().getPlugin("advance-magic");
+        if(!(addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic)
+            ||!magic.isEnabled()||magic.staffSpells()==null)return null;
+        List<String> pool=new ArrayList<>();
+        for(ElementalSpell spell:ElementalSpell.values())if(spell.rarity()==ElementalSpell.Rarity.LEGENDARY)pool.add(spell.id());
+        return pool.isEmpty()?null:pool.get(random.nextInt(pool.size()));
+    }
     private void victory(Run r){
         if(r.test){message(r,"จบไฟต์ทดสอบ! · เปิด /evergarden test เพื่อเริ่มเฟสที่ต้องการอีกครั้ง");cleanup(r);return;}
         ledger.set("sites."+id(r.site)+".last-stop",null);
@@ -847,7 +867,13 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         int keys=plugin.integer("world-boss.rewards.keys",2,0,16),xp=plugin.integer("world-boss.rewards.experience",1500,0,1000000);
         for(UUID uuid:r.fight.roster()){
             if(r.fight.contribution(uuid)<=0)continue;
-            String reward="rewards."+uuid;ledger.set(reward+".keys",ledger.getInt(reward+".keys")+keys);
+            String reward="rewards."+uuid;ledger.set(reward+".tier5-keys",ledger.getInt(reward+".tier5-keys")+keys);
+            String spell=rollLegendarySpell();
+            if(spell==null)ledger.set(reward+".legendary-spell-rolls",ledger.getInt(reward+".legendary-spell-rolls")+1);
+            else{
+                List<String> spells=new ArrayList<>(ledger.getStringList(reward+".legendary-spells"));
+                spells.add(spell);ledger.set(reward+".legendary-spells",spells);
+            }
             ledger.set(reward+".xp",ledger.getInt(reward+".xp")+xp);
             ledger.set(reward+".skill-points",ledger.getInt(reward+".skill-points")+1);
             ledger.set(reward+".feathers",ledger.getInt(reward+".feathers")+plugin.integer("seraph-trader.feathers.world-boss",15,0,64));
@@ -861,23 +887,50 @@ public final class WorldBossManager implements Listener,AutoCloseable {
     }
     /** Persist removal before delivering: a restart cannot repeatedly claim the same reward. */
     private void claim(Player p){
-        if(!healthy||p.isDead())return;
-        String path="rewards."+p.getUniqueId();int keys=ledger.getInt(path+".keys"),xp=ledger.getInt(path+".xp");
+        if(!healthy||!p.isOnline()||p.isDead())return;
+        String path="rewards."+p.getUniqueId();int keys=ledger.getInt(path+".keys"),tier5Keys=ledger.getInt(path+".tier5-keys"),xp=ledger.getInt(path+".xp");
         var addon=Bukkit.getPluginManager().getPlugin("advance-magic");
         var magic=addon instanceof com.example.advancemagic.AdvanceMagicPlugin m&&m.isEnabled()?m:null;
+        List<String> spells=new ArrayList<>(ledger.getStringList(path+".legendary-spells"));
+        int pendingRolls=ledger.getInt(path+".legendary-spell-rolls");
+        if(!spells.isEmpty()||pendingRolls>0){
+            // Hold the key + spell bundle together when the optional addon is unavailable.
+            if(magic==null||magic.staffSpells()==null)return;
+            if(pendingRolls>0){
+                for(int i=0;i<pendingRolls;i++){
+                    String spell=rollLegendarySpell();if(spell==null)return;spells.add(spell);
+                }
+                Object previousSpells=ledger.get(path+".legendary-spells");
+                ledger.set(path+".legendary-spells",spells);ledger.set(path+".legendary-spell-rolls",null);
+                // Persist deferred choices before testing space: retries must not reroll.
+                if(!save()){
+                    ledger.set(path+".legendary-spells",previousSpells);ledger.set(path+".legendary-spell-rolls",pendingRolls);return;
+                }
+            }
+        }
         int skillPoints=ledger.getInt(path+".skill-points");
         List<String> cores=ledger.getStringList(path+".cores");
         // Feathers wait in the ledger while the Seraph is unavailable.
         int stored=ledger.getInt(path+".feathers"),feathers=plugin.seraphTrader()==null?0:stored;
-        if(keys<=0&&xp<=0&&cores.isEmpty()&&feathers<=0&&(skillPoints<=0||magic==null))return;
+        if(keys<=0&&tier5Keys<=0&&xp<=0&&cores.isEmpty()&&spells.isEmpty()&&feathers<=0&&(skillPoints<=0||magic==null))return;
         List<ItemStack> items=new ArrayList<>();
         if(keys>0){ItemStack item=plugin.relics().createVoidKey();item.setAmount(keys);items.add(item);}
+        if(tier5Keys>0){ItemStack item=plugin.relics().createVoidKey(5);item.setAmount(tier5Keys);items.add(item);}
+        for(String id:spells){
+            ElementalSpell spell=ElementalSpell.parse(id);
+            if(spell==null||spell.rarity()!=ElementalSpell.Rarity.LEGENDARY){
+                plugin.getLogger().warning("Unknown or nonlegendary queued world-boss spell: "+id);return;
+            }
+            items.add(magic.staffSpells().createScroll(spell));
+        }
         for(String id:cores){
             RelicService.MagicCore core=RelicService.MAGIC_CORES.stream().filter(c->c.id().equals(id)).findFirst().orElse(null);
             if(core==null){plugin.getLogger().warning("Unknown queued world-boss core: "+id);return;}
             items.add(plugin.relics().createMagicCore(core));
         }
-        if(!fits(p.getInventory(),items)){plugin.message(p,"รางวัลบอสถูกเก็บไว้ · เว้นช่องแล้วใช้ /evergarden boss claim");return;}
+        List<ItemStack> capacity=new ArrayList<>(items);
+        if(feathers>0)capacity.add(com.example.voidscape.trade.SeraphFeathers.feather(plugin,feathers));
+        if(!fits(p.getInventory(),capacity)){plugin.message(p,"รางวัลบอสถูกเก็บไว้ · เว้นช่องแล้วใช้ /evergarden boss claim");return;}
         Object previous=ledger.get(path);ledger.set(path,null);
         if(magic==null&&skillPoints>0)ledger.set(path+".skill-points",skillPoints);
         if(feathers==0&&stored>0)ledger.set(path+".feathers",stored);
@@ -886,7 +939,8 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         for(ItemStack item:items)p.getInventory().addItem(item).values().forEach(left->p.getWorld().dropItemNaturally(p.getLocation(),left));
         if(xp>0)p.giveExp(xp);
         if(magic!=null&&skillPoints>0)magic.skillTree().grantPoints(p,skillPoints,"World boss defeated");
-        plugin.message(p,"รางวัลผู้พิพากษาไร้ร่าง · Core สุ่ม "+cores.size()+" · กุญแจ Evergarden "+keys+" · XP "+xp);
+        plugin.message(p,"รางวัลผู้พิพากษาไร้ร่าง · กุญแจ Vault Tier V "+tier5Keys+" · เวทย์ตำนาน "+spells.size()
+            +(keys>0?" · กุญแจเดิม "+keys:"")+(cores.isEmpty()?"":" · Core เดิม "+cores.size())+" · XP "+xp);
     }
     /** Simulate Bukkit's storage stacking before consuming any persisted reward. */
     private static boolean fits(PlayerInventory inventory,List<ItemStack> rewards){

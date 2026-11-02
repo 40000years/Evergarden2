@@ -11,7 +11,8 @@ import java.util.function.Consumer;
 /** Registers a resource-pack cube rig before Geyser starts; no Geyser dependency on Java-only servers. */
 public final class BedrockBlockModels implements AutoCloseable {
     public static final String TYPE="advance_magic:legendary_block";
-    public static final List<String> CHANNELS=List.of("x","y","z","qx","qy","qz","qw","size");
+    /** Pose channels: position, rotation quaternion, uniform size, then per-axis scale in the cube's own frame. */
+    public static final List<String> CHANNELS=List.of("x","y","z","qx","qy","qz","qw","size","sx","sy","sz");
     private final AdvanceMagicPlugin plugin;
     private final List<String> materials;
     private final Map<String,Object> properties=new LinkedHashMap<>();
@@ -47,9 +48,10 @@ public final class BedrockBlockModels implements AutoCloseable {
                 properties.put("revision",registerInt.invoke(event,type,idOf.invoke(null,"advance_magic:revision"),0,Integer.MAX_VALUE,0));
                 for(String end:List.of("from_","to_"))for(String channel:CHANNELS){
                     String name=end+channel;
-                    float min=channel.startsWith("q")?-1:channel.equals("size")?0:-256;
-                    float max=channel.startsWith("q")?1:256;
-                    float initial=channel.equals("qw")?1:0;
+                    boolean scale=channel.equals("size")||channel.startsWith("s");
+                    float min=channel.startsWith("q")?-1:scale?0:-256;
+                    float max=channel.startsWith("q")?1:scale&&!channel.equals("size")?64:256;
+                    float initial=channel.equals("qw")||(scale&&!channel.equals("size"))?1:0;
                     properties.put(name,registerFloat.invoke(event,type,idOf.invoke(null,"advance_magic:"+name),min,max,initial));
                 }
                 properties.put("duration",registerFloat.invoke(event,type,idOf.invoke(null,"advance_magic:duration"),0f,3f,0f));
@@ -59,7 +61,7 @@ public final class BedrockBlockModels implements AutoCloseable {
             update=loader.loadClass("org.geysermc.geyser.api.entity.property.BatchPropertyUpdater").getMethod("update",loader.loadClass("org.geysermc.geyser.api.entity.property.GeyserEntityProperty"),Object.class);
         }catch(ReflectiveOperationException|LinkageError|RuntimeException failure){plugin.getLogger().warning("Legendary Bedrock cube rig unavailable: "+failure);close();}
     }
-    public boolean ready(){return defined&&properties.size()==19;}
+    public boolean ready(){return defined&&properties.size()==3+2*CHANNELS.size();}
     int material(String name){return materials.indexOf(name);}
     Object definition(ClassLoader loader)throws ReflectiveOperationException{
         if(!ready())throw new IllegalStateException("Legendary cube definition is not registered; restart Geyser with this plugin");

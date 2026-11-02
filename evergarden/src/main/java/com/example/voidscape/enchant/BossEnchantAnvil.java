@@ -38,6 +38,18 @@ public final class BossEnchantAnvil implements Listener {
         ItemStack output=event.getResult();if(output==null||output.getType().isAir())return;
         output=output.clone();var meta=output.getItemMeta();var caps=new HashMap<>(a);b.forEach((e,l)->caps.merge(e,l,Math::max));
         var incoming=BossEnchantService.enchants(right);int discount=0;
+        // A creative anvil skips item compatibility. Boss treasure keeps survival's rule in every game mode:
+        // Protection or Feather Falling from a boots book never lands on a sword, where it would do nothing.
+        if(!(meta instanceof EnchantmentStorageMeta)){
+            var kept=BossEnchantService.enchants(left);boolean stripped=false;
+            for(var enchant:List.copyOf(meta.getEnchants().keySet()))
+                if(incoming.containsKey(enchant)&&!kept.containsKey(enchant)&&!enchant.canEnchantItem(new ItemStack(output.getType()))){
+                    meta.removeEnchant(enchant);caps.remove(enchant);stripped=true;
+                }
+            if(stripped&&meta.getEnchants().equals(kept)&&right.getType()==org.bukkit.Material.ENCHANTED_BOOK){event.setResult(null);return;}
+            // The level pass below reads the output item, so it must not see the dropped enchantments.
+            if(stripped){output.setItemMeta(meta);meta=output.getItemMeta();}
+        }
         for(var entry:BossEnchantService.enchants(output).entrySet()){
             var enchant=entry.getKey();int old=entry.getValue();
             // Equal high levels do not create a new level. Ordinary enchants keep their vanilla ceiling.

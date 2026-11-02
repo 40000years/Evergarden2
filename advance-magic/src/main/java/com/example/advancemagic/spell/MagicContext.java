@@ -55,12 +55,17 @@ public final class MagicContext {
     public boolean ally(Player p,LivingEntity e) {
         if(p.getUniqueId().equals(e.getUniqueId()))return true;
         if(e instanceof Tameable t&&t.getOwner()!=null&&t.getOwner().getUniqueId().equals(p.getUniqueId()))return true;
-        var pdc = e.getPersistentDataContainer();
-        NamespacedKey vexKey = new NamespacedKey(plugin, "allied_vex");
-        if(pdc.has(vexKey, org.bukkit.persistence.PersistentDataType.STRING)) {
-            String owner = pdc.get(vexKey, org.bukkit.persistence.PersistentDataType.STRING);
-            if(p.getUniqueId().toString().equals(owner)) return true;
+        // A summoned guardian or shadow fights for its owner and the owner's team.
+        String summoner=e.getPersistentDataContainer().get(new NamespacedKey(plugin,"elemental_summon"),org.bukkit.persistence.PersistentDataType.STRING);
+        if(summoner!=null){
+            if(summoner.equals(p.getUniqueId().toString()))return true;
+            Player owner;
+            try{owner=Bukkit.getPlayer(UUID.fromString(summoner));}catch(IllegalArgumentException malformed){return false;}
+            return owner!=null&&team(p,owner);
         }
+        return team(p,e);
+    }
+    private boolean team(Player p,LivingEntity e){
         var board=Bukkit.getScoreboardManager().getMainScoreboard();
         var a=board.getEntryTeam(p.getName());
         String entry=e instanceof Player other?other.getName():e.getUniqueId().toString();
@@ -74,23 +79,6 @@ public final class MagicContext {
         }
         return true;
     }
-    private final Map<UUID, Double> castVelocityMultipliers = new java.util.concurrent.ConcurrentHashMap<>();
-    private final Map<UUID, Double> castDamageMultipliers = new java.util.concurrent.ConcurrentHashMap<>();
-    public void setCastDamageMultiplier(UUID uuid,double multiplier){if(multiplier<=1.0)castDamageMultipliers.remove(uuid);else castDamageMultipliers.put(uuid,multiplier);}
-    public void clearCastDamageMultiplier(UUID uuid){castDamageMultipliers.remove(uuid);}
-    public double getCastDamageMultiplier(UUID uuid){return castDamageMultipliers.getOrDefault(uuid,1.0);}
-
-    public void setCastVelocityMultiplier(UUID uuid, double mult) {
-        if (mult <= 1.0) castVelocityMultipliers.remove(uuid);
-        else castVelocityMultipliers.put(uuid, mult);
-    }
-    public double getCastVelocityMultiplier(UUID uuid) {
-        return castVelocityMultipliers.getOrDefault(uuid, 1.0);
-    }
-    public void clearCastVelocityMultiplier(UUID uuid) {
-        castVelocityMultipliers.remove(uuid);
-    }
-
     public boolean affect(Player p,LivingEntity target,Spell spell) {
         if(!target.isValid()||target.isDead()||target.getWorld()!=p.getWorld())return false;
         MagicAffectEvent event=new MagicAffectEvent(p,target,spell);
@@ -114,16 +102,9 @@ public final class MagicContext {
     }
     public RayTraceResult target(Player p,double range) {
         // Trim to loaded chunks before tracing so casts never generate terrain.
-        double effectiveRange = range * getCastVelocityMultiplier(p.getUniqueId());
         Location eye=p.getEyeLocation();Vector dir=eye.getDirection();double distance=0;
-        for(double d=0.5;d<=effectiveRange;d+=0.5){if(!loaded(eye.clone().add(dir.clone().multiply(d))))break;distance=d;}
+        for(double d=0.5;d<=range;d+=0.5){if(!loaded(eye.clone().add(dir.clone().multiply(d))))break;distance=d;}
         return distance==0?null:p.getWorld().rayTrace(eye,dir,distance,FluidCollisionMode.NEVER,true,0.35,e->enemy(p,e));
-    }
-    public Location targetPoint(Player p,double range) {
-        var hit=target(p,range);return hit==null?null:hit.getHitPosition().toLocation(p.getWorld());
-    }
-    public LivingEntity targetEntity(Player p,double range) {
-        var hit=target(p,range);return hit!=null&&hit.getHitEntity() instanceof LivingEntity e?e:null;
     }
     public void potion(LivingEntity e,PotionEffectType type,int ticks,int amplifier) {
         e.addPotionEffect(new PotionEffect(type,ticks,amplifier,true,false,true));
@@ -135,7 +116,7 @@ public final class MagicContext {
         e.setNoDamageTicks(0);
         magicDamageContext.set(Boolean.TRUE);
         try {
-            e.damage(Math.max(0,amount*castDamageMultipliers.getOrDefault(p.getUniqueId(),1.0)),DamageSource.builder(type).withCausingEntity(p).withDirectEntity(p).build());
+            e.damage(Math.max(0,amount),DamageSource.builder(type).withCausingEntity(p).withDirectEntity(p).build());
         } finally {
             magicDamageContext.set(Boolean.FALSE);
         }
@@ -152,40 +133,6 @@ public final class MagicContext {
         if(type.getDataType()==Float.class)at.getWorld().spawnParticle(type,at,count,spread,spread,spread,0.02,1.0f);
         else if(type.getDataType()==Color.class)at.getWorld().spawnParticle(type,at,count,spread,spread,spread,0.02,Color.WHITE);
         else at.getWorld().spawnParticle(type,at,count,spread,spread,spread,0.02);
-    }
-    public void ring(Location at,double radius,Spell spell) {
-        if(!loaded(at))return;
-        for(int i=0;i<32;i++) {
-            double angle=i*Math.PI/16;
-            Location point=at.clone().add(Math.cos(angle)*radius,0.15,Math.sin(angle)*radius);
-            if(loaded(point))point.getWorld().spawnParticle(Particle.DUST,point,1,0,0,0,0,new Particle.DustOptions(Color.fromRGB(spell.color),1.2f));
-        }
-    }
-    public void beam(Location from,Location to,Particle type) {
-        if(from.getWorld()!=to.getWorld())return;
-        Vector delta=to.toVector().subtract(from.toVector());int n=Math.min(60,Math.max(1,(int)(delta.length()*2)));
-        for(int i=0;i<=n;i++)particles(from.clone().add(delta.clone().multiply((double)i/n)),type,1,0);
-    }
-    public double configuredDamage(String key,double fallback) {
-        double n=plugin.getConfig().getDouble(key,fallback);return Double.isFinite(n)?Math.max(0,Math.min(2000,n)):Math.max(0,Math.min(2000,fallback));
-    }
-    /** Automatic final pulse, owned by the original caster and cancelled with their effects. */
-    public void echo(Player p,Location center,Spell spell,int delay,double radius,double baseDamage) {
-        if(!plugin.effects().hasCapacity()||!loaded(center))return;
-        Location at=center.clone();
-        plugin.effects().start(p,delay+1,(effect,age)->{
-            if(!loaded(at))return false;
-            if(age==delay) {
-                ring(at,radius,spell);
-                particles(at.clone().add(0,0.5,0),Particle.ENCHANT,24,radius/3);
-                at.getWorld().playSound(at,Sound.BLOCK_AMETHYST_BLOCK_RESONATE,0.8f,1.2f);
-                for(var enemy:nearby(p,at,radius,false))if(affect(p,enemy,spell)) {
-                    damage(p,enemy,configuredDamage("follow-up.damage."+spell.id(),baseDamage),DamageType.MAGIC);
-                    potion(enemy,PotionEffectType.SLOWNESS,40,1);
-                }
-            }
-            return true;
-        });
     }
     public boolean safeBody(Location at) {
         if(!loaded(at)||!loaded(at.clone().add(0,1.8,0)))return false;

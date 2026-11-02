@@ -50,11 +50,13 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     private final Random random=new Random();
     private PetTaming taming;
     private PetMenu menu;
+    private final PetRiding riding;
     private int clock;
     private long busy;
 
     PetCompanions(VoidscapePlugin plugin,NativePetRenderer renderer,PetBodies bodies,PetTerrain terrain,PetStore store){
         this.plugin=plugin;this.renderer=renderer;this.bodies=bodies;this.terrain=terrain;this.store=store;
+        riding=new PetRiding(plugin,this);
         bodies.hidesOthers(id->{PetStable stable=store.cached(id);return stable!=null&&stable.hideOthers;});
         Bukkit.getPluginManager().registerEvents(this,plugin);
         long now=System.currentTimeMillis();
@@ -66,6 +68,10 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     }
     void taming(PetTaming taming){this.taming=taming;}
     void menu(PetMenu menu){this.menu=menu;}
+    PetRiding riding(){return riding;}
+    String rideBlocker(Player player){return blocker(player);}
+    void ridingActivity(Player player){moved.put(player.getUniqueId(),System.currentTimeMillis());}
+    void rideSeat(PetBody body,Entity seat,boolean add){bodies.rideSeat(body,seat,add);}
     PetStable stable(Player player){return store.stable(player.getUniqueId());}
     PetBody body(UUID owner){return out.get(owner);}
     int count(){return out.size();}
@@ -75,6 +81,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     String state(Player player){
         PetStable stable=stable(player);
         if(!stable.out||stable.active==null)return "อยู่ในคอก";
+        if(riding.riding(player.getUniqueId()))return "กำลังขี่บิน · ไม่ใช้มานา";
         if(out.containsKey(player.getUniqueId()))return "ออกมาเดินด้วย";
         String reason=suspended.get(player.getUniqueId());
         return "พักชั่วคราว"+(reason==null?"":" · "+reason);
@@ -97,6 +104,14 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         PetStable stable=stable(player);stable.out=false;stable.dirty=true;
         suspended.remove(player.getUniqueId());despawn(player.getUniqueId());
     }
+    /** Commit a newly tamed pet before consuming the lead or removing its wild body. */
+    boolean reserveAdoption(Player player,PetRecord record){
+        PetStable stable=stable(player);if(stable.locked||stable.full())return false;
+        stable.add(record);
+        if(store.saveStableNow(stable))return true;
+        stable.pets.remove(record.id);stable.locked=true;
+        return false;
+    }
     /** A freshly tamed wild body becomes the companion, or goes straight to the stable. */
     void adopt(Player player,PetRecord record,PetBody body){
         PetStable stable=stable(player);stable.add(record);
@@ -118,7 +133,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         Location at=body.perched?null:body.location();despawn(player.getUniqueId());
         if(!spawnAt(player,at)&&!spawnNear(player))suspended.put(player.getUniqueId(),"รอพื้นที่ปลอดภัยใกล้เจ้าของ");
     }
-    void despawn(UUID owner){PetBody body=out.remove(owner);if(body!=null)bodies.remove(body);stranded.remove(owner);}
+    void despawn(UUID owner){riding.stop(owner,true);PetBody body=out.remove(owner);if(body!=null)bodies.remove(body);stranded.remove(owner);}
     private boolean spawnAt(Player player,Location at){
         PetStable stable=stable(player);PetRecord record=stable.activeRecord();
         if(record==null)return false;
@@ -179,8 +194,9 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         clock++;
         for(var entry:new ArrayList<>(out.entrySet())){
             Player owner=Bukkit.getPlayer(entry.getKey());PetBody body=entry.getValue();
-            if(owner==null||!body.valid())continue;
+            if(owner==null||!body.valid()){riding.stop(entry.getKey(),true);continue;}
             try{
+                if(riding.tick(owner,body))continue;
                 if(!body.tickGrounding())body.tickGlide();
                 follow(body,owner,clock%2==0);
             }
@@ -304,6 +320,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     String mode(Player player,UUID id,String mode){
         PetStable stable=stable(player);PetRecord record=stable.get(id);
         if(record==null)return "ไม่พบสัตว์เลี้ยงตัวนี้";
+        riding.stop(player.getUniqueId(),true);
         if(!PetSkills.MODES.contains(mode))return "โหมดมี follow, stay, perch และ assist";
         record.mode=mode;stable.dirty=true;
         PetBody body=out.get(player.getUniqueId());
@@ -364,7 +381,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     }
 
     // ---- assist: fighting beside the owner ----
-    private static boolean assisting(PetBody body){return body.record!=null&&body.record.mode.equals("assist")&&!body.perched;}
+    private static boolean assisting(PetBody body){return body.record!=null&&body.record.mode.equals("assist")&&!body.perched&&!body.ridden;}
     /** Something a companion may bite: a living mob near its owner, never a player, pet, boss, NPC or the owner's own animal. */
     private boolean foe(Player owner,LivingEntity target){
         int radius=setting("assist-radius",16,4,48);
@@ -548,7 +565,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
             body=out.get(id);
             // Passive skills work while the companion is close (a pet left on stay far away does not count).
             if(body!=null&&(body.perched||body.location().getWorld()==player.getWorld()&&body.location().distanceSquared(player.getLocation())<=32*32))
-                PetSkills.passive(player,active,clock,target->foe(player,target));
+                if(active.species!=PetCatalog.Species.AETHERIUS||!riding.riding(id))PetSkills.passive(player,active,clock,target->foe(player,target));
         }
     }
     private void grow(){
@@ -570,10 +587,19 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     void checkGrowth(Player player,PetRecord record){
         PetCatalog.Stage next=record.stage==PetCatalog.Stage.BABY?PetCatalog.Stage.MEDIUM:record.stage==PetCatalog.Stage.MEDIUM?PetCatalog.Stage.ADULT:null;
         if(next==null||record.growth<threshold(next)||!renderer.hasModel(record.species,next))return;
-        record.stage=next;stable(player).dirty=true;
+        PetStable stable=stable(player);
+        record.stage=next;stable.dirty=true;
+        int before=stable.capacity();
+        // Raised here from a baby: the stable grows for good.
+        boolean raised=stable.raise(record);
+        int opened=stable.capacity()-before;
+        if(raised)store.save(stable);
         player.showTitle(Title.title(Component.text(record.name()+" เติบโตแล้ว!",NamedTextColor.GOLD),
-            Component.text(next.thai,NamedTextColor.AQUA),Title.Times.times(Duration.ofMillis(200),Duration.ofSeconds(2),Duration.ofMillis(500))));
+            Component.text(next.thai+(opened>0?" · คอกสัตว์ +"+opened+" ช่อง":""),NamedTextColor.AQUA),
+            Title.Times.times(Duration.ofMillis(200),Duration.ofSeconds(2),Duration.ofMillis(500))));
         player.playSound(player.getLocation(),Sound.ENTITY_PLAYER_LEVELUP,.8f,1.2f);
+        if(raised)plugin.message(player,opened>0?"เลี้ยง "+record.name()+" มาตั้งแต่เด็กจนโตเต็มวัย · คอกสัตว์เพิ่ม "+opened+" ช่อง (ตอนนี้ "+stable.capacity()+" ช่อง)"
+            :"เลี้ยง "+record.name()+" มาตั้งแต่เด็กจนโตเต็มวัย · คอกสัตว์ครบ "+stable.capacity()+" ช่องสูงสุดแล้ว");
         if(record.id.equals(stable(player).active))rebuild(player);
     }
 
@@ -588,6 +614,9 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         ItemStack hand=player.getInventory().getItemInMainHand();
         if(taming!=null&&hand.getType()==taming.food(body.species)&&PetTaming.plain(hand)){feed(player,body,hand);return;}
         if(menu!=null&&hand.getType()==Material.NAME_TAG){menu.nameTag(player,body.record.id,hand);return;}
+        if(hand.getType().isAir()&&body.species.mythical()&&!player.isSneaking()){
+            String problem=riding.start(player,body.record.id);if(problem!=null)plugin.message(player,problem);return;
+        }
         if(menu!=null)menu.openPet(player,body.record.id);
     }
     private void feed(Player player,PetBody body,ItemStack hand){
@@ -605,7 +634,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         player.sendActionBar(Component.text(record.name()+" · ความผูกพัน "+record.bond+" · การเติบโต "+record.growth,NamedTextColor.LIGHT_PURPLE));
         checkGrowth(player,record);
     }
-    @Override public void lost(PetBody body){if(body.owner!=null&&out.get(body.owner)==body)out.remove(body.owner);}
+    @Override public void lost(PetBody body){if(body.owner!=null&&out.get(body.owner)==body){riding.stop(body.owner,true);out.remove(body.owner);}}
 
     // ---- player lifecycle ----
     @EventHandler public void join(PlayerJoinEvent event){
@@ -675,6 +704,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     }
     @Override public void close(){
         motion.cancel();upkeep.cancel();growth.cancel();saver.cancel();
+        riding.close();
         for(UUID owner:new ArrayList<>(out.keySet()))despawn(owner);
         HandlerList.unregisterAll(this);
     }

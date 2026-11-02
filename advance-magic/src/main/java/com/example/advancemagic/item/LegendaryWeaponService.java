@@ -44,12 +44,10 @@ public final class LegendaryWeaponService implements Listener, AutoCloseable {
     private final NamespacedKey key;
     private final Map<UUID,Held> held=new HashMap<>();
     private final Map<UUID,Integer> lastEquip=new HashMap<>();
-    private final LonginusProjectileService projectiles;
     private final LegendaryCombatService combat;
     public LegendaryCombatService combat(){return combat;}
     private int ticks;
     public LegendaryWeaponService(AdvanceMagicPlugin plugin){this.plugin=plugin;key=new NamespacedKey(plugin,"legendary_weapon");
-        projectiles=null; // Longinus is now strictly a melee weapon; no projectile bridge is started.
         combat=new LegendaryCombatService(plugin,this);
         Bukkit.getPluginManager().registerEvents(combat,plugin);
         Bukkit.getPluginManager().registerEvents(new LegendaryEnchanting(this),plugin);
@@ -57,7 +55,6 @@ public final class LegendaryWeaponService implements Listener, AutoCloseable {
         for(Player p:Bukkit.getOnlinePlayers()){migrate(p.getInventory());migrate(p.getEnderChest());}
         for(World w:Bukkit.getWorlds())for(var e:w.getEntities())migrateEntity(e);
     }
-    public LonginusProjectileService projectiles(){return projectiles;}
 
     public ItemStack create(Weapon weapon){
         ItemStack item=new ItemStack(weapon.material);
@@ -261,5 +258,5 @@ public final class LegendaryWeaponService implements Listener, AutoCloseable {
         if(event.getView().getTopInventory().getHolder() instanceof Menu)event.setCancelled(true);
     }
     @EventHandler public void quit(PlayerQuitEvent event){UUID id=event.getPlayer().getUniqueId();held.remove(id);lastEquip.remove(id);}
-    @Override public void close(){held.clear();lastEquip.clear();combat.close();if(projectiles!=null)projectiles.close();}
+    @Override public void close(){held.clear();lastEquip.clear();combat.close();}
 }

@@ -13,6 +13,8 @@ import com.example.voidscape.VoidscapePlugin;
 import com.example.voidscape.boss.JudgePackService;
 import com.example.voidscape.boss.BossArmorCores;
 import com.example.voidscape.boss.BossArmorCores.Core;
+import com.example.voidscape.boss.RealmBosses;
+import com.example.voidscape.boss.RealmCores;
 import com.example.voidscape.boss.SoulOrbs;
 import com.example.voidscape.boss.SoulOrbs.Orb;
 import io.papermc.paper.event.player.PlayerPurchaseEvent;
@@ -33,9 +35,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.*;
-import org.geysermc.cumulus.form.SimpleForm;
-import org.geysermc.cumulus.util.FormImage;
-import org.geysermc.floodgate.api.FloodgateApi;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -189,6 +188,13 @@ public final class SeraphShop implements Listener {
         }
         return offers;
     }
+    /** A Nether or End boss core sells back for Golden Seraph Feathers (5 each by default), without stock limits. */
+    List<Offer> realmCoreOffers(){
+        List<Offer> offers=new ArrayList<>();int golden=plugin.integer("seraph-trader.prices.realm-core-golden",5,1,64);
+        for(RealmBosses.Kind kind:RealmBosses.Kind.values())offers.add(new Offer("realm-core:"+kind.model,"realm-core",0,false,
+            RealmCores.create(plugin,kind),null,()->SeraphFeathers.golden(plugin,golden)));
+        return offers;
+    }
     List<Offer> legendOffers(){return legendOffers(promotion());}
     List<Offer> legendOffers(Promotion sale){
         AdvanceMagicPlugin magic=magic();List<Offer> offers=new ArrayList<>();
@@ -197,6 +203,7 @@ public final class SeraphShop implements Listener {
         // A Core of Legend asks for orbs of one sanctuary; any of the six will do.
         for(Orb orb:Orb.values())offers.add(new Offer("legend:core:"+orb.id(),"legend-core",coreLimit,true,
             SeraphFeathers.golden(plugin,golden),orbs(orb,orbCost),()->SoulOrbs.legendCore(plugin),coreDiscount));
+        offers.addAll(realmCoreOffers());
         if(magic==null)return offers;
         ItemStack cores=SoulOrbs.legendCore(plugin);cores.setAmount(price("legendary-weapon-cores",3));
         for(Weapon weapon:Weapon.values())offers.add(new Offer("weapon:"+weapon.id(),"weapon",limit("legendary-weapons-per-week",1),true,
@@ -223,7 +230,7 @@ public final class SeraphShop implements Listener {
     }
     private void openTrader(Player player,String title,List<Offer> offers){
         if(offers.isEmpty()){plugin.message(player,"ร้านนี้ยังไม่พร้อม กรุณาลองใหม่ภายหลัง");return;}
-        BossArmorCores.migratePlayer(plugin,player);
+        BossArmorCores.migratePlayer(plugin,player);RealmCores.migratePlayer(plugin,player);
         Merchant merchant=Bukkit.createMerchant(Component.text(title,NamedTextColor.GOLD));
         List<MerchantRecipe> recipes=new ArrayList<>();List<Offer> kept=new ArrayList<>();
         for(Offer offer:offers){
@@ -307,10 +314,12 @@ public final class SeraphShop implements Listener {
         hub.inventory.setItem(11,button(magicIcon,"ร้านเวทมนตร์",NamedTextColor.AQUA,List.of("คทาธาตุ · คัมภีร์ประจำวัน · ยามานา","แลกขนนกเซราฟเป็นทองคำ","คลิกเพื่อเปิด")));
         hub.actions.put(11,()->openTrader(player,false));
         hub.inventory.setItem(13,button(SeraphFeathers.feather(plugin,1),"ขนนกเซราฟของคุณ",NamedTextColor.YELLOW,summary(player)));
-        hub.inventory.setItem(15,button(SoulOrbs.legendCore(plugin),"ร้านตำนาน",NamedTextColor.GOLD,List.of("Core of Legend · อาวุธตำนาน","คัมภีร์ Legendary · ชุด Seraph / Revenant","1 คอร์บอส แลกเกราะของชุดนั้น 1 ชิ้น","คลิกเพื่อเปิด")));
+        hub.inventory.setItem(15,button(SoulOrbs.legendCore(plugin),"ร้านตำนาน",NamedTextColor.GOLD,List.of("Core of Legend · อาวุธตำนาน","คัมภีร์ Legendary · ชุด Seraph / Revenant","1 คอร์บอส แลกเกราะของชุดนั้น 1 ชิ้น",
+            "Core บอสมิติ Nether / End · 1 ชิ้นแลกขนนกทองคำ "+plugin.integer("seraph-trader.prices.realm-core-golden",5,1,64)+" อัน","คลิกเพื่อเปิด")));
         hub.actions.put(15,()->openTrader(player,true));
         hub.inventory.setItem(19,button(new ItemStack(Material.MAP),"ร้านแผนที่",NamedTextColor.GREEN,List.of(
             "Sanctuary โลกปกติ · ขนนกเซราฟ "+maps.price(SanctuaryMaps.Destination.ACHERON)+" อัน",
+            "Sanctuary Nether / End 4 แห่ง · ขนนกเซราฟ "+maps.price(SanctuaryMaps.Destination.CROWN_FORTRESS)+" อัน",
             "บอสหลัก Evergarden 3 ตัว · ขนนกเซราฟทองคำ "+maps.price(SanctuaryMaps.Destination.JUDGE)+" อัน","คลิกเพื่อเปิดหน้าแลกเปลี่ยนแผนที่")));
         hub.actions.put(19,()->maps.open(player));
         hub.inventory.setItem(22,button(new ItemStack(Material.BOOK),"หาขนนกได้จากไหน",NamedTextColor.WHITE,List.of(
@@ -331,14 +340,7 @@ public final class SeraphShop implements Listener {
     @EventHandler public void quit(PlayerQuitEvent event){sessions.remove(event.getPlayer().getUniqueId());lastOpen.remove(event.getPlayer().getUniqueId());}
     private boolean form(Player player){
         List<Runnable> actions=List.of(()->openTrader(player,false),()->openTrader(player,true),()->maps.open(player));
-        SimpleForm form=SimpleForm.builder().title("Seraph").content(String.join("\n",summary(player)))
-            .button("ร้านเวทมนตร์\n§7คทา · คัมภีร์ · ยามานา",FormImage.Type.PATH,"textures/items/seraph_feather")
-            .button("ร้านตำนาน\n§7อาวุธ · คัมภีร์ · ชุด Seraph / Revenant",FormImage.Type.PATH,"textures/items/core_of_legend")
-            .button("ร้านแผนที่\n§7โลกปกติ "+maps.price(SanctuaryMaps.Destination.ACHERON)+" ขนนก · บอสหลัก Evergarden "+maps.price(SanctuaryMaps.Destination.JUDGE)+" ทองคำ",FormImage.Type.PATH,"textures/items/map_empty")
-            .validResultHandler(response->{
-                int index=response.clickedButtonId();
-                if(index>=0&&index<actions.size())Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline())actions.get(index).run();});
-            }).build();
-        return FloodgateApi.getInstance().sendForm(player.getUniqueId(),form);
+        return SeraphShopBedrockForm.send(plugin,player,summary(player),
+            maps.price(SanctuaryMaps.Destination.ACHERON),maps.price(SanctuaryMaps.Destination.JUDGE),actions);
     }
 }

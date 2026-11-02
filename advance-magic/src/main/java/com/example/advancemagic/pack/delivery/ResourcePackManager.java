@@ -54,6 +54,7 @@ public final class ResourcePackManager implements Listener {
         final Offer offer;
         String status = "QUEUED";
         int source, retries;
+        boolean timeoutWarned;
         long sentAt;
         long queuedAt = System.nanoTime();
         Attempt(Offer offer) { this.offer = offer; }
@@ -110,7 +111,8 @@ public final class ResourcePackManager implements Listener {
         if (urls.length == 0 || urls.length != sha1s.length) throw new IllegalArgumentException("Resource pack addresses and hashes differ");
         List<Source> sources = new ArrayList<>();
         for (int i = 0; i < urls.length; i++) sources.add(source(urls[i], sha1s[i]));
-        Offer offer = new Offer(packId, List.copyOf(sources), prompt, required);
+        // All plugin packs are optional, even if an older caller still requests a required pack.
+        Offer offer = new Offer(packId, List.copyOf(sources), prompt, false);
         Session session = sessions.computeIfAbsent(player.getUniqueId(), ignored -> new Session());
         session.unavailable.remove(packId);
         boolean released = session.holds.remove(packId) != null;
@@ -125,7 +127,7 @@ public final class ResourcePackManager implements Listener {
         session.pending.put(packId, offer);
         session.attempts.put(packId, new Attempt(offer));
         schedule();
-        if (required) scheduleValidation();
+        scheduleValidation();
         return true;
     }
 
@@ -159,11 +161,11 @@ public final class ResourcePackManager implements Listener {
         session.attempts.remove(packId);
         session.unavailable.add(packId);
         if (session.holds.remove(packId) != null && !session.pending.isEmpty()) schedule();
-        scheduleValidation();
+        // Preserve UNAVAILABLE for diagnostics but do not disconnect the player.
     }
 
     private void scheduleValidation() {
-        if(validationTask==null)validationTask=Bukkit.getScheduler().runTaskTimer(host,this::validateRequired,20,20);
+        if(validationTask==null)validationTask=Bukkit.getScheduler().runTaskTimer(host,this::validateProgress,20,20);
     }
 
     private int timeoutSeconds() {
@@ -172,11 +174,10 @@ public final class ResourcePackManager implements Listener {
         return Math.max(30, seconds == 0 ? DEFAULT_TIMEOUT_SECONDS : seconds);
     }
 
-    private void validateRequired() {
+    private void validateProgress() {
         boolean waiting = false;
         long now = System.nanoTime();
         int timeout = timeoutSeconds();
-        // Disconnects may synchronously remove a session through PlayerQuitEvent.
         for(var entry:List.copyOf(sessions.entrySet())) {
             Player player=Bukkit.getPlayer(entry.getKey());
             if(player==null||!player.isOnline())continue;
@@ -186,23 +187,14 @@ public final class ResourcePackManager implements Listener {
                 if(session.holds.values().removeIf(deadline->deadline<=now)&&session.holds.isEmpty()&&!session.pending.isEmpty())schedule();
                 waiting|=!session.holds.isEmpty();
             }
-            boolean failed=!session.unavailable.isEmpty();
-            boolean timedOut=false;
             for(Attempt attempt:session.attempts.values()) {
-                if(!attempt.offer.required||attempt.status.equals("SUCCESSFULLY_LOADED"))continue;
-                if(!inFlight(attempt))failed=true;
-                else {
-                    waiting=true;
-                    long started=attempt.sentAt==0?attempt.queuedAt:attempt.sentAt;
-                    if(now-started>=timeout*1_000_000_000L)timedOut=true;
-                }
-            }
-            if(failed||timedOut) {
-                waiting=true;
-                player.kick(Component.text(timedOut
-                    ? "โหลดแพ็กทรัพยากรของเซิร์ฟเวอร์ไม่เสร็จภายใน "+(timeout%60==0?timeout/60+" นาที":timeout+" วินาที")
-                        +" กรุณาเข้าใหม่และอนุญาต Resource Packs"
-                    : "ต้องโหลดแพ็กทรัพยากรของเซิร์ฟเวอร์ให้สำเร็จเพื่อเข้าเล่น กรุณาอนุญาต Resource Packs แล้วเข้าใหม่"));
+                if(!inFlight(attempt) || attempt.timeoutWarned) continue;
+                long started=attempt.sentAt==0?attempt.queuedAt:attempt.sentAt;
+                if(now-started>=timeout*1_000_000_000L) {
+                    attempt.timeoutWarned=true;
+                    player.sendMessage(Component.text("แพ็กภาพใช้เวลาโหลดนาน: " + attempt.offer.prompt()
+                        + " คุณยังเล่นได้ หากโหลดไม่สำเร็จให้ติดต่อผู้ดูแลเซิร์ฟเวอร์"));
+                } else waiting=true;
             }
         }
         if(!waiting&&validationTask!=null){validationTask.cancel();validationTask=null;}
@@ -276,6 +268,7 @@ public final class ResourcePackManager implements Listener {
         } catch (RuntimeException error) {
             for (Offer offer : batch) session.attempts.get(offer.id()).status = "SEND_FAILED";
             host.getLogger().warning("Resource pack batch for " + player.getName() + " failed: " + error.getMessage());
+            player.sendMessage(Component.text("ส่งแพ็กภาพไม่สำเร็จ คุณยังเล่นได้ กรุณาแจ้งผู้ดูแลเซิร์ฟเวอร์"));
         }
     }
 
@@ -295,7 +288,6 @@ public final class ResourcePackManager implements Listener {
             if (session.pending.isEmpty() && idleOnClient(session)) session.recovering = false;
             else schedule();
         }
-        if(attempt.offer.required&&!next.equals("SUCCESSFULLY_LOADED"))scheduleValidation();
     }
 
     /** Sends a pack again: the same address when another pack broke its batch, else the next address. */
@@ -351,9 +343,8 @@ public final class ResourcePackManager implements Listener {
         if (owners.isEmpty()) { sessions.clear(); return; }
         attach(owners.values().iterator().next());
         if (sessions.values().stream().anyMatch(session -> !session.pending.isEmpty())) schedule();
-        if (sessions.values().stream().anyMatch(session -> !session.unavailable.isEmpty() || !session.holds.isEmpty()
-                || session.attempts.values().stream().anyMatch(attempt -> attempt.offer.required
-                    && !attempt.status.equals("SUCCESSFULLY_LOADED")))) scheduleValidation();
+        if (sessions.values().stream().anyMatch(session -> !session.holds.isEmpty()
+                || session.attempts.values().stream().anyMatch(attempt -> inFlight(attempt) && !attempt.timeoutWarned))) scheduleValidation();
     }
 
     private static void requireMainThread() {

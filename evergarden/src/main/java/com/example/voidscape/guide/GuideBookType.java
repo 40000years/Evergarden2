@@ -8,14 +8,14 @@ public enum GuideBookType {
         "Evergarden Relics & Vault Guide",
         "ผู้พิทักษ์วิหาร",
         Material.NETHERITE_SWORD,
-        "§63 มหาวิหาร, ยุทธภัณฑ์โบราณ, คัมภีร์ และเรตดรอป"
+        "§6การเดินทาง บอส แผนที่ สมบัติ และสัตว์เลี้ยง"
     ),
     MAGIC(
         "คัมภีร์เวทมนตร์ Advance Magic",
         "Advance Magic Arcana",
         "มหาจอมเวทบรรพกาล",
         Material.BLAZE_ROD,
-        "§bคทา 8 ธาตุ, มานา, การฟื้นฟู และไม้เท้าบิน"
+        "§bคทา เวท มานา Skill Tree และการฟื้นฟู"
     );
 
     public final String bookTitle;

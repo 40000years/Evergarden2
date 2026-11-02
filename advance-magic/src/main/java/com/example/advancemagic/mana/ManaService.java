@@ -1,15 +1,9 @@
 package com.example.advancemagic.mana;
 
-import com.example.advancemagic.spell.Spell;
-import com.example.advancemagic.spell.BasicSpellProfile;
 import com.example.advancemagic.AdvanceMagicPlugin;
 import com.example.advancemagic.elemental.ElementalSpell;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
@@ -21,8 +15,17 @@ public final class ManaService {
     private final Map<UUID,CastAccount> accounts=new HashMap<>();
     private final Set<UUID> refreshingStats=new HashSet<>();
     private final Map<UUID,Long> combatUntil=new HashMap<>();
-    private record Reservation(long oldGcd,long oldUltimate,long oldDelay,ElementalSpell spell){}
-    private final Map<UUID,Reservation> reservations=new HashMap<>();
+    private static final class Reservation {
+        final UUID player;final ElementalSpell spell;final int cost;final long oldGcd,oldUltimate,oldDelay;
+        boolean refunded;
+        Reservation(UUID player,ElementalSpell spell,int cost,long oldGcd,long oldUltimate,long oldDelay){
+            this.player=player;this.spell=spell;this.cost=cost;this.oldGcd=oldGcd;this.oldUltimate=oldUltimate;this.oldDelay=oldDelay;
+        }
+    }
+    // More than one spell can be in flight while its telegraph is still active. Keep
+    // each reservation and track which one most recently wrote the shared locks.
+    private final Map<UUID,EnumMap<ElementalSpell,Reservation>> reservations=new HashMap<>();
+    private final Map<UUID,Reservation> gcdOwner=new HashMap<>(),ultimateOwner=new HashMap<>(),delayOwner=new HashMap<>();
     public ManaService(Plugin plugin) { this.plugin=plugin; }
     public NamespacedKey key(String id) { return new NamespacedKey(plugin,id); }
 
@@ -44,8 +47,6 @@ public final class ManaService {
                 mana=data.get(key("mana"),PersistentDataType.INTEGER);
             }
             CastAccount a=new CastAccount(mana,maxMana,regen);
-            for (Spell s:Spell.values()) a.restore(s.id(),data.getOrDefault(key("cd_"+s.id()),PersistentDataType.LONG,0L));
-            a.restore(BasicSpellProfile.COOLDOWN_KEY,data.getOrDefault(key("cd_"+BasicSpellProfile.COOLDOWN_KEY),PersistentDataType.LONG,0L));
             for(ElementalSpell spell:ElementalSpell.values())a.restore("elemental_"+spell.id(),data.getOrDefault(key("cd_elemental_"+spell.id()),PersistentDataType.LONG,0L));
             return a;
         });
@@ -64,12 +65,10 @@ public final class ManaService {
         data.set(key("mana"),PersistentDataType.DOUBLE,a.manaExact());
         data.set(key("max_mana"),PersistentDataType.DOUBLE,a.baseMaxMana());
         data.set(key("mana_regen"),PersistentDataType.DOUBLE,a.regenRate());
-        for(Spell s:Spell.values()) data.set(key("cd_"+s.id()),PersistentDataType.LONG,a.end(s.id()));
-        data.set(key("cd_"+BasicSpellProfile.COOLDOWN_KEY),PersistentDataType.LONG,a.end(BasicSpellProfile.COOLDOWN_KEY));
         for(ElementalSpell spell:ElementalSpell.values())data.set(key("cd_elemental_"+spell.id()),PersistentDataType.LONG,a.end("elemental_"+spell.id()));
     }
 
-    public void quit(Player p) { save(p); accounts.remove(p.getUniqueId());combatUntil.remove(p.getUniqueId());reservations.remove(p.getUniqueId()); }
+    public void quit(Player p) { save(p); accounts.remove(p.getUniqueId());combatUntil.remove(p.getUniqueId());reservations.remove(p.getUniqueId());gcdOwner.remove(p.getUniqueId());ultimateOwner.remove(p.getUniqueId());delayOwner.remove(p.getUniqueId()); }
     public void regenerate(Player p) { regenerate(p,System.currentTimeMillis()); }
     public void regenerate(Player p,long now) {
         var a=account(p);
@@ -111,26 +110,41 @@ public final class ManaService {
         else
         if(!canReserveElemental(p,spell,cost,now))return false;
         var data=p.getPersistentDataContainer();
-        var reservation=new Reservation(data.getOrDefault(key("elemental_gcd"),PersistentDataType.LONG,0L),data.getOrDefault(key("elemental_ultimate"),PersistentDataType.LONG,0L),data.getOrDefault(key("elemental_regen_after"),PersistentDataType.LONG,0L),spell);
+        var reservation=new Reservation(p.getUniqueId(),spell,cost,data.getOrDefault(key("elemental_gcd"),PersistentDataType.LONG,0L),data.getOrDefault(key("elemental_ultimate"),PersistentDataType.LONG,0L),data.getOrDefault(key("elemental_regen_after"),PersistentDataType.LONG,0L));
         double scale=(Double.isFinite(cooldownScale)?Math.clamp(cooldownScale,.5,1):1)*(Double.isFinite(levelFactor)?Math.clamp(levelFactor,.25,4):1);
         if(!account(p).reserve("elemental_"+spell.id(),cost,spell.cooldown()*scale,now))return false;
-        reservations.put(p.getUniqueId(),reservation);
+        UUID id=p.getUniqueId();reservations.computeIfAbsent(id,ignored->new EnumMap<>(ElementalSpell.class)).put(spell,reservation);
         double gcd=plugin.getConfig().getDouble(spell.ultimate()?"elemental-system.mana.ultimate-gcd":"elemental-system.mana.global-cooldown",spell.ultimate()?1.2:.65);
-        data.set(key("elemental_gcd"),PersistentDataType.LONG,now+(long)(Math.max(.1,gcd)*1000));
-        if(spell.ultimate())data.set(key("elemental_ultimate"),PersistentDataType.LONG,now+Math.max(0,plugin.getConfig().getLong("elemental-system.mana.ultimate-category-seconds",15))*1000);
-        data.set(key("elemental_regen_after"),PersistentDataType.LONG,now+Math.max(0,plugin.getConfig().getLong("elemental-system.mana.regen-delay-seconds",2))*1000);
+        data.set(key("elemental_gcd"),PersistentDataType.LONG,now+(long)(Math.max(.1,gcd)*1000));gcdOwner.put(id,reservation);
+        if(spell.ultimate()){data.set(key("elemental_ultimate"),PersistentDataType.LONG,now+Math.max(0,plugin.getConfig().getLong("elemental-system.mana.ultimate-category-seconds",15))*1000);ultimateOwner.put(id,reservation);}
+        data.set(key("elemental_regen_after"),PersistentDataType.LONG,now+Math.max(0,plugin.getConfig().getLong("elemental-system.mana.regen-delay-seconds",2))*1000);delayOwner.put(id,reservation);
         save(p);return true;
     }
-    public void rollbackElemental(Player p,ElementalSpell spell,int cost){
-        var r=reservations.remove(p.getUniqueId());if(r==null||r.spell()!=spell)return;
-        account(p).refund("elemental_"+spell.id(),cost);var data=p.getPersistentDataContainer();
-        data.set(key("elemental_gcd"),PersistentDataType.LONG,r.oldGcd());data.set(key("elemental_ultimate"),PersistentDataType.LONG,r.oldUltimate());data.set(key("elemental_regen_after"),PersistentDataType.LONG,r.oldDelay());save(p);
+    /** An interrupted wind-up costs nothing: mana, the spell cooldown, GCD and an Ultimate's category lock return at once. */
+    public void refundInterrupted(Player p,ElementalSpell spell,int cost){
+        refundInterrupted(p,spell,cost,reservationToken(p,spell));
     }
-
-    public boolean drinkDragonBreath(Player p, ItemStack item, EquipmentSlot hand) {
-        p.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-            TextComponent.fromLegacyText(ChatColor.YELLOW+"Dragon's Breath ไม่สามารถใช้ฟื้นฟูมานาได้"));
-        p.playSound(p.getLocation(),Sound.ENTITY_VILLAGER_NO,1.0f,1.0f);
-        return false;
+    public void rollbackElemental(Player p,ElementalSpell spell,int cost){
+        refundInterrupted(p,spell,cost,reservationToken(p,spell));
+    }
+    /** Capture immediately after paying; a slow-ticking telegraph may outlive its wall-clock cooldown. */
+    public Object reservationToken(Player p,ElementalSpell spell){
+        var pending=reservations.get(p.getUniqueId());return pending==null?null:pending.get(spell);
+    }
+    public void refundInterrupted(Player p,ElementalSpell spell,int cost,Object token){
+        if(!(token instanceof Reservation r)||r.refunded||!r.player.equals(p.getUniqueId())||r.spell!=spell||r.cost!=cost)return;
+        r.refunded=true;UUID id=p.getUniqueId();var pending=reservations.get(id);
+        boolean latest=pending!=null&&pending.remove(spell,r);
+        if(pending!=null&&pending.isEmpty())reservations.remove(id);
+        var a=account(p);
+        if(latest)a.refund("elemental_"+spell.id(),cost);
+        else a.setMana(a.manaExact()+cost); // A later cast of the same spell owns its cooldown.
+        var data=p.getPersistentDataContainer();
+        // A later cast may have claimed these locks; an older interruption must
+        // never undo that cast's cooldown, even if both happened in one millisecond.
+        if(gcdOwner.remove(id,r))data.set(key("elemental_gcd"),PersistentDataType.LONG,r.oldGcd);
+        if(ultimateOwner.remove(id,r))data.set(key("elemental_ultimate"),PersistentDataType.LONG,r.oldUltimate);
+        if(delayOwner.remove(id,r))data.set(key("elemental_regen_after"),PersistentDataType.LONG,r.oldDelay);
+        save(p);
     }
 }

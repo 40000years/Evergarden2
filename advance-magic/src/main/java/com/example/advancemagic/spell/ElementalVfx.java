@@ -78,6 +78,8 @@ public final class ElementalVfx implements AutoCloseable {
         private final MythicVisuals views;
         private final NativeElementalVfx.Scene nativeScene;
         private final NativeSpellProjectiles.Track nativeTrack;
+        /** The shared cast flourish of an authored Legendary and its Bedrock kit overlay, cancelled with this scene. */
+        private NativeElementalVfx.Scene flourish,overlay;
         private final boolean legendaryLight,legendaryElement;
         private boolean legendaryStarted;
         private final Map<String,Clip> clips=new LinkedHashMap<>();
@@ -114,8 +116,12 @@ public final class ElementalVfx implements AutoCloseable {
         private boolean spectacle(){return legendaryElement;}
         private List<Player> fxViewers=List.of();
         private long fxViewTick=-100;
+        private Set<UUID> fxBedrock=Set.of();
         private List<Player> fxViewers(){
-            if(tick-fxViewTick>=4){fxViewTick=tick;fxViewers=world.getPlayers().stream().filter(p->p.isOnline()&&p.getLocation().distanceSquared(anchor)<=96*96).toList();}
+            if(tick-fxViewTick>=4){
+                fxViewTick=tick;fxViewers=world.getPlayers().stream().filter(p->p.isOnline()&&p.getLocation().distanceSquared(anchor)<=96*96).toList();
+                Set<UUID> bedrock=new HashSet<>();for(Player p:fxViewers)if(context.plugin.packs().isBedrock(p))bedrock.add(p.getUniqueId());fxBedrock=bedrock;
+            }
             return fxViewers;
         }
         /** One-off cosmetic accents on exact choreography beats; combat sounds stay in the spell service. */
@@ -169,7 +175,7 @@ public final class ElementalVfx implements AutoCloseable {
             markers.entrySet().removeIf(e->e.getValue()==this&&(e.getKey().equals(prefix)||e.getKey().startsWith(prefix+":")));
         }
         private void release(String key){Piece piece=pieces.remove(key);if(piece==null)return;piece.display().close();worldPlanes.computeIfPresent(piece.world(),(id,n)->n<=1?null:n-1);}
-        @Override public void close(){if(closed)return;closed=true;if(nativeScene!=null){nativeScene.close();nativeTrack.close();}for(String key:List.copyOf(pieces.keySet()))release(key);clips.clear();views.clear();markers.values().removeIf(s->s==this);scenes.remove(this);}
+        @Override public void close(){if(closed)return;closed=true;if(nativeScene!=null){nativeScene.close();nativeTrack.close();}if(flourish!=null)flourish.close();if(overlay!=null)overlay.close();for(String key:List.copyOf(pieces.keySet()))release(key);clips.clear();views.clear();markers.values().removeIf(s->s==this);scenes.remove(this);}
         private void claim(String key){if(!alive())return;Scene previous=markers.put(key,this);if(previous!=null&&previous!=this)previous.clear(key);markers.put(key,this);}
         private void sound(Location at,Sound sound,float pitch){
             if(!context.plugin.getConfig().getBoolean("elemental-visuals.sounds",true)||!context.loaded(at)||tick-soundTimes.getOrDefault(owner.getUniqueId(),-100L)<3)return;
@@ -189,6 +195,8 @@ public final class ElementalVfx implements AutoCloseable {
         public void startup(){
             if(nativeScene!=null){safe(()->{nativeScene.startup();});return;}
             Location at=owner.getEyeLocation().add(facing.clone().multiply(.75)).add(0,-.3,0);
+            // The Legendaries keep their authored choreography and open with the shared cast flourish.
+            if((legendaryElement||legendaryLight)&&flourish==null)flourish=nativeVfx.flourish(owner,spell);
             if(legendaryElement){
                 Location seal=owner.getLocation().add(0,.12,0);
                 emit("startup",seal,10,f->f.planeSpin("glyph",legendaryTexture("sigil"),seal,X,Z,2*(1-ease(f.age/10.0)),f.age*.025,.025));
@@ -264,6 +272,19 @@ public final class ElementalVfx implements AutoCloseable {
             if(f.age<8)f.plane("signature",signature,at.clone().add(0,.035,0),X,Z,radius*1.4,radius*1.4,0);
             if(f.age<8&&spell!=ElementalSpell.ABSOLUTE_ZERO&&spell!=ElementalSpell.MAGMA_ERUPTION&&spell!=ElementalSpell.METEOR_RAIN)
                 f.plane("accent",accent,at.clone().add(0,.8,0),side,Y,Math.min(3,radius),Math.min(3,radius),0);
+        }
+        /** A lasting floor lane (Flame Dash fire, Glacial Path ice); the authored style reuses its spell sheet. */
+        public void trail(Location from,Location to,int age,int duration){
+            if(nativeScene!=null){safe(()->{nativeScene.trail(from,to,age,duration);});return;}
+            if(age%4!=0)return;
+            Location mid=from.clone().add(to.toVector().subtract(from.toVector()).multiply(.5)).add(0,-.42,0);
+            Vector along=to.toVector().subtract(from.toVector());double length=Math.max(1,along.length());
+            emit("trail",mid,6,f->f.plane("lane",signature,mid,along.normalize(),right(along),length,1.6,0));
+        }
+        /** The burst of a team buff around its caster. */
+        public void aura(Location center,double radius){
+            if(nativeScene!=null){safe(()->{nativeScene.aura(center,radius);});return;}
+            area(center,radius);
         }
         public void cone(Location origin,Vector direction,double radius,double cosine){
             if(nativeScene!=null){safe(()->{nativeScene.cone(origin,direction,radius,cosine);});return;}
@@ -448,6 +469,7 @@ public final class ElementalVfx implements AutoCloseable {
             if(legendaryStarted||!alive()||!context.loaded(center))return;
             legendaryStarted=true;clear("telegraph");clear("startup");
             Location floor=center.clone().add(0,.12,0);
+            if(overlay==null)overlay=nativeVfx.overlay(owner,spell,floor,duration);
             emit("legendary-stage",floor,duration,f->legendaryElementFrame(f,floor,f.age,duration));resonance(floor);
             if(spectacle()){
                 clear("fx-charge");
@@ -1521,6 +1543,11 @@ public final class ElementalVfx implements AutoCloseable {
         }
     }
 
+    private static final org.bukkit.block.data.BlockData STONE_DUST=Material.STONE.createBlockData();
+    private static final Set<Particle> BEDROCK_EMITTERS=Set.of(Particle.CLOUD,Particle.POOF,Particle.EXPLOSION,Particle.EXPLOSION_EMITTER,
+            Particle.GUST,Particle.GUST_EMITTER_LARGE,Particle.GUST_EMITTER_SMALL,Particle.SMALL_GUST,Particle.LARGE_SMOKE,
+            Particle.CAMPFIRE_COSY_SMOKE,Particle.CAMPFIRE_SIGNAL_SMOKE,Particle.SWEEP_ATTACK,Particle.SONIC_BOOM,Particle.FLASH,
+            Particle.CRIT,Particle.ENCHANTED_HIT,Particle.FIREWORK,Particle.FALLING_WATER,Particle.DRAGON_BREATH);
     private final class Frame {
         final Scene scene;final String key;final int age;int dustCount;
         final Set<String> used=new HashSet<>();
@@ -1627,6 +1654,14 @@ public final class ElementalVfx implements AutoCloseable {
          */
         void fx(Particle type,Location at,int count,double dx,double dy,double dz,double speed,Object data){
             if(count<0||scene.closed||at.getWorld()!=scene.world||!context.loaded(at))return;
+            // Geyser plays every BLOCK-family particle as a whole block-break burst (a dirt flood that
+            // stalls Bedrock): both clients draw a few falling-dust chips of the same block instead.
+            if(type==Particle.BLOCK||type==Particle.BLOCK_CRUMBLE||type==Particle.DUST_PILLAR||type==Particle.DUST_PLUME){
+                var block=data instanceof org.bukkit.block.data.BlockData given?given:STONE_DUST;
+                // Coloured dust (one quad each on Bedrock) keeps the burst's body in the block's own colour.
+                if(count>=3)fx(Particle.DUST,at,Math.min(24,count/2),dx,dy,dz,0,new Particle.DustOptions(block.getMapColor(),1.6f));
+                type=Particle.FALLING_DUST;data=block;count=Math.min(12,Math.max(1,count/3));speed=0;
+            }
             Class<?> wanted=type.getDataType();
             if(wanted==Void.class?data!=null:data==null||!wanted.isInstance(data))return;
             if(low()&&count>1)count=Math.max(1,count/2);
@@ -1634,12 +1669,16 @@ public final class ElementalVfx implements AutoCloseable {
             if(fxCost+cost>(low()?120:420))return;
             if(fxTick!=tick){fxTick=tick;fxCounts.clear();}
             int cap=setting("legendary-particles-per-viewer-tick",low()?160:450,32,2000);
+            // Every Bedrock particle is its own packet and quad: a far smaller share of the spectacle (its kit overlay fills the area).
+            int bedrockCap=setting("legendary-particles-per-bedrock-viewer-tick",low()?30:60,0,2000);
             boolean sent=false;
             for(Player viewer:scene.fxViewers()){
                 if(!viewer.isOnline()||viewer.getWorld()!=scene.world)continue;
                 UUID id=viewer.getUniqueId();int used=fxCounts.getOrDefault(id,0);
-                if(used+cost>cap)continue;
-                try{viewer.spawnParticle(type,at,count,dx,dy,dz,speed,data,true);}catch(IllegalArgumentException unsupported){return;}
+                if(used+cost>(scene.fxBedrock.contains(id)?bedrockCap:cap))continue;
+                // Geyser turns these into multi-particle Bedrock emitters: two per call is already a burst there.
+                int send=count>2&&BEDROCK_EMITTERS.contains(type)&&scene.fxBedrock.contains(id)?2:count;
+                try{viewer.spawnParticle(type,at,send,dx,dy,dz,speed,data,true);}catch(IllegalArgumentException unsupported){return;}
                 fxCounts.put(id,used+cost);sent=true;
             }
             if(sent)fxCost+=cost;

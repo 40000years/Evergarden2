@@ -263,22 +263,24 @@ public final class EnchantApplyListener implements Listener {
             fail(player, "คัมภีร์นี้ใช้ได้กับ " + type.targetDescription() + " เท่านั้น");
             return;
         }
-        ItemMeta meta = target.getItemMeta();
-        if (meta == null) return;
-
         int current = relics.getLimitBreakUpgradeLevel(target, type);
         if (current <= 0) {
             fail(player, "อุปกรณ์ต้องมีเอนแชนต์ " + type.enchantment().getKey().getKey() + " อยู่ก่อนแล้ว");
             return;
         }
-        if (current >= type.maxLevel()) {
-            fail(player, "เอนแชนต์นี้ถึงระดับสูงสุดแล้ว (" + type.maxLevel() + ")");
+        int cap = relics.getLimitBreakCap(source);
+        if (current >= cap) {
+            fail(player, "คัมภีร์นี้อัปเอนแชนต์ได้ถึงระดับ " + toRoman(cap) + " เท่านั้น");
             return;
         }
 
         int next = current + 1;
-        relics.applyLimitBreakMeta(target.getType(), meta, type, next);
-        target.setItemMeta(meta);
+        ItemStack upgraded = relics.evaluateScrollCraft(source, target);
+        if (upgraded == null) {
+            fail(player, "ไม่สามารถใช้คัมภีร์นี้กับอุปกรณ์ดังกล่าวได้");
+            return;
+        }
+        target = upgraded;
 
         if (rawSlot >= 0) {
             player.getOpenInventory().setItem(rawSlot, target);

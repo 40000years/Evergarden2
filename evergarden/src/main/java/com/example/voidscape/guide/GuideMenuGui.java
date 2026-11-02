@@ -53,35 +53,30 @@ public final class GuideMenuGui implements InventoryHolder, Listener {
             "§6Shift+คลิก: §fรับสมุดเล่มจริงเข้าช่องเก็บของ"
         )));
 
-        // Slot 13: Book 2 - Relics & Sanctum
+        // Slot 13: Evergarden guide
         inventory.setItem(13, createBookIcon(
             Material.NETHERITE_SWORD,
-            "§6§lเล่มที่ 2: " + GuideBookType.RELICS.bookTitle,
+            "§6§lเล่มที่ 1: " + GuideBookType.RELICS.bookTitle,
             List.of(
                 "§7" + GuideBookType.RELICS.englishTitle,
                 GuideBookType.RELICS.description,
-                "§8- 3 มหาวิหาร (ความมืด, ดวงดาว, กาลเวลา)",
-                "§8- คำสาป True Death, นมแก้คำสาป, ใยแมงมุม 20%",
-                "\u00a78- \u0e40\u0e04\u0e23\u0e37\u0e48\u0e2d\u0e07\u0e21\u0e37\u0e2d\u0e42\u0e1a\u0e23\u0e32\u0e13 2 ชิ้น (3x3 และหลอมแร่)",
-                "§8- Scroll of Eternity [MYTHIC] และ Limit Break",
-                "§8- ตารางสุ่ม Evergarden Vault ปรับปรุงใหม่",
-                "§8- Whale, Garden, Observatory และสมบัติลอยฟ้า",
+                "§8- ประตูมิติ การสำรวจ และบอส",
+                "§8- ร้านนางฟ้า แผนที่ และสมบัติ",
+                "§8- สัตว์เลี้ยงและรังผสมพันธุ์",
                 "",
                 "§e▶ คลิกซ้ายเพื่อเปิดอ่าน §8| §6Shift+คลิกเพื่อรับสมุด"
             )
         ));
 
-        // Slot 15: Book 3 - Magic
+        // Slot 15: Magic guide
         inventory.setItem(15, createBookIcon(
             Material.BLAZE_ROD,
-            "§b§lเล่มที่ 3: " + GuideBookType.MAGIC.bookTitle,
+            "§b§lเล่มที่ 2: " + GuideBookType.MAGIC.bookTitle,
             List.of(
                 "§7" + GuideBookType.MAGIC.englishTitle,
                 GuideBookType.MAGIC.description,
-                "§8- โมเดลคทา 8 ธาตุ /magic staffs",
-                "§8- ข้อมูลคทาและ Core เดิมยังเก็บไว้",
-                "§8- ระบบมานาและแท่นฟื้นฟู",
-                "§8- Wand of Restoration และไม้เท้าบิน",
+                "§8- คทา คัมภีร์ และการร่ายเวท",
+                "§8- Skill Tree มานา และการฟื้นฟูคทา",
                 "",
                 "§e▶ คลิกซ้ายเพื่อเปิดอ่าน §8| §6Shift+คลิกเพื่อรับสมุด"
             )

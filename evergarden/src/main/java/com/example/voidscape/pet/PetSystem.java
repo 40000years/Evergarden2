@@ -69,14 +69,19 @@ public final class PetSystem implements AutoCloseable {
         var species=args.length>3?PetCatalog.Species.find(args[3]):null;
         if(species==null||!renderer.hasModel(species,PetCatalog.Stage.BABY)){plugin.message(sender,"ระบุชนิดที่มีโมเดล เช่น frost_wyvern");return true;}
         PetStable stable=companions.stable(target);
+        if(stable.locked){plugin.message(sender,"อ่านหรือบันทึกข้อมูลคอกสัตว์ของ "+target.getName()+" ไม่ได้");return true;}
         if(action.equals("give")){
             var stage=args.length>4?PetCatalog.Stage.find(args[4]):PetCatalog.Stage.BABY;
             if(stage==null){plugin.message(sender,"ระบุวัย baby · medium · adult");return true;}
             if(stable.full()){plugin.message(sender,"คอกของ "+target.getName()+" เต็ม");return true;}
-            PetRecord record=PetRecord.tamed(species,stage,new Random());record.bond=60;record.growth=companions.growthFloor(stage);stable.add(record);
+            PetRecord record=PetRecord.tamed(species,stage,new Random());record.bond=60;record.growth=companions.growthFloor(stage);
+            if(stage==PetCatalog.Stage.BABY)record.raisedBy=stable.owner;
+            stable.add(record);
+            if(!store.saveStableNow(stable)){stable.pets.remove(record.id);stable.locked=true;plugin.message(sender,"บันทึกสัตว์ที่มอบไม่ได้ · ตรวจไฟล์คอก");return true;}
             plugin.message(sender,"มอบ "+species.display+" · "+stage.thai+" ให้ "+target.getName()+" แล้ว");return true;
         }
         if(action.equals("egg")){
+            if(store.eggsLocked()){plugin.message(sender,"อ่านบันทึกไข่ไม่ได้ · ต้องซ่อมไฟล์ก่อน");return true;}
             if(target.getInventory().firstEmpty()<0){plugin.message(sender,"กระเป๋าของ "+target.getName()+" เต็ม");return true;}
             Random random=new Random();
             PetRecord a=PetRecord.tamed(species,PetCatalog.Stage.ADULT,random),b=PetRecord.tamed(species,PetCatalog.Stage.ADULT,random);
@@ -85,9 +90,12 @@ public final class PetSystem implements AutoCloseable {
             ConfigurationSection egg=store.eggs.createSection("eggs."+id);
             egg.set("owner",target.getUniqueId().toString());egg.set("species",species.id);egg.set("created",System.currentTimeMillis());
             egg.set("parents","แอดมิน");egg.set("incubated",breeding.incubateMillis());egg.set("hatched",false);
+            egg.set("item-delivery-pending",true);egg.set("item-token",UUID.randomUUID().toString());
             child.save(egg.createSection("pet"));egg.set("pet-id",child.id.toString());
-            store.eggsDirty=true;store.saveEggs();
-            target.getInventory().addItem(breeding.egg(id,species,"แอดมิน",100));
+            store.eggsDirty=true;
+            if(!store.saveEggsNow()){store.eggs.set("eggs."+id,null);store.eggsDirty=true;plugin.message(sender,"บันทึกไข่ไม่ได้ · ยังไม่ได้มอบไข่");return true;}
+            breeding.retryDeliveries(target);
+            if(egg.getBoolean("item-delivery-pending")){plugin.message(sender,"บันทึกรายการไข่รอส่งแล้ว · เว้นช่องกระเป๋าแล้วเปิด /pets หรือแจ้งแอดมินหากบันทึกไม่ได้");return true;}
             plugin.message(sender,"มอบไข่ "+species.display+" พร้อมฟักให้ "+target.getName()+" แล้ว");return true;
         }
         plugin.message(sender,"/evergarden pets perf|give|egg|rush");return true;

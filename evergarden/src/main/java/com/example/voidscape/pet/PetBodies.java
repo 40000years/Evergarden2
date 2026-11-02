@@ -73,6 +73,9 @@ public final class PetBodies implements Listener,AutoCloseable {
         }
     }
     void transfer(PetBody body,Manager manager){if(managers.containsKey(body))managers.put(body,manager);}
+    void rideSeat(PetBody body,Entity seat,boolean add){
+        if(add)parts.put(seat.getUniqueId(),body);else parts.remove(seat.getUniqueId(),body);
+    }
     void remove(PetBody body){
         managers.remove(body);parts.remove(body.shell.getUniqueId());
         if(body.carrier!=null)parts.remove(body.carrier.getUniqueId());

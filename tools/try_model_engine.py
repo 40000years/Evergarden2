@@ -24,6 +24,10 @@ p.add_argument('--boss-readiness',action='store_true',help='Corrupt one river bl
 p.add_argument('--river-poses',action='store_true')
 p.add_argument('--malefeasance',action='store_true')
 p.add_argument('--styx',action='store_true')
+p.add_argument('--realm-bosses',action='store_true',help='Verify the merged realm-boss blueprint (one ModelEngine slot): every rig spawns and clears; the e2.159 install is retired')
+p.add_argument('--realm-melee',action='store_true',help='Verify player melee cooldown against a real dimensional boss on Paper')
+p.add_argument('--realm-projectile',action='store_true',help='Verify arrow collision and damage against a dimensional boss on Paper')
+p.add_argument('--nether-antiair',action='store_true',help='Verify Nether boss anti-air telegraphs, dodging and wall obstruction')
 p.add_argument('--previous-blueprint',type=Path)
 p.add_argument('--previous-managed',action='store_true')
 args=p.parse_args();source=args.source_server.resolve();trial=args.test_directory.resolve()
@@ -65,6 +69,14 @@ if args.world_copy:
     data=plugins/'Evergarden';data.mkdir(exist_ok=True)
     for f in (source/'plugins/Evergarden').glob('*.yml'):
         if f.name!='config.yml':shutil.copy2(f,data/f.name)
+if args.realm_bosses:
+    assert args.garden_jar,'--realm-bosses requires --garden-jar'
+    # An e2.159 server left cinder_colossus installed on its own; the merged blueprint must retire it.
+    with zipfile.ZipFile(args.garden_jar) as bundle:
+        data=bundle.read('modelengine/realm/cinder_colossus.bbmodel')
+    model=plugins/'ModelEngine/blueprints/cinder_colossus.bbmodel';model.parent.mkdir(parents=True,exist_ok=True);model.write_bytes(data)
+    digest=hashlib.sha256(data).hexdigest();(plugins/'Evergarden/modelengine').mkdir(parents=True,exist_ok=True)
+    (plugins/'Evergarden/modelengine/cinder_colossus.sha256').write_text(digest);(plugins/'ModelEngine/cinder_colossus-evergarden.sha256').write_text(digest)
 for name in ('Evergarden','advance-magic'):
     folder=plugins/name;folder.mkdir(exist_ok=True)
     config='config-version: 2\nresource-pack:\n  enabled: false\n  host:\n    enabled: false\nworld-boss:\n  visuals:\n    pack:\n      host:\n        bind: 127.0.0.1\n        public-host: 127.0.0.1\n        port: 0\n'
@@ -90,15 +102,20 @@ if args.pet_facing:probe='PetFacingNativeProbe'
 if args.adventurer_ranged:probe='AdventurerRangedNativeProbe'
 if args.wild_terrain:probe='WildSpawnTerrainProbe'
 if args.boss_readiness:probe='BossReadinessProbe'
+if args.realm_bosses:probe='RealmBossesNativeProbe'
+if args.realm_melee:probe='RealmMeleeProbe'
+if args.realm_projectile:probe='RealmProjectileProbe'
+if args.nether_antiair:probe='NetherAntiAirNativeProbe'
 if args.river_poses:
     assert args.arkhaia,'--river-poses requires --arkhaia'
     probe='RiverNativePoseProbe'
 sources=[str(ROOT/f'tests/model-engine/{probe}.java')]
+if args.realm_bosses:sources+=[str(ROOT/'tests/model-engine/RealmEndAntiAirProbe.java'),str(ROOT/'tests/model-engine/RealmPerchProbe.java')]
 if args.pet_facing or args.adventurer_ranged:sources.append(str(ROOT/'tests/model-engine/PetSystemNativeProbe.java'))
 if args.river_poses:sources.append(str(ROOT/'tests/model-engine/ArkhaiaModelEngineProbe.java'))
 opts=['--release','25','-proc:none','-encoding','UTF-8','-cp',classpath,'-d',str(classes),*sources]
 argfile=trial/'probe-javac.args';argfile.write_text('\n'.join('"'+str(v).replace('\\','/')+'"' for v in opts),encoding='utf8')
-subprocess.run(['java',str(ROOT/'tools/CompileJava.java'),str(argfile)] if args.pets or args.model_restore or args.wild_pets or args.pet_system or args.pet_facing or args.adventurer_ranged or args.wild_terrain else ['javac','@'+str(argfile)],check=True)
+subprocess.run(['java',str(ROOT/'tools/CompileJava.java'),str(argfile)] if args.pets or args.model_restore or args.wild_pets or args.pet_system or args.pet_facing or args.adventurer_ranged or args.wild_terrain or args.realm_bosses or args.realm_melee or args.realm_projectile or args.nether_antiair else ['javac','@'+str(argfile)],check=True)
 (classes/'plugin.yml').write_text(f"name: ModelEngineTrialProbe\nversion: '1'\nmain: {probe}\napi-version: '26.2'\nsoftdepend: [ModelEngine, Evergarden, advance-magic, LevelledMobs, Geyser-Spigot, floodgate]\n",encoding='utf8')
 subprocess.run(['jar','--create','--file',str(plugins/'model-engine-trial-probe.jar'),'-C',str(classes),'.'],check=True)
 (trial/'eula.txt').write_text((source/'eula.txt').read_text())

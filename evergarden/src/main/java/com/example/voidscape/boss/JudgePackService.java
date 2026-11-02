@@ -57,8 +57,7 @@ public final class JudgePackService implements Listener,AutoCloseable {
             try(InputStream pets=plugin.getResource("native-pets.zip")){
                 if(pets==null)throw new IOException("Bundled native pet graphics are missing");
                 readZip(pets.readAllBytes(),entries,true);
-                for(var species:com.example.voidscape.pet.PetCatalog.Species.values()){
-                    if(species.mythical())continue;
+                for(var species:com.example.voidscape.pet.PetCatalog.available()){
                     for(var stage:com.example.voidscape.pet.PetCatalog.Stage.values()){
                         String id=species.id+"_"+stage.id;
                         if(entries.keySet().stream().noneMatch(n->n.startsWith("assets/evergarden/items/pet_native/"+id+"/"))
@@ -84,9 +83,7 @@ public final class JudgePackService implements Listener,AutoCloseable {
             if(!servedPath.isEmpty())plugin.getLogger().info("Ancient Judge graphics added to the shared Evergarden HTTP host; /evergarden boss pack shows the client URL and status.");
         }catch(IOException|GeneralSecurityException|IllegalArgumentException error){
             failure=error.getMessage();plugin.getLogger().warning("Judge pack unavailable: "+failure
-                +(plugin.getConfig().getBoolean("world-boss.visuals.pack.required",true)
-                    ?". Required Java pack delivery must be fixed before players can remain connected."
-                    :". Java players retain the solid vanilla sculpture."));
+                +". Java players may see missing boss and pet graphics until the pack is available.");
         }
     }
     /** Publish the imported rig through the existing boss pack URL and port. */
@@ -256,11 +253,13 @@ public final class JudgePackService implements Listener,AutoCloseable {
         String url=url(p);
         if(!url.isEmpty()&&!sha1.isEmpty()){urls.add(url);hashes.add(sha1);}
         if(urls.isEmpty()){unavailable(p);return;}
-        try{if(delivery!=null)delivery.offer(p,urls,hashes,"Evergarden: Crimson Judge + magic circles",
-            plugin.getConfig().getBoolean("world-boss.visuals.pack.required",true),force);}
+        try{if(delivery!=null)delivery.offer(p,urls,hashes,"Evergarden: Crimson Judge + magic circles",false,force);}
         catch(IllegalArgumentException error){plugin.getLogger().warning("Cannot offer Judge pack: "+error.getMessage());unavailable(p);}
     }
-    private void unavailable(Player p){if(delivery!=null&&plugin.getConfig().getBoolean("world-boss.visuals.pack.required",true))delivery.unavailable(p);}
+    private void unavailable(Player p){
+        if(delivery!=null)delivery.unavailable(p);
+        plugin.message(p,"ไม่สามารถส่งแพ็กภาพบอสและสัตว์เลี้ยงได้ อาจมองเห็นโมเดลไม่ครบ ลองใหม่ด้วย /evergarden boss pack resend");
+    }
     /**
      * Judge goes out in the same batch as the Magic and Evergarden packs, so the client reloads once.
      * Just after a restart ModelEngine may still be importing; the batch then waits for it briefly.
@@ -284,9 +283,13 @@ public final class JudgePackService implements Listener,AutoCloseable {
         String name=status.name();
         // The coordinator is already sending it again (from the next address, or on its own).
         if(delivery!=null&&List.of("QUEUED","OFFERED","ACCEPTED","DOWNLOADED").contains(delivery.status(p)))return;
-        if(name.startsWith("FAILED")||name.equals("INVALID_URL")||name.equals("DISCARDED")||name.equals("DECLINED"))
+        if(name.startsWith("FAILED")||name.equals("INVALID_URL")||name.equals("DISCARDED")||name.equals("DECLINED")){
             plugin.getLogger().warning("Judge pack for "+p.getName()+": "+name+" from "+url(p)
-                +". The client could not fetch it from this address; check that HTTP reaches the server port, or set world-boss.visuals.pack.required: false.");
+                +". Check the client resource pack setting and server pack URL.");
+            plugin.message(p,name.equals("DECLINED")
+                ?"คุณปฏิเสธแพ็กภาพบอสและสัตว์เลี้ยง จึงอาจมองเห็นโมเดลไม่ครบ ลองใหม่ด้วย /evergarden boss pack resend"
+                :"โหลดแพ็กภาพบอสและสัตว์เลี้ยงไม่สำเร็จ อาจมองเห็นโมเดลไม่ครบ ลองใหม่ด้วย /evergarden boss pack resend");
+        }
     }
     @EventHandler public void quit(PlayerQuitEvent e){statuses.remove(e.getPlayer().getUniqueId());PLATFORMS.remove(e.getPlayer().getUniqueId());mirror.forget(e.getPlayer());}
     public void describe(CommandSender sender){
@@ -295,7 +298,7 @@ public final class JudgePackService implements Listener,AutoCloseable {
             ?"Model Engine articulated rig (Java)":"compatible Java poses; Model Engine rig is not ready"));
         if(plugin.arkhaiaBedrock()!=null)sender.sendMessage("Arkhaia: "+plugin.arkhaiaBedrock().status());
         if(plugin.arkhaiaModels()!=null)sender.sendMessage("Arkhaia blueprint: "+plugin.arkhaiaModels().modelInfo());
-        sender.sendMessage("Ancient Judge graphics | Required: "+plugin.getConfig().getBoolean("world-boss.visuals.pack.required",true)+" | SHA-1: "+sha1);
+        sender.sendMessage("Ancient Judge graphics | Required: false | SHA-1: "+sha1);
         String sharedHost=plugin.packs()==null?"off":plugin.packs().hostLabel();
         sender.sendMessage("Host: "+(sharedHost.equals("off")?"external/off":"shared "+sharedHost)+" | URL: "+url(sender instanceof Player p?p:null));
         sender.sendMessage("Public copy: "+(mirror.copy()!=null?mirror.copy().url():mirror.fingerprint().isEmpty()?"not used"

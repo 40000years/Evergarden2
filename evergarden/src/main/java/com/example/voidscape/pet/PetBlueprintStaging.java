@@ -17,7 +17,6 @@ public final class PetBlueprintStaging {
         if(enabled)for(String name:plugin.getConfig().getStringList("pets.model-preview.install-species")) {
             var species=PetCatalog.Species.find(name);
             if(species==null)plugin.getLogger().warning("Unknown pets.model-preview.install-species entry: "+name);
-            else if(species.mythical())plugin.getLogger().warning("pets.model-preview.install-species entry "+name+" is mythical and has no model yet");
             else for(var stage:PetCatalog.Stage.values())selected.add(species.model(stage));
         }
         int active=0,staged=0,custom=0;

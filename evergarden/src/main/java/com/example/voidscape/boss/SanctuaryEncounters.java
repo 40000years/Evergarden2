@@ -39,6 +39,7 @@ public final class SanctuaryEncounters implements Listener,AutoCloseable {
     private boolean playable(Player p){return p.isOnline()&&!p.isDead()&&(p.getGameMode()==GameMode.SURVIVAL||p.getGameMode()==GameMode.ADVENTURE);}
     private boolean inside(Run r,Player p){return playable(p)&&r.arena.contains(p.getLocation());}
     private List<Player> players(Run r){return r.arena.world().getPlayers().stream().filter(p->inside(r,p)).toList();}
+    public boolean owns(Entity e){return e!=null&&runs.values().stream().anyMatch(r->r.minions!=null&&r.minions.owns(e));}
     private boolean enabled(){return !closed&&plugin.getConfig().getBoolean("overworld-sanctuaries.bosses.enabled",true);}
     private void discover(Chunk chunk){
         if(!enabled()||!chunk.isLoaded())return;

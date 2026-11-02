@@ -1,0 +1,36 @@
+{
+  "revision": "soul-hound-v1",
+  "title": "Soul-Eater Hound",
+  "cubes": 506,
+  "bones": 39,
+  "displays": 276,
+  "scale": 2.8,
+  "texture": {
+    "size": 1024,
+    "density": 9.0,
+    "tiles": 849,
+    "coverage": 0.391
+  },
+  "aura_bones": [
+    "sigil",
+    "wisps"
+  ],
+  "animations": {
+    "idle": 6.0,
+    "walk": 1.4,
+    "attack_windup": 0.7,
+    "attack_active": 0.35,
+    "attack_recover": 0.7,
+    "skill_windup": 1.0,
+    "skill_active": 0.6,
+    "skill_recover": 0.8,
+    "ultimate_windup": 1.2,
+    "ultimate_active": 2.0,
+    "ultimate_recover": 1.0,
+    "stun": 2.0,
+    "transition": 3.0,
+    "spawn": 3.0,
+    "aura": 30.0
+  },
+  "worst_ik_reach_error": 0.0
+}

@@ -188,7 +188,7 @@ world-boss:
   visuals:
     pack:
       enabled: true
-      required: true
+      required: false
       # Separate bundled addon; keep the existing relic pack/CDN intact.
       # This pack shares the resource-pack.host listener below (the Minecraft port by default).
       # Leave empty to serve the current Judge/ModelEngine ZIP automatically.
@@ -231,20 +231,25 @@ world-boss:
   fight-timeout-seconds: 0
   respawn-seconds: 14400
   rewards:
-    # Every player who damaged a hand or the core also receives one random core
-    # from all 21 Advance Magic types (including the three new legendary wands).
-    # The roll is stored for dead/offline players and when their inventory is full.
+    # Every player credited with positive hand/core damage receives Tier V Vault keys
+    # PLUS one guaranteed random LEGENDARY elemental spell scroll (equal chances).
+    # Spell IDs are stored at victory; offline/dead/full-inventory players claim later.
+    # If Advance Magic is unavailable, the whole pair waits and its roll is saved once ready.
+    # Existing queued legacy keys/cores remain claimable. Test fights give no rewards.
     keys: 2
     experience: 1500
 rewards:
-  # Tier 1/2 major rewards: 35%/45% over-cap enchant books, otherwise the ordinary pool.
-  # Independent weapon bonuses: T2 0.25% Rare; T3/4/5 5%/10%/15% (80% Rare, 20% Legendary).
-  # Independent elemental staff bonuses: T2 0.25%; T3/4/5 10%/15%/20%, once per opening.
-  # Tier 1 never gives weapons or staffs. Tier 5 retains two major rewards and one supply.
+  # Vaults give one primary reward; mana potions are not in the Vault pool.
+  # T1..5 primary gear: 65/63/60/57/53%; books: 30/31/32/33/34%.
+  # After primary gear/book only, T2..5 have a 10/15/20/25% chance of one more gear/book.
+  # The extra item is 65% gear / 35% book. At most two items, each amount one.
+  # Gear/book profiles and enchant levels come from boss-treasure.yml equipment.entries.
+  # Generated gear/books have exactly one native enchant; gear must exceed its vanilla max.
+  # Rare weapons, relic tools and staffs occupy primary slots; they are not bonus rolls.
 staff-loot:
   enabled: true
   # One random APPRENTICE staff, three empty spell slots; all eight elements equally likely.
-  # Legacy untiered setting; tiered Vault odds are now defined by VaultLootTable.
+  # Legacy setting; not used by tiered Vaults. Primary staff odds T1..5: 0/.2/.5/.8/1.2%.
   vault-chance: 0.10
   # Per newly authored chest, only Whale / Hanging Garden / Observatory in Evergarden.
   sky-chest-chance: 0.03
@@ -259,9 +264,8 @@ resource-pack:
   # Administrator CDN URLs and their hashes are preserved during upgrades.
   url: ''
   sha1: ''
-  required: true
-  # Seconds a player may spend downloading all required Java packs before the kick.
-  # Slow connections need several minutes; the larger value of both plugins applies.
+  required: false
+  # Warn if a Java pack is still loading after this many seconds. Players can continue playing.
   required-timeout-seconds: 600
   # Public copies of the packs, named by a fingerprint of their contents. At startup the
   # server downloads each copy once and offers it only if it holds exactly the same files;
@@ -326,6 +330,45 @@ pets:
     hide-distance: 64
   stable:
     slots: 6
+    # Permanent slots for each unique pet this owner raised from baby to adult.
+    raised-adult-slots: 2
+    # 0 = no limit on earned slots; the stable and breeding menus have multiple pages.
+    max-slots: 0
+  mythical:
+    # Per species, per successful wild encounter in its habitat (0.1%, not per 45-second attempt).
+    # Time/weather only boost this by x2/x3; all five remain obtainable in Evergarden's frozen night.
+    # No mythical pity timer. At most one wild mythical can be present in the world at once.
+    chance: 0.001
+    lifetime-seconds: 1200
+    trust-multiplier: 0.5
+    stage-weights:
+      baby: 80
+      medium: 17
+      adult: 3
+  riding:
+    enabled: true
+    adult-only: true
+    # Mythical adults only. Fenrir runs/jumps; the other four fly. No mana or item uses.
+    horizontal-speed: 0.486
+    vertical-speed: 0.288
+    sprint-multiplier: 1.5
+    fenrir:
+      horizontal-speed: 0.7
+      jump-velocity: 1.0
+    aetherius:
+      # Two absorption hearts, once per 120 seconds; boarding again never refills them.
+      absorption-cooldown-seconds: 120
+    # Rider feet above the pet model origin; size variations are applied automatically.
+    seat-height:
+      aetherius: 1.05
+      ignis_draconis: 1.25
+      zephyros: 1.05
+      solaris: 0.9
+      fenrir: 1.05
+    anticheat:
+      bypass-permissions:
+        GrimAC: [grim.disabled]
+        NoCheatPlus: [nocheatplus.checks.moving.vehicle]
   companions:
     # Worlds where companions never appear, e.g. [world_nether]
     disabled-worlds: []
@@ -352,17 +395,18 @@ pets:
   breeding:
     nest-minutes: 30
     cooldown-hours: 24
+    mythical-cooldown-hours: 72
     food-cost: 8
     bond-required: 50
     eggs-per-day: 2
     incubate-minutes: 20
   model-preview:
     enabled: true
-    # Keep all 51 editable files in Evergarden/modelengine/pets/library by default.
+    # Keep all 111 editable files in Evergarden/modelengine/pets/library by default.
     # Import only chosen species (all three growth forms), then restart the server.
     # This preserves ModelEngine slots for boss models and the required internal_fire.
     install-species: []
-    # Opt in only with unrestricted ModelEngine; imports the entire 51-model collection.
+    # Opt in only with unrestricted ModelEngine; imports the entire 111-model collection.
     install-all-models: false
     lifetime-seconds: 600
     max-per-admin: 18
@@ -464,3 +508,44 @@ seraphon:
   damage-percent: 100
   # A wiped party restarts the current phase after 10 seconds; full reset after this grace.
   return-grace-seconds: 180
+
+# Dimensional boss-arena sanctuaries (Nether: crown-fortress, bone-temple; End: crystal-city, void-ring).
+dimensional-sanctuaries:
+  enabled: true
+  worlds: []
+  region-blocks:
+    crown-fortress: 2048
+    bone-temple: 2048
+    crystal-city: 3072
+    void-ring: 3072
+  habitat:
+    suppress-natural-hostiles: true
+  treasure:
+    # Chance (0.0 to 1.0) that a rolled Netherite Upgrade Smithing Template in a Nether sanctuary
+    # chest stays a template instead of converting to 1-2 Netherite Scrap. Set to 0.0 to disable completely.
+    netherite-upgrade-chance: 0.05
+  bosses:
+    enabled: true
+    empty-reset-seconds: 15
+    respawn-ticks: 600
+    damage-percent: 100
+    cinder-colossus:
+      health: 3800.0
+      health-per-extra-player: 950.0
+      health-cap: 7600.0
+      damage-percent: 100
+    soul-hound:
+      health: 3200.0
+      health-per-extra-player: 850.0
+      health-cap: 6600.0
+      damage-percent: 100
+    crystal-moth:
+      health: 3400.0
+      health-per-extra-player: 900.0
+      health-cap: 7000.0
+      damage-percent: 100
+    unlit-sun:
+      health: 3600.0
+      health-per-extra-player: 950.0
+      health-cap: 7400.0
+      damage-percent: 100

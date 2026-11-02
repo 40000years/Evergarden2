@@ -252,7 +252,7 @@ public final class WhaleTreasure implements Listener {
         if (choice==0) items.add(new ItemStack(Material.ECHO_SHARD,1));
         else if (choice==1) items.add(new ItemStack(Material.NETHER_STAR, 1));
         else if (choice==2) items.add(plugin.relics().createScrollLimitBreak(
-                LimitBreakType.values()[random.nextInt(LimitBreakType.values().length)]));
+                LimitBreakType.values()[random.nextInt(LimitBreakType.values().length)],3));
         else if (choice==3) items.add(plugin.relics().createScrollUnique(
                 UniqueEnchant.values()[random.nextInt(UniqueEnchant.values().length)]));
         return items;

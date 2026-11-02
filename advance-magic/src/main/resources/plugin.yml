@@ -1,5 +1,5 @@
 name: advance-magic
-version: '1.34.1-bedrock-pack-repair'
+version: '1.38.2-spell-audit'
 main: com.example.advancemagic.AdvanceMagicPlugin
 api-version: '26.2'
 description: 58 elemental spells, cross-element loadouts, scroll extraction and craftable wooden starter staffs.

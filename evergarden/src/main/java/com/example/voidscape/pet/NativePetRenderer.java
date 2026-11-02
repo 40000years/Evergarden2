@@ -68,8 +68,8 @@ public final class NativePetRenderer {
                     throw new IOException("Incomplete native pet: "+entry.getKey());
                 models.put(entry.getKey(),new Model(List.copyOf(bones),Map.copyOf(clips)));
             }
-            int expected=PetCatalog.wildSpecies()*PetCatalog.Stage.values().length;
-            if(models.size()!=expected)throw new IOException("Expected "+expected+" non-mythical pet variants; found "+models.size());
+            int expected=PetCatalog.available().size()*PetCatalog.Stage.values().length;
+            if(models.size()!=expected)throw new IOException("Expected "+expected+" pet variants; found "+models.size());
         }catch(IOException|RuntimeException error){
             models.clear();failure=error.getMessage();plugin.getLogger().warning("Native pet renderer unavailable: "+failure);
         }

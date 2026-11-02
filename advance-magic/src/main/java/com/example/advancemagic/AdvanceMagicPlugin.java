@@ -39,9 +39,6 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     private TemporaryTerrainService terrain;
     private StatusService statuses;
     private MagicContext context;
-    private AreaSpells areas;
-    private ProjectileSpells projectiles;
-    private SpellRegistry spells;
     private CastListener casts;
     private ResourcePackService packs;
     private RetiredStaffRecipeData retiredStaffRecipes;
@@ -56,23 +53,25 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         catch(java.io.IOException error){getLogger().log(java.util.logging.Level.SEVERE,"Could not migrate retired staff recipe books before player loading",error);}
         if(FlyingStaffService.upgradeSpeedConfig(getConfig()))
             getLogger().info("Updated flying-staff defaults and Turbo to 4x; custom base speeds were preserved.");
-        if(upgradeMythicBalanceConfig())
-            getLogger().info("Updated Solar and Chronos damage defaults for the ice-field finale; custom damage values were preserved.");
+        if(upgradeSpellReworkConfig())
+            getLogger().info("Updated healing and native spell VFX budgets for the 1.36 spell rework; customized values were preserved.");
         getConfig().options().copyDefaults(true);saveConfig();
         packs=new ResourcePackService(this);
         try {packs.extract();}
         catch(java.io.IOException e){getLogger().log(java.util.logging.Level.SEVERE,"Could not extract bundled resource packs",e);}
     }
-    private boolean upgradeMythicBalanceConfig() {
+    /** Moves values still at their pre-1.36 defaults to the new ones: team heals need more per-cast headroom, and 3D props/glows need budget. */
+    private boolean upgradeSpellReworkConfig() {
         var config=getConfig();
-        if(config.isSet("internal.mythic-ice-balance-version"))return false;
+        if(config.isSet("internal.spell-rework-version"))return false;
         boolean changed=false;
-        if(Double.compare(config.getDouble("damage.solar-beam"),32.0)==0){config.set("damage.solar-beam",45.0);changed=true;}
-        if(Double.compare(config.getDouble("damage.solar-apocalypse"),180.0)==0){config.set("damage.solar-apocalypse",250.0);changed=true;}
-        if(Double.compare(config.getDouble("damage.solar-lava"),12.0)==0){config.set("damage.solar-lava",18.0);changed=true;}
-        if(Double.compare(config.getDouble("damage.chronos-blade"),24.0)==0){config.set("damage.chronos-blade",30.0);changed=true;}
-        if(Double.compare(config.getDouble("damage.chronos-shatter"),100.0)==0){config.set("damage.chronos-shatter",180.0);changed=true;}
-        config.set("internal.mythic-ice-balance-version",1);
+        Object[][] defaults={{"elemental-combat.healing-per-cast-percent",35,60},{"elemental-visuals.max-native-particles-per-world-tick",1200,2400},
+            {"elemental-visuals.max-native-particles-per-viewer-tick",220,360},{"elemental-visuals.max-native-displays-per-world",80,160}};
+        for(Object[] row:defaults){
+            String path=(String)row[0];
+            if(config.isSet(path)&&config.getInt(path)==(int)row[1]){config.set(path,row[2]);changed=true;}
+        }
+        config.set("internal.spell-rework-version",1);
         return changed;
     }
     private com.example.advancemagic.item.MagicItemMenu itemMenu;
@@ -89,8 +88,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         effects=new EffectEngine(this,getConfig().getInt("max-active-effects",128));
         context=new MagicContext(this);statuses=new StatusService(this);
         terrain=new TemporaryTerrainService(this);
-        areas=new AreaSpells(context);projectiles=new ProjectileSpells(context);
-        spells=new SpellRegistry(context,areas,projectiles);casts=new CastListener(this);
+        casts=new CastListener(this);
         staffSpells=new StaffSpellService(this);skillTree=new SkillTreeService(this);
         blockModels=new BedrockBlockModels(this);
         elementalStats=new ElementalStats(this);elemental=new ElementalSpellService(this);
@@ -101,7 +99,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         var spellCommand=new SpellCommand(this,spellMenu);
         for(String name:List.of("spell","staff")){Objects.requireNonNull(getCommand(name)).setExecutor(spellCommand);getCommand(name).setTabCompleter(spellCommand);}
         Objects.requireNonNull(getCommand("skilltree")).setExecutor(skillTree);getCommand("skilltree").setTabCompleter(skillTree);
-        for(Listener listener:List.of(this,wands,staffs,restoration,flyingStaff,statuses,areas,projectiles,casts,packs,terrain,manaPotions))getServer().getPluginManager().registerEvents(listener,this);
+        for(Listener listener:List.of(this,wands,staffs,restoration,flyingStaff,statuses,casts,packs,terrain,manaPotions))getServer().getPluginManager().registerEvents(listener,this);
         terrain.recoverLoaded();
         itemMenu=new com.example.advancemagic.item.MagicItemMenu(this);
         getServer().getPluginManager().registerEvents(itemMenu,this);
@@ -126,7 +124,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         Bukkit.getScheduler().runTaskTimer(this,staffs::tick,4,4);
         wands.register();flyingStaff.register();MagicCommand command=new MagicCommand(this);
         Objects.requireNonNull(getCommand("magic")).setExecutor(command);getCommand("magic").setTabCompleter(command);
-        Bukkit.getScheduler().runTaskTimer(this,()->{effects.tick();statuses.tick();areas.tick();flyingStaff.tick();elemental.tick();},1,1);
+        Bukkit.getScheduler().runTaskTimer(this,()->{effects.tick();statuses.tick();flyingStaff.tick();elemental.tick();},1,1);
         Bukkit.getScheduler().runTaskTimer(this,()->Bukkit.getOnlinePlayers().forEach(p->{
             manaPotions.applyDebt(p);
             if(!flyingStaff.isRiding(p))mana.regenerate(p);
@@ -148,7 +146,6 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         if(packs!=null)packs.close();
         if(effects!=null)effects.close();if(statuses!=null)statuses.close();
         if(terrain!=null)terrain.close();
-        if(areas!=null)areas.close();if(projectiles!=null)projectiles.close();
         if(wands!=null)wands.close();if(mana!=null)Bukkit.getOnlinePlayers().forEach(mana::quit);
     }
     @EventHandler public void join(PlayerJoinEvent e) {
@@ -169,8 +166,5 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     public TemporaryTerrainService terrain(){return terrain;}
     public StatusService statuses(){return statuses;}
     public MagicContext context(){return context;}
-    public AreaSpells areas(){return areas;}
-    public ProjectileSpells projectiles(){return projectiles;}
-    public SpellRegistry spells(){return spells;}
     public CastListener casts(){return casts;}
 }

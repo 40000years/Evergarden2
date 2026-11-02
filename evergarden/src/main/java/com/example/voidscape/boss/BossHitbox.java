@@ -28,7 +28,7 @@ final class BossHitbox {
     private static final Set<String> BODY=Set.of("pelvis","chest","head","arm_r","arm_l","forearm_r","forearm_l",
         "neck","jaw","collar","shoulder_r","shoulder_l","sash_r","sash_l","hand_r","hand_l","leg_r","leg_l","shin_r","shin_l","foot_r","foot_l",
         "sleeve_r","sleeve_l","tabard","tabard_tip","skirt_front","skirt_front_tip","skirt_r","skirt_r_tip","skirt_back","skirt_back_tip","skirt_l","skirt_l_tip",
-        "skirt_tip_r","skirt_tip_l","sash_tip_r","sash_tip_l");
+        "skirt_tip_r","skirt_tip_l","sash_tip_r","sash_tip_l","core","plate_r","plate_l","spine","ribs_r","ribs_l","fore_r","foreleg_r","forepaw_r","fore_l","foreleg_l","forepaw_l","thigh_r","shank_r","hock_r","hindpaw_r","thigh_l","shank_l","hock_l","hindpaw_l","tail1","tail2","tail3","tail4","thorax","forewing_r","forewing_tip_r","hindwing_r","hindwing_tip_r","forewing_l","forewing_tip_l","hindwing_l","hindwing_tip_l","leg1_r","shin1_r","leg2_r","shin2_r","leg3_r","shin3_r","leg1_l","shin1_l","leg2_l","shin2_l","leg3_l","shin3_l","abdomen","abdomen2","stinger","body","shell","seg0","seg1","seg2","seg3","seg4","seg5","seg6","seg7","cap_top","cap_bottom","ring","inner","petal0","petal1","petal2","petal3","petal4","petal5","petal6","petal7");
     private static double[] xyz(JsonArray a){return new double[]{a.get(0).getAsDouble(),a.get(1).getAsDouble(),a.get(2).getAsDouble()};}
     private static Bone bone(JsonObject g,Map<String,JsonObject> cubes){
         List<Bone> children=new ArrayList<>();BoundingBox bounds=null;String name=g.get("name").getAsString();
@@ -49,7 +49,7 @@ final class BossHitbox {
         return new Bone(g.get("uuid").getAsString(),name,xyz(g.getAsJsonArray("origin")),children,BODY.contains(name)?bounds:null,name.equals("sword")?bounds:null);
     }
     private static Model model(String name){return MODELS.computeIfAbsent(name,key->{
-        String path="/modelengine/"+(key.equals("arkhaia")||key.equals("seraphon")?key:"rivers/"+key)+".bbmodel";
+        String path="/modelengine/"+(key.equals("arkhaia")||key.equals("seraphon")?key:RealmBosses.realm(key)?"realm/"+key:"rivers/"+key)+".bbmodel";
         try(var input=BossHitbox.class.getResourceAsStream(path)){
             if(input==null)throw new IOException(path);
             JsonObject json=JsonParser.parseReader(new InputStreamReader(input,StandardCharsets.UTF_8)).getAsJsonObject();
@@ -104,6 +104,8 @@ final class BossHitbox {
         for(Bone root:model.roots())visit(root,world,animation.tracks(),time,model.flipPositionX(),weapon,result);
         return result;
     }
+    /** Authored length of a clip in seconds, or 0 when the blueprint lacks it. */
+    static double clipLength(String name,String clip){Clip animation=model(name).clips().get(clip);return animation==null?0:animation.length();}
     static Map<String,Location> bonePoints(String name,String clip,double time,Location at,double scale,Set<String> names){
         Model model=model(name);Clip animation=model.clips().getOrDefault(clip,model.clips().get("idle"));Map<String,Location> points=new HashMap<>();
         Matrix4d world=new Matrix4d().translate(at.getX(),at.getY(),at.getZ()).rotateY(-Math.toRadians(at.getYaw())).scale(-scale/16,scale/16,-scale/16);
@@ -119,8 +121,11 @@ final class BossHitbox {
         for(Bone child:bone.children())points(child,matrix,tracks,time,flip,world,names,result);
     }
     static double ray(Player player,String name,String clip,double time,Location at,double scale,double reach){
-        Vector eye=player.getEyeLocation().toVector(),direction=player.getEyeLocation().getDirection();double nearest=Double.POSITIVE_INFINITY;
-        var wall=player.getWorld().rayTraceBlocks(player.getEyeLocation(),direction,reach,FluidCollisionMode.NEVER,true);
+        return ray(player.getEyeLocation(),player.getEyeLocation().getDirection(),name,clip,time,at,scale,reach);
+    }
+    static double ray(Location origin,Vector direction,String name,String clip,double time,Location at,double scale,double reach){
+        Vector eye=origin.toVector();direction=direction.clone().normalize();double nearest=Double.POSITIVE_INFINITY;
+        var wall=origin.getWorld().rayTraceBlocks(origin,direction,reach,FluidCollisionMode.NEVER,true);
         if(wall!=null)reach=Math.min(reach,eye.distance(wall.getHitPosition()));
         for(var box:boxes(name,clip,time,at,scale)){
             Matrix4d inverse=new Matrix4d(box.getValue()).invert();Vector3d a=inverse.transformPosition(new Vector3d(eye.getX(),eye.getY(),eye.getZ()));

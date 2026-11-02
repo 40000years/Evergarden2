@@ -79,35 +79,17 @@ def main():
     files['validation.json']=(json.dumps(validation,indent=2)+'\n').encode()
     files['SHA256SUMS.txt']=''.join(sha(value)+'  '+name+'\n' for name,value in sorted(files.items())).encode()
     notes=(
-        '# Evergarden Forge 0.6.0 - legendary weapons, armor sets and staffs
-
-'
-        'Advance Magic legendary weapons (Excalibur, Longinus, Tyrfing, Mjolnir, Vajra), the Seraph and Revenant armor sets and every elemental and wooden staff can now be reforged and take gems. Their names, skills, models, set bonuses and the sets' 1.5x armor stay; the affix block is added above. They are never salvaged, and chests never turn them into affix loot.
-
-'
-        '- New staff category with spell affixes: spell power +3-15%, healing power +4-20%, max mana +5-25, mana cost -2-8%, mana regeneration +5-25% (plus health and movement speed). They apply while the staff is in the main hand, through Advance Magic's own cast stats, so its caps still hold (mana cost reductions max 40%).
-'
-        '- Gems in staffs: the seven element gems raise their element +3% to +10.8% (water covers ice), life raises healing power. Forge sockets are separate from a staff's two Advance Magic gem slots.
-'
-        '- Existing configs need no edit: the new salvage-locked-keys list overrides the old protected-keys entries for legendary weapons and armor sets. Flying staffs, retired wands, cores and relics stay out of the forge.
-'
-        '- **Requires Advance Magic 1.38.3-forge-gear** (release resources-e2.183-am1.38.3); older versions reset a legendary weapon's lore every 4 ticks and erase the affix block.
-
-'
-        f'Validation: **{reports[0]}** (standalone audit), **{reports[1]}** (with Evergarden, Advance Magic 1.38.3 and Geyser: real armor set pieces, legendary weapons and staffs, and the staff bonuses read back from Advance Magic's cast stats).
-
-'
-        'Install evergarden-forge.jar under the server plugins directory together with Advance Magic 1.38.3 and restart. Java receives the addon automatically; Forge installs its Bedrock pack/mapping on the same Geyser host. For a separate Geyser host, copy forge-bedrock.mcpack into packs/ and forge-geyser-mappings.json into custom_mappings/, then restart. forge-config.yml is a reference copy of the defaults. Resource pack 0.5.1 is unchanged, so its existing SHA stays valid.
-
-'
-        f'Source: [{args.commit[:12]}](https://github.com/{REPO}/commit/{args.commit}) on workstation-2026-10-27. The binary matches these Forge sources (line endings normalized for comparison).
-
-'
-        f'JAR SHA-256: {digest}.
-
-'
-        'Older releases and the public packs branch are preserved. In-game look on connected Java/Bedrock clients still needs a playtest.
-')
+        "# Evergarden Forge 0.6.0 - legendary weapons, armor sets and staffs\n\n"
+        "Advance Magic legendary weapons (Excalibur, Longinus, Tyrfing, Mjolnir, Vajra), the Seraph and Revenant armor sets and every elemental and wooden staff can now be reforged and take gems. Their names, skills, models, set bonuses and the sets' 1.5x armor stay; the affix block is added above. They are never salvaged, and chests never turn them into affix loot.\n\n"
+        "- New staff category with spell affixes: spell power +3-15%, healing power +4-20%, max mana +5-25, mana cost -2-8%, mana regeneration +5-25% (plus health and movement speed). They apply while the staff is in the main hand, through Advance Magic's own cast stats, so its caps still hold (mana cost reductions max 40%).\n"
+        "- Gems in staffs: the seven element gems raise their element +3% to +10.8% (water covers ice), life raises healing power. Forge sockets are separate from a staff's two Advance Magic gem slots.\n"
+        "- Existing configs need no edit: the new salvage-locked-keys list overrides the old protected-keys entries for legendary weapons and armor sets. Flying staffs, retired wands, cores and relics stay out of the forge.\n"
+        "- **Requires Advance Magic 1.38.3-forge-gear** (release resources-e2.183-am1.38.3); older versions reset a legendary weapon's lore every 4 ticks and erase the affix block.\n\n"
+        f"Validation: **{reports[0]}** (standalone audit), **{reports[1]}** (with Evergarden, Advance Magic 1.38.3 and Geyser: real armor set pieces, legendary weapons and staffs, and the staff bonuses read back from Advance Magic's cast stats).\n\n"
+        "Install evergarden-forge.jar under the server plugins directory together with Advance Magic 1.38.3 and restart. Java receives the addon automatically; Forge installs its Bedrock pack/mapping on the same Geyser host. For a separate Geyser host, copy forge-bedrock.mcpack into packs/ and forge-geyser-mappings.json into custom_mappings/, then restart. forge-config.yml is a reference copy of the defaults. Resource pack 0.5.1 is unchanged, so its existing SHA stays valid.\n\n"
+        f"Source: [{args.commit[:12]}](https://github.com/{REPO}/commit/{args.commit}) on workstation-2026-10-27. The binary matches these Forge sources (line endings normalized for comparison).\n\n"
+        f"JAR SHA-256: {digest}.\n\n"
+        "Older releases and the public packs branch are preserved. In-game look on connected Java/Bedrock clients still needs a playtest.\n")
     (stage/'RELEASE.md').write_text(notes,encoding='utf8')
     for name,value in files.items():(stage/name).write_bytes(value)
     print('Staged',tag,'assets:',{name:len(value) for name,value in files.items()},flush=True)

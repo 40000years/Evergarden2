@@ -6775,6 +6775,60 @@
             "slot": "head"
           }
         }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:infernal_drake_helm",
+        "bedrock_identifier": "advance_magic:infernal_drake_helm",
+        "display_name": "Infernal Drake Helm",
+        "bedrock_options": {
+          "icon": "advance_magic.infernal_drake_helm",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 6,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "head"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:frostwyrm_helm",
+        "bedrock_identifier": "advance_magic:frostwyrm_helm",
+        "display_name": "Frostwyrm Helm",
+        "bedrock_options": {
+          "icon": "advance_magic.frostwyrm_helm",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 6,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "head"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:tempest_drake_helm",
+        "bedrock_identifier": "advance_magic:tempest_drake_helm",
+        "display_name": "Tempest Drake Helm",
+        "bedrock_options": {
+          "icon": "advance_magic.tempest_drake_helm",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 6,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "head"
+          }
+        }
       }
     ],
     "minecraft:netherite_chestplate": [
@@ -6806,6 +6860,60 @@
           "allow_offhand": false,
           "display_handheld": false,
           "protection_value": 8,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "chest"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:infernal_drake_chestplate",
+        "bedrock_identifier": "advance_magic:infernal_drake_chestplate",
+        "display_name": "Infernal Drake Cuirass",
+        "bedrock_options": {
+          "icon": "advance_magic.infernal_drake_chestplate",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 16,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "chest"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:frostwyrm_chestplate",
+        "bedrock_identifier": "advance_magic:frostwyrm_chestplate",
+        "display_name": "Frostwyrm Cuirass",
+        "bedrock_options": {
+          "icon": "advance_magic.frostwyrm_chestplate",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 16,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "chest"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:tempest_drake_chestplate",
+        "bedrock_identifier": "advance_magic:tempest_drake_chestplate",
+        "display_name": "Tempest Drake Cuirass",
+        "bedrock_options": {
+          "icon": "advance_magic.tempest_drake_chestplate",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 16,
           "creative_category": "equipment"
         },
         "components": {
@@ -6851,6 +6959,60 @@
             "slot": "legs"
           }
         }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:infernal_drake_leggings",
+        "bedrock_identifier": "advance_magic:infernal_drake_leggings",
+        "display_name": "Infernal Drake Greaves",
+        "bedrock_options": {
+          "icon": "advance_magic.infernal_drake_leggings",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 12,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "legs"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:frostwyrm_leggings",
+        "bedrock_identifier": "advance_magic:frostwyrm_leggings",
+        "display_name": "Frostwyrm Greaves",
+        "bedrock_options": {
+          "icon": "advance_magic.frostwyrm_leggings",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 12,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "legs"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:tempest_drake_leggings",
+        "bedrock_identifier": "advance_magic:tempest_drake_leggings",
+        "display_name": "Tempest Drake Greaves",
+        "bedrock_options": {
+          "icon": "advance_magic.tempest_drake_leggings",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 12,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "legs"
+          }
+        }
       }
     ],
     "minecraft:netherite_boots": [
@@ -6882,6 +7044,60 @@
           "allow_offhand": false,
           "display_handheld": false,
           "protection_value": 3,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "feet"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:infernal_drake_boots",
+        "bedrock_identifier": "advance_magic:infernal_drake_boots",
+        "display_name": "Infernal Drake Sabatons",
+        "bedrock_options": {
+          "icon": "advance_magic.infernal_drake_boots",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 6,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "feet"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:frostwyrm_boots",
+        "bedrock_identifier": "advance_magic:frostwyrm_boots",
+        "display_name": "Frostwyrm Sabatons",
+        "bedrock_options": {
+          "icon": "advance_magic.frostwyrm_boots",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 6,
+          "creative_category": "equipment"
+        },
+        "components": {
+          "minecraft:equippable": {
+            "slot": "feet"
+          }
+        }
+      },
+      {
+        "type": "definition",
+        "model": "advance_magic:tempest_drake_boots",
+        "bedrock_identifier": "advance_magic:tempest_drake_boots",
+        "display_name": "Tempest Drake Sabatons",
+        "bedrock_options": {
+          "icon": "advance_magic.tempest_drake_boots",
+          "allow_offhand": false,
+          "display_handheld": false,
+          "protection_value": 6,
           "creative_category": "equipment"
         },
         "components": {

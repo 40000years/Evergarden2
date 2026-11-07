@@ -32,6 +32,13 @@ public final class ForgeSettings {
                              List<String> armor, double armorChance,
                              int gear, double gemChance, int materialsMin, int materialsMax, int xp) {}
 
+    /** Moves an elite of a grade rolls, and the multiplier on every move's cooldown. */
+    public record EliteMoveGrade(int moves, double cooldown) {}
+
+    /** One elite move; times are in ticks, distances in blocks. Unused fields stay at their defaults. */
+    public record EliteMoveConfig(boolean enabled, int cooldown, int windup, double minRange, double maxRange,
+                                  double radius, double strength, int duration, double maxSpeed) {}
+
     public final boolean commandAnywhere;
     public final org.bukkit.Material stationBlock;
     public final String iconNamespace;
@@ -71,6 +78,14 @@ public final class ForgeSettings {
     public final Set<EntityType> eliteDamageExempt = EnumSet.noneOf(EntityType.class);
     public final Map<World.Environment, Map<Rarity, Integer>> eliteWeights = new EnumMap<>(World.Environment.class);
     public final Map<Rarity, EliteGrade> eliteGrades = new EnumMap<>(Rarity.class);
+    /** Elites never board boats or minecarts, and are thrown out of one they are already in. */
+    public final boolean eliteNoVehicles;
+    public final boolean eliteAbilitiesEnabled;
+    public final Set<EntityType> eliteAbilityExempt = EnumSet.noneOf(EntityType.class);
+    /** Ticks: target held before the first move; between two moves of one elite; player immunity after a hit; remount lock. */
+    public final int eliteFirstDelay, eliteGlobalCooldown, elitePlayerGrace, eliteRemountLock;
+    public final Map<Rarity, EliteMoveGrade> eliteMoveGrades = new EnumMap<>(Rarity.class);
+    public final Map<EliteMove, EliteMoveConfig> eliteMoves = new EnumMap<>(EliteMove.class);
 
     public final boolean evergardenChestsEnabled, evergardenEndCityOutsideEnd;
     public final List<Pattern> evergardenChunkMarkers = new ArrayList<>();
@@ -224,6 +239,39 @@ public final class ForgeSettings {
                 Math.max(1, config.getInt(path + "xp", 3))));
         }
 
+        eliteNoVehicles = config.getBoolean("elites.no-vehicles", true);
+        eliteAbilitiesEnabled = config.getBoolean("elites.abilities.enabled", true);
+        for (String name : config.getStringList("elites.abilities.exempt-types")) {
+            try {
+                eliteAbilityExempt.add(EntityType.valueOf(name.trim().toUpperCase(Locale.ROOT)));
+            } catch (IllegalArgumentException e) {
+                logger.warning("elites.abilities.exempt-types: unknown entity " + name);
+            }
+        }
+        eliteFirstDelay = ticks(config.getDouble("elites.abilities.first-delay", 2.0), 0, 30);
+        eliteGlobalCooldown = ticks(config.getDouble("elites.abilities.global-cooldown", 4.0), 0, 120);
+        elitePlayerGrace = ticks(config.getDouble("elites.abilities.player-grace", 2.5), 0, 30);
+        eliteRemountLock = ticks(config.getDouble("elites.abilities.remount-lock", 3.0), 0, 30);
+        for (Rarity rarity : Rarity.values()) {
+            String path = "elites.abilities.grades." + rarity.name() + ".";
+            if (!config.isConfigurationSection("elites.abilities.grades." + rarity.name())) continue;
+            eliteMoveGrades.put(rarity, new EliteMoveGrade(Math.clamp(config.getInt(path + "moves", 1), 0, EliteMove.values().length),
+                Math.clamp(config.getDouble(path + "cooldown", 1.0), 0.1, 10)));
+        }
+        for (EliteMove move : EliteMove.values()) {
+            String path = "elites.abilities." + move.key + ".";
+            eliteMoves.put(move, new EliteMoveConfig(
+                config.getBoolean(path + "enabled", true),
+                ticks(config.getDouble(path + "cooldown", 10), 1, 600),
+                ticks(config.getDouble(path + "windup", 0.75), 0, 5),
+                Math.clamp(config.getDouble(path + "min-range", 5), 0, 32),
+                Math.clamp(config.getDouble(path + "max-range", 18), 1, 32),
+                Math.clamp(config.getDouble(path + "radius", 4), 1, 16),
+                Math.clamp(config.getDouble(path + "strength", 1), 0, 4),
+                ticks(config.getDouble(path + "duration", 1.5), 1, 10),
+                Math.clamp(config.getDouble(path + "max-speed", 2.2), 0.2, 4)));
+        }
+
         for (World.Environment environment : World.Environment.values()) {
             ConfigurationSection weights = config.getConfigurationSection("elites.weights." + environment.name());
             if (weights == null) continue;
@@ -302,6 +350,11 @@ public final class ForgeSettings {
     private List<String> families(List<String> families) {
         if (allowNetherite) return families;
         return families.stream().map(family -> family.trim().equalsIgnoreCase("NETHERITE") ? "DIAMOND" : family).toList();
+    }
+
+    /** Seconds from config to server ticks, clamped to [min, max] seconds. */
+    private static int ticks(double seconds, double min, double max) {
+        return (int) Math.round(Math.clamp(seconds, min, max) * 20);
     }
 
     private static int[] pair(List<Integer> values, int defaultMin, int defaultMax, int floor, int ceiling) {

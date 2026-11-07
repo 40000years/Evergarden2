@@ -13,16 +13,19 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.event.world.EntitiesUnloadEvent;
@@ -81,6 +84,11 @@ public final class EliteService implements Listener {
 
     public Rarity rarity(Entity entity) {
         return Rarity.parse(entity.getPersistentDataContainer().get(eliteKey, PersistentDataType.STRING));
+    }
+
+    /** Snapshot of the loaded elites' ids. */
+    public List<UUID> trackedIds() {
+        return List.copyOf(tracked);
     }
 
     public int count(World world) {
@@ -229,12 +237,28 @@ public final class EliteService implements Listener {
             Rarity rarity = rarity(living);
             if (rarity == null) continue;
             restore(living, rarity);
+            // An elite that got into a boat or minecart before this rule (or by another route) is thrown out.
+            if (plugin.settings().eliteNoVehicles && trapVehicle(living.getVehicle())) living.leaveVehicle();
             int rgb = rarity.color.value();
             Particle.DustOptions dust = new Particle.DustOptions(Color.fromRGB(rgb), 1.1f);
             double height = living.getHeight();
             living.getWorld().spawnParticle(Particle.DUST, living.getLocation().add(0, height * 0.5, 0),
                 3 + rarity.ordinal() * 2, living.getWidth() * 0.6, height * 0.4, living.getWidth() * 0.6, 0, dust);
         }
+    }
+
+    /**
+     * Elites never sit in boats or minecarts. Vanilla seats any small mob that bumps into a boat, and a seated
+     * mob cannot walk or teleport (an elite Enderman in a boat is harmless). Living mounts (spider and chicken
+     * jockeys, raid ravagers) are left alone.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onMount(EntityMountEvent event) {
+        if (plugin.settings().eliteNoVehicles && trapVehicle(event.getMount()) && rarity(event.getEntity()) != null) event.setCancelled(true);
+    }
+
+    private static boolean trapVehicle(Entity vehicle) {
+        return vehicle instanceof Boat || vehicle instanceof Minecart;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

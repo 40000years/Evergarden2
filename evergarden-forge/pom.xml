@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>evergarden-forge</artifactId>
-    <version>0.7.3</version>
+    <version>0.7.4</version>
     <packaging>jar</packaging>
 
     <build>

@@ -175,6 +175,32 @@ elites:
                gear: 1, gem-chance: 0.85, materials: [1, 3], xp: 8}
     MYTHIC:   {health: 9.0, damage: 9.0, speed: 0.12, knockback-resist: 0.6,  armor: [DIAMOND], armor-chance: 1.0,
                gear: 2, gem-chance: 1.0, materials: [2, 4], xp: 12}
+  # Elites never sit in boats or minecarts. Vanilla seats any small mob that bumps into a boat, which
+  # traps it (an elite Enderman in a boat cannot teleport). One already inside is thrown out.
+  no-vehicles: true
+  # Special moves while an elite is hostile to a player. Each elite rolls its moves once from what its type
+  # can use (ghasts, phantoms, blazes, breezes and shulkers only use shockwave) and keeps them. Every move is
+  # telegraphed first and throws a mounted or gliding player off their boat, pet, staff or elytra.
+  #  hook:      yanks the target to the elite. Needs line of sight; a player who breaks it dodges.
+  #  shockwave: throws nearby players back; never toward a spot without ground (void, lava).
+  #  vortex:    drags every player in the radius toward the elite for a moment.
+  # Times are seconds. A thrown-off player cannot mount again for remount-lock seconds.
+  abilities:
+    enabled: true
+    exempt-types: [WARDEN]
+    first-delay: 2.0
+    global-cooldown: 4.0
+    player-grace: 2.5
+    remount-lock: 3.0
+    # moves: how many moves an elite of the grade rolls; cooldown: multiplier on every move's cooldown.
+    grades:
+      UNCOMMON: {moves: 1, cooldown: 1.5}
+      RARE:     {moves: 1, cooldown: 1.25}
+      EPIC:     {moves: 2, cooldown: 1.0}
+      MYTHIC:   {moves: 3, cooldown: 0.75}
+    hook:      {enabled: true, cooldown: 10, windup: 0.75, min-range: 5, max-range: 18, max-speed: 2.2}
+    shockwave: {enabled: true, cooldown: 8, windup: 0.6, radius: 3.5, strength: 1.4}
+    vortex:    {enabled: true, cooldown: 16, windup: 0.75, radius: 9, duration: 1.5, strength: 0.3}
 
 # Items carrying any of these persistent-data keys never get affixes and cannot be salvaged.
 # A trailing * matches a key prefix. Flying staffs, retired wands, cores, relics, keys and guide books.

@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public final class ForgeCommand implements TabExecutor {
     private static final List<String> PAGES = List.of("salvage", "gems", "cut", "codex", "charm");
-    private static final List<String> ADMIN = List.of("affix", "material", "gem", "dust", "gear", "elite", "reload", "pack");
+    private static final List<String> ADMIN = List.of("affix", "material", "gem", "dust", "gear", "elite", "elitemove", "reload", "pack");
 
     private final ForgePlugin plugin;
 
@@ -164,6 +164,22 @@ public final class ForgeCommand implements TabExecutor {
                     ? message(sender, "เรียก Elite " + rarity.label + " (" + type.name().toLowerCase(Locale.ROOT) + ")", NamedTextColor.GREEN)
                     : message(sender, "เรียก Elite ไม่สำเร็จ", NamedTextColor.RED);
             }
+            case "elitemove" -> {
+                // The nearest elite within 24 blocks targets the admin and uses the move now (test in survival).
+                if (!(sender instanceof Player player) || args.length < 2) return message(sender, "/forge elitemove <hook|shockwave|vortex>", NamedTextColor.YELLOW);
+                EliteMove move = EliteMove.parse(args[1]);
+                if (move == null) return message(sender, "ท่า: hook shockwave vortex", NamedTextColor.RED);
+                org.bukkit.entity.Mob nearest = null;
+                for (org.bukkit.entity.Entity entity : player.getNearbyEntities(24, 24, 24)) {
+                    if (entity instanceof org.bukkit.entity.Mob mob && plugin.elites().rarity(mob) != null
+                        && (nearest == null || mob.getLocation().distanceSquared(player.getLocation()) < nearest.getLocation().distanceSquared(player.getLocation()))) nearest = mob;
+                }
+                if (nearest == null) return message(sender, "ไม่มี Elite ในระยะ 24 บล็อก", NamedTextColor.RED);
+                nearest.setTarget(player);
+                return plugin.eliteAbilities().force(nearest, player, move)
+                    ? message(sender, "Elite ใช้ท่า " + move.label + " (ต้องอยู่โหมด Survival/Adventure)", NamedTextColor.GREEN)
+                    : message(sender, "ใช้ท่าไม่ได้ตอนนี้ (กำลังร่ายท่าอื่น หรือคุณไม่ได้อยู่โหมด Survival/Adventure)", NamedTextColor.RED);
+            }
             default -> {
                 return false;
             }
@@ -221,6 +237,8 @@ public final class ForgeCommand implements TabExecutor {
             Arrays.stream(GemType.values()).map(GemType::id).forEach(options::add);
         } else if (admin && args.length == 3 && first.equals("gem")) {
             options.addAll(List.of("1", "2", "3", "4", "5"));
+        } else if (admin && args.length == 2 && first.equals("elitemove")) {
+            Arrays.stream(EliteMove.values()).map(move -> move.key).forEach(options::add);
         } else if (admin && args.length == 3 && first.equals("elite")) {
             plugin.settings().eliteTypes.forEach(type -> options.add(type.name().toLowerCase(Locale.ROOT)));
         }

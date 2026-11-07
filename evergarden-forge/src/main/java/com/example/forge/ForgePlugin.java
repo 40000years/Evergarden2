@@ -19,6 +19,7 @@ public final class ForgePlugin extends JavaPlugin {
     private GearFactory gear;
     private ReforgeService reforge;
     private EliteService elites;
+    private EliteAbilities eliteAbilities;
     private ForgeMenu menu;
     private EvergardenChestLoot evergardenChests;
     private OreGemDrops oreGems;
@@ -44,6 +45,7 @@ public final class ForgePlugin extends JavaPlugin {
         gear = new GearFactory(this);
         reforge = new ReforgeService(this);
         elites = new EliteService(this);
+        eliteAbilities = new EliteAbilities(this);
         menu = new ForgeMenu(this);
         charms = new CharmService(this);
         charmEffects = new CharmEffects(this, charms);
@@ -60,6 +62,7 @@ public final class ForgePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(oreGems, this);
         getServer().getPluginManager().registerEvents(menu, this);
         getServer().getPluginManager().registerEvents(elites, this);
+        getServer().getPluginManager().registerEvents(eliteAbilities, this);
         elites.registerCompatibility();
         getServer().getPluginManager().registerEvents(new ForgeListener(this), this);
         ForgeCommand command = new ForgeCommand(this);
@@ -71,6 +74,7 @@ public final class ForgePlugin extends JavaPlugin {
             }
         }
         elites.start();
+        eliteAbilities.start();
         charmEffects.start();
         for (var player : getServer().getOnlinePlayers()) charms.applyPassives(player);
         // Advance Magic may enable after the forge; hook its cast stats once every plugin is up.
@@ -86,6 +90,7 @@ public final class ForgePlugin extends JavaPlugin {
         if (menu != null) menu.closeAll();
         if (charmMenu != null) charmMenu.closeAll();
         if (charmEffects != null) charmEffects.stop();
+        if (eliteAbilities != null) eliteAbilities.stop();
         if (elites != null) elites.stop();
         if (farmGuard != null) farmGuard.stop();
         if (resources != null) resources.close();
@@ -194,6 +199,10 @@ public final class ForgePlugin extends JavaPlugin {
 
     public EliteService elites() {
         return elites;
+    }
+
+    public EliteAbilities eliteAbilities() {
+        return eliteAbilities;
     }
 
     public FarmGuard farmGuard() {

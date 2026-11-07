@@ -82,7 +82,13 @@ public final class EvergardenChestLoot implements Listener {
         } else if (holder instanceof Container container) {
             containers.add(container);
         }
-        for (Container container : containers) decorate(container.getBlock(), ThreadLocalRandom.current());
+        for (Container container : containers) {
+            List<ItemStack> added = decorate(container.getBlock(), ThreadLocalRandom.current());
+            if (!added.isEmpty() && event.getPlayer() instanceof org.bukkit.entity.Player player) {
+                if (plugin.charmEffects().lostHours(player)) extra(container, ThreadLocalRandom.current());
+                plugin.charmEffects().luckyStar(player, player.getLocation());
+            }
+        }
     }
 
     /**
@@ -115,6 +121,49 @@ public final class EvergardenChestLoot implements Listener {
                 + " added=" + added.stream().map(item -> item.getType().getKey().getKey()).toList());
         }
         return added;
+    }
+
+    /**
+     * Eye of the Abyss: treasure nobody opened yet near a point (loaded chunks only), nearest first, at most 12:
+     * Evergarden treasure chests the forge has not decorated, and vanilla containers that still hold their loot table.
+     */
+    public List<org.bukkit.Location> unopenedNear(org.bukkit.Location center, double radius) {
+        World world = center.getWorld();
+        int reach = (int) Math.ceil(radius / 16), cx = center.getBlockX() >> 4, cz = center.getBlockZ() >> 4;
+        List<org.bukkit.Location> found = new ArrayList<>();
+        for (int dx = -reach; dx <= reach; dx++) for (int dz = -reach; dz <= reach; dz++) {
+            if (!world.isChunkLoaded(cx + dx, cz + dz)) continue;
+            Chunk chunk = world.getChunkAt(cx + dx, cz + dz);
+            PersistentDataContainer data = chunk.getPersistentDataContainer();
+            boolean garden = evergardenChunk(chunk);
+            for (org.bukkit.block.BlockState state : chunk.getTileEntities(false)) {
+                if (!CONTAINERS.contains(state.getType()) || !(state instanceof Container container)) continue;
+                Block block = state.getBlock();
+                if (block.getLocation().add(0.5, 0.5, 0.5).distanceSquared(center) > radius * radius) continue;
+                if (state instanceof org.bukkit.loot.Lootable lootable && lootable.hasLootTable()) {
+                    found.add(block.getLocation());
+                    continue;
+                }
+                if (data.has(positionKey("placed", block), PersistentDataType.BYTE) || data.has(positionKey("evg_loot", block), PersistentDataType.BYTE)) continue;
+                if (!garden && !data.has(positionKey("evg_chest", block), PersistentDataType.BYTE)) continue;
+                Inventory inventory = container instanceof Chest chest ? chest.getBlockInventory() : container.getInventory();
+                if (!inventory.isEmpty()) found.add(block.getLocation());
+            }
+        }
+        found.sort(java.util.Comparator.comparingDouble(location -> location.distanceSquared(center)));
+        return found.size() > 12 ? new ArrayList<>(found.subList(0, 12)) : found;
+    }
+
+    /** Lost Hours: one more loot pass into free slots of a chest that was just decorated. */
+    private void extra(Container container, Random random) {
+        Inventory inventory = container instanceof Chest chest ? chest.getBlockInventory() : container.getInventory();
+        List<ItemStack> items = roll(random, container.getWorld().getEnvironment());
+        if (items.isEmpty()) items = List.of(plugin.gems().item(plugin.gems().roll(plugin.affixes().rollRarity(random, plugin.settings().evergardenWeights), random), 1));
+        for (ItemStack item : items) {
+            int slot = inventory.firstEmpty();
+            if (slot < 0) break;
+            inventory.setItem(slot, item);
+        }
     }
 
     /** Gems (60%, then 25% for each extra, up to 3) and affix gear (40%, then 20% extra, up to 2) by default. */

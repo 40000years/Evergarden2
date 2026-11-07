@@ -68,6 +68,33 @@ public final class ForgeApi {
         return available() && parsed != null ? plugin.gems().item(new GemService.Gem(parsed, tier), amount) : null;
     }
 
+    /** A charm by id (for example "blood_pact") at a grade (COMMON..MYTHIC); null when unknown. */
+    public static ItemStack charm(String id, String rarity) {
+        Charm charm = Charm.parse(id);
+        Rarity grade = Rarity.parse(rarity);
+        return available() && charm != null && grade != null ? plugin.charms().item(charm, grade) : null;
+    }
+
+    /** Every charm id, sanctum by sanctum (dark, astral, time; nine each). */
+    public static java.util.List<String> charmIds() {
+        return java.util.Arrays.stream(Charm.values()).map(Charm::id).toList();
+    }
+
+    /** The sanctum (dark, astral, time) a charm id belongs to, or null. */
+    public static String charmTemple(String id) {
+        Charm charm = Charm.parse(id);
+        return charm == null ? null : charm.temple.id();
+    }
+
+    /** A random charm of a sanctum (dark, astral, time; null or "any" = all 27) at a grade. Sanctum rewards use this. */
+    public static ItemStack rollCharm(String temple, String rarity, Random random) {
+        Rarity grade = Rarity.parse(rarity);
+        Charm.Temple from = temple == null || temple.equalsIgnoreCase("any") ? null : java.util.Arrays.stream(Charm.Temple.values())
+            .filter(t -> t.id().equalsIgnoreCase(temple)).findFirst().orElse(null);
+        if (!available() || grade == null || (from == null && temple != null && !temple.equalsIgnoreCase("any"))) return null;
+        return plugin.charms().roll(from, grade, random);
+    }
+
     /** Makes a living mob an elite of a rarity (UNCOMMON..MYTHIC). */
     public static boolean makeElite(LivingEntity entity, String rarity) {
         Rarity parsed = Rarity.parse(rarity);

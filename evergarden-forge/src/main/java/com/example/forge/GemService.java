@@ -3,6 +3,7 @@ package com.example.forge;
 import com.example.forge.LootCategory.Group;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -78,12 +79,12 @@ public final class GemService {
     public ItemStack item(Gem gem, int amount) {
         ItemStack item = new ItemStack(gem.type().material, Math.max(1, amount));
         item.editMeta(meta -> {
-            meta.customName(line(gem.type().thai + " " + roman(gem.tier()), gem.type().color));
+            meta.customName(line(gem.type().label + " " + roman(gem.tier()), gem.type().color));
             List<Component> lore = new ArrayList<>();
             lore.add(line("ความบริสุทธิ์ " + roman(gem.tier()) + " · " + tierName(gem.tier()), NamedTextColor.GRAY));
             lore.add(line("ใส่ในช่อง Gem ของอุปกรณ์ที่มีเกรด:", NamedTextColor.WHITE));
             for (Group group : Group.values()) {
-                lore.add(line(" • " + group.thai + ": ", NamedTextColor.GRAY).append(line(describe(gem, group), gem.type().color)));
+                lore.add(line(" • " + group.label + ": ", NamedTextColor.GRAY).append(line(describe(gem, group), gem.type().color)));
             }
             if (gem.tier() < MAX_TIER) lore.add(line("เจียระไน 2 เม็ดเท่ากัน → ขั้น " + roman(gem.tier() + 1), NamedTextColor.DARK_GRAY));
             lore.add(line("/forge → แท็บ Gem เพื่อใส่ · ถอดได้ฟรี", NamedTextColor.DARK_GRAY));
@@ -98,6 +99,27 @@ public final class GemService {
     public Gem read(ItemStack item) {
         if (item == null || !item.hasItemMeta()) return null;
         return Gem.parse(item.getItemMeta().getPersistentDataContainer().get(gemKey, PersistentDataType.STRING));
+    }
+
+    /** Refresh our bonus lines on existing loose gems without changing their identity or foreign lore. */
+    public boolean refresh(ItemStack item) {
+        Gem gem=read(item);
+        if(gem==null)return false;
+        var meta=item.getItemMeta();
+        List<Component> old=meta.lore();
+        if(old==null)return false;
+        List<Component> updated=new ArrayList<>(old);
+        var plain=PlainTextComponentSerializer.plainText();
+        boolean changed=false;
+        for(int i=0;i<updated.size();i++)for(Group group:Group.values()){
+            if(!plain.serialize(updated.get(i)).startsWith(" • "+group.label+": "))continue;
+            Component expected=line(" • "+group.label+": ",NamedTextColor.GRAY)
+                .append(line(describe(gem,group),gem.type().color));
+            if(!updated.get(i).equals(expected)){updated.set(i,expected);changed=true;}
+            break;
+        }
+        if(changed){meta.lore(updated);item.setItemMeta(meta);}
+        return changed;
     }
 
     public ItemStack dust(int amount) {
@@ -123,7 +145,7 @@ public final class GemService {
         if (item == null || !item.hasItemMeta()) return false;
         PersistentDataContainer pdc = item.getItemMeta().getPersistentDataContainer();
         return pdc.has(gemKey, PersistentDataType.STRING) || pdc.has(dustKey, PersistentDataType.BYTE)
-            || plugin.affixes().materialRarity(item) != null;
+            || plugin.affixes().materialRarity(item) != null || plugin.charms() != null && plugin.charms().isCharm(item);
     }
 
     // ---- loot and cutting ----------------------------------------------------------------------

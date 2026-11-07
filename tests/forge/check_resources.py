@@ -38,8 +38,17 @@ with zipfile.ZipFile(io.BytesIO(java_bytes)) as java,zipfile.ZipFile(io.BytesIO(
                 left,top,right,bottom=image.getbbox()
                 assert 0<left<right<64 and 0<top<bottom<64,'Clipped item: '+key
             images.add(hashlib.sha256(png).hexdigest())
-    assert len(models)==len(atlas)==len(images)==46
     expected={f'evergarden_forge:gem/{kind}_{tier}' for kind in ('fire','water','wind','earth','lightning','light','dark','life') for tier in range(1,6)}
     expected|={'evergarden_forge:material/'+kind for kind in ('common','uncommon','rare','epic','mythic')};expected.add('evergarden_forge:gem_dust')
+    if version>=[0,7,0]:
+        # 27 sanctum charms and the Charm page icons (tools/forge_charm_art.py)
+        charms=('shadow_step','crimson_wave','soul_legion','hex_brand','reaper_mark','bat_form','nightfall_veil','eye_of_abyss','cursed_coin',
+                'starwalker','sky_glider','meteor_fall','star_familiar','celestial_cascade','orbit','black_hole','lodestar','lucky_star',
+                'time_stop','hourglass','chrono_anchor','echo_strike','stasis_trap','overclock','timeless','vein_of_ages','lost_hours')
+        expected|={'evergarden_forge:charm/'+c for c in charms}
+        expected|={'evergarden_forge:charm_ui/'+c for c in ('tab','meter','slot_empty','notch_empty','notch_dark','notch_astral','notch_time',
+                                                             'temple_dark','temple_astral','temple_time')}
+        assert all(row['bedrock_options']['icon'] in atlas for row in maps['items']['minecraft:paper'])
+    assert len(models)==len(atlas)==len(images)==len(expected),(len(models),len(atlas),len(images),len(expected))
     assert models==expected
-print('PASS: 46 unique original icons; all Java models and Geyser mappings resolve; Java/Bedrock pixels match; ZIP SHA-1s match')
+print(f'PASS: {len(models)} unique original icons; all Java models and Geyser mappings resolve; Java/Bedrock pixels match; ZIP SHA-1s match')

@@ -8,7 +8,8 @@ OUT=ROOT/'evergarden-forge/src/main/resources/resource-packs'
 ART=ROOT/'evergarden-forge/art'
 SOURCE=ART/'generated-v2/source'
 NS='evergarden_forge'
-VERSION=[0,5,1]
+VERSION=[0,7,1]
+CHARMS=ART/'charms/source'
 SIZE=64
 GEMS={'fire':'fire_charge','water':'heart_of_the_sea','wind':'ghast_tear',
       'earth':'armadillo_scute','lightning':'glowstone_dust','light':'quartz',
@@ -21,8 +22,8 @@ def encode(v):return (json.dumps(v,ensure_ascii=False,separators=(',',':'))+'\n'
 def png(im):
     b=io.BytesIO();im.save(b,format='PNG',optimize=True);return b.getvalue()
 
-def artwork(identifier):
-    path=SOURCE/(identifier+'.png')
+def artwork(identifier,folder=SOURCE):
+    path=folder/(identifier+'.png')
     with Image.open(path) as original:
         original.load()
         assert original.width==original.height and original.width>=SIZE,path
@@ -61,9 +62,13 @@ def main():
     definitions += [('material/'+kind,base) for kind,base in MATS.items()]
     definitions += [('gem_dust','gunpowder')]
     previews=[(key,artwork(key.replace('/','_'))) for key,_ in definitions]
-    java={'pack.mcmeta':encode({'pack':{'description':'Evergarden Forge | Gems & Materials','min_format':[88,0],'max_format':[88,0]}})}
+    # Charms 0.7.0: procedurally drawn by tools/forge_charm_art.py; all ride on paper like the menu icons.
+    charm_keys=[('charm/'+p.stem[len('charm_'):]) if not p.stem.startswith('charm_ui_') else 'charm_ui/'+p.stem[len('charm_ui_'):] for p in sorted(CHARMS.glob('*.png'))]
+    assert len(charm_keys)==37,charm_keys
+    charm_art=[(key,artwork(key.replace('/','_'),CHARMS)) for key in charm_keys]
+    java={'pack.mcmeta':encode({'pack':{'description':'Evergarden Forge | Gems, Materials & Charms','min_format':[88,0],'max_format':[88,0]}})}
     bedrock={};mapping={};atlas={};provenance=[]
-    for (key,base),(_,im) in zip(definitions,previews):
+    for (key,base),(_,im) in list(zip(definitions,previews))+[((key,'paper'),(key,im)) for key,im in charm_art]:
         data=png(im);identifier=key.replace('/','_');icon=NS+'.'+identifier
         java[f'assets/{NS}/textures/item/{key}.png']=data
         java[f'assets/{NS}/models/item/{key}.json']=encode({'parent':'minecraft:item/generated','textures':{'layer0':NS+':item/'+key}})
@@ -71,12 +76,14 @@ def main():
         bedrock['textures/items/forge/'+identifier+'.png']=data;atlas[icon]={'textures':'textures/items/forge/'+identifier}
         mapping.setdefault('minecraft:'+base,[]).append({'type':'definition','model':NS+':'+key,'bedrock_identifier':NS+':'+identifier,
             'display_name':'Forge','bedrock_options':{'icon':icon,'allow_offhand':True,'display_handheld':False}})
+        if key.startswith('charm'):
+            continue
         (ART/(identifier+'.png')).write_bytes(data)
         source=SOURCE/(identifier+'.png')
         provenance.append({'model':NS+':'+key,'source':source.relative_to(ROOT).as_posix(),
             'source_sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'texture_sha256':hashlib.sha256(data).hexdigest()})
     bedrock['textures/item_texture.json']=encode({'resource_pack_name':'Evergarden Forge','texture_name':'atlas.items','texture_data':atlas})
-    bedrock['manifest.json']=encode({'format_version':2,'header':{'name':'Evergarden Forge','description':'Forge gems and crafting materials',
+    bedrock['manifest.json']=encode({'format_version':2,'header':{'name':'Evergarden Forge','description':'Forge gems, crafting materials and sanctum charms',
         'uuid':'d17e1d40-8932-4c65-9d9a-4fed0e351050','version':VERSION,'min_engine_version':[1,21,0]},
         'modules':[{'type':'resources','uuid':'d17e1d40-8932-4c65-9d9a-4fed0e351051','version':VERSION}]})
     for filename,files in [('forge-java.zip',java),('forge-bedrock.mcpack',bedrock)]:
@@ -87,5 +94,5 @@ def main():
     (ART/'generated-v2/manifest.json').write_text(json.dumps({'tool':'built-in imagegen','version':VERSION,'texture_size':SIZE,
         'conversion':'nearest-neighbor downscale only','items':provenance},indent=2)+'\n',encoding='utf8')
     catalog(previews)
-    print(f'Packaged {len(previews)} authored {SIZE}px icons with identical Java/Bedrock textures')
+    print(f'Packaged {len(previews)} gem/material + {len(charm_art)} charm {SIZE}px icons with identical Java/Bedrock textures')
 if __name__=='__main__':main()

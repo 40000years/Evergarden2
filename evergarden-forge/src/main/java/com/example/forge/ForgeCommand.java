@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class ForgeCommand implements TabExecutor {
-    private static final List<String> PAGES = List.of("salvage", "gems", "cut", "codex");
+    private static final List<String> PAGES = List.of("salvage", "gems", "cut", "codex", "charm");
     private static final List<String> ADMIN = List.of("affix", "material", "gem", "dust", "gear", "elite", "reload", "pack");
 
     private final ForgePlugin plugin;
@@ -53,6 +53,25 @@ public final class ForgeCommand implements TabExecutor {
                 plugin.menu().open(player, page);
                 return true;
             }
+            case "charm", "charms" -> {
+                if (args.length <= 1) {
+                    if (!(sender instanceof Player player)) return message(sender, "ใช้ได้เฉพาะผู้เล่น", NamedTextColor.RED);
+                    if (!player.hasPermission("forge.use")) return message(sender, "ไม่มีสิทธิ์ใช้โรงตีเหล็ก", NamedTextColor.RED);
+                    plugin.charmMenu().open(player);
+                    return true;
+                }
+                if (!admin) return message(sender, "/forge charm · เปิดหน้า Charm", NamedTextColor.YELLOW);
+                Charm charm = Charm.parse(args[1]);
+                if (charm == null && !args[1].equalsIgnoreCase("random")) return message(sender, "/forge charm <id|random> [rarity] [player]", NamedTextColor.YELLOW);
+                if (charm == null) charm = Charm.values()[java.util.concurrent.ThreadLocalRandom.current().nextInt(Charm.values().length)];
+                Rarity grade = args.length >= 3 ? Rarity.parse(args[2]) : Rarity.COMMON;
+                if (grade == null) return message(sender, "เกรดไม่ถูกต้อง: " + args[2], NamedTextColor.RED);
+                Player target = args.length >= 4 ? Bukkit.getPlayerExact(args[3]) : sender instanceof Player p ? p : null;
+                if (target == null) return message(sender, "ผู้เล่นไม่ถูกต้อง", NamedTextColor.RED);
+                ItemStack item = plugin.charms().item(charm, grade);
+                target.getInventory().addItem(item).values().forEach(left -> target.getWorld().dropItemNaturally(target.getLocation(), left));
+                return message(sender, "ให้ Charm " + charm.title + " (" + grade.label + ") แก่ " + target.getName(), NamedTextColor.GREEN);
+            }
             case "inspect" -> {
                 if (!(sender instanceof Player player)) return message(sender, "ใช้ได้เฉพาะผู้เล่น", NamedTextColor.RED);
                 ItemStack held = player.getInventory().getItemInMainHand();
@@ -63,7 +82,7 @@ public final class ForgeCommand implements TabExecutor {
                     String why = plugin.affixes().category(held) == null ? "รับ Affix ไม่ได้" : "ยังไม่มี Affix (รีฟอร์จได้)";
                     return message(sender, "ของในมือ: " + why, NamedTextColor.GRAY);
                 }
-                message(sender, "เกรด " + data.rarity().thai + " (" + data.rarity() + ") · ช่อง Gem " + data.sockets(), NamedTextColor.GOLD);
+                message(sender, "เกรด " + data.rarity().label + " (" + data.rarity() + ") · ช่อง Gem " + data.sockets(), NamedTextColor.GOLD);
                 data.levels().forEach((type, level) -> message(sender, " " + type.id() + " level=" + Math.round(level * 1000) / 1000.0
                     + " → " + type.stat.format(plugin.affixes().value(type, level)), NamedTextColor.GRAY));
                 List<Gem> gems = plugin.affixes().gems(held);
@@ -98,7 +117,7 @@ public final class ForgeCommand implements TabExecutor {
                 ItemStack held = player.getInventory().getItemInMainHand();
                 if (!plugin.affixes().affix(held, rarity, random)) return message(sender, "ของในมือรับ Affix ไม่ได้", NamedTextColor.RED);
                 player.getInventory().setItemInMainHand(held);
-                return message(sender, "สุ่ม Affix เกรด " + rarity.thai + " ให้ของในมือแล้ว", NamedTextColor.GREEN);
+                return message(sender, "สุ่ม Affix เกรด " + rarity.label + " ให้ของในมือแล้ว", NamedTextColor.GREEN);
             }
             case "material" -> {
                 if (args.length < 2) return message(sender, "/forge material <rarity> [amount] [player]", NamedTextColor.YELLOW);
@@ -127,7 +146,7 @@ public final class ForgeCommand implements TabExecutor {
                     target.getInventory().addItem(plugin.gear().affixed(rarity, random, target.getWorld().getEnvironment()))
                         .values().forEach(left -> target.getWorld().dropItemNaturally(target.getLocation(), left));
                 }
-                return message(sender, "ให้อุปกรณ์เกรด " + rarity.thai + " ×" + amount + " แก่ " + target.getName(), NamedTextColor.GREEN);
+                return message(sender, "ให้อุปกรณ์เกรด " + rarity.label + " ×" + amount + " แก่ " + target.getName(), NamedTextColor.GREEN);
             }
             case "elite" -> {
                 if (!(sender instanceof Player player) || args.length < 2) return message(sender, "/forge elite <rarity> [entity]", NamedTextColor.YELLOW);
@@ -142,7 +161,7 @@ public final class ForgeCommand implements TabExecutor {
                     }
                 }
                 return plugin.elites().spawn(player, type, rarity) != null
-                    ? message(sender, "เรียก Elite " + rarity.thai + " (" + type.name().toLowerCase(Locale.ROOT) + ")", NamedTextColor.GREEN)
+                    ? message(sender, "เรียก Elite " + rarity.label + " (" + type.name().toLowerCase(Locale.ROOT) + ")", NamedTextColor.GREEN)
                     : message(sender, "เรียก Elite ไม่สำเร็จ", NamedTextColor.RED);
             }
             default -> {
@@ -190,6 +209,11 @@ public final class ForgeCommand implements TabExecutor {
             options.addAll(PAGES);
             options.add("inspect");
             if (admin) options.addAll(ADMIN);
+        } else if (admin && args.length == 2 && (first.equals("charm") || first.equals("charms"))) {
+            options.add("random");
+            Arrays.stream(Charm.values()).map(Charm::id).forEach(options::add);
+        } else if (admin && args.length == 3 && (first.equals("charm") || first.equals("charms"))) {
+            Arrays.stream(Rarity.values()).map(Rarity::id).forEach(options::add);
         } else if (admin && args.length == 2 && List.of("affix", "material", "gear", "elite").contains(first)) {
             Arrays.stream(Rarity.values()).map(Rarity::id).forEach(options::add);
         } else if (admin && args.length == 2 && first.equals("gem")) {

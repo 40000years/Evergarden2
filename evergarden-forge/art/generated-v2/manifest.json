@@ -2,7 +2,7 @@
   "tool": "built-in imagegen",
   "version": [
     0,
-    5,
+    7,
     1
   ],
   "texture_size": 64,

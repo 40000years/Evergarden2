@@ -2,6 +2,7 @@ package com.example.forge;
 
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -23,6 +24,9 @@ public final class ForgePlugin extends JavaPlugin {
     private OreGemDrops oreGems;
     private FarmGuard farmGuard;
     private ForgeResources resources;
+    private CharmService charms;
+    private CharmEffects charmEffects;
+    private CharmMenu charmMenu;
 
     @Override public void onLoad(){
         resources=new ForgeResources(this);
@@ -41,6 +45,12 @@ public final class ForgePlugin extends JavaPlugin {
         reforge = new ReforgeService(this);
         elites = new EliteService(this);
         menu = new ForgeMenu(this);
+        charms = new CharmService(this);
+        charmEffects = new CharmEffects(this, charms);
+        charmMenu = new CharmMenu(this);
+        getServer().getPluginManager().registerEvents(charms, this);
+        getServer().getPluginManager().registerEvents(charmEffects, this);
+        getServer().getPluginManager().registerEvents(charmMenu, this);
         evergardenChests = new EvergardenChestLoot(this);
         getServer().getPluginManager().registerEvents(evergardenChests, this);
         farmGuard = new FarmGuard(this);
@@ -50,6 +60,7 @@ public final class ForgePlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(oreGems, this);
         getServer().getPluginManager().registerEvents(menu, this);
         getServer().getPluginManager().registerEvents(elites, this);
+        elites.registerCompatibility();
         getServer().getPluginManager().registerEvents(new ForgeListener(this), this);
         ForgeCommand command = new ForgeCommand(this);
         for (String name : new String[]{"forge", "salvage", "gems"}) {
@@ -60,17 +71,21 @@ public final class ForgePlugin extends JavaPlugin {
             }
         }
         elites.start();
+        charmEffects.start();
+        for (var player : getServer().getOnlinePlayers()) charms.applyPassives(player);
         // Advance Magic may enable after the forge; hook its cast stats once every plugin is up.
         getServer().getScheduler().runTask(this, () -> MagicStats.register(this));
         ForgeApi.bind(this);
         resources.start();
         getLogger().info("EvergardenForge ready: " + AffixType.values().length + " affixes, " + GemType.values().length
-            + " gems x " + GemService.MAX_TIER + " tiers, elites " + (settings.elitesEnabled ? "on" : "off"));
+            + " gems x " + GemService.MAX_TIER + " tiers, " + Charm.values().length + " charms, elites " + (settings.elitesEnabled ? "on" : "off"));
     }
 
     @Override
     public void onDisable() {
         if (menu != null) menu.closeAll();
+        if (charmMenu != null) charmMenu.closeAll();
+        if (charmEffects != null) charmEffects.stop();
         if (elites != null) elites.stop();
         if (farmGuard != null) farmGuard.stop();
         if (resources != null) resources.close();
@@ -79,12 +94,14 @@ public final class ForgePlugin extends JavaPlugin {
 
     public void reload() {
         menu.closeAll();
+        charmMenu.closeAll();
         reloadConfig();
         settings = loadSettings();
+        charms.refreshAll();
         for(var player:getServer().getOnlinePlayers()){
             var inventory=player.getInventory();
             for(int slot=0;slot<inventory.getSize();slot++){
-                var item=inventory.getItem(slot);if(item!=null&&(affixes.ensure(item)|ForgeResources.model(this,item)))inventory.setItem(slot,item);
+                var item=inventory.getItem(slot);if(item!=null&&(affixes.ensure(item)|gems.refresh(item)|ForgeResources.model(this,item)))inventory.setItem(slot,item);
             }
         }
     }
@@ -92,6 +109,13 @@ public final class ForgePlugin extends JavaPlugin {
     /** A config.yml from an older version gains the new sections (gems, elites, sockets...) without losing edits. */
     private ForgeSettings loadSettings() {
         replaceOutdatedConfig();
+        // Inspect the actual file without bundled defaults, so old files cannot inherit the new marker.
+        var disk = YamlConfiguration.loadConfiguration(getDataFolder().toPath().resolve("config.yml").toFile());
+        if (CombatBalance.upgrade(disk)) {
+            CombatBalance.copyChanges(disk, getConfig());
+            saveConfig();
+            getLogger().info("Updated previous default combat balance; custom values were preserved.");
+        }
         // Key by key: copyDefaults alone skips keys missing inside a section that already exists
         // (rarities.*.sockets, new affixes).
         Configuration defaults = getConfig().getDefaults();
@@ -123,8 +147,8 @@ public final class ForgePlugin extends JavaPlugin {
         Map<String, Object> retained = new LinkedHashMap<>();
         for (String key : getConfig().getKeys(true)) {
             if (getConfig().isConfigurationSection(key) || !getConfig().isSet(key)) continue;
-            if (key.startsWith("resource-pack.") || key.equals("gui.icon-namespace")
-                || key.equals("command-opens-anywhere") || key.equals("station-block")) {
+            if (key.startsWith("resource-pack.") || key.startsWith("affixes.") || key.equals("gems.tier-multipliers")
+                || key.equals("gui.icon-namespace") || key.equals("command-opens-anywhere") || key.equals("station-block")) {
                 retained.put(key, getConfig().get(key));
             }
         }
@@ -142,6 +166,8 @@ public final class ForgePlugin extends JavaPlugin {
         saveDefaultConfig();
         reloadConfig();
         retained.forEach((key, value) -> getConfig().set(key, value));
+        // The newer file's marker must not skip comparison of preserved pre-v7 affix ranges.
+        getConfig().set("combat-balance-version", 0);
         saveConfig();
         getLogger().warning("config.yml was version " + current + "; replaced with version " + target + " defaults. Old file: " + backup.getFileName());
     }
@@ -186,4 +212,7 @@ public final class ForgePlugin extends JavaPlugin {
         return menu;
     }
     public ForgeResources resources(){return resources;}
+    public CharmService charms(){return charms;}
+    public CharmEffects charmEffects(){return charmEffects;}
+    public CharmMenu charmMenu(){return charmMenu;}
 }

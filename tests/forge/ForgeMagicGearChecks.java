@@ -104,15 +104,15 @@ final class ForgeMagicGearChecks {
             ElementalStats.Snapshot plain = magic.elementalStats().snapshot(player);
             player.getInventory().setItemInMainHand(staff);
             ElementalStats.Snapshot forged = magic.elementalStats().snapshot(player);
-            double life = 0.03 * 3.6, fire = 0.03 * 3.6;
-            probe.check(Math.abs(forged.spellPower() - plain.spellPower() * 1.15) < 1e-6
+            double life = 0.05 * 3.6, fire = 0.05 * 3.6;
+            probe.check(Math.abs(forged.spellPower() - plain.spellPower() * 1.25) < 1e-6
                     && Math.abs(forged.healingPower() - plain.healingPower() * (1 + life)) < 1e-6
                     && Math.abs(forged.maxMana() - Math.min(300, plain.maxMana() + 25)) < 1e-6
                     && Math.abs(forged.manaReduction() - Math.min(ElementalStats.MAX_REDUCTION, plain.manaReduction() + 0.08)) < 1e-6
                     && Math.abs(forged.manaRegenBonus() - Math.min(1.5, plain.manaRegenBonus() + 0.25)) < 1e-6
                     && Math.abs(forged.elementBonus(Element.FIRE) - Math.min(1, plain.elementBonus(Element.FIRE) + fire)) < 1e-6
                     && forged.elementBonus(Element.WATER) == plain.elementBonus(Element.WATER),
-                "held forged staff: spell power x1.15, healing +10.8%, +25 max mana, -8% mana cost, +25% regen, fire +10.8%: "
+                "held forged staff: spell power x1.25, healing +18%, +25 max mana, -8% mana cost, +25% regen, fire +18%: "
                     + plain + " -> " + forged);
             player.getInventory().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
             ElementalStats.Snapshot sword = magic.elementalStats().snapshot(player);

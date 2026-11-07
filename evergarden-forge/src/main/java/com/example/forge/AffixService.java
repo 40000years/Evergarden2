@@ -208,8 +208,9 @@ public final class AffixService {
 
     /** Re-applies name, lore and modifiers if another plugin removed them. True when it changed the item. */
     public boolean ensure(ItemStack item) {
+        if (refreshMaterial(item)) return true;
         if (read(item) == null || LootCategory.of(item) == null) return false;
-        if (intact(item)) return false;
+        if (intact(item) && loreCurrent(item)) return false;
         render(item);
         return true;
     }
@@ -344,14 +345,14 @@ public final class AffixService {
     }
     private List<Component> affixLore(AffixData data,Map<AffixType,Double> active,List<Gem> gems,LootCategory category){
         List<Component> ours = new ArrayList<>();
-        ours.add(line("✦ เกรด " + data.rarity().thai, data.rarity().color));
+        ours.add(line("✦ เกรด " + data.rarity().label, data.rarity().color));
         active.forEach((type, level) -> ours.add(line(" ▸ " + type.stat.format(value(type, level)), STAT)
             .append(line("  (" + Math.round(level * 100) + "%)", QUALITY))));
         for (Gem gem : gems) {
             if (gem == null) {
                 ours.add(line(" ◇ ช่อง Gem ว่าง", NamedTextColor.DARK_GRAY));
             } else {
-                ours.add(line(" ◆ " + gem.type().thai + " " + GemService.roman(gem.tier()) + ": ", gem.type().color)
+                ours.add(line(" ◆ " + gem.type().label + " " + GemService.roman(gem.tier()) + ": ", gem.type().color)
                     .append(line(plugin.gems().describe(gem, category.group), STAT)));
             }
         }
@@ -375,16 +376,38 @@ public final class AffixService {
         ItemStack item = new ItemStack(rarity.material, Math.max(1, amount));
         item.editMeta(meta -> {
             meta.customName(line(rarity.materialName, rarity.color));
-            meta.lore(List.of(
-                line("วัสดุช่างเกรด " + rarity.thai, rarity.color),
-                line("ได้จากการย่อยอุปกรณ์เกรด " + rarity.thai, NamedTextColor.GRAY),
-                line("ใช้รีฟอร์จอุปกรณ์ให้เป็นเกรด " + rarity.thai, NamedTextColor.GRAY),
-                line("/forge เพื่อเปิดโรงตีเหล็ก", NamedTextColor.DARK_GRAY)));
+            meta.lore(materialLore(rarity));
             if (rarity.ordinal() >= Rarity.RARE.ordinal()) meta.setEnchantmentGlintOverride(true);
             meta.getPersistentDataContainer().set(materialKey, PersistentDataType.STRING, rarity.name());
         });
         ForgeResources.model(plugin,item);
         return item;
+    }
+
+    private static List<Component> materialLore(Rarity rarity) {
+        return List.of(
+            line("วัสดุช่างเกรด " + rarity.label, rarity.color),
+            line("ได้จากการย่อยอุปกรณ์เกรด " + rarity.label, NamedTextColor.GRAY),
+            line("ใช้รีฟอร์จอุปกรณ์ให้เป็นเกรด " + rarity.label, NamedTextColor.GRAY),
+            line("/forge เพื่อเปิดโรงตีเหล็ก", NamedTextColor.DARK_GRAY));
+    }
+
+    /** Materials made before a grade rename keep their old lore; rewrite it so they stack with new ones. */
+    private boolean refreshMaterial(ItemStack item) {
+        Rarity rarity = materialRarity(item);
+        if (rarity == null) return false;
+        List<String> want = materialLore(rarity).stream().map(PLAIN::serialize).toList();
+        List<Component> have = item.getItemMeta().lore();
+        if (have != null && have.stream().map(PLAIN::serialize).toList().equals(want)) return false;
+        item.editMeta(meta -> meta.lore(materialLore(rarity)));
+        return true;
+    }
+
+    /** False when the stored affix lore is out of date, e.g. after a grade rename. */
+    private boolean loreCurrent(ItemStack item) {
+        AffixData data = read(item);
+        List<String> want = affixLore(data, active(data), gems(item), LootCategory.of(item)).stream().map(PLAIN::serialize).toList();
+        return want.equals(storedLore(item.getItemMeta()));
     }
 
     public Rarity materialRarity(ItemStack item) {

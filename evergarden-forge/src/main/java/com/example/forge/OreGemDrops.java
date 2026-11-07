@@ -82,15 +82,16 @@ public final class OreGemDrops implements Listener {
             return;
         }
         Player player = event.getPlayer();
-        if (!settings.oreGemsEnabled || settings.oreGemBlockedWorlds.contains(block.getWorld().getName())) return;
         if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR || !event.isDropItems()) return;
+        plugin.charmEffects().veinMine(player, block, other -> !other.getChunk().getPersistentDataContainer().has(placedKey(other), PersistentDataType.BYTE));
+        if (!settings.oreGemsEnabled || settings.oreGemBlockedWorlds.contains(block.getWorld().getName())) return;
         // The wrong tool (diamond ore by hand) drops nothing in vanilla, and no gem either.
         ItemStack tool = player.getInventory().getItemInMainHand();
         if (block.getDrops(tool, player).isEmpty()) return;
         Gem gem = roll(block.getType(), ThreadLocalRandom.current());
         if (gem == null) return;
         block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0.5, 0.5), plugin.gems().item(gem, 1));
-        player.sendActionBar(Component.text("✦ พบ " + gem.type().thai + " " + GemService.roman(gem.tier()), gem.type().color));
+        player.sendActionBar(Component.text("✦ พบ " + gem.type().label + " " + GemService.roman(gem.tier()), gem.type().color));
         plugin.getLogger().fine("[Forge-OreGem] player=" + player.getName() + " block=" + block.getType().getKey().getKey() + " gem=" + gem.serialize());
     }
 

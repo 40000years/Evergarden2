@@ -3,6 +3,8 @@
 
 # Bumped when defaults change in a way an old file must not keep (the old file is backed up and replaced).
 config-version: 7
+# One-time combat balance migration; admins can freely edit values after this revision.
+combat-balance-version: 2
 
 # Open the forge with /forge anywhere. When false, only sneak + right-click on a smithing table opens it.
 command-opens-anywhere: true
@@ -45,14 +47,14 @@ salvage-plain-chance: 0.5
 # Value of each affix at level 0 and level 1. enabled: false removes it from new rolls and stops
 # applying it to existing items.
 affixes:
-  sharp:       {enabled: true, min: 0.5,  max: 3.0}
+  sharp:       {enabled: true, min: 0.75, max: 5.0}
   swift:       {enabled: true, min: 0.03, max: 0.15}
   heavy:       {enabled: true, min: 0.2,  max: 1.0}
   sweep:       {enabled: true, min: 0.1,  max: 0.5}
-  vigor:       {enabled: true, min: 0.5,  max: 2.5}
+  vigor:       {enabled: true, min: 1.0,  max: 5.0}
   fleet:       {enabled: true, min: 0.02, max: 0.06}
   lucky:       {enabled: true, min: 0.5,  max: 2.0}
-  arrow_power: {enabled: true, min: 0.05, max: 0.25}
+  arrow_power: {enabled: true, min: 0.08, max: 0.40}
   arrow_speed: {enabled: true, min: 0.04, max: 0.15}
   armored:     {enabled: true, min: 0.5,  max: 2.5}
   tough:       {enabled: true, min: 0.5,  max: 2.0}
@@ -67,8 +69,8 @@ affixes:
   tide:        {enabled: true, min: 0.10, max: 0.50}
   # Staff affixes (Advance Magic): spell power and healing are percent of the cast stat, wellspring is flat
   # maximum mana, frugal lowers mana cost (Advance Magic caps all reductions at 40%), flow speeds regeneration.
-  arcane:      {enabled: true, min: 0.03, max: 0.15}
-  mending:     {enabled: true, min: 0.04, max: 0.20}
+  arcane:      {enabled: true, min: 0.05, max: 0.25}
+  mending:     {enabled: true, min: 0.06, max: 0.30}
   wellspring:  {enabled: true, min: 5.0,  max: 25.0}
   frugal:      {enabled: true, min: 0.02, max: 0.08}
   flow:        {enabled: true, min: 0.05, max: 0.25}
@@ -278,3 +280,15 @@ loot:
   # Loot tables whose key contains one of these use rich-weights instead of the rarity weights.
   rich-tables: [ancient_city, end_city_treasure, bastion_treasure, woodland_mansion, stronghold, trial_chambers/reward]
   rich-weights: {COMMON: 20, UNCOMMON: 35, RARE: 28, EPIC: 13, MYTHIC: 4}
+
+# Sanctum charms: worn from /forge -> Charm, right click, or sneak + punch (Bedrock).
+charms:
+  enabled: true
+  # Total charm slots (1-6); each charm costs 1-3.
+  capacity: 6
+  # Mobs above this maximum health count as bosses (no Executioner, shorter Frozen Moment, no Gravity Well pull).
+  boss-health: 300
+  visuals:
+    # Sparse passive motes for Orbit, Star Familiar, Soul Legion, Sky Glider, Overclock and Veil.
+    # false hides these idle/trail particles; hit/activation cues and all abilities still work.
+    passive-particles: true

@@ -24,6 +24,7 @@ parser.add_argument('--audit', action='store_true')
 parser.add_argument('--with-core', action='store_true')
 parser.add_argument('--magic-jar', type=Path, default=root / 'dist/advance-magic.jar', help='Advance Magic JAR for --with-core')
 parser.add_argument('--with-geyser', action='store_true')
+parser.add_argument('--legacy-balance-config', action='store_true', help='Check pre-v7 config migration with custom affixes')
 args = parser.parse_args()
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 candidate_sha=sha(args.forge)
@@ -47,7 +48,7 @@ plugins = server / 'plugins'
 plugins.mkdir()
 shutil.copy2(args.forge, plugins / 'evergarden-forge.jar')
 forge_config=plugins/'EvergardenForge';forge_config.mkdir()
-(forge_config/'config.yml').write_text('config-version: 7\nresource-pack:\n  port: 0\n  public-host: 127.0.0.1\n',encoding='utf8')
+(forge_config/'config.yml').write_text(('config-version: 6\naffixes:\n  sharp: {enabled: false, min: 0.5, max: 7.0}\n  vigor: {enabled: true, min: 0.5, max: 2.5}\ngems:\n  tier-multipliers: [1.0, 1.4, 2.0, 3.0, 4.0]\n' if args.legacy_balance_config else 'config-version: 7\n')+'resource-pack:\n  port: 0\n  public-host: 127.0.0.1\n',encoding='utf8')
 if args.with_core:
     shutil.copy2(root/'dist/evergarden.jar',plugins/'evergarden.jar');shutil.copy2(args.magic_jar,plugins/'advance-magic.jar')
     data=plugins/'Evergarden';data.mkdir()
@@ -62,16 +63,21 @@ classes.mkdir()
 source_dir = Path(__file__).parent
 compiler_args = ['--release', '25', '-proc:none', '-encoding', 'UTF-8', '-cp', os.pathsep.join(classpath), '-d', str(classes), str(source_dir / 'ForgeProbe.java')]
 if args.audit:compiler_args.append(str(source_dir/'ForgeAuditProbe.java'))
+if args.legacy_balance_config:compiler_args.append(str(source_dir/'ForgeBalanceLegacyProbe.java'))
 if args.with_core:
     # Real legendary weapons, armor sets and staffs through the forge (needs Advance Magic's classes).
     compiler_args[compiler_args.index('-cp')+1]+=os.pathsep+str(plugins/'advance-magic.jar')
     compiler_args.append(str(source_dir/'ForgeMagicGearChecks.java'))
+    compiler_args.append(str(source_dir/'ForgeCharmChecks.java'))
 argfile = server / 'probe-javac.args'
 argfile.write_text('\n'.join('"' + value.replace('\\', '/') + '"' for value in compiler_args), encoding='utf8')
 subprocess.run(['java', str(root / 'tools/CompileJava.java'), str(argfile)], check=True)
 shutil.copy2(source_dir / 'plugin.yml', classes / 'plugin.yml')
 if args.audit:
     descriptor=(classes/'plugin.yml').read_text().replace('main: ForgeProbe','main: ForgeAuditProbe')
+    (classes/'plugin.yml').write_text(descriptor,encoding='utf8')
+if args.legacy_balance_config:
+    descriptor=(classes/'plugin.yml').read_text().replace('main: ForgeProbe','main: ForgeBalanceLegacyProbe')
     (classes/'plugin.yml').write_text(descriptor,encoding='utf8')
 subprocess.run(['jar', '--create', '--file', str(plugins / 'forge-probe.jar'), '-C', str(classes), '.'], check=True)
 

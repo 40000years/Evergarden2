@@ -89,6 +89,30 @@ public class ForgeProbe extends JavaPlugin {
         AffixService affixes = forge.affixes();
         GemService gems = forge.gems();
 
+        try {
+            var method=Class.forName("com.example.forge.CombatBalance").getDeclaredMethod("upgrade",org.bukkit.configuration.ConfigurationSection.class);
+            method.setAccessible(true);
+            var old=new org.bukkit.configuration.file.YamlConfiguration();
+            old.set("affixes.sharp.min",.5);old.set("affixes.sharp.max",3.0);
+            old.set("affixes.vigor.min",.5);old.set("affixes.vigor.max",2.5);
+            old.set("affixes.arrow_power.min",.05);old.set("affixes.arrow_power.max",.25);
+            old.set("affixes.arcane.min",.03);old.set("affixes.arcane.max",.15);
+            old.set("affixes.mending.min",.04);old.set("affixes.mending.max",.20);
+            old.set("affixes.sharp.enabled",false);old.set("other.setting",42);
+            check((boolean)method.invoke(null,old)&&old.getDouble("affixes.sharp.min")==.75&&old.getDouble("affixes.sharp.max")==5
+                &&old.getDouble("affixes.vigor.max")==5&&old.getDouble("affixes.arrow_power.max")==.40
+                &&old.getDouble("affixes.arcane.max")==.25&&old.getDouble("affixes.mending.max")==.30
+                &&!old.getBoolean("affixes.sharp.enabled")&&old.getInt("other.setting")==42,"default combat values migrate; disabled and unrelated settings survive");
+            check(!(boolean)method.invoke(null,old),"combat balance migration is one-time");
+            var custom=new org.bukkit.configuration.file.YamlConfiguration();
+            custom.set("affixes.sharp.min",.5);custom.set("affixes.sharp.max",.6);
+            custom.set("affixes.vigor.max",4.0);
+            method.invoke(null,custom);
+            check(custom.getDouble("affixes.sharp.min")==.5&&custom.getDouble("affixes.sharp.max")==.6
+                &&custom.getDouble("affixes.vigor.min")==.5&&custom.getDouble("affixes.vigor.max")==4,
+                "custom ranges retain both bounds, including a missing original-default bound");
+        } catch (ReflectiveOperationException e) { throw new AssertionError(e); }
+
         // 1. Rolling keeps the sword's own damage and adds one hidden modifier per attribute affix.
         ItemStack sword = new ItemStack(Material.DIAMOND_SWORD);
         check(ForgeApi.affix(sword, "MYTHIC", new Random(7)), "mythic roll accepted");
@@ -98,7 +122,7 @@ public class ForgeProbe extends JavaPlugin {
         long attributeAffixes = data.levels().keySet().stream().filter(t -> t.stat.attribute != null).count();
         check(ours(sword).size() == attributeAffixes, "one modifier per attribute affix");
         check(hasBaseDamage(sword), "base attack damage kept after explicit component");
-        check(lore(sword).getFirst().equals("✦ เกรด ปรัมปรา"), "rarity lore line first: " + lore(sword));
+        check(lore(sword).getFirst().equals("✦ เกรด Divine"), "rarity lore line first: " + lore(sword));
         check(lore(sword).stream().filter(l -> l.contains("ช่อง Gem ว่าง")).count() == data.sockets(), "empty sockets shown in lore");
         check(!affixes.ensure(sword), "ensure is a no-op on a fresh item: " + affixes.describeModifiers(sword));
 
@@ -113,9 +137,9 @@ public class ForgeProbe extends JavaPlugin {
         Gem fire3 = new Gem(GemType.FIRE, 3);
         check(affixes.setGem(sword, 0, fire3), "fire III socketed");
         ItemAttributeModifiers.Entry gemModifier = ours(sword).stream().filter(e -> e.modifier().getKey().getKey().equals("gem0_melee")).findFirst().orElse(null);
-        check(gemModifier != null && gemModifier.attribute() == Attribute.ATTACK_DAMAGE && Math.abs(gemModifier.modifier().getAmount() - 0.5 * 2.1) < 1e-9,
-            "fire III on a sword = +1.05 attack damage: " + affixes.describeModifiers(sword));
-        check(lore(sword).stream().anyMatch(l -> l.startsWith(" ◆ อัญมณีเพลิง III: +1.1 ดาเมจโจมตี")), "gem lore line: " + lore(sword));
+        check(gemModifier != null && gemModifier.attribute() == Attribute.ATTACK_DAMAGE && Math.abs(gemModifier.modifier().getAmount() - 0.75 * 2.1) < 1e-9,
+            "fire III on a sword = +1.575 attack damage: " + affixes.describeModifiers(sword));
+        check(lore(sword).stream().anyMatch(l -> l.startsWith(" ◆ อัญมณีเพลิง III: +1.6 ดาเมจโจมตี")), "gem lore line: " + lore(sword));
         check(!affixes.ensure(sword), "ensure is a no-op with a gem");
         affixes.apply(sword, new AffixData(Rarity.COMMON, Map.of(AffixType.SHARP, 0.5), 0));
         check(affixes.sockets(sword) == data.sockets() && fire3.equals(affixes.gems(sword).getFirst()), "reforge keeps sockets and gems");
@@ -124,12 +148,22 @@ public class ForgeProbe extends JavaPlugin {
         ItemStack bow = new ItemStack(Material.BOW);
         affixes.apply(bow, new AffixData(Rarity.EPIC, Map.of(AffixType.ARROW_POWER, 1.0), 2));
         affixes.setGem(bow, 0, new Gem(GemType.DARK, 1));
-        check(Math.abs(affixes.total(bow, Stat.ARROW_DAMAGE) - (0.25 + 0.05)) < 1e-9, "bow arrow damage = affix + gem: " + affixes.total(bow, Stat.ARROW_DAMAGE));
+        check(Math.abs(affixes.total(bow, Stat.ARROW_DAMAGE) - (0.40 + 0.075)) < 1e-9, "bow arrow damage = affix + gem: " + affixes.total(bow, Stat.ARROW_DAMAGE));
 
         ItemStack gemItem = gems.item(new Gem(GemType.LIFE, 2), 3);
         check(new Gem(GemType.LIFE, 2).equals(gems.read(gemItem)), "gem item round trip");
         check(gemItem.isSimilar(gems.item(new Gem(GemType.LIFE, 2), 1)) && !gemItem.isSimilar(gems.item(new Gem(GemType.LIFE, 3), 1)), "gems stack by type and tier only");
         check(lore(gemItem).stream().filter(l -> l.startsWith(" • ")).count() == LootCategory.Group.values().length, "gem lore lists every gear group: " + lore(gemItem));
+        List<Component> oldLore=new ArrayList<>(gemItem.getItemMeta().lore());
+        int staffLine=-1;
+        for(int i=0;i<oldLore.size();i++)if(PLAIN.serialize(oldLore.get(i)).startsWith(" • คทา")){staffLine=i;break;}
+        check(staffLine>=0,"gem tooltip includes staff entry");
+        oldLore.set(staffLine,Component.text(" • คทาเวท: +4.5% พลังรักษา"));
+        oldLore.add(Component.text("Custom note"));
+        gemItem.editMeta(meta->meta.lore(oldLore));
+        check(gems.refresh(gemItem)&&gems.read(gemItem).equals(new Gem(GemType.LIFE,2))&&gemItem.getAmount()==3
+            &&lore(gemItem).stream().anyMatch(l->l.startsWith(" • คทาเวท: +7.5% พลังรักษา"))
+            &&lore(gemItem).contains("Custom note")&&!gems.refresh(gemItem),"old loose gem tooltip updates once, preserving identity and foreign lore");
         check(gems.cutCost(1).rarity() == Rarity.UNCOMMON && gems.cutCost(4).rarity() == Rarity.MYTHIC && gems.cutCost(5) == null, "cutting costs follow tiers");
         check(gems.isForgeItem(gemItem) && gems.isForgeItem(gems.dust(1)) && gems.isForgeItem(affixes.material(Rarity.RARE, 1))
             && !gems.isForgeItem(new ItemStack(Material.EMERALD)), "forge items recognised, vanilla emerald is not");
@@ -196,10 +230,10 @@ public class ForgeProbe extends JavaPlugin {
         affixes.apply(fireStaff, new AffixData(Rarity.MYTHIC, Map.of(AffixType.ARCANE, 1.0, AffixType.WELLSPRING, 0.5), 2));
         affixes.setGem(fireStaff, 0, new Gem(GemType.FIRE, 3));
         affixes.setGem(fireStaff, 1, new Gem(GemType.LIFE, 1));
-        check(Math.abs(affixes.total(fireStaff, Stat.SPELL_POWER) - 0.15) < 1e-9 && Math.abs(affixes.total(fireStaff, Stat.MAX_MANA) - 15) < 1e-9
-            && Math.abs(affixes.total(fireStaff, Stat.ELEMENT_FIRE) - 0.03 * 2.1) < 1e-9 && Math.abs(affixes.total(fireStaff, Stat.HEALING_POWER) - 0.03) < 1e-9,
-            "staff totals: arcane 15% spell power, wellspring +15 mana, fire III +6.3% fire, life I +3% healing");
-        check(lore(fireStaff).contains(" ▸ +15% พลังเวท  (100%)") && lore(fireStaff).stream().anyMatch(l -> l.startsWith(" ◆ อัญมณีเพลิง III: +6.3% พลังธาตุไฟ")),
+        check(Math.abs(affixes.total(fireStaff, Stat.SPELL_POWER) - 0.25) < 1e-9 && Math.abs(affixes.total(fireStaff, Stat.MAX_MANA) - 15) < 1e-9
+            && Math.abs(affixes.total(fireStaff, Stat.ELEMENT_FIRE) - 0.05 * 2.1) < 1e-9 && Math.abs(affixes.total(fireStaff, Stat.HEALING_POWER) - 0.05) < 1e-9,
+            "staff totals: arcane 25% spell power, wellspring +15 mana, fire III +10.5% fire, life I +5% healing");
+        check(lore(fireStaff).contains(" ▸ +25% พลังเวท  (100%)") && lore(fireStaff).stream().anyMatch(l -> l.startsWith(" ◆ อัญมณีเพลิง III: +10.5% พลังธาตุไฟ")),
             "staff lore shows spell stats: " + lore(fireStaff));
         check(ours(fireStaff).isEmpty() && !affixes.ensure(fireStaff), "spell stats add no attribute modifiers and the staff is intact");
         ItemStack staff = new ItemStack(Material.IRON_SWORD);
@@ -483,13 +517,13 @@ public class ForgeProbe extends JavaPlugin {
             epicArmor &= piece != null && piece.getType().name().startsWith("DIAMOND");
         }
         check(epicArmor && epic.getEquipment().getHelmetDropChance() == 0f, "epic elite wears full diamond, never dropped");
-        check(elite.customName() != null && PLAIN.serialize(elite.customName()).startsWith("✦ หายาก"), "elite name: " + PLAIN.serialize(elite.customName()));
+        check(elite.customName() != null && PLAIN.serialize(elite.customName()).startsWith("✦ Arcane"), "elite name: " + PLAIN.serialize(elite.customName()));
         Bukkit.getScheduler().runTaskLater(this, () -> {
             try {
                 double damage = geared.getAttribute(Attribute.ATTACK_DAMAGE).getValue() - plain.getAttribute(Attribute.ATTACK_DAMAGE).getValue();
                 double health = geared.getAttribute(Attribute.MAX_HEALTH).getValue() - plain.getAttribute(Attribute.MAX_HEALTH).getValue();
-                check(Math.abs(damage - 3.0) < 1e-6, "sharp +3 damage reaches the wearer: " + damage);
-                check(Math.abs(health - (2.5 + 2.5 + 2.5 + 0.8)) < 1e-6, "helmet + boots + off-hand shield (+life gem) stack to +8.3 health: " + health);
+                check(Math.abs(damage - 5.0) < 1e-6, "sharp +5 damage reaches the wearer: " + damage);
+                check(Math.abs(health - (5.0 + 5.0 + 5.0 + 1.2)) < 1e-6, "helmet + boots + off-hand shield (+life gem) stack to +16.2 health: " + health);
                 double eliteHealth = elite.getAttribute(Attribute.MAX_HEALTH).getValue();
                 check(Math.abs(eliteHealth - 20 * 4.0) < 1e-6 && Math.abs(elite.getHealth() - eliteHealth) < 1e-6, "rare elite has 4x health (+300%), full: " + eliteHealth);
                 double eliteDamage = elite.getAttribute(Attribute.ATTACK_DAMAGE).getValue();
@@ -501,14 +535,122 @@ public class ForgeProbe extends JavaPlugin {
                     "rare warden elite: health " + wardenHealth + " (vanilla cap 1024), damage unchanged " + wardenDamage);
                 check(forge.elites().count(world) == 3, "three elites tracked");
                 magicGear(forge);
-                additionalChecks(forge);
-                finish("PASS " + passed.size() + " forge checks\n" + String.join("\n", passed));
+                charms(forge, world);
+                Runnable finished = () -> {
+                    try {
+                        additionalChecks(forge);
+                        finish("PASS " + passed.size() + " forge checks\n" + String.join("\n", passed));
+                    } catch (Throwable error) {
+                        finish("FAIL " + error + "\npassed before failure: " + passed);
+                    }
+                };
+                if (!charmRuntime(forge, finished)) finished.run();
             } catch (Throwable error) {
                 finish("FAIL " + error + "\npassed before failure: " + passed);
             }
         }, 20L);
     }
     protected void additionalChecks(ForgePlugin forge)throws Exception {}
+
+    /** Charm abilities on a real server player, when run.py --with-core compiled ForgeCharmChecks; false otherwise. */
+    private boolean charmRuntime(ForgePlugin forge, Runnable done) throws Throwable {
+        Class<?> checks;
+        try {
+            checks = Class.forName("ForgeCharmChecks");
+        } catch (ClassNotFoundException absent) {
+            return false;
+        }
+        var start = checks.getDeclaredMethod("start", ForgeProbe.class, ForgePlugin.class, Runnable.class, java.util.function.Consumer.class);
+        start.setAccessible(true);
+        java.util.function.Consumer<Throwable> fail = error -> {
+            java.io.StringWriter trace = new java.io.StringWriter();
+            error.printStackTrace(new java.io.PrintWriter(trace));
+            getLogger().severe(trace.toString());
+            finish("FAIL " + error + "\npassed before failure: " + passed);
+        };
+        start.invoke(null, this, forge, done, fail);
+        return true;
+    }
+
+    /** A stand-in player: persistent data, health and attributes come from an armor stand. */
+    private static org.bukkit.entity.Player fakePlayer(org.bukkit.entity.ArmorStand body) {
+        java.util.UUID id = java.util.UUID.randomUUID();
+        return (org.bukkit.entity.Player) java.lang.reflect.Proxy.newProxyInstance(ForgeProbe.class.getClassLoader(),
+            new Class<?>[]{org.bukkit.entity.Player.class}, (self, method, args) -> switch (method.getName()) {
+                case "getPersistentDataContainer" -> body.getPersistentDataContainer();
+                case "getUniqueId" -> id;
+                case "getName" -> "CharmProbe";
+                case "getLocation" -> body.getLocation();
+                case "getWorld" -> body.getWorld();
+                case "getAttribute" -> body.getAttribute((Attribute) args[0]);
+                case "getHealth" -> body.getHealth();
+                case "setHealth" -> { body.setHealth((double) args[0]); yield null; }
+                case "hashCode" -> id.hashCode();
+                case "equals" -> self == args[0];
+                case "toString" -> "CharmProbe";
+                default -> {
+                    Class<?> type = method.getReturnType();
+                    Object zero = null;
+                    if (type == boolean.class) zero = Boolean.FALSE;
+                    else if (type == int.class) zero = Integer.valueOf(0);
+                    else if (type == double.class) zero = Double.valueOf(0);
+                    else if (type == float.class) zero = Float.valueOf(0);
+                    else if (type == long.class) zero = Long.valueOf(0);
+                    yield zero;
+                }
+            });
+    }
+
+    private void charms(ForgePlugin forge, World world) {
+        var service = forge.charms();
+        var ids = ForgeApi.charmIds();
+        check(ids.size() == 27 && new HashSet<>(ids).size() == 27, "27 distinct charm ids: " + ids.size());
+        for (String temple : List.of("dark", "astral", "time"))
+            check(ids.stream().filter(id -> temple.equals(ForgeApi.charmTemple(id))).count() == 9, "nine charms in the " + temple + " sanctum");
+        for (com.example.forge.Charm charm : com.example.forge.Charm.values()) {
+            ItemStack item = ForgeApi.charm(charm.id(), "MYTHIC");
+            check(item != null && service.charm(item) == charm && service.grade(item) == Rarity.MYTHIC
+                && item.getItemMeta().getItemModel().equals(new NamespacedKey("evergarden_forge", "charm/" + charm.id()))
+                && item.getMaxStackSize() == 1 && item.getItemMeta().getEnchantmentGlintOverride()
+                && charm.cost >= 1 && charm.cost <= 3 && !charm.describe(Rarity.MYTHIC).isEmpty()
+                && lore(item).stream().noneMatch(line -> line.contains("{v}")), "charm item " + charm.id());
+        }
+        ItemStack worn = ForgeApi.charm("timeless", "COMMON");
+        check(forge.gems().isForgeItem(worn) && !worn.getItemMeta().hasEnchantmentGlintOverride(), "charms are protected forge items; Worn has no glint");
+        check(lore(worn).get(1).startsWith("✦ เกรด Worn") && lore(worn).stream().anyMatch(line -> line.contains("30 นาที")), "Worn Timeless lore shows its 30 minute cooldown: " + lore(worn));
+        check(lore(ForgeApi.charm("starwalker", "UNCOMMON")).stream().anyMatch(line -> line.contains("อีก 1 ครั้ง"))
+            && lore(ForgeApi.charm("starwalker", "MYTHIC")).stream().anyMatch(line -> line.contains("อีก 2 ครั้ง")), "count charms show whole numbers (Starwalker 1 → 2 jumps)");
+        check(com.example.forge.Charm.TIMELESS.value(Rarity.MYTHIC) == 15 && com.example.forge.Charm.TIME_STOP.value(Rarity.MYTHIC) == 60
+            && com.example.forge.Charm.HOURGLASS.value(Rarity.COMMON) == 420 && com.example.forge.Charm.BAT_FORM.value(Rarity.MYTHIC) == 50,
+            "strong charms keep cooldowns (Timeless 30→15 min, Time Stop 120→60 s, Hourglass 420→240 s, Bat Form 90→50 s)");
+        check(com.example.forge.Charm.VEIN_OF_AGES.intValue(Rarity.COMMON) == 8 && com.example.forge.Charm.VEIN_OF_AGES.intValue(Rarity.MYTHIC) == 24
+            && com.example.forge.Charm.SOUL_LEGION.intValue(Rarity.MYTHIC) == 4, "grades scale charm values (vein 8→24, legion 2→4 spirits)");
+        ItemStack rolled = ForgeApi.rollCharm("astral", "RARE", new Random(3));
+        check(rolled != null && service.charm(rolled).temple == com.example.forge.Charm.Temple.ASTRAL && service.grade(rolled) == Rarity.RARE, "rollCharm keeps the sanctum and grade");
+        check(ForgeApi.rollCharm("nowhere", "RARE", new Random(3)) == null && ForgeApi.charm("nothing", "RARE") == null, "unknown charm or sanctum gives null");
+
+        var body = world.spawn(new Location(world, 4, -60, 4), org.bukkit.entity.ArmorStand.class);
+        var player = fakePlayer(body);
+        double baseHealth = body.getAttribute(Attribute.MAX_HEALTH).getValue();
+        check(service.equip(player, ForgeApi.charm("shadow_step", "EPIC")) == com.example.forge.CharmService.EquipResult.OK, "equip Shadow Step");
+        check(service.equip(player, ForgeApi.charm("shadow_step", "MYTHIC")) == com.example.forge.CharmService.EquipResult.DUPLICATE, "same charm twice is refused");
+        check(service.equip(player, ForgeApi.charm("time_stop", "COMMON")) == com.example.forge.CharmService.EquipResult.OK
+            && service.used(player) == 5, "Time Stop fits: 5/6 slots used");
+        check(service.equip(player, ForgeApi.charm("hourglass", "COMMON")) == com.example.forge.CharmService.EquipResult.NO_ROOM, "a 3-slot charm over capacity is refused");
+        check(service.equip(player, ForgeApi.charm("vein_of_ages", "RARE")) == com.example.forge.CharmService.EquipResult.OK && service.used(player) == 6, "a 1-slot charm fills 6/6");
+        check(service.worn(player).size() == 3 && service.grade(player, com.example.forge.Charm.SHADOW_STEP) == Rarity.EPIC, "worn map has grades");
+        check(service.equip(player, new ItemStack(Material.PAPER)) == com.example.forge.CharmService.EquipResult.NOT_CHARM, "plain paper is not a charm");
+        var stored = service.wornItems(player);
+        check(stored.size() == 3 && service.charm(stored.get(2)) == com.example.forge.Charm.VEIN_OF_AGES, "worn charms persist as items in player data");
+        ItemStack removed = service.unequip(player, 0);
+        check(service.charm(removed) == com.example.forge.Charm.SHADOW_STEP && service.grade(removed) == Rarity.EPIC && service.used(player) == 4,
+            "unequip returns the same charm and grade");
+        check(Math.abs(body.getAttribute(Attribute.MAX_HEALTH).getValue() - baseHealth) < 1e-6, "charms never change maximum health");
+        check(forge.evergardenChests().unopenedNear(new Location(world, 4, -60, 4), 24).isEmpty(), "Eye of the Abyss: no treasure on the flat probe world");
+        check(forge.charmEffects().eliteSpawnMultiplier(new Location(world, 4, -60, 4)) == 1.0, "no Cursed Coin wearer: elite chance unchanged");
+        check(forge.charmMenu() != null && com.example.forge.CharmMenu.capacitySlots() == 6 && service.capacity() == 6, "charm page and 6 slots");
+        body.remove();
+    }
 
     /** Real Advance Magic items, when run.py --with-core compiled ForgeMagicGearChecks against Advance Magic. */
     private void magicGear(ForgePlugin forge) throws Throwable {

@@ -28,10 +28,10 @@ public enum LootCategory {
         TOOL("เครื่องมือ / เบ็ด"),
         STAFF("คทาเวท");
 
-        public final String thai;
+        public final String label;
 
         Group(String thai) {
-            this.thai = thai;
+            this.label = thai;
         }
     }
 

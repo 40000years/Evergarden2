@@ -180,7 +180,7 @@ public final class ForgeListener implements Listener {
     /** No throwing a gem pearl, lighting fire with a gem fire charge, or feeding a gem scute to a wolf. */
     @EventHandler(priority = EventPriority.LOW)
     public void onUse(PlayerInteractEvent event) {
-        if (event.getAction() == Action.PHYSICAL || !forgeItem(event.getItem())) return;
+        if (event.getAction() == Action.PHYSICAL || !forgeItem(event.getItem()) || plugin.charms().isCharm(event.getItem())) return;
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && event.getClickedBlock() != null
             && event.getClickedBlock().getType() == plugin.settings().stationBlock && event.getPlayer().isSneaking()) return;
         event.setUseItemInHand(Event.Result.DENY);
@@ -214,7 +214,7 @@ public final class ForgeListener implements Listener {
         var inventory = event.getInventory();
         for (int slot=0;slot<inventory.getSize();slot++) {
             ItemStack item=inventory.getItem(slot);
-            if (ForgeResources.model(plugin,item)) inventory.setItem(slot,item);
+            if (plugin.gems().refresh(item) | ForgeResources.model(plugin,item)) inventory.setItem(slot,item);
         }
         if (event.getPlayer() instanceof Player player) migrate(player.getInventory());
     }
@@ -222,7 +222,7 @@ public final class ForgeListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPickup(EntityPickupItemEvent event) {
         ItemStack item=event.getItem().getItemStack();
-        if(ForgeResources.model(plugin,item))event.getItem().setItemStack(item);
+        if(plugin.gems().refresh(item) | plugin.affixes().ensure(item) | ForgeResources.model(plugin,item))event.getItem().setItemStack(item);
     }
 
     private void migrate(PlayerInventory inventory) {
@@ -278,6 +278,6 @@ public final class ForgeListener implements Listener {
     private void ensure(PlayerInventory inventory, int slot) {
         ItemStack item = inventory.getItem(slot);
         if (item == null || item.getType().isAir()) return;
-        if (plugin.affixes().ensure(item) | ForgeResources.model(plugin,item)) inventory.setItem(slot, item);
+        if (plugin.affixes().ensure(item) | plugin.gems().refresh(item) | ForgeResources.model(plugin,item)) inventory.setItem(slot, item);
     }
 }

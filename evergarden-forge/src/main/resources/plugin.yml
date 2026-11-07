@@ -1,15 +1,15 @@
 name: EvergardenForge
-version: '0.6.0-magic-gear'
+version: '0.7.3'
 main: com.example.forge.ForgePlugin
 api-version: '26.2'
-description: Affix gear, reforging with three choices, salvaging, gems with sockets and purity, elite monsters and affix structure loot.
-softdepend: [advance-magic, Evergarden, floodgate]
+description: Affix gear, reforging with three choices, salvaging, gems with sockets and purity, elite monsters and affix structure loot. Sanctum charms.
+softdepend: [advance-magic, Evergarden, floodgate, LevelledMobs]
 loadbefore: [Geyser-Spigot]
 commands:
   forge:
     aliases: [reforge]
     description: Open the Evergarden Forge (reforge, salvage, gems, cutting, gem codex)
-    usage: /forge [salvage|gems|cut|codex|inspect]
+    usage: /forge [salvage|gems|cut|codex|charm|inspect]
   salvage:
     description: Open the Forge salvage page
     usage: /salvage

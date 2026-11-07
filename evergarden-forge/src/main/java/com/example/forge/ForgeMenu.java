@@ -42,16 +42,16 @@ public final class ForgeMenu implements Listener {
     public enum Page {
         REFORGE("รีฟอร์จ"), SALVAGE("ย่อยอุปกรณ์"), GEMS("ใส่ Gem"), CUT("เจียระไน Gem"), CODEX("คลัง Gem");
 
-        final String thai;
+        final String label;
 
         Page(String thai) {
-            this.thai = thai;
+            this.label = thai;
         }
     }
 
     private static final int SIZE = 54;
     private static final TextColor TITLE = TextColor.color(0x4B2A7A);
-    private static final int HELP = 0, CLOSE = 8, INFO = 49;
+    private static final int HELP = 0, CLOSE = 8, INFO = 49, CHARM_TAB = 7;
     private static final int[] TABS = {2, 3, 4, 5, 6};
     private static final String[] TAB_ICONS = {"menu_upgrade", "menu_extract", "menu_socket", "menu_skills", "menu_codex"};
     // reforge
@@ -103,7 +103,7 @@ public final class ForgeMenu implements Listener {
     public void open(Player player, Page page) {
         if (!player.hasPermission("forge.use") || player.isDead()) return;
         Holder holder = new Holder(page, player);
-        holder.inventory = Bukkit.createInventory(holder, SIZE, Component.text("✦ โรงตีเหล็ก · " + page.thai, TITLE));
+        holder.inventory = Bukkit.createInventory(holder, SIZE, Component.text("✦ โรงตีเหล็ก · " + page.label, TITLE));
         redraw(holder);
         player.openInventory(holder.inventory);
         player.playSound(player.getLocation(), Sound.BLOCK_SMITHING_TABLE_USE, 0.6f, 1.2f);
@@ -173,12 +173,21 @@ public final class ForgeMenu implements Listener {
             "ใส่ Gem: อุปกรณ์ที่มีเกรดมีช่อง Gem 0–3 ช่อง",
             "เจียระไน: Gem เท่ากัน 2 เม็ด + ผง + วัสดุ → ขั้นถัดไป",
             "คลัง Gem: ดูว่า Gem แต่ละเม็ดให้อะไรกับอุปกรณ์ไหน",
+            "Charm: สวม / ถอดเครื่องรางจากวิหาร",
             "อาวุธตำนาน ชุดบอส คทา และ Relic ใช้ที่นี่ไม่ได้")));
         Page[] pages = Page.values();
         for (int i = 0; i < pages.length; i++) {
-            ItemStack tab = icon(TAB_ICONS[i], pages[i].thai, NamedTextColor.GOLD, List.of(pages[i] == holder.page ? "หน้าปัจจุบัน" : "คลิกเพื่อเปิด"));
+            ItemStack tab = icon(TAB_ICONS[i], pages[i].label, NamedTextColor.GOLD, List.of(pages[i] == holder.page ? "หน้าปัจจุบัน" : "คลิกเพื่อเปิด"));
             inv.setItem(TABS[i], pages[i] == holder.page ? glint(tab) : tab);
         }
+        ItemStack charmTab = new ItemStack(Material.PAPER);
+        charmTab.editMeta(meta -> {
+            meta.setItemModel(new NamespacedKey(CharmService.NAMESPACE, "charm_ui/tab"));
+            meta.customName(line("Charm", TextColor.color(0xF2C35B)));
+            meta.lore(List.of(line("เครื่องรางจากวิหารทั้งสาม · สวม / ถอด", NamedTextColor.GRAY), line("คลิกเพื่อเปิด", NamedTextColor.GRAY)));
+            meta.addItemFlags(ItemFlag.values());
+        });
+        inv.setItem(CHARM_TAB, charmTab);
         inv.setItem(CLOSE, icon("skilltree_close", "ปิด", NamedTextColor.RED, List.of("ของในช่องวางจะคืนเข้ากระเป๋า")));
         switch (holder.page) {
             case REFORGE -> drawReforge(holder);
@@ -194,7 +203,7 @@ public final class ForgeMenu implements Listener {
         inv.setItem(GEAR_LABEL, icon("menu_pick", "ช่องอุปกรณ์ ↓", NamedTextColor.WHITE,
             List.of("อาวุธ ธนู โล่ เครื่องมือ เบ็ด ชุดเกราะ หรือคทาเวท", "อาวุธตำนานและชุดเกราะเซตก็รีฟอร์จได้ (ย่อยไม่ได้)", "อุปกรณ์ธรรมดาก็รีฟอร์จให้มีเกรดได้", "Gem ที่ใส่อยู่ไม่หาย ช่อง Gem ไม่ลดลง")));
         List<String> materialLore = new ArrayList<>(List.of("วัสดุกำหนดเกรดของผลลัพธ์:"));
-        for (Rarity rarity : Rarity.values()) materialLore.add(rarity.materialName + " → เกรด " + rarity.thai);
+        for (Rarity rarity : Rarity.values()) materialLore.add(rarity.materialName + " → เกรด " + rarity.label);
         inv.setItem(MATERIAL_LABEL, icon("menu_socket", "ช่องวัสดุช่าง ↓", NamedTextColor.WHITE, materialLore));
 
         Player player = holder.owner;
@@ -207,7 +216,7 @@ public final class ForgeMenu implements Listener {
         if (empty(gear)) blocked = "วางอุปกรณ์ในช่องอุปกรณ์ก่อน";
         else if (affixes.category(gear) == null) blocked = "อุปกรณ์นี้รีฟอร์จไม่ได้";
         else if (rarity == null) blocked = "วางวัสดุช่างเพื่อเลือกเกรด";
-        else if (!reforge.allowed(rarity)) blocked = "เกรด " + rarity.thai + " ยังรีฟอร์จไม่ได้";
+        else if (!reforge.allowed(rarity)) blocked = "เกรด " + rarity.label + " ยังรีฟอร์จไม่ได้";
 
         List<ItemStack> choices = blocked == null ? reforge.choices(player, gear, rarity) : List.of();
         for (int i = 0; i < ReforgeService.CHOICES; i++) {
@@ -261,7 +270,7 @@ public final class ForgeMenu implements Listener {
         List<String> lore = new ArrayList<>();
         counts.forEach((rarity, count) -> {
             ForgeSettings.Grade grade = plugin.settings().grade(rarity);
-            lore.add(rarity.thai + " ×" + count + " → " + rarity.materialName + " " + grade.salvageMin() * count + "–" + grade.salvageMax() * count);
+            lore.add(rarity.label + " ×" + count + " → " + rarity.materialName + " " + grade.salvageMin() * count + "–" + grade.salvageMax() * count);
         });
         if (plain > 0) lore.add("อุปกรณ์ธรรมดา ×" + plain + " → " + Rarity.COMMON.materialName + " 0–" + plain
             + " (โอกาส " + Math.round(plugin.settings().salvagePlainChance * 100) + "% ต่อชิ้น)");
@@ -284,7 +293,7 @@ public final class ForgeMenu implements Listener {
     private void drawGems(Holder holder) {
         Inventory inv = holder.inventory;
         inv.setItem(GEAR_LABEL, icon("menu_pick", "ช่องอุปกรณ์ ↓", NamedTextColor.WHITE,
-            List.of("วางอุปกรณ์ที่มีเกรด", "ช่อง Gem: ดี 0–1 · หายาก 1 · มหากาพย์ 1–2 · ปรัมปรา 2–3")));
+            List.of("วางอุปกรณ์ที่มีเกรด", "ช่อง Gem: Tempered 0–1 · Arcane 1 · Exalted 1–2 · Divine 2–3")));
         ItemStack gear = inv.getItem(GEAR);
         LootCategory category = plugin.affixes().category(gear);
         List<Gem> gems = category == null ? List.of() : plugin.affixes().gems(gear);
@@ -297,13 +306,13 @@ public final class ForgeMenu implements Listener {
                 inv.setItem(SOCKET[i], icon("skilltree_lock", "ช่อง Gem " + (i + 1), NamedTextColor.DARK_GRAY, List.of("อุปกรณ์ชิ้นนี้ไม่มีช่องนี้")));
             } else if (gems.get(i) == null) {
                 List<String> lore = new ArrayList<>(List.of("ช่องว่าง"));
-                lore.add(selected == null ? "เลือก Gem ในกระเป๋าก่อน แล้วคลิกช่องนี้" : "คลิกเพื่อใส่ " + selected.type().thai + " " + GemService.roman(selected.tier())
+                lore.add(selected == null ? "เลือก Gem ในกระเป๋าก่อน แล้วคลิกช่องนี้" : "คลิกเพื่อใส่ " + selected.type().label + " " + GemService.roman(selected.tier())
                     + " → " + plugin.gems().describe(selected, category.group));
                 inv.setItem(SOCKET[i], icon("menu_socket", "ช่อง Gem " + (i + 1), NamedTextColor.WHITE, lore));
             } else {
                 Gem gem = gems.get(i);
                 inv.setItem(SOCKET[i], withLore(plugin.gems().item(gem, 1), List.of(Component.empty(),
-                    line("ในอุปกรณ์นี้ (" + category.group.thai + "): " + plugin.gems().describe(gem, category.group), gem.type().color),
+                    line("ในอุปกรณ์นี้ (" + category.group.label + "): " + plugin.gems().describe(gem, category.group), gem.type().color),
                     line(selected == null ? "คลิกเพื่อถอด (ฟรี)" : "คลิกเพื่อสลับกับ Gem ที่เลือก", NamedTextColor.YELLOW))));
             }
         }
@@ -341,7 +350,7 @@ public final class ForgeMenu implements Listener {
             boolean enoughMaterial = plugin.affixes().materialRarity(material) == cost.rarity() && material.getAmount() >= cost.materials();
             boolean ok = enoughGems && enoughDust && enoughMaterial;
             inv.setItem(CUT_RESULT, withLore(plugin.gems().item(new Gem(gem.type(), gem.tier() + 1), 1), List.of(Component.empty(),
-                line("ต้นทุน: " + gem.type().thai + " " + GemService.roman(gem.tier()) + " ×" + cost.gems(), enoughGems ? NamedTextColor.GREEN : NamedTextColor.RED),
+                line("ต้นทุน: " + gem.type().label + " " + GemService.roman(gem.tier()) + " ×" + cost.gems(), enoughGems ? NamedTextColor.GREEN : NamedTextColor.RED),
                 line("        ผงอัญมณี ×" + cost.dust(), enoughDust ? NamedTextColor.GREEN : NamedTextColor.RED),
                 line("        " + cost.rarity().materialName + " ×" + cost.materials(), enoughMaterial ? NamedTextColor.GREEN : NamedTextColor.RED),
                 line(ok ? "คลิกเพื่อเจียระไน" : "ทรัพยากรไม่พอ", NamedTextColor.YELLOW))));
@@ -470,6 +479,10 @@ public final class ForgeMenu implements Listener {
             && event.getClick() != org.bukkit.event.inventory.ClickType.RIGHT) return;
         if (raw == CLOSE) {
             player.closeInventory();
+            return;
+        }
+        if (raw == CHARM_TAB) {
+            plugin.charmMenu().open(player);
             return;
         }
         for (int i = 0; i < TABS.length; i++) {
@@ -820,7 +833,7 @@ public final class ForgeMenu implements Listener {
         inv.setItem(CUT_MATERIAL, material.getAmount() > 0 ? material : null);
         give(player, produced);
         plugin.getLogger().info("[Forge-Cut] player=" + player.getName() + " uuid=" + player.getUniqueId() + " " + gem.serialize() + " -> " + result.serialize());
-        player.sendMessage(Component.text("เจียระไนสำเร็จ: " + result.type().thai + " " + GemService.roman(result.tier()), result.type().color));
+        player.sendMessage(Component.text("เจียระไนสำเร็จ: " + result.type().label + " " + GemService.roman(result.tier()), result.type().color));
         player.playSound(player.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_BREAK, 0.8f, 1.4f);
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.5f, 1.6f);
         redraw(holder);

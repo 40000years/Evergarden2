@@ -52,17 +52,26 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class EliteService implements Listener {
     private final ForgePlugin plugin;
     private final NamespacedKey eliteKey;
+    private final LevelledMobsCompat levelledMobs;
     private final Set<UUID> tracked = new HashSet<>();
     private BukkitTask aura;
 
     public EliteService(ForgePlugin plugin) {
         this.plugin = plugin;
         eliteKey = new NamespacedKey(plugin, "elite");
+        levelledMobs = new LevelledMobsCompat(plugin);
+    }
+
+    public void registerCompatibility() {
+        levelledMobs.register();
     }
 
     public void start() {
         aura = Bukkit.getScheduler().runTaskTimer(plugin, this::aura, 20L, 10L);
-        for (World world : Bukkit.getWorlds()) for (LivingEntity entity : world.getLivingEntities()) if (rarity(entity) != null) tracked.add(entity.getUniqueId());
+        for (World world : Bukkit.getWorlds()) for (LivingEntity entity : world.getLivingEntities()) {
+            Rarity rarity = rarity(entity);
+            if (rarity != null) restore(entity, rarity);
+        }
     }
 
     public void stop() {
@@ -93,6 +102,7 @@ public final class EliteService implements Listener {
         if (chance <= 0 || settings.eliteBlockedWorlds.contains(entity.getWorld().getName())) return;
         // Fewer elites where many mobs have just died (mob farms).
         chance *= plugin.farmGuard().multiplier(entity.getLocation());
+        chance *= plugin.charmEffects().eliteSpawnMultiplier(entity.getLocation());
         Map<Rarity, Integer> weights = settings.eliteWeights(entity.getWorld().getEnvironment());
         if (weights == null || ThreadLocalRandom.current().nextDouble() >= chance) return;
         Runnable convert = () -> {
@@ -130,6 +140,25 @@ public final class EliteService implements Listener {
         ForgeSettings.EliteGrade grade = plugin.settings().eliteGrades.get(rarity);
         if (grade == null || rarity(entity) != null) return false;
         entity.getPersistentDataContainer().set(eliteKey, PersistentDataType.STRING, rarity.name());
+        restore(entity, rarity);
+        equip(entity, grade, ThreadLocalRandom.current());
+        AttributeInstance health = entity.getAttribute(Attribute.MAX_HEALTH);
+        if (health != null) entity.setHealth(health.getValue());
+        // Flush a nametag/attribute update already queued before this mob became an elite.
+        Bukkit.getScheduler().runTask(plugin, () -> {
+            if (entity.isValid() && !entity.isDead()) restore(entity, rarity);
+        });
+        return true;
+    }
+
+    /** Repair old/loaded elites without rerolling armor or stacking boosts; retain the health percentage. */
+    private void restore(LivingEntity entity, Rarity rarity) {
+        ForgeSettings.EliteGrade grade = plugin.settings().eliteGrades.get(rarity);
+        if (grade == null || entity.isDead()) return;
+        double currentHealth = entity.getHealth();
+        AttributeInstance health = entity.getAttribute(Attribute.MAX_HEALTH);
+        double previousMax = health == null ? currentHealth : health.getValue();
+        levelledMobs.protect(entity);
         boost(entity, Attribute.MAX_HEALTH, grade.health() - 1, AttributeModifier.Operation.MULTIPLY_SCALAR_1);
         // Some mobs (the Warden) already hit hard enough: they only gain health.
         if (!plugin.settings().eliteDamageExempt.contains(entity.getType())) {
@@ -137,15 +166,19 @@ public final class EliteService implements Listener {
         }
         boost(entity, Attribute.MOVEMENT_SPEED, grade.speed(), AttributeModifier.Operation.MULTIPLY_SCALAR_1);
         boost(entity, Attribute.KNOCKBACK_RESISTANCE, grade.knockbackResist(), AttributeModifier.Operation.ADD_NUMBER);
-        equip(entity, grade, ThreadLocalRandom.current());
-        AttributeInstance health = entity.getAttribute(Attribute.MAX_HEALTH);
-        if (health != null) entity.setHealth(health.getValue());
-        entity.customName(Component.text("✦ " + rarity.thai + " · ", rarity.color)
+        if (health != null && previousMax > 0) {
+            double restoredHealth = Math.min(health.getValue(), currentHealth / previousMax * health.getValue());
+            if (Math.abs(entity.getHealth() - restoredHealth) > 1e-9) entity.setHealth(restoredHealth);
+        }
+        Component name = Component.text("✦ " + rarity.label + " · ", rarity.color)
             .append(Component.translatable(entity.getType().translationKey(), rarity.color))
-            .decoration(TextDecoration.BOLD, rarity.ordinal() >= Rarity.EPIC.ordinal()));
+            .decoration(TextDecoration.BOLD, rarity.ordinal() >= Rarity.EPIC.ordinal());
+        // LM sends client-only metadata: Bukkit's name can already be correct while a previously
+        // queued LM packet overwrote the visible name. Dirty the metadata so trackers resend ours.
+        entity.customName(null);
+        entity.customName(name);
         entity.setCustomNameVisible(true);
         tracked.add(entity.getUniqueId());
-        return true;
     }
 
     private static final EquipmentSlot[] ARMOR_SLOTS = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
@@ -167,10 +200,12 @@ public final class EliteService implements Listener {
 
     private void boost(LivingEntity entity, Attribute attribute, double amount, AttributeModifier.Operation operation) {
         AttributeInstance instance = entity.getAttribute(attribute);
-        if (instance == null || amount == 0) return;
+        if (instance == null) return;
         NamespacedKey key = new NamespacedKey(plugin, "elite_" + attribute.getKey().getKey().replace('.', '_'));
+        AttributeModifier existing = instance.getModifier(key);
+        if (existing != null && existing.getAmount() == amount && existing.getOperation() == operation) return;
         instance.removeModifier(key);
-        instance.addModifier(new AttributeModifier(key, amount, operation));
+        if (amount != 0) instance.addModifier(new AttributeModifier(key, amount, operation));
     }
 
     /** Admin/test spawn in front of a player. */
@@ -193,6 +228,7 @@ public final class EliteService implements Listener {
             }
             Rarity rarity = rarity(living);
             if (rarity == null) continue;
+            restore(living, rarity);
             int rgb = rarity.color.value();
             Particle.DustOptions dust = new Particle.DustOptions(Color.fromRGB(rgb), 1.1f);
             double height = living.getHeight();
@@ -201,9 +237,12 @@ public final class EliteService implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onLoad(EntitiesLoadEvent event) {
-        for (Entity entity : event.getEntities()) if (rarity(entity) != null) tracked.add(entity.getUniqueId());
+        for (Entity entity : event.getEntities()) {
+            Rarity rarity = rarity(entity);
+            if (entity instanceof LivingEntity living && rarity != null) restore(living, rarity);
+        }
     }
 
     @EventHandler
@@ -229,9 +268,12 @@ public final class EliteService implements Listener {
             return;
         }
         List<ItemStack> rewards = rewards(rarity, ThreadLocalRandom.current(), entity.getWorld().getEnvironment());
+        if (plugin.charmEffects().cursedCoinBonus(killer))
+            rewards.add(plugin.gear().affixed(rarity, ThreadLocalRandom.current(), entity.getWorld().getEnvironment()));
+        plugin.charmEffects().luckyStar(killer, entity.getLocation());
         event.getDrops().addAll(rewards);
         event.setDroppedExp(event.getDroppedExp() * grade.xp());
-        killer.sendMessage(Component.text("✦ ล้ม Elite เกรด " + rarity.thai + " ได้รับ " + rewards.size() + " รางวัล", rarity.color));
+        killer.sendMessage(Component.text("✦ ล้ม Elite เกรด " + rarity.label + " ได้รับ " + rewards.size() + " รางวัล", rarity.color));
         plugin.getLogger().info("[Forge-Elite] killer=" + killer.getName() + " uuid=" + killer.getUniqueId() + " mob="
             + entity.getType().getKey().getKey() + " rarity=" + rarity + " rewards=" + rewards.size());
     }

@@ -21,23 +21,25 @@ public final class PetBlueprintStaging {
         }
         int active=0,staged=0,custom=0;
         Path folder=plugin.getDataFolder().toPath().resolve("modelengine/pets");
-        for(String id:PetCatalog.modelIds())try(var input=plugin.getResource("modelengine/pets/"+id+".bbmodel")) {
-            if(input==null)throw new IOException("Missing bundled pet blueprint "+id);
-            byte[] bundled=input.readAllBytes();
+        try(PetBlueprints models=new PetBlueprints(plugin)) {
+        for(String id:PetCatalog.modelIds()) {
+            String expected=models.hash(id);
+            byte[][] restored={null};
+            PetBlueprintInstaller.Source bundled=()->restored[0]!=null?restored[0]:(restored[0]=models.bytes(id));
             Path library=folder.resolve("library/"+id+".bbmodel");
             // The editable library exists even when no pet is actively imported.
             PetBlueprintInstaller.install(library,folder.resolve("library-ownership/"+id+".sha256"),
-                folder.resolve("library-ownership/"+id+".portable.sha256"),bundled);
+                folder.resolve("library-ownership/"+id+".portable.sha256"),expected,bundled);
             Path blueprint=engineFolder.resolve("blueprints/"+id+".bbmodel");
             Path marker=folder.resolve(id+".sha256"),portable=engineFolder.resolve("evergarden-pets/"+id+".sha256");
             if(all||selected.contains(id)) {
-                var result=PetBlueprintInstaller.install(blueprint,marker,portable,bundled);active++;
+                var result=PetBlueprintInstaller.install(blueprint,marker,portable,expected,bundled);active++;
                 if(!result.bundled())custom++;
             } else {
                 staged++;
                 if(Files.exists(blueprint)) {
                     byte[] previous=Files.readAllBytes(blueprint);String hash=PetBlueprintInstaller.digest(previous);
-                    if(hash.equals(PetBlueprintInstaller.digest(bundled))||hash.equals(recorded(marker))||hash.equals(recorded(portable))) {
+                    if(hash.equals(expected)||hash.equals(recorded(marker))||hash.equals(recorded(portable))) {
                         park(blueprint,library,folder.resolve("library/previous/"+id+"-"+hash+".bbmodel"),previous);
                     } else {
                         custom++;active++;
@@ -46,6 +48,7 @@ public final class PetBlueprintStaging {
                     }
                 }
             }
+        }
         }
         return new Summary(active,staged,custom);
     }

@@ -1,5 +1,5 @@
 name: EvergardenForge
-version: '0.7.4'
+version: '0.7.5'
 main: com.example.forge.ForgePlugin
 api-version: '26.2'
 description: Affix gear, reforging with three choices, salvaging, gems with sockets and purity, elite monsters and affix structure loot. Sanctum charms.

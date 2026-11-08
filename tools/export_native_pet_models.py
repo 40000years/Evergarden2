@@ -119,6 +119,11 @@ def export():
     manifest = dict(format=1, minimum_java='1.21.11', models=models)
     target = RESOURCES / 'native-pets.json'
     target.write_bytes(encode(manifest))
+    # Large textures go into a smaller canvas with the same face pixels, or the Java items atlas
+    # outgrows 16384x16384 and most non-NVIDIA GPUs reject the pack (tools/pet_native_repack.py).
+    import pet_native_repack
+    repacked, _ = pet_native_repack.repack(assets)
+    assets.update(repacked)
     pack = RESOURCES / 'native-pets.zip'
     with zipfile.ZipFile(pack, 'w', zipfile.ZIP_DEFLATED) as archive:
         for name, data in sorted(assets.items()):

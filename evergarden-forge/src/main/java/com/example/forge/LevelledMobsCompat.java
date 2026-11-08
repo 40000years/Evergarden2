@@ -87,8 +87,15 @@ final class LevelledMobsCompat {
         plugin.getLogger().info("LevelledMobs: Forge elites excluded (" + hooked + " pre-level hooks).");
     }
 
-    /** Block queued/future levelling first, then remove any scaling applied before conversion. */
     boolean protect(LivingEntity entity) {
+        return protect(entity, false);
+    }
+
+    /**
+     * Block queued/future levelling first, then remove any scaling applied before conversion.
+     * @param keepBases leave base values alone: a hosted elite's owner sets them (EliteService).
+     */
+    boolean protect(LivingEntity entity, boolean keepBases) {
         var pdc = entity.getPersistentDataContainer();
         boolean levelled = pdc.has(LEVEL);
         boolean contaminated = levelled;
@@ -127,7 +134,7 @@ final class LevelledMobsCompat {
             }
         }
         if (contaminated) pdc.set(NATIVE_STATS, PersistentDataType.BYTE, (byte) 1);
-        if (pdc.has(NATIVE_STATS, PersistentDataType.BYTE)) {
+        if (!keepBases && pdc.has(NATIVE_STATS, PersistentDataType.BYTE)) {
             // LM rules can replace base values as well as modifiers. Attribute.getDefaultValue
             // is a global default (20 HP), so use an unspawned type template (Enderman: 40 HP).
             // Keep enforcing these bases: LM may already have queued a synchronous base-only

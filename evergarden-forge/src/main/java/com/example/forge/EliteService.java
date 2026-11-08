@@ -51,10 +51,16 @@ import java.util.concurrent.ThreadLocalRandom;
  * with a coloured name, an aura and boosted stats. Killed by a player, an elite drops affix gear of
  * its own rarity, maybe a gem and salvage materials. Only NATURAL spawns qualify, so spawners,
  * plugin bosses, sanctuary mobs and pets are never touched.
+ *
+ * <p>Another plugin may make one of its own mobs an elite through {@link ForgeApi#makeElite} (Evergarden's sanctum
+ * uniques). Such a "hosted" elite keeps its owner's health, damage and name: Forge adds the grade mark, armor, aura,
+ * moves and rewards, but never re-applies its multipliers. Re-applying them every aura tick while the owner strips
+ * them refilled the mob after almost every hit (0.7.3-0.7.4).
  */
 public final class EliteService implements Listener {
     private final ForgePlugin plugin;
     private final NamespacedKey eliteKey;
+    private final NamespacedKey hostedKey;
     private final LevelledMobsCompat levelledMobs;
     private final Set<UUID> tracked = new HashSet<>();
     private BukkitTask aura;
@@ -62,6 +68,7 @@ public final class EliteService implements Listener {
     public EliteService(ForgePlugin plugin) {
         this.plugin = plugin;
         eliteKey = new NamespacedKey(plugin, "elite");
+        hostedKey = new NamespacedKey(plugin, "elite_hosted");
         levelledMobs = new LevelledMobsCompat(plugin);
     }
 
@@ -137,7 +144,7 @@ public final class EliteService implements Listener {
         return settings.eliteChance * settings.eliteReasonChance.getOrDefault(reason, 0.0);
     }
 
-    private boolean ownedByAnotherPlugin(Entity entity) {
+    boolean ownedByAnotherPlugin(Entity entity) {
         for (NamespacedKey key : entity.getPersistentDataContainer().getKeys()) {
             if (plugin.settings().eliteSkipNamespaces.contains(key.getNamespace().toLowerCase(Locale.ROOT))) return true;
         }
@@ -145,13 +152,19 @@ public final class EliteService implements Listener {
     }
 
     public boolean makeElite(LivingEntity entity, Rarity rarity) {
+        return makeElite(entity, rarity, false);
+    }
+
+    /** @param hosted the caller owns this mob's health, damage and name (see the class comment). */
+    public boolean makeElite(LivingEntity entity, Rarity rarity, boolean hosted) {
         ForgeSettings.EliteGrade grade = plugin.settings().eliteGrades.get(rarity);
         if (grade == null || rarity(entity) != null) return false;
         entity.getPersistentDataContainer().set(eliteKey, PersistentDataType.STRING, rarity.name());
+        if (hosted) entity.getPersistentDataContainer().set(hostedKey, PersistentDataType.BYTE, (byte) 1);
         restore(entity, rarity);
         equip(entity, grade, ThreadLocalRandom.current());
         AttributeInstance health = entity.getAttribute(Attribute.MAX_HEALTH);
-        if (health != null) entity.setHealth(health.getValue());
+        if (health != null && !hosted) entity.setHealth(health.getValue());
         // Flush a nametag/attribute update already queued before this mob became an elite.
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (entity.isValid() && !entity.isDead()) restore(entity, rarity);
@@ -163,6 +176,10 @@ public final class EliteService implements Listener {
     private void restore(LivingEntity entity, Rarity rarity) {
         ForgeSettings.EliteGrade grade = plugin.settings().eliteGrades.get(rarity);
         if (grade == null || entity.isDead()) return;
+        if (hosted(entity)) {
+            restoreHosted(entity);
+            return;
+        }
         double currentHealth = entity.getHealth();
         AttributeInstance health = entity.getAttribute(Attribute.MAX_HEALTH);
         double previousMax = health == null ? currentHealth : health.getValue();
@@ -186,6 +203,29 @@ public final class EliteService implements Listener {
         entity.customName(null);
         entity.customName(name);
         entity.setCustomNameVisible(true);
+        tracked.add(entity.getUniqueId());
+    }
+
+    public boolean hosted(Entity entity) {
+        return entity.getPersistentDataContainer().has(hostedKey, PersistentDataType.BYTE);
+    }
+
+    /**
+     * A hosted elite: keep LevelledMobs away without touching the owner's base values, and take back any Forge
+     * multiplier an older release left on it, keeping its health percentage. Its name and health stay the owner's.
+     */
+    private void restoreHosted(LivingEntity entity) {
+        levelledMobs.protect(entity, true);
+        AttributeInstance health = entity.getAttribute(Attribute.MAX_HEALTH);
+        double currentHealth = entity.getHealth(), previousMax = health == null ? currentHealth : health.getValue();
+        boost(entity, Attribute.MAX_HEALTH, 0, AttributeModifier.Operation.MULTIPLY_SCALAR_1);
+        boost(entity, Attribute.ATTACK_DAMAGE, 0, AttributeModifier.Operation.MULTIPLY_SCALAR_1);
+        boost(entity, Attribute.MOVEMENT_SPEED, 0, AttributeModifier.Operation.MULTIPLY_SCALAR_1);
+        boost(entity, Attribute.KNOCKBACK_RESISTANCE, 0, AttributeModifier.Operation.ADD_NUMBER);
+        if (health != null && previousMax > 0 && Math.abs(health.getValue() - previousMax) > 1e-9) {
+            double restoredHealth = Math.min(health.getValue(), currentHealth / previousMax * health.getValue());
+            if (restoredHealth > 0 && Math.abs(entity.getHealth() - restoredHealth) > 1e-9) entity.setHealth(restoredHealth);
+        }
         tracked.add(entity.getUniqueId());
     }
 

@@ -95,9 +95,14 @@ public final class ForgeApi {
         return plugin.charms().roll(from, grade, random);
     }
 
-    /** Makes a living mob an elite of a rarity (UNCOMMON..MYTHIC). */
+    /**
+     * Makes a living mob an elite of a rarity (UNCOMMON..MYTHIC). When the mob belongs to the calling plugin (it
+     * carries a key from elites.skip-namespaces, as Evergarden's sanctum mobs do), that plugin keeps the mob's
+     * health, damage and name; Forge adds the grade, armor, aura, moves and rewards. An ordinary mob gets the
+     * full elite multipliers.
+     */
     public static boolean makeElite(LivingEntity entity, String rarity) {
         Rarity parsed = Rarity.parse(rarity);
-        return available() && parsed != null && plugin.elites().makeElite(entity, parsed);
+        return available() && parsed != null && plugin.elites().makeElite(entity, parsed, plugin.elites().ownedByAnotherPlugin(entity));
     }
 }

@@ -1,10 +1,14 @@
 """Store each pet texture once in the Evergarden JAR.
 
 Every bundled pet blueprint (modelengine/pets/*.bbmodel) embeds its PNG as a base64 data URI, and the
-same PNG bytes already ship in native-pets.zip. `slim` swaps each data URI for a short token and writes
-modelengine/pets/blueprint-textures.json, which maps every token back to its native-pets.zip entry and
-records the original blueprint's size and SHA-256. The plugin (PetBlueprints.java) restores the exact
-original bytes only when it really has to write a blueprint, and checks them against that SHA-256.
+same PNG bytes already ship in the bundled Bedrock pack (its native entity textures). `slim` swaps each
+data URI for a short token and writes modelengine/pets/blueprint-textures.json, which maps every token
+back to its entry in that pack and records the original blueprint's size and SHA-256. The plugin
+(PetBlueprints.java) reads the archive named in the index, restores the exact original bytes only when
+it really has to write a blueprint, and checks them against that SHA-256.
+
+e2.200 pointed at native-pets.zip; since e2.201 its large Java textures are repacked
+(tools/pet_native_repack.py), so only the Bedrock pack still holds the blueprints' own PNG bytes.
 
 `restore` is the Python twin of the Java restore. `slim` runs it on every blueprint and refuses to
 return anything that does not round-trip byte for byte.
@@ -17,7 +21,7 @@ import re
 import zipfile
 
 INDEX = 'modelengine/pets/blueprint-textures.json'
-ARCHIVE = 'native-pets.zip'
+ARCHIVE = 'resource-packs/evergarden-bedrock.mcpack'
 PREFIX = 'modelengine/pets/'
 TOKEN = 'evergarden-texture:'
 DATA_URI = re.compile(rb'data:image/png;base64,([A-Za-z0-9+/]*={0,2})')
@@ -85,10 +89,24 @@ def slim(entries):
                           'uncompressed_bytes_saved': saved}
 
 
+def reindex(index_bytes, archive_bytes, archive=ARCHIVE):
+    """Point an existing index at another archive holding the same PNG bytes (tokens carry each PNG's SHA-256)."""
+    index = json.loads(index_bytes)
+    pngs = _pngs(archive_bytes)
+    for name, model in index['models'].items():
+        for token in model['textures']:
+            digest = token[len(TOKEN):]
+            if digest not in pngs:
+                raise ValueError(f'{name}: texture {digest} is not in {archive}')
+            model['textures'][token] = pngs[digest][0]
+    index['archive'] = archive
+    return (json.dumps(index, indent=1, sort_keys=True) + '\n').encode('utf8')
+
+
 def verify(entries):
     """Check a slim JAR's entries: every indexed blueprint restores to its recorded size and SHA-256."""
     index = json.loads(entries[INDEX])
-    by_path = {path: data for path, data in _pngs(entries[ARCHIVE]).values()}
+    by_path = {path: data for path, data in _pngs(entries[index['archive']]).values()}
     for model, info in index['models'].items():
         data = restore(entries[PREFIX + model + '.bbmodel'], info['textures'], by_path)
         if len(data) != info['size'] or _sha(data) != info['sha256']:

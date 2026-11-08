@@ -1,11 +1,30 @@
-"""Verify the native export preserves every pet sculpture (wild and mythical) and authored clip."""
+"""Verify the native export preserves every pet sculpture (wild and mythical) and authored clip.
+
+Textures larger than 512 px are repacked by tools/pet_native_repack.py (no empty space, same pixels): for those
+the check compares every face's pixels with the blueprint's face instead of the whole texture's bytes.
+"""
 import base64
 import hashlib
+import io
 import json
 from pathlib import Path
 import zipfile
 
+import numpy as np
+from PIL import Image
+
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def face_pixels(image, uv, width, height):
+    """The pixel block a UV rectangle samples, and whether it is mirrored horizontally/vertically."""
+    corners = []
+    for index, value in enumerate(uv):
+        scaled = value * (width if index % 2 == 0 else height) / 16
+        assert abs(scaled - round(scaled)) < 1e-6, f'UV {uv} off the {width}x{height} pixel grid'
+        corners.append(int(round(scaled)))
+    u1, v1, u2, v2 = corners
+    return image[min(v1, v2):max(v1, v2), min(u1, u2):max(u1, u2)], (u1 > u2, v1 > v2)
 RESOURCES = ROOT / 'evergarden/src/main/resources'
 MYTHICAL = {'aetherius', 'ignis_draconis', 'zephyros', 'solaris', 'fenrir'}
 
@@ -53,6 +72,14 @@ def main():
 
             for group in source['outliner']:
                 walk(group, -1)
+            # A repacked texture keeps each face's pixels at a new place; compare those pixels face by face.
+            repacked = {}
+            for index, texture in enumerate(source['textures']):
+                original = base64.b64decode(texture['source'].split(',', 1)[1])
+                packed = pack.read(f'assets/evergarden/textures/item/pet_native/{model_id}_{index}.png')
+                if packed != original:
+                    repacked[index] = (np.asarray(Image.open(io.BytesIO(original)).convert('RGBA')),
+                                       np.asarray(Image.open(io.BytesIO(packed)).convert('RGBA')))
             verify(len(groups) == len(definition['bones']), 'joint count ' + model_id)
             exported_count = 0
             for index, (group, parent) in enumerate(groups):
@@ -94,14 +121,25 @@ def main():
                         verify(exported_face['texture'] == '#' + str(uv['texture']), 'original face texture')
                         resolution = source['resolution']
                         expected = [uv['uv'][a]*16/resolution['width' if a % 2 == 0 else 'height'] for a in range(4)]
-                        verify(exported_face['uv'] == expected, 'original UV rectangle')
+                        if uv['texture'] in repacked:
+                            original, packed = repacked[uv['texture']]
+                            before = face_pixels(original, expected, original.shape[1], original.shape[0])
+                            after = face_pixels(packed, exported_face['uv'], packed.shape[1], packed.shape[0])
+                            verify(before[1] == after[1] and np.array_equal(before[0], after[0]), 'repacked face keeps its exact pixels')
+                        else:
+                            verify(exported_face['uv'] == expected, 'original UV rectangle')
                         verify(exported_face.get('rotation', 0) == uv.get('rotation', 0), 'original UV rotation')
             verify(exported_count == definition['cubes'], 'manifest cube count')
             total_cubes += exported_count
             for index, texture in enumerate(source['textures']):
                 path = f'assets/evergarden/textures/item/pet_native/{model_id}_{index}.png'
                 expected_paths.add(path)
-                verify(pack.read(path) == base64.b64decode(texture['source'].split(',', 1)[1]), 'original texture bytes')
+                if index in repacked:
+                    original, packed = repacked[index]
+                    verify(max(original.shape[:2]) > 512 and packed.shape[0] * packed.shape[1] < original.shape[0] * original.shape[1],
+                           'only a large texture is repacked, onto a smaller canvas')
+                else:
+                    verify(pack.read(path) == base64.b64decode(texture['source'].split(',', 1)[1]), 'original texture bytes')
             verify(set(definition['clips']) == {'idle', 'walk', 'fly', 'sit', 'greet'}, 'all authored animations retained')
             group_indices = {group['uuid']: index for index, (group, _) in enumerate(groups)}
             for clip in source['animations']:

@@ -868,14 +868,28 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         for(ElementalSpell spell:ElementalSpell.values())if(spell.rarity()==ElementalSpell.Rarity.LEGENDARY)pool.add(spell.id());
         return pool.isEmpty()?null:pool.get(random.nextInt(pool.size()));
     }
+    /** Every species with equal odds, the mythical five included; the egg hatches as a baby. */
+    private com.example.voidscape.pet.PetCatalog.Species rollEgg(){
+        var pool=com.example.voidscape.pet.PetCatalog.available();
+        return pool.get(random.nextInt(pool.size()));
+    }
     private void victory(Run r){
         if(r.test){message(r,"จบไฟต์ทดสอบ! · เปิด /evergarden test เพื่อเริ่มเฟสที่ต้องการอีกครั้ง");cleanup(r);return;}
         ledger.set("sites."+id(r.site)+".last-stop",null);
         ledger.set(path(r.site),System.currentTimeMillis()+seconds("respawn-seconds",14400,60,604800)*50L);
-        int keys=plugin.integer("world-boss.rewards.keys",2,0,16),xp=plugin.integer("world-boss.rewards.experience",1500,0,1000000);
+        int tier7=plugin.integer("world-boss.rewards.tier7-keys",1,0,16),tier6=plugin.integer("world-boss.rewards.tier6-keys",1,0,16);
+        int eggs=plugin.integer("world-boss.rewards.eggs",1,0,8),xp=plugin.integer("world-boss.rewards.experience",1500,0,1000000);
         for(UUID uuid:r.fight.roster()){
             if(r.fight.contribution(uuid)<=0)continue;
-            String reward="rewards."+uuid;ledger.set(reward+".tier5-keys",ledger.getInt(reward+".tier5-keys")+keys);
+            String reward="rewards."+uuid;
+            ledger.set(reward+".tier7-keys",ledger.getInt(reward+".tier7-keys")+tier7);
+            ledger.set(reward+".tier6-keys",ledger.getInt(reward+".tier6-keys")+tier6);
+            // The egg's species is chosen now and stored, so a later claim can never reroll it.
+            if(eggs>0){
+                List<String> queued=new ArrayList<>(ledger.getStringList(reward+".eggs"));
+                for(int i=0;i<eggs;i++)queued.add(rollEgg().id);
+                ledger.set(reward+".eggs",queued);
+            }
             String spell=rollLegendarySpell();
             if(spell==null)ledger.set(reward+".legendary-spell-rolls",ledger.getInt(reward+".legendary-spell-rolls")+1);
             else{
@@ -897,6 +911,10 @@ public final class WorldBossManager implements Listener,AutoCloseable {
     private void claim(Player p){
         if(!healthy||!p.isOnline()||p.isDead())return;
         String path="rewards."+p.getUniqueId();int keys=ledger.getInt(path+".keys"),tier5Keys=ledger.getInt(path+".tier5-keys"),xp=ledger.getInt(path+".xp");
+        int tier7Keys=ledger.getInt(path+".tier7-keys"),tier6Keys=ledger.getInt(path+".tier6-keys");
+        var pets=plugin.pets();
+        // Eggs are registered by the pet system; if it failed to start they stay queued while the rest is delivered.
+        List<String> queuedEggs=ledger.getStringList(path+".eggs"),eggs=pets==null?List.of():queuedEggs,heldEggs=pets==null?queuedEggs:List.of();
         var addon=Bukkit.getPluginManager().getPlugin("advance-magic");
         var magic=addon instanceof com.example.advancemagic.AdvanceMagicPlugin m&&m.isEnabled()?m:null;
         List<String> spells=new ArrayList<>(ledger.getStringList(path+".legendary-spells"));
@@ -920,10 +938,20 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         List<String> cores=ledger.getStringList(path+".cores");
         // Feathers wait in the ledger while the Seraph is unavailable.
         int stored=ledger.getInt(path+".feathers"),feathers=plugin.seraphTrader()==null?0:stored;
-        if(keys<=0&&tier5Keys<=0&&xp<=0&&cores.isEmpty()&&spells.isEmpty()&&feathers<=0&&(skillPoints<=0||magic==null))return;
+        if(keys<=0&&tier5Keys<=0&&tier7Keys<=0&&tier6Keys<=0&&eggs.isEmpty()&&xp<=0&&cores.isEmpty()&&spells.isEmpty()&&feathers<=0
+            &&(skillPoints<=0||magic==null))return;
         List<ItemStack> items=new ArrayList<>();
         if(keys>0){ItemStack item=plugin.relics().createVoidKey();item.setAmount(keys);items.add(item);}
+        if(tier7Keys>0){ItemStack item=plugin.relics().createVoidKey(7);item.setAmount(tier7Keys);items.add(item);}
+        if(tier6Keys>0){ItemStack item=plugin.relics().createVoidKey(6);item.setAmount(tier6Keys);items.add(item);}
+        // Tier V keys queued by victories before the e2.203 reward change stay claimable.
         if(tier5Keys>0){ItemStack item=plugin.relics().createVoidKey(5);item.setAmount(tier5Keys);items.add(item);}
+        List<com.example.voidscape.pet.PetCatalog.Species> eggSpecies=new ArrayList<>();
+        for(String id:eggs){
+            var species=com.example.voidscape.pet.PetCatalog.Species.find(id);
+            if(species==null){plugin.getLogger().warning("Unknown queued world-boss egg species "+id+"; rolling another");species=rollEgg();}
+            eggSpecies.add(species);
+        }
         for(String id:spells){
             ElementalSpell spell=ElementalSpell.parse(id);
             if(spell==null||spell.rarity()!=ElementalSpell.Rarity.LEGENDARY){
@@ -938,16 +966,30 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         }
         List<ItemStack> capacity=new ArrayList<>(items);
         if(feathers>0)capacity.add(com.example.voidscape.trade.SeraphFeathers.feather(plugin,feathers));
+        for(var species:eggSpecies)capacity.add(com.example.voidscape.pet.PetSystem.eggPreview(species));
         if(!fits(p.getInventory(),capacity)){plugin.message(p,"รางวัลบอสถูกเก็บไว้ · เว้นช่องแล้วใช้ /evergarden boss claim");return;}
         Object previous=ledger.get(path);ledger.set(path,null);
+        if(!heldEggs.isEmpty())ledger.set(path+".eggs",heldEggs);
         if(magic==null&&skillPoints>0)ledger.set(path+".skill-points",skillPoints);
         if(feathers==0&&stored>0)ledger.set(path+".feathers",stored);
         if(!save()){ledger.set(path,previous);return;}
         if(feathers>0)plugin.seraphTrader().feathers().grant(p,feathers,"พิชิตผู้พิพากษาไร้ร่าง",false);
         for(ItemStack item:items)p.getInventory().addItem(item).values().forEach(left->p.getWorld().dropItemNaturally(p.getLocation(),left));
+        // Each egg goes into the pet ledger first (no duplicates); one that cannot be saved is queued here again.
+        List<String> eggNames=new ArrayList<>(),failedEggs=new ArrayList<>();String eggProblem=null;
+        for(var species:eggSpecies){
+            String problem=pets.grantEgg(p,species,"ผู้พิพากษาไร้ร่าง");
+            if(problem==null)eggNames.add("ไข่ "+species.display+" (ร่างเด็ก)");else{failedEggs.add(species.id);eggProblem=problem;}
+        }
+        if(!failedEggs.isEmpty()){
+            List<String> again=new ArrayList<>(ledger.getStringList(path+".eggs"));again.addAll(failedEggs);ledger.set(path+".eggs",again);save();
+            plugin.message(p,"ไข่รางวัลยังส่งไม่ได้ ("+eggProblem+") · เก็บไว้แล้ว รับใหม่ด้วย /evergarden boss claim");
+        }
         if(xp>0)p.giveExp(xp);
         if(magic!=null&&skillPoints>0)magic.skillTree().grantPoints(p,skillPoints,"World boss defeated");
-        plugin.message(p,"รางวัลผู้พิพากษาไร้ร่าง · กุญแจ Vault Tier V "+tier5Keys+" · เวทย์ตำนาน "+spells.size()
+        plugin.message(p,"รางวัลผู้พิพากษาไร้ร่าง"+(eggNames.isEmpty()?"":" · "+String.join(" · ",eggNames))
+            +(tier7Keys>0?" · กุญแจ Vault Tier VII "+tier7Keys:"")+(tier6Keys>0?" · Tier VI "+tier6Keys:"")
+            +(tier5Keys>0?" · Tier V "+tier5Keys:"")+" · เวทย์ตำนาน "+spells.size()
             +(keys>0?" · กุญแจเดิม "+keys:"")+(cores.isEmpty()?"":" · Core เดิม "+cores.size())+" · XP "+xp);
     }
     /** Simulate Bukkit's storage stacking before consuming any persisted reward. */

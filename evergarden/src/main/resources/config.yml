@@ -313,12 +313,16 @@ world-boss:
   fight-timeout-seconds: 0
   respawn-seconds: 14400
   rewards:
-    # Every player credited with positive hand/core damage receives Tier V Vault keys
+    # Every player credited with positive hand/core damage receives one Tier VII and one Tier VI
+    # Vault key, one pet egg (baby form; every species equally likely, the five mythical ones included)
     # PLUS one guaranteed random LEGENDARY elemental spell scroll (equal chances).
-    # Spell IDs are stored at victory; offline/dead/full-inventory players claim later.
-    # If Advance Magic is unavailable, the whole pair waits and its roll is saved once ready.
-    # Existing queued legacy keys/cores remain claimable. Test fights give no rewards.
-    keys: 2
+    # Egg species and spell IDs are stored at victory; offline/dead/full-inventory players claim later.
+    # If Advance Magic is unavailable, the bundle waits and its spell roll is saved once ready.
+    # Tier V keys, legacy keys and cores queued before this change remain claimable; the old
+    # "keys" (Tier V count) setting is no longer used. Test fights give no rewards.
+    tier7-keys: 1
+    tier6-keys: 1
+    eggs: 1
     experience: 1500
 rewards:
   # Vaults give one primary reward; mana potions are not in the Vault pool.

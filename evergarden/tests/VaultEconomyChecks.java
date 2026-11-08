@@ -359,7 +359,8 @@ public final class VaultEconomyChecks extends JavaPlugin {
                     case 0->data.remove(garden.key("limit_break_cap"));
                     case 1->data.remove(garden.key("limit_break_tier"));
                     case 2->data.set(garden.key("limit_break_tier"),PersistentDataType.INTEGER,0);
-                    case 3->data.set(garden.key("limit_break_tier"),PersistentDataType.INTEGER,6);
+                    // Grades run I..VIII since the Tier VI-VIII sanctum hoard (e2.194); IX is out of range.
+                    case 3->data.set(garden.key("limit_break_tier"),PersistentDataType.INTEGER,9);
                     case 4->data.set(garden.key("limit_break_tier"),PersistentDataType.STRING,"1");
                     case 5->data.set(garden.key("limit_break_cap"),PersistentDataType.STRING,"32");
                     case 6->data.set(garden.key("limit_break_cap"),PersistentDataType.INTEGER,0);
@@ -375,7 +376,7 @@ public final class VaultEconomyChecks extends JavaPlugin {
             check(garden.relics().evaluateScrollCraft(forged,limitBreakTarget(type,expectedCaps(type)[0]))==null,"forged cap cannot bypass grade restriction "+type);
         }
         check(garden.relics().getLimitBreakCap(new ItemStack(Material.PAPER))==0,"untyped paper has no Limit Break entitlement");
-        for(int tier:new int[]{0,6,-1})try{
+        for(int tier:new int[]{0,9,-1})try{   // I..VIII are valid since the Tier VI-VIII sanctum hoard (e2.194)
             garden.relics().createScrollLimitBreak(LimitBreakType.SHARPNESS,tier);throw new AssertionError("invalid Limit Break grade accepted");
         }catch(IllegalArgumentException expected){passed++;}
         audit.append("Limit Break: all 14 types x 5 grades; explicit ceilings, serialization, non-stacking, +1/cap enforcement, legacy maxima and malformed metadata\n");

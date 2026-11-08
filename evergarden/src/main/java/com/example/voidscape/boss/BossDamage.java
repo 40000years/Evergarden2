@@ -79,8 +79,38 @@ public final class BossDamage {
         boolean trueHealth;double armorAmount;int wearMultiplier=1;
         Impact(Player player,double amount,DamageSource source,boolean armor){this.player=player;this.amount=amount;this.source=source;this.armor=armor;}
     }
+    /** Boss attributions of deaths now in progress (PlayerDeathEvent LOWEST to MONITOR). */
+    private static final Map<UUID,String> DEATHS=new HashMap<>();
+    /** Deaths whose boss line another plugin (DeathMessages) is broadcasting. */
+    private static final Set<UUID> ANNOUNCED=new HashSet<>();
+    static void announcedElsewhere(Player player){ANNOUNCED.add(player.getUniqueId());}
+    /** The boss a death is attributed to: a scoped kill, a tagged boss or proxy as the source, or its lingering Wither/fire. */
+    private static String attribution(Player player,DamageSource source){
+        UUID id=player.getUniqueId();Attribution scoped=SCOPED.get();
+        String boss=scoped!=null&&scoped.player.equals(id)?scoped.name:null;
+        if(boss==null&&source!=null){boss=name(source.getCausingEntity());if(boss==null)boss=name(source.getDirectEntity());}
+        if(boss==null&&source!=null){
+            var type=source.getDamageType();
+            Lingering effect=type==org.bukkit.damage.DamageType.WITHER?WITHER.get(id):type==org.bukkit.damage.DamageType.ON_FIRE?FIRE.get(id):null;
+            if(effect!=null&&effect.until>=Bukkit.getCurrentTick()&&effect.world.equals(player.getWorld().getUID())
+                    &&(type!=org.bukkit.damage.DamageType.WITHER||player.hasPotionEffect(PotionEffectType.WITHER))
+                    &&(type!=org.bukkit.damage.DamageType.ON_FIRE||player.getFireTicks()>0))boss=effect.name;
+        }
+        return boss==null||boss.isBlank()?null:boss;
+    }
+    /** The boss behind a death now in progress, also when another plugin's death listener runs before ours. */
+    static String deathBoss(Player player){
+        String boss=DEATHS.get(player.getUniqueId());
+        if(boss!=null)return boss;
+        var last=player.getLastDamageCause();
+        return player.isDead()||player.getHealth()<=0?attribution(player,last==null?null:last.getDamageSource()):null;
+    }
+    static net.kyori.adventure.text.TextComponent deathMessage(Player player,String boss){
+        return Component.text(player.getName()+" ถูกสังหารโดย ",net.kyori.adventure.text.format.NamedTextColor.GRAY).append(BossNames.styled(boss));
+    }
     static void register(JavaPlugin plugin){
-        bossNameKey=new NamespacedKey(plugin,"boss_death_name");WITHER.clear();FIRE.clear();
+        bossNameKey=new NamespacedKey(plugin,"boss_death_name");WITHER.clear();FIRE.clear();DEATHS.clear();ANNOUNCED.clear();
+        DeathMessagesHook.register(plugin);
         plugin.getServer().getPluginManager().registerEvents(new Listener(){
             @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
             public void potion(EntityPotionEffectEvent event){
@@ -94,27 +124,25 @@ public final class BossDamage {
             }
             @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
             public void combust(EntityCombustEvent event){if(event.getEntity() instanceof Player p)FIRE.remove(p.getUniqueId());}
+            // Decided first, so a death-message plugin listening later (DeathMessagesHook) sees the same boss.
+            @EventHandler(priority=EventPriority.LOWEST)
+            public void deathAttribution(PlayerDeathEvent event){
+                String boss=attribution(event.getEntity(),event.getDamageSource());
+                if(boss!=null)DEATHS.put(event.getEntity().getUniqueId(),boss);else DEATHS.remove(event.getEntity().getUniqueId());
+            }
             @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
             public void deathName(PlayerDeathEvent event){
-                Player player=event.getEntity();UUID id=player.getUniqueId();Attribution scoped=SCOPED.get();
-                String boss=scoped!=null&&scoped.player.equals(id)?scoped.name:null;
-                if(boss==null){boss=name(event.getDamageSource().getCausingEntity());if(boss==null)boss=name(event.getDamageSource().getDirectEntity());}
-                if(boss==null){
-                    var type=event.getDamageSource().getDamageType();
-                    Lingering effect=type==org.bukkit.damage.DamageType.WITHER?WITHER.get(id):type==org.bukkit.damage.DamageType.ON_FIRE?FIRE.get(id):null;
-                    if(effect!=null&&effect.until>=Bukkit.getCurrentTick()&&effect.world.equals(player.getWorld().getUID())
-                            &&(type!=org.bukkit.damage.DamageType.WITHER||player.hasPotionEffect(PotionEffectType.WITHER))
-                            &&(type!=org.bukkit.damage.DamageType.ON_FIRE||player.getFireTicks()>0))boss=effect.name;
-                }
-                if(boss!=null&&!boss.isBlank()){
-                    Component message=Component.text(player.getName()+" ถูกสังหารโดย ",net.kyori.adventure.text.format.NamedTextColor.GRAY)
-                        .append(BossNames.styled(boss));
-                    if(event.deathMessage()!=null)event.deathMessage(message);
+                Player player=event.getEntity();String boss=DEATHS.get(player.getUniqueId());
+                if(boss!=null){
+                    Component message=deathMessage(player,boss);
+                    // DeathMessages already carries the boss line; a kept vanilla line would only repeat it.
+                    if(ANNOUNCED.contains(player.getUniqueId()))event.deathMessage(null);
+                    else if(event.deathMessage()!=null)event.deathMessage(message);
                     event.deathScreenMessageOverride(message);
                 }
             }
-            @EventHandler(priority=EventPriority.MONITOR) public void deathCleanup(PlayerDeathEvent e){WITHER.remove(e.getEntity().getUniqueId());FIRE.remove(e.getEntity().getUniqueId());}
-            @EventHandler public void quit(PlayerQuitEvent e){WITHER.remove(e.getPlayer().getUniqueId());FIRE.remove(e.getPlayer().getUniqueId());}
+            @EventHandler(priority=EventPriority.MONITOR) public void deathCleanup(PlayerDeathEvent e){UUID id=e.getEntity().getUniqueId();WITHER.remove(id);FIRE.remove(id);DEATHS.remove(id);ANNOUNCED.remove(id);}
+            @EventHandler public void quit(PlayerQuitEvent e){UUID id=e.getPlayer().getUniqueId();WITHER.remove(id);FIRE.remove(id);DEATHS.remove(id);ANNOUNCED.remove(id);}
             @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
             public void soulFixed(org.bukkit.event.entity.EntityDamageEvent event){
                 Impact impact=CURRENT.get();

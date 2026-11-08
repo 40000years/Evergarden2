@@ -1,0 +1,4 @@
+name: DeathMessages
+version: 'stub-1.5.0-api'
+main: dev.mrshawn.deathmessages.DeathMessages
+api-version: '26.2'

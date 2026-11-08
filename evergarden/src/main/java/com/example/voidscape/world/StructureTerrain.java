@@ -83,13 +83,21 @@ public final class StructureTerrain {
     private final SkyLandmarkLayout landmarks;
     private final WorldBossTempleLayout temples;
     private final BossStructureLayout bosses;
+    private final DragonNestLayout dragons;
     private final boolean whaleEnabled, observatoryEnabled, gardenEnabled, templeEnabled;
     private final CellCache whaleCells = new CellCache(), landmarkCells = new CellCache();
-    private final CellCache templeCells = new CellCache(), bossCells = new CellCache();
+    private final CellCache templeCells = new CellCache(), bossCells = new CellCache(), dragonCells = new CellCache();
 
     public StructureTerrain(long seed, SkyWhaleLayout whales, boolean whaleEnabled,
                             SkyLandmarkLayout landmarks, boolean observatoryEnabled, boolean gardenEnabled,
                             WorldBossTempleLayout temples, boolean templeEnabled, BossStructureLayout bosses) {
+        this(seed, whales, whaleEnabled, landmarks, observatoryEnabled, gardenEnabled, temples, templeEnabled, bosses, null);
+    }
+
+    public StructureTerrain(long seed, SkyWhaleLayout whales, boolean whaleEnabled,
+                            SkyLandmarkLayout landmarks, boolean observatoryEnabled, boolean gardenEnabled,
+                            WorldBossTempleLayout temples, boolean templeEnabled, BossStructureLayout bosses,
+                            DragonNestLayout dragons) {
         this.seed = seed;
         this.whales = whales;
         this.whaleEnabled = whaleEnabled;
@@ -99,6 +107,15 @@ public final class StructureTerrain {
         this.temples = temples;
         this.templeEnabled = templeEnabled;
         this.bosses = bosses;
+        this.dragons = dragons;
+        if (dragons != null) {
+            for (var kind : DragonNestLayout.Kind.values()) {
+                if (dragons.enabled(kind)) {
+                    var bp = kind.blueprint();
+                    cached(bp, () -> dragonUnderside(bp, kind.radius));
+                }
+            }
+        }
     }
 
     /** Includes neighbor cells whose structure or smooth apron can reach this point. */
@@ -144,6 +161,18 @@ public final class StructureTerrain {
                     var map = cached(blueprint, () -> bossUnderside(blueprint, site.kind().radius));
                     values.add(anchor(site.x(), site.z(), site.kind().radius, site.kind().radius,
                             site.kind().floorY, site.kind().id, floating(site.x(), site.z(), site.kind().id, .6), map));
+                }
+                return List.copyOf(values);
+            });
+        if (dragons != null)
+            collect(result, x, z, reach, dragons.spacingChunks() * 16, dragonCells, (gx, gz) -> {
+                List<Anchor> values = new ArrayList<>();
+                for (var site : dragons.cell(gx, gz)) {
+                    if (!dragons.enabled(site.kind())) continue;
+                    var blueprint = site.blueprint();
+                    var map = cached(blueprint, () -> dragonUnderside(blueprint, site.kind().radius));
+                    values.add(anchor(site.x(), site.z(), site.kind().radius, site.kind().radius,
+                            site.kind().floorY, site.kind().id, floating(site.x(), site.z(), site.kind().id, .75), map));
                 }
                 return List.copyOf(values);
             });
@@ -281,6 +310,16 @@ public final class StructureTerrain {
         for (var box : blueprint.boxes()) {
             // AIR is an ordered carving operation, never an underside block. A
             // conservative old solid beneath a cut remains safe to build below.
+            if (box.material().isAir()) continue;
+            for (int x = box.x1(); x <= box.x2(); x++)
+                for (int z = box.z1(); z <= box.z2(); z++) map.include(x, box.y1(), z);
+        }
+        return map;
+    }
+
+    private static Underside dragonUnderside(DragonNest blueprint, int radius) {
+        var map = new Underside(radius, radius);
+        for (var box : blueprint.boxes()) {
             if (box.material().isAir()) continue;
             for (int x = box.x1(); x <= box.x2(); x++)
                 for (int z = box.z1(); z <= box.z2(); z++) map.include(x, box.y1(), z);

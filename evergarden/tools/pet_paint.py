@@ -74,6 +74,27 @@ SPECIES_KINDS = {
     'starlight_peacock': {'plume': 'feather', 'plume_light': 'feather', 'train': 'feather', 'train_dark': 'feather',
                           'eye_gold': 'metal', 'eye_blue': 'plain', 'eye_core': 'plain'},
     'aurora_jelly': {'bell': 'crystal', 'bell_light': 'crystal', 'tentacle': 'crystal'},
+    # Mythical concept set v2 (pet_mythical_sculpt).
+    'solaris': {'plume': 'feather', 'plume_warm': 'feather', 'plume_deep': 'feather', 'crest_feather': 'feather',
+                'beak': 'metal', 'beak_tip': 'metal', 'talon': 'metal', 'eye_rim': 'plain', 'sun_glow': 'glow',
+                'ray_glow': 'glow', 'plume_cream': 'feather', 'plume_gold': 'feather', 'breast_cream': 'feather',
+                'leg_gold': 'scale', 'eye_socket': 'plain'},
+    'ignis_draconis': {'scale_dark': 'scale', 'ridge': 'scale', 'belly_plate': 'glow', 'horn_bone': 'shell', 'spike': 'shell',
+                       'claw': 'shell', 'fang': 'skin', 'eye_rim': 'plain', 'nostril_glow': 'glow',
+                       'rock': 'magma', 'rock_dark': 'scale', 'belly_cream': 'glow', 'horn_dark': 'shell',
+                       'membrane_fire': 'membrane', 'claw_dark': 'shell', 'lava_plate': 'glow'},
+    'zephyros': {'feather_white': 'feather', 'feather_sky': 'feather', 'feather_azure': 'feather', 'feather_navy': 'feather',
+                 'beak': 'metal', 'beak_tip': 'metal', 'scale_gold': 'scale', 'horn_gold': 'metal',
+                 'talon': 'shell', 'fur_white': 'fur', 'fur_shade': 'fur', 'eye_rim': 'plain', 'storm_glow': 'glow',
+                 'wind_glow': 'glow', 'talon_dark': 'shell'},
+    'aetherius': {'coat': 'fur', 'coat_shade': 'fur', 'mane': 'hair', 'mane_light': 'hair', 'crystal_pink': 'crystal',
+                  'crystal_cyan': 'crystal', 'crystal_violet': 'crystal', 'halo_gold': 'metal', 'gem_cyan': 'glow',
+                  'hoof': 'metal', 'inner_ear': 'skin', 'nose': 'skin', 'eye_rim': 'plain', 'star_glow': 'glow',
+                  'antler': 'crystal', 'veil_pink': 'crystal', 'veil_lilac': 'crystal'},
+    'fenrir': {'fur_dark': 'fur', 'fur_light': 'fur', 'fur_top': 'fur', 'fur_obsidian': 'fur', 'fur_midnight': 'fur',
+               'muzzle_fur': 'fur', 'mane': 'hair', 'crystal_dark': 'crystal', 'claw': 'shell',
+               'fang': 'skin', 'nose': 'skin', 'inner_ear': 'skin', 'eye_rim': 'plain', 'claw_dark': 'shell',
+               'rune_cyan': 'glow', 'storm_arc': 'glow'},
 }
 WORDS = (('eye', 'eye'), ('glow', 'glow'), ('rune', 'glow'), ('gold', 'metal'), ('metal', 'metal'),
          ('fur', 'fur'), ('feather', 'feather'), ('wing', 'membrane'), ('stone', 'stone'), ('rock', 'stone'),
@@ -95,16 +116,16 @@ def kind(species, material):
     return 'plain'
 
 
-def pack(sizes, gutter=1):
+def pack(sizes, gutter=1, atlas_size=SIZE):
     """Shelf-pack rectangles (tallest first) into the atlas; None when they do not fit."""
     order = sorted(range(len(sizes)), key=lambda i: (-sizes[i][1], -sizes[i][0]))
     spots = [None] * len(sizes)
     x = y = shelf = 0
     for i in order:
         w, h = sizes[i][0] + 2 * gutter, sizes[i][1] + 2 * gutter
-        if x + w > SIZE:
+        if x + w > atlas_size:
             x, y, shelf = 0, y + shelf, 0
-        if w > SIZE or y + h > SIZE:
+        if w > atlas_size or y + h > atlas_size:
             return None
         spots[i] = (x + gutter, y + gutter)
         x += w
@@ -120,6 +141,22 @@ def _shade(rgb, f):
     else:
         r, g, b = r * f, g * f, b * f ** .9
     return tuple(max(0, min(255, round(v))) for v in (r, g, b)) + (255,)
+
+
+def _stops(spec):
+    """'#RRGGBB' or a vertical gradient '#top>#...>#bottom' (side faces run top to bottom)."""
+    return [tuple(bytes.fromhex(c.strip().lstrip('#'))) for c in spec.split('>')]
+
+
+def _colour(stops, face, t):
+    if len(stops) == 1 or face == 'up':
+        return stops[0]
+    if face == 'down':
+        return stops[-1]
+    span = t * (len(stops) - 1)
+    i = min(int(span), len(stops) - 2)
+    f = span - i
+    return tuple(stops[i][k] + (stops[i + 1][k] - stops[i][k]) * f for k in range(3))
 
 
 def _base(w, h, face, material, rng):
@@ -181,8 +218,8 @@ def _pattern(grid, material, face, rng):
                     _mul(grid, col + dx, row + dy, .88)
                 _mul(grid, col + 1, row, 1.07)
                 _mul(grid, col + 2, row, 1.07)
-    elif material in ('scale', 'shell'):
-        step = 5 if material == 'scale' else 7
+    elif material in ('scale', 'shell', 'magma'):
+        step = 5 if material in ('scale', 'magma') else 7
         for row in range(1, h, step - 1):
             offset = step // 2 if (row // (step - 1)) % 2 else 0
             for col in range(offset - step, w, step):
@@ -193,7 +230,7 @@ def _pattern(grid, material, face, rng):
         if material == 'shell':
             for _ in range(area // 60):
                 _mul(grid, rng.randrange(w), rng.randrange(h), 1.12)
-    elif material == 'stone':
+    elif material in ('stone',):
         for _ in range(max(1, area // 22)):
             _mul(grid, rng.randrange(w), rng.randrange(h), rng.choice((.9, .94, 1.06, 1.1)))
         for _ in range(area // 110):
@@ -252,6 +289,19 @@ def _pattern(grid, material, face, rng):
             _mul(grid, rng.randrange(w), rng.randrange(h), rng.choice((.96, 1.04)))
 
 
+def _magma(pixels, x0, y0, w, h, stops, rng):
+    """Dark obsidian dragon scales with a subtle warm ember lower rim."""
+    def burn(x, y, f):
+        if 0 <= x < w and 0 <= y < h:
+            old = pixels[x0 + x, y0 + y]
+            hot = stops[0] if f > .6 else stops[-1]
+            pixels[x0 + x, y0 + y] = tuple(round(old[k] + (hot[k] - old[k]) * f) for k in range(3)) + (255,)
+    if w < 4 or h < 4:
+        return
+    for x in range(1, w - 1):
+        burn(x, h - 1, .16)
+
+
 def _bleed(pixels, x0, y0, w, h):
     """Copy each face's border one texel outward, so mipmaps never pull in a neighbour."""
     for x in range(x0, x0 + w):
@@ -262,24 +312,24 @@ def _bleed(pixels, x0, y0, w, h):
         pixels[x0 + w, y] = pixels[x0 + w - 1, min(max(y, y0), y0 + h - 1)]
 
 
-def paint(species, stage, parts, palette):
+def paint(species, stage, parts, palette, atlas_size=SIZE, densities=(4, 3, 2, 1.5, 1)):
     """Return the atlas and, per part, the [u1, v1, u2, v2] pixel rectangle of each face."""
-    for density in (4, 3, 2):
+    for density in densities:
         sizes = []
         for part in parts:
             for face in FACES:
                 a, b = AXES[face]
                 sizes.append((max(1, round(part['size'][a] * density)), max(1, round(part['size'][b] * density))))
-        spots = pack(sizes)
+        spots = pack(sizes, atlas_size=atlas_size)
         if spots is not None:
             break
     else:
-        raise ValueError(f'{species}/{stage}: faces do not fit a {SIZE}px atlas')
-    image = Image.new('RGBA', (SIZE, SIZE), (0, 0, 0, 0))
+        raise ValueError(f'{species}/{stage}: faces do not fit a {atlas_size}px atlas')
+    image = Image.new('RGBA', (atlas_size, atlas_size), (0, 0, 0, 0))
     pixels = image.load()
     uvs = []
     for index, part in enumerate(parts):
-        rgb = tuple(bytes.fromhex(palette[part['material']].lstrip('#')))
+        stops = _stops(palette[part['material']])
         material = kind(species, part['material'])
         faces = {}
         for number, face in enumerate(FACES):
@@ -288,8 +338,11 @@ def paint(species, stage, parts, palette):
             grid = _base(w, h, face, material, rng)
             _pattern(grid, material, face, rng)
             for y in range(h):
+                rgb = _colour(stops, face, (y + .5) / h)
                 for x in range(w):
                     pixels[x0 + x, y0 + y] = _shade(rgb, grid[y][x])
+            if material == 'magma':
+                _magma(pixels, x0, y0, w, h, _stops(palette['magma_seam']), rng)
             _bleed(pixels, x0, y0, w, h)
             faces[face] = [x0, y0, x0 + w, y0 + h]
         uvs.append(faces)

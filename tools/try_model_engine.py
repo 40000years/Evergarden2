@@ -9,6 +9,7 @@ p.add_argument('--plugin',type=Path,required=True)
 p.add_argument('--test-directory',type=Path,required=True)
 p.add_argument('--garden-jar',type=Path)
 p.add_argument('--magic-jar',type=Path)
+p.add_argument('--forge-jar',type=Path)
 p.add_argument('--boss-orbs',action='store_true')
 p.add_argument('--pets',action='store_true')
 p.add_argument('--model-restore',action='store_true',help='Seed the old 51-pet installation and verify normal startup restores every boss')
@@ -27,7 +28,9 @@ p.add_argument('--styx',action='store_true')
 p.add_argument('--realm-bosses',action='store_true',help='Verify the merged realm-boss blueprint (one ModelEngine slot): every rig spawns and clears; the e2.159 install is retired')
 p.add_argument('--realm-melee',action='store_true',help='Verify player melee cooldown against a real dimensional boss on Paper')
 p.add_argument('--realm-projectile',action='store_true',help='Verify arrow collision and damage against a dimensional boss on Paper')
+p.add_argument('--realm-wipe',action='store_true',help='Verify Unlit Sun wipe, loot recovery and death attribution on Paper')
 p.add_argument('--nether-antiair',action='store_true',help='Verify Nether boss anti-air telegraphs, dodging and wall obstruction')
+p.add_argument('--dragon-hunt',action='store_true',help='Verify the Dragon Nest attack clips import and play under real ModelEngine (merged blueprint)')
 p.add_argument('--previous-blueprint',type=Path)
 p.add_argument('--previous-managed',action='store_true')
 args=p.parse_args();source=args.source_server.resolve();trial=args.test_directory.resolve()
@@ -44,6 +47,7 @@ for jar in (source/'plugins').glob('*.jar'):
 shutil.copy2(args.plugin,plugins/'ModelEngine.jar')
 if args.garden_jar:shutil.copy2(args.garden_jar,plugins/'evergarden.jar')
 if args.magic_jar:shutil.copy2(args.magic_jar,plugins/'advance-magic.jar')
+if args.forge_jar:shutil.copy2(args.forge_jar,plugins/'evergarden-forge.jar')
 if args.model_restore:
     assert args.garden_jar, '--model-restore requires --garden-jar'
     # Reproduce an existing e2.102/e2.103 installation before the new plugin
@@ -105,7 +109,9 @@ if args.boss_readiness:probe='BossReadinessProbe'
 if args.realm_bosses:probe='RealmBossesNativeProbe'
 if args.realm_melee:probe='RealmMeleeProbe'
 if args.realm_projectile:probe='RealmProjectileProbe'
+if args.realm_wipe:probe='RealmWipeProbe'
 if args.nether_antiair:probe='NetherAntiAirNativeProbe'
+if args.dragon_hunt:probe='DragonModelEngineProbe'
 if args.river_poses:
     assert args.arkhaia,'--river-poses requires --arkhaia'
     probe='RiverNativePoseProbe'
@@ -115,8 +121,8 @@ if args.pet_facing or args.adventurer_ranged:sources.append(str(ROOT/'tests/mode
 if args.river_poses:sources.append(str(ROOT/'tests/model-engine/ArkhaiaModelEngineProbe.java'))
 opts=['--release','25','-proc:none','-encoding','UTF-8','-cp',classpath,'-d',str(classes),*sources]
 argfile=trial/'probe-javac.args';argfile.write_text('\n'.join('"'+str(v).replace('\\','/')+'"' for v in opts),encoding='utf8')
-subprocess.run(['java',str(ROOT/'tools/CompileJava.java'),str(argfile)] if args.pets or args.model_restore or args.wild_pets or args.pet_system or args.pet_facing or args.adventurer_ranged or args.wild_terrain or args.realm_bosses or args.realm_melee or args.realm_projectile or args.nether_antiair else ['javac','@'+str(argfile)],check=True)
-(classes/'plugin.yml').write_text(f"name: ModelEngineTrialProbe\nversion: '1'\nmain: {probe}\napi-version: '26.2'\nsoftdepend: [ModelEngine, Evergarden, advance-magic, LevelledMobs, Geyser-Spigot, floodgate]\n",encoding='utf8')
+subprocess.run(['java',str(ROOT/'tools/CompileJava.java'),str(argfile)] if args.pets or args.model_restore or args.wild_pets or args.pet_system or args.pet_facing or args.adventurer_ranged or args.wild_terrain or args.realm_bosses or args.realm_melee or args.realm_projectile or args.realm_wipe or args.nether_antiair or args.dragon_hunt else ['javac','@'+str(argfile)],check=True)
+(classes/'plugin.yml').write_text(f"name: ModelEngineTrialProbe\nversion: '1'\nmain: {probe}\napi-version: '26.2'\nsoftdepend: [ModelEngine, Evergarden, EvergardenForge, advance-magic, LevelledMobs, Geyser-Spigot, floodgate]\n",encoding='utf8')
 subprocess.run(['jar','--create','--file',str(plugins/'model-engine-trial-probe.jar'),'-C',str(classes),'.'],check=True)
 (trial/'eula.txt').write_text((source/'eula.txt').read_text())
 (trial/'server.properties').write_text('server-ip=127.0.0.1\nserver-port=0\nonline-mode=false\nlevel-name=model_engine_trial\nlevel-type=minecraft:flat\nview-distance=2\nsimulation-distance=2\nspawn-protection=0\npause-when-empty-seconds=-1\nmax-tick-time=120000\n')

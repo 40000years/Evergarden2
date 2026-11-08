@@ -46,6 +46,12 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
 
     private static final Set<String> DIRECT_TARGET = Set.of("bubble_prison", "crystal_prison", "life_drain", "cursed_mark", "hellfire_chain", "lightning_chain");
     private static final Set<String> GROUND_TARGET = Set.of("burning_ground", "magma_eruption", "scorching_vortex", "meteor_rain", "healing_spring", "whirlpool", "ice_spike", "blizzard", "absolute_zero", "cyclone_trap", "earth_spike", "quicksand", "titans_judgment", "holy_sanctuary", "divine_judgment", "abyssal_collapse", "static_field", "wrath_of_raijin");
+    /** Aimed heal fields and their radius: they stay where aimed only when that reaches the caster or a friendly player. */
+    private static final Map<String, Double> HEAL_FIELDS = Map.of("healing_spring", 5.0, "holy_sanctuary", 6.0);
+    /** Whole-cast healing in units of healing power; a stronger heal than the reference raises its per-cast cap in proportion. */
+    private static final Map<String, Double> HEAL_WEIGHT = Map.of("healing_spring", 2.5, "rain_blessing", 3.5, "holy_sanctuary", 2.5,
+            "purification", 1.5, "heavens_descent", 4.8);
+    private static final double HEAL_REFERENCE = 2.5;
     private static final List<String> CLEANSE = List.of("burn", "curse_mark", "curse", "shock", "frost", "slow", "wet", "healing_reduction");
     private static final Set<PotionEffectType> CLEANSE_POTIONS = Set.of(PotionEffectType.POISON, PotionEffectType.WITHER, PotionEffectType.SLOWNESS, PotionEffectType.WEAKNESS,
             PotionEffectType.BLINDNESS, PotionEffectType.NAUSEA, PotionEffectType.DARKNESS, PotionEffectType.HUNGER, PotionEffectType.MINING_FATIGUE);
@@ -81,7 +87,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
     private final class Cast {
         final Player player;
         final ElementalSpell spell;
-        final double power, healing, utilityPower;
+        final double power, healing, utilityPower, levelFactor, healCapScale;
         final Location origin;
         final ElementalVfx.Scene art;
         final Set<UUID> targets = new HashSet<>(), statusApplied = new HashSet<>();
@@ -98,7 +104,12 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             ItemStack staff = player.getInventory().getItemInMainHand();
             // Damage Cores (+3% per level, from sky-landmark treasure) scale offensive power only.
             power = bounded(utilityPower * plugin.staffSpells().affinityMultiplier(staff,spell) * plugin.wands().damageMultiplier(staff), 0, 3000);
-            healing = bounded(stats.healingPower() * levelFactor, 0, 2000);
+            this.levelFactor = levelFactor;
+            // A matching staff strengthens heals like it strengthens damage; other staffs never weaken them.
+            healing = bounded(stats.healingPower() * levelFactor * Math.max(1, plugin.staffSpells().affinityMultiplier(staff, spell)), 0, 2000);
+            double reference = Math.max(.1, plugin.getConfig().getDouble("elemental-system.stats.healing-power", 6)) * HEAL_REFERENCE;
+            Double weight = HEAL_WEIGHT.get(spell.id());
+            healCapScale = bounded(weight == null ? levelFactor : healing * weight / reference, 1, 3);
             art = visuals.begin(player, spell);
         }
         boolean alive() { return player.isOnline() && !player.isDead() && player.getWorld() == origin.getWorld(); }
@@ -160,9 +171,45 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         return false;
     }
     private List<LivingEntity> nearby(Cast c, Location at, double radius, boolean friendly) {
-        return context.nearby(c.player, at, radius, friendly).stream()
+        return (friendly ? friendlyNearby(c.player, at, radius) : context.nearby(c.player, at, radius, false)).stream()
                 .filter(e -> visible(c.player, at.clone().add(0, .35, 0), e.getLocation().add(0, .7, 0)))
                 .limit(targetCap()).toList();
+    }
+    /**
+     * Who heals, shields and buffs reach: scoreboard allies, owned pets and summons, and (unless
+     * elemental-combat.support-all-players is false) every other player who is not on an opposing team.
+     * Damage still follows the PvP rules in MagicContext.enemy.
+     */
+    private boolean friendly(Player caster, LivingEntity target) {
+        if (context.ally(caster, target)) return true;
+        if (!(target instanceof Player other) || other.getGameMode() == GameMode.SPECTATOR
+                || !plugin.getConfig().getBoolean("elemental-combat.support-all-players", true)) return false;
+        var board = Bukkit.getScoreboardManager().getMainScoreboard();
+        return board.getEntryTeam(caster.getName()) == null || board.getEntryTeam(other.getName()) == null;
+    }
+    private List<LivingEntity> friendlyNearby(Player caster, Location at, double radius) {
+        if (!context.loaded(at)) return List.of();
+        List<LivingEntity> result = new ArrayList<>();
+        for (Entity e : at.getWorld().getNearbyEntities(at, radius, radius, radius))
+            if (e instanceof LivingEntity living && living.isValid() && !living.isDead() && !(e instanceof ArmorStand)
+                    && e.getLocation().distanceSquared(at) <= radius * radius && friendly(caster, living)) result.add(living);
+        result.sort(Comparator.comparingDouble(e -> e.getLocation().distanceSquared(at)));
+        int limit = Math.max(1, Math.min(128, plugin.getConfig().getInt("max-targets-per-effect", 32)));
+        return result.subList(0, Math.min(limit, result.size()));
+    }
+    /**
+     * An aimed heal field stays where it was aimed only when it reaches the caster or a friendly player there;
+     * aimed at a distant enemy, the horizon or the sky, it opens at the caster's feet instead of healing nobody.
+     */
+    private Location healCenter(Player p, Location aimed, double radius) {
+        if (aimed != null && aimed.getWorld() == p.getWorld()) {
+            Location from = aimed.clone().add(0, .35, 0);
+            for (LivingEntity e : friendlyNearby(p, aimed, radius))
+                if (e instanceof Player && visible(p, from, e.getLocation().add(0, .7, 0))) return aimed;
+        }
+        Location feet = p.getLocation().clone();
+        feet.setPitch(0);
+        return feet;
     }
     private EffectEngine.Effect effect(Cast c, int duration, BiPredicate<EffectEngine.Effect, Integer> body) {
         EffectEngine.Effect e = plugin.effects().start(c.player, duration, (active, age) -> c.alive() && body.test(active, age));
@@ -193,6 +240,8 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         LivingEntity target = DIRECT_TARGET.contains(spell.id()) ? target(player, 24) : null;
         if (DIRECT_TARGET.contains(spell.id()) && target == null) { player.sendActionBar(ChatColor.RED + "ไม่พบเป้าหมายในระยะหรือมีสิ่งกีดขวาง"); return false; }
         Location ground = GROUND_TARGET.contains(spell.id()) ? groundPoint(player, 24) : null;
+        Double healRadius = HEAL_FIELDS.get(spell.id());
+        if (healRadius != null) ground = healCenter(player, ground, healRadius);
         if (GROUND_TARGET.contains(spell.id()) && ground == null) { player.sendActionBar(ChatColor.RED + "ต้องเล็งพื้นภายใน 24 บล็อก"); return false; }
         Location dash = spell.id().endsWith("_dash") || spell.id().equals("gale_step") ? dashPoint(player, spell.id().equals("flame_dash") ? 6 : 7) : null;
         if ((spell.id().endsWith("_dash") || spell.id().equals("gale_step")) && dash == null) { player.sendActionBar(ChatColor.RED + "ไม่มีที่ว่างให้พุ่งไปข้างหน้า"); return false; }
@@ -286,7 +335,8 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
             case "heavens_descent" -> heavensDescent(c);
             case "life_drain" -> {
                 if (!permitted(c, target)) return false;
-                double actual = hit(c, target, 1, true), amount = Math.min(actual * .4, maxHealth(p) * (isBoss(target) ? .05 : .2));
+                // 40% of the damage actually dealt, as the scroll says; at most 40% of max HP (20% from a boss).
+                double actual = hit(c, target, 1, true), amount = Math.min(actual * .4, maxHealth(p) * (isBoss(target) ? .2 : .4));
                 heal(c, p, amount); beam(c, target.getEyeLocation(), p.getEyeLocation());
                 // Half of the stolen life flows on to nearby allied players.
                 for (LivingEntity ally : nearby(c, p.getLocation(), 6, true)) if (ally instanceof Player other && other != p) { heal(c, other, amount * .5); beam(c, p.getEyeLocation(), other.getEyeLocation()); }
@@ -402,7 +452,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         BoundingBox box = BoundingBox.of(from, to).expand(width + 1);
         List<LivingEntity> hits = new ArrayList<>();
         for (Entity e : from.getWorld().getNearbyEntities(box)) if (e instanceof LivingEntity living
-                && (friendly ? living instanceof Player && living != c.player && context.ally(c.player, living) : context.enemy(c.player, e))) {
+                && (friendly ? living instanceof Player && living != c.player && friendly(c.player, living) : context.enemy(c.player, e))) {
             BoundingBox body = living.getBoundingBox().expand(width);
             if (body.contains(from.toVector()) || body.rayTrace(from.toVector(), direction, distance) != null) hits.add(living);
         }
@@ -1097,7 +1147,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
     /** Buff keys drawn on the wearer; riders such as chill or steadfast share the main buff's art. */
     private static final Set<String> SHOWN_BUFFS = Set.of("reduction", "shield", "projectile_reduction", "power");
     private void buff(Cast c, LivingEntity target, String key, int duration, double amount) {
-        if (!context.ally(c.player, target) || !context.affect(c.player, target, null)) return;
+        if (!friendly(c.player, target) || !context.affect(c.player, target, null)) return;
         State s = state(target); Buff previous = s.buffs.get(key);
         // A weaker application cannot extend the stronger value indefinitely.
         if (previous == null || previous.until <= clock || amount >= previous.value) {
@@ -1111,7 +1161,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         if (!context.affect(c.player, c.player, null)) return false;
         int count = 0;
         for (LivingEntity ally : nearby(c, c.player.getLocation(), radius, true)) {
-            if (!context.ally(c.player, ally) || !context.affect(c.player, ally, null)) continue;
+            if (!friendly(c.player, ally) || !context.affect(c.player, ally, null)) continue;
             apply.accept(ally); count++;
         }
         if (count > 0) c.art.aura(c.player.getLocation(), radius);
@@ -1139,8 +1189,9 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
         }
     }
     private void heal(Cast c, Player player, double amount) {
-        if (!c.alive() || player.isDead() || !context.ally(c.player, player) || !context.affect(c.player, player, null)) return;
-        double limit = maxHealth(player) * configured("healing-per-cast-percent", 35, 1, 100) / 100;
+        if (!c.alive() || player.isDead() || !friendly(c.player, player) || !context.affect(c.player, player, null)) return;
+        // The fallback matches the shipped config.yml (getDouble with a fallback ignores the jar defaults on a first boot).
+        double limit = maxHealth(player) * configured("healing-per-cast-percent", 60, 1, 100) / 100 * c.healCapScale;
         double remaining = limit - c.healed.getOrDefault(player.getUniqueId(), 0.0);
         if (remaining <= 0) return;
         double before = player.getHealth(); context.heal(player, Math.min(remaining, Math.max(0, amount)));
@@ -1293,7 +1344,7 @@ public final class ElementalSpellService implements Listener, AutoCloseable {
     private void taunt(Cast c, IronGolem guardian) {
         for (Entity entity : guardian.getNearbyEntities(8, 4, 8))
             if (entity instanceof Mob mob && !guardians.containsKey(mob.getUniqueId()) && !isBoss(mob) && context.enemy(c.player, mob)
-                    && mob.getTarget() instanceof Player victim && context.ally(c.player, victim)) mob.setTarget(guardian);
+                    && mob.getTarget() instanceof Player victim && friendly(c.player, victim)) mob.setTarget(guardian);
     }
     private boolean shadow(Cast c) {
         Location at = dashPoint(c.player, 1.8); if (at == null) { c.player.sendActionBar(ChatColor.RED + "ไม่มีพื้นที่ให้ร่างเงา"); return false; }

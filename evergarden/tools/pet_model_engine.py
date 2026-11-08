@@ -13,6 +13,7 @@ import uuid
 from pathlib import Path
 
 from pet_paint import paint
+import pet_expansion_catalog as expansion
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'evergarden/src/main/resources/modelengine/pets'
@@ -35,11 +36,15 @@ TITLES = ('Aetherius', 'Ignis Draconis', 'Zephyros', 'Solaris', 'Fenrir',
           'Clover Bumble', 'Aurora Penguin', 'Storm Raptor', 'Magma Rhino', 'Eclipse Scorpion',
           'Raijin Tiger', 'Titan Beetle', 'Anubis Jackal', 'Bone Drake', 'Jade Lung',
           'Crystal Stag', 'Luna Moth', 'Celestial Koi', 'Starlight Peacock', 'Aurora Jelly')
+SPECIES += expansion.SPECIES
+TITLES += expansion.TITLES
 # Always airborne: walking is a hovering drift rather than steps.
-HOVERING = ('astral_owl', 'solaris', 'abyssal_manta', 'chrono_fairy', 'clover_bumble', 'luna_moth',
+HOVERING = ('astral_owl', 'abyssal_manta', 'chrono_fairy', 'clover_bumble', 'luna_moth',
             'celestial_koi', 'aurora_jelly', 'jade_lung')
+HOVERING += expansion.HOVERING
 # Many-legged bodies that crouch flat to sit, rather than settling onto haunches.
 CRAWLERS = ('eclipse_scorpion', 'titan_beetle')
+CRAWLERS += ('seashell_crab','coral_shrimp','lotus_snail','pearl_oyster','obsidian_basilisk','lotus_mantis')
 FACES = ('north', 'south', 'east', 'west', 'up', 'down')
 
 
@@ -103,8 +108,6 @@ def animations(model, bones, species):
                 ease=min(1,t*4)
                 quadruped=all(b in bones for b in ('leg_fl','leg_fr','leg_bl','leg_br')) and species not in CRAWLERS
                 if quadruped:
-                    # A settled haunch pose with folded rear hocks, rather than
-                    # scaling the whole animal or dragging its feet through the floor.
                     hip=min(bones[b][1][1] for b in ('leg_bl','leg_br'))
                     pose['body']={'rotation':[-4*ease,0,0],'position':[0,-hip*.15*ease,0]}
                 for bone in names:
@@ -127,8 +130,6 @@ def animations(model, bones, species):
                 if 'lid' in bones:pose['lid']=[-wave*32,0,0]
                 if 'body' in bones:pose['body']={'position':[0,wave*.9,0]}
             if species=='abyssal_manta':
-                # A ray sends a soft wave out along each fin; it does not beat
-                # two rigid wings like a bird. Tips and tail trail the body.
                 amplitude={'idle':2.5,'walk':7,'fly':13,'sit':1,'greet':7}[action]
                 held=action in ('sit','greet')
                 envelope=math.sin(t*math.pi)**2 if held else 1
@@ -145,8 +146,6 @@ def animations(model, bones, species):
                 pose['body']={'rotation':[-1 if action=='fly' else 0,0,s*.35*envelope],
                               'position':[0,lift+(1-c)*.18*envelope,0]}
             elif species=='frost_wyvern':
-                # The wrist folds behind the shoulder at rest. In flight its
-                # outer fingers follow the shoulder with a small phase delay.
                 flying=action=='fly'
                 greeting=math.sin(t*math.pi)**2 if action=='greet' else 0
                 for bone in names:
@@ -161,18 +160,14 @@ def animations(model, bones, species):
                         fold=(58 if tip else 32)-greeting*(25 if tip else 12)
                         pose[bone]=[wave*.4,-side*fold,side*((15 if tip else -25)+wave*.8)]
                 if action=='idle':
-                    # A little forward poise and breathing; geometry supplies
-                    # the crouched haunches without swinging the feet through ground.
                     pose['body']={'rotation':[-2+s*.45,0,s*.18],'position':[0,(1-c)*.08,0]}
                     pose['head']=[2+s*1.2,s*2,0]
             elif species=='mochi_slime':
-                # A jelly hops and wobbles: the blob lags each bounce of its base.
                 hop={'idle':.25,'walk':2.2,'fly':1.4,'sit':0,'greet':1.6}[action]
                 bounce=abs(s) if action=='walk' else (1-c)*.5
                 pose['body']={'position':[0,bounce*hop,0]}
                 pose['head']={'rotation':[s*2.5,s*4 if action=='idle' else s*6,s*3],'position':[0,-abs(c)*.25*(action!='sit'),0]}
             elif species=='aurora_jelly':
-                # The bell pulses and the arms trail behind each pulse.
                 lift=(1-c)*(.5 if action in ('idle','sit') else 1.0)
                 pose['body']={'position':[0,lift+(1 if action in ('walk','fly') else 0),0],'rotation':[s*2,0,0]}
                 pose['head']={'rotation':[s*1.5,s*3,0]}
@@ -182,23 +177,163 @@ def animations(model, bones, species):
                         wave=math.sin(t*math.tau-phase*.9)
                         pose[bone]=[wave*(6 if action=='fly' else 4),wave*3,math.cos(t*math.tau-phase*.9)*4]
             elif species=='jade_lung':
-                # The serpent body travels in a wave that runs from neck to tail.
                 amplitude={'idle':5,'walk':9,'fly':12,'sit':3,'greet':7}[action]
                 pose['body']={'position':[0,(1-c)*.6+(1 if action in ('walk','fly') else 0),0],'rotation':[s*2,s*3,0]}
                 pose['tail']=[math.sin(t*math.tau-.9)*amplitude*.6,math.sin(t*math.tau-.6)*amplitude,0]
                 pose['tail_tip']=[math.sin(t*math.tau-1.8)*amplitude*.8,math.sin(t*math.tau-1.4)*amplitude*1.3,0]
+            elif species in ('solaris','zephyros','ignis_draconis'):
+                # Folded wings on the ground for Solaris & Zephyros, natural wingbeats in flight, and sleek forward flight posture.
+                for bone in names:
+                    if 'wing' not in bone:continue
+                    side=-1 if bone.endswith('_l') else 1
+                    tip=bone.startswith('wingtip_')
+                    wave=math.sin(t*math.tau-(.65 if tip else 0))
+                    if action=='fly':
+                        pose[bone]=[wave*(3 if tip else 4),side*wave*(2.5 if tip else 3.5),
+                                    side*(wave*(16 if tip else 20)-(14 if tip else 18))]
+                    elif species in ('solaris','zephyros'):
+                        if action=='greet':
+                            unfurl=math.sin(t*math.pi)**2
+                            if tip:
+                                pose[bone]=[0,-side*(10-unfurl*6),-side*(12-unfurl*8)]
+                            else:
+                                pose[bone]=[-132+unfurl*28,-side*(114-unfurl*24),side*(150-unfurl*28)]
+                        else:
+                            if tip:
+                                pose[bone]=[wave*.8,-side*10,-side*12]
+                            else:
+                                pose[bone]=[-132+wave*1.5,-side*(114+wave*1.2),side*(150+wave*1.5)]
+                    else:
+                        if action=='greet':
+                            pose[bone]=[0,0,side*(wave*3-math.sin(t*math.pi)**2*(6 if tip else 14))]
+                        elif action=='sit':
+                            pose[bone]=[16 if not tip else 8,-side*(16 if not tip else 12),side*-(12 if tip else 18)*min(1,t*4)]
+                        else:
+                            pose[bone]=[(14 if not tip else 6)+wave*.8,-side*(14 if not tip else 10),side*(wave*(2 if tip else 3)-(10 if tip else 14))]
+                if action=='sit' and species=='solaris':
+                    ease=min(1,t*4)
+                    pose['body']={'rotation':[-4*ease,0,0],'position':[0,-3.2*ease,0]}
+                    for bone in ('leg_l','leg_r'):
+                        if bone in bones:pose[bone]=[-55*ease,0,0]
+                elif action=='walk':
+                    if species=='solaris':
+                        pose['leg_l']=[s*24,0,0]
+                        pose['leg_r']=[-s*24,0,0]
+                        pose['body']={'rotation':[s*1.5,s*1.5,s*.6],'position':[0,abs(s)*.22,0]}
+                        pose['neck']=[-2-s*1.0,0,0]
+                        pose['head']=[2-s*1.0,s*2.0,0]
+                        pose['tail']=[4+math.sin(t*math.tau-.5)*4,s*5,0]
+                        pose['tail_tip']=[2+math.sin(t*math.tau-1.1)*6,math.sin(t*math.tau-.9)*7,0]
+                    else:
+                        for bone in names:
+                            if not bone.startswith('leg_'):continue
+                            limb=bone.removesuffix('_lower')
+                            diagonal=1 if limb.endswith(('fl','br')) else -1
+                            wave=s*diagonal
+                            pose[bone]=[-max(0,-wave)*30 if bone.endswith('_lower') else wave*24,0,0]
+                        pose['body']={'rotation':[s*1.5,s*2,s*.8],'position':[0,abs(s)*.24,0]}
+                        pose['tail']=[4+math.sin(t*math.tau-.5)*5,math.sin(t*math.tau-.7)*8,0]
+                        pose['tail_tip']=[2+math.sin(t*math.tau-1.1)*7,math.sin(t*math.tau-1.3)*12,0]
+                elif action=='fly':
+                    neck_pitch=-4 if species=='solaris' else (-6 if species=='zephyros' else -10)
+                    pose['body']={'rotation':[-2+s*1.5,0,s*.6],'position':[0,(1-c)*.35,0]}
+                    if 'neck' in bones:pose['neck']=[neck_pitch-s*1.2,0,0]
+                    pose['head']=[-neck_pitch*.6-s*1.2,s*1.5,0]
+                    pose['tail']=[8+math.sin(t*math.tau-.5)*5,math.sin(t*math.tau-.7)*6,0]
+                    pose['tail_tip']=[5+math.sin(t*math.tau-1.1)*8,math.sin(t*math.tau-1.3)*10,0]
+                    if 'halo' in bones:pose['halo']=[2,0,s*4]
+                    for bone in names:
+                        if not bone.startswith('leg_'):continue
+                        lower=bone.endswith('_lower')
+                        rear=bone.startswith('leg_b')
+                        flutter=math.sin(t*math.tau-(.55 if rear else .35))*4
+                        if species=='solaris':
+                            pose[bone]=[-42+flutter,0,0]
+                        elif lower:
+                            pose[bone]=[(-20 if rear else -28)+flutter*.7,0,0]
+                        else:
+                            pose[bone]=[(-32 if rear else -22)+flutter,0,0]
+            elif species in ('fenrir','aetherius'):
+                if action=='idle' and species=='aetherius' and not model.endswith('_baby'):
+                    # Proud raised foreleg stance at rest while keeping base geometry symmetric for walk/fly.
+                    pose['leg_fl']=[32+s*2,0,0]
+                    pose['leg_fl_lower']=[-54-s*2,0,0]
+                elif action=='walk':
+                    # Four-beat bounding gait with natural backward knee/hock flexion.
+                    for bone in names:
+                        if not bone.startswith('leg_'):continue
+                        rear=bone.startswith('leg_b');left=bone.startswith(('leg_fl','leg_bl'))
+                        phase=(math.pi if rear else 0)+(.45 if left else 0)
+                        wave=math.sin(t*math.tau+phase)
+                        pose[bone]=[(-max(0,-wave)*38 if bone.endswith('_lower') else wave*30),0,0]
+                    pose['body']={'rotation':[s*2.2,0,math.sin(t*math.tau+.4)*.8],'position':[0,(1-c)*.32,0]}
+                    if 'neck' in bones:pose['neck']=[-2-s*1.2,0,0]
+                    pose['head']=[-s*1.8,s*1.5,0]
+                    pose['tail']=[6+math.sin(t*math.tau-.7)*7,math.sin(t*math.tau-.9)*11,0]
+                    pose['tail_tip']=[4+math.sin(t*math.tau-1.3)*9,math.sin(t*math.tau-1.5)*16,0]
+                elif action=='fly':
+                    # Graceful aerial sky-gallop / bounding leap through the air.
+                    for bone in names:
+                        if not bone.startswith('leg_'):continue
+                        rear=bone.startswith('leg_b');left=bone.startswith(('leg_fl','leg_bl'))
+                        phase=(math.pi if rear else 0)+(.42 if left else 0)
+                        wave=math.sin(t*math.tau+phase)
+                        if bone.endswith('_lower'):
+                            pose[bone]=[-max(0,-wave)*38-14,0,0]
+                        else:
+                            pose[bone]=[wave*28-8,0,0]
+                    pose['body']={'rotation':[-2+s*2.4,0,math.sin(t*math.tau+.4)*.8],'position':[0,(1-c)*.38,0]}
+                    if 'neck' in bones:pose['neck']=[-8-s*1.5,0,0]
+                    pose['head']=[4-s*1.5,s*1.5,0]
+                    pose['tail']=[12+math.sin(t*math.tau-.5)*8,math.sin(t*math.tau-.8)*10,0]
+                    pose['tail_tip']=[8+math.sin(t*math.tau-1.1)*10,math.sin(t*math.tau-1.4)*15,0]
             elif species=='celestial_koi':
                 sway={'idle':6,'walk':12,'fly':16,'sit':4,'greet':9}[action]
                 pose['tail']=[0,math.sin(t*math.tau)*sway,0]
                 pose['tail_tip']=[0,math.sin(t*math.tau-.9)*sway*1.4,0]
                 pose['body']={'position':[0,(1-c)*.6+(1 if action in ('walk','fly') else 0),0],'rotation':[0,-s*2,0]}
+            if species in expansion.SPECIES:
+                held=action in ('sit','greet');envelope=math.sin(t*math.pi)**2 if held else 1
+                active=action in ('walk','fly')
+                for bone in names:
+                    lower=bone.lower();left='_l' in lower or lower.endswith('left');side=-1 if left else 1
+                    phase=math.sin(t*math.tau-(.7 if lower.endswith(('_tip','_lower')) else 0))
+                    if lower.startswith('ear_'):pose[bone]=[phase*2,0,side*phase*3]
+                    elif lower.startswith(('antenna','eyestalk','gill','kelp','ribbon','snowdrop','dandelion','blossom')):
+                        pose[bone]=[phase*(5 if active else 2)*envelope,phase*2,side*phase*3*envelope]
+                    elif lower=='winder':pose[bone]=[0,0,t*360 if not held else envelope*120]
+                    elif lower.startswith('fin_'):
+                        pose[bone]=[phase*(14 if active else 4),0,side*phase*(10 if active else 3)]
+                if species in ('nebula_whale','glacier_narwhal','bubble_seal'):
+                    for bone in names:
+                        if bone.startswith('tail'):pose[bone]=[math.sin(t*math.tau-.7)*(12 if active else 4)*envelope,0,0]
+                    if active:pose['body']={'position':[0,(1-c)*.32,0],'rotation':[s*2,0,s*.8]}
+                elif species in ('blueberry_bat','dew_dragonfly','lantern_firefly'):
+                    flutter=math.sin(t*math.tau*(2 if species!='blueberry_bat' else 1))
+                    for bone in names:
+                        if 'wing' in bone:
+                            side=-1 if '_l' in bone else 1
+                            pose[bone]=[flutter*3,0,side*flutter*(32 if active else 5)*envelope]
+                elif species in ('pebble_pika','dusk_jerboa') and action=='walk':
+                    hop=abs(s);pose['body']={'position':[0,hop*1.7,0],'rotation':[-hop*4,0,0]}
+                    for bone in names:
+                        if bone.startswith('leg_'):pose[bone]=[s*(28 if '_b' in bone else 18),0,0]
+                elif species=='lotus_snail':
+                    pose['body']={'position':[0,(1-c)*.06,0],'rotation':[0,s*.8,0]}
+                elif species=='pearl_oyster':
+                    for bone in names:
+                        if bone in ('lid','shell_upper','shell_top'):pose[bone]=[-(8+(1-c)*3 if not held else math.sin(t*math.pi)**2*24),0,0]
+                elif species=='paper_crane' and action=='greet':
+                    pose['head']=[-math.sin(t*math.pi)**2*24,0,0]
             samples.append((round(t*length,4),pose))
         clips.append(make(action,length,samples,'hold' if action in ('sit','greet') else 'loop'))
     return clips
 
 
 def build_model(species,stage):
-    if species in MYTHICAL:
+    if species in expansion.SPECIES:
+        build=expansion.build
+    elif species in MYTHICAL:
         from pet_mythical_sculpt import build
     elif species in MENAGERIE:
         from pet_menagerie_sculpt import build
@@ -207,7 +342,20 @@ def build_model(species,stage):
     sculpt=build(species,stage);bones=sculpt['bones'];palette=sculpt['palette']
     model='everpet_'+species+'_'+stage
     # Every face has its own hand-shaded region at an even texel density (pet_paint).
-    texture,uvs,_=paint(species,stage,sculpt['parts'],palette);buffer=io.BytesIO();texture.save(buffer,format='PNG')
+    high_detail=species in expansion.SPECIES
+    if 'marks' in sculpt:
+        # Pet Atelier sculpts paint one continuous coat from 3D marks (pet_atelier).
+        from pet_atelier import paint as atelier_paint
+        texture,uvs,density=atelier_paint(sculpt,species,stage)
+    else:
+        texture,uvs,density=paint(species,stage,sculpt['parts'],palette,atlas_size=1024 if high_detail else 512,
+            densities=(8,6,4,3,2,1.5,1) if high_detail else (4,3,2,1.5,1))
+    buffer=io.BytesIO()
+    if species in MYTHICAL:
+        import imagequant
+        texture=imagequant.quantize_pil_image(texture,dithering_level=1.0,max_colors=256,min_quality=0,max_quality=95)
+        texture.save(buffer,format='PNG',optimize=True)
+    else:texture.save(buffer,format='PNG')
     elements=[];children={name:[] for name in bones}
     for i,p in enumerate(sculpt['parts']):
         e=dict(name=p['name'],type='cube',uuid=uid(model,'cube/'+str(i)),
@@ -225,11 +373,11 @@ def build_model(species,stage):
     elements.append(dict(name='hitbox',uuid=hit,type='cube',**{'from':[-4,0,-4]},to=[4,max(8,height),4],origin=[0,0,0],faces={}))
     data=dict(meta=dict(format_version='4.10',model_format='free',box_uv=False,
                        evergarden_animation_position_x='inverted',evergarden_pet_species=species,evergarden_pet_stage=stage,
-                       evergarden_pet_revision='1.1-anatomy-and-attention'),
-        name=model,model_identifier=model,resolution=dict(width=512,height=512),elements=elements,
+                       evergarden_pet_revision='atelier-1.0' if 'marks' in sculpt else '1.1-anatomy-and-attention'),
+        name=model,model_identifier=model,resolution=dict(width=texture.width,height=texture.height),elements=elements,
         outliner=[group('root'),dict(name='hitbox',uuid=uid(model,'hitbox'),origin=[0,height*.7,0],children=[hit],export=True)],
-        textures=[dict(name=model+'.png',namespace='',folder='',path='',id='0',uuid=uid(model,'texture'),width=512,height=512,
-                       uv_width=512,uv_height=512,source='data:image/png;base64,'+base64.b64encode(buffer.getvalue()).decode())],
+        textures=[dict(name=model+'.png',namespace='',folder='',path='',id='0',uuid=uid(model,'texture'),width=texture.width,height=texture.height,
+                       uv_width=texture.width,uv_height=texture.height,source='data:image/png;base64,'+base64.b64encode(buffer.getvalue()).decode())],
         animations=animations(model,bones,species),display={},variable_placeholders='')
     return data,texture
 
@@ -238,15 +386,14 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--species',choices=SPECIES,nargs='*')
     args=parser.parse_args();OUT.mkdir(parents=True,exist_ok=True);ART.mkdir(parents=True,exist_ok=True)
     manifest=[]
-    # The mythical five ship no blueprints until the legendary tier opens; name one to build it.
-    for species in (args.species or [s for s in SPECIES if s not in MYTHICAL]):
+    for species in (args.species or SPECIES):
         for stage in STAGES:
             data,texture=build_model(species,stage)
             target=OUT/(data['name']+'.bbmodel')
             target.write_text(json.dumps(data,separators=(',',':'),ensure_ascii=False)+'\n',encoding='utf8')
             texture.save(ART/(data['name']+'.png'))
             manifest.append(dict(id=data['name'],species=species,stage=stage,title=TITLES[SPECIES.index(species)],
-                rarity='mythical' if species in MYTHICAL else 'rare',cubes=len(data['elements'])-1,
+                rarity='mythical' if species in MYTHICAL else 'rare' if species in expansion.RARE else 'common',cubes=len(data['elements'])-1,
                 bones=len(data['animations'][0]['animators']),animations=[a['name'] for a in data['animations']],
                 sha256=hashlib.sha256(target.read_bytes()).hexdigest()))
     if not args.species:

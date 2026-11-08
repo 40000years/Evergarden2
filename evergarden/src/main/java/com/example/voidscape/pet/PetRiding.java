@@ -48,8 +48,8 @@ final class PetRiding implements Listener,AutoCloseable {
         return Double.isFinite(value)?Math.clamp(value,min,max):fallback;
     }
     private double lift(PetBody body){
-        double height=switch(body.species){case AETHERIUS->1.05;case IGNIS_DRACONIS->1.25;
-            case ZEPHYROS->1.05;case SOLARIS->.9;case FENRIR->1.05;default->1;};
+        double height=switch(body.species){case AETHERIUS->2.10;case IGNIS_DRACONIS->2.15;
+            case ZEPHYROS->1.98;case SOLARIS->1.72;case FENRIR->1.62;default->1;};
         return number("seat-height."+body.species.id,height,.4,2.5)*body.record.size;
     }
     String start(Player player,UUID id){
@@ -57,6 +57,7 @@ final class PetRiding implements Listener,AutoCloseable {
         if(!player.isOnline()||player.isDead()||player.getGameMode()==GameMode.SPECTATOR)return "ขี่สัตว์ในสถานะนี้ไม่ได้";
         if(riding(player.getUniqueId()))return "คุณขี่สัตว์อยู่แล้ว · ใช้ /pet dismount เพื่อลง";
         PetStable stable=companions.stable(player);PetRecord record=stable.get(id);
+        if(stable.out&&id.equals(stable.secondary))return "สัตว์ตัวที่สองอยู่โหมดเฉย ๆ · เก็บตัวแรกก่อนขึ้นขี่";
         if(stable.locked)return "อ่านข้อมูลคอกสัตว์ไม่ได้ · แจ้งแอดมิน";
         if(record==null||!record.species.mythical())return "ขี่ได้เฉพาะสัตว์เลี้ยงระดับตำนานของคุณ";
         if(plugin.getConfig().getBoolean("pets.riding.adult-only",true)&&record.stage!=PetCatalog.Stage.ADULT)return "เลี้ยงสัตว์ตำนานให้โตเต็มวัยก่อนขึ้นขี่";
@@ -64,9 +65,11 @@ final class PetRiding implements Listener,AutoCloseable {
         if(companions.faintLeft(record)>0)return "สัตว์ตัวนี้ยังพักฟื้นอยู่";
         String blocked=companions.rideBlocker(player);if(blocked!=null)return "ขี่ไม่ได้ · "+blocked;
         if(player.isInsideVehicle())return "ลงจากพาหนะเดิมก่อนขึ้นขี่สัตว์";
+        if(stable.out&&stable.activeRecord()!=null&&!id.equals(stable.active))return "ขี่ได้เฉพาะสัตว์ตัวแรก · เก็บตัวแรกก่อนขึ้นขี่ตัวอื่น";
         if(!id.equals(stable.active)||!stable.out||companions.body(player.getUniqueId())==null){
             String problem=companions.summon(player,id);if(problem!=null)return problem;
         }
+        if(!id.equals(stable.active))return "สัตว์ตัวที่สองอยู่โหมดเฉย ๆ · เก็บตัวแรกก่อนขึ้นขี่";
         // A full-size body is necessary for a saddle; the head-perch mode remains available afterwards.
         if(record.mode.equals("perch"))companions.mode(player,id,"follow");
         PetBody body=companions.body(player.getUniqueId());
@@ -93,6 +96,7 @@ final class PetRiding implements Listener,AutoCloseable {
             Session session=new Session(body,seat,origin,JudgePackService.bedrock(player),lift,attachment);
             if(!seat.addPassenger(player)){seat.remove();return "ขึ้นขี่สัตว์ไม่ได้ · ลองอีกครั้งในที่โล่ง";}
             sessions.put(player.getUniqueId(),session);body.ridden=true;body.airborne=body.species!=PetCatalog.Species.FENRIR;body.target=null;
+            if(body.species==PetCatalog.Species.AETHERIUS)PetSkills.clear(player);
             companions.rideSeat(body,seat,true);
             body.speed=0;body.pitch=body.roll=body.headYaw=body.headPitch=0;
             session.exemption=exemption(player);
@@ -135,10 +139,11 @@ final class PetRiding implements Listener,AutoCloseable {
         }
         session.motion.copy(to.toVector().subtract(from.toVector()));
         body.yaw=body.targetYaw=player.getLocation().getYaw();body.pitch+=(float)(-session.motion.getY()*18-body.pitch)*.15;
-        body.roll*=.8f;body.airborne=true;
+        boolean grounded=session.motion.lengthSquared()<=1e-4&&!clear(to.clone().subtract(0,.08,0),session.lift,player);
+        body.roll*=.8f;body.airborne=!grounded;
         to.setYaw(body.yaw);to.setPitch(0);body.move(to);
         moveEntity(session.seat,to.clone().add(0,session.lift-session.attachment,0));
-        body.present("fly");player.setFallDistance(0);
+        body.present(grounded?"idle":"fly");player.setFallDistance(0);
         if(body.species==PetCatalog.Species.AETHERIUS&&++session.ticks%20==0)blessing.tick(player);
         return true;
     }

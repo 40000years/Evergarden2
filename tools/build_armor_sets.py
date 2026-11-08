@@ -24,12 +24,13 @@ sys.path.insert(0, str(ROOT / 'evergarden/tools'))
 from build_weapon_remodel import encode, read_zip, write_zip  # noqa: E402
 import armor_set_forge as forge  # noqa: E402
 import revenant_armor_assets  # noqa: E402
+import dragon_armor_assets  # noqa: E402
 import seraph_armor_assets  # noqa: E402
 import menu_gui_assets  # noqa: E402
 import skilltree_gui_assets  # noqa: E402
 
 DIST = ROOT / 'advance-magic/dist'
-SETS = (seraph_armor_assets.SET, revenant_armor_assets.SET)
+SETS = (seraph_armor_assets.SET, revenant_armor_assets.SET) + dragon_armor_assets.SETS
 MENUS = (skilltree_gui_assets, menu_gui_assets)
 OWNED = tuple(prefix for s in SETS for prefix in forge.owned(s.key)) + tuple(prefix for m in MENUS for prefix in m.owned())
 IDS = tuple(f'{forge.NS}:{s.key}_' for s in SETS) + tuple(f'{m.NS}:{m.PREFIX}' for m in MENUS)

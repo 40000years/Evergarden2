@@ -31,6 +31,7 @@ def load(species,stage):
     renderer.ELEMENTS={e['uuid']:e for e in model['elements']}
     renderer.CLIPS={c['name']:c for c in model['animations']}
     renderer.TEXTURE=np.array(Image.open(io.BytesIO(base64.b64decode(model['textures'][0]['source'].split(',')[1]))).convert('RGBA'))
+    renderer.MC_FACES=str(model.get('meta',{}).get('evergarden_pet_revision','')).startswith('atelier')
     return model
 
 

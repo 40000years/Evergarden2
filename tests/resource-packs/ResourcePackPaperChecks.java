@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.BundlePacket;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.common.ClientboundResourcePackPushPacket;
+import net.minecraft.network.protocol.game.ClientboundSystemChatPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerPlayer;
@@ -36,6 +37,7 @@ public final class ResourcePackPaperChecks extends JavaPlugin implements Listene
     static final UUID GARDEN = UUID.fromString("c8f2b94e-4a35-4d1b-9b67-0d2a6ef4f821");
     static final UUID JUDGE = UUID.fromString("b198c85c-c302-4c62-a365-a358fa544509");
     final List<ClientboundResourcePackPushPacket> pushes = new ArrayList<>();
+    final List<String> messages = new ArrayList<>();
     VoidscapePlugin garden;
     Plugin magic;
     Object magicPacks;
@@ -70,6 +72,7 @@ public final class ResourcePackPaperChecks extends JavaPlugin implements Listene
         actor.connection = new ServerGamePacketListenerImpl(server, connection, actor, CommonListenerCookie.createInitial(profile, false)) {
             @Override public boolean hasClientLoaded() { return true; }
             @Override public void send(Packet<?> packet) { capture(packet); }
+            @Override public void send(Packet<?> packet, io.netty.channel.ChannelFutureListener listener) { capture(packet); }
         };
         level.getChunk(0, 0); actor.setPos(.5, 200, .5);
         server.getPlayerList().getPlayers().add(actor);
@@ -87,9 +90,9 @@ public final class ResourcePackPaperChecks extends JavaPlugin implements Listene
         List<UUID> expected = magic == null ? List.of(GARDEN, JUDGE) : List.of(MAGIC, GARDEN, JUDGE);
         check(pushes.stream().map(ClientboundResourcePackPushPacket::id).toList().equals(expected), "every pack pushed exactly once in priority order: " + pushes.stream().map(ClientboundResourcePackPushPacket::id).toList());
         check(packBundles == 1, "Paper bundles join packs in one packet group");
-        check(pushes.stream().allMatch(ClientboundResourcePackPushPacket::required), "every Java pack is required");
-        check(garden.getConfig().getBoolean("resource-pack.required")&&garden.getConfig().getBoolean("world-boss.visuals.pack.required"),"existing optional Evergarden configuration upgrades to required");
-        if(magic!=null)check(magic.getConfig().getBoolean("resource-pack.required"),"existing optional Magic configuration upgrades to required");
+        check(pushes.stream().noneMatch(ClientboundResourcePackPushPacket::required), "every Java pack is optional even with old required config");
+        check(!garden.getConfig().getBoolean("resource-pack.required")&&!garden.getConfig().getBoolean("world-boss.visuals.pack.required"),"existing required Evergarden settings become optional");
+        if(magic!=null)check(!magic.getConfig().getBoolean("resource-pack.required"),"existing required Magic setting becomes optional");
         check(serviceCount() == 1, "actual plugin classloaders share one delivery service");
         check(describe().contains("Batches: 1"), "all join offers belong to one batch");
         check(!garden.judgePack().applied(player), "boss visuals wait for client success");
@@ -134,28 +137,34 @@ public final class ResourcePackPaperChecks extends JavaPlugin implements Listene
                 check(Bukkit.getServicesManager().getRegistration(type).getPlugin() == garden, "Evergarden owns standalone delivery");
         Bukkit.getPluginManager().callEvent(new PlayerResourcePackStatusEvent(player, JUDGE, PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
         check(garden.judgePack().applied(player), "retry status works after handoff");
-        check(kickRequests==0,"successful required loads allow the player to remain connected");
+        check(kickRequests==0,"successful loads allow the player to remain connected");
         beforeKicks=kickRequests;
+        int beforeMessages=messages.size();
         Bukkit.getPluginManager().callEvent(new PlayerResourcePackStatusEvent(player,JUDGE,PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD));
+        check(messages.size()>beforeMessages,"failed boss pack sends a player warning");
         later(this::failed,25);
     }
     void failed(){
-        check(kickRequests>beforeKicks,"failed required download requests a real Paper disconnect");
+        check(kickRequests==beforeKicks,"failed download never requests a Paper disconnect");
         Bukkit.getPluginManager().callEvent(new PlayerResourcePackStatusEvent(player,JUDGE,PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
         beforeKicks=kickRequests;
+        int beforeMessages=messages.size();
         Bukkit.getPluginManager().callEvent(new PlayerResourcePackStatusEvent(player,GARDEN,PlayerResourcePackStatusEvent.Status.DECLINED));
+        check(messages.size()>beforeMessages,"declined pack sends a player warning");
         later(this::declined,25);
     }
     void declined(){
-        check(kickRequests>beforeKicks,"declining a required pack requests a real Paper disconnect");
+        check(kickRequests==beforeKicks,"declining a pack never requests a Paper disconnect");
         Bukkit.getPluginManager().callEvent(new PlayerResourcePackStatusEvent(player,GARDEN,PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
         beforeKicks=kickRequests;
         garden.getConfig().set("resource-pack.url","file:///invalid-pack.zip");
+        int beforeMessages=messages.size();
         garden.packs().offer(player);
+        check(messages.size()>beforeMessages,"unavailable pack sends a player warning");
         later(this::unavailable,25);
     }
     void unavailable(){
-        check(kickRequests>beforeKicks,"invalid required URL cannot silently allow pack-free play");
+        check(kickRequests==beforeKicks,"invalid URL never requests a Paper disconnect");
         garden.getConfig().set("resource-pack.url","");
         finish(null);
     }
@@ -173,6 +182,7 @@ public final class ResourcePackPaperChecks extends JavaPlugin implements Listene
     }
     void capture(Packet<?> packet) {
         if (packet instanceof ClientboundResourcePackPushPacket push) pushes.add(push);
+        else if (packet instanceof ClientboundSystemChatPacket chat) messages.add(chat.content().getString());
         else if (packet instanceof BundlePacket<?> bundle) {
             int previous = pushes.size();
             for (Packet<?> child : bundle.subPackets()) capture(child);

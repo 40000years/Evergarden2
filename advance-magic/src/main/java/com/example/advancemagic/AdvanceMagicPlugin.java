@@ -45,6 +45,8 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
     private com.example.advancemagic.item.LegendaryWeaponService legendaryWeapons;
     private com.example.advancemagic.item.ArmorCombatService armorCombat;
     public com.example.advancemagic.item.ArmorCombatService armorCombat(){return armorCombat;}
+    private com.example.advancemagic.item.DragonSetPowers dragonPowers;
+    public com.example.advancemagic.item.DragonSetPowers dragonPowers(){return dragonPowers;}
     public com.example.advancemagic.item.LegendaryWeaponService legendaryWeapons(){return legendaryWeapons;}
     @Override public void onLoad() {
         saveDefaultConfig();
@@ -114,6 +116,10 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         Bukkit.getScheduler().runTask(this,armorCombat::registerSurvival);
         for(Player player:Bukkit.getOnlinePlayers()){armorSets.migrate(player.getInventory());armorSets.migrate(player.getEnderChest());}
         Bukkit.getScheduler().runTaskTimer(this,armorCombat::tick,1,5);
+        dragonPowers=new com.example.advancemagic.item.DragonSetPowers(this,armorSets);
+        getServer().getPluginManager().registerEvents(dragonPowers,this);
+        Bukkit.getScheduler().runTask(this,dragonPowers::registerSurvival);
+        Bukkit.getScheduler().runTaskTimer(this,dragonPowers::tick,1,1);
         getServer().getPluginManager().registerEvents(new com.example.advancemagic.item.RetiredArmorCleanup(),this);
         for(Player player:Bukkit.getOnlinePlayers()){
             com.example.advancemagic.item.RetiredArmorCleanup.clean(player.getInventory());
@@ -141,6 +147,7 @@ public final class AdvanceMagicPlugin extends JavaPlugin implements Listener {
         if(acquisition!=null)acquisition.close();
         if(legendaryWeapons!=null)legendaryWeapons.close();
         if(armorCombat!=null)armorCombat.close();
+        if(dragonPowers!=null)dragonPowers.close();
         if(manaPotions!=null)manaPotions.close();
         if(flyingStaff!=null)flyingStaff.close();
         if(packs!=null)packs.close();

@@ -28,7 +28,8 @@ Advance Magic **1.23.0-armor-combat** · แพ็ก Bedrock **2.21.0**
 ## ใช้งาน
 
 `/magic armor give seraph [helm|chestplate|leggings|boots|all] [player]` (สิทธิ์ `advance-magic.admin`)
-แบบเดิม `/magic armor give helm Bowran` ยังใช้ได้ (ให้ชุดเซราฟ) · ชุดที่สอง: [revenant-armor.md](revenant-armor.md)
+แบบเดิม `/magic armor give helm Bowran` ยังใช้ได้ (ให้ชุดเซราฟ) · ชุดที่สอง: [revenant-armor.md](revenant-armor.md) ·
+ชุดมังกร 3 ชุด: [dragon-armor.md](dragon-armor.md)
 
 ## ติดตั้ง
 

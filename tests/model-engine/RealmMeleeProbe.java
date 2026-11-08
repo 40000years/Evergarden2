@@ -117,7 +117,7 @@ public final class RealmMeleeProbe extends JavaPlugin implements Listener {
             ready();actor.setOnGround(false);player.setFallDistance(100);player.setVelocity(new Vector(0,-.5,0));player.attack(target);
             check(1024-target.getHealth()>90,"high Mace smash on ordinary mobs retains vanilla damage");target.remove();
             later(10,()->{
-                try{var health=RealmBossController.class.getDeclaredField("health");health.setAccessible(true);health.setDouble(boss,1);}catch(ReflectiveOperationException e){throw new RuntimeException(e);}
+                try{var health=RealmBossController.class.getDeclaredField("health");health.setAccessible(true);health.setDouble(boss,1);for(String f:new String[]{"phaseTwo","phaseThree"}){var flag=RealmBossController.class.getDeclaredField(f);flag.setAccessible(true);flag.setBoolean(boss,true);}}catch(ReflectiveOperationException e){throw new RuntimeException(e);}
                 ready();actor.setOnGround(false);player.setFallDistance(5);player.setVelocity(new Vector(0,-.5,0));player.attack(boss.carrier());
                 check(boss.health()==0,"lethal mace smash consumes the remaining virtual HP");
                 check(player.getVelocity().getY()>0&&player.getFallDistance()==0,"lethal smash still rebounds and resets fall damage");

@@ -113,7 +113,7 @@ def main():
         if not source.is_file():
             parser.error('Missing input: ' + str(source))
     inputs = {'garden_sha256': sha(args.garden_jar), 'magic_sha256': sha(args.magic_jar), 'probe_sha256': sha(PROBE)}
-    args.probe_source = server.parent / 'probe-source/PetGroundingChecks.java'
+    args.probe_source = server.parent / 'probe-source' / PROBE.name
     args.probe_source.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(PROBE, args.probe_source)
     if args.prepared:
@@ -126,7 +126,8 @@ def main():
     report = result.read_text(encoding='utf8').splitlines()[0]
     console = (server / 'console.log').read_text(encoding='utf8', errors='replace')
     for failure in ('Could not pass event', 'Error occurred while enabling advance-magic',
-                    'Error occurred while enabling Evergarden', 'Cannot update wild pet', 'Cannot update companion'):
+                    'Error occurred while enabling Evergarden', 'Cannot update wild pet', 'Cannot update companion',
+                    'Cannot update second companion'):
         if failure in console:
             raise RuntimeError('Runtime failure (' + failure + '): ' + str(server / 'console.log'))
     if not report.startswith('PASS '):

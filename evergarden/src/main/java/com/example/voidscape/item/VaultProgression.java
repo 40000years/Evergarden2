@@ -26,7 +26,11 @@ public final class VaultProgression {
         };
     }
 
-    /** New Vault scrolls stop at their tier's equipment ceiling; legacy scrolls keep their own cap. */
+    /**
+     * New Vault scrolls stop at their tier's equipment ceiling; legacy scrolls keep their own cap. Tier VI-VIII
+     * scrolls (the sanctum hoard) pass the Tier V ceiling by one level per tier, never beyond the scroll type's own
+     * maximum: Sharpness / Protection / Power / Efficiency / Smite reach IX at VI and X from VII.
+     */
     public static int limitBreakCap(Enchantment enchantment,int maxLevel,int tier) {
         Objects.requireNonNull(enchantment,"enchantment");
         int nativeMax=enchantment.getMaxLevel();
@@ -39,6 +43,10 @@ public final class VaultProgression {
             case "minecraft:feather_falling","minecraft:density" -> 7;
             default -> nativeMax;
         };
+        if(tier>=6){
+            if(ceiling==nativeMax)return Math.clamp(Math.min(maxLevel,nativeMax),1,32);
+            return Math.clamp(Math.min(maxLevel,ceiling+Math.min(3,tier-5)),1,32);
+        }
         int top=Math.clamp(Math.min(maxLevel,ceiling),1,32);
         return top<=nativeMax?top:range(enchantment,nativeMax,top,tier).max();
     }

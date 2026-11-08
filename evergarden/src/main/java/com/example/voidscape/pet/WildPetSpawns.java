@@ -9,10 +9,14 @@ import net.kyori.adventure.title.Title;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 import java.time.Duration;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.random.RandomGenerator;
@@ -22,11 +26,14 @@ import java.util.random.RandomGenerator;
  * Java players see {@link NativePetRenderer} displays; Bedrock players see a Geyser
  * custom entity on a separate carrier, exactly like the sanctuary bosses.
  * Very rarely an encounter is one of the mythical five instead: each only in its own
- * realm at its own hour ({@link #omen}), one at a time in the world.
+ * realm at any time ({@link #omen}), one at a time in the world.
  */
 public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
     private static final List<PetCatalog.Species> SPECIES=Arrays.stream(PetCatalog.Species.values())
         .filter(s->!s.mythical()).toList();
+    private static final List<PetCatalog.Species> COMMON=SPECIES.stream().filter(s->!s.rare()).toList();
+    private static final List<PetCatalog.Species> RARE=SPECIES.stream().filter(PetCatalog.Species::rare).toList();
+    static final double DEFAULT_RARE_CHANCE=.08;
     /** Never chosen by an ordinary roll; see {@link #legend}. */
     private static final List<PetCatalog.Species> MYTHICAL=Arrays.stream(PetCatalog.Species.values())
         .filter(PetCatalog.Species::mythical).toList();
@@ -83,6 +90,8 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
     private final NativePetRenderer renderer;
     private final PetBodies bodies;
     private final PetTerrain terrain;
+    private final File pityFile;
+    private final YamlConfiguration pity;
     private final Map<UUID,PetBody> active=new LinkedHashMap<>();
     private final RandomGenerator random=new Random();
     private PetTaming taming;
@@ -94,7 +103,9 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
 
     WildPetSpawns(VoidscapePlugin plugin,NativePetRenderer renderer,PetBodies bodies,PetTerrain terrain){
         this.plugin=plugin;this.renderer=renderer;this.bodies=bodies;this.terrain=terrain;
-        reload();maintenance=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,1,1);
+        this.pityFile=new File(plugin.getDataFolder(),"pets/mythical-encounters.yml");
+        this.pity=YamlConfiguration.loadConfiguration(pityFile);
+        upgradePetDefaults();reload();maintenance=Bukkit.getScheduler().runTaskTimer(plugin,this::tick,1,1);
     }
     void taming(PetTaming taming){this.taming=taming;}
     public static List<PetCatalog.Species> eligibleSpecies(){return SPECIES;}
@@ -109,48 +120,50 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
             default->null;
         };
     }
-    static boolean home(PetCatalog.Species species,BiomeTerrain.Kind region){return region!=null&&HABITAT.getOrDefault(species,Set.of()).contains(region);}
+    static boolean home(PetCatalog.Species species,BiomeTerrain.Kind region){
+        var profile=PetExpansion.of(species);
+        return region!=null&&(profile!=null?profile.habitat()==region:HABITAT.getOrDefault(species,Set.of()).contains(region));
+    }
     /**
      * Home regions weigh three, elsewhere one, so every species can still turn up anywhere;
      * one this player met among their last few encounters counts half, to keep variety.
      */
     static PetCatalog.Species chooseSpecies(RandomGenerator random,BiomeTerrain.Kind region,Collection<PetCatalog.Species> recent){
-        double[] weights=new double[SPECIES.size()];double total=0;
+        return chooseSpecies(random,region,recent,DEFAULT_RARE_CHANCE);
+    }
+    static PetCatalog.Species chooseSpecies(RandomGenerator random,BiomeTerrain.Kind region,Collection<PetCatalog.Species> recent,double rareChance){
+        var candidates=!RARE.isEmpty()&&random.nextDouble()<Math.clamp(rareChance,0,1)?RARE:COMMON;
+        double[] weights=new double[candidates.size()];double total=0;
         for(int i=0;i<weights.length;i++){
-            PetCatalog.Species species=SPECIES.get(i);
+            PetCatalog.Species species=candidates.get(i);
             double weight=home(species,region)?3:1;
             if(recent!=null&&recent.contains(species))weight*=.5;
             weights[i]=weight;total+=weight;
         }
         double roll=random.nextDouble()*total;
-        for(int i=0;i<weights.length;i++)if((roll-=weights[i])<0)return SPECIES.get(i);
-        return SPECIES.getLast();
+        for(int i=0;i<weights.length;i++)if((roll-=weights[i])<0)return candidates.get(i);
+        return candidates.getLast();
     }
     /**
-     * How strongly a mythical companion is drawn to this place and moment: 0 where it never appears,
-     * 1 in its realm, 2 or 3 at its favourite moment (noon, a new or full moon, a storm).
-     * Time and weather only boost encounters: Evergarden normally has a frozen night and clear sky.
-     * {@code time} is the world's day time, {@code moon} its phase (0 full, 4 new).
+     * Equal odds in each species' habitat regardless of time or weather. Evergarden normally has
+     * a frozen night and clear sky, so time/weather bonuses would never be attainable for some pets.
      */
-    static int omen(PetCatalog.Species species,BiomeTerrain.Kind region,long time,boolean storm,boolean thunder,int moon){
-        long hour=Math.floorMod(time,24000L);boolean day=hour<12500;
+    static int omen(PetCatalog.Species species,BiomeTerrain.Kind region){
         return switch(species){
-            case SOLARIS->region==BiomeTerrain.Kind.GARDENS?(day&&!storm&&hour>=5000&&hour<7000?2:1):0;
-            case AETHERIUS->region==BiomeTerrain.Kind.GARDENS?(!day&&!storm&&moon==4?2:1):0;
-            case FENRIR->region==BiomeTerrain.Kind.ANCIENT_FOREST?(!day&&moon==0?2:1):0;
-            case ZEPHYROS->region==BiomeTerrain.Kind.GLACIER?(thunder?3:storm?2:1):0;
-            case IGNIS_DRACONIS->region==BiomeTerrain.Kind.LUNAR_CITY?(!day&&!storm?2:1):0;
+            case SOLARIS,AETHERIUS->region==BiomeTerrain.Kind.GARDENS?1:0;
+            case FENRIR->region==BiomeTerrain.Kind.ANCIENT_FOREST?1:0;
+            case ZEPHYROS->region==BiomeTerrain.Kind.GLACIER?1:0;
+            case IGNIS_DRACONIS->region==BiomeTerrain.Kind.LUNAR_CITY?1:0;
             default->0;
         };
     }
     /** Where and when to look for a mythical companion, for the /pet guide. */
     static String legendHint(PetCatalog.Species species){
         return switch(species){
-            case SOLARIS->BiomeTerrain.Kind.GARDENS.title+" · ทุกเวลา (เที่ยงวันฟ้าโปร่งโอกาส ×2)";
-            case AETHERIUS->BiomeTerrain.Kind.GARDENS.title+" · ทุกเวลา (คืนเดือนมืดฟ้าโปร่งโอกาส ×2)";
-            case FENRIR->BiomeTerrain.Kind.ANCIENT_FOREST.title+" · ทุกเวลา (คืนจันทร์เต็มดวงโอกาส ×2)";
-            case ZEPHYROS->BiomeTerrain.Kind.GLACIER.title+" · ทุกเวลา (ฝนหรือหิมะ ×2 · พายุฟ้าคะนอง ×3)";
-            case IGNIS_DRACONIS->BiomeTerrain.Kind.LUNAR_CITY.title+" · ทุกเวลา (กลางคืนฟ้าโปร่งโอกาส ×2)";
+            case SOLARIS,AETHERIUS->BiomeTerrain.Kind.GARDENS.title+" · ไม่ขึ้นกับเวลา/อากาศ";
+            case FENRIR->BiomeTerrain.Kind.ANCIENT_FOREST.title+" · ไม่ขึ้นกับเวลา/อากาศ";
+            case ZEPHYROS->BiomeTerrain.Kind.GLACIER.title+" · ไม่ขึ้นกับเวลา/อากาศ";
+            case IGNIS_DRACONIS->BiomeTerrain.Kind.LUNAR_CITY.title+" · ไม่ขึ้นกับเวลา/อากาศ";
             default->"";
         };
     }
@@ -162,29 +175,93 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
         double value=Math.clamp(roll,0,Math.nextDown(1d))*total;
         return value<b?PetCatalog.Stage.BABY:value<b+m?PetCatalog.Stage.MEDIUM:PetCatalog.Stage.ADULT;
     }
-    public static boolean flies(PetCatalog.Species species){return FLYING.contains(species);}
+    public static boolean flies(PetCatalog.Species species){var profile=PetExpansion.of(species);return profile==null?FLYING.contains(species):profile.flies();}
+    public static List<PetCatalog.Species> rareSpecies(){return RARE;}
+    public double rareChance(){double value=plugin.getConfig().getDouble("pets.rare.chance",DEFAULT_RARE_CHANCE);return Double.isFinite(value)?Math.clamp(value,0,1):DEFAULT_RARE_CHANCE;}
     private int setting(String key,int fallback,int min,int max){return plugin.integer("pets.wild-spawns."+key,fallback,min,max);}
     private int legendSetting(String key,int fallback,int min,int max){return plugin.integer("pets.mythical."+key,fallback,min,max);}
-    double legendChance(){double value=plugin.getConfig().getDouble("pets.mythical.chance",.001);
-        return Double.isFinite(value)?Math.clamp(value,0,1):.001;}
+    private static final double LEGACY_LEGEND_CHANCE=.001, OLD_LEGEND_CHANCE=.01, DEFAULT_LEGEND_CHANCE=.02;
+    private static final int OLD_PITY=20, DEFAULT_PITY=0, SPAWN_RATE_VERSION=3;
+    /**
+     * One-time migration: shipped defaults (0.1%, or 1% with a 20-encounter guarantee) become
+     * 2% with no guarantee; any other value a server set by hand is left intact.
+     */
+    static boolean upgradeMythicalConfig(ConfigurationSection config){
+        if(config.getInt("pets.mythical.spawn-rate-version",0)>=SPAWN_RATE_VERSION)return false;
+        if(config.contains("pets.mythical.chance")){
+            double chance=config.getDouble("pets.mythical.chance");
+            if(Double.compare(chance,LEGACY_LEGEND_CHANCE)==0||Double.compare(chance,OLD_LEGEND_CHANCE)==0)
+                config.set("pets.mythical.chance",DEFAULT_LEGEND_CHANCE);
+        }
+        if(config.contains("pets.mythical.pity-encounters")&&config.getInt("pets.mythical.pity-encounters")==OLD_PITY)
+            config.set("pets.mythical.pity-encounters",DEFAULT_PITY);
+        config.set("pets.mythical.spawn-rate-version",SPAWN_RATE_VERSION);
+        return true;
+    }
+    /** The old recovery default was 20 minutes; retain other server-configured durations. */
+    static boolean upgradeRecoveryConfig(ConfigurationSection config){
+        if(config.getInt("pets.companions.recovery-version",0)>=2)return false;
+        if(config.contains("pets.companions.faint-ticks")
+                && config.getInt("pets.companions.faint-ticks")==24000)
+            config.set("pets.companions.faint-ticks",6000);
+        config.set("pets.companions.recovery-version",2);
+        return true;
+    }
+    private void upgradePetDefaults(){
+        // Read the actual file without bundled defaults so an old config cannot inherit the new marker.
+        File file=new File(plugin.getDataFolder(),"config.yml");
+        YamlConfiguration disk=YamlConfiguration.loadConfiguration(file);
+        boolean mythical=upgradeMythicalConfig(disk), recovery=upgradeRecoveryConfig(disk);
+        if(mythical){
+            if(disk.contains("pets.mythical.chance"))plugin.getConfig().set("pets.mythical.chance",disk.get("pets.mythical.chance"));
+            if(disk.contains("pets.mythical.pity-encounters"))plugin.getConfig().set("pets.mythical.pity-encounters",disk.get("pets.mythical.pity-encounters"));
+            plugin.getConfig().set("pets.mythical.spawn-rate-version",SPAWN_RATE_VERSION);
+        }
+        if(recovery){
+            if(disk.contains("pets.companions.faint-ticks"))plugin.getConfig().set("pets.companions.faint-ticks",disk.get("pets.companions.faint-ticks"));
+            plugin.getConfig().set("pets.companions.recovery-version",2);
+        }
+        if(mythical||recovery)plugin.saveConfig();
+    }
+    double legendChance(){double value=plugin.getConfig().getDouble("pets.mythical.chance",DEFAULT_LEGEND_CHANCE);
+        return Double.isFinite(value)?Math.clamp(value,0,1):DEFAULT_LEGEND_CHANCE;}
     /** At most one mythical companion roams the world at a time. */
     private boolean legendAbroad(){return active.values().stream().anyMatch(p->p.species.mythical());}
     /** The mythical companions that could answer an encounter here now, each with its omen. */
-    private Map<PetCatalog.Species,Integer> omens(BiomeTerrain.Kind region,World world){
+    private Map<PetCatalog.Species,Integer> omens(BiomeTerrain.Kind region){
         Map<PetCatalog.Species,Integer> found=new EnumMap<>(PetCatalog.Species.class);
         if(region==null)return found;
-        int moon=(int)Math.floorMod(world.getFullTime()/24000L,8L);
         for(var species:MYTHICAL){
-            int omen=omen(species,region,world.getTime(),world.hasStorm(),world.isThundering(),moon);
+            int omen=omen(species,region);
             if(omen>0)found.put(species,omen);
         }
         return found;
     }
-    /** Rarely, an encounter is a mythical companion instead: {@code pets.mythical.chance} times its omen. */
-    private PetCatalog.Species legend(BiomeTerrain.Kind region,World world){
+    /** Natural encounters can roll a mythical, or guarantee one after enough eligible misses. */
+    private PetCatalog.Species legend(BiomeTerrain.Kind region,UUID player){
         double chance=legendChance();
         if(chance<=0||legendAbroad())return null;
-        return legendForRoll(random.nextDouble(),chance,omens(region,world));
+        return legendForEncounter(random.nextDouble(),chance,omens(region),
+            pity.getInt("players."+player,0),legendSetting("pity-encounters",DEFAULT_PITY,0,10000));
+    }
+    static PetCatalog.Species legendForEncounter(double roll,double chance,Map<PetCatalog.Species,Integer> omens,int misses,int threshold){
+        if(chance<=0||omens.isEmpty())return null;
+        boolean guarantee=threshold>0&&misses>=threshold-1;
+        return legendForRoll(roll,guarantee?1.0:chance,omens);
+    }
+    private void recordLegendEncounter(UUID player,boolean found){
+        String key="players."+player;
+        if(found)pity.set(key,null);
+        else pity.set(key,Math.min(10000,Math.max(0,pity.getInt(key,0))+1));
+        try{
+            File parent=pityFile.getParentFile();
+            if(!parent.isDirectory()&&!parent.mkdirs())throw new IOException("Cannot create "+parent);
+            // Write and atomically replace so a restart or interrupted write does not corrupt previous progress.
+            java.nio.file.Path tmp=pityFile.toPath().resolveSibling(pityFile.getName()+".tmp");
+            pity.save(tmp.toFile());
+            try{java.nio.file.Files.move(tmp,pityFile.toPath(),java.nio.file.StandardCopyOption.REPLACE_EXISTING,java.nio.file.StandardCopyOption.ATOMIC_MOVE);}
+            catch(java.nio.file.AtomicMoveNotSupportedException ex){java.nio.file.Files.move(tmp,pityFile.toPath(),java.nio.file.StandardCopyOption.REPLACE_EXISTING);}
+        }catch(IOException ex){plugin.getLogger().log(Level.WARNING,"Cannot save mythical encounter progress",ex);}
     }
     /** Disjoint intervals give every eligible species its exact chance without enum-order bias. */
     static PetCatalog.Species legendForRoll(double roll,double chance,Map<PetCatalog.Species,Integer> omens){
@@ -249,9 +326,11 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
             if(!guaranteed&&random.nextDouble()>=chance()){
                 rolls.put(id,"สุ่มไม่ผ่าน ("+Math.round(chance()*100)+"%) · การันตีในอีก "+Math.max(0,(guaranteeTicks()-waited)/1200)+" นาทีเกม");continue;
             }
-            // Very rarely a mythical companion answers instead, in its own realm and hour.
+            // A mythical may replace an ordinary encounter in its habitat; time and weather are irrelevant.
             Location feet=player.getLocation();
-            var legend=legend(region(feet.getWorld().getBiome(feet.getBlockX(),feet.getBlockY(),feet.getBlockZ())),feet.getWorld());
+            var encounterRegion=region(feet.getWorld().getBiome(feet.getBlockX(),feet.getBlockY(),feet.getBlockZ()));
+            boolean eligibleLegend=legendChance()>0&&!legendAbroad()&&!omens(encounterRegion).isEmpty();
+            var legend=legend(encounterRegion,id);
             double stageRoll=random.nextDouble();
             var stage=legend!=null?stageForRoll(stageRoll,legendSetting("stage-weights.baby",80,0,100000),
                     legendSetting("stage-weights.medium",17,0,100000),legendSetting("stage-weights.adult",3,0,100000))
@@ -269,15 +348,16 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
             if(at==null){rolls.put(id,lastRoll);continue;}
             BiomeTerrain.Kind region=region(at.getWorld().getBiome(at.getBlockX(),at.getBlockY(),at.getBlockZ()));
             // The spot must still lie in the legend's realm; otherwise it is an ordinary encounter.
-            if(legend!=null&&!omens(region,at.getWorld()).containsKey(legend)){
+            if(legend!=null&&!omens(region).containsKey(legend)){
                 legend=null;
                 // Preserve the ordinary age distribution if a boundary crossing cancels the legend.
                 var ordinary=stageForRoll(stageRoll,setting("stage-weights.baby",85,0,100000),
                     setting("stage-weights.medium",13,0,100000),setting("stage-weights.adult",2,0,100000));
                 if(ordinary.ordinal()<stage.ordinal())stage=ordinary;
             }
-            var species=legend!=null?legend:chooseSpecies(random,region,recentHistory.get(id));
+            var species=legend!=null?legend:chooseSpecies(random,region,recentHistory.get(id),rareChance());
             if(!spawn(species,stage,at)){rolls.put(id,"พบพื้นแต่เกิดไม่สำเร็จ · "+lastFailure);continue;}
+            if(eligibleLegend&&region==encounterRegion)recordLegendEncounter(id,legend!=null);
             drought.remove(id);
             if(legend==null){
                 recentHistory.computeIfAbsent(id,k->new ArrayList<>()).add(species);
@@ -325,12 +405,16 @@ public final class WildPetSpawns implements PetBodies.Manager,AutoCloseable {
         if(player.getWorld()!=plugin.world())return "คุณอยู่นอกโลก Evergarden · สัตว์ป่าเกิดเฉพาะใน Evergarden";
         String blocked=why(player);
         Location feet=player.getLocation();
-        var omens=omens(region(feet.getWorld().getBiome(feet.getBlockX(),feet.getBlockY(),feet.getBlockZ())),feet.getWorld());
+        var omens=omens(region(feet.getWorld().getBiome(feet.getBlockX(),feet.getBlockY(),feet.getBlockZ())));
         StringBuilder legends=new StringBuilder();
         omens.forEach((species,omen)->legends.append(legends.isEmpty()?"":", ").append(species.display).append(" ")
             .append(String.format(Locale.ROOT,"%.1f%%",legendChance()*omen*100)));
+        int threshold=legendSetting("pity-encounters",DEFAULT_PITY,0,10000);
+        String guarantee=threshold==0||legendChance()<=0||omens.isEmpty()?"":" · การันตีตำนานในการพบที่เข้าเงื่อนไขอีก "
+            +Math.max(1,threshold-Math.max(0,pity.getInt("players."+player.getUniqueId(),0)))+" ครั้ง";
         return "คุณ: "+(blocked!=null?blocked:rolls.getOrDefault(player.getUniqueId(),"รอการสุ่มรอบถัดไป (ทุก "+setting("attempt-interval-seconds",45,5,3600)+" วินาทีเกม)"))
-            +" · ตำนานที่นี่ตอนนี้: "+(legends.isEmpty()?"ไม่มี":legends+" ต่อการพบ"+(legendAbroad()?" (มีตัวหนึ่งออกมาอยู่แล้ว)":""));
+            +" · ตำนานที่นี่: "+(legends.isEmpty()?"ไม่มี":legends+" ต่อการพบ"+(legendAbroad()?" (มีตัวหนึ่งออกมาอยู่แล้ว)":""))+guarantee
+            +" · เวลาและอากาศไม่มีผลต่อโอกาสเกิด";
     }
     /** The ground a player stands on, or the ground below a flying player; their own height when over void. */
     private static double groundLevel(Player player){

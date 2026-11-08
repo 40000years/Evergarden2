@@ -39,6 +39,7 @@ public final class WhaleTreasure implements Listener {
         if (!chunk.getWorld().equals(plugin.world())) return;
         populateLandmarks(chunk);
         populateBossStructures(chunk);
+        populateDragonNests(chunk);
         if (!plugin.getConfig().getBoolean("structures.sky-whale.enabled", true)) return;
         var site = plugin.skyWhales().cell(Math.floorDiv(chunk.getX(), plugin.skyWhales().spacingChunks()),
                 Math.floorDiv(chunk.getZ(), plugin.skyWhales().spacingChunks()));
@@ -106,6 +107,15 @@ public final class WhaleTreasure implements Listener {
 
     private int chestCount(Random random){
         return random.nextInt(100)<probability("second-chest-chance",.30)*100?2:1;
+    }
+    private void populateDragonNests(Chunk chunk){
+        var layout=plugin.dragonNests();if(layout==null)return;
+        for(var site:layout.cell(Math.floorDiv(chunk.getX(),layout.spacingChunks()),Math.floorDiv(chunk.getZ(),layout.spacingChunks()))){
+            var kind=site.kind();
+            if(layout.enabled(kind)&&plugin.getConfig().getBoolean("structures.dragon-nests."+kind.id+".enabled",true)){
+                bossTreasure.populateDragonNest(chunk,site);
+            }
+        }
     }
     private void populateBossStructures(Chunk chunk){
         var layout=plugin.bossStructures();if(layout==null)return;

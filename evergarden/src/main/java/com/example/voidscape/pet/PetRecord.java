@@ -26,7 +26,7 @@ public final class PetRecord {
     UUID raisedBy;
     /** Health in fights; never saved, so it is full after a restart. Ticks are the server's current tick. */
     double health=-1;
-    transient long combatTick,healthTick;
+    transient long combatTick,healthTick,traitTick;
 
     PetRecord(UUID id,PetCatalog.Species species,PetCatalog.Stage stage){this.id=id;this.species=species;this.stage=stage;}
 

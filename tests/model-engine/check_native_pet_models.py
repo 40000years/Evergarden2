@@ -1,4 +1,4 @@
-"""Verify the native export preserves every rare sculpture and authored clip."""
+"""Verify the native export preserves every pet sculpture (wild and mythical) and authored clip."""
 import base64
 import hashlib
 import json
@@ -21,7 +21,9 @@ def main():
     manifest = json.loads((RESOURCES / 'native-pets.json').read_text(encoding='utf8'))
     models = manifest['models']
     species_count = len({m['species'] for m in models.values()})
-    verify(len(models) == 3 * species_count == 96, '96 eligible variants: 32 wild species in three growth stages')
+    roster=json.loads((RESOURCES/'pet-expansion.json').read_text(encoding='utf8'))['species']
+    verify(len(models) == 3 * species_count == 3*(37+len(roster)), 'every original and expansion species has three growth stages')
+    verify(MYTHICAL <= {m['species'] for m in models.values()}, 'mythical five included')
     expected_paths = set()
     total_cubes = 0
     source_hashes = {}
@@ -33,9 +35,6 @@ def main():
             source = json.loads(raw)
             species = source['meta']['evergarden_pet_species']
             model_id = species + '_' + source['meta']['evergarden_pet_stage']
-            if species in MYTHICAL:
-                verify(model_id not in models, 'mythical models excluded')
-                continue
             definition = models[model_id]
             digest = hashlib.sha256(raw).hexdigest()
             source_hashes[source_path.name] = digest

@@ -21,6 +21,8 @@ parser.add_argument('--result-name', default='vault-weapon-result.txt')
 parser.add_argument('--disabled-magic', action='store_true',
                     help='Load both plugins, then disable Advance Magic before testing Rare fallback')
 parser.add_argument('--timeout', type=int, default=300)
+parser.add_argument('--link-cache', action='store_true',
+                    help='Reuse immutable Paper libraries/versions/cache through directory links instead of copying')
 args = parser.parse_args()
 source = args.source_server.resolve()
 server = (args.server or ROOT / 'output' / ('vault-weapons-' + uuid.uuid4().hex)).resolve()
@@ -38,7 +40,14 @@ for name in ('libraries', 'versions', 'cache'):
     origin = (source / name).resolve()
     if not origin.is_dir():
         raise RuntimeError('Missing cached Paper directory: ' + str(origin))
-    shutil.copytree(origin, server / name)
+    if args.link_cache:
+        if os.name == 'nt':
+            subprocess.run(['cmd', '/c', 'mklink', '/J', str(server / name), str(origin)],
+                           check=True, capture_output=True)
+        else:
+            (server / name).symlink_to(origin, target_is_directory=True)
+    else:
+        shutil.copytree(origin, server / name)
 if (source / 'config').is_dir():
     shutil.copytree(source / 'config', server / 'config')
 shutil.copy2(source / 'paper.jar', server / 'paper.jar')
@@ -57,6 +66,7 @@ api_libraries = [m2 / relative for relative in (
     'org/geysermc/cumulus/cumulus/1.1.2/cumulus-1.1.2.jar',
     'org/geysermc/floodgate/api/2.2.5-SNAPSHOT/api-2.2.5-SNAPSHOT.jar',
     'org/geysermc/api/base-api/1.0.3/base-api-1.0.3.jar')]
+api_libraries.append(m2 / 'org/geysermc/event/events/1.1-SNAPSHOT/events-1.1-SNAPSHOT.jar')
 for library in api_libraries:
     if not library.is_file():
         raise RuntimeError('Missing cached optional-plugin API library: ' + str(library))

@@ -8,6 +8,8 @@ original seventeen already ship in Advance Magic's pack under the same paths).
 
 Each portrait renders the shipped blueprint with the preview camera and frames it with
 Advance Magic's menu plaque (menu_gui_assets.portrait), so old and new pets match.
+Portraits already in the archive are kept byte-for-byte (the slim build palette-compressed
+them); only missing species are rendered, then compressed the same way.
 
     python evergarden/tools/pet_portraits.py
 """
@@ -24,7 +26,8 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools'))
 import menu_gui_assets as menu  # noqa: E402
 import preview_pet_models as previews  # noqa: E402
-from pet_model_engine import MENAGERIE, MYTHICAL, SPECIES, STAGES  # noqa: E402
+from pet_model_engine import MENAGERIE, SPECIES, STAGES  # noqa: E402
+from pet_expansion_catalog import SPECIES as EXPANSION
 
 OUT = ROOT / 'evergarden/src/main/resources/pet-portraits.zip'
 
@@ -46,10 +49,10 @@ def _png(image):
     return buffer.getvalue()
 
 
-def portraits():
-    """name -> PNG bytes, for every obtainable species and stage, bright and dimmed (not the mythical five)."""
+def portraits(species_list=SPECIES):
+    """name -> PNG bytes, for these species in every stage, bright and dimmed."""
     out = {}
-    for species in (s for s in SPECIES if s not in MYTHICAL):
+    for species in species_list:
         span = previews.span_for(species)
         for stage in STAGES:
             render = _crop(previews.frame(species, stage, span))
@@ -64,7 +67,14 @@ def _json(value):
 
 def build():
     entries = {}
-    for name, data in portraits().items():
+    if OUT.exists():
+        with zipfile.ZipFile(OUT) as archive:
+            entries = {name: archive.read(name) for name in archive.namelist()}
+    missing = [s for s in SPECIES if f'assets/evergarden/textures/item/menu/pet_{s}_adult.png' not in entries]
+    import build_evergarden_slim_packs as slim  # noqa: E402  (imagequant, only when rendering)
+    stats = {'pinned': 0, 'kept': 0, 'lossless': 0, 'palette': 0}
+    for name, data in portraits(missing).items():
+        data = slim.compress(data, set(), stats)
         entries[f'assets/evergarden/textures/item/menu/{name}.png'] = data
         entries[f'assets/evergarden/models/item/menu/{name}.json'] = _json(
             {'parent': 'minecraft:item/generated', 'textures': {'layer0': f'evergarden:item/menu/{name}'}})
@@ -73,14 +83,14 @@ def build():
     with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED) as archive:
         for name, data in sorted(entries.items()):
             archive.writestr(zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0)), data, compress_type=zipfile.ZIP_DEFLATED)
-    print(f'{len(entries) // 3} portraits for {len(SPECIES) - len(MYTHICAL)} species -> {OUT.name} ({OUT.stat().st_size} bytes)')
+    print(f'{len(entries) // 3} portraits for {len(SPECIES)} species ({len(missing)} rendered: {stats}) -> {OUT.name} ({OUT.stat().st_size} bytes)')
 
 
 def bedrock_textures():
     """Bedrock form images for the menagerie species, read from the built Java portraits."""
     files = {}
     with zipfile.ZipFile(OUT) as archive:
-        for species in MENAGERIE:
+        for species in MENAGERIE + EXPANSION:
             for stage in STAGES:
                 name = f'pet_{species}_{stage}'
                 files[f'textures/menu/{name}.png'] = archive.read(f'assets/evergarden/textures/item/menu/{name}.png')

@@ -112,8 +112,75 @@ public final class JudgePackService implements Listener,AutoCloseable {
         finally{Files.deleteIfExists(temp);}
         servedPath=nextPath;sha1=hash;modelEngineIncluded=true;statuses.clear();
         lookForMirror(entries);
+        saveEngineCache(merged,generated.getParent());
         for(Player player:Bukkit.getOnlinePlayers())resend(player);
         return true;
+    }
+    /*
+     * ModelEngine rebuilds its whole resource pack on every start; with the Dragon Nest dragons that takes about
+     * 40 seconds, so a player joining after a restart waited for the Judge pack, got the other packs alone, and then
+     * a second download when ModelEngine finished. The Judge pack is identical across restarts (see
+     * unusedModelEngineMaps and contentNamedTextures), so the last one built is kept with a key over everything it
+     * came from. On the next start, if the key still matches, it is served at once; ModelEngine's rebuild then
+     * produces the same hash and nothing is re-sent. If anything changed, the old behaviour applies.
+     */
+    private static final String ENGINE_CACHE="judge-modelengine.zip",ENGINE_KEY="judge-modelengine.key";
+    /** A digest of this plugin's bundled Judge, the ModelEngine build, its config and every installed blueprint. */
+    private String engineKey(Path engineFolder)throws IOException,GeneralSecurityException{
+        var digest=MessageDigest.getInstance("SHA-256");
+        var me=Bukkit.getPluginManager().getPlugin("ModelEngine");
+        digest.update((sha1Of(bundled)+"\0"+(me==null?"":me.getPluginMeta().getVersion())+"\0").getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        Path config=engineFolder.resolve("config.yml");
+        if(Files.isRegularFile(config))digest.update(Files.readAllBytes(config));
+        // The whole-rotation format may be chosen in memory by Evergarden (ModelEngineArkhaia), not in config.yml.
+        boolean whole=plugin.getConfig().getBoolean("world-boss.visuals.compact-model-rotation",true)||Files.isRegularFile(config)
+            &&org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(config.toFile()).getBoolean("Model-Generator.Use-New-Rotation",false);
+        digest.update(("\0rotation="+(whole?"whole":"split")+"\0").getBytes(java.nio.charset.StandardCharsets.UTF_8));
+        Path blueprints=engineFolder.resolve("blueprints");
+        List<Path> files=new ArrayList<>();
+        if(Files.isDirectory(blueprints))try(var walk=Files.walk(blueprints)){walk.filter(Files::isRegularFile).forEach(files::add);}
+        files.sort(Comparator.comparing(p->blueprints.relativize(p).toString().replace('\\','/')));
+        for(Path file:files){
+            digest.update(("\0"+blueprints.relativize(file).toString().replace('\\','/')+"\0").getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            digest.update(MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(file)));
+        }
+        return HexFormat.of().formatHex(digest.digest());
+    }
+    private static String sha1Of(byte[] bytes)throws GeneralSecurityException{return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(bytes));}
+    private void saveEngineCache(byte[] merged,Path engineFolder){
+        try{
+            Path folder=plugin.getDataFolder().toPath().resolve("resource-packs");Files.createDirectories(folder);
+            Path temp=Files.createTempFile(folder,"judge-cache-",".tmp");
+            try{Files.write(temp,merged);Files.move(temp,folder.resolve(ENGINE_CACHE),StandardCopyOption.REPLACE_EXISTING);}
+            finally{Files.deleteIfExists(temp);}
+            Files.writeString(folder.resolve(ENGINE_KEY),engineKey(engineFolder)+"\n");
+        }catch(IOException|GeneralSecurityException error){plugin.getLogger().warning("Cannot keep the Judge pack for the next start: "+error.getMessage());}
+    }
+    /** Serves the Judge pack ModelEngine built last time when nothing it came from has changed. */
+    public void restoreEngineCache(Path engineFolder){
+        if(bundled==null||plugin.packs()==null||modelEngineIncluded||!failure.isEmpty())return;
+        Path folder=plugin.getDataFolder().toPath().resolve("resource-packs");
+        Path cache=folder.resolve(ENGINE_CACHE),key=folder.resolve(ENGINE_KEY);
+        if(!Files.isRegularFile(cache)||!Files.isRegularFile(key))return;
+        try{
+            if(!engineKey(engineFolder).equals(Files.readString(key).trim())){
+                plugin.getLogger().info("ModelEngine models changed since the last start; the Judge pack follows ModelEngine's rebuild.");
+                return;
+            }
+            byte[] cached=Files.readAllBytes(cache);
+            Map<String,byte[]> entries=new TreeMap<>();readZip(cached,entries,false);
+            if(entries.keySet().stream().noneMatch(n->n.startsWith("assets/modelengine/")&&n.contains("arkhaia")))return;
+            String hash=sha1Of(cached),nextPath=plugin.packs().publishAddition(cached,hash);
+            if(nextPath.isEmpty())return;
+            Path dest=folder.resolve("judge-java.zip"),temp=Files.createTempFile(folder,"judge-",".tmp");
+            try{Files.write(temp,cached);Files.move(temp,dest,StandardCopyOption.REPLACE_EXISTING);}
+            finally{Files.deleteIfExists(temp);}
+            servedPath=nextPath;sha1=hash;modelEngineIncluded=true;
+            lookForMirror(entries);
+            plugin.getLogger().info("Judge pack "+hash.substring(0,12)+" restored from the last ModelEngine build; players get every pack at once while ModelEngine rebuilds.");
+        }catch(IOException|GeneralSecurityException|RuntimeException error){
+            plugin.getLogger().warning("Cannot restore the last Judge pack: "+error.getMessage());
+        }
     }
     /**
      * ModelEngine numbers its custom_model_data fallback maps in import order, which its threads change

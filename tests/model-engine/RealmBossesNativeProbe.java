@@ -165,6 +165,21 @@ public final class RealmBossesNativeProbe extends JavaPlugin {
             garden.getConfig().set(key,50);
             check(Math.abs(measureDamage(attack,boss,10,DamageType.INDIRECT_MAGIC)-7.54)<.02,
                 "configured 50 percent damage scales both the magic hit and the rend");
+            // e2.196: phase three deals boss-phase-three.damage-multiplier.realm (2x) on top of everything else.
+            garden.getConfig().set(key,100);
+            var finalPhase=RealmBossController.class.getDeclaredField("phaseThree");finalPhase.setAccessible(true);
+            String phaseKey="boss-phase-three.damage-multiplier.realm";Object oldPhase=garden.getConfig().get(phaseKey);
+            finalPhase.setBoolean(boss,true);
+            try{
+                check(Math.abs(measureDamage(attack,boss,10,DamageType.INDIRECT_MAGIC)-30.16)<.04,
+                    "phase three doubles the regular 10 HP attack: 56 magic (20.16 through Protection IV) + 10 rend");
+                check(Math.abs(measureDamage(attack,boss,13.5,DamageType.SONIC_BOOM)-27.0)<.04,
+                    "phase three doubles the armor-bypassing sonic pulse too");
+                garden.getConfig().set(phaseKey,1.0);
+                check(Math.abs(measureDamage(attack,boss,10,DamageType.INDIRECT_MAGIC)-15.08)<.02,
+                    "boss-phase-three.damage-multiplier.realm 1.0 restores the normal damage in phase three");
+            }finally{finalPhase.setBoolean(boss,false);garden.getConfig().set(phaseKey,oldPhase);}
+            check(Math.abs(measureDamage(attack,boss,10,DamageType.INDIRECT_MAGIC)-15.08)<.02,"outside phase three the attack is unchanged");
         }catch(ReflectiveOperationException error){throw new RuntimeException(error);}
         finally{
             garden.getConfig().set(key,oldScale);world.setDifficulty(oldDifficulty);
@@ -203,8 +218,13 @@ public final class RealmBossesNativeProbe extends JavaPlugin {
                 old.getPersistentDataContainer().set(garden.key("boss_orb"),PersistentDataType.STRING,kind.model);
                 old.getPersistentDataContainer().set(garden.key("realm_boss_orb"),PersistentDataType.STRING,kind.model);
                 legacy.setItemMeta(old);
-                check(com.example.voidscape.boss.RealmCores.migrate(garden,legacy)&&legacy.isSimilar(core)&&legacy.getAmount()==2
-                    &&!com.example.voidscape.boss.RealmCores.migrate(garden,legacy),kind+": an old Soul Orb becomes the textured core, stack kept");
+                // Era 2: everything won before the realm rework is spent, so the egg trade starts over.
+                check(com.example.voidscape.boss.RealmCores.migrate(garden,legacy)&&!legacy.isSimilar(core)&&legacy.getAmount()==2
+                    &&com.example.voidscape.boss.RealmCores.spent(garden,legacy)&&com.example.voidscape.boss.RealmCores.identify(garden,legacy)==null
+                    &&!com.example.voidscape.boss.RealmCores.migrate(garden,legacy),kind+": an old Soul Orb becomes a spent core with no trade value, stack kept");
+                ItemStack preEra=core.clone();var preMeta=preEra.getItemMeta();preMeta.getPersistentDataContainer().remove(garden.key("realm_core_era"));preEra.setItemMeta(preMeta);
+                check(com.example.voidscape.boss.RealmCores.identify(garden,preEra)==null&&com.example.voidscape.boss.RealmCores.migrate(garden,preEra)
+                    &&com.example.voidscape.boss.RealmCores.spent(garden,preEra),kind+": a core from before the reset is spent, not accepted");
                 ItemStack renamed=core.clone();var renamedMeta=renamed.getItemMeta();
                 renamedMeta.displayName(net.kyori.adventure.text.Component.text("My trophy"));((org.bukkit.inventory.meta.Repairable)renamedMeta).setRepairCost(3);renamed.setItemMeta(renamedMeta);
                 check(com.example.voidscape.boss.RealmCores.migrate(garden,renamed)&&renamed.isSimilar(core),kind+": an anvil-renamed core (repair cost 3) is restored so the Seraph still takes it");
@@ -231,6 +251,41 @@ public final class RealmBossesNativeProbe extends JavaPlugin {
                     org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(dropped),net.minecraft.world.item.ItemStack.EMPTY),
                     "a core dropped by a victory is accepted by the native trade: "+kind);
             }
+            // An old core no longer satisfies the native trade.
+            for(Object offer:offers){
+                var first=offer.getClass().getDeclaredMethod("first");first.setAccessible(true);
+                var result=offer.getClass().getDeclaredMethod("result");result.setAccessible(true);
+                ItemStack price=(ItemStack)first.invoke(offer);
+                var recipe=new org.bukkit.inventory.MerchantRecipe(((java.util.function.Supplier<ItemStack>)result.invoke(offer)).get(),0,9999,false,0,0,0,0,true);recipe.addIngredient(price);
+                ItemStack old=price.clone();var oldMeta=old.getItemMeta();oldMeta.getPersistentDataContainer().remove(garden.key("realm_core_era"));old.setItemMeta(oldMeta);
+                com.example.voidscape.boss.RealmCores.migrate(garden,old);
+                check(!org.bukkit.craftbukkit.inventory.CraftMerchantRecipe.fromBukkit(recipe).toMinecraft().satisfiedBy(
+                    org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(old),net.minecraft.world.item.ItemStack.EMPTY),"a spent core is refused by the native trade");
+            }
+            // Dragon armor for dragon scales (+ Golden Seraph Feathers): 12 lines, 42 scales and 19 golden feathers a set.
+            var dragon=shop.getClass().getDeclaredMethod("dragonArmorOffers");dragon.setAccessible(true);
+            List<?> armorOffers=(List<?>)dragon.invoke(shop);
+            check(armorOffers.size()==12,"the Seraph lists four dragon armor pieces for each dragon: "+armorOffers.size());
+            java.util.Map<com.example.voidscape.world.DragonNestLayout.Kind,int[]> totals=new java.util.EnumMap<>(com.example.voidscape.world.DragonNestLayout.Kind.class);
+            for(Object offer:armorOffers){
+                var first=offer.getClass().getDeclaredMethod("first");first.setAccessible(true);
+                var second=offer.getClass().getDeclaredMethod("second");second.setAccessible(true);
+                var result=offer.getClass().getDeclaredMethod("result");result.setAccessible(true);
+                ItemStack scales=(ItemStack)first.invoke(offer),golden=(ItemStack)second.invoke(offer);
+                ItemStack piece=((java.util.function.Supplier<ItemStack>)result.invoke(offer)).get();
+                var kind=com.example.voidscape.boss.DragonScales.identify(garden,scales);
+                check(kind!=null&&golden!=null&&com.example.voidscape.trade.SeraphFeathers.isGolden(garden,golden)
+                    &&piece.getItemMeta().getPersistentDataContainer().has(new NamespacedKey("advance-magic","armor_set")),"dragon armor line takes "+kind+" scales x"+scales.getAmount()+" + golden x"+(golden==null?0:golden.getAmount()));
+                int[] t=totals.computeIfAbsent(kind,k->new int[2]);t[0]+=scales.getAmount();t[1]+=golden.getAmount();
+                var recipe=new org.bukkit.inventory.MerchantRecipe(piece,0,9999,false,0,0,0,0,true);recipe.addIngredient(scales);recipe.addIngredient(golden);
+                check(org.bukkit.craftbukkit.inventory.CraftMerchantRecipe.fromBukkit(recipe).toMinecraft().satisfiedBy(
+                    org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(com.example.voidscape.boss.DragonScales.create(garden,kind,scales.getAmount())),
+                    org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(com.example.voidscape.trade.SeraphFeathers.golden(garden,golden.getAmount()))),
+                    "scales a dragon dropped pay for the "+kind+" piece natively");
+            }
+            for(var entry:totals.entrySet())check(entry.getValue()[0]==42&&entry.getValue()[1]==19,entry.getKey()+": a full dragon set costs 42 scales and 19 golden feathers");
+            ItemStack scale=com.example.voidscape.boss.DragonScales.create(garden,com.example.voidscape.world.DragonNestLayout.Kind.FIRE,3);
+            check(scale.getType()==Material.ECHO_SHARD&&new NamespacedKey("voidscape","dragon_scale_fire").equals(scale.getItemMeta().getItemModel())&&scale.getAmount()==3,"a fire scale carries its texture model");
             // Per-player spoils, forced through each branch.
             var rewards=com.example.voidscape.boss.RealmRewards.class;
             for(var kind:List.of(RealmBosses.Kind.CINDER_COLOSSUS,RealmBosses.Kind.SOUL_HOUND)){
@@ -600,6 +655,7 @@ public final class RealmBossesNativeProbe extends JavaPlugin {
                     two.setBoolean(boss,true);three.setBoolean(boss,false);health.setDouble(boss,boss.maxHealth()*0.25);boss.tick(++now);
                     check(boss.isPhaseThree()&&action.get(boss).toString().equals("TRANSITION"),entry.getKey()+": 30% HP opens the final phase");
                 }finally{boss.close();}
+                phaseWall(entry.getKey(),entry.getValue(),now+=2000,mover);
             }
         }catch(ReflectiveOperationException error){throw new RuntimeException(error);}
         finally{
@@ -658,6 +714,88 @@ public final class RealmBossesNativeProbe extends JavaPlugin {
             world.addPluginChunkTicket(x>>4,z>>4,this);world.getBlockAt(x,119,z).setType(Material.STONE,false);
             for(int y=120;y<120+height;y++)world.getBlockAt(x,y,z).setType(Material.AIR,false);
         }
+    }
+    /** Party health (+70% of solo per extra challenger, 3.8x cap) and the phase walls: no burst skips a phase or its skill. */
+    void phaseWall(DimensionalSanctuaries.Kind kind,List<String> skills,long now,Player mover)throws ReflectiveOperationException{
+        var action=RealmBossController.class.getDeclaredField("action");action.setAccessible(true);
+        var health=RealmBossController.class.getDeclaredField("health");health.setAccessible(true);
+        var warded=RealmBossController.class.getDeclaredField("warded");warded.setAccessible(true);
+        var carrierField=RealmBossController.class.getDeclaredField("carrier");carrierField.setAccessible(true);
+        var solo=RealmBossController.class.getDeclaredMethod("configuredSoloHealth");solo.setAccessible(true);
+        var extra=RealmBossController.class.getDeclaredMethod("configuredExtraPlayerHealth");extra.setAccessible(true);
+        var cap=RealmBossController.class.getDeclaredMethod("configuredHealthCap");cap.setAccessible(true);
+        var site=new DimensionalSanctuaries.Site(kind,256,120,256,0,0,1);
+        var boss=new RealmBossController(garden,site,new DimensionalSanctuaries.Arena(256,120,256,30,20),new Location(world,256.5,120,256.5),p->p==mover,d->{});
+        try{
+            double s=(double)solo.invoke(boss);
+            check(Math.abs((double)extra.invoke(boss)-s*0.7)<1e-6&&Math.abs((double)cap.invoke(boss)-s*3.8)<1e-6,kind+": each extra challenger adds 70% of solo health, capped at 3.8x ("+(int)(s*3.8)+" for five)");
+            boss.spawnWaiting(now);boss.awaken(List.of(mover));
+            for(int i=0;i<60&&!action.get(boss).toString().equals("NONE");i++)boss.tick(++now);
+            Entity target=(Entity)carrierField.get(boss);
+            double max=boss.maxHealth();
+            Runnable hit=()->boss.handleIncomingDamage(new org.bukkit.event.entity.EntityDamageByEntityEvent(mover,target,org.bukkit.event.entity.EntityDamageEvent.DamageCause.MAGIC,
+                org.bukkit.damage.DamageSource.builder(DamageType.MAGIC).withCausingEntity(mover).withDirectEntity(mover).build(),180),mover);
+            health.setDouble(boss,max*0.66);hit.run();
+            check(Math.abs((double)health.get(boss)-max*0.65)<1e-6&&!boss.isPhaseTwo(),kind+": a burst stops at the 65% phase wall");
+            hit.run();check(Math.abs((double)health.get(boss)-max*0.65)<1e-6,kind+": no damage passes the wall before the phase opens");
+            boss.tick(++now);
+            check(boss.isPhaseTwo()&&action.get(boss).toString().equals("TRANSITION")&&warded.getBoolean(boss),kind+": the wall opens phase two behind a ward");
+            hit.run();check(Math.abs((double)health.get(boss)-max*0.65)<1e-6,kind+": the ward absorbs hits during the transition");
+            int ticks=0;while(action.get(boss).toString().equals("TRANSITION")&&ticks<80){ticks++;boss.tick(++now);}
+            check(action.get(boss).toString().equals(skills.get(3))&&warded.getBoolean(boss),kind+": phase two opens with its signature "+skills.get(3));
+            ticks=0;while(!action.get(boss).toString().equals("NONE")&&ticks<400){ticks++;boss.tick(++now);}
+            check(!warded.getBoolean(boss),kind+": the ward falls once "+skills.get(3)+" ends ("+ticks+" ticks)");
+            double before=(double)health.get(boss);hit.run();
+            check((double)health.get(boss)<before,kind+": damage lands again after the signature skill");
+            health.setDouble(boss,max*0.31);hit.run();
+            check(Math.abs((double)health.get(boss)-max*0.30)<1e-6&&!boss.isPhaseThree(),kind+": a burst stops at the 30% wall");
+            boss.tick(++now);
+            for(int i=0;i<80&&action.get(boss).toString().equals("TRANSITION");i++)boss.tick(++now);
+            check(boss.isPhaseThree()&&action.get(boss).toString().equals(skills.get(4))&&warded.getBoolean(boss),kind+": the final phase opens with "+skills.get(4)+" behind its ward");
+            var adaptation=RealmBossController.class.getDeclaredField("adaptation");adaptation.setAccessible(true);
+            Object chain=adaptation.get(boss);var chainLength=chain.getClass().getDeclaredMethod("chain");chainLength.setAccessible(true);
+            mover.getInventory().setItemInMainHand(null);hit.run();
+            check((int)chainLength.invoke(chain)==0,kind+": hits the phase ward absorbs never feed the adaptation chain");
+            ticks=0;while(!action.get(boss).toString().equals("NONE")&&ticks<400){ticks++;boss.tick(++now);}
+            check(!warded.getBoolean(boss),kind+": the final-phase ward falls once "+skills.get(4)+" ends");
+            adaptationChain(kind,boss,health,hit,mover);
+        }finally{boss.close();}
+    }
+    /** e2.196: Phlegethon's weapon adaptation in phase three (halving per repeated family, reset on a switch). */
+    void adaptationChain(DimensionalSanctuaries.Kind kind,RealmBossController boss,java.lang.reflect.Field health,Runnable hit,Player mover)throws ReflectiveOperationException{
+        // Keep the Crystal Moth's wing gauge from triggering a stun (which changes the multiplier) mid-sequence.
+        if(kind==DimensionalSanctuaries.Kind.CRYSTAL_CITY){
+            var gauge=RealmBossController.class.getDeclaredField("wingCrackGauge");gauge.setAccessible(true);gauge.setDouble(boss,0);
+        }
+        // Likewise the Colossus core interrupt: a closed core keeps one flank multiplier for the whole sequence.
+        if(kind==DimensionalSanctuaries.Kind.CROWN_FORTRESS){
+            var core=RealmBossController.class.getDeclaredField("coreExposed");core.setAccessible(true);core.setBoolean(boss,false);
+        }
+        double[] dealt=new double[7];
+        // Refill (inside phase three) before every hit: nine 180-damage hits outlast a 3200-HP boss's final 30%.
+        // Health never feeds the adaptation chain, which follows weapon families only.
+        double room=boss.maxHealth()*0.29;
+        ItemStack[] held={null,null,null,new ItemStack(Material.DIAMOND_SWORD),new ItemStack(Material.IRON_SWORD),null,new ItemStack(Material.BOW)};
+        for(int i=0;i<dealt.length;i++){
+            mover.getInventory().setItemInMainHand(held[i]);
+            health.setDouble(boss,room);hit.run();dealt[i]=room-(double)health.get(boss);
+        }
+        double full=dealt[0];
+        check(full>0&&Math.abs(dealt[1]-full/2)<1e-6&&Math.abs(dealt[2]-full/4)<1e-6,
+            kind+": phase three halves each repeated bare-hand hit ("+String.format(Locale.ROOT,"%.1f, %.1f, %.1f",dealt[0],dealt[1],dealt[2])+")");
+        check(Math.abs(dealt[3]-full)<1e-6,kind+": switching to a sword lands in full");
+        check(Math.abs(dealt[4]-full/2)<1e-6,kind+": an iron sword after a diamond one is the same family and halves");
+        check(Math.abs(dealt[5]-full)<1e-6,kind+": returning to bare hands starts at full damage again");
+        check(Math.abs(dealt[6]-full)<1e-6,kind+": a held bow (another family) lands in full");
+        mover.getInventory().setItemInMainHand(null);
+        String toggle="boss-phase-three.adaptation.realm";Object old=garden.getConfig().get(toggle);
+        garden.getConfig().set(toggle,"off");
+        try{
+            health.setDouble(boss,room);hit.run();double first=room-(double)health.get(boss);
+            health.setDouble(boss,room);hit.run();double second=room-(double)health.get(boss);
+            check(Math.abs(first-full)<1e-6&&Math.abs(second-full)<1e-6,
+                kind+": boss-phase-three.adaptation.realm off turns adaptation off ("+first+", "+second+" vs "+full+")");
+        }finally{garden.getConfig().set(toggle,old);}
     }
     ServerPlayer fake(Location at,String name){
         var server=MinecraftServer.getServer();var level=((CraftWorld)world).getHandle();

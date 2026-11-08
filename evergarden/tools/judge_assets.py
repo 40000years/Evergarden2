@@ -297,6 +297,8 @@ def build():
     files['manifest.json']=json_bytes(manifest)
     atlas_data=json.loads(files['textures/item_texture.json'])
     mappings=json.loads((dist/'geyser-mappings.json').read_text())
+    from pet_menu_bedrock_items import register as register_pet_menu_items
+    register_pet_menu_items(files,atlas_data,mappings,ROOT/'src/main/resources/pet-portraits.zip')
     entries=mappings['items'].setdefault('minecraft:iron_helmet',[])
     entries[:]=[e for e in entries if not e.get('bedrock_identifier','').startswith('voidscape:judge_')]
     from seraph_preview_assets import assets as seraph_assets, PREFIX as SERAPH_PREFIX, REVISION as SERAPH_REVISION, ATLAS_SIZE as SERAPH_ATLAS_SIZE

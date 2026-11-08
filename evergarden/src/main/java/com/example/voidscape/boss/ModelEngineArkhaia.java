@@ -11,6 +11,7 @@ import com.ticxo.modelengine.api.events.ModelRegistrationEvent;
 import com.ticxo.modelengine.api.generator.ModelGenerator;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
+import com.ticxo.modelengine.api.utils.config.ConfigProperty;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -71,6 +72,10 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
         }
         else retire(RealmBosses.BLUEPRINT,"modelengine/realm/"+RealmBosses.BLUEPRINT+".bbmodel");
         plugin.getLogger().info("Realm rigs for ModelEngine: "+(realm?"all four in "+RealmBosses.BLUEPRINT:"disabled"));
+        // ModelEngine imports after the server is up (Register-Post-Server), i.e. after this constructor.
+        wholeRotation(true);
+        // Every blueprint is in place: if none changed since the last start, the last Judge pack is served at once.
+        if(plugin.judgePack()!=null)plugin.judgePack().restoreEngineCache(engineFolder);
         Bukkit.getPluginManager().registerEvents(this,plugin);
         // An Evergarden reload can happen after ME has already finished importing.
         Bukkit.getScheduler().runTask(plugin,()->refresh(false));
@@ -93,6 +98,39 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
         if(result.upgraded())plugin.getLogger().info("Updated Arkhaia rig; previous blueprint backed up to "+result.backup());
         if(!result.bundled())plugin.getLogger().warning("Using existing edited Arkhaia blueprint: "+blueprint);
         plugin.getLogger().info("Arkhaia blueprint: "+modelInfo+" | expected "+ArkhaiaBlueprintInstaller.digest(bundled).substring(0,12));
+    }
+    /*
+     * The Dragon Nest dragons are ~22,000 freely rotated skin cubes. With ModelEngine's default split format each such
+     * cube becomes its own sub-model (~22,300 files, ~40 s rebuild, 27 MB pack, and that many model files for every
+     * Java client to load). Its whole-rotation format (Use-New-Rotation, 26.x clients) keeps one file per bone instead.
+     * The flag is read only by the Blockbench parser, so it is switched on in ModelEngine's in-memory settings for the
+     * duration of each import and put back afterwards: plugins/ModelEngine/config.yml is never written, a server that
+     * already enables it is left alone, and /meg reload re-applies it at its next PRE_IMPORT.
+     */
+    private boolean rotationOverridden;
+    static boolean compactRotation(org.bukkit.plugin.Plugin plugin){
+        return plugin.getConfig().getBoolean("world-boss.visuals.compact-model-rotation",true);
+    }
+    private synchronized void wholeRotation(boolean on){
+        try{
+            var settings=ModelEngineAPI.getAPI().getConfigManager();
+            if(on){
+                if(rotationOverridden||!compactRotation(plugin)||settings.getBoolean(ConfigProperty.USE_NEW_ROTATION))return;
+                settings.set(ConfigProperty.USE_NEW_ROTATION,true);rotationOverridden=true;
+            }else{
+                if(!rotationOverridden)return;
+                settings.set(ConfigProperty.USE_NEW_ROTATION,false);rotationOverridden=false;
+            }
+            ModelEngineAPI.getConfigCache().updateConfig();
+        }catch(RuntimeException|LinkageError error){
+            rotationOverridden=false;
+            plugin.getLogger().warning("Cannot select ModelEngine's whole-rotation model format ("+error+"); its configured format is used.");
+        }
+    }
+    /** Runs on ModelEngine's import thread before parsing starts, so the parser sees the format for this import. */
+    @EventHandler(priority=EventPriority.LOWEST) public void importing(ModelRegistrationEvent event){
+        if(event.getPhase()==ModelGenerator.Phase.PRE_IMPORT){if(!closed)wholeRotation(true);}
+        else if(event.getPhase()==ModelGenerator.Phase.FINISHED)wholeRotation(false);
     }
     @EventHandler public void generated(ModelRegistrationEvent event){
         Bukkit.getScheduler().runTask(plugin,()->{
@@ -129,16 +167,16 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
         return true;
     }
     @Override public boolean ready(String model){
-        String blueprint=RealmBosses.realm(model)?RealmBosses.BLUEPRINT:model;
+        String blueprint=RealmBosses.sharedBlueprint(model)?RealmBosses.BLUEPRINT:model;
         return published&&!closed&&ModelEngineAPI.getBlueprint("internal_fire")!=null&&ModelEngineAPI.getBlueprint(blueprint)!=null;
     }
     @Override public String modelInfo(){return modelInfo+" | "+readiness;}
     @Override public ArkhaiaModelSupport.Rig attach(Slime target){return new Rig(target,"arkhaia",3.2);}
     @Override public ArkhaiaModelSupport.Rig attachRiver(Mob target,String model){return new Rig(target,model,RiverVisual.scale(model));}
     @Override public ArkhaiaModelSupport.Rig attachBoss(Mob target,String model,double scale){
-        return RealmBosses.realm(model)?new Rig(target,RealmBosses.BLUEPRINT,scale,model):new Rig(target,model,scale);
+        return RealmBosses.sharedBlueprint(model)?new Rig(target,RealmBosses.BLUEPRINT,scale,model):new Rig(target,model,scale);
     }
-    @Override public void close(){closed=true;ready=false;published=false;HandlerList.unregisterAll(this);}
+    @Override public void close(){closed=true;ready=false;published=false;wholeRotation(false);HandlerList.unregisterAll(this);}
 
     /** Culling uses UUID snapshots; no Bukkit calls from our animation worker. */
     private static final class AudienceCull extends BasicCulling {
@@ -180,12 +218,20 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
             // Their floating geometry is lowered into melee range, leaving the anchor under the
             // arena floor. A blocked-view test against that anchor can hide the visible bones.
             // Keep the normal distance, camera and accepted-viewer culling for these models.
-            if("crystal_moth".equals(show)||"unlit_sun".equals(show))
+            if("crystal_moth".equals(show)||"unlit_sun".equals(show)||RealmBosses.dragon(show))
                 base.getData().setBlockedCull(false);
+            // A Dragon Nest dragon's anchor sits under its hind legs, some 20 blocks behind its head and 25 below its
+            // wingtips, and it hunts players in the air. ModelEngine's behind-viewer cull (MOVEMENT_ONLY) then freezes the
+            // rig in its bind pose without turning whenever a hunter faces the dragon's head, and the vertical cull hides
+            // it when the anchor is far above or below. The model is rendered and animated for every accepted viewer.
+            if(RealmBosses.dragon(show)){base.getData().setBackCull(false);base.getData().setVerticalCull(false);}
             ActiveModel created=null;
             try{
                 entity.setSaved(false);entity.setModelRotationLocked(true);
                 model=created=ModelEngineAPI.createActiveModel(modelId,null,ModelEngineAPI::createStateMachineHandler);
+                // The shared realm blueprint may contain several high-detail rigs. Generate its bones first,
+                // prune the unused families, and only then create displays for the selected boss.
+                if(show!=null)model.setAutoRendererInitialization(false);
                 model.setScale(scale);model.setCanHurt(false);model.setShadowVisible(false);
                 model.setRenderFire(false);model.setOnFire(false);
                 model.setBlockLight(14);model.setSkyLight(15);model.setLockPitch(true);model.setLockYaw(true);
@@ -197,6 +243,7 @@ final class ModelEngineArkhaia implements ArkhaiaModelSupport.Backend,Listener {
                     for(String bone:new ArrayList<>(model.getBones().keySet()))
                         if(!RealmBosses.owns(show,bone)&&model.getBones().containsKey(bone))model.removeBone(bone);
                     for(var bone:model.getBones().entrySet())if(!RealmBosses.owns(show,bone.getKey()))bone.getValue().setVisible(false);
+                    model.initializeRenderer();
                 }
                 // R4 reads locked angles only when the attached ActiveModel is
                 // explicitly locked. The entity lock alone freezes its old yaw.

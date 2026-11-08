@@ -28,7 +28,7 @@ final class BossHitbox {
     private static final Set<String> BODY=Set.of("pelvis","chest","head","arm_r","arm_l","forearm_r","forearm_l",
         "neck","jaw","collar","shoulder_r","shoulder_l","sash_r","sash_l","hand_r","hand_l","leg_r","leg_l","shin_r","shin_l","foot_r","foot_l",
         "sleeve_r","sleeve_l","tabard","tabard_tip","skirt_front","skirt_front_tip","skirt_r","skirt_r_tip","skirt_back","skirt_back_tip","skirt_l","skirt_l_tip",
-        "skirt_tip_r","skirt_tip_l","sash_tip_r","sash_tip_l","core","plate_r","plate_l","spine","ribs_r","ribs_l","fore_r","foreleg_r","forepaw_r","fore_l","foreleg_l","forepaw_l","thigh_r","shank_r","hock_r","hindpaw_r","thigh_l","shank_l","hock_l","hindpaw_l","tail1","tail2","tail3","tail4","thorax","forewing_r","forewing_tip_r","hindwing_r","hindwing_tip_r","forewing_l","forewing_tip_l","hindwing_l","hindwing_tip_l","leg1_r","shin1_r","leg2_r","shin2_r","leg3_r","shin3_r","leg1_l","shin1_l","leg2_l","shin2_l","leg3_l","shin3_l","abdomen","abdomen2","stinger","body","shell","seg0","seg1","seg2","seg3","seg4","seg5","seg6","seg7","cap_top","cap_bottom","ring","inner","petal0","petal1","petal2","petal3","petal4","petal5","petal6","petal7");
+        "skirt_tip_r","skirt_tip_l","sash_tip_r","sash_tip_l","core","plate_r","plate_l","spine","ribs_r","ribs_l","fore_r","foreleg_r","forepaw_r","fore_l","foreleg_l","forepaw_l","thigh_r","shank_r","hock_r","hindpaw_r","thigh_l","shank_l","hock_l","hindpaw_l","tail1","tail2","tail3","tail4","tail5","tail6","tail7","neck1","neck2","neck3","neck4","neck5","forefoot_r","forefoot_l","hind_r","hindleg_r","hindhock_r","hindfoot_r","hind_l","hindleg_l","hindhock_l","hindfoot_l","wing_r","wingelbow_r","wingtip_r","wing_l","wingelbow_l","wingtip_l","thorax","forewing_r","forewing_tip_r","hindwing_r","hindwing_tip_r","forewing_l","forewing_tip_l","hindwing_l","hindwing_tip_l","leg1_r","shin1_r","leg2_r","shin2_r","leg3_r","shin3_r","leg1_l","shin1_l","leg2_l","shin2_l","leg3_l","shin3_l","abdomen","abdomen2","stinger","body","shell","seg0","seg1","seg2","seg3","seg4","seg5","seg6","seg7","cap_top","cap_bottom","ring","inner","petal0","petal1","petal2","petal3","petal4","petal5","petal6","petal7");
     private static double[] xyz(JsonArray a){return new double[]{a.get(0).getAsDouble(),a.get(1).getAsDouble(),a.get(2).getAsDouble()};}
     private static Bone bone(JsonObject g,Map<String,JsonObject> cubes){
         List<Bone> children=new ArrayList<>();BoundingBox bounds=null;String name=g.get("name").getAsString();
@@ -49,7 +49,7 @@ final class BossHitbox {
         return new Bone(g.get("uuid").getAsString(),name,xyz(g.getAsJsonArray("origin")),children,BODY.contains(name)?bounds:null,name.equals("sword")?bounds:null);
     }
     private static Model model(String name){return MODELS.computeIfAbsent(name,key->{
-        String path="/modelengine/"+(key.equals("arkhaia")||key.equals("seraphon")?key:RealmBosses.realm(key)?"realm/"+key:"rivers/"+key)+".bbmodel";
+        String path="/modelengine/"+(key.equals("arkhaia")||key.equals("seraphon")?key:RealmBosses.dragon(key)?"dragons/"+key:RealmBosses.realm(key)?"realm/"+key:"rivers/"+key)+".bbmodel";
         try(var input=BossHitbox.class.getResourceAsStream(path)){
             if(input==null)throw new IOException(path);
             JsonObject json=JsonParser.parseReader(new InputStreamReader(input,StandardCharsets.UTF_8)).getAsJsonObject();

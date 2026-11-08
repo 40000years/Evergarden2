@@ -270,21 +270,44 @@ embroidered robe panels, an octagonal gold halo and continuous tapered feathers.
 Both export paths preserve the rotated feather pivots and UV crops. The local
 preview renderer reads the final Java pack with textures and depth testing.
 
-Victory sets a four-hour site cooldown. Every participant credited with positive
-hand/core damage receives one random Advance Magic core, two Evergarden keys and
-1,500 XP by default. Each player rolls independently from all available cores with
-equal chances, including Mythic cores.
-Being nearby or damaging only summoned temple bosses does not qualify. The exact
-core ID is drawn once at victory and saved; claiming cannot reroll it. Rewards
-accumulate over multiple wins until there is room for the entire item bundle.
-Rewards for offline/dead players or full inventories remain in `world-bosses.yml`.
-They are offered on join/respawn or with `boss claim`. Atomic ledger writes prevent
-repeated claims across a restart. Runtime sculptures are nonpersistent and cannot
+Victory sets a four-hour site cooldown. From e2.158, every participant credited
+with positive hand/core damage receives both Vault Tier 5 keys (two by default,
+controlled by `world-boss.rewards.keys`) and one random Legendary elemental spell
+scroll. Each player rolls independently with equal chances among Legendary
+`ElementalSpell` entries. The existing 1,500 XP, one skill point and configured
+Seraph feathers also remain. New victories do not award retired Advance Magic
+cores; previously queued cores and legacy Master Keys remain claimable.
+Being nearby or damaging only summoned temple bosses does not qualify. Selected
+spell IDs are saved once, so claims cannot reroll them. If Advance Magic becomes
+unavailable after startup, a saved pending roll waits until the plugin can provide a
+Legendary scroll. The Tier 5 key and scroll pair waits together while that plugin
+is unavailable. Rewards accumulate over multiple wins until the entire item bundle
+fits. Rewards for offline/dead players or full inventories remain in
+`world-bosses.yml` and are offered on join/respawn or with `/evergarden boss claim`.
+The queue is saved before delivery to prevent repeated claims; this does not make
+inventory delivery transactional across a server crash.
+
+Install the paired Advance Magic JAR when starting Evergarden. A separate boot
+with that JAR entirely absent fails in the existing `SeraphShop` static initializer
+because `ElementalStaffService$Element` is missing. `SeraphShop`, `SeraphTrader` and
+`VoidscapePlugin` class bytes match the previous release; this patch does not change
+that startup dependency. The reward regression covers paired startup and later
+addon outages, rather than startup without the addon JAR.
+
+Runtime sculptures are nonpersistent and cannot
 place or drop blocks. Victory, abort, plugin shutdown and empty timeout remove
 hitboxes, sculpture, boss bars, markers and owned chunk tickets. The encounter
 never edits the protected arena blocks.
 
 ## Verification
+
+`python tools/run_temple_reward_checks.py` runs the e2.158 reward regression on
+isolated cached Paper with the candidate release JARs. It exercises real
+`JudgmentFight` victories and the production queue/claim path, including offline,
+dead and full-inventory players, persisted spell choices, legacy queued rewards,
+optional-plugin outages, failed ledger writes and repeated claims after reload.
+`tools/build_temple_rewards_release.py --promote` requires the matching successful
+Paper receipt and preserves every unrelated JAR entry, pack and mirror manifest.
 
 `tests/ancient-judge/run.py` boots isolated Paper twice. The probe uses actual
 NMS sword attacks, moving vanilla arrows, selection rays, Advance Magic calls,
@@ -300,7 +323,7 @@ transitions, always-open final heart, real sword strikes on interruption seals,
 seal repair, failed-charge damage boundaries, exact stun timing and bonus damage,
 admin phase shortcuts, test reward/cooldown isolation and cleanup, menu permission
 checks, temple boss counts/species, late participant summons, no loot
-or respawns for defeated summons, one core per positive contributor, queued rewards
+or respawns for defeated summons, reward eligibility for positive contributors, queued rewards
 for dead/offline players, inventory capacity, unchanged rolls after restart,
 repeated-claim prevention, entity/ticket cleanup and persisted cooldowns.
 Long-fight regressions simulate an hour of active combat, remove a hitbox, leave

@@ -16,6 +16,8 @@ parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--compiler-options', type=Path, required=True,
                     help='A javac argument file with the cached Paper compilation classpath')
 parser.add_argument('--build-directory', type=Path)
+parser.add_argument('--candidate-directory', type=Path,
+                    help='Test the actual built plugin JARs instead of rebuilding all sources')
 args = parser.parse_args()
 build = (args.build_directory or ROOT / 'output' / ('pack-checks-' + uuid.uuid4().hex[:8])).resolve()
 build.mkdir(parents=True, exist_ok=False)
@@ -67,8 +69,15 @@ def package(module, extra=()):
     return classes, jar
 
 
-magic_classes, magic = package('advance-magic')
-garden_classes, garden = package('evergarden', [magic_classes])
+if args.candidate_directory:
+    magic = build / 'advance-magic.jar'
+    garden = build / 'evergarden.jar'
+    shutil.copyfile(args.candidate_directory / magic.name, magic)
+    shutil.copyfile(args.candidate_directory / garden.name, garden)
+    magic_classes, garden_classes = magic, garden
+else:
+    magic_classes, magic = package('advance-magic')
+    garden_classes, garden = package('evergarden', [magic_classes])
 checks = build / 'check-classes'
 compile_sources([Path(__file__).with_name('ResourcePackDeliveryChecks.java'),
                  Path(__file__).with_name('RequiredPackSettingsChecks.java'),

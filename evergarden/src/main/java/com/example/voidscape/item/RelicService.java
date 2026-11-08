@@ -148,7 +148,7 @@ public final class RelicService implements Listener {
 
     /** Newly earned scrolls carry their own grade and upgrade ceiling. */
     public ItemStack createScrollLimitBreak(LimitBreakType lb,int tier) {
-        if(tier<1||tier>5)throw new IllegalArgumentException("Limit Break tier must be 1..5");
+        if(tier<1||tier>8)throw new IllegalArgumentException("Limit Break tier must be 1..8");
         return createLimitBreakScroll(lb,tier);
     }
 
@@ -211,7 +211,7 @@ public final class RelicService implements Listener {
         if(!data.has(tierKey))return data.has(plugin.key("limit_break_cap"))?-1:0;
         if(!data.has(tierKey,PersistentDataType.INTEGER))return -1;
         int tier=data.get(tierKey,PersistentDataType.INTEGER);
-        return tier>=1&&tier<=5?tier:-1;
+        return tier>=1&&tier<=8?tier:-1;
     }
 
     public int getLimitBreakCap(ItemStack scroll) {
@@ -455,14 +455,17 @@ public final class RelicService implements Listener {
         return create(Relic.VOID_KEY,1);
     }
     public ItemStack createVoidKey(int tier) {
-        int clamped = Math.clamp(tier, 1, 5);
+        int clamped = Math.clamp(tier, 1, com.example.voidscape.world.DungeonLayout.MAX_TIER);
         String roman = toRoman(clamped);
         NamedTextColor tierColor = switch (clamped) {
             case 1 -> NamedTextColor.GREEN;
             case 2 -> NamedTextColor.AQUA;
             case 3 -> NamedTextColor.YELLOW;
             case 4 -> NamedTextColor.GOLD;
-            default -> NamedTextColor.RED;
+            case 5 -> NamedTextColor.RED;
+            case 6 -> NamedTextColor.BLUE;
+            case 7 -> NamedTextColor.DARK_PURPLE;
+            default -> NamedTextColor.DARK_RED;
         };
         ItemStack item = create(Relic.VOID_KEY, 1);
         ItemMeta meta = item.getItemMeta();
@@ -476,11 +479,11 @@ public final class RelicService implements Listener {
         item.setItemMeta(meta);
         return item;
     }
-    /** Returns the key tier (1..5), or 5 for legacy/untagged keys so old keys work as Master Keys. */
+    /** Returns the key tier (1..8), or 5 for legacy/untagged keys: old Master Keys open Tier I-V, never VI-VIII. */
     public int getVoidKeyTier(ItemStack item) {
         if (!isVoidKey(item)) return 0;
         Integer tier = item.getItemMeta().getPersistentDataContainer().get(plugin.key("key_tier"), PersistentDataType.INTEGER);
-        return tier == null ? 5 : Math.clamp(tier, 1, 5);
+        return tier == null ? 5 : Math.clamp(tier, 1, com.example.voidscape.world.DungeonLayout.MAX_TIER);
     }
 
     private static final LimitBreakType[] DARK_LIMIT_BREAKS = {
@@ -542,8 +545,18 @@ public final class RelicService implements Listener {
         return rollVaultRewards(site, java.util.concurrent.ThreadLocalRandom.current());
     }
 
-    /** One primary; only diamond gear/books can roll one extra normal item (two items maximum). */
+    /** A real opening: Tier VI-VIII also advance the opener's bad-luck counter. */
+    public List<ItemStack> rollVaultRewards(com.example.voidscape.world.DungeonLayout.Site site, org.bukkit.entity.Player opener) {
+        return site!=null&&site.tier()>=6?hoard(site,java.util.concurrent.ThreadLocalRandom.current(),opener)
+            :rollVaultRewards(site,java.util.concurrent.ThreadLocalRandom.current());
+    }
+
+    /**
+     * One primary; only diamond gear/books can roll one extra normal item (two items maximum).
+     * Tier VI-VIII draw from the sanctum hoard instead ({@link SanctumHoard}).
+     */
     public List<ItemStack> rollVaultRewards(com.example.voidscape.world.DungeonLayout.Site site, java.util.random.RandomGenerator random) {
+        if(site!=null&&site.tier()>=6)return hoard(site,random,null);
         int tier=site==null?1:Math.clamp(site.tier(),1,5);
         var kind=site==null?null:site.kind();
         var category=VaultLootTable.primaryReward(tier,random.nextInt(10000));
@@ -553,6 +566,125 @@ public final class RelicService implements Listener {
         if(VaultLootTable.canDouble(category)&&doubleChance>0&&random.nextInt(10000)<doubleChance)
             results.add(createVaultPrimary(kind,tier,VaultLootTable.bonusReward(random.nextInt(10000)),random));
         return results;
+    }
+
+    /**
+     * The Tier VI-VIII hoard: two draws from {@link SanctumHoard}, then Golden Seraph Feathers (1/2/3), a gem of the
+     * sanctum element (purity II/III/IV) with gem dust, and a charm chance. Eight dry openings in a row make the
+     * ninth carry a legendary weapon or a charm. Without an opener (tests, admin previews) no counter moves.
+     */
+    private List<ItemStack> hoard(com.example.voidscape.world.DungeonLayout.Site site,java.util.random.RandomGenerator random,org.bukkit.entity.Player opener){
+        int tier=Math.clamp(site.tier(),6,8);
+        List<ItemStack> results=new ArrayList<>();
+        boolean jackpot=false;
+        for(int i=0;i<SanctumHoard.ROLLS;i++){
+            var reward=SanctumHoard.reward(tier,random.nextInt(10000));
+            boolean[] big={SanctumHoard.jackpot(reward)};
+            ItemStack item=createHoardItem(site,tier,reward,random,big);
+            if(item!=null)results.add(item);
+            jackpot|=big[0];
+        }
+        results.add(com.example.voidscape.trade.SeraphFeathers.golden(plugin,SanctumHoard.goldenFeathers(tier)));
+        String element=switch(site.kind()){case SANCTUM_DARK->"dark";case SANCTUM_ASTRAL->"light";case SANCTUM_TIME->"lightning";};
+        ItemStack gem=forgeGem(element,SanctumHoard.themedGemPurity(tier),1);if(gem!=null)results.add(gem);
+        Object dust=forgeCall("dust",new Class<?>[]{int.class},SanctumHoard.gemDust(tier));if(dust instanceof ItemStack d)results.add(d);
+        ItemStack charm=vaultCharm(site,random);
+        if(charm!=null){results.add(charm);jackpot=true;}
+        if(opener!=null){
+            var key=plugin.key("hoard_dry");var data=opener.getPersistentDataContainer();
+            int dry=jackpot?0:data.getOrDefault(key,PersistentDataType.INTEGER,0)+1;
+            if(dry>SanctumHoard.PITY){
+                ItemStack prize=random.nextBoolean()?createVaultModeledWeapon(site.kind(),true,random):rollCharm(site,random);
+                if(prize==null)prize=createVaultModeledWeapon(site.kind(),true,random);
+                results.add(prize);dry=0;
+            }
+            data.set(key,PersistentDataType.INTEGER,dry);
+        }
+        return results;
+    }
+    private ItemStack createHoardItem(com.example.voidscape.world.DungeonLayout.Site site,int tier,SanctumHoard.Reward reward,
+            java.util.random.RandomGenerator random,boolean[] jackpot){
+        var kind=site.kind();
+        return switch(reward){
+            case NETHERITE_GEAR -> {
+                String rarity=SanctumHoard.gearRarity(tier,random.nextInt(100));
+                if(rarity.equals("MYTHIC"))jackpot[0]=true;
+                yield hoardGear(rarity,random);
+            }
+            case ENCHANT_BOOK -> createVaultEnchantBook(5,random);
+            case LIMIT_BREAK -> createScrollLimitBreak(pickThematicLimitBreak(kind,random),tier);
+            case UNIQUE_SCROLL -> createScrollUnique(pickThematicUnique(kind,random));
+            case GEMS -> {
+                String[] elements={"fire","water","wind","earth","lightning","light","dark","life"};
+                ItemStack gems=forgeGem(elements[random.nextInt(elements.length)],SanctumHoard.gemPurity(tier),2);
+                yield gems!=null?gems:createVaultEnchantBook(5,random);
+            }
+            case RARE_WEAPON -> createVaultModeledWeapon(kind,false,random);
+            case LEGENDARY_WEAPON -> createVaultModeledWeapon(kind,true,random);
+            case STAFF -> {
+                ItemStack staff=hoardStaff(tier,random);
+                yield staff!=null?staff:createVaultEnchantBook(5,random);
+            }
+            case FLYING_STAFF_TIER2 -> createVaultPrimary(kind,5,VaultLootTable.PrimaryReward.FLYING_STAFF_TIER2,random);
+            case SCROLL_ETERNITY -> createScrollEternity();
+        };
+    }
+    /** The Vault enchanted diamond gear, reforged in netherite and given Forge affixes of the hoard rarity. */
+    private ItemStack hoardGear(String rarity,java.util.random.RandomGenerator random){
+        ItemStack gear=createVaultDiamondGear(5,random);
+        Material netherite=Material.matchMaterial(gear.getType().name().replace("DIAMOND_","NETHERITE_"));
+        if(netherite!=null&&netherite!=gear.getType())gear=gear.withType(netherite);
+        forgeCall("affix",new Class<?>[]{ItemStack.class,String.class,java.util.Random.class},gear,rarity,new java.util.Random(random.nextLong()));
+        return gear;
+    }
+    private ItemStack hoardStaff(int tier,java.util.random.RandomGenerator random){
+        if(!plugin.getConfig().getBoolean("staff-loot.enabled",true))return null;
+        var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");
+        if(!(addon instanceof com.example.advancemagic.AdvanceMagicPlugin magic)||!magic.isEnabled()||magic.staffSpells()==null)return null;
+        var elements=com.example.advancemagic.item.ElementalStaffService.Element.values();
+        var grade=tier>=8&&random.nextInt(100)<30?com.example.advancemagic.elemental.StaffSpellService.Tier.MYTHIC
+            :com.example.advancemagic.elemental.StaffSpellService.Tier.ARCANE;
+        return magic.staffSpells().createStaff(elements[random.nextInt(elements.length)],grade);
+    }
+    private ItemStack forgeGem(String type,int purity,int amount){
+        return forgeCall("gem",new Class<?>[]{String.class,int.class,int.class},type,purity,amount) instanceof ItemStack gem?gem:null;
+    }
+    private Object forgeCall(String method,Class<?>[] types,Object... args){
+        var forge=org.bukkit.Bukkit.getPluginManager().getPlugin("EvergardenForge");
+        if(forge==null||!forge.isEnabled())return null;
+        try{
+            Class<?> api=Class.forName("com.example.forge.ForgeApi",true,forge.getClass().getClassLoader());
+            return api.getMethod(method,types).invoke(null,args);
+        }catch(ReflectiveOperationException|LinkageError e){
+            plugin.getLogger().warning("[Vault] EvergardenForge "+method+" unavailable: "+e);return null;
+        }
+    }
+
+    /** 10% / 15% / 22% at Tier VI / VII / VIII: a charm of the shrine sanctum, grade rising with the tier. */
+    public static int charmChanceBps(int tier){return tier>=6?SanctumHoard.charmChanceBps(tier):0;}
+    /** Grade weights (Worn..Divine) of a Vault charm: three grades per tier, 50 / 35 / 15. */
+    public static int[] charmGradeWeights(int tier){
+        int[] weights=new int[5];int low=Math.clamp(tier-6,0,2);
+        weights[low]=50;weights[low+1]=35;weights[low+2]=15;return weights;
+    }
+    private static final String[] CHARM_GRADES={"COMMON","UNCOMMON","RARE","EPIC","MYTHIC"};
+    private ItemStack vaultCharm(com.example.voidscape.world.DungeonLayout.Site site,java.util.random.RandomGenerator random){
+        if(random.nextInt(10000)>=charmChanceBps(site.tier()))return null;
+        return rollCharm(site,random);
+    }
+    private ItemStack rollCharm(com.example.voidscape.world.DungeonLayout.Site site,java.util.random.RandomGenerator random){
+        int[] weights=charmGradeWeights(site.tier());int ticket=random.nextInt(100),grade=0;
+        for(int i=0,sum=0;i<weights.length;i++){sum+=weights[i];if(ticket<sum){grade=i;break;}}
+        String temple=switch(site.kind()){case SANCTUM_DARK->"dark";case SANCTUM_ASTRAL->"astral";case SANCTUM_TIME->"time";};
+        var forge=org.bukkit.Bukkit.getPluginManager().getPlugin("EvergardenForge");
+        if(forge==null||!forge.isEnabled())return null;
+        try{
+            Class<?> api=Class.forName("com.example.forge.ForgeApi",true,forge.getClass().getClassLoader());
+            long seed=random.nextLong();
+            return (ItemStack)api.getMethod("rollCharm",String.class,String.class,java.util.Random.class).invoke(null,temple,CHARM_GRADES[grade],new java.util.Random(seed));
+        }catch(ReflectiveOperationException|LinkageError|ClassCastException e){
+            plugin.getLogger().warning("[Vault] EvergardenForge charm unavailable: "+e);return null;
+        }
     }
 
     private VaultEnchantRewards vaultEnchants() {

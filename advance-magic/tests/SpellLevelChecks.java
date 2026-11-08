@@ -126,11 +126,37 @@ public final class SpellLevelChecks extends JavaPlugin implements Listener {
         check(!service.createScroll(ElementalSpell.FIREBALL,3).isSimilar(service.createScroll(ElementalSpell.FIREBALL,4)),"different levels never stack");
         // A scroll from before levels: no level key and the old lore.
         ItemStack legacy=service.createScroll(ElementalSpell.FROST_BOLT,5);var meta=legacy.getItemMeta();
-        meta.getPersistentDataContainer().remove(new NamespacedKey("advance_magic","spell_level"));meta.setLore(List.of("old lore"));legacy.setItemMeta(meta);legacy.setAmount(7);
+        ElementalSpell oldSpell=ElementalSpell.FROST_BOLT;
+        meta.getPersistentDataContainer().remove(new NamespacedKey("advance_magic","spell_level"));
+        meta.setDisplayName(oldSpell.element().color+oldSpell.title()+ChatColor.WHITE+" Scroll");
+        meta.setLore(List.of(ChatColor.GRAY+oldSpell.element().title+" · "+oldSpell.rarity(),
+            ChatColor.AQUA+"Mana "+oldSpell.mana()+" · CD "+StaffSpellService.format(oldSpell.cooldown())+"s",
+            ChatColor.GRAY+oldSpell.description(),ChatColor.YELLOW+"ถือคทา แล้วใช้ /spell imprint (ใส่ข้ามธาตุได้)",
+            ChatColor.GRAY+"ธาตุตรง: Damage +50% · ต่างธาตุ/คทาไม้: −50%",
+            ChatColor.DARK_GRAY+"ประทับสำเร็จจะใช้คัมภีร์ 1 ชิ้น"));legacy.setItemMeta(meta);legacy.setAmount(7);
         check(service.scroll(legacy)==ElementalSpell.FROST_BOLT&&service.scrollLevel(legacy)==5,"a scroll from before levels reads as level V");
         caster.getInventory().setItem(3,legacy);service.discover(caster);
         ItemStack migrated=caster.getInventory().getItem(3);
         check(migrated.isSimilar(service.createScroll(ElementalSpell.FROST_BOLT,5))&&migrated.getAmount()==7,"old scrolls are rewritten as stackable level V on join/menu");
+        ItemStack personal=service.createScroll(ElementalSpell.FIREBALL,7);var personalMeta=personal.getItemMeta();
+        personalMeta.setDisplayName("My special scroll");personalMeta.getPersistentDataContainer().set(new NamespacedKey("foreign_plugin","owner"),PersistentDataType.STRING,"owner-data");
+        personalMeta.setLore(List.of("Player or third-party description"));personal.setItemMeta(personalMeta);personal.setAmount(2);
+        caster.getInventory().setItem(4,personal);service.discover(caster);
+        check(caster.getInventory().getItem(4).equals(personal)&&service.scrollLevel(caster.getInventory().getItem(4))==7,
+            "scanning the inventory preserves a named current scroll and all foreign metadata");
+        ItemStack customLegacy=legacy.clone();var legacyMeta=customLegacy.getItemMeta();
+        legacyMeta.setDisplayName("My old scroll");legacyMeta.getPersistentDataContainer().set(new NamespacedKey("foreign_plugin","owner"),PersistentDataType.STRING,"owner-data");customLegacy.setItemMeta(legacyMeta);
+        caster.getInventory().setItem(5,customLegacy);service.discover(caster);
+        check(caster.getInventory().getItem(5).equals(customLegacy)&&service.scrollLevel(caster.getInventory().getItem(5))==5,
+            "old customized scroll stays intact and still reads as level V");
+        ItemStack customLore=legacy.clone();var customLoreMeta=customLore.getItemMeta();customLoreMeta.setLore(List.of("Other plugin lore"));customLore.setItemMeta(customLoreMeta);
+        caster.getInventory().setItem(7,customLore);service.discover(caster);
+        check(caster.getInventory().getItem(7).equals(customLore)&&service.scrollLevel(caster.getInventory().getItem(7))==5,
+            "legacy scroll with unrecognized lore is not overwritten and stays usable at level V");
+        ItemStack ownerOnly=service.createScroll(ElementalSpell.AQUA_BULLET,3);var ownerMeta=ownerOnly.getItemMeta();
+        ownerMeta.getPersistentDataContainer().set(new NamespacedKey("foreign_plugin","owner"),PersistentDataType.STRING,"owner-data");ownerOnly.setItemMeta(ownerMeta);
+        caster.getInventory().setItem(6,ownerOnly);service.discover(caster);
+        check(caster.getInventory().getItem(6).equals(ownerOnly),"default-looking scroll keeps a foreign owner marker");
         check(service.scrollIcon(ElementalSpell.FIREBALL,7).getItemMeta().getPersistentDataContainer().getKeys().stream().noneMatch(key->key.getKey().startsWith("spell_")),"menu icons carry no scroll data");
         // A staff written before levels.
         staff(Tier.MYTHIC,Element.FIRE,ElementalSpell.FIREBALL,5);
@@ -196,8 +222,16 @@ public final class SpellLevelChecks extends JavaPlugin implements Listener {
         reset();staff(Tier.MYTHIC,Element.FIRE,ElementalSpell.FLAME_BURST,level);caster.getInventory().setItem(1,null);
         LivingEntity target=mob(2.5,.5);
         double before=magic.mana().account(caster).manaExact();
-        check(magic.elemental().cast(caster),"cast Flame Burst "+SpellLevels.roman(level));
-        long cooldown=magic.mana().elementalRemaining(caster,ElementalSpell.FLAME_BURST,System.currentTimeMillis());
+        long beforeCast=System.currentTimeMillis();
+        boolean cast=magic.elemental().cast(caster);
+        long afterCast=System.currentTimeMillis();
+        check(cast,"cast Flame Burst "+SpellLevels.roman(level));
+        // Both deadlines use the same reservation timestamp. Recover that timestamp from
+        // the GCD so cold scene loading and synchronous damage cannot shorten this reading.
+        long gcdMillis=(long)(Math.max(.1,magic.getConfig().getDouble("elemental-system.mana.global-cooldown",.65))*1000);
+        long reservedAt=caster.getPersistentDataContainer().getOrDefault(magic.mana().key("elemental_gcd"),PersistentDataType.LONG,0L)-gcdMillis;
+        check(reservedAt>=beforeCast&&reservedAt<=afterCast,"level "+SpellLevels.roman(level)+" cooldown was reserved during the cast");
+        long cooldown=magic.mana().elementalRemaining(caster,ElementalSpell.FLAME_BURST,reservedAt);
         ticks(40);
         return new double[]{damage.getOrDefault(target.getUniqueId(),0.0),before-magic.mana().account(caster).manaExact(),cooldown};
     }
@@ -209,11 +243,11 @@ public final class SpellLevelChecks extends JavaPlugin implements Listener {
         near(five[1],ElementalSpell.FLAME_BURST.mana(),.001,"level V costs the published mana");
         near(one[1],SpellLevels.mana(ElementalSpell.FLAME_BURST,1),.001,"level I costs less mana");
         near(seven[1],SpellLevels.mana(ElementalSpell.FLAME_BURST,7),.001,"level VII costs more mana");
-        // Remaining cooldown is read a few wall-clock milliseconds after the cast.
+        // CastAccount stores whole milliseconds, truncating the configured duration.
         double base=ElementalSpell.FLAME_BURST.cooldown()*1000;
-        near(five[2],base,300,"level V keeps the published cooldown");
-        near(one[2],base*SpellLevels.cooldown(1),300,"level I cooldown is longer");
-        near(seven[2],base*SpellLevels.cooldown(7),300,"level VII cooldown is shorter");
+        near(five[2],(long)base,0,"level V keeps the published cooldown");
+        near(one[2],(long)(base*SpellLevels.cooldown(1)),0,"level I cooldown is longer");
+        near(seven[2],(long)(base*SpellLevels.cooldown(7)),0,"level VII cooldown is shorter");
     }
 
     void loot(){

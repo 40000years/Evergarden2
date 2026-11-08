@@ -88,7 +88,10 @@ public class LegendarySpectacleChecks extends JavaPlugin implements Listener {
         ((Map<UUID,String>)status.get(magic.packs())).put(caster.getUniqueId(),"SUCCESSFULLY_LOADED");
         magic.getConfig().set("elemental-visuals.style","native");magic.getConfig().set("elemental-visuals.quality","balanced");
         meteorRain();tempest();leviathan();absoluteZero();titans();abyssal();raijin();heavensLance();lowQuality();
+        afterLegendary();
     }
+    /** Subclasses add casts that run inside this probe's fixture (e.g. while a Bedrock observer is attached). */
+    void afterLegendary()throws Exception{}
     Location stage(){return new Location(world,.5,100,6.5);}
     List<ItemDisplay> displays(){return new ArrayList<>(world.getEntitiesByClass(ItemDisplay.class));}
     String model(ItemDisplay display){
@@ -135,12 +138,14 @@ public class LegendarySpectacleChecks extends JavaPlugin implements Listener {
             }
             for(var strike:world.getEntitiesByClass(LightningStrike.class))if(strikes.add(strike.getUniqueId()))strikeTicks.merge(simulatedTick,1,Integer::sum);
             int count=capture.raw.stream().mapToInt(p->Math.max(1,(int)p[4])).sum();
-            peak[0]=Math.max(peak[0],(int)poses.stream().filter(d->!((String)d.get("model")).startsWith("carrier:")).count());particlePeak[0]=Math.max(particlePeak[0],count);
+            peak[0]=Math.max(peak[0],(int)poses.stream().filter(d->authoredPiece((String)d.get("model"))).count());particlePeak[0]=Math.max(particlePeak[0],count);
             Frame frame=new Frame(simulatedTick,poses,new ArrayList<>(capture.raw));frames.add(frame);frameCaptured(frame);
         }
         return frames;
     }
     void frameCaptured(Frame frame){}
+    /** Pieces of the authored scene itself; the shared cast flourish's one-shot fx_/vfx_ sprites have their own world cap. */
+    static boolean authoredPiece(String model){return !model.startsWith("carrier:")&&!model.startsWith("fx_")&&!model.startsWith("vfx_");}
     void write(String name,List<Frame> frames,Location stage)throws Exception{
         StringBuilder json=new StringBuilder("{\"stage\":["+stage.getX()+","+stage.getY()+","+stage.getZ()+"],\"damage\":"+damageTicks+",\"frames\":[");
         for(int i=0;i<frames.size();i++){
@@ -266,7 +271,8 @@ public class LegendarySpectacleChecks extends JavaPlugin implements Listener {
         check(blocks(standing,"packed_ice")+blocks(standing,"blue_ice")+blocks(standing,"ice")>=14,"a field of 3D ice spires stands before the shatter");
         check(blocks(standing,"blue_ice")>=2,"the central blue-ice spire has grown on the freeze");
         var shatter=frames.get(first+59);
-        check(particlesNamed(shatter,"minecraft:block").stream().mapToInt(p->(int)p[4]).sum()>=150,"the shatter throws ice shards on its damage tick");
+        // Falling-dust shards: Geyser would play each BLOCK particle as a whole block-break burst on Bedrock.
+        check(particlesNamed(shatter,"minecraft:block").isEmpty()&&particlesNamed(shatter,"minecraft:falling_dust").stream().mapToInt(p->(int)p[4]).sum()>=40,"the shatter throws ice shards on its damage tick");
         check(blocks(standing,"blue_ice")>=8&&standing.displays.stream().anyMatch(d->d.get("model").equals("block:blue_ice")&&num(d,"pos",1)>center.getY()+9),"a crown of blue-ice crystals hangs high over the field");
         check(frames.get(first+64).displays.stream().filter(d->((String)d.get("model")).startsWith("block:")&&((String)d.get("model")).endsWith("ice")).allMatch(d->d.get("model").equals("block:blue_ice")),"every spire is gone after the shatter; only the falling crown remains");
         check(frames.get(first+76).displays.stream().noneMatch(d->((String)d.get("model")).endsWith("ice")),"the crown crystals have fallen and burst");

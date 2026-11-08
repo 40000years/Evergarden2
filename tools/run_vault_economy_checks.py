@@ -13,7 +13,7 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'output/vault-economy-20261026'
+OUT = ROOT / 'output/vault-economy-20261029'
 PROBE = ROOT / 'evergarden/tests/VaultEconomyChecks.java'
 RESULT = 'vault-economy-result.txt'
 RECEIPT = 'vault-economy-validation.json'
@@ -35,9 +35,23 @@ def prepared(args, server):
     index = options.index('"-cp"') + 1
     dependencies = options[index].strip('"').split(os.pathsep)
     dependencies[:2] = [args.garden_jar.resolve().as_posix(), args.magic_jar.resolve().as_posix()]
+    # Floodgate's API exposes EventBus in its interface. Reflective form tests need
+    # the official event API even when the plugin's network transport is absent.
+    events = Path.home() / '.m2/repository/org/geysermc/event/events/1.1-SNAPSHOT/events-1.1-SNAPSHOT.jar'
+    if not events.is_file():
+        raise RuntimeError('Missing cached Floodgate event API: ' + str(events))
+    api = server / 'probe-api-libraries' / events.name
+    shutil.copy2(events, api)
+    dependencies = list(dict.fromkeys([*dependencies, api.as_posix()]))
     options[index] = '"' + os.pathsep.join(dependencies) + '"'
     options[-1] = '"' + args.probe_source.as_posix() + '"'
     (server / 'probe-javac.args').write_text('\n'.join(options), encoding='utf8')
+    launch = server / 'server-launch.args'
+    runtime = launch.read_text(encoding='utf8').splitlines()
+    cp = runtime.index('"-cp"') + 1
+    entries = list(dict.fromkeys([*runtime[cp].strip('"').split(os.pathsep), api.as_posix()]))
+    runtime[cp] = '"' + os.pathsep.join(entries) + '"'
+    launch.write_text('\n'.join(runtime), encoding='utf8')
     subprocess.run(['java', str(ROOT / 'tools/CompileJava.java'), str(server / 'probe-javac.args')], check=True)
     (server / 'probe-classes/plugin.yml').write_text(
         "name: VaultEconomyChecks\nversion: '1.0'\nmain: VaultEconomyChecks\napi-version: '26.2'\n"
@@ -61,6 +75,8 @@ def fresh(args, server):
     sys.argv = [str(harness), '--source-server', str(args.source_server), '--server', str(server),
                 '--magic-jar', str(args.magic_jar), '--garden-jar', str(args.garden_jar),
                 '--probe-source', str(args.probe_source), '--result-name', RESULT, '--timeout', str(args.timeout)]
+    if args.link_cache:
+        sys.argv.append('--link-cache')
     try:
         exec(compile(harness.read_text(encoding='utf8'), str(harness), 'exec'),
              {'__name__': '__main__', '__file__': str(harness)})
@@ -71,11 +87,12 @@ def fresh(args, server):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--source-server', type=Path, default=ROOT / 'output/dungeon-balance-20261026/paper')
+    parser.add_argument('--source-server', type=Path, default=ROOT / 'output/optional-floodgate-proof/paper')
     parser.add_argument('--server', type=Path, default=OUT / 'paper')
     parser.add_argument('--garden-jar', type=Path, default=OUT / 'build/evergarden.jar')
     parser.add_argument('--magic-jar', type=Path,
-                        default=ROOT / 'dist/advance-magic-1.34.1-bedrock-pack-repair.jar')
+                        default=ROOT / 'dist/advance-magic.jar')
+    parser.add_argument('--link-cache', action='store_true', help='Reuse cached Paper libraries without copying them')
     parser.add_argument('--prepared', action='store_true')
     parser.add_argument('--timeout', type=int, default=360)
     args = parser.parse_args()

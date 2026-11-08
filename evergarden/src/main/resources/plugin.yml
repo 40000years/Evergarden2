@@ -1,5 +1,5 @@
 name: Evergarden
-version: '3.0.0-e2.183-realm-hitrun'
+version: '3.0.1-e2.199-pet-atelier'
 main: com.example.voidscape.VoidscapePlugin
 api-version: '26.2'
 description: Evergarden - Varied biome scenery with twelve small and twenty medium exploration destinations.

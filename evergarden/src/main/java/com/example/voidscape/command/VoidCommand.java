@@ -86,6 +86,23 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                 else if(!isAdmin(sender))plugin.message(p,"อัญเชิญด้วยมือเปล่าคลิกขวา Amethyst กลางลาน · คำสั่งควบคุมสำหรับแอดมิน");
                 else if(action.equals("start"))plugin.worldBoss().start(p,true);
                 else if(action.equals("stop"))plugin.worldBoss().stop(p);
+                else if(action.equals("dragon")){
+                    // Dragon Nest hunt test: a dragon whose "nest" is 30 blocks ahead (no cooldown, no rewards).
+                    String what=args.length>2?args[2].toLowerCase(Locale.ROOT):"status";
+                    var dragons=plugin.dragonBosses();
+                    var kind=com.example.voidscape.world.DragonNestLayout.Kind.fromId(what);
+                    if(dragons==null)plugin.message(p,"ระบบมังกรประจำรังไม่ได้เปิดใช้งาน");
+                    else if(what.equals("clear"))plugin.message(p,"ลบมังกรทดสอบแล้ว "+dragons.clearTests()+" ตัว");
+                    else if(kind!=null)plugin.message(p,dragons.spawnTest(p,kind));
+                    else{
+                        var views=dragons.views();
+                        if(views.isEmpty())plugin.message(p,"ยังไม่มีมังกรถูกโหลด · /evergarden boss dragon fire|storm|ice|clear");
+                        for(var v:views)plugin.message(p,(v.test()?"[ทดสอบ] ":"")+v.kind()+" · "+v.state()+(v.move().isEmpty()?"":" "+v.move())
+                            +" · HP "+(int)v.health()+"/"+(int)v.maxHealth()+" · phase "+v.phase()+" · "
+                            +v.position().getBlockX()+","+v.position().getBlockY()+","+v.position().getBlockZ()
+                            +" · ห่างรัง "+(int)Math.hypot(v.position().getX()-v.center().getX(),v.position().getZ()-v.center().getZ()));
+                    }
+                }
                 else if(action.equals("model")){
                     // Main-boss showcase rigs (Arkhaia / Seraphon): spawn, pose program, clear.
                     String what=args.length>2?args[2].toLowerCase(Locale.ROOT):"menu";
@@ -105,7 +122,7 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                         }
                     }
                 }
-                else plugin.message(p,"/evergarden boss status|claim|start|stop|model");
+                else plugin.message(p,"/evergarden boss status|claim|start|stop|model|dragon");
             }
             case "upgrade", "up", "enchant", "forge" -> {
                 if(p==null){plugin.message(sender,"คำสั่งนี้ใช้ได้เฉพาะผู้เล่นในเกมเท่านั้น");return true;}
@@ -188,6 +205,25 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                                 p.teleport(arrival);plugin.message(p,small.title+" · X="+arrival.getBlockX()+" Z="+arrival.getBlockZ());
                             }));return true;
                     }
+                    var dragonKind=com.example.voidscape.world.DragonNestLayout.Kind.fromId(dest);
+                    if(dragonKind!=null){
+                        if(plugin.dragonNests()==null||!plugin.dragonNests().enabled(dragonKind)||!plugin.getConfig().getBoolean("structures.dragon-nests."+dragonKind.id+".enabled",true)){
+                            plugin.message(p,"รังมังกรนี้ถูกปิดใน config");return true;
+                        }
+                        int x=p.getWorld()==plugin.world()?p.getLocation().getBlockX():0;
+                        int z=p.getWorld()==plugin.world()?p.getLocation().getBlockZ():0;
+                        var site=plugin.dragonNests().nearest(dragonKind,x,z,48);
+                        if(site==null){plugin.message(p,"ไม่พบรังมังกรในระยะค้นหา · ลองสำรวจพื้นที่ใหม่");return true;}
+                        int tx=site.x(),tz=site.z()+dragonKind.arrivalZ,y=dragonKind.floorY+1;
+                        var arrival=new Location(plugin.world(),tx+.5,y,tz+.5,180,0);
+                        p.teleportAsync(arrival).whenComplete((ok,error)->
+                            Bukkit.getScheduler().runTask(plugin,()->{
+                                if(!p.isOnline())return;
+                                if(error!=null||!Boolean.TRUE.equals(ok)){plugin.message(p,"โหลดพื้นที่รังมังกรไม่สำเร็จ");return;}
+                                plugin.message(p,dragonKind.title+" · X="+site.x()+" Z="+site.z());
+                            }));
+                        return true;
+                    }
                     var bossKind=com.example.voidscape.world.BossStructureLayout.Kind.fromId(dest);
                     if(bossKind!=null){
                         if(!plugin.bossStructures().enabled(bossKind)||!plugin.getConfig().getBoolean("structures.boss-structures."+bossKind.id+".enabled",true)){
@@ -265,8 +301,10 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
                              dest.contains("time")?DungeonLayout.Kind.SANCTUM_TIME:
                              DungeonLayout.Kind.SANCTUM_DARK;
                     int targetTier=0;
-                    if(args.length>2){try{targetTier=Math.clamp(Integer.parseInt(args[2]),1,5);}catch(NumberFormatException ignored){}}
+                    if(args.length>2){try{targetTier=Math.clamp(Integer.parseInt(args[2]),1,com.example.voidscape.world.DungeonLayout.MAX_TIER);}catch(NumberFormatException ignored){}}
                     int x=p.getWorld()==plugin.world()?p.getLocation().getBlockX():0,z=p.getWorld()==plugin.world()?p.getLocation().getBlockZ():0;
+                    // Tier VI-VIII shrines exist once decided: decide the corners around the player first.
+                    if(targetTier>=6){plugin.dungeons().expansion().decideAround(x,z,10);plugin.dungeons().expansion().flush();}
                     var s=plugin.layout().locate(x,z,kind,targetTier,targetTier>0?32:12);
                     if(s==null){plugin.message(sender,"ไม่พบสิ่งก่อสร้างในระยะค้นหา");return true;}
                     p.teleport(new Location(plugin.world(),s.x()+0.5,97,s.z()+8.5));
@@ -633,14 +671,15 @@ public final class VoidCommand implements CommandExecutor,TabCompleter {
         if(args.length==2&&args[0].equalsIgnoreCase("guide")) {
             c.addAll(List.of("2","3","relics","magic"));
         }
-        if(args.length==2&&args[0].equalsIgnoreCase("boss")){c.addAll(List.of("status","claim","pack"));if(isAdmin(sender))c.addAll(List.of("start","stop","model"));}
+        if(args.length==2&&args[0].equalsIgnoreCase("boss")){c.addAll(List.of("status","claim","pack"));if(isAdmin(sender))c.addAll(List.of("start","stop","model","dragon"));}
+        if(args.length==3&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("dragon")&&isAdmin(sender))c.addAll(List.of("fire","storm","ice","clear","status"));
         if(args.length==3&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("model")&&isAdmin(sender)){
             c.addAll(List.of("arkhaia","seraphon","both","clear","pose","realm"));c.addAll(com.example.voidscape.boss.RealmBosses.MODELS);
         }
         if(args.length==4&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("model")&&args[2].equalsIgnoreCase("pose")&&isAdmin(sender))
             c.addAll(com.example.voidscape.boss.WorldBossManager.bossShowcaseModes());
         if(args.length==3&&args[0].equalsIgnoreCase("boss")&&args[1].equalsIgnoreCase("pack"))c.add("resend");
-        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","whale","observatory","garden","boss-temple","arkhaia","valkyrie","seraphon","spawn"));
+        if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))c.addAll(List.of("dark","astral","time","whale","observatory","garden","boss-temple","arkhaia","valkyrie","seraphon","dragon-fire","dragon-storm","dragon-ice","spawn"));
         if(args.length==3&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender)&&Set.of("dark","astral","time").contains(args[1].toLowerCase(Locale.ROOT)))c.addAll(List.of("1","2","3","4","5"));
         if(args.length==2&&args[0].equalsIgnoreCase("tp")&&isAdmin(sender))
             for(var kind:com.example.voidscape.world.ExplorationLayout.Kind.values())c.add(kind.id);

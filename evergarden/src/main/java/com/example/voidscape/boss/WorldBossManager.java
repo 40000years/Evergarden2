@@ -42,6 +42,8 @@ public final class WorldBossManager implements Listener,AutoCloseable {
     private record Target(Run run,JudgmentFight.Part part) {}
     private record SealTarget(Run run,int index) {}
     private static final class Run {
+        /** Phlegethon's weapon adaptation on core hits, active in phase three. */
+        final BossAdaptation adaptation=new BossAdaptation();
         final Site site;final Location center;final JudgmentFight fight;
         final Map<JudgmentFight.Part,Slime> targets=new EnumMap<>(JudgmentFight.Part.class);
         final Set<Long> tickets=new HashSet<>();final Map<UUID,Long> lastHit=new HashMap<>();
@@ -57,7 +59,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
         JudgmentPattern.Tuning pattern=JudgmentPattern.forPhase(1);
         Run(Site site,Location center,JudgmentFight fight){
             this.site=site;this.center=center;this.fight=fight;
-            bar=Bukkit.createBossBar("ผู้พิพากษาไร้ร่าง",BarColor.PURPLE,BarStyle.SEGMENTED_10);
+            bar=Bukkit.createBossBar(BossNames.legacy("ผู้พิพากษาไร้ร่าง"),BarColor.PURPLE,BarStyle.SEGMENTED_10);
         }
     }
     private final VoidscapePlugin plugin;
@@ -424,6 +426,9 @@ public final class WorldBossManager implements Listener,AutoCloseable {
             p.sendActionBar(Component.text(r.fight.phase()==2?"เฟส 2 · กันโปรเจกไทล์ · ใช้ประชิดหรือคทาเวทย์":"เฟส 3 · กันโปรเจกไทล์และเวทย์ · ใช้อาวุธประชิด",NamedTextColor.YELLOW));
             return;
         }
+        // Phase three: only the core takes damage, so only core hits adapt.
+        if(r.fight.phase()==3&&target.part==JudgmentFight.Part.CORE&&!r.fight.won())
+            damage=r.adaptation.phaseThree(plugin,e,p,damage,BossAdaptation.JUDGE,"ผู้พิพากษาไร้ร่าง",e.getEntity().getLocation().add(0,3,0));
         JudgmentFight.Hit result=r.fight.hit(p.getUniqueId(),target.part,damage,tick);
         if(result.damage()>0){
             ModelMeleeImpact.play(p,e);
@@ -518,7 +523,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
             for(Player p:players)if(!r.bar.getPlayers().contains(p))r.bar.addPlayer(p);
             r.bar.setProgress(Math.clamp(r.fight.core()/r.fight.coreMax(),0,1));
             String state=r.attack==Attack.JUDGMENT?"☠ พิพากษาใน "+Math.max(0,(r.resolveAt-tick+19)/20)+" วิ · เข้าวงเขียว!":r.attack==Attack.RUPTURE?attackInstruction(r):objective(r);
-            r.bar.setTitle((r.test?"[TEST] ":"")+"ผู้พิพากษาไร้ร่าง · เฟส "+r.fight.phase()+" · "+state+timeLimit(r));
+            r.bar.setTitle((r.test?"§7[TEST] ":"")+BossNames.legacy("ผู้พิพากษาไร้ร่าง")+" §8· §fเฟส "+r.fight.phase()+" · "+state+timeLimit(r));
             r.bar.setColor(r.attack==Attack.JUDGMENT||r.attack==Attack.RUPTURE?BarColor.RED:r.fight.exposed(tick)?BarColor.GREEN:BarColor.PURPLE);
             for(Player p:players)p.sendActionBar(Component.text(r.attack==null?state:attackInstruction(r),r.attack==null&&r.fight.exposed(tick)?NamedTextColor.GREEN:NamedTextColor.RED));
             if(players.isEmpty()){
@@ -761,7 +766,7 @@ public final class WorldBossManager implements Listener,AutoCloseable {
             if(attack==Attack.JUDGMENT){
                 // True Death's final step uses direct zero HP. No cancellable damage event means
                 // Totem and Phoenix cannot intercept it; no curse state is copied here.
-                p.setHealth(0);
+                BossDamage.scoped(p,"ผู้พิพากษาไร้ร่าง",()->p.setHealth(0));
             }else{
                 double base=number("attack-damage",56,10,1000)*(1+(r.fight.phase()-1)*.15);
                 double hp=p.getAttribute(Attribute.MAX_HEALTH).getValue();
@@ -769,6 +774,9 @@ public final class WorldBossManager implements Listener,AutoCloseable {
                 if(attack==Attack.SKY_BEAMS||attack==Attack.RUPTURE)damage=Math.min(damage*1.15,hp*.80);
                 // Apply power after the old HP ceilings so +30% really increases every red spell.
                 damage*=number("attack-power-percent",JudgeBalance.ATTACK_POWER_PERCENT,10,500)/100.0;
+                // Phase three hits harder on top of the HP ceilings above; red spells are sized by max HP, so the
+                // multiplied blow stops at the percent-blow cap instead of always killing from full health.
+                if(r.fight.phase()==3)damage=BossAdaptation.percentBlow(plugin,BossAdaptation.JUDGE,damage,hp);
                 p.setNoDamageTicks(0);
                 // sonic_boom has scaling=always. Undo vanilla's Easy/Hard multiplier so the
                 // configured HP fraction stays consistent; defensive effects still run normally.
@@ -777,8 +785,8 @@ public final class WorldBossManager implements Listener,AutoCloseable {
                     case HARD -> damage/1.5;
                     default -> damage;
                 };
-                BossDamage.hit(p,raw,
-                    DamageSource.builder(DamageType.SONIC_BOOM).withDamageLocation(r.center).build(),true);
+                BossDamage.scoped(p,"ผู้พิพากษาไร้ร่าง",()->BossDamage.hit(p,raw,
+                    DamageSource.builder(DamageType.SONIC_BOOM).withDamageLocation(r.center).build(),true));
             }
         }
         if(attack==Attack.BAIT_SLAM){

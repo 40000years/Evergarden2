@@ -87,12 +87,14 @@ public final class SeraphFeathers implements Listener,AutoCloseable {
     public int dailyCap(){return plugin.integer("seraph-trader.feathers.daily-cap",60,0,100000);}
     public int earnedToday(UUID id){return day().equals(ledger.getString(path(id,"day")))?ledger.getInt(path(id,"earned")):0;}
     /** Times this player used a shop category in the current day or week. */
-    int used(UUID id,String category,boolean weekly){
-        String period=weekly?week():day();
+    int used(UUID id,String category,boolean weekly){return used(id,category,weekly?week():day());}
+    void use(UUID id,String category,boolean weekly){use(id,category,weekly?week():day());}
+    /** Same, for any period key (e.g. an in-game day); a different key means the count has reset. */
+    int used(UUID id,String category,String period){
         return period.equals(ledger.getString(path(id,"limits."+category+".period")))?ledger.getInt(path(id,"limits."+category+".count")):0;
     }
-    void use(UUID id,String category,boolean weekly){
-        String period=weekly?week():day(),base=path(id,"limits."+category);
+    void use(UUID id,String category,String period){
+        String base=path(id,"limits."+category);
         int count=period.equals(ledger.getString(base+".period"))?ledger.getInt(base+".count"):0;
         ledger.set(base+".period",period);ledger.set(base+".count",count+1);dirty=true;
     }

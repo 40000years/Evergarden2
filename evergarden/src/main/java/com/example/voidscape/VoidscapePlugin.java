@@ -22,6 +22,7 @@ public final class VoidscapePlugin extends JavaPlugin {
     private SkyLandmarkLayout skyLandmarks;
     private WorldBossTempleLayout bossTemples;
     private BossStructureLayout bossStructures;
+    private DragonNestLayout dragonNests;
     private BiomeTerrain biomeTerrain;
     private ExplorationLayout exploration;
     private OverworldSanctuaries overworldSanctuaries;
@@ -32,6 +33,8 @@ public final class VoidscapePlugin extends JavaPlugin {
     private com.example.voidscape.boss.SanctuaryEncounters sanctuaryEncounters;
     private com.example.voidscape.boss.SeraphonBoss seraphonBoss;
     public com.example.voidscape.boss.SeraphonBoss seraphonBoss(){return seraphonBoss;}
+    private com.example.voidscape.boss.DragonNestBosses dragonBosses;
+    public com.example.voidscape.boss.DragonNestBosses dragonBosses(){return dragonBosses;}
     public com.example.voidscape.boss.SanctuaryEncounters sanctuaryEncounters(){return sanctuaryEncounters;}
     private com.example.voidscape.boss.RealmSanctuaryEncounters realmSanctuaryEncounters;
     public com.example.voidscape.boss.RealmSanctuaryEncounters realmSanctuaryEncounters(){return realmSanctuaryEncounters;}
@@ -212,6 +215,31 @@ public final class VoidscapePlugin extends JavaPlugin {
                 saved.getInt("boss-structures.spacing"),saved.getInt("boss-structures.minimum-gap",64),
                 structureChances,enabledStructures,new HashSet<>(saved.getLongList("boss-structures.excluded-cells")),
                 new HashSet<>(saved.getLongList("boss-structures.legacy-design-cells")));
+            if(!saved.contains("dragon-nests.spacing")){
+                int spacing=getConfig().isInt("structures.dragon-nests.spacing-chunks")
+                    ?integer("structures.dragon-nests.spacing-chunks",whaleSpacing,32,64):whaleSpacing;
+                saved.set("dragon-nests.spacing",spacing);
+                saved.set("dragon-nests.minimum-gap",integer("structures.dragon-nests.minimum-gap",72,48,128));
+                for(var kind:DragonNestLayout.Kind.values()){
+                    String path="structures.dragon-nests."+kind.id+".chance";
+                    double rate=getConfig().isSet(path)?getConfig().getDouble(path,DragonNestLayout.DEFAULT_CHANCE):DragonNestLayout.DEFAULT_CHANCE;
+                    saved.set("dragon-nests.chances."+kind.id,Double.isFinite(rate)?Math.clamp(rate,0,1):DragonNestLayout.DEFAULT_CHANCE);
+                }
+                var explored=SkyPlacementHistory.captureWorld(Bukkit.getWorldContainer().toPath(),
+                    Bukkit.getWorlds().getFirst().getWorldFolder().toPath(),worldName,spacing);
+                saved.set("dragon-nests.excluded-cells",explored.stream().sorted().toList());
+                saved.save(file);
+                getLogger().info("Three elemental Dragon Nests enabled in unexplored sky cells; preserved "+explored.size()+" explored cells.");
+            }
+            var dragonChances=new EnumMap<DragonNestLayout.Kind,Double>(DragonNestLayout.Kind.class);
+            var enabledDragons=EnumSet.noneOf(DragonNestLayout.Kind.class);
+            for(var kind:DragonNestLayout.Kind.values()){
+                dragonChances.put(kind,saved.getDouble("dragon-nests.chances."+kind.id,DragonNestLayout.DEFAULT_CHANCE));
+                if(getConfig().getBoolean("structures.dragon-nests."+kind.id+".enabled",true))enabledDragons.add(kind);
+            }
+            dragonNests=new DragonNestLayout(seed,layout,skyWhales,skyLandmarks,bossTemples,bossStructures,
+                saved.getInt("dragon-nests.spacing"),saved.getInt("dragon-nests.minimum-gap",72),
+                dragonChances,enabledDragons,new HashSet<>(saved.getLongList("dragon-nests.excluded-cells")));
             restorationLayout=new RestorationLayout(seed,skyWhales,skyLandmarks,repairOldCells,
                     saved.getDouble("restoration-altar-chance",.6),getConfig().getBoolean("structures.sky-whale.enabled",true),
                     getConfig().getBoolean("structures.hanging-garden.enabled",true),getConfig().getBoolean("structures.observatory.enabled",true));
@@ -278,7 +306,7 @@ public final class VoidscapePlugin extends JavaPlugin {
             if(worldName.equals("the_void"))throw new IllegalStateException("Use a new world name for Evergarden; never replace the legacy world generator.");
             voidWorld=new WorldCreator(worldName).seed(seed).environment(World.Environment.NORMAL).generator(new VoidGenerator(seed,layout,skyWhales,getConfig().getBoolean("structures.sky-whale.enabled",true),
                     skyLandmarks,getConfig().getBoolean("structures.observatory.enabled",true),getConfig().getBoolean("structures.hanging-garden.enabled",true),restorationLayout,
-                    bossTemples,getConfig().getBoolean("structures.world-boss-temple.enabled",true),bossStructures,biomeTerrain,
+                    bossTemples,getConfig().getBoolean("structures.world-boss-temple.enabled",true),bossStructures,dragonNests,biomeTerrain,
                     getConfig().getBoolean("structures.exploration.enabled",true),saved.getDouble("scenery.exploration-chance",.35),
                     new HashSet<>(saved.getLongList("scenery.exploration-legacy-cells")),
                     new HashSet<>(saved.getLongList("scenery.exploration-v2-cells")),
@@ -329,6 +357,7 @@ public final class VoidscapePlugin extends JavaPlugin {
             sanctuaryEncounters=new com.example.voidscape.boss.SanctuaryEncounters(this);
             realmSanctuaryEncounters=new com.example.voidscape.boss.RealmSanctuaryEncounters(this);
             seraphonBoss=new com.example.voidscape.boss.SeraphonBoss(this);
+            dragonBosses=new com.example.voidscape.boss.DragonNestBosses(this);
             var whaleTreasure = new WhaleTreasure(this);
             var magicPlugin=pm.getPlugin("advance-magic");
             if(magicPlugin instanceof com.example.advancemagic.AdvanceMagicPlugin magic&&magic.isEnabled()){
@@ -371,7 +400,7 @@ public final class VoidscapePlugin extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
     }
-    @Override public void onDisable(){if(seraphonBoss!=null)seraphonBoss.close();if(seraphTrader!=null)seraphTrader.close();if(pets!=null)pets.close();if(petPreviews!=null)petPreviews.close();if(realmSanctuaryEncounters!=null)realmSanctuaryEncounters.close();if(sanctuaryEncounters!=null)sanctuaryEncounters.close();if(overworldSanctuaries!=null)overworldSanctuaries.close();if(dimensionalSanctuaries!=null)dimensionalSanctuaries.close();if(netherArenaWorldgen!=null)netherArenaWorldgen.close();if(bossEnchantEffects!=null)bossEnchantEffects.close();if(worldBoss!=null)worldBoss.close();if(arkhaiaBedrock!=null)arkhaiaBedrock.close();if(arkhaiaModels!=null)arkhaiaModels.close();if(judgePack!=null)judgePack.close();if(restorationAltars!=null)restorationAltars.close();if(travel!=null)travel.close();if(packs!=null)packs.close();if(dungeons!=null)dungeons.close();}
+    @Override public void onDisable(){if(dragonBosses!=null)dragonBosses.close();if(seraphonBoss!=null)seraphonBoss.close();if(seraphTrader!=null)seraphTrader.close();if(pets!=null)pets.close();if(petPreviews!=null)petPreviews.close();if(realmSanctuaryEncounters!=null)realmSanctuaryEncounters.close();if(sanctuaryEncounters!=null)sanctuaryEncounters.close();if(overworldSanctuaries!=null)overworldSanctuaries.close();if(dimensionalSanctuaries!=null)dimensionalSanctuaries.close();if(netherArenaWorldgen!=null)netherArenaWorldgen.close();if(bossEnchantEffects!=null)bossEnchantEffects.close();if(worldBoss!=null)worldBoss.close();if(arkhaiaBedrock!=null)arkhaiaBedrock.close();if(arkhaiaModels!=null)arkhaiaModels.close();if(judgePack!=null)judgePack.close();if(restorationAltars!=null)restorationAltars.close();if(travel!=null)travel.close();if(packs!=null)packs.close();if(dungeons!=null)dungeons.close();}
 
     public NamespacedKey key(String value){return new NamespacedKey("voidscape",value);}
     public int integer(String path,int value,int min,int max){return Math.max(min,Math.min(max,getConfig().getInt(path,value)));}
@@ -390,6 +419,7 @@ public final class VoidscapePlugin extends JavaPlugin {
     public SkyLandmarkLayout skyLandmarks(){return skyLandmarks;}
     public WorldBossTempleLayout bossTemples(){return bossTemples;}
     public BossStructureLayout bossStructures(){return bossStructures;}
+    public DragonNestLayout dragonNests(){return dragonNests;}
     public BiomeTerrain biomeTerrain(){return biomeTerrain;}
     public ExplorationLayout exploration(){return exploration;}
     public StructureProtection structureProtection(){return structureProtection;}

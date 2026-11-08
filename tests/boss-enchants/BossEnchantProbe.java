@@ -108,6 +108,18 @@ public final class BossEnchantProbe extends JavaPlugin implements Listener {
         Files.write(Path.of("enchant-saved-items.bin"),ItemStack.serializeItemsAsBytes(saved));world.save();
     }
     void anvilSecurity(){
+        var highArmor=item(Material.DIAMOND_CHESTPLATE,Enchantment.PROTECTION,10,true);
+        var armorTransfer=result(menu(new ItemStack(Material.DIAMOND_CHESTPLATE),highArmor));
+        check(armorTransfer!=null&&lvl(armorTransfer,Enchantment.PROTECTION)==10&&garden.bossEnchants().level(armorTransfer,Enchantment.PROTECTION)==10,"same-type gear can transfer an awarded high-level enchantment without a book");
+        var existingArmor=item(Material.DIAMOND_CHESTPLATE,Enchantment.PROTECTION,8,true);
+        var forgedArmor=item(Material.DIAMOND_CHESTPLATE,Enchantment.PROTECTION,12,false);
+        var guardedArmor=result(menu(existingArmor,forgedArmor));
+        check(guardedArmor!=null&&lvl(guardedArmor,Enchantment.PROTECTION)==8&&garden.bossEnchants().level(guardedArmor,Enchantment.PROTECTION)==8,"unstamped high-level gear cannot raise trusted gear beyond its entitlement");
+        var unbreakingBook=item(Material.ENCHANTED_BOOK,Enchantment.UNBREAKING,8,true);
+        var injectedMeta=(EnchantmentStorageMeta)unbreakingBook.getItemMeta();
+        injectedMeta.addStoredEnchant(Enchantment.PROTECTION,12,true);unbreakingBook.setItemMeta(injectedMeta);
+        var injectedOutput=result(menu(new ItemStack(Material.DIAMOND_CHESTPLATE),unbreakingBook));
+        check(injectedOutput!=null&&lvl(injectedOutput,Enchantment.UNBREAKING)==8&&lvl(injectedOutput,Enchantment.PROTECTION)<=4&&garden.bossEnchants().level(injectedOutput,Enchantment.PROTECTION)==0,"a stamp for Unbreaking cannot authorize an injected Protection XII enchantment");
         var p8=item(Material.ENCHANTED_BOOK,Enchantment.PROTECTION,8,true);var m=menu(new ItemStack(Material.DIAMOND_CHESTPLATE),p8);var output=result(m);near(m.getCost(),8,"Protection VIII book costs 8 XP");
         int xp=player.getLevel();m.clicked(2,0,net.minecraft.world.inventory.ContainerInput.PICKUP,actor);
         check(lvl(CraftItemStack.asBukkitCopy(m.getCarried()),Enchantment.PROTECTION)==8&&m.getSlot(0).getItem().isEmpty()&&m.getSlot(1).getItem().isEmpty()&&player.getLevel()==xp-8,"real survival result click delivers VIII, consumes both inputs and pays XP once");

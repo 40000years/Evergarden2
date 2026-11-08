@@ -62,6 +62,7 @@ def main():
     parser.add_argument('--dry-run', action='store_true', help='Stage the assets and notes without touching GitHub')
     parser.add_argument('--include-jars', action='store_true', help='Also publish the current plugin JARs (public repository)')
     parser.add_argument('--notes-file', type=Path, help='Append release-specific Markdown notes from a local file')
+    parser.add_argument('--with-forge', action='store_true', help='With --include-jars, also attach dist/evergarden-forge.jar')
     args = parser.parse_args()
     garden, magic = version(ROOT / 'dist/evergarden.jar'), version(ROOT / 'dist/advance-magic.jar')
     number = re.search(r'-e2\.(\d+)', garden).group(1)
@@ -69,7 +70,8 @@ def main():
     stage = ROOT / 'output' / ('github-release-' + tag)
     stage.mkdir(parents=True, exist_ok=True)
     files = {}
-    jar_bytes = {name: (ROOT / 'dist' / name).read_bytes() for name in ('evergarden.jar', 'advance-magic.jar')}
+    jar_names = ('evergarden.jar', 'advance-magic.jar') + (('evergarden-forge.jar',) if args.with_forge else ())
+    jar_bytes = {name: (ROOT / 'dist' / name).read_bytes() for name in jar_names}
     for jar, entry, name in ASSETS:
         with zipfile.ZipFile(ROOT / 'dist' / jar) as z:
             data = z.read(entry)
@@ -102,8 +104,11 @@ def main():
             'ฝั่ง Bedrock ใส่ .mcpack ใน Geyser packs และไฟล์ mapping ใน custom_mappings แล้วรีสตาร์ต\n')
     if args.include_jars:
         body += ('\n## Plugin update\n\n'
-                 '- Includes the current `evergarden.jar` and `advance-magic.jar` from the validated local delivery. Install both under the server plugins directory and restart.\n'
-                 '- Binary artifacts were built from the local working tree; the workstation tag is not a complete source snapshot of those changes.\n')
+                 + ('- Includes the current `evergarden.jar`, `advance-magic.jar` and `evergarden-forge.jar` (Forge '
+                    + version(ROOT / 'dist/evergarden-forge.jar') + ') from the validated local delivery. Install all three under the server plugins directory and restart.\n'
+                    if args.with_forge else
+                    '- Includes the current `evergarden.jar` and `advance-magic.jar` from the validated local delivery. Install both under the server plugins directory and restart.\n')
+                 + '- Binary artifacts were built from the local working tree; the workstation tag is not a complete source snapshot of those changes.\n')
     if args.notes_file:
         body += '\n' + args.notes_file.read_text(encoding='utf8').strip() + '\n'
     (stage / 'RELEASE.md').write_text(body, encoding='utf8')

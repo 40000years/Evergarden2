@@ -33,7 +33,7 @@ final class JudgeTempleSummons {
             m.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));m.getEquipment().setChestplateDropChance(0);
             m.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_SWORD));m.getEquipment().setItemInMainHandDropChance(0);
             GuardianAppearance.apply(m,kind,true);
-            m.customName(Component.text(name+" · อัญเชิญ",NamedTextColor.GOLD));m.setCustomNameVisible(true);
+            m.customName(Component.text(name+" · อัญเชิญ",NamedTextColor.GOLD));m.setCustomNameVisible(true);BossDamage.tag(m,name);
         });
         if(!mob.isValid())throw new IllegalStateException("Temple boss summon was cancelled");
         return mob;

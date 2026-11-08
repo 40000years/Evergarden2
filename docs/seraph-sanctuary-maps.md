@@ -5,7 +5,10 @@ Evergarden `3.0.0-e2.135-map-trades` opens **ร้านแผนที่** in
 | Destination | Price per map | Choices |
 | --- | --- | --- |
 | Overworld Sanctuary | 30 normal Seraph Feathers | Acheron, Phlegethon, Cocytus, Banshee, Malefeasance, Styx |
+| Nether / End Sanctuary (e2.166) | 30 normal Seraph Feathers (follows the Overworld price) | Cinder Colossus (crown-fortress), Soul-Eater Hound (bone-temple), Crystal Moth Queen (crystal-city), Unlit Sun (void-ring) |
 | Evergarden main boss | 10 Golden Seraph Feathers | Bodiless Judge, Arkhaia, Seraphon |
+
+**Nether / End maps (e2.166).** The search runs in the attached Nether or End world (the one the buyer stands in, otherwise the first attached one), from the buyer's position there or from that world's spawn, using the dimensional sanctuary planner (`findNearest`), which never loads chunks. Like the main bosses, a sanctuary the buyer already reached is offered again only when no unreached one is in range, because its boss respawns. The map's lore names the coordinates, since vanilla Nether maps are mostly roof and End maps mostly void. `seraph-trader.maps.dimensional-feathers` overrides the price; `seraph-trader.maps.dimensional-search-regions` (default 8) sets the search radius in planner regions.
 
 Each exchange gives one native filled map. Hold it in the world named in its lore: the red X marks the fixed destination, and Minecraft's normal player indicator shows the approach. Terrain starts unexplored and fills as players explore. The target name and world are also on the item because Bedrock does not preserve Java map-cursor captions. No new resource pack is required.
 

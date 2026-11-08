@@ -50,6 +50,15 @@ ARMOR_BONES = {
               ('leftLeg', [1.9, 12, 0], [-.1, 0, -2], [4, 12, 4], [0, 16], 1.0, True)),
 }
 
+# A cape is Java's folded elytra (WingsLayer draws any chest item whose equipment asset has a
+# `wings` layer; that also hides the player's own cape). ElytraModel at rest: wings pivot at the
+# shoulders, xRot 15 deg, zRot -/+15 deg, 10x20x2 box inflated by 1, the layer pushed 2 px back.
+# Bedrock rebuilds it as two child bones of `body` (names unlike any player bone) with the cape
+# painted under layer 1 in one 64x64 texture, so the chestplate keeps a single render controller.
+CAPE_UV = (22, 0)
+CAPE_BONES = (('drake_mantle_l', [5, 24, 2], [15, 0, -15], False),
+              ('drake_mantle_r', [-5, 24, 2], [15, 0, 15], True))
+
 
 @dataclass
 class ArmorSet:
@@ -66,7 +75,19 @@ class ArmorSet:
     label_color: tuple = (255, 228, 160)
     background: tuple = (16, 18, 28)
     skin: tuple = (58, 52, 64, 255)
+    baked: Callable = None                     # -> armor_helm_bake.Baked: a painted voxel helm instead of `helm`
+    cape: Callable = None                      # -> 256x128 elytra-layout cape texture worn with the chestplate
     _cache: dict = field(default_factory=dict, repr=False)
+
+    def baked_helm(self):
+        if 'baked' not in self._cache:
+            self._cache['baked'] = self.baked()
+        return self._cache['baked']
+
+    def cape_texture(self):
+        if 'cape' not in self._cache:
+            self._cache['cape'] = self.cape()
+        return self._cache['cape']
 
     @property
     def asset(self):
@@ -140,14 +161,31 @@ def bedrock_armor(s: ArmorSet, piece):
         if mirror:
             cube['mirror'] = True
         bones.append({'name': name, 'pivot': pivot, 'cubes': [cube]})
+    caped = s.cape is not None and piece == 'chestplate'
+    if caped:
+        for name, pivot, rotation, mirror in CAPE_BONES:
+            cube = {'origin': [-5, 4, 2], 'size': [10, 20, 2], 'uv': [CAPE_UV[0], CAPE_UV[1] + 32], 'inflate': 1.0}
+            if mirror:
+                cube['mirror'] = True
+            bones.append({'name': name, 'parent': 'body', 'pivot': pivot, 'rotation': rotation, 'cubes': [cube]})
     return {'format_version': '1.16.0', 'minecraft:geometry': [{
-        'description': {'identifier': f'geometry.advance_magic.{s.key}_{piece}', 'texture_width': 64, 'texture_height': 32,
-                        'visible_bounds_width': 2, 'visible_bounds_height': 3, 'visible_bounds_offset': [0, 1.5, 0]},
+        'description': {'identifier': f'geometry.advance_magic.{s.key}_{piece}', 'texture_width': 64, 'texture_height': 64 if caped else 32,
+                        'visible_bounds_width': 3 if caped else 2, 'visible_bounds_height': 3, 'visible_bounds_offset': [0, 1.5, 0]},
         'bones': bones}]}
+
+
+def chest_texture(s: ArmorSet):
+    """Bedrock chestplate texture: layer 1 above, the cape below (64x64 UV space at 4x)."""
+    image = Image.new('RGBA', (64 * K, 64 * K))
+    image.alpha_composite(s.layer_one(), (0, 0))
+    image.alpha_composite(s.cape_texture(), (0, 32 * K))
+    return image
 
 
 def attachable(s: ArmorSet, piece):
     texture = f'textures/{s.key}/helm' if piece == 'helm' else f"textures/{s.key}/layer_{2 if piece == 'leggings' else 1}"
+    if piece == 'chestplate' and s.cape is not None:
+        texture = f'textures/{s.key}/chest'
     description = {'identifier': f'{NS}:{s.key}_{piece}',
                    'materials': {'default': 'entity_alphatest', 'glow': 'entity_emissive_alpha'},
                    'textures': {'default': texture},
@@ -184,13 +222,29 @@ def box_faces(u, v, w, h, d, mirror, offset):
     return {k: {'uv': [ox + a[0] * K, oy + a[1] * K, ox + a[2] * K, oy + a[3] * K], 'texture': 0} for k, a in r.items()}
 
 
+def rich(s: ArmorSet):
+    return s.baked is not None or s.cape is not None
+
+
+def preview_layout(s: ArmorSet):
+    """Atlas size and offsets of the offline preview texture."""
+    if not rich(s):
+        return ATLAS_SIZE, OFFSETS
+    size = s.baked_helm().size if s.baked is not None else 128
+    offsets = {'layer1': (0, 0), 'layer2': (256, 0), 'cape': (512, 0), 'skin': (768, 0), 'helm': (0, 128)}
+    return (max(896, size), 128 + size), offsets
+
+
 def preview_atlas(s: ArmorSet):
     if 'png' not in s._cache:
-        atlas = Image.new('RGBA', ATLAS_SIZE)
-        atlas.alpha_composite(s.layer_one(), OFFSETS['layer1'])
-        atlas.alpha_composite(s.layer_two(), OFFSETS['layer2'])
-        atlas.alpha_composite(helm_atlas(s), OFFSETS['helm'])
-        atlas.alpha_composite(Image.new('RGBA', (128, 128), s.skin), OFFSETS['skin'])
+        size, offsets = preview_layout(s)
+        atlas = Image.new('RGBA', size)
+        atlas.alpha_composite(s.layer_one(), offsets['layer1'])
+        atlas.alpha_composite(s.layer_two(), offsets['layer2'])
+        atlas.alpha_composite(s.baked_helm().java if s.baked is not None else helm_atlas(s), offsets['helm'])
+        if s.cape is not None:
+            atlas.alpha_composite(s.cape_texture(), offsets['cape'])
+        atlas.alpha_composite(Image.new('RGBA', (128, 128), s.skin), offsets['skin'])
         stream = io.BytesIO()
         atlas.save(stream, format='PNG')
         s._cache['png'] = stream.getvalue()
@@ -214,8 +268,9 @@ def preview_model(s: ArmorSet, pieces=('helm', 'chestplate', 'leggings', 'boots'
     limbs = {'head': ((-4, 24, -4), (8, 8, 8), (0, 0)), 'body': ((-4, 12, -2), (8, 12, 4), (16, 16)),
              'right_arm': ((4, 12, -2), (4, 12, 4), (40, 16)), 'left_arm': ((-8, 12, -2), (4, 12, 4), (40, 16)),
              'right_leg': ((-.1, 0, -2), (4, 12, 4), (0, 16)), 'left_leg': ((-3.9, 0, -2), (4, 12, 4), (0, 16))}
+    atlas_size, offsets = preview_layout(s)
     if mannequin:
-        sx, sy = OFFSETS['skin']
+        sx, sy = offsets['skin']
         for bone, (lo, size, _) in limbs.items():
             hi = [a + b for a, b in zip(lo, size)]
             uv = {face: {'uv': [sx + 4, sy + 4, sx + 12, sy + 12], 'texture': 0} for face in FACES}
@@ -224,20 +279,33 @@ def preview_model(s: ArmorSet, pieces=('helm', 'chestplate', 'leggings', 'boots'
               'leggings': (('body', .5), ('right_leg', .5), ('left_leg', .5)),
               'boots': (('right_leg', 1.0), ('left_leg', 1.0))}
     for piece in pieces:
+        if piece == 'helm' and s.baked is not None:
+            from armor_helm_bake import preview_faces
+            for lo, hi, faces_uv, glow in preview_faces(s.baked_helm(), offsets['helm']):
+                add('head', lo, hi, faces_uv, 'glow' if glow else 'helm', not glow)
+            continue
         if piece == 'helm':
-            hx, hy = OFFSETS['helm']
+            hx, hy = offsets['helm']
             for c in s.helm().cubes:
                 (x0, y0, z0), (x1, y1, z1) = c['from'], c['to']
                 u, v = tile(s, c['mat'])
                 uv = {face: {'uv': [hx + u + .5, hy + v + .5, hx + u + 15.5, hy + v + 15.5], 'texture': 0} for face in FACES}
                 add('head', (-x1, y0, z0), (-x0, y1, z1), uv, 'glow' if c['mat'] in s.helm_glow else 'helm', c['mat'] not in s.helm_glow)
             continue
-        offset = OFFSETS['layer2' if piece == 'leggings' else 'layer1']
+        offset = offsets['layer2' if piece == 'leggings' else 'layer1']
         for bone, inflate in layers[piece]:
             lo, size, (u, v) = limbs[bone]
             lo2 = [a - inflate for a in lo]
             hi2 = [a + b + inflate for a, b in zip(lo, size)]
             add(bone, lo2, hi2, box_faces(u, v, size[0], size[1], size[2], bone.startswith('left'), offset), piece)
+        if piece == 'chestplate' and s.cape is not None:
+            # Preview space mirrors Bedrock's X: pivots and X/Y angles flip sign.
+            for name, pivot, rotation, mirror in CAPE_BONES:
+                uid = f'cape-{len(elements)}'
+                elements.append({'uuid': uid, 'name': 'cape', 'from': [-6, 3, 1], 'to': [6, 25, 5],
+                                 'origin': [-pivot[0], pivot[1], pivot[2]], 'rotation': [-rotation[0], -rotation[1], rotation[2]],
+                                 'faces': box_faces(CAPE_UV[0], CAPE_UV[1], 10, 20, 2, mirror, offsets['cape']), 'shade': True})
+                children['body'].append(uid)
     outliner = [{'name': b, 'uuid': 'bone-' + b, 'origin': o, 'children': children[b]} for b, o in bones.items()]
     animations = []
     if pose:
@@ -246,7 +314,7 @@ def preview_model(s: ArmorSet, pieces=('helm', 'chestplate', 'leggings', 'boots'
             animators['bone-' + bone] = {'name': bone, 'keyframes': [{'channel': 'rotation', 'time': 0,
                                                                      'data_points': [{'x': -angles[0], 'y': -angles[1], 'z': angles[2]}]}]}
         animations.append({'name': 'pose', 'length': 1, 'loop': 'hold', 'animators': animators})
-    return {'meta': {}, 'resolution': {'width': ATLAS_SIZE[0], 'height': ATLAS_SIZE[1]}, 'elements': elements, 'outliner': outliner,
+    return {'meta': {}, 'resolution': {'width': atlas_size[0], 'height': atlas_size[1]}, 'elements': elements, 'outliner': outliner,
             'animations': animations, 'textures': [{'source': 'data:image/png;base64,' + base64.b64encode(preview_atlas(s)).decode()}]}
 
 
@@ -279,6 +347,12 @@ def write_json(path, value):
     path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf8')
 
 
+def write_compact(path, value):
+    """Large generated models: no indentation."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, ensure_ascii=False, separators=(',', ':')) + '\n', encoding='utf8')
+
+
 def save(image, *paths):
     for path in paths:
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -292,13 +366,27 @@ def register(s: ArmorSet, java, bedrock, item_atlas, definitions):
     k = s.key
     save(s.layer_one(), jt / f'entity/equipment/humanoid/{k}.png', bedrock / f'textures/{k}/layer_1.png', s.art / 'layer_1.png')
     save(s.layer_two(), jt / f'entity/equipment/humanoid_leggings/{k}.png', bedrock / f'textures/{k}/layer_2.png', s.art / 'layer_2.png')
-    save(helm_atlas(s), jt / f'item/{k}/helm.png', bedrock / f'textures/{k}/helm.png', s.art / 'helm_materials.png')
-    write_json(java / f'assets/{NS}/equipment/{k}.json', {'layers': {
-        'humanoid': [{'texture': s.asset}], 'humanoid_leggings': [{'texture': s.asset}]}})
-    f = s.helm()
-    write_json(s.art / 'helm.geometry.json', {'id': f'{k}_helm', 'cubes': f.cubes})
-    write_json(java / f'assets/{NS}/models/item/{k}/helm.json', java_helm_model(s, f))
-    write_json(bedrock / f'models/entity/{k}/helm.geo.json', bedrock_helm(s, f))
+    layers = {'humanoid': [{'texture': s.asset}], 'humanoid_leggings': [{'texture': s.asset}]}
+    if s.cape is not None:
+        layers['wings'] = [{'texture': s.asset}]
+        save(s.cape_texture(), jt / f'entity/equipment/wings/{k}.png', s.art / 'cape.png')
+        save(chest_texture(s), bedrock / f'textures/{k}/chest.png')
+    write_json(java / f'assets/{NS}/equipment/{k}.json', {'layers': layers})
+    if s.baked is not None:
+        import armor_helm_bake as bake
+        b = s.baked_helm()
+        save(b.java, jt / f'item/{k}/helm.png', s.art / 'helm_atlas.png')
+        save(b.bedrock, bedrock / f'textures/{k}/helm.png')
+        write_compact(s.art / 'helm.geometry.json', {'id': f'{k}_helm', 'atlas': b.size,
+                                                       'boxes': [[box.lo, box.hi, box.glow] for box in b.boxes]})
+        write_compact(java / f'assets/{NS}/models/item/{k}/helm.json', bake.java_model(b, f'{NS}:item/{k}/helm', s.credit, HELM_DISPLAY))
+        write_compact(bedrock / f'models/entity/{k}/helm.geo.json', bake.bedrock_geometry(b, f'geometry.advance_magic.{k}_helm'))
+    else:
+        save(helm_atlas(s), jt / f'item/{k}/helm.png', bedrock / f'textures/{k}/helm.png', s.art / 'helm_materials.png')
+        f = s.helm()
+        write_json(s.art / 'helm.geometry.json', {'id': f'{k}_helm', 'cubes': f.cubes})
+        write_json(java / f'assets/{NS}/models/item/{k}/helm.json', java_helm_model(s, f))
+        write_json(bedrock / f'models/entity/{k}/helm.geo.json', bedrock_helm(s, f))
     for piece, title, base, slot, protection in s.pieces:
         icon = render_icon(s, piece)
         save(icon, jt / f'item/{k}/{piece}_icon.png', bedrock / f'textures/{k}/{piece}_icon.png', s.art / f'{piece}_icon.png')
@@ -331,6 +419,7 @@ def owned(key):
     return (f'assets/{NS}/items/{key}_', f'assets/{NS}/models/item/{key}/', f'assets/{NS}/textures/item/{key}/',
             f'assets/{NS}/equipment/{key}.json', f'assets/{NS}/textures/entity/equipment/humanoid/{key}.png',
             f'assets/{NS}/textures/entity/equipment/humanoid_leggings/{key}.png',
+            f'assets/{NS}/textures/entity/equipment/wings/{key}.png',
             f'attachables/{key}/', f'models/entity/{key}/', f'textures/{key}/', f'render_controllers/{key}_armor.render.json')
 
 

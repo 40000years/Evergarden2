@@ -38,6 +38,9 @@ public final class PetSystem implements AutoCloseable {
         sampler=Bukkit.getScheduler().runTaskTimer(plugin,this::sample,100,100);
     }
     public WildPetSpawns wild(){return wild;}
+    /** Registers and gives a baby egg of this species; why not, or null on success. */
+    public String grantEgg(org.bukkit.entity.Player player,PetCatalog.Species species,String source){return breeding.grantEgg(player,species,source);}
+    public static org.bukkit.inventory.ItemStack eggPreview(PetCatalog.Species species){return PetBreeding.preview(species);}
     public PetMenu menu(){return menu;}
     public void reload(){wild.reload();}
     private long busy(){return bodies.busy()+wild.busy()+companions.busy();}

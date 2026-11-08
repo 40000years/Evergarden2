@@ -18,7 +18,7 @@ public final class ArkhaiaBedrockSupport implements AutoCloseable {
         "smite_windup","smite_active","smite_recover","verdict_windup","verdict_active","verdict_recover",
         "wings_windup","wings_active","wings_recover","stun","transition","spawn");
     public static List<String> clips(String model){
-        return model.equals("arkhaia")?CLIPS:model.equals("seraphon")?SERAPHON_CLIPS:RealmBosses.realm(model)?RealmBosses.CLIPS:riverClips(model);
+        return model.equals("arkhaia")?CLIPS:model.equals("seraphon")?SERAPHON_CLIPS:RealmBosses.dragon(model)?RealmBosses.DRAGON_CLIPS:RealmBosses.realm(model)?RealmBosses.CLIPS:riverClips(model);
     }
     public static final List<String> RIVER_CLIPS=List.of("idle","walk","hover","cast_windup","cast_active","cast_recover","attack_windup","attack_active","attack_recover","stun","ritual_windup","ritual_active","ritual_recover");
     public static List<String> riverClips(String model){
@@ -47,6 +47,7 @@ public final class ArkhaiaBedrockSupport implements AutoCloseable {
     static{MODELS.add("arkhaia");MODELS.add("seraphon");MODELS.add("arkhaia_acheron_echo");for(var kind:ArkhaiaWaves.Kind.values())MODELS.add("arkhaia_"+kind.name().toLowerCase(Locale.ROOT));
         MODELS.add("arkhaia_malefeasance_phase2");
         MODELS.addAll(RealmBosses.MODELS);
+        MODELS.addAll(RealmBosses.DRAGON_MODELS);
         // Geyser defines entities once at startup, including every mythical growth variant.
         for(var species:com.example.voidscape.pet.PetCatalog.available())
             for(var stage:com.example.voidscape.pet.PetCatalog.Stage.values())MODELS.add(species.model(stage));}

@@ -19,6 +19,7 @@ public final class VoidGenerator extends ChunkGenerator {
     private final WorldBossTempleLayout bossTemples;
     private final boolean bossTempleEnabled;
     private final BossStructureLayout bossStructures;
+    private final DragonNestLayout dragonNests;
     private final BiomeTerrain terrain;
     private final StructureTerrain structureTerrain;
     private final ExplorationLayout exploration;
@@ -88,13 +89,22 @@ public final class VoidGenerator extends ChunkGenerator {
                          SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
                          WorldBossTempleLayout bossTemples,boolean bossTempleEnabled,BossStructureLayout bossStructures,BiomeTerrain terrain,
                          boolean explorationEnabled,double explorationChance,Set<Long> explorationLegacyCells,Set<Long> explorationPreviousCells,Set<Long> explorationDetailedCells,Set<Long> explorationMediumCells) {
+        this(seed,layout,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,restoration,
+            bossTemples,bossTempleEnabled,bossStructures,null,terrain,explorationEnabled,explorationChance,
+            explorationLegacyCells,explorationPreviousCells,explorationDetailedCells,explorationMediumCells);
+    }
+    public VoidGenerator(long seed,DungeonLayout layout,SkyWhaleLayout skyWhales,boolean skyWhaleEnabled,
+                         SkyLandmarkLayout landmarks,boolean observatoryEnabled,boolean gardenEnabled,RestorationLayout restoration,
+                         WorldBossTempleLayout bossTemples,boolean bossTempleEnabled,BossStructureLayout bossStructures,DragonNestLayout dragonNests,BiomeTerrain terrain,
+                         boolean explorationEnabled,double explorationChance,Set<Long> explorationLegacyCells,Set<Long> explorationPreviousCells,Set<Long> explorationDetailedCells,Set<Long> explorationMediumCells) {
         this.seed=seed;this.layout=layout;this.skyWhales=skyWhales;this.skyWhaleEnabled=skyWhaleEnabled;
         this.landmarks=landmarks;this.observatoryEnabled=observatoryEnabled;this.gardenEnabled=gardenEnabled;
         this.restoration=restoration;
         this.bossTemples=bossTemples;this.bossTempleEnabled=bossTempleEnabled;
         this.bossStructures=bossStructures;
+        this.dragonNests=dragonNests;
         this.terrain=terrain;
-        structureTerrain=terrain==null?null:new StructureTerrain(seed,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,bossTemples,bossTempleEnabled,bossStructures);
+        structureTerrain=terrain==null?null:new StructureTerrain(seed,skyWhales,skyWhaleEnabled,landmarks,observatoryEnabled,gardenEnabled,bossTemples,bossTempleEnabled,bossStructures,dragonNests);
         islands=new SimplexNoiseGenerator(seed);detail=new SimplexNoiseGenerator(seed^721945L);
         exploration=new ExplorationLayout(this,terrain,explorationEnabled,explorationChance,explorationLegacyCells,explorationPreviousCells,explorationDetailedCells,explorationMediumCells);
     }
@@ -111,6 +121,11 @@ public final class VoidGenerator extends ChunkGenerator {
         if(bossStructures==null)return false;
         var site=bossStructures.at(x,z,margin);
         return site!=null&&bossStructures.enabled(site.kind());
+    }
+    private boolean dragonNestReserved(int x,int z,int margin){
+        if(dragonNests==null)return false;
+        var site=dragonNests.at(x,z,margin);
+        return site!=null&&dragonNests.enabled(site.kind());
     }
     private static double smooth(double t){t=Math.clamp(t,0,1);return t*t*(3-2*t);}
     private long hash(int x,int z){return DungeonLayout.mix(seed^(long)x*341873128712L^(long)z*132897987541L);}
@@ -160,7 +175,7 @@ public final class VoidGenerator extends ChunkGenerator {
         // The landmark supplies its own islands and empty spaces. Noise terrain here
         // would fill its rib cage, bury the approach, and spoil the floating silhouette.
         if((skyWhaleEnabled&&skyWhales.at(x,z,0)!=null)||landmarkReserved(x,z,0)
-                ||bossTempleReserved(x,z,0)||bossStructureReserved(x,z,0))
+                ||bossTempleReserved(x,z,0)||bossStructureReserved(x,z,0)||dragonNestReserved(x,z,0))
             return new Surface(false,95,0,garden(x,z),false,false);
         double radial=Math.hypot(x,z);
         double density=islands.noise(x/155.0,z/155.0)+0.18*detail.noise(x/49.0,z/49.0);
@@ -258,6 +273,7 @@ public final class VoidGenerator extends ChunkGenerator {
             if(landmarkReserved(tx,tz,6))continue;
             if(bossTempleReserved(tx,tz,6))continue;
             if(bossStructureReserved(tx,tz,6))continue;
+            if(dragonNestReserved(tx,tz,6))continue;
             Surface s=surface(tx,tz);
             if(!s.land()||s.pond()||s.path()||s.depth()<16||Math.hypot(tx,tz)<19||layout.at(tx,tz,13)!=null)continue;
             // Broad, deliberately empty home sites.
@@ -297,6 +313,9 @@ public final class VoidGenerator extends ChunkGenerator {
         if(bossStructures!=null)
             for(var site:bossStructures.cell(Math.floorDiv(cx,bossStructures.spacingChunks()),Math.floorDiv(cz,bossStructures.spacingChunks())))
                 if(bossStructures.enabled(site.kind()))site.blueprint().render(data,cx,cz,site.x(),site.z());
+        if(dragonNests!=null)
+            for(var site:dragonNests.cell(Math.floorDiv(cx,dragonNests.spacingChunks()),Math.floorDiv(cz,dragonNests.spacingChunks())))
+                if(dragonNests.enabled(site.kind()))site.blueprint().render(data,cx,cz,site.x(),site.z());
         if(restoration!=null)for(var site:restoration.cell(Math.floorDiv(cx*16,restoration.cellSize()),Math.floorDiv(cz*16,restoration.cellSize())))
             RestorationShrine.render(data,cx,cz,site);
     }

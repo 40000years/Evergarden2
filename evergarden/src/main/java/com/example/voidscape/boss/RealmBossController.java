@@ -168,6 +168,7 @@ public final class RealmBossController implements AutoCloseable {
     private final Map<UUID, Integer> lastMeleeHit = new HashMap<>();
     // Boss tick of each player's last accepted hit: hit-and-run attackers stay hunted after leaving the arena
     private final Map<UUID, Long> lastAttack = new HashMap<>();
+    private final Map<UUID, Integer> lastWardNotice = new HashMap<>();
 
     private Location at;
     private String currentClip = "idle";
@@ -175,6 +176,9 @@ public final class RealmBossController implements AutoCloseable {
     private long tick;
     private boolean fighting;
     private boolean phaseTwo;
+    /** Phase wall: from a phase threshold until the boss has unleashed that phase's signature skill, it takes no damage. */
+    private boolean warded;
+    private Action wardSkill;
     private boolean dead;
     private boolean hiddenUnderground;
     private double health;
@@ -205,6 +209,8 @@ public final class RealmBossController implements AutoCloseable {
     private static final int MAX_BRAND = 5;
     private static final int BRAND_TICKS = 140;
     private boolean phaseThree;
+    /** Phlegethon's weapon adaptation, active in phase three. */
+    private final BossAdaptation adaptation = new BossAdaptation();
     private int ambientTicks;
     private double coronaAngle;
     private int nodeTotal;
@@ -331,24 +337,19 @@ public final class RealmBossController implements AutoCloseable {
         return Math.max(200.0, plugin.getConfig().getDouble("dimensional-sanctuaries.bosses." + configKey() + ".health", def));
     }
 
+    /**
+     * Each extra challenger adds party-health-percent of the solo health (default 70%), up to party-health-max times
+     * the solo health (default 3.8x, i.e. five players). A full late-game party could otherwise erase the old
+     * +25%-per-player pool before the boss finished one skill rotation. Solo health is unchanged.
+     */
     private double configuredExtraPlayerHealth() {
-        double def = switch (kind) {
-            case CINDER_COLOSSUS -> 950.0;
-            case SOUL_HOUND -> 850.0;
-            case CRYSTAL_MOTH -> 900.0;
-            case UNLIT_SUN -> 950.0;
-        };
-        return Math.max(0.0, plugin.getConfig().getDouble("dimensional-sanctuaries.bosses." + configKey() + ".health-per-extra-player", def));
+        double percent = plugin.getConfig().getDouble("dimensional-sanctuaries.bosses.party-health-percent", 70.0);
+        return configuredSoloHealth() * Math.clamp(Double.isFinite(percent) ? percent : 70.0, 0.0, 500.0) / 100.0;
     }
 
     private double configuredHealthCap() {
-        double def = switch (kind) {
-            case CINDER_COLOSSUS -> 7600.0;
-            case SOUL_HOUND -> 6600.0;
-            case CRYSTAL_MOTH -> 7000.0;
-            case UNLIT_SUN -> 7400.0;
-        };
-        return Math.max(configuredSoloHealth(), plugin.getConfig().getDouble("dimensional-sanctuaries.bosses." + configKey() + ".health-cap", def));
+        double times = plugin.getConfig().getDouble("dimensional-sanctuaries.bosses.party-health-max", 3.8);
+        return configuredSoloHealth() * Math.clamp(Double.isFinite(times) ? times : 3.8, 1.0, 20.0);
     }
 
     private double damageScale() {
@@ -378,6 +379,9 @@ public final class RealmBossController implements AutoCloseable {
         this.fighting = false;
         this.phaseTwo = false;
         this.phaseThree = false;
+        this.adaptation.reset();
+        this.warded = false;
+        this.wardSkill = null;
         this.dead = false;
         this.hiddenUnderground = false;
         this.at = center.clone();
@@ -454,6 +458,7 @@ public final class RealmBossController implements AutoCloseable {
                 carrier.remove();
             }
             carrier = world.spawn(at, WitherSkeleton.class, mob -> {
+                BossDamage.tag(mob,kind.title);
                 mob.setPersistent(false);
                 mob.setRemoveWhenFarAway(false);
                 mob.setSilent(true);
@@ -554,12 +559,9 @@ public final class RealmBossController implements AutoCloseable {
                 : (phaseThree ? " §4[เฟส 3: โคโรนากวาดลาน]" : phaseTwo ? " §e[เฟส 2: สุริยุปราคาเต็มดวง]" : "");
         };
         if (action == Action.STUN) sub = " §a[มึนงง — โอกาสโจมตีรุนแรง!]";
-        return Component.text(thaiName() + " · " + englishName(), TextColor.color(switch (kind) {
-            case CINDER_COLOSSUS -> 0xff7a2f;
-            case SOUL_HOUND -> 0x52e5ff;
-            case CRYSTAL_MOTH -> 0xf28cff;
-            case UNLIT_SUN -> 0xffd257;
-        })).append(Component.text(" (" + (int) Math.ceil(health) + "/" + (int) Math.ceil(maxHealth) + ")" + sub, NamedTextColor.WHITE));
+        if (warded) sub = " §e[🛡 เกราะเฟส — รอให้สกิลจบ]";
+        return BossNames.styled(englishName())
+            .append(Component.text(" (" + (int) Math.ceil(health) + "/" + (int) Math.ceil(maxHealth) + ")" + sub, NamedTextColor.WHITE));
     }
 
     private void updateBossBarViewers(List<Player> present) {
@@ -585,6 +587,17 @@ public final class RealmBossController implements AutoCloseable {
     }
 
     public Mob carrier() { return carrier; }
+
+    /** Players admitted to this fight, including those who subsequently left its ring. */
+    Set<UUID> participants() { return Set.copyOf(participants); }
+
+    /** A fallen player is no longer a target, even if they respawn before the fight ends. */
+    void playerDefeated(UUID player) {
+        lastAttack.remove(player);
+        lastMeleeHit.remove(player);
+        brands.remove(player);
+        if (perchHunt != null) perchHunt.forget(player);
+    }
 
     private void playClip(String clip, boolean force) {
         if (!force && clip.equals(currentClip)) return;
@@ -719,11 +732,15 @@ public final class RealmBossController implements AutoCloseable {
 
         if (!phaseTwo && health <= maxHealth * 0.65 && action != Action.TRANSITION && action != Action.SPAWN) {
             phaseTwo = true;
+            warded = true;
+            wardSkill = moves().get(3);
             startAction(Action.TRANSITION);
         } else if (phaseTwo && !phaseThree && health <= maxHealth * 0.30
                 && action != Action.TRANSITION && action != Action.SPAWN && action != Action.STUN) {
             // The final phase waits for an earned stun to play out
             phaseThree = true;
+            warded = true;
+            wardSkill = moves().get(4);
             startAction(Action.TRANSITION);
         }
 
@@ -994,6 +1011,11 @@ public final class RealmBossController implements AutoCloseable {
     }
 
     private void finishAction(int nextCooldown) {
+        if (warded && action == wardSkill) {
+            warded = false;
+            wardSkill = null;
+            broadcast(presentPlayers(), "§a✦ เกราะเฟสของ " + thaiName() + " สลายแล้ว — โจมตีได้เต็มที่!");
+        }
         this.action = Action.NONE;
         this.actionTick = 0;
         this.comboStep = 0;
@@ -1006,6 +1028,8 @@ public final class RealmBossController implements AutoCloseable {
     }
 
     public void triggerStun(int durationTicks, double damageMultiplier, String message) {
+        warded = false;
+        wardSkill = null;
         clearActiveNodes();
         this.coreExposed = false;
         this.hiddenUnderground = false;
@@ -1028,7 +1052,11 @@ public final class RealmBossController implements AutoCloseable {
             }
             case TRANSITION -> {
                 center.getWorld().spawnParticle(Particle.END_ROD, at.clone().add(0, 2.5, 0), 10, 1.2, 1.2, 1.2, 0.08);
-                if (actionTick >= 36) finishAction(16);
+                if (actionTick >= 36) {
+                    // The phase opens with its signature skill; the wall falls when that skill ends.
+                    if (warded && wardSkill != null) startAction(wardSkill);
+                    else finishAction(16);
+                }
             }
             case STUN -> {
                 if (actionTick >= stunTicks) finishAction(20);
@@ -2526,12 +2554,16 @@ public final class RealmBossController implements AutoCloseable {
         PotionEffect current = p.getPotionEffect(type);
         if (current == null || current.getAmplifier() < amplifier
                 || (current.getAmplifier() == amplifier && current.getDuration() < ticks)) {
-            p.addPotionEffect(new PotionEffect(type, ticks, amplifier, false, true, true));
+            BossDamage.effect(p,new PotionEffect(type, ticks, amplifier, false, true, true),kind.title);
         }
     }
 
     private void ignite(Player p, int ticks) {
-        if (p.isOnline() && !p.isDead()) p.setFireTicks(Math.max(p.getFireTicks(), ticks));
+        if (!p.isOnline() || p.isDead()) return;
+        int before = p.getFireTicks();
+        BossDamage.ignite(p,ticks,kind.title);
+        if (kind == RealmBosses.Kind.UNLIT_SUN && plugin.realmSanctuaryEncounters() != null)
+            plugin.realmSanctuaryEncounters().trackSunFire(p, before, ticks);
     }
 
     // =========================================================================
@@ -2723,6 +2755,21 @@ public final class RealmBossController implements AutoCloseable {
         }
 
         double dealt = raw * multiplier;
+        // Warded hits deal nothing, so they never feed the adaptation chain.
+        if (phaseThree && !warded) dealt = adaptation.phaseThree(plugin, event, attacker, dealt, BossAdaptation.REALM, thaiName(), at.clone().add(0, 3, 0));
+        if (warded) {
+            // Phase wall: the hit lands visually but the boss cannot be burst through its phase skill.
+            if (Bukkit.getCurrentTick() % 20 == 0 || !lastWardNotice.containsKey(attacker.getUniqueId())
+                    || Bukkit.getCurrentTick() - lastWardNotice.get(attacker.getUniqueId()) > 40) {
+                lastWardNotice.put(attacker.getUniqueId(), Bukkit.getCurrentTick());
+                attacker.sendActionBar(Component.text("§e🛡 " + thaiName() + " กำลังปลดปล่อยพลังเฟส — เกราะเฟสกันดาเมจจนกว่าสกิลจะจบ!"));
+            }
+            attacker.playSound(at, Sound.ITEM_SHIELD_BLOCK, 0.8f, 0.7f);
+            dealt = 0.0;
+        }
+        // Phase floors: no burst can skip a phase; the transition (and its wall) always plays first.
+        double floor = !phaseTwo ? maxHealth * 0.65 : !phaseThree ? maxHealth * 0.30 : 0.0;
+        dealt = Math.min(dealt, Math.max(0.0, health - floor));
         health = Math.max(0.0, health - dealt);
         boolean nativeSmash = realMelee(event, attacker) && event.getEntity() == carrier
             && event.getDamageSource().getDamageType() == DamageType.MACE_SMASH;
@@ -2814,7 +2861,8 @@ public final class RealmBossController implements AutoCloseable {
     private boolean dealBossDamage(Player player, double baseAmount, DamageType type, double magicPower, double rendRatio, boolean brand) {
         if (player == null || !player.isOnline() || player.isDead() || carrier == null || !carrier.isValid()) return false;
         boolean magic = type == DamageType.INDIRECT_MAGIC;
-        double scale = damageScale() * brandMultiplier(player);
+        double scale = damageScale() * brandMultiplier(player)
+            * (phaseThree ? BossAdaptation.damageMultiplier(plugin, BossAdaptation.REALM) : 1.0);
         double scaled = Math.max(1.0, baseAmount * (magic ? magicPower : 1.0) * scale);
         boolean landed = BossDamage.hit(player, scaled, source(type), true);
         double rend = magic ? baseAmount * rendRatio * rendScale() * scale : 0.0;

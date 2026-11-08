@@ -68,6 +68,7 @@ public final class SanctuaryMapChecks extends JavaPlugin {
     private Map<Long,Optional<WorldBossTempleLayout.Site>> judgeCells;
     private Map<Long,List<BossStructureLayout.Site>> bossCells;
     private final EnumMap<Destination,MapTarget> fixedEver=new EnumMap<>(Destination.class);
+    private final EnumMap<Destination,MapTarget> fixedRealm=new EnumMap<>(Destination.class);
     @Override public void onEnable(){Bukkit.getScheduler().runTaskLater(this,()->{
         try{reloadPhase=Boolean.getBoolean("sanctuary.maps.reload");
             if(reloadPhase){reload();finish(null);}else{setup();run().whenComplete((ignored,error)->main(()->finish(error)));}}
@@ -129,10 +130,39 @@ public final class SanctuaryMapChecks extends JavaPlugin {
         }
         // A nearer Valkyrie must never be confused with the Seraphon main boss.
         bossCells.put(SkyPlacementHistory.key(1,1),List.of(new BossStructureLayout.Site(BossStructureLayout.Kind.VALKYRIE,bossSize+bossSize/2,bossSize+bossSize/2)));
-        check(Destination.values().length==9&&fixed.size()==6,"nine destinations with six Overworld sanctuaries");
-        for(var destination:Destination.values())check(maps.price(destination)==(destination.overworld()?30:10),"exact default price "+destination);
-        check(Arrays.stream(Destination.values()).filter(destination->!destination.overworld()).collect(java.util.stream.Collectors.toSet()).equals(Set.of(Destination.JUDGE,Destination.ARKHAIA,Destination.SERAPHON)),"Evergarden choices are exactly Judge, Arkhaia and Seraphon, without Tier selector or Valkyrie");
+        seedRealmSites();
+        check(Destination.values().length==13&&fixed.size()==6&&fixedRealm.size()==4,"thirteen destinations: six Overworld, four Nether/End sanctuaries, three Evergarden bosses");
+        for(var destination:Destination.values())check(maps.price(destination)==(destination.golden()?10:30),"exact default price "+destination);
+        check(Arrays.stream(Destination.values()).filter(Destination::golden).collect(java.util.stream.Collectors.toSet()).equals(Set.of(Destination.JUDGE,Destination.ARKHAIA,Destination.SERAPHON)),"Evergarden choices are exactly Judge, Arkhaia and Seraphon, without Tier selector or Valkyrie");
+        check(Arrays.stream(Destination.values()).filter(Destination::dimensional).collect(java.util.stream.Collectors.toSet()).equals(Set.of(Destination.CROWN_FORTRESS,Destination.BONE_TEMPLE,Destination.CRYSTAL_CITY,Destination.VOID_RING)),"the four Nether and End sanctuaries are sold in plain feathers");
         check(maps.target(new ItemStack(Material.FILLED_MAP))==null,"ordinary map cannot impersonate purchased target");
+    }
+    /**
+     * The server's real Nether and End worlds carry the dimensional sanctuary planner. Fill the plan ledger around
+     * each world's spawn with "no site" and put one fixed site of each kind in the next region east, so the real
+     * async search and validation run without planning terrain.
+     */
+    @SuppressWarnings("unchecked") private void seedRealmSites()throws Exception {
+        var service=garden.dimensionalSanctuaries();check(service!=null,"dimensional sanctuary service is running");
+        Map<UUID,Object> placements=(Map<UUID,Object>)field(service,"worlds");
+        Map<Object,Map<Integer,?>> assets=(Map<Object,Map<Integer,?>>)field(service,"assets");
+        for(var destination:Destination.values()){
+            if(!destination.dimensional())continue;
+            var kind=com.example.voidscape.world.DimensionalSanctuaries.Kind.valueOf(destination.name());
+            World world=Bukkit.getWorlds().stream().filter(w->w.getEnvironment()==kind.environment&&service.enabled(w)).findFirst().orElse(null);
+            check(world!=null,"a "+kind.environment+" world carries dimensional sanctuaries for "+destination);
+            Object placement=placements.get(world.getUID());
+            Method region=placement.getClass().getDeclaredMethod("region",com.example.voidscape.world.DimensionalSanctuaries.Kind.class,int.class,int.class);region.setAccessible(true);
+            Method origin=placement.getClass().getDeclaredMethod("origin",com.example.voidscape.world.DimensionalSanctuaries.Kind.class);origin.setAccessible(true);
+            Map<String,String> plans=(Map<String,String>)field(placement,"plans");((Map<?,?>)field(placement,"parsed")).clear();
+            int size=((Map<Object,Integer>)field(placement,"sizes")).get(kind);int[] offset=(int[])origin.invoke(placement,kind);
+            Location spawn=world.getSpawnLocation();
+            int rx=(int)region.invoke(placement,kind,spawn.getBlockX(),0),rz=(int)region.invoke(placement,kind,spawn.getBlockZ(),1);
+            for(int dx=-10;dx<=10;dx++)for(int dz=-10;dz<=10;dz++)plans.put(kind.id+"@"+(rx+dx)+"@"+(rz+dz),"-");
+            int x=(rx+1)*size+offset[0]+size/2,z=rz*size+offset[1]+size/2,version=Collections.max(assets.get(kind).keySet());
+            plans.put(kind.id+"@"+(rx+1)+"@"+rz,x+","+(kind.environment==World.Environment.NETHER?70:60)+","+z+",0,1,"+version);
+            fixedRealm.put(destination,new MapTarget(world.getUID(),destination,x,z));
+        }
     }
     private void seedFixedTargets(){
         // A NO_TARGET search can exhaust the whole 49x49 search area and evict the
@@ -148,6 +178,24 @@ public final class SanctuaryMapChecks extends JavaPlugin {
     private List<ItemStack> owned(Player player){return Arrays.stream(player.getInventory().getStorageContents()).filter(Objects::nonNull).filter(item->maps.target(item)!=null).toList();}
     private MerchantInventory inventory(Player player){return (MerchantInventory)player.getOpenInventory().getTopInventory();}
     private MerchantRecipe recipe(Player player,Destination destination){return inventory(player).getMerchant().getRecipe(destination.ordinal());}
+    @SuppressWarnings("unchecked") private MapTarget prepared(Player player,Destination destination) {
+        try {var sessions=(Map<UUID,?>)field(maps,"sessions");Object session=sessions.get(player.getUniqueId());
+            List<?> offers=(List<?>)field(session,"offers");return (MapTarget)field(offers.get(destination.ordinal()),"target");
+        } catch(Exception error){throw new RuntimeException(error);}
+    }
+    @SuppressWarnings("unchecked") private ItemStack preparedItem(Player player,Destination destination) {
+        try {var sessions=(Map<UUID,?>)field(maps,"sessions");Object session=sessions.get(player.getUniqueId());
+            Object offer=((List<?>)field(session,"offers")).get(destination.ordinal());
+            Method method=SanctuaryMaps.class.getDeclaredMethod("mapItem",int.class,MapTarget.class,boolean.class);method.setAccessible(true);
+            return (ItemStack)method.invoke(maps,(int)field(offer,"mapId"),field(offer,"target"),false);
+        } catch(Exception error){throw new RuntimeException(error);}
+    }
+    private void safePreview(ItemStack item,MapTarget target,String label) {
+        check(item.getType()==Material.MAP&&!(item.getItemMeta() instanceof MapMeta)&&maps.target(item)==null,"offer has no map ID or target "+label);
+        String value=net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(item.getItemMeta().displayName())+lore(item);
+        check(!value.contains(Integer.toString(target.x()))&&!value.contains(Integer.toString(target.z())),"offer hides target coordinates "+label);
+        check(item.getItemMeta().getPersistentDataContainer().isEmpty(),"offer has no identifying persistent data "+label);
+    }
     private void reset(Player player){player.closeInventory();clear(player);}
     private void select(Player player,Destination destination){((MerchantMenu)((CraftPlayer)player).getHandle().containerMenu).setSelectionHint(destination.ordinal());}
     private void clickResult(Player player,ContainerInput input){
@@ -159,24 +207,24 @@ public final class SanctuaryMapChecks extends JavaPlugin {
     private CompletableFuture<Void> opened(Player player,Runnable after){
         CompletableFuture<Void> result=new CompletableFuture<>();maps.openTrades(player).whenComplete((merchant,error)->main(()->{
             try{if(error!=null)throw new CompletionException(error);check(merchant!=null&&player.getOpenInventory().getTopInventory() instanceof MerchantInventory,"native villager trade screen opens");
-                check(inventory(player).getMerchant()==merchant&&merchant.getRecipeCount()==9,"one native merchant contains all nine destinations");after.run();result.complete(null);}
+                check(inventory(player).getMerchant()==merchant&&merchant.getRecipeCount()==13,"one native merchant contains all thirteen destinations");after.run();result.complete(null);}
             catch(Throwable failure){result.completeExceptionally(failure);}
         }));return result;
     }
     private CompletableFuture<Void> nativePurchase(Player player,Destination destination,Runnable after){
-        reset(player);int price=maps.price(destination),amount=price*2;boolean golden=!destination.overworld();funds(player,golden,amount);
+        reset(player);int price=maps.price(destination),amount=price*2;boolean golden=destination.golden();funds(player,golden,amount);
         return opened(player,()->{
             check(feathers(player,golden)==amount,"opening map offers does not charge currency "+destination);
-            MerchantRecipe offer=recipe(player,destination);MapTarget expected=maps.target(offer.getResult());
+            MerchantRecipe offer=recipe(player,destination);MapTarget expected=prepared(player,destination);
             String title=player.getOpenInventory().getTitle();String itemName=net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText().serialize(offer.getResult().getItemMeta().displayName());
             check(title.contains("แผนที่")&&!title.contains("???")&&itemName.contains("แผนที่")&&!itemName.contains("???"),"native merchant and actual map retain readable Thai labels "+destination);
-            check(expected!=null&&expected.destination()==destination&&offer.getResult().getType()==Material.FILLED_MAP,"native offer displays actual bound map "+destination);
+            check(expected!=null&&expected.destination()==destination,"offer selects a real server-side target "+destination);safePreview(offer.getResult(),expected,destination.name());
             check(offer.getMaxUses()==1&&offer.getUses()==0,"target can be purchased once in this native merchant "+destination);
             ItemStack currency=golden?SeraphFeathers.golden(garden,amount):SeraphFeathers.feather(garden,amount);
             check(offer.getIngredients().size()==1&&offer.getIngredients().getFirst().getAmount()==price&&offer.getSpecialPrice()==0,"native offer shows exact single currency price "+destination);
             check(pays(offer,currency)&&!pays(offer,golden?SeraphFeathers.feather(garden,amount):SeraphFeathers.golden(garden,amount)),"native price accepts exact currency kind "+destination);
             player.getInventory().setItem(0,null);select(player,destination);inventory(player).setItem(0,currency);
-            check(expected.equals(maps.target(inventory(player).getItem(2))),"putting currency previews the same real map "+destination);
+            safePreview(inventory(player).getItem(2),expected,"with currency "+destination);
             clickResult(player,ContainerInput.PICKUP);ItemStack purchased=player.getItemOnCursor();
             check(expected.equals(maps.target(purchased)),"native result click delivers chosen map on cursor "+destination);
             check(inventory(player).getItem(0)!=null&&inventory(player).getItem(0).getAmount()==price,"native click consumes exactly one price "+destination);
@@ -196,13 +244,14 @@ public final class SanctuaryMapChecks extends JavaPlugin {
         chain=chain.thenCompose(ignored->step(this::concurrentAndCancelled));
         chain=chain.thenCompose(ignored->step(this::invalidCurrency));
         chain=chain.thenCompose(ignored->step(this::inventoryCapacity));
+        chain=chain.thenCompose(ignored->step(this::shiftPurchase));
         for(var destination:Destination.values())chain=chain.thenCompose(ignored->step(()->nativePurchase(buyer,destination,()->verifyMap(buyer,destination))));
         chain=chain.thenCompose(ignored->step(this::alreadyOwned));
         chain=chain.thenCompose(ignored->step(this::lateCancelAndRetry));
         chain=chain.thenCompose(ignored->step(this::visitedEverMainBoss));
         chain=chain.thenCompose(ignored->step(this::revisitAndReason));
         chain=chain.thenCompose(ignored->step(this::visitedOverworld));
-        return chain.thenRun(()->{check(acquired.size()==9,"all nine destination maps purchased and verified");cartography();
+        return chain.thenRun(()->{check(acquired.size()==13,"all thirteen destination maps purchased and verified");cartography();
             check(Files.isRegularFile(garden.getDataFolder().toPath().resolve("seraph-sanctuary-maps.yml")),"map registry persisted before successful delivery");
             SanctuaryMaps reloaded=new SanctuaryMaps(garden);
             try{for(var destination:Destination.values()){
@@ -220,10 +269,10 @@ public final class SanctuaryMapChecks extends JavaPlugin {
         Player previewer=actor("MapPreviewer",garden.world());reset(previewer);
         return opened(previewer,()->{
             for(var destination:Destination.values()){
-                MerchantRecipe offer=recipe(previewer,destination);MapTarget target=maps.target(offer.getResult());
-                check(target!=null&&target.destination()==destination&&offer.getMaxUses()==1,"poor player sees real purchasable map result "+destination);
+                MerchantRecipe offer=recipe(previewer,destination);MapTarget target=prepared(previewer,destination);
+                check(target!=null&&target.destination()==destination&&offer.getMaxUses()==1,"poor player sees purchasable map offer "+destination);safePreview(offer.getResult(),target,"poor "+destination);
                 check(offer.getIngredients().getFirst().getAmount()==maps.price(destination),"poor player sees real currency ingredient count "+destination);
-                previewItems.put(destination,offer.getResult().serializeAsBytes());previewTargets.put(destination,target);
+                previewItems.put(destination,preparedItem(previewer,destination).serializeAsBytes());previewTargets.put(destination,target);
             }
             select(previewer,Destination.ACHERON);clickResult(previewer,ContainerInput.PICKUP);
             check(empty(previewer.getItemOnCursor())&&owned(previewer).isEmpty(),"clicking a real map offer without funds cannot take result");
@@ -232,9 +281,9 @@ public final class SanctuaryMapChecks extends JavaPlugin {
         }).thenCompose(ignored->opened(previewer,()->{
             for(var destination:Destination.values()){
                 ItemStack original=ItemStack.deserializeBytes(previewItems.get(destination));
-                check(((MapMeta)original.getItemMeta()).getMapView().getId()==((MapMeta)recipe(previewer,destination).getResult().getItemMeta()).getMapView().getId(),"reopening unbought preview reuses fixed map ID "+destination);
+                check(((MapMeta)original.getItemMeta()).getMapView().getId()==((MapMeta)preparedItem(previewer,destination).getItemMeta()).getMapView().getId(),"reopening unbought preview reuses fixed map ID "+destination);
             }
-            check(previewTargets.get(Destination.ACHERON).equals(maps.target(recipe(previewer,Destination.ACHERON).getResult())),"arriving at an unbought preview never advances target");previewer.closeInventory();
+            check(previewTargets.get(Destination.ACHERON).equals(prepared(previewer,Destination.ACHERON)),"arriving at an unbought preview never advances target");previewer.closeInventory();
         }));
     }
     private CompletableFuture<Void> invalidCurrency(){
@@ -245,12 +294,15 @@ public final class SanctuaryMapChecks extends JavaPlugin {
                 check(empty(buyer.getItemOnCursor())&&empty(inventory(buyer).getItem(2))&&inventory(buyer).getItem(0).getAmount()==currency.getAmount(),"native trade rejects insufficient, wrong-kind or untagged normal currency");inventory(buyer).setItem(0,null);}
             select(buyer,Destination.JUDGE);inventory(buyer).setItem(0,SeraphFeathers.feather(garden,30));clickResult(buyer,ContainerInput.PICKUP);
             check(empty(buyer.getItemOnCursor())&&empty(inventory(buyer).getItem(2))&&inventory(buyer).getItem(0).getAmount()==30,"normal feathers cannot substitute for golden native price");
+            select(buyer,Destination.COCYTUS);inventory(buyer).setItem(1,new ItemStack(Material.COBBLESTONE));clickResult(buyer,ContainerInput.PICKUP);
+            check(empty(buyer.getItemOnCursor())&&owned(buyer).isEmpty()&&inventory(buyer).getItem(0).getAmount()==30,"an extra second ingredient never grants a free map or consumes payment");
+            inventory(buyer).setItem(1,null);
             buyer.closeInventory();check(feathers(buyer,false)==30,"closing native merchant returns all unspent wrong currency");
         });
     }
     private CompletableFuture<Void> disabledDestinations(){
-        String[] paths={"world-boss.enabled","structures.world-boss-temple.enabled","seraphon.enabled","structures.boss-structures.arkhaia-castle.enabled"};
-        Destination[] destinations={Destination.JUDGE,Destination.JUDGE,Destination.SERAPHON,Destination.ARKHAIA};
+        String[] paths={"world-boss.enabled","structures.world-boss-temple.enabled","seraphon.enabled","structures.boss-structures.arkhaia-castle.enabled","dimensional-sanctuaries.enabled"};
+        Destination[] destinations={Destination.JUDGE,Destination.JUDGE,Destination.SERAPHON,Destination.ARKHAIA,Destination.CROWN_FORTRESS};
         CompletableFuture<Void> chain=CompletableFuture.completedFuture(null);
         for(int index=0;index<paths.length;index++){
             String path=paths[index];Destination destination=destinations[index];
@@ -279,16 +331,30 @@ public final class SanctuaryMapChecks extends JavaPlugin {
             });
     }
     private CompletableFuture<Void> alreadyOwned(){
-        // The most recent normal purchase is Seraphon, still carried in storage.
-        return opened(buyer,()->{check(recipe(buyer,Destination.SERAPHON).getMaxUses()==0,"already-owned target disables its native offer without another charge");buyer.closeInventory();
+        // The most recent normal purchase (the last destination, the Unlit Sun's void-ring) is still carried in storage.
+        Destination last=Destination.values()[Destination.values().length-1];
+        return opened(buyer,()->{check(recipe(buyer,last).getMaxUses()==0,"already-owned target disables its native offer without another charge");buyer.closeInventory();
             ItemStack map=owned(buyer).getFirst();for(int slot=0;slot<36;slot++)if(map.equals(buyer.getInventory().getItem(slot))){buyer.getInventory().setItem(slot,null);break;}buyer.setItemOnCursor(map);
-        }).thenCompose(ignored->opened(buyer,()->{check(recipe(buyer,Destination.SERAPHON).getMaxUses()==0,"map held on cursor also disables duplicate offer");buyer.closeInventory();}));
+        }).thenCompose(ignored->opened(buyer,()->{check(recipe(buyer,last).getMaxUses()==0,"map held on cursor also disables duplicate offer");buyer.closeInventory();}));
     }
     private CompletableFuture<Void> inventoryCapacity(){
         reset(buyer);for(int slot=0;slot<36;slot++)buyer.getInventory().setItem(slot,new ItemStack(Material.COBBLESTONE,64));
         return opened(buyer,()->{select(buyer,Destination.PHLEGETHON);inventory(buyer).setItem(0,SeraphFeathers.feather(garden,30));clickResult(buyer,ContainerInput.QUICK_MOVE);
             check(inventory(buyer).getItem(0)!=null&&inventory(buyer).getItem(0).getAmount()==30&&owned(buyer).isEmpty()&&empty(buyer.getItemOnCursor()),"full inventory refuses native shift-click without consuming feathers");
             buyer.getInventory().setItem(5,null);buyer.closeInventory();check(feathers(buyer,false)==30&&owned(buyer).isEmpty(),"closing full-inventory exchange returns all unspent native input");
+        });
+    }
+    private CompletableFuture<Void> shiftPurchase(){
+        Player player=actor("MapShiftBuyer",garden.world());reset(player);
+        return opened(player,()->{
+            Destination destination=Destination.COCYTUS;MapTarget expected=prepared(player,destination);
+            select(player,destination);inventory(player).setItem(1,SeraphFeathers.feather(garden,60));
+            clickResult(player,ContainerInput.QUICK_MOVE);
+            check(owned(player).size()==1&&expected.equals(maps.target(owned(player).getFirst())),"shift-click delivers the real purchased map to inventory");
+            check(inventory(player).getItem(1)!=null&&inventory(player).getItem(1).getAmount()==30,"shift-click consumes exactly one payment from the right input");
+            clickResult(player,ContainerInput.QUICK_MOVE);
+            check(owned(player).size()==1&&inventory(player).getItem(1).getAmount()==30,"shift-click cannot repeat the same offer");
+            player.closeInventory();
         });
     }
     private static final class CancelOne implements Listener {
@@ -302,18 +368,18 @@ public final class SanctuaryMapChecks extends JavaPlugin {
         Player cancelled=actor("MapCancelled",garden.world());reset(cancelled);
         final ItemStack[] firstPreview=new ItemStack[1];
         return opened(cancelled,()->{
-            firstPreview[0]=recipe(cancelled,Destination.BANSHEE).getResult();select(cancelled,Destination.BANSHEE);inventory(cancelled).setItem(0,SeraphFeathers.feather(garden,30));
+            firstPreview[0]=preparedItem(cancelled,Destination.BANSHEE);select(cancelled,Destination.BANSHEE);inventory(cancelled).setItem(0,SeraphFeathers.feather(garden,30));
             CancelOne listener=new CancelOne(cancelled);Bukkit.getPluginManager().registerEvents(listener,this);
             try{clickResult(cancelled,ContainerInput.PICKUP);}finally{HandlerList.unregisterAll(listener);}
             check(empty(cancelled.getItemOnCursor())&&inventory(cancelled).getItem(0).getAmount()==30,"late MONITOR cancellation leaves native result unbought and input unchanged");cancelled.closeInventory();
         }).thenCompose(ignored->ticks(2)).thenCompose(ignored->{
             MapTarget target=maps.target(firstPreview[0]);maps.teleport(new PlayerTeleportEvent(cancelled,cancelled.getLocation(),new Location(overworld,target.x(),100,target.z()),PlayerTeleportEvent.TeleportCause.PLUGIN));
-            return opened(cancelled,()->{check(target.equals(maps.target(recipe(cancelled,Destination.BANSHEE).getResult()))&&recipe(cancelled,Destination.BANSHEE).getMaxUses()==1,"cancelled preview stays unpurchased and arriving never advances it");
+            return opened(cancelled,()->{check(target.equals(prepared(cancelled,Destination.BANSHEE))&&recipe(cancelled,Destination.BANSHEE).getMaxUses()==1,"cancelled preview stays unpurchased and arriving never advances it");
                 check(feathers(cancelled,false)==30,"cancelled native purchase returns all thirty feathers on close");cancelled.closeInventory();});
         }).thenCompose(ignored->{
             Player retry=actor("MapRetryBuyer",garden.world());reset(retry);final MapTarget[] paidTarget=new MapTarget[1];
             return opened(retry,()->{
-                paidTarget[0]=maps.target(recipe(retry,Destination.BANSHEE).getResult());select(retry,Destination.BANSHEE);inventory(retry).setItem(0,SeraphFeathers.feather(garden,60));
+                paidTarget[0]=prepared(retry,Destination.BANSHEE);select(retry,Destination.BANSHEE);inventory(retry).setItem(0,SeraphFeathers.feather(garden,60));
                 CancelOne listener=new CancelOne(retry);Bukkit.getPluginManager().registerEvents(listener,this);
                 try{
                     clickResult(retry,ContainerInput.PICKUP);check(empty(retry.getItemOnCursor())&&inventory(retry).getItem(0).getAmount()==60,"first same-tick attempt is cancelled without payment");
@@ -325,7 +391,7 @@ public final class SanctuaryMapChecks extends JavaPlugin {
                 MapTarget target=paidTarget[0];maps.teleport(new PlayerTeleportEvent(retry,retry.getLocation(),new Location(overworld,target.x(),100,target.z()),PlayerTeleportEvent.TeleportCause.PLUGIN));
                 int size=garden.overworldSanctuaries().placement(overworld).spacing*16;
                 cachedCells.put(OverworldSanctuaries.key(5,2),Optional.of(new OverworldSanctuaries.Site(OverworldSanctuaries.Kind.BANSHEE,5*size+size/2,2*size+size/2,777L)));
-                reset(retry);return opened(retry,()->{MapTarget next=maps.target(recipe(retry,Destination.BANSHEE).getResult());
+                reset(retry);return opened(retry,()->{MapTarget next=prepared(retry,Destination.BANSHEE);
                     check(next!=null&&!next.equals(target),"deferred rollback cannot erase a paid retry: visiting its map advances to next target");retry.closeInventory();});
             });
         });
@@ -357,7 +423,7 @@ public final class SanctuaryMapChecks extends JavaPlugin {
         maps.teleport(new PlayerTeleportEvent(buyer,buyer.getLocation(),new Location(garden.world(),seraphon.x(),100,seraphon.z()),PlayerTeleportEvent.TeleportCause.PLUGIN));
         return ticks(2).thenCompose(ignored->opened(buyer,()->{
             MerchantRecipe offer=recipe(buyer,Destination.SERAPHON);
-            check(seraphon.equals(maps.target(offer.getResult()))&&offer.getMaxUses()==1,"the only Seraphon in range is offered again after it was reached");
+            check(seraphon.equals(prepared(buyer,Destination.SERAPHON))&&offer.getMaxUses()==1,"the only Seraphon in range is offered again after it was reached");safePreview(offer.getResult(),seraphon,"revisit");
             check(lore(offer.getResult()).contains("เคยไปถึงที่นี่แล้ว"),"a revisit map says the player has been there");
             buyer.closeInventory();
         })).thenCompose(ignored->{
@@ -389,8 +455,12 @@ public final class SanctuaryMapChecks extends JavaPlugin {
     private void verifyMap(Player player,Destination destination){
         check(owned(player).size()==1,"exactly one bound map in inventory "+destination);ItemStack item=owned(player).getFirst();MapTarget target=maps.target(item);
         check(item.getType()==Material.FILLED_MAP&&target.destination()==destination,"native filled map has correct destination "+destination);
-        check(target.world().equals(destination.overworld()?overworld.getUID():garden.world().getUID()),"correct target world "+destination);
+        check(target.world().equals(destination.overworld()?overworld.getUID():destination.dimensional()?fixedRealm.get(destination).world():garden.world().getUID()),"correct target world "+destination);
         if(destination.overworld()){var expected=fixed.get(destination);check(target.x()==expected.x()&&target.z()==expected.z(),"async locator selects fixed correct sanctuary "+destination);}
+        else if(destination.dimensional()){
+            check(target.equals(fixedRealm.get(destination)),"async locator selects the planned Nether/End sanctuary "+destination);
+            check(lore(item).contains("พิกัด X "+target.x()+" · Z "+target.z()),"Nether/End map names its coordinates "+destination);
+        }
         else check(target.equals(fixedEver.get(destination)),"async locator selects the exact requested Evergarden main boss "+destination);
         MapView view=((MapMeta)item.getItemMeta()).getMapView();
         check(view!=null&&view.getWorld()!=null&&view.getWorld().getUID().equals(target.world()),"MapView world matches bound target "+destination);
@@ -426,7 +496,7 @@ public final class SanctuaryMapChecks extends JavaPlugin {
                 expected.set(previewPath+".world",previewTarget.world().toString());expected.set(previewPath+".x",previewTarget.x());expected.set(previewPath+".z",previewTarget.z());
                 expected.set(previewPath+".map-id",((MapMeta)previewItem.getItemMeta()).getMapView().getId());
             }
-            expected.save(directory.resolve("expected.yml").toFile());check(previewItems.size()==9,"nine purchased and nine unbought preview maps saved for actual restart");
+            expected.save(directory.resolve("expected.yml").toFile());check(previewItems.size()==13,"thirteen purchased and thirteen unbought preview maps saved for actual restart");
         }catch(Exception error){throw new CompletionException(error);}
     }
     private void cartography(){
@@ -476,7 +546,7 @@ public final class SanctuaryMapChecks extends JavaPlugin {
     }
     private void finish(Throwable error){
         if(finished)return;finished=true;if(error!=null)getLogger().log(java.util.logging.Level.SEVERE,"SANCTUARY MAP CHECK FAILED",error);
-        String report=(error==null?"PASS ":"FAIL ")+passed+" checks; actual Paper Seraph native trades "+(reloadPhase?"after process restart":"transactions")+"; "+(error==null?(reloadPhase?"nine purchased and nine unbought preview native map IDs/worlds/centers, automatic overlays and red X markers":"all nine native merchant offers and packet purchases, exact currency, poor-player previews, async cancellation, native fixed maps and personal visited exclusions"):error);
+        String report=(error==null?"PASS ":"FAIL ")+passed+" checks; actual Paper Seraph native trades "+(reloadPhase?"after process restart":"transactions")+"; "+(error==null?(reloadPhase?"thirteen purchased and thirteen unbought preview native map IDs/worlds/centers, automatic overlays and red X markers":"all thirteen native merchant offers and packet purchases, exact currency, poor-player previews, async cancellation, native fixed maps and personal visited exclusions"):error);
         try{Files.writeString(Path.of(reloadPhase?"sanctuary-map-reload-result.txt":"sanctuary-map-result.txt"),report);}catch(Exception failure){getLogger().log(java.util.logging.Level.SEVERE,"Could not save report",failure);}
         for(var actor:actors){MinecraftServer.getServer().getPlayerList().getPlayers().remove(actor);MinecraftServer.getServer().getPlayerList().getPlayersByUUID().remove(actor.getUUID());actor.discard();}
         getLogger().info(report);Bukkit.getScheduler().runTaskLater(this,Bukkit::shutdown,1);

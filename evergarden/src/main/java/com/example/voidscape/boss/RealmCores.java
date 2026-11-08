@@ -21,11 +21,16 @@ import java.util.List;
 
 /**
  * The textured core each realm boss leaves at its arena. The Seraph buys one for five Golden Seraph
- * Feathers. Earlier untextured "Soul Orb" drops carry the same marker and are upgraded in place.
+ * Feathers, and two buy a mythical companion egg.
+ * <p>Era 2 (e2.193): cores won before the realm bosses were reworked (party health and phase walls, e2.192) were
+ * far too easy to farm and flooded the egg trade. Every core from an earlier era, including old Soul Orbs, turns
+ * into a spent core on sight: a keepsake with no trade value. Only cores dropped from now on buy anything.
  */
 public final class RealmCores implements Listener {
     private final VoidscapePlugin plugin;
     public RealmCores(VoidscapePlugin plugin){this.plugin=plugin;}
+    /** Cores of this era are the only ones the Seraph accepts. */
+    public static final int ERA=2;
 
     public static NamespacedKey model(RealmBosses.Kind kind){return new NamespacedKey("voidscape","realm_core_"+kind.model);}
     public static String title(RealmBosses.Kind kind){return "Core of "+kind.title;}
@@ -57,10 +62,35 @@ public final class RealmCores implements Listener {
         // An anvil rename leaves a repair cost; drop it so a renamed core still matches the Seraph's trade.
         if(meta instanceof org.bukkit.inventory.meta.Repairable repairable)repairable.setRepairCost(0);
         meta.getPersistentDataContainer().set(plugin.key("realm_boss_orb"),PersistentDataType.STRING,kind.model);
+        meta.getPersistentDataContainer().set(plugin.key("realm_core_era"),PersistentDataType.INTEGER,ERA);
         item.setItemMeta(meta);
     }
-    /** Only the PDC marker counts, so a renamed Heart of the Sea never pays. */
+    /** A core from an earlier era, kept as a keepsake: grey, no glint, no trade marker. */
+    private static void spend(VoidscapePlugin plugin,ItemStack item,RealmBosses.Kind kind){
+        var meta=item.getItemMeta();var data=meta.getPersistentDataContainer();
+        data.remove(plugin.key("realm_boss_orb"));data.remove(plugin.key("boss_orb"));data.remove(plugin.key("realm_core_era"));
+        data.set(plugin.key("realm_core_spent"),PersistentDataType.STRING,kind.model);
+        meta.displayName(Component.text("Spent "+title(kind)+" (หมดพลัง)",NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC,false));
+        meta.lore(List.of(
+            Component.text("แกนรุ่นเก่าที่ได้มาก่อนบอสมิติถูกปรับความยาก",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
+            Component.text("พลังในแกนสลายไปแล้ว — Seraph ไม่รับแลก",NamedTextColor.RED).decoration(TextDecoration.ITALIC,false),
+            Component.text("เก็บไว้เป็นที่ระลึกได้ · แกนใหม่ได้จากการพิชิตบอสมิติอีกครั้ง",NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC,false)));
+        meta.setItemModel(model(kind));
+        meta.setEnchantmentGlintOverride(false);
+        item.setItemMeta(meta);
+    }
+    public static boolean spent(VoidscapePlugin plugin,ItemStack item){
+        return item!=null&&item.hasItemMeta()&&item.getItemMeta().getPersistentDataContainer().has(plugin.key("realm_core_spent"),PersistentDataType.STRING);
+    }
+    /** Only the PDC marker of the current era counts, so a renamed Heart of the Sea or an old core never pays. */
     public static RealmBosses.Kind identify(VoidscapePlugin plugin,ItemStack item){
+        RealmBosses.Kind kind=marked(plugin,item);
+        if(kind==null)return null;
+        Integer era=item.getItemMeta().getPersistentDataContainer().get(plugin.key("realm_core_era"),PersistentDataType.INTEGER);
+        return era!=null&&era==ERA?kind:null;
+    }
+    /** Any realm core marker, whatever its era. */
+    private static RealmBosses.Kind marked(VoidscapePlugin plugin,ItemStack item){
         if(item==null||item.getType()!=Material.HEART_OF_THE_SEA||!item.hasItemMeta())return null;
         String id=item.getItemMeta().getPersistentDataContainer().get(plugin.key("realm_boss_orb"),PersistentDataType.STRING);
         return id==null?null:RealmBosses.Kind.of(id);
@@ -70,6 +100,8 @@ public final class RealmCores implements Listener {
      * identity and stack size. The Seraph's trade matches item components exactly, so every core must be current.
      */
     public static boolean migrate(VoidscapePlugin plugin,ItemStack item){
+        RealmBosses.Kind old=marked(plugin,item);
+        if(old!=null&&identify(plugin,item)==null){spend(plugin,item,old);return true;}
         RealmBosses.Kind kind=identify(plugin,item);if(kind==null||item.isSimilar(create(plugin,kind)))return false;
         var meta=item.getItemMeta();
         meta.getPersistentDataContainer().remove(plugin.key("boss_orb"));meta.lore(null);item.setItemMeta(meta);
@@ -82,16 +114,24 @@ public final class RealmCores implements Listener {
         migrateInventory(plugin,player.getInventory());
         ItemStack cursor=player.getItemOnCursor();if(migrate(plugin,cursor))player.setItemOnCursor(cursor);
     }
-    @EventHandler public void join(PlayerJoinEvent event){migratePlayer(plugin,event.getPlayer());migrateInventory(plugin,event.getPlayer().getEnderChest());}
+    @EventHandler public void join(PlayerJoinEvent event){
+        Player player=event.getPlayer();
+        int before=count(plugin,player.getInventory())+count(plugin,player.getEnderChest());
+        migratePlayer(plugin,player);migrateInventory(plugin,player.getEnderChest());
+        if(before>0)plugin.message(player,"§7แกนบอสมิติรุ่นเก่า §f"+before+"§7 ชิ้นหมดพลังแล้ว (รีเซ็ตหลังปรับความยากบอสมิติ) · แกนใหม่ได้จากการพิชิตบอสมิติอีกครั้ง");
+    }
+    private static int count(VoidscapePlugin plugin,Inventory inventory){
+        int total=0;for(ItemStack item:inventory.getContents())if(marked(plugin,item)!=null&&identify(plugin,item)==null)total+=item.getAmount();return total;
+    }
     @EventHandler(ignoreCancelled=true) public void open(InventoryOpenEvent event){
         migrateInventory(plugin,event.getInventory());if(event.getPlayer() instanceof Player player)migratePlayer(plugin,player);
     }
     // A Heart of the Sea crafts a conduit; a boss core must never be spent that way.
     @EventHandler public void craft(PrepareItemCraftEvent event){
-        for(ItemStack ingredient:event.getInventory().getMatrix())if(identify(plugin,ingredient)!=null){event.getInventory().setResult(null);return;}
+        for(ItemStack ingredient:event.getInventory().getMatrix())if(marked(plugin,ingredient)!=null||spent(plugin,ingredient)){event.getInventory().setResult(null);return;}
     }
     @EventHandler(ignoreCancelled=true) public void autocraft(CrafterCraftEvent event){
         if(event.getBlock().getState() instanceof org.bukkit.block.Crafter crafter)
-            for(ItemStack ingredient:crafter.getInventory().getContents())if(identify(plugin,ingredient)!=null){event.setCancelled(true);return;}
+            for(ItemStack ingredient:crafter.getInventory().getContents())if(marked(plugin,ingredient)!=null||spent(plugin,ingredient)){event.setCancelled(true);return;}
     }
 }

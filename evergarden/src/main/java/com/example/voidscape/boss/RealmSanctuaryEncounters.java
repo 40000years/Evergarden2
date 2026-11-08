@@ -46,12 +46,15 @@ public final class RealmSanctuaryEncounters implements Listener, AutoCloseable {
         RealmBossController controller;
         boolean fighting;
         boolean dead;
+        boolean wipePending;
         boolean warnedEmpty;
         long emptySince = -1;
         long readyAt;
         final Set<Chunk> tickets = new HashSet<>();
         final Map<UUID, Long> lastRescueTick = new HashMap<>();
         final Set<UUID> engagedCreative = new HashSet<>();
+        /** Fallen fighters sit out this fight, so they can retrieve their drops safely. */
+        final Set<UUID> fallen = new HashSet<>();
         final ArrayDeque<int[]> sweep = new ArrayDeque<>();
         int swept;
 
@@ -75,6 +78,10 @@ public final class RealmSanctuaryEncounters implements Listener, AutoCloseable {
     private record WardedShot(AbstractArrow arrow, Run run) {}
     private final Map<UUID, WardedShot> warded = new HashMap<>();
     private final Map<UUID, Long> wardNotices = new HashMap<>();
+    private record SunFire(UUID world, long expires) {}
+    private final Map<UUID, SunFire> sunFire = new HashMap<>();
+    /** Wither is claimed only if its effect event identifies this boss as the source. */
+    private final Map<UUID, SunFire> sunWither = new HashMap<>();
     /** Attacks count only from inside the drawn ring, with a little slack for the border particles. */
     private static final double RING_SLACK = 0.5;
     private final NamespacedKey ringShotKey;
@@ -148,8 +155,8 @@ public final class RealmSanctuaryEncounters implements Listener, AutoCloseable {
     }
 
     private boolean playableInRun(Run r, Player p) {
-        return playable(p) || (p != null && p.isOnline() && !p.isDead()
-            && p.getGameMode() == GameMode.CREATIVE && r.engagedCreative.contains(p.getUniqueId()));
+        return p != null && !r.fallen.contains(p.getUniqueId()) && (playable(p) || (p.isOnline() && !p.isDead()
+            && p.getGameMode() == GameMode.CREATIVE && r.engagedCreative.contains(p.getUniqueId())));
     }
 
     /**
@@ -174,6 +181,7 @@ public final class RealmSanctuaryEncounters implements Listener, AutoCloseable {
 
     /** A projectile counts by where it was loosed; anything else by where the attacker stands now. */
     private boolean fromRing(Run r, Player p, Entity direct) {
+        if (r.wipePending || r.fallen.contains(p.getUniqueId())) return false;
         Byte launched = direct instanceof Projectile shot
             ? shot.getPersistentDataContainer().get(ringShotKey, PersistentDataType.BYTE) : null;
         if (launched != null) return launched == 1 && contains(r, p.getLocation());
@@ -255,6 +263,8 @@ public final class RealmSanctuaryEncounters implements Listener, AutoCloseable {
         if (r.controller != null) r.controller.close();
         r.dead = false;
         r.fighting = false;
+        r.wipePending = false;
+        r.fallen.clear();
         r.emptySince = -1;
         r.warnedEmpty = false;
         r.engagedCreative.clear();
@@ -323,6 +333,105 @@ public final class RealmSanctuaryEncounters implements Listener, AutoCloseable {
         }
     }
 
+    /** Track only fire that Unlit Sun started itself, never existing environmental fire. */
+    void trackSunFire(Player player, int before, int duration) {
+        UUID id = player.getUniqueId();
+        long now = Bukkit.getCurrentTick();
+        SunFire existing = sunFire.get(id);
+        boolean alreadyOurs = existing != null && existing.expires() >= now
+            && existing.world().equals(player.getWorld().getUID());
+        if (before > 0 && !alreadyOurs) return;
+        sunFire.put(id, new SunFire(player.getWorld().getUID(), now + Math.max(duration, player.getFireTicks()) + 2L));
+    }
+
+    /** A later ignition from any other source makes the origin ambiguous. */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void invalidateSunFire(EntityCombustEvent event) {
+        if (event.getEntity() instanceof Player player) sunFire.remove(player.getUniqueId());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onSunWither(EntityPotionEffectEvent event) {
+        if (!(event.getEntity() instanceof Player player) || event.getModifiedType() != PotionEffectType.WITHER) return;
+        UUID id = player.getUniqueId();
+        sunWither.remove(id);
+        PotionEffect added = event.getNewEffect();
+        if (added == null || (event.getOldEffect() != null && !event.isOverride())) return;
+        Entity source = event.getSource();
+        if (source == null) return;
+        for (Run r : runs.values()) {
+            if (r.site.kind() == DimensionalSanctuaries.Kind.VOID_RING && r.controller != null && r.controller.owns(source)) {
+                long duration = added.getDuration() == PotionEffect.INFINITE_DURATION ? Integer.MAX_VALUE : added.getDuration();
+                sunWither.put(id, new SunFire(player.getWorld().getUID(), Bukkit.getCurrentTick() + duration + 2L));
+                return;
+            }
+        }
+    }
+
+    /** Rename only direct hits from the Unlit Sun proxy or fire definitely started by that boss. */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onBossDeathMessage(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        DamageSource source = event.getDamageSource();
+        boolean sun = false;
+        Entity cause = source.getCausingEntity(), direct = source.getDirectEntity();
+        for (Run r : runs.values()) {
+            if (r.site.kind() != DimensionalSanctuaries.Kind.VOID_RING || r.controller == null) continue;
+            if (r.controller.owns(cause) || r.controller.owns(direct)) { sun = true; break; }
+        }
+        if (!sun && source.getDamageType() == DamageType.ON_FIRE) {
+            SunFire fire = sunFire.get(player.getUniqueId());
+            sun = fire != null && fire.world().equals(player.getWorld().getUID())
+                && fire.expires() >= Bukkit.getCurrentTick() && player.getFireTicks() > 0;
+        }
+        if (!sun && source.getDamageType() == DamageType.WITHER) {
+            SunFire wither = sunWither.get(player.getUniqueId());
+            sun = wither != null && wither.world().equals(player.getWorld().getUID())
+                && wither.expires() >= Bukkit.getCurrentTick() && player.hasPotionEffect(PotionEffectType.WITHER);
+        }
+        if (!sun) return;
+        Component message = Component.text(player.getName() + " ถูกสังหารโดย Unlit Sun");
+        if (event.deathMessage() != null) event.deathMessage(message);
+        event.deathScreenMessageOverride(message);
+    }
+
+    private boolean hasLivingFighter(Run r, Set<UUID> participants) {
+        // A player may have just entered the arena after the boss's previous tick.
+        return !players(r).isEmpty() || participants.stream().map(Bukkit::getPlayer)
+            .anyMatch(other -> other != null && other.getWorld() == r.world && playableInRun(r, other));
+    }
+
+    /** A real death is different from leaving the arena or being rescued by a Totem. */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onFighterDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        sunFire.remove(player.getUniqueId());
+        sunWither.remove(player.getUniqueId());
+        for (Run r : new ArrayList<>(runs.values())) {
+            if (r.site.kind() != DimensionalSanctuaries.Kind.VOID_RING || !r.fighting || r.dead
+                    || r.wipePending || r.controller == null) continue;
+            Set<UUID> participants = r.controller.participants();
+            if (!participants.contains(player.getUniqueId())) continue;
+            r.fallen.add(player.getUniqueId());
+            r.controller.playerDefeated(player.getUniqueId());
+            // A living participant elsewhere in the same world still gets the normal leave-arena
+            // grace. Offline, spectators and players who changed worlds cannot keep a wipe alive.
+            if (!hasLivingFighter(r, participants)) {
+                r.wipePending = true;
+                RealmBossController wiped = r.controller;
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                    // Do not overwrite a victory, admin reset, or encounter removal in the meantime.
+                    if (!closed && runs.containsValue(r) && r.wipePending && !r.dead && r.controller == wiped) reset(r);
+                });
+            }
+        }
+    }
+
+    @EventHandler public void onFighterQuit(PlayerQuitEvent event) {
+        sunFire.remove(event.getPlayer().getUniqueId());
+        sunWither.remove(event.getPlayer().getUniqueId());
+    }
+
     private void hold(Run r) {
         int radChunks = (r.arena.radius() + 16) >> 4;
         int cx = r.center.getBlockX() >> 4, cz = r.center.getBlockZ() >> 4;
@@ -351,6 +460,10 @@ public final class RealmSanctuaryEncounters implements Listener, AutoCloseable {
     private void tick() {
         if (closed) return;
         tick++;
+        if (tick % 100 == 0) {
+            sunFire.values().removeIf(fire -> fire.expires() < Bukkit.getCurrentTick());
+            sunWither.values().removeIf(wither -> wither.expires() < Bukkit.getCurrentTick());
+        }
         long resetGrace = emptyResetTicks();
 
         for (Run r : new ArrayList<>(runs.values())) {
@@ -360,6 +473,9 @@ public final class RealmSanctuaryEncounters implements Listener, AutoCloseable {
                 runs.remove(id(r.world, r.site));
                 continue;
             }
+            // A death event may fire inside the boss's damage call. Reset next tick, after Paper
+            // finishes death/drop processing, and do not run another attack in the meantime.
+            if (r.wipePending) continue;
             if (r.dead) {
                 if (r.controller != null) r.controller.close();
                 release(r);
@@ -945,6 +1061,8 @@ public final class RealmSanctuaryEncounters implements Listener, AutoCloseable {
         shots.clear();
         warded.clear();
         wardNotices.clear();
+        sunFire.clear();
+        sunWither.clear();
         task.cancel();
         for (Run r : runs.values()) {
             if (r.controller != null) r.controller.close();

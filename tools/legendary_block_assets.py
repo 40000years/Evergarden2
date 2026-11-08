@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / 'advance-magic/src/main/resources/legendary-blocks.json'
 TYPE = 'advance_magic:legendary_block'
 FACES = ('north', 'south', 'east', 'west', 'up', 'down')
-CHANNELS = ('x', 'y', 'z', 'qx', 'qy', 'qz', 'qw', 'size')
+CHANNELS = ('x', 'y', 'z', 'qx', 'qy', 'qz', 'qw', 'size', 'sx', 'sy', 'sz')
 NORMALS = ((0, 0, -1), (0, 0, 1), (1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0))
 
 
@@ -134,7 +134,7 @@ def pre_animation():
              'v.start=v.changed ? q.life_time : v.start;',
              "v.rev=q.property('advance_magic:revision');",
              "v.t=q.property('advance_magic:duration') > 0 ? math.clamp((q.life_time-v.start)/q.property('advance_magic:duration'),0,1) : 1;"]
-    for channel in ('x', 'y', 'z', 'size'):
+    for channel in ('x', 'y', 'z', 'size', 'sx', 'sy', 'sz'):
         steps.append(f"v.{channel}=math.lerp(q.property('advance_magic:from_{channel}'),q.property('advance_magic:to_{channel}'),v.t);")
     steps.append("v.dot=math.clamp(" + '+'.join(f"q.property('advance_magic:from_q{c}')*q.property('advance_magic:to_q{c}')" for c in 'xyzw') + ",-1,1);")
     steps += ['v.theta=math.acos(v.dot);', 'v.sine=math.sin(v.theta);',
@@ -173,8 +173,19 @@ def write_assets(bedrock, archive_path=None):
             image.save(target, optimize=True)
             textures[material] = f'textures/legendary_blocks/{material}'
             timings.append((duration, count))
-    def select(values):
-        return '(' + ' : '.join(f"q.property('advance_magic:material') == {i} ? ({value})" for i, value in enumerate(values[:-1])) + ' : (' + str(values[-1]) + '))'
+    material = "q.property('advance_magic:material')"
+
+    def flag(indices):
+        # A flat OR over a few indices: no deeply nested ternary for every block in the catalog.
+        return ('(' + ' || '.join(f'{material} == {i}' for i in indices) + ')') if indices else '0'
+
+    def select(values, default):
+        # Only entries that differ from the default get a branch.
+        special = [(i, value) for i, value in enumerate(values) if value != default]
+        expression = str(default)
+        for i, value in reversed(special):
+            expression = f'({material} == {i} ? ({value}) : {expression})'
+        return expression
     # Cube UVs follow Blockbench's Bedrock export: top/bottom UVs have both axes flipped.
     uv = {side: {'uv': [i*16, 0], 'uv_size': [16, 16]} for i, side in enumerate(FACES)}
     for side in ('up', 'down'):
@@ -186,7 +197,10 @@ def write_assets(bedrock, archive_path=None):
         'bones':[{'name':'root','pivot':[0,0,0],'cubes':[{'origin':[-8,-8,-8],'size':[16,16,16],'uv':uv}]}]}]})
     write(bedrock / 'animations/legendary_block.animation.json', {'format_version':'1.8.0','animations':{
         'animation.advance_magic.legendary_block':{'loop':True,'bones':{'root':{
-            'position':['-16*v.x','16*v.y','16*v.z'], 'rotation':['-v.rx','-v.ry','v.rz'],'scale':'v.size'}}}}})
+            'position':['-16*v.x','16*v.y','16*v.z'], 'rotation':['-v.rx','-v.ry','v.rz'],
+            # Per-axis scale (spikes, walls, armor plates) in the cube's own frame, times the uniform size.
+            # An unset axis (a Geyser that predates the channel) reads 0 and falls back to a uniform cube.
+            'scale':['v.size*(v.sx > 0 ? v.sx : 1)','v.size*(v.sy > 0 ? v.sy : 1)','v.size*(v.sz > 0 ? v.sz : 1)']}}}}})
     write(bedrock / 'entity/legendary_block.entity.json', {'format_version':'1.10.0','minecraft:client_entity':{'description':{
         'identifier':TYPE,'materials':{'default':'advance_magic_legendary_blocks','translucent':'advance_magic_legendary_blocks_blend'},'textures':textures,
         'geometry':{'default':'geometry.advance_magic.legendary_block'},
@@ -198,10 +212,10 @@ def write_assets(bedrock, archive_path=None):
             'arrays':{'textures':{'Array.blocks':['Texture.'+name for name in catalog]},
                       'materials':{'Array.materials':['Material.default','Material.translucent']}},
             'ignore_lighting':True,'light_color_multiplier':1,
-            'geometry':'Geometry.default','materials':[{'*':'Array.materials['+select([1 if flag else 0 for flag in translucent])+']'}],
+            'geometry':'Geometry.default','materials':[{'*':'Array.materials['+flag([i for i, value in enumerate(translucent) if value])+' ? 1 : 0]'}],
             'textures':["Array.blocks[q.property('advance_magic:material')]"],
-            'uv_anim':{'offset':[0,select([f'math.mod(math.floor(q.life_time*20/{duration}),{count})/{count}' for duration,count in timings])],
-                       'scale':[1,select([f'1/{count}' for _,count in timings])]}}}})
+            'uv_anim':{'offset':[0,select([f'math.mod(math.floor(q.life_time*20/{duration}),{count})/{count}' if count > 1 else '0' for duration,count in timings],'0')],
+                       'scale':[1,select([f'1/{count}' if count > 1 else '1' for _,count in timings],'1')]}}}})
     write(bedrock / 'materials/legendary_blocks.material', {'materials':{'version':'1.0.0',
         'advance_magic_legendary_blocks:entity_alphatest':{'+defines':['USE_UV_ANIM']},
         'advance_magic_legendary_blocks_blend:entity_alphablend':{'+defines':['USE_UV_ANIM']}}})

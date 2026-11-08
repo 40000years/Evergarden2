@@ -50,6 +50,15 @@ public final class AdminTestGui implements InventoryHolder, Listener {
     private static final class ForgeItemsHolder implements InventoryHolder {
         @Override public Inventory getInventory(){return null;}
     }
+    /** EvergardenForge sanctum charms: one row per sanctum, the grade picked on the bottom row. */
+    private static final class CharmTestHolder implements InventoryHolder {
+        private final int grade;
+        private final List<String> ids;
+        private CharmTestHolder(int grade,List<String> ids){this.grade=grade;this.ids=ids;}
+        @Override public Inventory getInventory(){return null;}
+    }
+    private static final String[] FORGE_GRADE_LABELS={"Worn","Tempered","Arcane","Exalted","Divine"};
+    private static final Material[] FORGE_GRADE_ICONS={Material.IRON_NUGGET,Material.PRISMARINE_CRYSTALS,Material.ECHO_SHARD,Material.AMETHYST_SHARD,Material.RESIN_BRICK};
     /** EvergardenForge gem types and rarities in its own order; items come from its ForgeApi by reflection. */
     private static final String[] FORGE_GEMS={"fire","water","wind","earth","lightning","light","dark","life"};
     private static final String[] FORGE_RARITIES={"COMMON","UNCOMMON","RARE","EPIC","MYTHIC"};
@@ -294,6 +303,7 @@ public final class AdminTestGui implements InventoryHolder, Listener {
             if(!isAdmin(player)){player.closeInventory();return;}
             int raw=event.getRawSlot();
             if(raw==49){Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline())open(player);});return;}
+            if(raw==47){Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline())openCharmTest(player,0);});return;}
             int amount=event.isShiftClick()?16:event.isRightClick()?4:1;
             ItemStack item=raw==45?forgeItem("dust",amount)
                 :raw>=0&&raw<45&&raw%9==8?forgeItem("material",FORGE_RARITIES[raw/9],amount)
@@ -301,6 +311,26 @@ public final class AdminTestGui implements InventoryHolder, Listener {
             if(item==null)return;
             giveOrDrop(player,item);
             player.playSound(player.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_CHIME,.4f,1.4f);
+            return;
+        }
+        if(event.getInventory().getHolder() instanceof CharmTestHolder holder){
+            event.setCancelled(true);
+            if(!isAdmin(player)){player.closeInventory();return;}
+            int raw=event.getRawSlot();
+            if(raw==45){Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline())openForgeItems(player);});return;}
+            if(raw>=47&&raw<=51){int grade=raw-47;Bukkit.getScheduler().runTask(plugin,()->{if(player.isOnline())openCharmTest(player,grade);});return;}
+            String id=raw>=0&&raw<27&&raw<holder.ids.size()?holder.ids.get(raw):raw==53&&!holder.ids.isEmpty()?holder.ids.get(java.util.concurrent.ThreadLocalRandom.current().nextInt(holder.ids.size())):null;
+            if(id!=null){
+                ItemStack charm=forgeItem("charm",id,FORGE_RARITIES[holder.grade]);
+                if(charm==null)return;
+                giveOrDrop(player,charm);
+                player.playSound(player.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_RESONATE,.5f,1.3f);
+                return;
+            }
+            if(raw==52){
+                for(String each:holder.ids){ItemStack charm=forgeItem("charm",each,FORGE_RARITIES[holder.grade]);if(charm!=null)giveOrDrop(player,charm);}
+                player.playSound(player.getLocation(),Sound.ENTITY_PLAYER_LEVELUP,.5f,1.4f);
+            }
             return;
         }
         if(event.getInventory().getHolder() instanceof MainBossHolder){
@@ -547,7 +577,7 @@ public final class AdminTestGui implements InventoryHolder, Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onInventoryDrag(InventoryDragEvent event) {
-        if (event.getInventory().getHolder() instanceof AdminTestGui||event.getInventory().getHolder() instanceof BossTestHolder||event.getInventory().getHolder() instanceof ManaPotionHolder||event.getInventory().getHolder() instanceof ForgeItemsHolder||event.getInventory().getHolder() instanceof RiverTestHolder||event.getInventory().getHolder() instanceof MainBossHolder||event.getInventory().getHolder() instanceof RealmBossHolder||event.getInventory().getHolder() instanceof SpellScrollHolder||event.getInventory().getHolder() instanceof VaultTestHolder) {
+        if (event.getInventory().getHolder() instanceof AdminTestGui||event.getInventory().getHolder() instanceof BossTestHolder||event.getInventory().getHolder() instanceof ManaPotionHolder||event.getInventory().getHolder() instanceof ForgeItemsHolder||event.getInventory().getHolder() instanceof CharmTestHolder||event.getInventory().getHolder() instanceof RiverTestHolder||event.getInventory().getHolder() instanceof MainBossHolder||event.getInventory().getHolder() instanceof RealmBossHolder||event.getInventory().getHolder() instanceof SpellScrollHolder||event.getInventory().getHolder() instanceof VaultTestHolder) {
             event.setCancelled(true);
         }
     }
@@ -709,8 +739,41 @@ public final class AdminTestGui implements InventoryHolder, Listener {
             inventory.setItem((tier-1)*9+8,withHint(forgeItem("material",FORGE_RARITIES[tier-1],1),hint));
         }
         inventory.setItem(45,withHint(forgeItem("dust",1),hint));
+        if(!forgeCharmIds().isEmpty())inventory.setItem(47,createActionItem(Material.NETHER_STAR,"§6§l✦ Charm วิหาร (27 ชิ้น)",List.of("§7วิหารความมืด · ดวงดาว · กาลเวลา","§7เลือกเกรด Worn → Divine แล้วคลิกรับ","§eคลิกเพื่อเปิด")));
         inventory.setItem(49,createActionItem(Material.ARROW,"§eกลับเมนูทดสอบ",List.of()));
         player.openInventory(inventory);
+    }
+    /** EvergardenForge charms: rows = dark / astral / time sanctum, bottom row = grade, random, whole set. */
+    public void openCharmTest(Player player,int grade){
+        if(!isAdmin(player))return;
+        List<String> ids=forgeCharmIds();
+        if(ids.isEmpty()){player.sendMessage(Component.text("ต้องใช้ EvergardenForge 0.7.0 ขึ้นไป (ระบบ Charm)",NamedTextColor.RED));return;}
+        int chosen=Math.clamp(grade,0,FORGE_RARITIES.length-1);
+        Inventory inventory=Bukkit.createInventory(new CharmTestHolder(chosen,ids),54,Component.text("Evergarden Forge · Charm ["+FORGE_GRADE_LABELS[chosen]+"]",NamedTextColor.DARK_PURPLE));
+        List<Component> hint=List.of(Component.empty(),Component.text("คลิกเพื่อรับ 1 ชิ้น",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false));
+        for(int i=0;i<ids.size()&&i<27;i++)inventory.setItem(i,withHint(forgeItem("charm",ids.get(i),FORGE_RARITIES[chosen]),hint));
+        String[] rows={"§5§l☾ วิหารความมืด","§b§l✦ วิหารดวงดาว","§6§l⌛ วิหารกาลเวลา"};
+        Material[] glass={Material.PURPLE_STAINED_GLASS_PANE,Material.LIGHT_BLUE_STAINED_GLASS_PANE,Material.ORANGE_STAINED_GLASS_PANE};
+        for(int i=0;i<9;i++)inventory.setItem(27+i,createActionItem(glass[i/3],rows[i/3],List.of("§7แถวบน: ความมืด · กลาง: ดวงดาว · ล่าง: กาลเวลา")));
+        inventory.setItem(45,createActionItem(Material.ARROW,"§eกลับหน้า Gem / วัสดุ",List.of()));
+        for(int i=0;i<FORGE_RARITIES.length;i++){
+            ItemStack button=createActionItem(FORGE_GRADE_ICONS[i],(i==chosen?"§a§l▶ ":"§f")+"เกรด "+FORGE_GRADE_LABELS[i],List.of(i==chosen?"§aกำลังเลือก":"§7คลิกเพื่อเปลี่ยนเกรด"));
+            if(i==chosen)button.editMeta(meta->meta.setEnchantmentGlintOverride(true));
+            inventory.setItem(47+i,button);
+        }
+        inventory.setItem(52,createActionItem(Material.CHEST,"§d§lรับครบ 27 ชิ้น",List.of("§7Charm ทุกชิ้นในเกรด "+FORGE_GRADE_LABELS[chosen],"§8ของที่ล้นกระเป๋าจะตกที่พื้น")));
+        inventory.setItem(53,createActionItem(Material.ENDER_EYE,"§b§lสุ่ม 1 ชิ้น",List.of("§7Charm สุ่มในเกรด "+FORGE_GRADE_LABELS[chosen])));
+        player.openInventory(inventory);
+    }
+    /** ForgeApi.charmIds() (dark, astral, time; nine each) or empty when the forge or its charms are absent. */
+    @SuppressWarnings("unchecked")
+    private List<String> forgeCharmIds(){
+        var forge=Bukkit.getPluginManager().getPlugin("EvergardenForge");
+        if(forge==null||!forge.isEnabled())return List.of();
+        try{
+            Class<?> api=Class.forName("com.example.forge.ForgeApi",true,forge.getClass().getClassLoader());
+            return List.copyOf((List<String>)api.getMethod("charmIds").invoke(null));
+        }catch(ReflectiveOperationException|LinkageError|ClassCastException e){return List.of();}
     }
     private static ItemStack withHint(ItemStack item,List<Component> hint){
         if(item==null)return null;

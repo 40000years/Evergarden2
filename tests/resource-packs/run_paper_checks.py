@@ -12,6 +12,10 @@ parser.add_argument('--build-directory', type=Path, required=True,
                     help='Successful output directory from run_checks.py')
 parser.add_argument('--source-server', type=Path, required=True, help='Cached Paper server files')
 parser.add_argument('--server-directory', type=Path)
+parser.add_argument('--geyser', type=Path, help='Geyser-Spigot JAR needed by plugins with Bedrock integrations')
+parser.add_argument('--mode', choices=('both', 'together', 'standalone'), default='both',
+                    help='Run both modes or one selected deployment mode')
+parser.add_argument('--max-heap', default='2G', help='Maximum Java heap for the isolated Paper server')
 parser.add_argument('--timeout', type=int, default=240)
 args = parser.parse_args()
 build = args.build_directory.resolve()
@@ -33,7 +37,7 @@ subprocess.run(['jar', '--create', '--file', str(probe), '-C', str(classes), '.'
 parent = (args.server_directory or ROOT / 'output' / ('pack-paper-' + uuid.uuid4().hex[:8])).resolve()
 parent.mkdir(parents=True, exist_ok=False)
 results = []
-for mode in ('together', 'standalone'):
+for mode in (('together', 'standalone') if args.mode == 'both' else (args.mode,)):
     server = parent / mode
     server.mkdir()
     for name in ('libraries', 'versions', 'cache', 'config'):
@@ -44,15 +48,17 @@ for mode in ('together', 'standalone'):
     plugins = server / 'plugins'
     plugins.mkdir()
     shutil.copyfile(probe, plugins / probe.name)
+    if args.geyser:
+        shutil.copyfile(args.geyser, plugins / 'Geyser-Spigot.jar')
     for module, folder in [('evergarden', 'Evergarden'), *([('advance-magic', 'advance-magic')] if mode == 'together' else [])]:
         shutil.copyfile(build / (module + '.jar'), plugins / (module + '.jar'))
         config = plugins / folder
         config.mkdir()
         (config / 'config.yml').write_text(
-            'config-version: 2\nresource-pack:\n  enabled: true\n  required: false\n  url: ""\n  sha1: ""\n'
-            '  host:\n    enabled: true\n    bind: 127.0.0.1\n    port: 0\n    public-host: 127.0.0.1\n'
+            'config-version: 2\nresource-pack:\n  enabled: true\n  required: true\n  url: ""\n  sha1: ""\n  mirrors: []\n'
+            '  host:\n    enabled: true\n    use-server-port: false\n    bind: 127.0.0.1\n    port: 0\n    public-host: 127.0.0.1\n'
             '  geyser:\n    auto-install: false\n'
-            'world-boss:\n  visuals:\n    pack:\n      enabled: true\n      url: ""\n'
+            'world-boss:\n  visuals:\n    pack:\n      enabled: true\n      required: true\n      url: ""\n'
             '      host:\n        bind: 127.0.0.1\n        port: 0\n        public-host: 127.0.0.1\n', encoding='utf8')
     (server / 'eula.txt').write_text('eula=true\n', encoding='ascii')
     (server / 'server.properties').write_text(
@@ -62,7 +68,7 @@ for mode in ('together', 'standalone'):
         'pause-when-empty-seconds=-1\nmax-tick-time=240000\n', encoding='ascii')
     print('Starting isolated Paper:', server, flush=True)
     with (server / 'console.log').open('w', encoding='utf8') as log:
-        process = subprocess.Popen(['java', '-Xms384M', '-Xmx2G', '-Dterminal.jline=false', '-Dterminal.ansi=false',
+        process = subprocess.Popen(['java', '-Xms256M', '-Xmx' + args.max_heap, '-Dterminal.jline=false', '-Dterminal.ansi=false',
                                     '-jar', 'paper.jar', '--nogui', '--noconsole'], cwd=server,
                                    stdout=log, stderr=subprocess.STDOUT,
                                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
@@ -80,4 +86,4 @@ for mode in ('together', 'standalone'):
     assert result.startswith('PASS'), result
     results.append(mode + ': ' + result)
 (build / 'paper-result.txt').write_text('\n'.join(results), encoding='utf8')
-print('Both Paper deployment modes passed', flush=True)
+print('Selected Paper deployment modes passed', flush=True)

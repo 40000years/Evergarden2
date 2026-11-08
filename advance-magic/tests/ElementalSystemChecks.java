@@ -97,7 +97,7 @@ public final class ElementalSystemChecks extends JavaPlugin implements Listener 
         for(int x=-2;x<=2;x++)for(int z=-2;z<=2;z++)world.getChunkAt(x,z).setForceLoaded(true);
         for(int x=-24;x<=24;x++)for(int z=-24;z<=24;z++)world.getBlockAt(x,99,z).setType(Material.STONE);
         caster=actor("ElementCaster",new Location(world,.5,100,.5,0,0));
-        catalog();stats();items();crafting();accounting();visuals();nativeVisuals();affinities();spells();policies();reactions();phoenix();
+        catalog();stats();items();crafting();accounting();visuals();nativeVisuals();affinities();spells();supportReach();policies();reactions();phoenix();
     }
     void crafting(){
         for(Element element:Element.values()){
@@ -322,14 +322,35 @@ public final class ElementalSystemChecks extends JavaPlugin implements Listener 
                 scene.wall(org.bukkit.util.BoundingBox.of(stage,1,1,1));scene.phoenix();
                 for(int tick=0;tick<6;tick++)renderer.tick();
                 check(scene.enabled(),"native scene accepts every visual hook "+spell.id());
-                // The eight Legendary spectacles draw their 3D art in either style, by design.
-                if(!LEGENDARY_SCENES.contains(spell))check(world.getEntitiesByClass(ItemDisplay.class).isEmpty(),"native spell never creates authored image displays "+spell.id());
+                // Native scenes draw the shared VFX kit (element circles, glows, bursts, bolts, beams and the
+                // tintable 1.37 sprites); the eight Legendary spectacles retain their separate authored 3D artwork.
+                if(!LEGENDARY_SCENES.contains(spell)){
+                    var sprites=world.getEntitiesByClass(ItemDisplay.class);
+                    NamespacedKey head=new NamespacedKey("advance_magic","fx_glow_"+spell.element().id());
+                    NamespacedKey circle=new NamespacedKey("advance_magic","fx_circle_"+spell.element().id());
+                    check(sprites.stream().anyMatch(d->d.getItemStack().hasItemMeta()
+                                    &&head.equals(d.getItemStack().getItemMeta().getItemModel())
+                                    &&d.getBillboard()==Display.Billboard.CENTER&&caster.canSee(d)),
+                            "native scene shows its elemental glow to the pack-applied Java viewer "+spell.id());
+                    check(sprites.stream().anyMatch(d->d.getItemStack().hasItemMeta()&&circle.equals(d.getItemStack().getItemMeta().getItemModel())&&caster.canSee(d)),
+                            "native cast opens its own element magic circle for the Java viewer "+spell.id());
+                    // Tracked sprites stay within 6 per cast (10 for an Ultimate); one-shot kit sprites expire on their own.
+                    check(sprites.size()<=(spell.ultimate()?10:6)+64&&sprites.stream().allMatch(d->{
+                        var model=d.getItemStack().hasItemMeta()?d.getItemStack().getItemMeta().getItemModel():null;
+                        var scale=d.getTransformation().getScale();
+                        return model!=null&&model.getNamespace().equals("advance_magic")
+                                &&model.getKey().matches("(fx_(circle|glow|burst)_|fx_beam_|vfx_(sigil_[ab]|ring|flare|slash|spark)_)(fire|water|ice|wind|earth|light|dark|lightning|heal)|fx_bolt_[abc]")
+                                &&Float.isFinite(scale.x())&&Float.isFinite(scale.y())&&Float.isFinite(scale.z())
+                                &&scale.x()>0&&scale.y()>0&&scale.z()==1&&!d.isPersistent();
+                    }),"native kit sprites use valid models, visible planar poses and bounded counts "+spell.id());
+                }
                 check(magic.effects().size()==combatEffects&&magic.mana().account(caster).manaExact()==mana,
                         "native presentation consumes no combat slots or mana "+spell.id());
                 near(target.getHealth(),1000,"native visual hooks cannot damage a nearby target "+spell.id());
                 scene.close();
-                check(nativeBodies().isEmpty()&&world.getEntitiesByClass(BlockDisplay.class).isEmpty(),
-                        "closing native scene removes projectile bodies and block fragments "+spell.id());
+                check(nativeBodies().isEmpty()&&world.getEntitiesByClass(BlockDisplay.class).isEmpty()
+                                &&world.getEntitiesByClass(ItemDisplay.class).isEmpty(),
+                        "closing native scene removes projectile bodies, block fragments and illustrated sprites "+spell.id());
             }finally{renderer.close();}
         }
 
@@ -730,6 +751,43 @@ public final class ElementalSystemChecks extends JavaPlugin implements Listener 
         clearAccounting();check(mana.reserveElemental(caster,ElementalSpell.FIREBALL,12,now),"reserve rollback fixture");
         mana.rollbackElemental(caster,ElementalSpell.FIREBALL,12);
         check(mana.account(caster).manaExact()==100&&mana.gcdRemaining(caster,now)==0&&mana.elementalRemaining(caster,ElementalSpell.FIREBALL,now)==0,"rollback restores mana spell cooldown and GCD");
+        clearAccounting();check(mana.reserveElemental(caster,ElementalSpell.MAGMA_ERUPTION,35,now),"reserve interrupted wind-up");
+        check(mana.reserveElemental(caster,ElementalSpell.FIREBALL,12,now+700),"reserve a different spell while the first winds up");
+        mana.refundInterrupted(caster,ElementalSpell.MAGMA_ERUPTION,35);
+        check(mana.account(caster).manaExact()==88&&mana.elementalRemaining(caster,ElementalSpell.MAGMA_ERUPTION,now+700)==0
+            &&mana.elementalRemaining(caster,ElementalSpell.FIREBALL,now+700)==4000&&mana.gcdRemaining(caster,now+700)==650
+            &&caster.getPersistentDataContainer().get(mana.key("elemental_regen_after"),PersistentDataType.LONG)==now+2700,
+            "interrupt refunds only the first spell and preserves the later spell's shared locks");
+        mana.refundInterrupted(caster,ElementalSpell.MAGMA_ERUPTION,35);
+        check(mana.account(caster).manaExact()==88&&!mana.reserveElemental(caster,ElementalSpell.AQUA_BULLET,10,now+701),"repeated interruption cannot mint mana or bypass the later GCD");
+        mana.quit(caster);
+        check(mana.account(caster).manaExact()==88&&mana.gcdRemaining(caster,now+700)==650&&mana.elementalRemaining(caster,ElementalSpell.FIREBALL,now+700)==4000,
+            "later spell locks and mana survive account reload after interruption");
+        clearAccounting();check(mana.reserveElemental(caster,ElementalSpell.METEOR_RAIN,65,now),"reserve interrupted ultimate wind-up");
+        check(mana.reserveElemental(caster,ElementalSpell.FIREBALL,12,now+1300),"normal spell can follow ultimate GCD during its wind-up");
+        mana.refundInterrupted(caster,ElementalSpell.METEOR_RAIN,65);
+        check(mana.account(caster).manaExact()==88&&mana.ultimateRemaining(caster,now+1300)==0&&mana.gcdRemaining(caster,now+1300)==650,
+            "interrupting ultimate restores its category lock without clearing a later normal spell's GCD");
+        clearAccounting();mana.account(caster).setMaxMana(200);mana.account(caster).setMana(200);
+        check(mana.reserveElemental(caster,ElementalSpell.MAGMA_ERUPTION,35,now)&&mana.reserveElementalPassive(caster,ElementalSpell.PHOENIX_REBIRTH,80,now+100),
+            "passive Phoenix can trigger during another spell's wind-up");
+        mana.refundInterrupted(caster,ElementalSpell.MAGMA_ERUPTION,35);
+        check(mana.account(caster).manaExact()==120&&mana.gcdRemaining(caster,now+100)==1200
+            &&mana.ultimateRemaining(caster,now+100)==15000&&mana.elementalRemaining(caster,ElementalSpell.PHOENIX_REBIRTH,now+100)>0,
+            "interrupting an older cast preserves Phoenix mana and all of its locks");
+        clearAccounting();check(mana.reserveElemental(caster,ElementalSpell.MAGMA_ERUPTION,35,now),"reserve same-spell slow-tick fixture");
+        Object oldCast=mana.reservationToken(caster,ElementalSpell.MAGMA_ERUPTION);
+        check(mana.reserveElemental(caster,ElementalSpell.MAGMA_ERUPTION,35,now+18001),"same spell can be reserved after wall-clock cooldown under extreme tick lag");
+        Object newCast=mana.reservationToken(caster,ElementalSpell.MAGMA_ERUPTION);
+        mana.refundInterrupted(caster,ElementalSpell.MAGMA_ERUPTION,35,oldCast);
+        check(mana.account(caster).manaExact()==65&&mana.elementalRemaining(caster,ElementalSpell.MAGMA_ERUPTION,now+18001)==18000
+            &&mana.gcdRemaining(caster,now+18001)==650,"old same-spell wind-up refunds without clearing the newer cast cooldown");
+        mana.refundInterrupted(caster,ElementalSpell.MAGMA_ERUPTION,35,oldCast);
+        check(mana.account(caster).manaExact()==65&&mana.reservationToken(caster,ElementalSpell.MAGMA_ERUPTION)==newCast,
+            "old cast token cannot refund twice or remove the newer reservation");
+        mana.refundInterrupted(caster,ElementalSpell.MAGMA_ERUPTION,35,newCast);
+        check(mana.account(caster).manaExact()==100&&mana.elementalRemaining(caster,ElementalSpell.MAGMA_ERUPTION,now+18001)==0,
+            "newer cast can be independently interrupted after the old one");
         clearAccounting();mana.account(caster).setMana(50);check(mana.reserveElemental(caster,ElementalSpell.FIREBALL,12,now),"reserve regen delay fixture");
         mana.regenerate(caster,now+1000);near(mana.account(caster).manaExact(),38,"no regeneration within two-second cast delay");
         mana.markCombat(caster);mana.regenerate(caster,now+3000);near(mana.account(caster).manaExact(),41,"combat regeneration is three mana per second");
@@ -782,7 +840,8 @@ public final class ElementalSystemChecks extends JavaPlugin implements Listener 
             check(imprint(ElementalSpell.HEALING_SPRING,0),"healing affinity fixture accepts Rare scroll "+kind);
             var downward=caster.getLocation();downward.setPitch(90);caster.teleport(downward);
             check(magic.elemental().cast(caster),"healing remains castable across matching mismatching and wood staffs "+kind);ticks(120);
-            near(caster.getHealth(),507.2,"damage affinity leaves healing power unchanged "+kind);
+            // A matching (Water) staff strengthens heals by its +50%; mismatched and wood staffs never weaken them.
+            near(caster.getHealth(),kind==0?522.5:515,"staff affinity only ever strengthens healing "+kind);
             clearAccounting();caster.getInventory().clear();
             caster.getInventory().setItemInMainHand(kind==2?service.createWoodenStaff():service.createStaff(kind==0?Element.WATER:Element.FIRE,Tier.MYTHIC));
             check(imprint(ElementalSpell.AQUA_SHIELD,0)&&magic.elemental().cast(caster),"shield affinity fixture casts "+kind);
@@ -832,7 +891,62 @@ public final class ElementalSystemChecks extends JavaPlugin implements Listener 
         check(magic.elemental().cast(caster),"life drain can launch into a protected damage target");near(caster.getHealth(),500,"cancelled damage cannot mint life-drain healing");cancelDamage=false;
         reset();target=mob(.5,4.5);staff(ElementalSpell.SHADOW_DOPPELGANGER,ElementalSpell.SHADOW_BOLT);
         check(magic.elemental().cast(caster),"shadow summon activated");clearAccounting();check(magic.staffSpells().select(caster,2)&&magic.elemental().cast(caster),"shadow copies an allowed normal attack");ticks(40);
-        near(total(target),18*1.35,"shadow echo applies one affinity-scaled bounded copy without recursion");
+        near(total(target),18*1.5,"shadow echo applies one affinity-scaled bounded copy without recursion");
+        reset();
+    }
+    /** Heals, shields and buffs reach nearby players without a shared scoreboard team; aimed heal fields never land on nobody. */
+    void supportReach(){
+        Player friend=actor("ElementFriend",new Location(world,2.5,100,1.5));
+        var board=Bukkit.getScoreboardManager().getMainScoreboard();
+        try{
+            for(ElementalSpell spell:List.of(ElementalSpell.HEALING_SPRING,ElementalSpell.RAIN_BLESSING,ElementalSpell.HOLY_SANCTUARY,ElementalSpell.PURIFICATION)){
+                reset();friend.teleport(new Location(world,2.5,100,1.5));friend.setHealth(500);caster.setHealth(500);
+                staff(spell);var down=caster.getLocation();down.setPitch(90);caster.teleport(down);
+                check(magic.elemental().cast(caster),"support reach cast "+spell.id());ticks(200);
+                check(caster.getHealth()>500&&friend.getHealth()>500,"heal reaches a nearby player without a shared scoreboard team "+spell.id());
+            }
+            reset();friend.teleport(new Location(world,2.5,100,1.5));staff(ElementalSpell.AQUA_SHIELD);
+            check(magic.elemental().cast(caster),"aqua shield cast beside a teamless player");
+            var attacker=mob(8.5,8.5);var blow=new EntityDamageByEntityEvent(attacker,friend,EntityDamageEvent.DamageCause.ENTITY_ATTACK,10);
+            Bukkit.getPluginManager().callEvent(blow);check(blow.isCancelled(),"aqua shield also shields a nearby player without a shared team");
+            reset();friend.teleport(new Location(world,2.5,100,1.5));friend.setHealth(500);caster.setHealth(500);
+            var home=board.registerNewTeam("element-home");var rival=board.registerNewTeam("element-rival");home.addEntry(caster.getName());rival.addEntry(friend.getName());
+            try{staff(ElementalSpell.RAIN_BLESSING);check(magic.elemental().cast(caster),"rival-team rain setup");ticks(200);
+                check(caster.getHealth()>500&&friend.getHealth()==500,"heals skip a player on an opposing scoreboard team");}
+            finally{home.unregister();rival.unregister();}
+            reset();friend.teleport(new Location(world,2.5,100,1.5));friend.setHealth(500);
+            magic.getConfig().set("elemental-combat.support-all-players",false);
+            try{staff(ElementalSpell.RAIN_BLESSING);check(magic.elemental().cast(caster),"team-only rain setup");ticks(200);
+                check(friend.getHealth()==500,"support-all-players false restores team-only heals");}
+            finally{magic.getConfig().set("elemental-combat.support-all-players",true);}
+            reset();caster.setHealth(500);staff(ElementalSpell.HEALING_SPRING);var far=caster.getLocation();far.setPitch(8);caster.teleport(far);
+            check(magic.elemental().cast(caster),"heal field aimed at empty ground far ahead casts");ticks(120);
+            check(caster.getHealth()>500,"heal field aimed where nobody stands opens at the caster's feet");
+            reset();caster.setHealth(500);staff(ElementalSpell.HOLY_SANCTUARY);var sky=caster.getLocation();sky.setPitch(-60);caster.teleport(sky);
+            check(magic.elemental().cast(caster),"heal field aimed at the sky casts instead of asking for ground");ticks(140);
+            check(caster.getHealth()>500,"sky-aimed sanctuary heals at the caster's feet");
+            reset();friend.teleport(new Location(world,.5,100,11.5));friend.setHealth(500);caster.setHealth(500);
+            staff(ElementalSpell.HEALING_SPRING);far=caster.getLocation();far.setPitch(8);caster.teleport(far);
+            check(magic.elemental().cast(caster),"heal field aimed beside a distant friend casts");ticks(120);
+            check(friend.getHealth()>500&&caster.getHealth()==500,"heal field aimed beside a distant friend stays where it was aimed");
+            double[] gained=new double[2];
+            for(int i=0;i<2;i++){
+                int level=i==0?5:7;reset();caster.getInventory().setHeldItemSlot(0);
+                caster.getInventory().setItemInMainHand(magic.staffSpells().createStaff(Element.FIRE,Tier.MYTHIC));
+                caster.getInventory().setItem(1,magic.staffSpells().createScroll(ElementalSpell.HEALING_SPRING,level));
+                check(magic.staffSpells().imprint(caster,0,held().clone(),1,caster.getInventory().getItem(1).clone(),0).success(),"leveled heal fixture "+level);
+                var down=caster.getLocation();down.setPitch(90);caster.teleport(down);
+                caster.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);caster.setHealth(1);
+                try{check(magic.elemental().cast(caster),"20 HP heal cast level "+level);ticks(120);gained[i]=caster.getHealth()-1;}
+                finally{caster.getAttribute(Attribute.MAX_HEALTH).setBaseValue(1000);}
+            }
+            near(gained[0],12,"level V heal keeps the 60% per-cast cap on a 20 HP player");
+            near(gained[1],18.75,"level VII heal raises its cap in proportion instead of matching level V");
+            reset();friend.teleport(new Location(world,2.5,100,1.5));friend.setHealth(500);caster.setHealth(500);var victim=mob(.5,4.5);staff(ElementalSpell.LIFE_DRAIN);
+            check(magic.elemental().cast(caster),"life drain share setup");
+            near(caster.getHealth()-500,(1000-victim.getHealth())*.4,"life drain returns 40% of the damage actually dealt");
+            check(friend.getHealth()>500,"life drain shares stolen life with a nearby teamless player");
+        }finally{friend.teleport(new Location(world,20.5,100,20.5));}
         reset();
     }
     void policies() throws Exception {
@@ -884,6 +998,25 @@ public final class ElementalSystemChecks extends JavaPlugin implements Listener 
         reset();target=mob(.5,4.5);double speed=target.getAttribute(Attribute.MOVEMENT_SPEED).getValue();castQuick(ElementalSpell.FROST_BOLT,5);
         check(target.getAttribute(Attribute.MOVEMENT_SPEED).getValue()<speed,"Frost slow changes actual movement speed");
         magic.elemental().close();near(target.getAttribute(Attribute.MOVEMENT_SPEED).getValue(),speed,"runtime cleanup removes movement modifier without an orphaned slow");
+        reset();staff(ElementalSpell.MAGMA_ERUPTION);aim(true);
+        check(magic.elemental().cast(caster),"telegraphed spell starts its wind-up");
+        check(magic.mana().account(caster).manaExact()<100,"wind-up reserves its mana");
+        caster.teleport(caster.getLocation().add(3,0,0));ticks(2);
+        near(magic.mana().account(caster).manaExact(),100,"walking off a wind-up refunds all of its mana");
+        long now=System.currentTimeMillis();
+        check(magic.mana().elementalRemaining(caster,ElementalSpell.MAGMA_ERUPTION,now)==0&&magic.mana().gcdRemaining(caster,now)==0,"an interrupted wind-up leaves no cooldown or GCD");
+        check(magic.elemental().cast(caster),"an interrupted spell can be recast at once");
+        reset();staff(ElementalSpell.MAGMA_ERUPTION);aim(true);
+        check(magic.elemental().cast(caster),"first real same-spell telegraph starts");
+        // Simulate a wall-clock cooldown expiring while the server has advanced no ticks.
+        magic.mana().account(caster).restore("elemental_magma_eruption",0);
+        caster.getPersistentDataContainer().remove(magic.mana().key("elemental_gcd"));
+        caster.teleport(caster.getLocation().add(1.5,0,0));
+        check(magic.elemental().cast(caster),"same spell can be cast again while the old telegraph is still active under extreme lag");
+        caster.teleport(caster.getLocation().add(1,0,0));ticks(1);
+        now=System.currentTimeMillis();
+        check(magic.mana().account(caster).manaExact()==65&&magic.mana().elementalRemaining(caster,ElementalSpell.MAGMA_ERUPTION,now)>0
+            &&magic.mana().gcdRemaining(caster,now)>0,"interrupting the first real telegraph preserves the second spell's mana and cooldowns");
         reset();
     }
     void castQuick(ElementalSpell spell,int ticks){
@@ -945,38 +1078,67 @@ public final class ElementalSystemChecks extends JavaPlugin implements Listener 
         Bukkit.getPluginManager().callEvent(event);return event;
     }
     void later(Runnable action){Bukkit.getScheduler().runTaskLater(this,()->{try{action.run();}catch(Throwable failure){finish(failure);}},2);}
+    boolean workbench(InventoryView view){
+        return view.getTopInventory().getSize()==54&&view.getTopInventory().getHolder()!=null
+                &&view.getTopInventory().getHolder().getClass().getSimpleName().equals("Workbench");
+    }
+    boolean menuModel(InventoryView view,int slot,String model){
+        ItemStack item=view.getTopInventory().getItem(slot);
+        return item!=null&&item.hasItemMeta()&&new NamespacedKey("advance_magic",model).equals(item.getItemMeta().getItemModel());
+    }
     void gui(){
         reset();staff(ElementalSpell.FIREBALL);var scroll=magic.staffSpells().createScroll(ElementalSpell.INFERNO_SPEAR);scroll.setAmount(3);caster.getInventory().setItem(1,scroll);
         check(Bukkit.dispatchCommand(caster,"spell"),"cross-platform spell command opens standard inventory UI");
-        var view=caster.getOpenInventory();check(view.getTopInventory().getSize()==27&&view.getTitle().equals("Staff Spell Management"),"staff manager has standard 27-slot inventory");
+        var view=caster.getOpenInventory();check(workbench(view)&&menuModel(view,7,"menu_codex"),"staff workbench has a standard 54-slot inventory and codex action");
         var original=held().clone();
+        check(view.getTopInventory().getItem(9).equals(original)&&magic.staffSpells().scroll(view.getTopInventory().getItem(11))==null
+                &&magic.staffSpells().scroll(view.getTopInventory().getItem(37))==null,"workbench previews staff and scroll art without creating usable scroll copies");
         for(var type:List.of(ClickType.SHIFT_LEFT,ClickType.SHIFT_RIGHT,ClickType.NUMBER_KEY,ClickType.DOUBLE_CLICK,ClickType.DROP,ClickType.CONTROL_DROP,ClickType.SWAP_OFFHAND))
-            check(click(view,10,type).isCancelled()&&held().equals(original)&&caster.getInventory().getItem(1).getAmount()==3,"GUI blocks item movement exploit "+type);
+            check(click(view,9,type).isCancelled()&&held().equals(original)&&caster.getInventory().getItem(1).getAmount()==3,"GUI blocks moving the staff preview "+type);
         var drag=new InventoryDragEvent(view,new ItemStack(Material.AIR),new ItemStack(Material.DIAMOND),false,Map.of(0,new ItemStack(Material.DIAMOND)));
         Bukkit.getPluginManager().callEvent(drag);check(drag.isCancelled(),"GUI blocks dragging real items into previews");
-        check(Bukkit.dispatchCommand(caster,"spell imprint")&&caster.getOpenInventory().getTitle().equals("Arcane Imprinting"),"imprinting page opens without transferring items");
-        click(caster.getOpenInventory(),55,ClickType.LEFT);
+        check(Bukkit.dispatchCommand(caster,"spell imprint")&&workbench(caster.getOpenInventory())&&held().equals(original),"imprint command opens the same workbench without transferring items");
+        // A 54-slot chest places player hotbar slot 1 at raw slot 82.
+        click(caster.getOpenInventory(),82,ClickType.LEFT);click(caster.getOpenInventory(),82,ClickType.LEFT);
         later(()->{
-            check(magic.staffSpells().scroll(caster.getOpenInventory().getTopInventory().getItem(4))==ElementalSpell.INFERNO_SPEAR,"bottom inventory click chooses scroll preview");
-            click(caster.getOpenInventory(),10,ClickType.LEFT);
+            check(magic.staffSpells().spells(held()).equals(List.of(ElementalSpell.FIREBALL,ElementalSpell.INFERNO_SPEAR))
+                    &&caster.getInventory().getItem(1).getAmount()==2,"rapid duplicate bottom-inventory clicks imprint once in the next empty slot");
+            check(workbench(caster.getOpenInventory())&&caster.getItemOnCursor().getType().isAir(),"imprint redraws the workbench without placing a preview on the cursor");
+            var replacement=magic.staffSpells().createScroll(ElementalSpell.BURNING_GROUND);replacement.setAmount(2);caster.getInventory().setItem(1,replacement);
+            Bukkit.dispatchCommand(caster,"spell imprint");
+            click(caster.getOpenInventory(),37,ClickType.LEFT);
+            ItemStack otherStaff=magic.staffSpells().createStaff(Element.FIRE,Tier.MYTHIC);caster.getInventory().setItemInMainHand(otherStaff);
             later(()->{
-                var confirm=caster.getOpenInventory();check(confirm.getTitle().equals("Confirm Spell Imprint"),"overwrite requires explicit preview confirmation");
-                check(magic.staffSpells().selected(held())==ElementalSpell.FIREBALL&&caster.getInventory().getItem(1).getAmount()==3,"opening confirmation does not consume items");
-                click(confirm,15,ClickType.LEFT);click(confirm,15,ClickType.LEFT);
-                check(magic.staffSpells().selected(held())==ElementalSpell.INFERNO_SPEAR&&caster.getInventory().getItem(1).getAmount()==2,"rapid duplicate confirm consumes exactly one scroll");
+                check(held().equals(otherStaff)&&magic.staffSpells().spells(held()).isEmpty()&&scrollCount(ElementalSpell.BURNING_GROUND)==2
+                        &&!workbench(caster.getOpenInventory()),"replacing the staff before a queued imprint closes the stale workbench without consuming a scroll");
+                guiSwap();
+            });
+        });
+    }
+    void guiSwap(){
+        reset();caster.getInventory().setItemInMainHand(magic.staffSpells().createWoodenStaff());
+        check(imprint(ElementalSpell.FIREBALL,0),"full one-slot workbench swap fixture");
+        var scroll=magic.staffSpells().createScroll(ElementalSpell.INFERNO_SPEAR);scroll.setAmount(3);caster.getInventory().setItem(1,scroll);
+        Bukkit.dispatchCommand(caster,"spell");ItemStack original=held().clone();
+        click(caster.getOpenInventory(),37,ClickType.LEFT);
+        later(()->{
+            check(held().equals(original)&&scrollCount(ElementalSpell.INFERNO_SPEAR)==3,"choosing a scroll on a full staff waits for the target spell without consuming items");
+            click(caster.getOpenInventory(),11,ClickType.LEFT);click(caster.getOpenInventory(),11,ClickType.LEFT);
+            later(()->{
+                check(magic.staffSpells().spells(held()).equals(List.of(ElementalSpell.INFERNO_SPEAR))
+                        &&scrollCount(ElementalSpell.INFERNO_SPEAR)==2&&scrollCount(ElementalSpell.FIREBALL)==1,
+                        "rapid target clicks swap once, consume one scroll and return the old spell exactly once");
+                check(workbench(caster.getOpenInventory())&&magic.staffs().isWooden(held()),"swap keeps the workbench open and preserves the staff identity");
+                for(int slot=2;slot<36;slot++)caster.getInventory().setItem(slot,new ItemStack(Material.STONE,64));
+                var next=magic.staffSpells().createScroll(ElementalSpell.BURNING_GROUND);next.setAmount(2);caster.getInventory().setItem(1,next);
+                Bukkit.dispatchCommand(caster,"spell");ItemStack fullStaff=held().clone();int dropped=world.getEntitiesByClass(Item.class).size();
+                click(caster.getOpenInventory(),37,ClickType.LEFT);
                 later(()->{
-                    check(caster.getOpenInventory().getTitle().equals("Staff Spell Management"),"successful imprint returns to staff manager");
-                    var replacement=magic.staffSpells().createScroll(ElementalSpell.BURNING_GROUND);replacement.setAmount(2);caster.getInventory().setItem(1,replacement);
-                    Bukkit.dispatchCommand(caster,"spell imprint");click(caster.getOpenInventory(),55,ClickType.LEFT);
+                    click(caster.getOpenInventory(),11,ClickType.LEFT);
                     later(()->{
-                        click(caster.getOpenInventory(),10,ClickType.LEFT);
-                        later(()->{
-                            check(caster.getOpenInventory().getTitle().equals("Confirm Spell Imprint"),"second preview opened for stale-item defense");
-                            var changed=held().clone();var meta=changed.getItemMeta();meta.setDisplayName("Changed since preview");changed.setItemMeta(meta);caster.getInventory().setItemInMainHand(changed);
-                            click(caster.getOpenInventory(),15,ClickType.LEFT);
-                            check(magic.staffSpells().selected(held())==ElementalSpell.INFERNO_SPEAR&&caster.getInventory().getItem(1).getAmount()==2&&held().equals(changed),"changed staff invalidates confirmation without loss or delayed writes");
-                            caster.closeInventory();guiExtraction();
-                        });
+                        check(held().equals(fullStaff)&&scrollCount(ElementalSpell.BURNING_GROUND)==2&&world.getEntitiesByClass(Item.class).size()==dropped,
+                                "full inventory rejects a GUI swap atomically when the returned scroll has no destination");
+                        caster.closeInventory();guiExtraction();
                     });
                 });
             });
@@ -984,32 +1146,31 @@ public final class ElementalSystemChecks extends JavaPlugin implements Listener 
     }
     void guiExtraction(){
         reset();staff(ElementalSpell.FIREBALL,ElementalSpell.AQUA_BULLET);var original=held().clone();
-        check(Bukkit.dispatchCommand(caster,"spell extract")&&caster.getOpenInventory().getTitle().equals("Extract Spell Scroll"),"spell extraction command opens standard inventory picker");
-        check(held().equals(original)&&scrollCount(ElementalSpell.AQUA_BULLET)==0,"opening extraction picker preserves staff and grants no preview item");
-        click(caster.getOpenInventory(),11,ClickType.LEFT);
+        check(Bukkit.dispatchCommand(caster,"spell extract")&&workbench(caster.getOpenInventory())&&menuModel(caster.getOpenInventory(),21,"menu_extract"),"extract command opens the shared workbench with a button for each learned spell");
+        check(held().equals(original)&&scrollCount(ElementalSpell.AQUA_BULLET)==0,"opening the workbench preserves the staff and grants no preview item");
+        for(ClickType type:List.of(ClickType.NUMBER_KEY,ClickType.DOUBLE_CLICK,ClickType.DROP,ClickType.CONTROL_DROP,ClickType.SWAP_OFFHAND))
+            check(click(caster.getOpenInventory(),21,type).isCancelled()&&held().equals(original)&&scrollCount(ElementalSpell.AQUA_BULLET)==0,"extraction button blocks unsupported item movement "+type);
+        click(caster.getOpenInventory(),21,ClickType.LEFT);click(caster.getOpenInventory(),21,ClickType.LEFT);
         later(()->{
-            var confirm=caster.getOpenInventory();
-            check(confirm.getTitle().equals("Confirm Spell Extraction")&&magic.staffSpells().scroll(confirm.getTopInventory().getItem(12))==ElementalSpell.AQUA_BULLET,"picker shows explicit exact-scroll extraction confirmation");
-            for(ClickType type:List.of(ClickType.SHIFT_LEFT,ClickType.NUMBER_KEY,ClickType.DOUBLE_CLICK,ClickType.DROP,ClickType.SWAP_OFFHAND))
-                check(click(confirm,15,type).isCancelled()&&held().equals(original)&&scrollCount(ElementalSpell.AQUA_BULLET)==0,"extraction preview blocks item movement exploit "+type);
-            click(confirm,11,ClickType.LEFT);
+            check(magic.staffSpells().spells(held()).equals(List.of(ElementalSpell.FIREBALL))&&scrollCount(ElementalSpell.AQUA_BULLET)==1,
+                    "rapid clicks on the last extraction button return exactly one scroll");
+            check(workbench(caster.getOpenInventory())&&menuModel(caster.getOpenInventory(),12,"menu_socket"),"extraction redraws the emptied spell slot in the same workbench");
+            check(Bukkit.dispatchCommand(caster,"spell extract 1")&&magic.staffSpells().spells(held()).isEmpty()&&scrollCount(ElementalSpell.FIREBALL)==1,
+                    "one-based extraction command returns the chosen scroll directly");
+            reset();staff(ElementalSpell.FIREBALL);Bukkit.dispatchCommand(caster,"spell");
+            click(caster.getOpenInventory(),20,ClickType.LEFT);
+            ItemStack replacement=magic.staffSpells().createStaff(Element.FIRE,Tier.MYTHIC);caster.getInventory().setItemInMainHand(replacement);
             later(()->{
-                check(caster.getOpenInventory().getTitle().equals("Extract Spell Scroll")&&held().equals(original),"cancelling extraction confirmation preserves entire loadout");
-                click(caster.getOpenInventory(),11,ClickType.LEFT);
+                check(held().equals(replacement)&&scrollCount(ElementalSpell.FIREBALL)==0&&!workbench(caster.getOpenInventory()),
+                        "replacing the staff before queued extraction closes the stale workbench without granting a scroll");
+                staff(ElementalSpell.FIREBALL);ItemStack fullStaff=held().clone();
+                for(int slot=1;slot<36;slot++)caster.getInventory().setItem(slot,new ItemStack(Material.STONE,64));
+                int dropped=world.getEntitiesByClass(Item.class).size();Bukkit.dispatchCommand(caster,"spell extract");
+                click(caster.getOpenInventory(),20,ClickType.LEFT);
                 later(()->{
-                    var accepted=caster.getOpenInventory();click(accepted,15,ClickType.LEFT);click(accepted,15,ClickType.LEFT);
-                    check(magic.staffSpells().spells(held()).equals(List.of(ElementalSpell.FIREBALL))&&scrollCount(ElementalSpell.AQUA_BULLET)==1,"rapid duplicate extraction confirmation removes and returns exactly one spell");
-                    later(()->{
-                        check(caster.getOpenInventory().getTitle().equals("Staff Spell Management"),"successful extraction returns to manager");
-                        check(Bukkit.dispatchCommand(caster,"spell extract 1")&&caster.getOpenInventory().getTitle().equals("Confirm Spell Extraction"),"one-based extraction command still requires GUI confirmation");
-                        var changed=held().clone();var meta=changed.getItemMeta();meta.setDisplayName("Changed after extraction preview");changed.setItemMeta(meta);caster.getInventory().setItemInMainHand(changed);
-                        click(caster.getOpenInventory(),15,ClickType.LEFT);
-                        check(held().equals(changed)&&magic.staffSpells().selected(held())==ElementalSpell.FIREBALL&&scrollCount(ElementalSpell.FIREBALL)==0,"changed staff invalidates extraction confirmation without scroll grant");
-                        for(int slot=1;slot<36;slot++)caster.getInventory().setItem(slot,new ItemStack(Material.STONE,64));
-                        Bukkit.dispatchCommand(caster,"spell extract 1");click(caster.getOpenInventory(),15,ClickType.LEFT);
-                        check(held().equals(changed)&&magic.staffSpells().selected(held())==ElementalSpell.FIREBALL,"GUI extraction with full inventory preserves staff and spell");
-                        later(this::guiWoodenImprint);
-                    });
+                    check(held().equals(fullStaff)&&scrollCount(ElementalSpell.FIREBALL)==0&&world.getEntitiesByClass(Item.class).size()==dropped,
+                            "GUI extraction with full inventory preserves the staff and drops no scroll");
+                    guiWoodenImprint();
                 });
             });
         });
@@ -1017,21 +1178,17 @@ public final class ElementalSystemChecks extends JavaPlugin implements Listener 
     void guiWoodenImprint(){
         reset();caster.getInventory().setItemInMainHand(magic.staffSpells().createWoodenStaff());
         caster.getInventory().setItem(1,magic.staffSpells().createScroll(ElementalSpell.AQUA_BULLET));
-        Bukkit.dispatchCommand(caster,"spell imprint");click(caster.getOpenInventory(),55,ClickType.LEFT);
+        Bukkit.dispatchCommand(caster,"spell imprint");
+        check(workbench(caster.getOpenInventory())&&menuModel(caster.getOpenInventory(),12,"skilltree_lock"),"wood workbench displays the second spell slot as locked before upgrade");
+        click(caster.getOpenInventory(),37,ClickType.LEFT);
         later(()->{
-            check(magic.staffSpells().scroll(caster.getOpenInventory().getTopInventory().getItem(4))==ElementalSpell.AQUA_BULLET,"neutral wood GUI accepts a scroll with an elemental affinity");
-            click(caster.getOpenInventory(),10,ClickType.LEFT);
+            check(magic.staffs().isWooden(held())&&magic.staffSpells().selected(held())==ElementalSpell.AQUA_BULLET&&caster.getInventory().getItem(1)==null,
+                    "wood workbench imprints a real elemental spell and consumes one scroll");
+            check(menuModel(caster.getOpenInventory(),12,"skilltree_lock"),"wood workbench keeps its second spell slot locked after imprint");
+            click(caster.getOpenInventory(),7,ClickType.LEFT);
             later(()->{
-                check(caster.getOpenInventory().getTitle().equals("Confirm Spell Imprint"),"wood GUI reaches imprint confirmation");click(caster.getOpenInventory(),15,ClickType.LEFT);
-                check(magic.staffs().isWooden(held())&&magic.staffSpells().selected(held())==ElementalSpell.AQUA_BULLET&&caster.getInventory().getItem(1)==null,"wood GUI imprints a real usable spell and consumes one scroll");
-                later(()->{
-                    check(caster.getOpenInventory().getTopInventory().getItem(11).getType()==Material.BARRIER,"wood manager marks second spell slot locked before upgrade");
-                    click(caster.getOpenInventory(),22,ClickType.LEFT);
-                    later(()->{
-                        check(caster.getOpenInventory().getTitle().equals("Arcane Codex"),"neutral wood staff can open elemental codex without null-element failure");
-                        caster.closeInventory();finish(null);
-                    });
-                });
+                check(caster.getOpenInventory().getTitle().equals("Arcane Codex"),"neutral wood staff opens the elemental codex without null-element failure");
+                caster.closeInventory();finish(null);
             });
         });
     }

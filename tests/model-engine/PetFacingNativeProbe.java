@@ -109,7 +109,7 @@ public final class PetFacingNativeProbe extends PetSystemNativeProbe {
             for(int tick=0;tick<30;tick++){
                 Location owner=home.clone().add(x*(6+tick*.15),0,z*(6+tick*.15));owner.setYaw(heading);tamer.teleport(owner);
                 Location start=((Rabbit)get(body,"shell")).getLocation();
-                call(companions,"follow",body,tamer,true);call(body,"tickGlide");call(body,"tickGlide");
+                call(companions,"follow",body,tamer,true,false);call(body,"tickGlide");call(body,"tickGlide");
                 verifyFrame(body,"retreating owner "+heading+" tick "+tick);
                 Location end=((Rabbit)get(body,"shell")).getLocation();
                 Vector3f moved=new Vector3f((float)(end.getX()-start.getX()),0,(float)(end.getZ()-start.getZ()));

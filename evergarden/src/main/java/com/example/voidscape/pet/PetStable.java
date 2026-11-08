@@ -12,7 +12,7 @@ final class PetStable {
     int perRaised=2,maxSlots=Integer.MAX_VALUE;
     /** Pets this owner raised from babies to adults. The slots they opened stay even if the pet is released. */
     final LinkedHashSet<UUID> raised=new LinkedHashSet<>();
-    UUID active;
+    UUID active,secondary;
     /** The owner wants the active pet out; it returns after relogging or a suspension. */
     boolean out;
     boolean hideOthers;
@@ -38,18 +38,20 @@ final class PetStable {
     }
     PetRecord get(UUID id){return id==null?null:pets.get(id);}
     PetRecord activeRecord(){return get(active);}
+    PetRecord secondaryRecord(){return get(secondary);}
+    boolean summoned(UUID id){return out&&id!=null&&(id.equals(active)||id.equals(secondary));}
     boolean nesting(UUID id){return id!=null&&(id.equals(nestA)||id.equals(nestB));}
     boolean nestBusy(){return nestA!=null&&nestB!=null;}
     void clearNest(){nestA=null;nestB=null;nestReady=0;dirty=true;}
     /** Eggs collected today (UTC day), reset lazily when the day changes. */
     int eggsToday(long now){long day=Math.floorDiv(now,86_400_000L);if(day!=eggDay){eggDay=day;eggsToday=0;}return eggsToday;}
     void add(PetRecord record){pets.put(record.id,record);dirty=true;}
-    void remove(UUID id){pets.remove(id);if(id.equals(active)){active=null;out=false;}if(nesting(id))clearNest();dirty=true;}
+    void remove(UUID id){pets.remove(id);if(id.equals(secondary))secondary=null;if(id.equals(active)){active=secondary;secondary=null;if(active==null)out=false;}if(nesting(id))clearNest();dirty=true;}
 
     String serialize(){
         YamlConfiguration file=new YamlConfiguration();
         file.set("version",1);file.set("slots",slots);
-        file.set("active",active==null?null:active.toString());file.set("out",out);file.set("hide-others",hideOthers);
+        file.set("active",active==null?null:active.toString());file.set("secondary",secondary==null?null:secondary.toString());file.set("out",out);file.set("hide-others",hideOthers);
         if(nestA!=null&&nestB!=null){file.set("nest.a",nestA.toString());file.set("nest.b",nestB.toString());file.set("nest.ready",nestReady);}
         file.set("eggs.day",eggDay);file.set("eggs.today",eggsToday);
         file.set("eggs.last-collected",lastEggCollected);
@@ -77,6 +79,9 @@ final class PetStable {
         for(PetRecord record:stable.pets.values())stable.raise(record);
         stable.active=uuid(file.getString("active"));
         if(!stable.pets.containsKey(stable.active)){stable.active=null;stable.out=false;}
+        stable.secondary=uuid(file.getString("secondary"));
+        if(stable.active==null||stable.secondary==null||!stable.pets.containsKey(stable.secondary)
+            ||stable.active.equals(stable.secondary)||stable.activeRecord().species==stable.secondaryRecord().species)stable.secondary=null;
         UUID a=uuid(file.getString("nest.a")),b=uuid(file.getString("nest.b"));
         if(a!=null&&b!=null&&stable.pets.containsKey(a)&&stable.pets.containsKey(b)){stable.nestA=a;stable.nestB=b;stable.nestReady=file.getLong("nest.ready");}
         return stable;

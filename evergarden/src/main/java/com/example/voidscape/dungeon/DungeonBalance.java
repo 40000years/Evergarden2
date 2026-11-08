@@ -1,6 +1,6 @@
 package com.example.voidscape.dungeon;
 
-/** Sanctums sit below world bosses. Party size adds bounded HP, never damage. */
+/** Sanctums sit below world bosses. Party size adds bounded HP, never damage. Tier 6-8 scale the Tier 5 numbers and add a rend. */
 public final class DungeonBalance {
     private DungeonBalance() {}
     public enum Species { MINION, CASTER, STALKER, BOSS, VEX }
@@ -23,5 +23,24 @@ public final class DungeonBalance {
     public static double armor(int tier) { return new double[]{6,7,8,9,10}[index(tier)]; }
     public static double toughness(int tier) { return new double[]{2,3,4,5,6}[index(tier)]; }
     public static double incomingMultiplier(int tier) { return new double[]{.95,.93,.90,.87,.85}[index(tier)]; }
-    public static double skillMultiplier(int tier) { return new double[]{.67,.75,.83,.90,1.0}[index(tier)]; }
+    /** Boss skill damage: Tier 1-5 ramp to the Tier 5 numbers; Tier 6-8 scale them like basic hits. */
+    public static double skillMultiplier(int tier) { return tier >= 6 ? damageMultiplier(tier) : new double[]{.67,.75,.83,.90,1.0}[index(tier)]; }
+    /** Tier 6-8 health builds on Tier 5: VI +20%, VII +5% on VI, VIII +5% on VII. */
+    public static double healthMultiplier(int tier) { return tier >= 8 ? 1.2 * 1.05 * 1.05 : tier == 7 ? 1.2 * 1.05 : tier == 6 ? 1.2 : 1.0; }
+    /**
+     * Tier 6-8 hit far harder than Tier 5 (e2.193: the players who reach them wear late-game, Limit Break armor):
+     * VI x1.45, VII x1.6, VIII x1.75 on every basic hit and boss skill.
+     */
+    public static double damageMultiplier(int tier) { return tier >= 8 ? 1.75 : tier == 7 ? 1.6 : tier == 6 ? 1.45 : 1.0; }
+    /**
+     * Share of each Tier 6-8 hit that lands again as a sonic rend, ignoring armor and Protection (Resistance,
+     * absorption and Totems still apply), so enchanted armor cannot shrug these sanctums off: VI 22%, VII 28%, VIII 34%.
+     */
+    public static double rendRatio(int tier) { return tier >= 8 ? 0.34 : tier == 7 ? 0.28 : tier == 6 ? 0.22 : 0.0; }
+    /** Tier 6-8 bosses are tougher still, on top of healthMultiplier: VI x1.5, VII x1.6, VIII x1.75. */
+    public static double bossHealthMultiplier(int tier) { return tier >= 8 ? 1.75 : tier == 7 ? 1.6 : tier == 6 ? 1.5 : 1.0; }
+    /** Damage the encounter's mobs take from a player's melee, arrows/thrown weapons and spells at a tier. */
+    public static double meleeTaken(int tier) { return tier == 7 ? 0.30 : 1.0; }
+    public static double rangedTaken(int tier) { return tier >= 8 ? 0.50 : 1.0; }
+    public static double magicTaken(int tier) { return tier >= 8 ? 0.50 : 1.0; }
 }

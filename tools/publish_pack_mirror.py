@@ -103,8 +103,26 @@ def runtime_judge(magic_jar, garden_jar):
     return judge
 
 
-def git(*args, cwd=REPO, check=True):
-    return subprocess.run(['git', *args], cwd=cwd, check=check, text=True, capture_output=True)
+def git(*args, cwd=None, check=True):
+    return subprocess.run(['git', *args], cwd=cwd or REPO, check=check, text=True, capture_output=True)
+
+
+def write_index(rows):
+    (STAGE / 'index.json').write_text(json.dumps(rows, indent=2) + '\n', encoding='utf8')
+
+
+def tree(revision):
+    entries = {}
+    for line in git('ls-tree', '-r', '--full-tree', revision).stdout.splitlines():
+        metadata, _, name = line.partition('\t')
+        entries[name] = metadata.split()[2]
+    return entries
+
+
+def require_preserved(before, after):
+    changed = [name for name, digest in before.items() if after.get(name) != digest]
+    if changed:
+        raise RuntimeError('Refusing publication: previously published files changed or disappeared: ' + ', '.join(changed))
 
 
 def stage(jars, judges):
@@ -130,7 +148,7 @@ def stage(jars, judges):
         rows.append({'pack': pack, 'fingerprint': key, 'sha1': hashlib.sha1(data).hexdigest(), 'bytes': len(data),
                      'source': str(Path(path).relative_to(ROOT)) if Path(path).is_relative_to(ROOT) else str(path),
                      'url': RAW.format(pack=pack, fingerprint=key)})
-    (STAGE / 'index.json').write_text(json.dumps(rows, indent=2) + '\n', encoding='utf8')
+    write_index(rows)
     return rows
 
 
@@ -140,20 +158,35 @@ def push(rows):
         REPO.mkdir(parents=True, exist_ok=True)
         git('init')
         git('remote', 'add', 'origin', origin)
-    if git('fetch', 'origin', BRANCH, check=False).returncode == 0:
-        git('checkout', '-B', BRANCH, 'origin/' + BRANCH)
-    elif git('rev-parse', '--verify', BRANCH, check=False).returncode != 0:
-        git('checkout', '--orphan', BRANCH)
+    if git('status', '--porcelain').stdout.strip():
+        raise RuntimeError('Publishing checkout has local changes; refusing to overwrite them')
+    fetched = git('fetch', 'origin', BRANCH, check=False)
+    if fetched.returncode:
+        raise RuntimeError('Cannot verify the current published baseline; refusing publication:\n' + fetched.stderr)
+    git('checkout', '-B', BRANCH, 'origin/' + BRANCH)
+    baseline = git('rev-parse', 'HEAD').stdout.strip()
+    previous = tree(baseline)
     added = []
     for row in rows:
         target = REPO / row['pack'] / (row['fingerprint'] + '.zip')
         if target.exists():
-            if fingerprint(target.read_bytes()) != row['fingerprint']:
+            existing = target.read_bytes()
+            if fingerprint(existing) != row['fingerprint']:
                 raise RuntimeError(f'{target} exists with other contents')
+            # Same contents can have different ZIP timestamps/compression and therefore SHA-1s.
+            # Keep the published ZIP byte-for-byte and advertise ITS hash, never a rebuilt ZIP's.
+            row['sha1'] = hashlib.sha1(existing).hexdigest()
+            row['bytes'] = len(existing)
+            (STAGE / row['pack'] / target.name).write_bytes(existing)
             continue
+        staged = STAGE / row['pack'] / target.name
+        data = staged.read_bytes()
+        if fingerprint(data) != row['fingerprint'] or hashlib.sha1(data).hexdigest() != row['sha1']:
+            raise RuntimeError('Staged pack changed before publication: ' + str(staged))
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(STAGE / row['pack'] / target.name, target)
+        shutil.copyfile(staged, target)
         added.append(target.relative_to(REPO).as_posix())
+    write_index(rows)
     readme = REPO / 'README.md'
     if not readme.exists():
         readme.write_text('# Evergarden pack mirror\n\nJava resource packs named by content fingerprint '
@@ -164,12 +197,21 @@ def push(rows):
         print('Every staged pack is already published.')
         return
     git('add', *added)
-    message = ('Add pack copies: ' + ', '.join(f"{r['pack']} {r['fingerprint'][:12]}" for r in rows)
-               + '\n\nCo-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>\n')
+    message = 'Add pack copies: ' + ', '.join(f"{r['pack']} {r['fingerprint'][:12]}" for r in rows)
     git('commit', '-m', message)
+    current = tree('HEAD')
+    require_preserved(previous, current)
+    report = {'baseline': baseline, 'commit': git('rev-parse', 'HEAD').stdout.strip(),
+              'preserved_files': len(previous), 'previous_blobs': previous,
+              'added_files': sorted(set(current) - set(previous)), 'published': False}
+    report_path = STAGE / 'publication.json'
+    report_path.write_text(json.dumps(report, indent=2) + '\n', encoding='utf8')
     result = git('push', 'origin', BRANCH, check=False)
     if result.returncode:
         raise RuntimeError('git push failed:\n' + result.stderr)
+    report['published'] = True
+    report_path.write_text(json.dumps(report, indent=2) + '\n', encoding='utf8')
+    print('Preserved', len(previous), 'previously published files byte-for-byte.')
     print('Pushed', len(added), 'files to', origin, BRANCH)
 
 
@@ -178,11 +220,14 @@ MANIFEST = 'pack-mirror.properties'
 
 def published_copies(rows):
     """Every copy on the packs branch (from the publishing clone), plus this run's."""
-    copies = {(row['pack'], row['fingerprint'], row['sha1']) for row in rows}
+    copies = {(row['pack'], row['fingerprint']): row['sha1'] for row in rows}
     if (REPO / '.git').exists():
         for path in REPO.glob('*/*.zip'):
-            copies.add((path.parent.name, path.stem, hashlib.sha1(path.read_bytes()).hexdigest()))
-    return sorted(copies)
+            key, digest = (path.parent.name, path.stem), hashlib.sha1(path.read_bytes()).hexdigest()
+            if key in copies and copies[key] != digest:
+                raise RuntimeError('Conflicting SHA-1 values for published pack: ' + '/'.join(key))
+            copies[key] = digest
+    return sorted((pack, key, digest) for (pack, key), digest in copies.items())
 
 
 def manifest(copies):
@@ -240,7 +285,7 @@ def verify(rows, attempts=7):
                                                  headers={'User-Agent': 'Evergarden-pack-mirror', 'Cache-Control': 'no-cache'})
                 with urllib.request.urlopen(request, timeout=60) as response:
                     data = response.read()
-                ok = fingerprint(data) == row['fingerprint']
+                ok = fingerprint(data) == row['fingerprint'] and hashlib.sha1(data).hexdigest() == row['sha1']
             except OSError as error:
                 ok, data = False, str(error).encode()
             if not ok:

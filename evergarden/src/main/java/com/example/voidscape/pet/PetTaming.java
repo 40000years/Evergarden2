@@ -68,11 +68,11 @@ final class PetTaming {
     PetTaming(VoidscapePlugin plugin,WildPetSpawns wild,PetCompanions companions,PetBodies bodies){
         this.plugin=plugin;this.wild=wild;this.companions=companions;this.bodies=bodies;
     }
-    static Material defaultFood(PetCatalog.Species species){return DEFAULT_FOOD.get(species);}
+    static Material defaultFood(PetCatalog.Species species){var profile=PetExpansion.of(species);return profile==null?DEFAULT_FOOD.get(species):profile.food();}
     Material food(PetCatalog.Species species){
         String configured=plugin.getConfig().getString("pets.taming.food."+species.id);
         Material material=configured==null?null:Material.matchMaterial(configured);
-        return material!=null&&material.isItem()?material:DEFAULT_FOOD.get(species);
+        return material!=null&&material.isItem()?material:defaultFood(species);
     }
     static String foodName(Material material){
         String raw=material.name().toLowerCase(Locale.ROOT).replace('_',' ');
@@ -196,6 +196,7 @@ final class PetTaming {
             int gain=switch(body.stage){case BABY->18+random.nextInt(13);case MEDIUM->9+random.nextInt(8);case ADULT->4+random.nextInt(5);};
             // A mythical companion trusts far more slowly.
             if(body.species.mythical())gain=Math.max(1,(int)Math.round(gain*mythicalTrust()));
+            else if(body.species.rare())gain=Math.max(1,(int)Math.round(gain*.75));
             body.trust=Math.min(100,body.trust+gain);
             at.getWorld().spawnParticle(Particle.HEART,at,1+gain/8,.35,.3,.35,0);
             player.playSound(at,Sound.ENTITY_GENERIC_EAT,.7f,1.3f);

@@ -53,8 +53,6 @@ subprocess.run(['javac', '-proc:none', '-encoding', 'UTF-8', '-cp', os.pathsep.j
                 str(Path(__file__).with_name('PortalTravelChecks.java')),
                 str(Path(__file__).with_name('RetiredRelicChecks.java')),
                 str(Path(__file__).with_name('RecipeMenuChecks.java')),
-                str(Path(__file__).with_name('MythicSpellChecks.java')),
-                str(Path(__file__).with_name('LegendaryBedrockChecks.java')),
                 str(root / 'tests/ancient-judge/JudgeBedrockChecks.java')], check=True)
 (classes / 'plugin.yml').write_text("name: BedrockItemChecks\nversion: '1.0'\nmain: BedrockItemChecks\napi-version: '26.2'\ndepend: [Evergarden, advance-magic, Geyser-Spigot]\n", encoding='utf-8')
 subprocess.run(['jar', '--create', '--file', str(plugins / 'bedrock-item-checks.jar'), '-C', str(classes), '.'], check=True)

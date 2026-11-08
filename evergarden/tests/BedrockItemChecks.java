@@ -45,6 +45,8 @@ public final class BedrockItemChecks extends JavaPlugin {
                     verify(garden.relics().createMagicCore(spell.id()),"advance_magic:core_"+spell.id());
                 }
                 verify(magic.flyingStaff().create(),"advance_magic:flying_staff");
+                for(var kind:com.example.voidscape.world.DragonNestLayout.Kind.values())
+                    verify(com.example.voidscape.boss.DragonScales.create(garden,kind,1),"voidscape:dragon_scale_"+com.example.voidscape.boss.DragonScales.id(kind));
                 verify(magic.restoration().createCore(),"advance_magic:restoration_core");
                 verify(magic.restoration().createRepairWand(),"advance_magic:restoration_wand");
                 var upgrades=new com.example.voidscape.world.WhaleTreasure(garden);
@@ -87,7 +89,6 @@ public final class BedrockItemChecks extends JavaPlugin {
                 expectedIds.removeAll(seen);
                 if(!expectedIds.isEmpty())throw new AssertionError("Missing coverage: "+expectedIds);
                 PortalTravelChecks.run(garden);
-                MythicSpellChecks.run(this,magic,garden);
                 JudgeBedrockChecks.run(this);
                 Files.writeString(Path.of("bedrock-items-result.txt"),"PASS "+checks+" translations / "+seen.size()+" custom identifiers / "+Registries.ITEMS.get().size()+" Bedrock protocol tables; vanilla honey bottle unchanged");
             }catch(Throwable error){

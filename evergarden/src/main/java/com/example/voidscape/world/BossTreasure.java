@@ -44,6 +44,49 @@ public final class BossTreasure {
             if(index==0){originalRewards.addRestorationTreasure(chest,site.x(),site.z(),site.kind().ordinal()+10);addFlyingStaff(chunk,chest,site);}
         }
     }
+    public void populateDragonNest(Chunk chunk,DragonNestLayout.Site site){
+        var points=site.blueprint().treasures();
+        var capKind=switch(site.kind()){
+            case FIRE->BossStructureLayout.Kind.ARKHAIA;
+            case STORM,ICE->BossStructureLayout.Kind.SERAPHON;
+        };
+        for(int index=0;index<points.size();index++){
+            var spot=points.get(index);var point=spot.point();int x=site.x()+point.x(),z=site.z()+point.z();
+            if(Math.floorDiv(x,16)!=chunk.getX()||Math.floorDiv(z,16)!=chunk.getZ())continue;
+            var marker=plugin.key(site.kind().id+"_vault_"+index+"_v1");var data=chunk.getPersistentDataContainer();
+            if(data.has(marker,PersistentDataType.BYTE))continue;
+            data.set(marker,PersistentDataType.BYTE,(byte)1);
+            var block=chunk.getBlock(Math.floorMod(x,16),point.y(),Math.floorMod(z,16));
+            if(!(block.getState() instanceof Chest chest)
+                ||!chunk.getBlock(Math.floorMod(x,16),point.y()+1,Math.floorMod(z,16)).getType().isAir()
+                ||!chunk.getBlock(Math.floorMod(x,16),point.y()-1,Math.floorMod(z,16)).getType().isSolid())continue;
+            if(!chest.getBlockInventory().isEmpty())continue;
+            var random=new Random(DungeonLayout.mix(chunk.getWorld().getSeed()^site.kind().salt
+                ^((long)site.x()*341873128712L)^((long)site.z()*132897987541L)^0x4452474e4c4f4f54L^index));
+            var items=loot.roll(random,capKind);
+            if(index==0)items.add(originalRewards.createWandUpgrade(random));
+            var slots=new ArrayList<Integer>();for(int slot=0;slot<27;slot++)slots.add(slot);Collections.shuffle(slots,random);
+            for(int i=0;i<items.size()&&i<slots.size();i++)chest.getBlockInventory().setItem(slots.get(i),items.get(i));
+            ElementalScrollTreasure.add(chest,"boss");
+            if(index==0){
+                originalRewards.addRestorationTreasure(chest,site.x(),site.z(),site.kind().ordinal()+20);
+                addDragonFlyingStaff(chunk,chest,site);
+            }
+        }
+    }
+    private void addDragonFlyingStaff(Chunk chunk,Chest chest,DragonNestLayout.Site site){
+        var marker=plugin.key(site.kind().id+"_flying_staff_v1");var data=chunk.getPersistentDataContainer();
+        if(data.has(marker,PersistentDataType.BYTE))return;
+        var addon=plugin.getServer().getPluginManager().getPlugin("advance-magic");
+        if(!(addon instanceof AdvanceMagicPlugin magic)||!magic.isEnabled())return;
+        data.set(marker,PersistentDataType.BYTE,(byte)1);
+        double chance=plugin.getConfig().getDouble("structures.treasure.flying-staff-chances."+site.kind().id,.10);
+        if(!Double.isFinite(chance))chance=.10;
+        var random=new Random(DungeonLayout.mix(chunk.getWorld().getSeed()^((long)site.x()*341873128712L)
+            ^((long)site.z()*132897987541L)^0x464c59494e475354L^site.kind().id.hashCode()));
+        int slot=chest.getBlockInventory().firstEmpty();
+        if(slot>=0&&random.nextDouble()<Math.clamp(chance,0,1))chest.getBlockInventory().setItem(slot,magic.flyingStaff().create());
+    }
     private void addFlyingStaff(Chunk chunk,Chest chest,BossStructureLayout.Site site){
         var marker=plugin.key(site.kind().id+"_flying_staff_v1");var data=chunk.getPersistentDataContainer();
         if(data.has(marker,PersistentDataType.BYTE))return;

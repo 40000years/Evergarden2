@@ -46,6 +46,8 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
         Ring(String key,Location origin,long start){this.key=key;this.origin=origin;this.start=start;}
     }
     private static final class Run {
+        /** Phlegethon's weapon adaptation, active in phase three. */
+        final BossAdaptation adaptation=new BossAdaptation();
         final Location center;
         final Location position;
         final ArkhaiaSovereign sovereign;
@@ -59,7 +61,7 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
         final Map<UUID,Long> hits=new HashMap<>();
         final Set<UUID> contributors=new HashSet<>(),roster=new HashSet<>();
         final Map<UUID,Long> feedback=new HashMap<>();
-        final BossBar bar=Bukkit.createBossBar("Arkhaia",BarColor.PURPLE,BarStyle.SOLID);
+        final BossBar bar=Bukkit.createBossBar(BossNames.legacy("Arkhaia"),BarColor.PURPLE,BarStyle.SOLID);
         final BossBar stance=Bukkit.createBossBar("เกจเสียหลัก",BarColor.YELLOW,BarStyle.SEGMENTED_10);
         Slime target;ArmorStand bedrock;
         ArkhaiaModelSupport.Rig rig;
@@ -203,6 +205,7 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
     }
     private void spawnParts(Run r){
             r.target=plugin.world().spawn(r.position,Slime.class,e->{
+                BossDamage.tag(e,"Arkhaia");
                 tag(e);LevelledMobsCompat.tagMob(e,plugin,true);
                 // Paper's isPickable() reads collidable: false also makes arrows pass through.
                 // Player exemptions below suppress body pushing without disabling projectile hits.
@@ -367,6 +370,7 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
         boolean rear=ArkhaiaRules.behind(yaw,dx,dz);
         if(kind==ArkhaiaRules.Kind.MELEE&&ArkhaiaRules.front(yaw,dx,dz)&&Math.hypot(dx,dz)<=8&&r.sovereign.parry(tick,false))parried(r,p,false);
         boolean bystander=r.act.duel()&&r.duelist!=null&&!r.duelist.equals(p.getUniqueId());
+        if(r.sovereign.phase()==3)damage=r.adaptation.phaseThree(plugin,event,p,damage,BossAdaptation.ARKHAIA,"Arkhaia",r.position.clone().add(0,4,0));
         double dealt=r.sovereign.damage(damage,ArkhaiaRules.posture(kind,rear,bystander),tick);
         if(dealt>0)r.contributors.add(p.getUniqueId());
         if(dealt>0&&tick<r.reflectUntil){
@@ -482,8 +486,12 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
     }
     private double scale(){double percent=plugin.getConfig().getDouble("arkhaia.combat.damage-percent",100);return Double.isFinite(percent)?Math.clamp(percent,0,1000)/100:1;}
     /** Every Arkhaia blow is armor-piercing encounter damage; Protection, Resistance and Totems still apply. */
-    private boolean magic(Run r,Player p,double amount,boolean armor){
+    private boolean magic(Run r,Player p,double amount,boolean armor){return magic(r,p,amount,armor,false);}
+    /** {@code percent}: the blow is a share of the victim's max HP, so phase three caps it (BossAdaptation.percentBlow). */
+    private boolean magic(Run r,Player p,double amount,boolean armor,boolean percent){
         if(r.stopped||!opponent(r,p)||!Double.isFinite(amount)||amount<=0)return false;
+        if(r.sovereign.phase()==3)amount=percent?BossAdaptation.percentBlow(plugin,BossAdaptation.ARKHAIA,amount,p.getAttribute(Attribute.MAX_HEALTH).getValue())
+            :amount*BossAdaptation.damageMultiplier(plugin,BossAdaptation.ARKHAIA);
         r.applyingImpact=true;
         try{return BossDamage.hit(p,amount,DamageSource.builder(DamageType.INDIRECT_MAGIC).withCausingEntity(r.target).withDirectEntity(r.target).build(),armor);}
         finally{r.applyingImpact=false;}
@@ -500,6 +508,8 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
         };
         return base*scale();
     }
+    /** The sweeps and Execute are sized by the victim's max HP (swordDamage). */
+    private static boolean percentMove(Move move){return move==Move.SWEEP_LEFT||move==Move.SWEEP_RIGHT||move==Move.EXECUTE;}
     private int lock(Move move){return switch(move){case LIGHT->5;case HEAVY->7;case CHARGE->6;case SWEEP_LEFT,SWEEP_RIGHT->8;case EXECUTE->9;default->-1;};}
     private ArkhaiaPattern.Hazard shape(Run r,Move move){
         double x=r.position.getX(),z=r.position.getZ(),yaw=r.position.getYaw(),angle=ArkhaiaPattern.facing(yaw);
@@ -673,7 +683,7 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
         r.effects.impact(r.position.clone().add(new Vector(-Math.sin(Math.toRadians(r.position.getYaw())),0,Math.cos(Math.toRadians(r.position.getYaw()))).multiply(4)),heavy);
         for(Player p:struck){
             if(heavy&&r.blocking.contains(p.getUniqueId())){p.setCooldown(Material.SHIELD,100);p.sendActionBar(net.kyori.adventure.text.Component.text("การ์ดแตก — ยกโล่ช้าหรือนานเกินไป",net.kyori.adventure.text.format.NamedTextColor.RED));}
-            if(!magic(r,p,swordDamage(r,move,p),true))continue;
+            if(!magic(r,p,swordDamage(r,move,p),true,percentMove(move)))continue;
             if(r.blessings.contains(ArkhaiaWaves.Kind.ACHERON))r.bleeding.put(p.getUniqueId(),tick+100);
             if(r.blessings.contains(ArkhaiaWaves.Kind.COCYTUS))p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,40,1));
             if(heavy&&r.blessings.contains(ArkhaiaWaves.Kind.STYX))p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,120,1));
@@ -704,7 +714,7 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
         r.trails.removeIf(t->tick>=t.until());
         for(Trail t:r.trails)for(Player p:opponents(r))if(grounded(r,p,1.5)&&Math.hypot(p.getX()-t.at().getX(),p.getZ()-t.at().getZ())<=1.8
                 &&tick>=r.grazed.getOrDefault(p.getUniqueId(),0L)){
-            r.grazed.put(p.getUniqueId(),tick+10);if(magic(r,p,(fire?12:8)*scale(),false)&&fire)p.setFireTicks(60);
+            r.grazed.put(p.getUniqueId(),tick+10);if(magic(r,p,(fire?12:8)*scale(),false)&&fire)BossDamage.ignite(p,60,"Arkhaia");
         }
         if(r.act.state()==State.ACTIVE&&r.act.move()==Move.SPIN&&(r.act.age()==2||r.act.age()==16)){
             Location origin=r.position.clone();origin.setY(r.center.getY()+.25);r.rings.add(new Ring("attack:ring:"+(r.serial++),origin,tick));
@@ -754,7 +764,7 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
         if(age%200==0&&age>0&&r.sovereign.state()==State.RITUAL)announce(r,"§dพิธีหกสายน้ำ · เหลือ "+(ArkhaiaSovereign.RITUAL_LIMIT-age)/20+" วินาที · วิญญาณเหลือ "+r.minions.alive());
     }
     private void regroup(Run r){
-        r.regrouped=true;r.sovereign.regroup(tick);clearAttacks(r);r.minions.clear();r.ritualKinds.clear();r.effects.clear();
+        r.regrouped=true;r.sovereign.regroup(tick);r.adaptation.reset();clearAttacks(r);r.minions.clear();r.ritualKinds.clear();r.effects.clear();
         r.act=new ArkhaiaSovereign.Act(State.NEUTRAL,Move.NONE,0,0,false,0,0);
         plugin.getLogger().info("Arkhaia regrouped at "+r.center+": party wiped; phase "+r.sovereign.phase()+" restarts at "+(int)r.sovereign.health());
     }
@@ -879,7 +889,7 @@ final class ArkhaiaBoss implements Listener,AutoCloseable {
         var s=r.sovereign;r.bar.setProgress(Math.clamp(s.health()/s.maxHealth(),0,1));
         r.bar.setColor(s.phase()==1?BarColor.PURPLE:s.phase()==2?BarColor.PINK:BarColor.RED);
         String state=switch(s.state()){case BROKEN->" · §dเสียหลัก ×2";case RITUAL->" · §5เกราะกุหลาบ";case TRANSITION->" · เปลี่ยนเฟส";default->s.lastStand()?" · §4LAST STAND":"";};
-        r.bar.setTitle("Arkhaia | Phase "+s.phase()+" | "+(int)Math.ceil(s.health())+" / "+(int)s.maxHealth()+state
+        r.bar.setTitle(BossNames.legacy("Arkhaia")+" §8| §fPhase "+s.phase()+" | "+(int)Math.ceil(s.health())+" / "+(int)s.maxHealth()+state
             +(r.blessings.isEmpty()?"":" · สายน้ำ "+r.blessings.size()));
         r.stance.setProgress(Math.clamp(s.posture()/100,0,1));
         r.stance.setColor(s.broken()?BarColor.PINK:BarColor.YELLOW);

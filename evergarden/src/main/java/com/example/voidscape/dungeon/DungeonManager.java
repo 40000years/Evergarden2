@@ -1,6 +1,7 @@
 package com.example.voidscape.dungeon;
 
 import com.example.voidscape.VoidscapePlugin;
+import com.example.voidscape.boss.BossDamage;
 import com.example.voidscape.dungeon.DungeonBalance.Species;
 import com.example.voidscape.world.DungeonLayout;
 import com.example.voidscape.world.DungeonLayout.Site;
@@ -41,10 +42,27 @@ public final class DungeonManager implements Listener {
         boolean warnedAway;   // the "back to the arena or it resets" warning has been shown
         Location warning; final List<Location> extraWarnings=new ArrayList<>(); BossBar bar;
         final int totalWaves;
+        // Tier VI-VIII: two bosses from VII, ground seals, VIII's sanctuary skills, unique (Forge elite) mobs.
+        final List<UUID> bosses=new ArrayList<>();
+        final Map<UUID,Long> nextSeal=new HashMap<>(),nextSpecial=new HashMap<>(),berserkUntil=new HashMap<>();
+        final List<Seal> seals=new ArrayList<>();
+        final Set<UUID> uniques=new HashSet<>();
+        int sealSerial;
         Encounter(Site site,int totalWaves){this.site=site;this.totalWaves=totalWaves;}
     }
+    /** A ground seal waiting to burst: 0 = the tier seal, 1 = Acheron's binding circle. */
+    private record Seal(String key,String model,Location at,double radius,long born,long burstAt,UUID boss,int kind){}
+    private record Root(long until,String site,Location at){}
     private final VoidscapePlugin plugin;
     private final Map<String,Encounter> active=new LinkedHashMap<>();
+    private final com.example.voidscape.boss.SanctumSigils sigils;
+    private final com.example.voidscape.world.SanctumExpansion expansion;
+    private final Map<UUID,Root> roots=new HashMap<>();
+    private final Map<UUID,Long> resistHint=new HashMap<>();
+    /** Seal damage in flight: the exact amount, so difficulty scaling never changes "a quarter of maximum health". */
+    private final Map<UUID,Double> exactSeal=new HashMap<>();
+    private final NamespacedKey hpScaleKey,uniqueColorKey,volleyKey,rootKey;
+    private int expansionTicks;
     private final Map<UUID,Encounter> owners=new HashMap<>();
     private final Map<UUID,Long> combatUntil=new HashMap<>();
     private final Map<UUID,Double> scriptedImpacts=new HashMap<>();
@@ -62,6 +80,12 @@ public final class DungeonManager implements Listener {
         this.plugin=plugin;mobKey=plugin.key("dungeon_mob");runKey=plugin.key("runtime");
         trueDeathHitsKey=plugin.key("true_death_hits");trueDeathLevelKey=plugin.key("true_death_level");
         mobTargetHpKey=plugin.key("target_hp");mobTargetDmgKey=plugin.key("target_dmg");mobTargetNameKey=plugin.key("target_name");
+        hpScaleKey=plugin.key("sanctum_hp_scale");uniqueColorKey=plugin.key("sanctum_unique_color");
+        volleyKey=plugin.key("sanctum_volley");rootKey=plugin.key("sanctum_root");
+        sigils=new com.example.voidscape.boss.SanctumSigils(plugin);
+        expansion=new com.example.voidscape.world.SanctumExpansion(plugin,plugin.layout());
+        plugin.layout().expand(expansion);
+        Bukkit.getScheduler().runTaskTimer(plugin,this::sealTick,40,2);
         file=new File(plugin.getDataFolder(),"dungeons.yml");
         ledger=new YamlConfiguration();
         if(file.exists())try{ledger.load(file);}catch(Exception e){throw new IOException("Cannot safely read reward ledger",e);}
@@ -106,21 +130,24 @@ public final class DungeonManager implements Listener {
     }
 
     private NamedTextColor tierNamedColor(int tier) {
-        return switch (Math.clamp(tier, 1, 5)) {
+        return switch (Math.clamp(tier, 1, DungeonLayout.MAX_TIER)) {
             case 1 -> NamedTextColor.GREEN;
             case 2 -> NamedTextColor.AQUA;
             case 3 -> NamedTextColor.YELLOW;
             case 4 -> NamedTextColor.GOLD;
-            default -> NamedTextColor.RED;
+            case 5 -> NamedTextColor.RED;
+            case 6 -> NamedTextColor.BLUE;
+            case 7 -> NamedTextColor.DARK_PURPLE;
+            default -> NamedTextColor.DARK_RED;
         };
     }
 
     private BarColor tierBarColor(int tier) {
-        return switch (Math.clamp(tier, 1, 5)) {
+        return switch (Math.clamp(tier, 1, DungeonLayout.MAX_TIER)) {
             case 1 -> BarColor.GREEN;
-            case 2 -> BarColor.BLUE;
+            case 2, 6 -> BarColor.BLUE;
             case 3 -> BarColor.YELLOW;
-            case 4 -> BarColor.PURPLE;
+            case 4, 7 -> BarColor.PURPLE;
             default -> BarColor.RED;
         };
     }
@@ -268,7 +295,7 @@ public final class DungeonManager implements Listener {
 
         // Commit the entitlement and selected reward(s) before consuming a key or delivering anything.
         // A failed disk write must never leave a reward that can be claimed again after a restart.
-        List<ItemStack> rewards = plugin.relics().rollVaultRewards(site);
+        List<ItemStack> rewards = plugin.relics().rollVaultRewards(site, p);
         ItemStack primary = rewards.getFirst();
         String receiptPath=path(site)+".vault-claims."+p.getUniqueId();
         Object previousOpened=ledger.get(openedPath),previousReceipt=ledger.get(receiptPath);
@@ -325,6 +352,28 @@ public final class DungeonManager implements Listener {
         }
         int baseMobs = tier <= 1 ? 2 : tier <= 3 ? 3 : 4;
         int count=Math.min(8, baseMobs + Math.max(0, team.size() - 1) + (waveNum - 1) / 2);
+        if(tier>=6) {
+            if(waveNum==1)for(Player member:team)plugin.message(member,tierRules(tier));
+            // Seraph armour turns undead away: Tier VI-VIII send illagers, blazes and magma cubes instead.
+            int ravagers=0;
+            for(int i=0;i<count;i++) {
+                double angle=(2.0*Math.PI*i)/Math.max(1,count);
+                Location loc=position(enc.site,(int)Math.round(Math.cos(angle)*9.0),97,(int)Math.round(Math.sin(angle)*9.0));
+                int pick=ThreadLocalRandom.current().nextInt(waveNum>=2&&ravagers==0&&i<count-1?4:3);
+                switch(pick) {
+                    case 0 -> spawn(enc,Species.MINION,loc,team.size(),Vindicator.class);
+                    case 1 -> spawn(enc,Species.MINION,loc,team.size(),MagmaCube.class);
+                    case 2 -> spawn(enc,Species.STALKER,loc,team.size(),Blaze.class);
+                    default -> {
+                        ravagers++;i++;
+                        LivingEntity ravager=spawn(enc,Species.STALKER,loc,team.size(),Ravager.class);
+                        LivingEntity rider=spawn(enc,Species.CASTER,loc,team.size(),Evoker.class);
+                        if(ravager!=null&&rider!=null)ravager.addPassenger(rider);
+                    }
+                }
+            }
+            return;
+        }
         for(int i=0;i<count;i++) {
             Species sp=waveNum==1||i%3==0?Species.MINION:waveNum>=2&&i%3==2?Species.STALKER:Species.CASTER;
             double angle = (2.0 * Math.PI * i) / Math.max(1, count);
@@ -338,15 +387,28 @@ public final class DungeonManager implements Listener {
     private void spawnBoss(Encounter enc) {
         enc.bossStarted=true;
         List<Player> team=players(enc.site);
+        enc.bosses.clear();
         Location loc=position(enc.site,0,97,2);
-        LivingEntity boss=spawn(enc,Species.BOSS,loc,team.size());
+        LivingEntity boss;
+        if(enc.site.tier()>=7) {
+            // Tier VII-VIII: two bosses side by side.
+            boss=spawn(enc,Species.BOSS,position(enc.site,-3,97,2),team.size());
+            LivingEntity twin=spawn(enc,Species.BOSS,position(enc.site,3,97,2),team.size());
+            if(twin!=null)enc.bosses.add(twin.getUniqueId());
+            if(boss==null)boss=twin;
+            else enc.bosses.add(0,boss.getUniqueId());
+        } else {
+            boss=spawn(enc,Species.BOSS,loc,team.size());
+            if(boss!=null)enc.bosses.add(boss.getUniqueId());
+        }
         if(boss!=null) {
             String baseTitle=switch(enc.site.kind()) {
                 case SANCTUM_DARK -> "จอมมารแห่งความมืด (Shadow Overlord)";
                 case SANCTUM_ASTRAL -> "อัครเทวทูตดวงดาว (Astral Archon)";
                 case SANCTUM_TIME -> "ผู้พิทักษ์กาลเวลา (Chronos Vanguard)";
             };
-            String barTitle = "[Tier " + enc.site.romanTier() + "] " + baseTitle;
+            String barTitle = com.example.voidscape.boss.BossNames.legacy("[Tier " + enc.site.romanTier() + "] " + baseTitle)
+                + (enc.bosses.size() > 1 ? " §f×" + enc.bosses.size() : "");
             enc.bar=Bukkit.createBossBar(barTitle,tierBarColor(enc.site.tier()),BarStyle.SEGMENTED_10);
             for(Player p:team) {
                 enc.bar.addPlayer(p);
@@ -357,10 +419,14 @@ public final class DungeonManager implements Listener {
     }
 
     private LivingEntity spawn(Encounter enc,Species species,Location where,int teamSize) {
+        return spawn(enc,species,where,teamSize,null);
+    }
+
+    private LivingEntity spawn(Encounter enc,Species species,Location where,int teamSize,Class<? extends Mob> forced) {
         if(where.getWorld()!=plugin.world()||!where.getWorld().isChunkLoaded(where.getBlockX()>>4,where.getBlockZ()>>4))return null;
         if(owners.size()>=plugin.integer("performance.max-dungeon-mobs",64,4,128))return null;
 
-        Class<? extends Mob> type=switch(species) {
+        Class<? extends Mob> type=forced!=null?forced:switch(species) {
             case BOSS -> switch(enc.site.kind()) {
                 case SANCTUM_DARK -> WitherSkeleton.class;
                 case SANCTUM_ASTRAL -> Stray.class;
@@ -377,16 +443,21 @@ public final class DungeonManager implements Listener {
         };
 
         int tier = Math.clamp(enc.site.tier(), 1, 5);
+        int sealTier = enc.site.tier();
 
         Mob mob=plugin.world().spawn(where,type,m->{
+            // Size first: a slime's size resets its health and attack attributes.
+            if(m instanceof MagmaCube cube)cube.setSize(3);
             m.getPersistentDataContainer().set(mobKey,PersistentDataType.BYTE,(byte)1);
             m.getPersistentDataContainer().set(runKey,PersistentDataType.STRING,runId);
             m.setRemoveWhenFarAway(false);
             m.setPersistent(true);
 
             DungeonBalance.Stats stats = DungeonBalance.stats(species, tier, teamSize);
-            double baseHp = stats.health();
-            double attackDamage = stats.damage();
+            double baseHp = stats.health() * DungeonBalance.healthMultiplier(sealTier) * (m instanceof Ravager ? 1.8 : 1.0)
+                * (species == Species.BOSS ? DungeonBalance.bossHealthMultiplier(sealTier) : 1.0);
+            double attackDamage = stats.damage() * DungeonBalance.damageMultiplier(sealTier);
+            double wantedHp = baseHp;
             if (species == Species.BOSS) {
                 double configuredCap = plugin.getConfig().getDouble("combat.boss-health", 1024.0);
                 if (Double.isFinite(configuredCap) && configuredCap > 0) baseHp = Math.min(baseHp, configuredCap);
@@ -403,6 +474,8 @@ public final class DungeonManager implements Listener {
                 if (m.getAttribute(Attribute.ARMOR_TOUGHNESS) != null) m.getAttribute(Attribute.ARMOR_TOUGHNESS).setBaseValue(0);
             }
             baseHp = Math.min(1024.0, Math.round(baseHp));
+            // Above the 1024 health ceiling the rest of the toughness is carried as damage reduction.
+            if (wantedHp > baseHp + 0.5) m.getPersistentDataContainer().set(hpScaleKey, PersistentDataType.DOUBLE, wantedHp / baseHp);
 
             com.example.voidscape.compat.LevelledMobsCompat.tagMob(m, plugin, species == Species.BOSS);
             m.getPersistentDataContainer().set(mobTargetHpKey, PersistentDataType.DOUBLE, baseHp);
@@ -431,7 +504,9 @@ public final class DungeonManager implements Listener {
                  species == Species.CASTER ? "ภูตพลังเวท" : species == Species.MINION ? "อัศวินแห่งวิหาร" : "นักล่ามิติ");
             String name = "[Tier " + enc.site.romanTier() + "] " + baseName;
             m.getPersistentDataContainer().set(mobTargetNameKey, PersistentDataType.STRING, name);
-            m.customName(Component.text(name, species == Species.BOSS ? NamedTextColor.GOLD : species == Species.VEX ? NamedTextColor.RED : tierNamedColor(tier)));
+            m.customName(species == Species.BOSS ? com.example.voidscape.boss.BossNames.styled(name)
+                : Component.text(name, species == Species.VEX ? NamedTextColor.RED : tierNamedColor(tier)));
+            if (species == Species.BOSS) BossDamage.tag(m, name);
             m.setCustomNameVisible(true);
 
             if(m instanceof Vex vex) {
@@ -461,12 +536,13 @@ public final class DungeonManager implements Listener {
         if(!mob.isValid()||mob.isDead())return null;
         enc.mobs.put(mob.getUniqueId(),species);
         owners.put(mob.getUniqueId(),enc);
+        if(sealTier>=6&&species!=Species.BOSS&&species!=Species.VEX&&ThreadLocalRandom.current().nextDouble()<0.20)makeUnique(enc,mob,sealTier);
 
         // Schedule LevelledMobs immunity check 1 tick later to strip any external level modifications
         final double finalHp = mob.getPersistentDataContainer().getOrDefault(mobTargetHpKey, PersistentDataType.DOUBLE, 90.0);
         final double finalDmg = mob.getPersistentDataContainer().getOrDefault(mobTargetDmgKey, PersistentDataType.DOUBLE, 16.0);
         final String finalName = mob.getPersistentDataContainer().getOrDefault(mobTargetNameKey, PersistentDataType.STRING, "อัศวินแห่งวิหาร");
-        final NamedTextColor finalColor = species == Species.BOSS ? NamedTextColor.GOLD : species == Species.VEX ? NamedTextColor.RED : tierNamedColor(tier);
+        final NamedTextColor finalColor = species == Species.BOSS ? NamedTextColor.GOLD : species == Species.VEX ? NamedTextColor.RED : tierNamedColor(sealTier);
 
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             cleanseAndLockMob(mob, finalHp, finalDmg, finalName, finalColor, species == Species.BOSS);
@@ -524,7 +600,10 @@ public final class DungeonManager implements Listener {
 
         // Restore Custom Name
         if (targetName != null) {
-            mob.customName(Component.text(targetName, color != null ? color : (isBoss ? NamedTextColor.GOLD : tierNamedColor(tier))));
+            Integer unique = mob.getPersistentDataContainer().get(uniqueColorKey, PersistentDataType.INTEGER);
+            net.kyori.adventure.text.format.TextColor shade = unique != null ? net.kyori.adventure.text.format.TextColor.color(unique)
+                : color != null ? color : (isBoss ? NamedTextColor.GOLD : tierNamedColor(tier));
+            mob.customName(Component.text(targetName, shade));
             mob.setCustomNameVisible(true);
         }
     }
@@ -586,6 +665,8 @@ public final class DungeonManager implements Listener {
     public void damage(EntityDamageByEntityEvent e) {
         Encounter enc=owners.get(e.getEntity().getUniqueId());
         Entity source=e.getDamager();
+        // Encounter mobs never hurt each other (blaze fire, evoker fangs, ravager trampling).
+        if(enc!=null&&encounterSource(source)!=null){e.setCancelled(true);return;}
         Player attacker=source instanceof Player p?p:source instanceof Projectile pr&&pr.getShooter() instanceof Player p?p:null;
         if(enc!=null&&attacker!=null) {
             if(attacker.getWorld()!=e.getEntity().getWorld()) {
@@ -600,6 +681,7 @@ public final class DungeonManager implements Listener {
 
             // Modest resistance, on top of native armor and cosmetic equipment.
             Species victimSpecies = enc.mobs.get(e.getEntity().getUniqueId());
+            if (enc.site.tier() >= 6) tierDefence(e, enc, attacker, victimSpecies);
             if (victimSpecies == Species.BOSS) {
                 int tier = enc.site.tier();
                 double mult = DungeonBalance.incomingMultiplier(tier);
@@ -615,6 +697,13 @@ public final class DungeonManager implements Listener {
             if(mobEnc!=null) {
                 // Scripted attacks already have their own damage, warning and debuffs.
                 // Never reapply the basic-hit curse/cap to an AoE, laser or hazard.
+                if (source instanceof Projectile volley && volley.getPersistentDataContainer().has(volleyKey)) {
+                    // Cocytus volley: fixed arrow damage and frost, never the boss's basic-hit curse.
+                    e.setDamage(6.0 * DungeonBalance.damageMultiplier(mobEnc.site.tier()));
+                    victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 1));
+                    victim.setFreezeTicks(Math.min(victim.getMaxFreezeTicks(), victim.getFreezeTicks() + 60));
+                    return;
+                }
                 Double skillBudget = scriptedImpacts.get(victim.getUniqueId());
                 if (skillBudget != null) {
                     // Hard difficulty scales attributed mob damage before this event.
@@ -642,14 +731,24 @@ public final class DungeonManager implements Listener {
                 // Native weapons and external levelers must not exceed the authored hit budget.
                 double hitCap = mobDamager.getPersistentDataContainer().getOrDefault(mobTargetDmgKey,
                         PersistentDataType.DOUBLE, DungeonBalance.stats(species, tier, 1).damage());
+                if (mobEnc.berserkUntil.getOrDefault(mobDamager.getUniqueId(), 0L) > System.currentTimeMillis()) {
+                    // Styx berserk: 35% harder hits.
+                    hitCap *= 1.35;
+                    e.setDamage(e.getDamage() * 1.35);
+                }
                 e.setDamage(Math.min(e.getDamage(), hitCap));
+                double rend = hitCap * DungeonBalance.rendRatio(tier);
+                if (rend >= 0.5) {
+                    Mob striker = mobDamager;
+                    Bukkit.getScheduler().runTask(plugin, () -> rend(victim, striker, rend));
+                }
                 if (species == Species.BOSS) {
                     // True Death Curse only activates on Tier 3+ sanctums so Tier 1-2 Diamond players can fight fairly
                     if (tier >= 3) {
-                        recordTrueDeathHit(victim);
+                        recordTrueDeathHit(victim, bossName(mobDamager));
                     }
                     if (mobEnc.site.kind() == DungeonLayout.Kind.SANCTUM_DARK) {
-                        victim.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60 + tier * 15, tier >= 4 ? 1 : 0));
+                        BossDamage.effect(victim, new PotionEffect(PotionEffectType.WITHER, 60 + tier * 15, tier >= 4 ? 1 : 0), bossName(mobDamager));
                     } else if (mobEnc.site.kind() == DungeonLayout.Kind.SANCTUM_ASTRAL) {
                         victim.setFreezeTicks(Math.min(victim.getMaxFreezeTicks(), victim.getFreezeTicks() + 80 + tier * 20));
                     } else if (mobEnc.site.kind() == DungeonLayout.Kind.SANCTUM_TIME) {
@@ -667,7 +766,11 @@ public final class DungeonManager implements Listener {
     private int trueDeathHitsPerLevel(){return plugin.integer("combat.true-death.hits-per-level",10,1,100);}
     private int trueDeathMaxLevel(){return plugin.integer("combat.true-death.max-level",5,1,10);}
 
-    private void recordTrueDeathHit(Player victim) {
+    private String bossName(Mob boss) {
+        return boss.getPersistentDataContainer().getOrDefault(mobTargetNameKey, PersistentDataType.STRING, "บอสแห่งวิหาร");
+    }
+
+    private void recordTrueDeathHit(Player victim, String bossName) {
         TrueDeathProgress progress=TrueDeathProgress.hit(trueDeathHits(victim),trueDeathLevel(victim),trueDeathHitsPerLevel(),trueDeathMaxLevel());
         victim.getPersistentDataContainer().set(trueDeathHitsKey,PersistentDataType.INTEGER,progress.hits());
         victim.getPersistentDataContainer().set(trueDeathLevelKey,PersistentDataType.INTEGER,progress.level());
@@ -685,7 +788,8 @@ public final class DungeonManager implements Listener {
             Bukkit.getScheduler().runTask(plugin,()->{
                 Player current=Bukkit.getPlayer(id);
                 if(current==null||!current.isOnline()||current.isDead()||trueDeathLevel(current)!=expectedLevel)return;
-                current.setHealth(0.0); // Direct death deliberately bypasses Totem at the final stack (Level 5).
+                // Direct death deliberately bypasses Totem at the final stack (Level 5).
+                BossDamage.scoped(current, bossName, () -> current.setHealth(0.0));
             });
         } else {
             victim.showTitle(net.kyori.adventure.title.Title.title(
@@ -698,10 +802,11 @@ public final class DungeonManager implements Listener {
                 if(current==null||!current.isOnline()||current.isDead()||trueDeathLevel(current)!=expectedLevel)return;
                 double pulseDamage = plugin.getConfig().getDouble("combat.true-death.pulse-damage-per-level", 4.0) * expectedLevel;
                 if(pulseDamage > 0.0) {
-                    current.damage(pulseDamage); // Normal damage: vanilla Totem protects if damage is lethal
+                    // Normal damage: vanilla Totem protects if damage is lethal.
+                    BossDamage.scoped(current, bossName, () -> current.damage(pulseDamage));
                 }
                 current.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 80, 0));
-                current.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 60, Math.min(1, expectedLevel - 1)));
+                BossDamage.effect(current, new PotionEffect(PotionEffectType.WITHER, 60, Math.min(1, expectedLevel - 1)), bossName);
             });
         }
     }
@@ -767,10 +872,20 @@ public final class DungeonManager implements Listener {
     public void death(EntityDeathEvent e) {
         Encounter enc=owners.remove(e.getEntity().getUniqueId());if(enc==null)return;
         Species species=enc.mobs.remove(e.getEntity().getUniqueId());
-        e.getDrops().clear();e.setDroppedExp(0);
+        // A unique keeps the EvergardenForge loot its elite rank dropped; nothing else drops.
+        if(enc.uniques.remove(e.getEntity().getUniqueId()))e.getDrops().removeIf(item->!forgeItem(item));
+        else e.getDrops().clear();
+        e.setDroppedExp(0);
         if(!runId.equals(e.getEntity().getPersistentDataContainer().get(runKey,PersistentDataType.STRING)))return;
 
         if(species==Species.BOSS) {
+            enc.bosses.remove(e.getEntity().getUniqueId());
+            enc.berserkUntil.remove(e.getEntity().getUniqueId());
+            for(var seal:new ArrayList<>(enc.seals))if(seal.boss().equals(e.getEntity().getUniqueId())){enc.seals.remove(seal);sigils.remove(seal.key());}
+            if(!enc.bosses.isEmpty()) {
+                for(Player p:players(enc.site))plugin.message(p,"⚔ บอสหนึ่งตนล้มลง · เหลืออีก "+enc.bosses.size()+" ตน!");
+                return;
+            }
             finish(enc);
             return;
         }
@@ -807,6 +922,7 @@ public final class DungeonManager implements Listener {
 
     public void tick() {
         long now=System.currentTimeMillis();combatUntil.values().removeIf(t->t<now);
+        if(++expansionTicks%10==0)expansion.decideAroundPlayers();
         for(Player p:Bukkit.getOnlinePlayers())if(trueDeathLevel(p)>0||trueDeathHits(p)>0)updateTrueDeathBar(p);
         if(!tempWebs.isEmpty()) {
             Iterator<Map.Entry<Block,Long>> it=tempWebs.entrySet().iterator();
@@ -878,8 +994,8 @@ public final class DungeonManager implements Listener {
             for(var entry:new ArrayList<>(enc.mobs.entrySet())) {
                 if(!(Bukkit.getEntity(entry.getKey()) instanceof Mob mob))continue;
 
-                // Anti-Boat Cheese: Force eject and delete any vehicle immediately
-                if(mob.isInsideVehicle()) {
+                // Anti-Boat Cheese: Force eject and delete any vehicle immediately (an Evoker may ride its Ravager)
+                if(mob.isInsideVehicle()&&!(mob.getVehicle()!=null&&owners.containsKey(mob.getVehicle().getUniqueId()))) {
                     Entity vehicle=mob.getVehicle();
                     mob.leaveVehicle();
                     if(vehicle instanceof Boat||vehicle instanceof Minecart) vehicle.remove();
@@ -891,9 +1007,10 @@ public final class DungeonManager implements Listener {
 
                 // Circular arena mob leash (keeps mobs inside the flat r <= 19 combat pit)
                 double mobRadial = Math.hypot(mob.getX() - (enc.site.x() + 0.5), mob.getZ() - (enc.site.z() + 0.5));
-                if(mob.getY() < 95.2 || (entry.getValue() != Species.VEX && mob.getY() > 101.5) || mobRadial > 19.2) {
+                double ceiling = entry.getValue() == Species.VEX ? 1000 : mob instanceof Blaze ? 108 : 101.5;
+                if(!mob.isInsideVehicle()&&(mob.getY() < 95.2 || mob.getY() > ceiling || mobRadial > 19.2)) {
                     Location back=position(enc.site,0,97,4);
-                    owners.remove(mob.getUniqueId());mob.teleport(back);owners.put(mob.getUniqueId(),enc);
+                    owners.remove(mob.getUniqueId());mob.teleport(back,io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_PASSENGERS);owners.put(mob.getUniqueId(),enc);
                 }
 
                 // Caster ranged debuff & cobweb curse
@@ -945,8 +1062,9 @@ public final class DungeonManager implements Listener {
                     double maxHp = mob.getAttribute(Attribute.MAX_HEALTH) != null ? mob.getAttribute(Attribute.MAX_HEALTH).getValue() : 1024.0;
                     double hpRatio = Math.max(0.0, Math.min(1.0, mob.getHealth() / maxHp));
                     if(enc.bar!=null) {
-                        enc.bar.setProgress(hpRatio);
+                        enc.bar.setProgress(bossBarProgress(enc, hpRatio));
                     }
+                    if (enc.site.tier() >= 6) tierSkills(enc, mob, target, team, now);
 
                     // Tier 4 & Tier 5 Boss Enrage Phase (< 50% HP)
                     if (tier >= 4 && !enc.bossEnraged && hpRatio <= 0.50) {
@@ -1064,6 +1182,25 @@ public final class DungeonManager implements Listener {
             if (previous == null) scriptedImpacts.remove(player.getUniqueId());
             else scriptedImpacts.put(player.getUniqueId(), previous);
         }
+        Encounter enc = owners.get(boss.getUniqueId());
+        if (enc != null) rend(player, boss, damage * DungeonBalance.rendRatio(enc.site.tier()));
+    }
+
+    /**
+     * Tier 6-8: a second, separate impact that ignores armor and Protection (sonic boom). It goes through the
+     * scripted-impact budget, so this handler never caps, curses or rends it again.
+     */
+    private void rend(Player player, Mob source, double amount) {
+        if (amount < 0.5 || !playable(player) || source == null || !source.isValid()) return;
+        Double previous = scriptedImpacts.put(player.getUniqueId(), amount);
+        try {
+            player.setNoDamageTicks(0);
+            player.damage(amount, org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.SONIC_BOOM)
+                .withCausingEntity(source).withDirectEntity(source).build());
+        } finally {
+            if (previous == null) scriptedImpacts.remove(player.getUniqueId());
+            else scriptedImpacts.put(player.getUniqueId(), previous);
+        }
     }
 
     private void detonateCataclysmZone(Encounter enc, Mob mob, Location blastLoc, List<Player> team, int tier, double skillMult) {
@@ -1075,7 +1212,7 @@ public final class DungeonManager implements Listener {
                 for(Player p:team) {
                     if(p.getWorld()==blastLoc.getWorld()&&p.getLocation().distanceSquared(blastLoc)<=25) {
                         skillHit(p, 26.0 * skillMult, mob);
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,100 + tier * 15, tier >= 4 ? 2 : 1));
+                        BossDamage.effect(p, new PotionEffect(PotionEffectType.WITHER,100 + tier * 15, tier >= 4 ? 2 : 1), bossName(mob));
                         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,60,0));
                         p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,100,1));
                         if (tier >= 2) maybePlaceWeb(p,6000L);
@@ -1135,7 +1272,7 @@ public final class DungeonManager implements Listener {
                     if (Math.abs(r - 13.5) <= 2.2) {
                         skillHit(p, 14.0, boss);
                         p.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 60, 0));
-                        p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 80, 1));
+                        BossDamage.effect(p, new PotionEffect(PotionEffectType.WITHER, 80, 1), bossName(boss));
                         p.sendActionBar(Component.text("☠ วงแหวนสุริยุปราคาปะทุ! ก้าวออกจากวงแหวนรอบนอก!", NamedTextColor.DARK_PURPLE));
                     }
                 }
@@ -1299,7 +1436,7 @@ public final class DungeonManager implements Listener {
                                 switch (enc.site.kind()) {
                                     case SANCTUM_DARK -> {
                                         p.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 0));
-                                        p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 80, 1));
+                                        BossDamage.effect(p, new PotionEffect(PotionEffectType.WITHER, 80, 1), bossName(boss));
                                         p.sendActionBar(Component.text("💥 โดนลำแสงความมืดทะลวง! ติดตาบอดและคำสาป Wither!", NamedTextColor.DARK_PURPLE));
                                     }
                                     case SANCTUM_ASTRAL -> {
@@ -1419,8 +1556,327 @@ public final class DungeonManager implements Listener {
     public void onMobTarget(org.bukkit.event.entity.EntityTargetLivingEntityEvent e) {
         if (e.getEntity() instanceof Mob mob && mob.getPersistentDataContainer().has(mobKey)) {
             cleanseMobIfTagged(mob);
+            // Never each other: a stray hit or an illager grudge must not start a fight between them.
+            if (e.getTarget() != null && owners.containsKey(e.getTarget().getUniqueId())) e.setCancelled(true);
         }
     }
+
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void sanctumIgnite(BlockIgniteEvent e) {
+        if (encounterSource(e.getIgnitingEntity()) != null) e.setCancelled(true);
+    }
+
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void sanctumGrief(EntityChangeBlockEvent e) {
+        if (owners.containsKey(e.getEntity().getUniqueId())) e.setCancelled(true);
+    }
+
+    @EventHandler(priority=EventPriority.MONITOR)
+    public void rootDeath(PlayerDeathEvent e) { unroot(e.getEntity().getUniqueId()); }
+
+    @EventHandler(priority=EventPriority.MONITOR)
+    public void rootQuit(PlayerQuitEvent e) { unroot(e.getPlayer().getUniqueId()); }
+
+    // ---- Tier VI-VIII ---------------------------------------------------------------------------
+
+    private String tierRules(int tier) {
+        return switch (tier) {
+            case 6 -> "§9✦ วิหารผนึกคราม [Tier VI] §f· บอสร่ายผนึกครามลงพื้น: 25% ของพลังชีวิต + ช้าลง · หลบออกจากวง!";
+            case 7 -> "§5✦ วิหารผนึกม่วง [Tier VII] §f· มอนทุกตัวต้านอาวุธประชิด 70% (ใช้ธนูหรือเวท) · บอส 2 ตน · ผนึกม่วงทำให้อ่อนแรง";
+            default -> "§4✦ วิหารผนึกโลหิต [Tier VIII] §f· มอนทุกตัวต้านธนูและเวท 50% (ใช้อาวุธประชิด) · บอส 2 ตน · ผนึกโลหิต + สกิลบอสแห่ง Sanctuary";
+        };
+    }
+
+    /** The encounter that owns a damage or ignition source (a mob, its projectile, its evoker fangs), or null. */
+    private Encounter encounterSource(Entity source) {
+        if (source == null) return null;
+        Entity owner = source;
+        if (source instanceof Projectile projectile && projectile.getShooter() instanceof Entity shooter) owner = shooter;
+        else if (source instanceof EvokerFangs fangs && fangs.getOwner() != null) owner = fangs.getOwner();
+        else if (source instanceof AreaEffectCloud cloud && cloud.getSource() instanceof Entity caster) owner = caster;
+        return owner instanceof Player ? null : owners.get(owner.getUniqueId());
+    }
+
+    private static boolean forgeItem(ItemStack item) {
+        return item != null && item.hasItemMeta() && item.getItemMeta().getPersistentDataContainer().getKeys().stream()
+            .anyMatch(key -> key.getNamespace().equals("evergardenforge"));
+    }
+
+    /** Tier VI-VIII mobs: one in five becomes an EvergardenForge elite of a rarity that rises with the tier. */
+    private void makeUnique(Encounter enc, Mob mob, int tier) {
+        var forge = Bukkit.getPluginManager().getPlugin("EvergardenForge");
+        if (forge == null || !forge.isEnabled()) return;
+        boolean high = ThreadLocalRandom.current().nextInt(100) < (tier >= 8 ? 40 : 50);
+        String rarity = tier >= 8 ? (high ? "MYTHIC" : "EPIC") : tier == 7 ? (high ? "EPIC" : "RARE") : (high ? "RARE" : "UNCOMMON");
+        try {
+            Class<?> api = Class.forName("com.example.forge.ForgeApi", true, forge.getClass().getClassLoader());
+            if (!(boolean) api.getMethod("makeElite", LivingEntity.class, String.class).invoke(null, mob, rarity)) {
+                plugin.getLogger().info("[Sanctum] Forge refused a " + rarity + " unique " + mob.getType());
+                return;
+            }
+        } catch (ReflectiveOperationException | LinkageError | ClassCastException error) {
+            plugin.getLogger().warning("[Sanctum] EvergardenForge elites unavailable: " + error);
+            return;
+        }
+        var data = mob.getPersistentDataContainer();
+        // The sanctum keeps authority over the numbers: +60% health and +25% damage, not the elite multipliers.
+        double hp = Math.min(1024.0, Math.round(data.getOrDefault(mobTargetHpKey, PersistentDataType.DOUBLE, 100.0) * 1.6));
+        data.set(mobTargetHpKey, PersistentDataType.DOUBLE, hp);
+        data.set(mobTargetDmgKey, PersistentDataType.DOUBLE, data.getOrDefault(mobTargetDmgKey, PersistentDataType.DOUBLE, 10.0) * 1.25);
+        String label = switch (rarity) { case "UNCOMMON" -> "Tempered"; case "RARE" -> "Arcane"; case "EPIC" -> "Exalted"; default -> "Divine"; };
+        int color = switch (rarity) { case "UNCOMMON" -> 0x5EE87A; case "RARE" -> 0x4FB4FF; case "EPIC" -> 0xB47CFF; default -> 0xFF9A3C; };
+        String base = data.getOrDefault(mobTargetNameKey, PersistentDataType.STRING, "[Tier " + enc.site.romanTier() + "]");
+        data.set(mobTargetNameKey, PersistentDataType.STRING, base.replace("] ", "] ✦ " + label + " · "));
+        data.set(uniqueColorKey, PersistentDataType.INTEGER, color);
+        cleanseAndLockMob(mob, hp, data.get(mobTargetDmgKey, PersistentDataType.DOUBLE), data.get(mobTargetNameKey, PersistentDataType.STRING), null, false);
+        mob.setHealth(hp);
+        enc.uniques.add(mob.getUniqueId());
+        plugin.getLogger().info("[Sanctum] unique " + rarity + " " + mob.getType() + " in " + enc.site.id());
+    }
+
+    /** Tier VII melee, Tier VIII arrows and spells, Seraph's undead bonus and the health ceiling. */
+    private void tierDefence(EntityDamageByEntityEvent e, Encounter enc, Player attacker, Species victimSpecies) {
+        int tier = enc.site.tier();
+        var type = e.getDamageSource().getDamageType();
+        boolean magic = type == org.bukkit.damage.DamageType.MAGIC || type == org.bukkit.damage.DamageType.INDIRECT_MAGIC;
+        boolean ranged = !magic && e.getDamager() instanceof Projectile;
+        double taken = magic ? DungeonBalance.magicTaken(tier) : ranged ? DungeonBalance.rangedTaken(tier) : DungeonBalance.meleeTaken(tier);
+        if (taken < 1) {
+            e.setDamage(e.getDamage() * taken);
+            long now = System.currentTimeMillis();
+            if (now >= resistHint.getOrDefault(attacker.getUniqueId(), 0L)) {
+                resistHint.put(attacker.getUniqueId(), now + 4000);
+                attacker.sendActionBar(Component.text(tier == 7 ? "⛨ ผนึกม่วงต้านอาวุธประชิด 70% · ใช้ธนูหรือเวทมนตร์"
+                    : "⛨ ผนึกโลหิตต้านธนูและเวท 50% · ใช้อาวุธประชิด", tierNamedColor(tier)));
+            }
+        }
+        // Full Seraph deals x4 to undead: Tier VI-VIII bosses take it as x2, like any other mob.
+        if (victimSpecies == Species.BOSS && e.getEntity() instanceof LivingEntity victim && seraphUndead(attacker, victim)) e.setDamage(e.getDamage() * 0.5);
+        Double scale = e.getEntity().getPersistentDataContainer().get(hpScaleKey, PersistentDataType.DOUBLE);
+        if (scale != null && scale > 1) e.setDamage(e.getDamage() / scale);
+    }
+
+    private boolean seraphUndead(Player player, LivingEntity victim) {
+        if (!(Bukkit.getPluginManager().getPlugin("advance-magic") instanceof com.example.advancemagic.AdvanceMagicPlugin magic) || !magic.isEnabled()) return false;
+        var armor = magic.armorCombat();
+        return armor != null && armor.fullSeraph(player) && com.example.advancemagic.item.ArmorCombatService.undead(victim);
+    }
+
+    /** With two bosses the bar shows their combined health. */
+    private double bossBarProgress(Encounter enc, double single) {
+        if (enc.bosses.size() <= 1) return single;
+        double health = 0, max = 0;
+        for (UUID id : enc.bosses) if (Bukkit.getEntity(id) instanceof LivingEntity boss && boss.isValid()) {
+            health += boss.getHealth();
+            var attribute = boss.getAttribute(Attribute.MAX_HEALTH);
+            max += attribute == null ? boss.getHealth() : attribute.getValue();
+        }
+        return max <= 0 ? single : Math.max(0, Math.min(1, health / max));
+    }
+
+    private void tierSkills(Encounter enc, Mob boss, Player target, List<Player> team, long now) {
+        int tier = enc.site.tier(), index = Math.max(0, enc.bosses.indexOf(boss.getUniqueId()));
+        UUID id = boss.getUniqueId();
+        long nextSeal = enc.nextSeal.computeIfAbsent(id, k -> now + 6000 + index * 5000L);
+        if (now >= nextSeal && !enc.laserActive) {
+            enc.nextSeal.put(id, now + (tier == 6 ? 13000 : 16000));
+            castSeal(enc, boss, target, tier);
+        }
+        if (tier >= 8) {
+            long nextSpecial = enc.nextSpecial.computeIfAbsent(id, k -> now + 11000 + index * 6000L);
+            if (now >= nextSpecial && !enc.laserActive) {
+                enc.nextSpecial.put(id, now + 21000);
+                switch (ThreadLocalRandom.current().nextInt(3)) {
+                    case 0 -> acheronSnare(enc, boss, target, team);
+                    case 1 -> cocytusVolley(enc, boss, team);
+                    default -> styxBerserk(enc, boss, team, now);
+                }
+            }
+        }
+        if (enc.berserkUntil.getOrDefault(id, 0L) > now) {
+            boss.getWorld().spawnParticle(Particle.DUST, boss.getLocation().add(0, 1.4, 0), 14, 0.5, 0.8, 0.5, 0,
+                new Particle.DustOptions(Color.fromRGB(0xD0102E), 1.6f));
+        }
+    }
+
+    private Location floor(Encounter enc, Location at) {
+        Location ground = at.clone();
+        ground.setY(97.06);
+        return ground;
+    }
+
+    /** The tier seal: azure (VI), violet (VII) or crimson (VIII), bursting 2.2 seconds later. */
+    private void castSeal(Encounter enc, Mob boss, Player target, int tier) {
+        String model = tier == 6 ? com.example.voidscape.boss.SanctumSigils.AZURE : tier == 7 ? com.example.voidscape.boss.SanctumSigils.VIOLET
+            : com.example.voidscape.boss.SanctumSigils.CRIMSON;
+        long now = System.currentTimeMillis();
+        String key = "sanctum:" + enc.site.id() + ":seal:" + (enc.sealSerial++);
+        enc.seals.add(new Seal(key, model, floor(enc, target.getLocation()), 5.5, now, now + 2200, boss.getUniqueId(), 0));
+        String name = tier == 6 ? "ผนึกคราม" : tier == 7 ? "ผนึกม่วง" : "ผนึกโลหิต";
+        for (Player p : players(enc.site)) {
+            plugin.message(p, (tier == 6 ? "§9" : tier == 7 ? "§5" : "§4") + "⚠ บอสร่าย " + name + " · ออกจากวงเวท!");
+            p.playSound(target.getLocation(), Sound.BLOCK_RESPAWN_ANCHOR_CHARGE, 0.8f, tier == 6 ? 1.4f : tier == 7 ? 1.0f : 0.6f);
+        }
+    }
+
+    /** Acheron's binding circle: anyone still inside when it closes is rooted for three seconds. */
+    private void acheronSnare(Encounter enc, Mob boss, Player target, List<Player> team) {
+        long now = System.currentTimeMillis();
+        String key = "sanctum:" + enc.site.id() + ":snare:" + (enc.sealSerial++);
+        enc.seals.add(new Seal(key, com.example.voidscape.boss.SanctumSigils.ACHERON, floor(enc, target.getLocation()), 4.5, now, now + 1800, boss.getUniqueId(), 1));
+        for (Player p : team) {
+            plugin.message(p, "§c⚠ บอสใช้ 'วงผนึก Acheron' · ออกจากวงก่อนถูกตรึงขา!");
+            p.playSound(target.getLocation(), Sound.ENTITY_EVOKER_PREPARE_ATTACK, 1f, 0.7f);
+        }
+    }
+
+    /** Cocytus' volley: three rings of sixteen arrows from the boss. */
+    private void cocytusVolley(Encounter enc, Mob boss, List<Player> team) {
+        for (Player p : team) plugin.message(p, "§b⚠ บอสใช้ 'ห่าธนูน้ำแข็ง Cocytus' · หาที่หลบ!");
+        boss.getWorld().playSound(boss.getLocation(), Sound.ENTITY_SKELETON_SHOOT, 1.2f, 0.5f);
+        for (int ring = 0; ring < 3; ring++) {
+            int wave = ring;
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!boss.isValid() || boss.isDead() || enc.finished) return;
+                Location eye = boss.getEyeLocation();
+                for (int i = 0; i < 16; i++) {
+                    double angle = Math.PI * 2 * i / 16 + wave * Math.PI / 16;
+                    Vector direction = new Vector(Math.cos(angle), -0.04, Math.sin(angle)).normalize();
+                    Arrow arrow = boss.getWorld().spawnArrow(eye.clone().add(direction.clone().multiply(1.2)), direction, 1.6f, 0f);
+                    arrow.setShooter(boss);
+                    arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+                    arrow.setPersistent(false);
+                    arrow.getPersistentDataContainer().set(volleyKey, PersistentDataType.BYTE, (byte) 1);
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> { if (arrow.isValid()) arrow.remove(); }, 60);
+                }
+                boss.getWorld().spawnParticle(Particle.SNOWFLAKE, eye, 40, 0.6, 0.4, 0.6, 0.08);
+                boss.getWorld().playSound(eye, Sound.ENTITY_ARROW_SHOOT, 1f, 0.6f);
+            }, 10L + ring * 6L);
+        }
+    }
+
+    /** Styx' berserk: eight seconds of speed and 35% harder hits. */
+    private void styxBerserk(Encounter enc, Mob boss, List<Player> team, long now) {
+        enc.berserkUntil.put(boss.getUniqueId(), now + 8000);
+        boss.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 160, 1, false, false));
+        boss.getWorld().playSound(boss.getLocation(), Sound.ENTITY_RAVAGER_ROAR, 1.2f, 0.7f);
+        boss.getWorld().spawnParticle(Particle.DUST, boss.getLocation().add(0, 1.2, 0), 60, 0.8, 1.0, 0.8, 0,
+            new Particle.DustOptions(Color.fromRGB(0xD0102E), 2.0f));
+        for (Player p : team) {
+            plugin.message(p, "§4⚠ บอสเข้าสู่ 'โหมด Berserker แห่ง Styx' 8 วินาที · ตีแรงขึ้น 35% และเร็วขึ้น!");
+            p.showTitle(net.kyori.adventure.title.Title.title(Component.text("☠ BERSERK", NamedTextColor.DARK_RED),
+                Component.text("Styx · 8 วินาที", NamedTextColor.RED),
+                net.kyori.adventure.title.Title.Times.times(java.time.Duration.ofMillis(150), java.time.Duration.ofMillis(1500), java.time.Duration.ofMillis(300))));
+        }
+    }
+
+    /** Every two ticks: draw the seals growing, burst the ripe ones, hold rooted players. */
+    private void sealTick() {
+        long now = System.currentTimeMillis();
+        for (Encounter enc : active.values()) {
+            if (enc.seals.isEmpty() && enc.berserkUntil.isEmpty()) continue;
+            sigils.frame(position(enc.site, 0, 97, 0), 72);
+            for (var seal : new ArrayList<>(enc.seals)) {
+                double grow = Math.min(1, (now - seal.born()) / (double) Math.max(1, seal.burstAt() - seal.born()) * 1.6);
+                sigils.ground(seal.key(), seal.model(), seal.at(), seal.radius() * (0.35 + 0.65 * grow), now * 0.003 * (seal.kind() == 1 ? -1 : 1));
+                if (now < seal.burstAt()) continue;
+                enc.seals.remove(seal);
+                sigils.remove(seal.key());
+                Entity owner = Bukkit.getEntity(seal.boss());
+                if (owner instanceof Mob boss && boss.isValid() && !boss.isDead()) burst(enc, seal, boss);
+            }
+            for (var entry : enc.berserkUntil.entrySet()) {
+                if (entry.getValue() > now && Bukkit.getEntity(entry.getKey()) instanceof Mob boss && boss.isValid())
+                    sigils.ground("sanctum:" + enc.site.id() + ":styx:" + entry.getKey(), com.example.voidscape.boss.SanctumSigils.STYX, floor(enc, boss.getLocation()), 2.6, now * 0.004);
+                else sigils.remove("sanctum:" + enc.site.id() + ":styx:" + entry.getKey());
+            }
+            enc.berserkUntil.values().removeIf(until -> until <= now - 1000);
+        }
+        for (var entry : new ArrayList<>(roots.entrySet())) {
+            Player p = Bukkit.getPlayer(entry.getKey());
+            if (p == null || now >= entry.getValue().until()) { unroot(entry.getKey()); continue; }
+            p.setVelocity(new Vector());
+            if (now % 4 < 2) {
+                Encounter enc = active.get(entry.getValue().site());
+                if (enc != null) {
+                    sigils.frame(position(enc.site, 0, 97, 0), 72);
+                    sigils.ground("sanctum:" + enc.site.id() + ":root:" + entry.getKey(), com.example.voidscape.boss.SanctumSigils.ACHERON, floor(enc, p.getLocation()), 0.9, now * 0.006);
+                }
+            }
+        }
+    }
+
+    private void burst(Encounter enc, Seal seal, Mob boss) {
+        World world = seal.at().getWorld();
+        int tier = enc.site.tier();
+        Color color = seal.kind() == 1 ? Color.fromRGB(0xF54268) : tier == 6 ? Color.fromRGB(34, 180, 216) : tier == 7 ? Color.fromRGB(184, 84, 255) : Color.fromRGB(255, 48, 93);
+        world.spawnParticle(Particle.DUST, seal.at().clone().add(0, 0.6, 0), 80, seal.radius() * 0.5, 0.5, seal.radius() * 0.5, 0, new Particle.DustOptions(color, 2.0f));
+        world.spawnParticle(Particle.END_ROD, seal.at().clone().add(0, 0.4, 0), 30, seal.radius() * 0.4, 0.3, seal.radius() * 0.4, 0.05);
+        world.playSound(seal.at(), Sound.ENTITY_EVOKER_CAST_SPELL, 1.2f, seal.kind() == 1 ? 0.5f : 0.8f);
+        world.playSound(seal.at(), Sound.BLOCK_GLASS_BREAK, 1f, 0.6f);
+        String bossName = bossName(boss);
+        for (Player p : players(enc.site)) {
+            if (p.getGameMode() == GameMode.CREATIVE || p.getWorld() != world) continue;
+            Location at = p.getLocation();
+            if (Math.hypot(at.getX() - seal.at().getX(), at.getZ() - seal.at().getZ()) > seal.radius() || Math.abs(at.getY() - seal.at().getY()) > 3.5) continue;
+            if (seal.kind() == 1) {
+                sealHit(p, 6.0 * DungeonBalance.damageMultiplier(tier), boss);
+                root(p, enc, 3000);
+                p.sendActionBar(Component.text("⛓ ผนึก Acheron ตรึงขา 3 วินาที!", NamedTextColor.RED));
+                continue;
+            }
+            // A quarter of the player's maximum health, through armour and Protection.
+            var max = p.getAttribute(Attribute.MAX_HEALTH);
+            sealHit(p, (max == null ? 20 : max.getValue()) * 0.25, boss);
+            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 80, 1));
+            if (tier >= 7) p.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 100, 0));
+            if (tier >= 8) {
+                BossDamage.effect(p, new PotionEffect(PotionEffectType.WITHER, 100, 1), bossName);
+                BossDamage.effect(p, new PotionEffect(PotionEffectType.POISON, 100, 0), bossName);
+            }
+        }
+    }
+
+    /** Seal damage: exact (difficulty never rescales it), through armour and Protection; the boss is named on death. */
+    private void sealHit(Player player, double damage, Mob boss) {
+        exactSeal.put(player.getUniqueId(), damage);
+        try {
+            BossDamage.scoped(player, bossName(boss), () -> player.damage(damage,
+                org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.SONIC_BOOM).build()));
+        } finally {
+            exactSeal.remove(player.getUniqueId());
+        }
+    }
+
+    @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+    public void sealExact(EntityDamageEvent e) {
+        Double exact = exactSeal.get(e.getEntity().getUniqueId());
+        if (exact != null && e.getDamageSource().getDamageType() == org.bukkit.damage.DamageType.SONIC_BOOM) e.setDamage(exact);
+    }
+
+    private void root(Player player, Encounter enc, long millis) {
+        roots.put(player.getUniqueId(), new Root(System.currentTimeMillis() + millis, enc.site.id(), player.getLocation()));
+        for (Attribute attribute : List.of(Attribute.MOVEMENT_SPEED, Attribute.JUMP_STRENGTH)) {
+            var instance = player.getAttribute(attribute);
+            if (instance == null) continue;
+            instance.removeModifier(rootKey);
+            instance.addTransientModifier(new org.bukkit.attribute.AttributeModifier(rootKey, -1, org.bukkit.attribute.AttributeModifier.Operation.MULTIPLY_SCALAR_1));
+        }
+    }
+
+    private void unroot(UUID id) {
+        Root root = roots.remove(id);
+        if (root != null) sigils.remove("sanctum:" + root.site() + ":root:" + id);
+        Player player = Bukkit.getPlayer(id);
+        if (player == null) return;
+        for (Attribute attribute : List.of(Attribute.MOVEMENT_SPEED, Attribute.JUMP_STRENGTH)) {
+            var instance = player.getAttribute(attribute);
+            if (instance != null) instance.removeModifier(rootKey);
+        }
+    }
+
+    /** Test hook: the expansion deciding Tier VI-VIII shrines. */
+    public com.example.voidscape.world.SanctumExpansion expansion() { return expansion; }
 
     @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
     public void trample(PlayerInteractEvent e){
@@ -1465,6 +1921,10 @@ public final class DungeonManager implements Listener {
         for(UUID id:enc.mobs.keySet()){owners.remove(id);Entity e=Bukkit.getEntity(id);if(e!=null)e.remove();}
         enc.mobs.clear();enc.casterCooldowns.clear();enc.casterVexCooldowns.clear();
         enc.laserActive = false;
+        for(var seal:enc.seals)sigils.remove(seal.key());
+        enc.seals.clear();enc.bosses.clear();enc.uniques.clear();enc.berserkUntil.clear();
+        sigils.removePrefix("sanctum:"+enc.site.id()+":");
+        for(var entry:new ArrayList<>(roots.entrySet()))if(entry.getValue().site().equals(enc.site.id()))unroot(entry.getKey());
         clearWebs(enc.site);
         if(enc.bar!=null)enc.bar.removeAll();
     }
@@ -1497,7 +1957,7 @@ public final class DungeonManager implements Listener {
                 case SANCTUM_ASTRAL -> "อัครเทวทูตดวงดาว (Astral Archon)";
                 case SANCTUM_TIME -> "ผู้พิทักษ์กาลเวลา (Chronos Vanguard)";
             };
-            enc.bar = Bukkit.createBossBar("✦ [TEST BOSS] " + title, BarColor.PURPLE, BarStyle.SEGMENTED_10);
+            enc.bar = Bukkit.createBossBar(com.example.voidscape.boss.BossNames.legacy("[TEST BOSS] " + title), BarColor.PURPLE, BarStyle.SEGMENTED_10);
             for (Player p : where.getWorld().getPlayers()) {
                 if (p.getLocation().distanceSquared(where) <= 2500) {
                     enc.bar.addPlayer(p);
@@ -1506,7 +1966,8 @@ public final class DungeonManager implements Listener {
         }
         return b;
     }
-    public void close(){for(Encounter enc:active.values())remove(enc);active.clear();clearWebs(null);trueDeathBars.values().forEach(BossBar::removeAll);trueDeathBars.clear();if(storageHealthy)save();}
+    public void close(){for(Encounter enc:active.values())remove(enc);active.clear();clearWebs(null);
+        for(UUID id:new ArrayList<>(roots.keySet()))unroot(id);sigils.close();expansion.flush();trueDeathBars.values().forEach(BossBar::removeAll);trueDeathBars.clear();if(storageHealthy)save();}
     public int waveCount(){return plugin.integer("combat.waves",5,2,12);}
     public int waveCount(Site site) {
         if (site == null) return waveCount();

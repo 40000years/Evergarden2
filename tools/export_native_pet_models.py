@@ -1,4 +1,4 @@
-"""Export original rare pet sculptures to vanilla display items (Java 1.21.11+).
+"""Export every pet sculpture (32 wild species and the mythical five) to vanilla display items (Java 1.21.11+).
 
 Each authored bone becomes one item model; arbitrary cube rotations are preserved
 using Minecraft's supported x/y/z element rotations. No ModelEngine assets or
@@ -13,9 +13,6 @@ import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 RESOURCES = ROOT / 'evergarden/src/main/resources'
-MYTHICAL = {'aetherius', 'ignis_draconis', 'zephyros', 'solaris', 'fenrir'}
-
-
 def encode(value):
     return (json.dumps(value, separators=(',', ':'), ensure_ascii=False) + '\n').encode()
 
@@ -30,8 +27,6 @@ def export():
         source = json.loads(raw)
         meta = source['meta']
         species, stage = meta['evergarden_pet_species'], meta['evergarden_pet_stage']
-        if species in MYTHICAL:
-            continue
         model_id = species + '_' + stage
         elements = {cube['uuid']: cube for cube in source['elements']}
         bones = []
@@ -119,7 +114,8 @@ def export():
                                source_sha256=hashlib.sha256(raw).hexdigest())
         input_hashes[path.name] = hashlib.sha256(raw).hexdigest()
     species_count = len({m['species'] for m in models.values()})
-    assert len(models) == 3 * species_count == 96, (len(models), species_count)
+    catalog=json.loads((RESOURCES/'pet-expansion.json').read_text(encoding='utf8'))
+    assert len(models) == 3 * species_count == (37+len(catalog['species']))*3, (len(models), species_count)
     manifest = dict(format=1, minimum_java='1.21.11', models=models)
     target = RESOURCES / 'native-pets.json'
     target.write_bytes(encode(manifest))

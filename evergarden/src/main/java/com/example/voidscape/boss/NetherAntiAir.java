@@ -151,7 +151,7 @@ final class NetherAntiAir {
             Location body = player.getLocation().add(0, 0.9, 0);
             if (body.distanceSquared(locked) > radius * radius || !unobstructed(locked, body)) continue;
             damage.accept(player, colossus ? 16.5 : 14.5);
-            if (colossus) player.setFireTicks(Math.max(player.getFireTicks(), 60));
+            if (colossus) BossDamage.ignite(player,60,kind.title);
             else player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS, 60, 0));
         }
     }

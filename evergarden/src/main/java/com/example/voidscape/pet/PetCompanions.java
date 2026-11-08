@@ -24,7 +24,7 @@ import java.time.Duration;
 import java.util.*;
 
 /**
- * Owned pets. Each player keeps a stable of records; at most one companion is in the world,
+ * Owned pets. Each player keeps a stable of records; up to two different companions are in the world,
  * following its owner across islands and worlds. It steps aside while its owner is AFK, dead
  * or fighting a boss and returns by itself afterwards. Time spent together and feeding grow
  * it from baby to adult and deepen the bond needed for breeding.
@@ -41,6 +41,8 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     private final PetTerrain terrain;
     private final PetStore store;
     private final Map<UUID,PetBody> out=new HashMap<>();
+    /** The second companion is visual-only: it follows, but cannot fight, give skills or be mounted. */
+    private final Map<UUID,PetBody> secondaryOut=new HashMap<>();
     private final Map<UUID,String> suspended=new HashMap<>();
     private final Map<UUID,Long> moved=new HashMap<>(),bossSeen=new HashMap<>(),bossCredit=new HashMap<>();
     private final Map<UUID,Integer> stranded=new HashMap<>();
@@ -56,6 +58,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
 
     PetCompanions(VoidscapePlugin plugin,NativePetRenderer renderer,PetBodies bodies,PetTerrain terrain,PetStore store){
         this.plugin=plugin;this.renderer=renderer;this.bodies=bodies;this.terrain=terrain;this.store=store;
+        PetSkills.enable(plugin);
         riding=new PetRiding(plugin,this);
         bodies.hidesOthers(id->{PetStable stable=store.cached(id);return stable!=null&&stable.hideOthers;});
         Bukkit.getPluginManager().registerEvents(this,plugin);
@@ -74,7 +77,12 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     void rideSeat(PetBody body,Entity seat,boolean add){bodies.rideSeat(body,seat,add);}
     PetStable stable(Player player){return store.stable(player.getUniqueId());}
     PetBody body(UUID owner){return out.get(owner);}
-    int count(){return out.size();}
+    PetBody bodyFor(UUID owner,UUID pet){
+        PetBody first=out.get(owner),second=secondaryOut.get(owner);
+        if(first!=null&&first.record.id.equals(pet))return first;
+        return second!=null&&second.record.id.equals(pet)?second:null;
+    }
+    int count(){return out.size()+secondaryOut.size();}
     void dirty(PetStable stable){stable.dirty=true;}
     private int setting(String key,int fallback,int min,int max){return plugin.integer("pets.companions."+key,fallback,min,max);}
     private boolean worldAllowed(World world){return !plugin.getConfig().getStringList("pets.companions.disabled-worlds").contains(world.getName());}
@@ -95,14 +103,41 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         if(!renderer.ready())return "ระบบโมเดลสัตว์เลี้ยงยังไม่พร้อม";
         if(!renderer.hasModel(record.species,record.stage))return record.species.display+" ยังไม่มีโมเดลในเซิร์ฟเวอร์นี้";
         if(faintLeft(record)>0)return record.name()+" ยังสลบอยู่ · พักฟื้นอีก "+recovery(record);
+        if(stable.out&&stable.activeRecord()!=null&&faintLeft(stable.activeRecord())>0&&!id.equals(stable.active)){
+            PetRecord second=stable.secondaryRecord();
+            if(second!=null&&!id.equals(second.id)&&record.species==second.species)return "ตัวที่สองต้องเป็นสัตว์คนละชนิด";
+            despawn(player.getUniqueId());
+            stable.active=id;if(id.equals(stable.secondary))stable.secondary=null;
+            stable.dirty=true;suspended.remove(player.getUniqueId());
+            if(blocker(player)==null){spawnNear(player);maintainSecondary(player,stable);}
+            return null;
+        }
+        if(stable.summoned(id))return record.name()+" ออกมาอยู่แล้ว";
+        if(stable.out&&stable.activeRecord()!=null){
+            if(stable.activeRecord().species==record.species)return "ตัวที่สองต้องเป็นสัตว์คนละชนิด";
+            if(stable.secondaryRecord()!=null)return "เรียกสัตว์ครบสองตัวแล้ว · เก็บตัวหนึ่งเข้าคอกก่อน";
+            stable.secondary=id;stable.dirty=true;
+            if(blocker(player)==null)spawnSecondary(player);
+            return null;
+        }
         despawn(player.getUniqueId());
-        stable.active=id;stable.out=true;stable.dirty=true;suspended.remove(player.getUniqueId());
+        stable.active=id;stable.secondary=null;stable.out=true;stable.dirty=true;suspended.remove(player.getUniqueId());
         if(!spawnNear(player))suspended.put(player.getUniqueId(),"รอพื้นที่ปลอดภัยใกล้เจ้าของ");
         return null;
     }
     void dismiss(Player player){
-        PetStable stable=stable(player);stable.out=false;stable.dirty=true;
+        PetStable stable=stable(player);stable.out=false;stable.secondary=null;stable.dirty=true;
         suspended.remove(player.getUniqueId());despawn(player.getUniqueId());
+    }
+    /** Dismiss just one selection. The remaining pet becomes the first active pet. */
+    void dismiss(Player player,UUID pet){
+        PetStable stable=stable(player);if(!stable.summoned(pet))return;
+        if(pet.equals(stable.secondary)){
+            stable.secondary=null;despawnSecondary(player.getUniqueId());stable.dirty=true;return;
+        }
+        UUID next=stable.secondary;
+        despawn(player.getUniqueId());stable.active=next;stable.secondary=null;stable.out=next!=null;stable.dirty=true;
+        if(next!=null){if(blocker(player)==null)spawnNear(player);plugin.message(player,stable.activeRecord().name()+" เป็นสัตว์ตัวแรกและจะให้บัฟเมื่ออยู่ใกล้");}
     }
     /** Commit a newly tamed pet before consuming the lead or removing its wild body. */
     boolean reserveAdoption(Player player,PetRecord record){
@@ -115,7 +150,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     /** A freshly tamed wild body becomes the companion, or goes straight to the stable. */
     void adopt(Player player,PetRecord record,PetBody body){
         PetStable stable=stable(player);stable.add(record);
-        if(stable.active==null||!stable.out||!out.containsKey(player.getUniqueId())){
+        if(stable.active==null||!stable.out){
             despawn(player.getUniqueId());
             stable.active=record.id;stable.out=true;suspended.remove(player.getUniqueId());
             body.adopt(player.getUniqueId(),record);body.notice(player);body.airborne=false;body.mode=PetBody.Mode.GREET;body.modeUntil=clock+24;
@@ -130,10 +165,31 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     void rebuild(Player player){
         PetBody body=out.get(player.getUniqueId());if(body==null)return;
         // A body leaving its owner's head looks for footing instead of appearing mid-air.
-        Location at=body.perched?null:body.location();despawn(player.getUniqueId());
+        Location at=body.perched?null:body.location();despawnPrimary(player.getUniqueId());
         if(!spawnAt(player,at)&&!spawnNear(player))suspended.put(player.getUniqueId(),"รอพื้นที่ปลอดภัยใกล้เจ้าของ");
     }
-    void despawn(UUID owner){riding.stop(owner,true);PetBody body=out.remove(owner);if(body!=null)bodies.remove(body);stranded.remove(owner);}
+    private void despawnPrimary(UUID owner){
+        Player player=Bukkit.getPlayer(owner);if(player!=null)PetSkills.clear(player);
+        riding.stop(owner,true);PetBody body=out.remove(owner);if(body!=null)bodies.remove(body);stranded.remove(owner);
+    }
+    private void despawnSecondary(UUID owner){PetBody body=secondaryOut.remove(owner);if(body!=null)bodies.remove(body);}
+    void despawn(UUID owner){despawnPrimary(owner);despawnSecondary(owner);}
+    private boolean spawnSecondary(Player player){
+        PetRecord record=stable(player).secondaryRecord();
+        if(record==null||!worldAllowed(player.getWorld())||faintLeft(record)>0)return false;
+        Location at=near(player,record.stage,WildPetSpawns.flies(record.species),true);
+        if(at==null)return false;
+        PetBody body=PetBody.spawn(plugin,renderer,record.species,record.stage,at,record,player.getUniqueId(),0);
+        if(body==null)return false;
+        Location owner=player.getLocation();
+        body.yaw=body.targetYaw=WildPetSpawns.yawTowards(owner.getX()-at.getX(),owner.getZ()-at.getZ());
+        body.notice(player);secondaryOut.put(player.getUniqueId(),body);bodies.add(body,this);bodies.refreshSoon();
+        double ground=PetTerrain.groundBelow(at,3);
+        body.airborne=WildPetSpawns.flies(record.species)&&(Double.isNaN(ground)||at.getY()-ground>.5);
+        if(body.airborne)body.hover=1.5;
+        at.getWorld().spawnParticle(Particle.END_ROD,at.clone().add(0,.6,0),10,.3,.3,.3,.02);
+        return true;
+    }
     private boolean spawnAt(Player player,Location at){
         PetStable stable=stable(player);PetRecord record=stable.activeRecord();
         if(record==null)return false;
@@ -165,22 +221,67 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     }
     /** Safe footing behind or beside the owner; flyers may also take the air beside them. */
     private Location near(Player player,PetCatalog.Stage stage,boolean flyer){
+        return near(player,stage,flyer,false);
+    }
+    private Location near(Player player,PetCatalog.Stage stage,boolean flyer,boolean secondary){
         Location base=player.getLocation();int radius=PetTerrain.radius(stage);
         double yaw=Math.toRadians(base.getYaw());
-        double[][] offsets={{0,-2.5},{1.6,-2},{-1.6,-2},{2.5,0},{-2.5,0},{0,-4},{3,-3},{-3,-3},{0,2.5}};
+        PetBody other=companion(player.getUniqueId(),secondary);
+        PetRecord record=secondary?stable(player).secondaryRecord():stable(player).activeRecord();
+        double clearance=other==null?0:spacing(stage,record,other);
+        double side=secondary?-1:1,lateral=Math.max(1.3,clearance*.5+.25);
+        double[][] offsets={{side*lateral,secondary?-3.4:-2.4},{side*(lateral+1),-2},
+            {-side*lateral,-2.4},{side*(lateral+1.5),0},{-side*(lateral+1.5),0},
+            {side*lateral,-4.5},{-side*lateral,-4.5},{0,3.5}};
         for(double[] o:offsets){
             // o = (right, forward) in the owner's frame.
             double x=base.getX()-Math.cos(yaw)*o[0]-Math.sin(yaw)*o[1],z=base.getZ()-Math.sin(yaw)*o[0]+Math.cos(yaw)*o[1];
             for(int dy:new int[]{0,1,-1,2,-2}){
                 Location c=new Location(base.getWorld(),Math.floor(x)+.5,base.getBlockY()+dy,Math.floor(z)+.5,base.getYaw(),0);
-                if(terrain.safe(c,radius,PetTerrain.HEADROOM,false))return c;
+                if(separated(c,other,clearance)&&terrain.safe(c,radius,PetTerrain.HEADROOM,false))return c;
             }
         }
         if(flyer){
-            Location air=base.clone().add(Math.sin(yaw)*2,1.5,-Math.cos(yaw)*2);air.setPitch(0);
-            if(terrain.airClear(air,stage,false))return air;
+            for(double[] o:offsets){
+                Location air=base.clone().add(-Math.cos(yaw)*o[0]-Math.sin(yaw)*o[1],1.5,
+                    -Math.sin(yaw)*o[0]+Math.cos(yaw)*o[1]);air.setPitch(0);
+                if(separated(air,other,clearance)&&terrain.airClear(air,stage,false))return air;
+            }
         }
         return null;
+    }
+
+    /** Pair slots, rather than random record bits, keep two companions on different sides. */
+    private PetBody companion(UUID owner,boolean secondary){
+        PetBody other=(secondary?out:secondaryOut).get(owner);
+        return other!=null&&other.valid()&&!other.perched?other:null;
+    }
+    private PetBody companion(PetBody body){
+        PetBody other=companion(body.owner,secondaryOut.get(body.owner)==body);
+        return other==body?null:other;
+    }
+    private static double footprint(PetCatalog.Stage stage,PetRecord record){
+        return (switch(stage){case BABY->.55;case MEDIUM->.95;case ADULT->1.3;})
+            *(record==null?1:record.size);
+    }
+    private static double spacing(PetCatalog.Stage stage,PetRecord record,PetBody other){
+        return footprint(stage,record)+footprint(other.stage,other.record)+.35;
+    }
+    private static boolean separated(Location at,PetBody other,double clearance){
+        if(other==null)return true;
+        Location there=other.destination();
+        return at.getWorld()!=there.getWorld()||Math.abs(at.getY()-there.getY())>2.5
+            ||Math.hypot(at.getX()-there.getX(),at.getZ()-there.getZ())>=clearance;
+    }
+    /** Do not step into the other sculpture; an existing overlap may gradually walk out. */
+    private boolean clearStep(PetBody body,Location from,Location next){
+        PetBody other=companion(body);
+        if(other==null)return true;
+        double clearance=spacing(body.stage,body.record,other);
+        if(separated(next,other,clearance))return true;
+        Location there=other.destination();
+        double before=Math.hypot(from.getX()-there.getX(),from.getZ()-there.getZ());
+        return Math.hypot(next.getX()-there.getX(),next.getZ()-there.getZ())>before+1e-5;
     }
 
     // ---- following ----
@@ -198,24 +299,34 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
             try{
                 if(riding.tick(owner,body))continue;
                 if(!body.tickGrounding())body.tickGlide();
-                follow(body,owner,clock%2==0);
+                follow(body,owner,clock%2==0,false);
             }
             catch(RuntimeException|LinkageError error){
                 despawn(entry.getKey());plugin.getLogger().log(java.util.logging.Level.WARNING,"Cannot update companion",error);
             }
         }
+        for(var entry:new ArrayList<>(secondaryOut.entrySet())){
+            Player owner=Bukkit.getPlayer(entry.getKey());PetBody body=entry.getValue();
+            if(owner==null||!body.valid())continue;
+            try{
+                if(!body.tickGrounding())body.tickGlide();
+                follow(body,owner,clock%2==0,true);
+            }catch(RuntimeException|LinkageError error){
+                despawnSecondary(entry.getKey());plugin.getLogger().log(java.util.logging.Level.WARNING,"Cannot update second companion",error);
+            }
+        }
     }
-    private void follow(PetBody body,Player owner,boolean decide){
+    private void follow(PetBody body,Player owner,boolean decide,boolean secondary){
         Location at=body.destination(),to=owner.getLocation();
         if(at.getWorld()!=to.getWorld()){despawn(owner.getUniqueId());return;}
-        String mode=body.record.mode;
-        if(body.perched!=mode.equals("perch")){rebuild(owner);return;}
+        String mode=secondary?"idle":body.record.mode;
+        if(!secondary&&body.perched!=mode.equals("perch")){rebuild(owner);return;}
         if(body.perched){perch(body,owner);return;}
         if(body.falling){
             // Stay/follow/assist cannot pin a grounded pet in midair. Rescue only after a
             // long fall or reaching the world floor, using the ordinary safe owner landing.
             if(Math.abs(to.getY()-at.getY())>48||at.getY()<=at.getWorld().getMinHeight()+1){
-                Location spot=near(owner,body.stage,WildPetSpawns.flies(body.species));
+                Location spot=near(owner,body.stage,WildPetSpawns.flies(body.species),secondary);
                 if(spot!=null){
                     body.move(spot);double ground=PetTerrain.groundBelow(spot,3);
                     body.airborne=WildPetSpawns.flies(body.species)&&(Double.isNaN(ground)||spot.getY()-ground>.5);
@@ -223,29 +334,47 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
             }
             body.present("idle");return;
         }
-        if(mode.equals("stay")&&stay(body,owner,decide))return;
+        if((mode.equals("stay")||mode.equals("idle")&&!secondary)&&stay(body,owner,decide))return;
         if(mode.equals("assist")&&fight(body,owner,decide))return;
         double dx=to.getX()-at.getX(),dz=to.getZ()-at.getZ(),flat=dx*dx+dz*dz,dy=to.getY()-at.getY();
         boolean flyer=WildPetSpawns.flies(body.species);
         if(flat>24*24||Math.abs(dy)>12){
-            Location spot=near(owner,body.stage,flyer);
-            if(spot!=null){double ground=PetTerrain.groundBelow(spot,3);body.airborne=flyer&&(Double.isNaN(ground)||spot.getY()-ground>.5);body.stuck=0;body.speed=0;body.move(spot);stranded.remove(owner.getUniqueId());}
-            else stranded.merge(owner.getUniqueId(),1,Integer::sum);
+            Location spot=near(owner,body.stage,flyer,secondary);
+            if(spot!=null){double ground=PetTerrain.groundBelow(spot,3);body.airborne=flyer&&(Double.isNaN(ground)||spot.getY()-ground>.5);body.stuck=0;body.speed=0;body.move(spot);if(!secondary)stranded.remove(owner.getUniqueId());}
+            else if(!secondary)stranded.merge(owner.getUniqueId(),1,Integer::sum);
             body.present(body.airborne?"fly":"idle");return;
         }
         if(!decide)return;
-        stranded.remove(owner.getUniqueId());
-        double yaw=Math.toRadians(to.getYaw()),side=(body.record.id.getLeastSignificantBits()&1)==0?1:-1;
-        double tx=to.getX()+Math.sin(yaw)*2.2-Math.cos(yaw)*side*1.3,tz=to.getZ()-Math.cos(yaw)*2.2-Math.sin(yaw)*side*1.3;
+        if(!secondary)stranded.remove(owner.getUniqueId());
+        PetBody other=companion(body);
+        double yaw=Math.toRadians(to.getYaw()),side=other!=null?(secondary?-1:1):(body.record.id.getLeastSignificantBits()&1)==0?1:-1;
+        double clearance=other==null?0:spacing(body.stage,body.record,other);
+        double lateral=Math.max(1.3,clearance*.5+.25),behind=other==null?2.2:secondary?3.4:2.4;
+        double tx=to.getX()+Math.sin(yaw)*behind-Math.cos(yaw)*side*lateral,tz=to.getZ()-Math.cos(yaw)*behind-Math.sin(yaw)*side*lateral;
+        boolean crowded=false;
+        if(other!=null){
+            Location there=other.destination();
+            if(at.getWorld()==there.getWorld()&&Math.abs(at.getY()-there.getY())<2.5){
+                double awayX=at.getX()-there.getX(),awayZ=at.getZ()-there.getZ(),distance=Math.hypot(awayX,awayZ);
+                crowded=distance<clearance+.1;
+                if(crowded){
+                    // Resolve even exact overlap while the owner stands still. Ease out in strides,
+                    // using opposite slot directions when there is no separation vector yet.
+                    if(distance<.01){awayX=-Math.cos(yaw)*side;awayZ=-Math.sin(yaw)*side;distance=1;}
+                    tx=there.getX()+awayX/distance*(clearance+.3);
+                    tz=there.getZ()+awayZ/distance*(clearance+.3);
+                }
+            }
+        }
         boolean ownerAloft=owner.isFlying()||owner.isGliding()||to.getY()-PetTerrain.groundBelow(to,4)>2.5||Double.isNaN(PetTerrain.groundBelow(to,4));
         double gap=(tx-at.getX())*(tx-at.getX())+(tz-at.getZ())*(tz-at.getZ());
         float before=body.yaw;
         Player greeted=clock<body.modeUntil&&body.mode==PetBody.Mode.GREET&&body.attention!=null?Bukkit.getPlayer(body.attention):null;
         Player look=body.watch(greeted!=null?greeted:owner,null,8);
         String clip;float pace=1;
-        if(clock<body.modeUntil&&body.mode==PetBody.Mode.GREET&&flat<6*6){
+        if(!crowded&&clock<body.modeUntil&&body.mode==PetBody.Mode.GREET&&flat<6*6){
             body.speed=0;body.steer(look,false,2,12);clip="greet";
-        }else if(flyer&&(ownerAloft||body.airborne&&flat>4*4)){
+        }else if(flyer&&(ownerAloft||body.airborne&&(flat>4*4||crowded))){
             body.airborne=true;
             double ty=to.getY()+(ownerAloft?.6:1.6);
             // Ease the air speed; it slows as it closes in, so it glides in instead of braking.
@@ -256,7 +385,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
             body.speed*=PetAttention.turnStride(body.targetYaw-body.yaw);
             Location next=toward(at,tx,ty,tz,body.speed,body.yaw);
             body.pitch+=((float)Math.clamp((next.getY()-at.getY())*60,-18,18)-body.pitch)*.4f;
-            if(terrain.airClear(next,body.stage,false))body.glide(next,2);
+            if(clearStep(body,at,next)&&terrain.airClear(next,body.stage,false))body.glide(next,2);
             clip="fly";pace=.85f+(float)(body.speed/.6)*.4f;
         }else if(body.airborne){
             body.steer(look,false,2,14);
@@ -265,13 +394,13 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
             if(Double.isNaN(ground)||!terrain.airClear(next.clone().add(0,-.3,0),body.stage,false)){
                 // Nothing to land on right here (void edge, fence): hover level, then settle beside the owner.
                 next=null;body.pitch*=.5f;body.stuck+=2;
-                if(body.stuck>60){Location spot=near(owner,body.stage,false);if(spot!=null){body.airborne=false;body.move(spot);}body.stuck=0;}
+                if(body.stuck>60){Location spot=near(owner,body.stage,false,secondary);if(spot!=null){body.airborne=false;body.move(spot);}body.stuck=0;}
             }else{body.pitch+=(-10-body.pitch)*.4f;next.setY(Math.max(ground,at.getY()-.3));if(next.getY()-ground<.05){body.airborne=false;body.pitch=0;}}
             if(next!=null)body.glide(next,2);
             clip="fly";
-        }else if(flat>3.2*3.2&&gap>1||body.speed>.06){
+        }else if(flat>3.2*3.2&&gap>1||crowded&&gap>.04||body.speed>.06){
             // Accelerate towards a run when far behind, and roll to a stop near the owner.
-            double target=flat>3.2*3.2&&gap>1?(flat>8*8?.55:.32):0;
+            double target=crowded?Math.min(.22,Math.sqrt(gap)*.3):flat>3.2*3.2&&gap>1?(flat>8*8?.55:.32):0;
             body.targetYaw=WildPetSpawns.yawTowards(tx-at.getX(),tz-at.getZ());
             body.steer(look,true,2,14);
             body.speed=(target>body.speed?Math.min(target,body.speed+.1):body.speed*.5)
@@ -283,7 +412,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
             }
             else{
                 body.stuck+=2;body.speed=0;clip="idle";
-                if(body.stuck>40){Location spot=near(owner,body.stage,flyer);if(spot!=null){body.move(spot);body.stuck=0;}}
+                if(body.stuck>40){Location spot=near(owner,body.stage,flyer,secondary);if(spot!=null){body.move(spot);body.stuck=0;}}
             }
         }else{
             body.speed=0;body.steer(look,false,2,12);
@@ -310,7 +439,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         // Step up or down one block, never off an island edge.
         for(int dy:new int[]{0,1,-1}){
             Location candidate=next.clone();candidate.setY(at.getBlockY()+dy);
-            if(terrain.safe(candidate,PetTerrain.radius(body.stage),PetTerrain.HEADROOM,false)){body.glide(candidate,2);return true;}
+            if(clearStep(body,at,candidate)&&terrain.safe(candidate,PetTerrain.radius(body.stage),PetTerrain.HEADROOM,false)){body.glide(candidate,2);return true;}
         }
         return false;
     }
@@ -320,8 +449,9 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
     String mode(Player player,UUID id,String mode){
         PetStable stable=stable(player);PetRecord record=stable.get(id);
         if(record==null)return "ไม่พบสัตว์เลี้ยงตัวนี้";
+        if(stable.out&&id.equals(stable.secondary))return "สัตว์ตัวที่สองอยู่โหมดเฉย ๆ · เก็บตัวแรกก่อนหากต้องการเปลี่ยนโหมด";
         riding.stop(player.getUniqueId(),true);
-        if(!PetSkills.MODES.contains(mode))return "โหมดมี follow, stay, perch และ assist";
+        if(!PetSkills.MODES.contains(mode))return "โหมดมี idle, follow, stay, perch และ assist";
         record.mode=mode;stable.dirty=true;
         PetBody body=out.get(player.getUniqueId());
         if(body!=null&&body.record==record){
@@ -480,18 +610,18 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         if(health<=0){faint(owner,body);return;}
         owner.sendActionBar(Component.text(record.name()+" ❤ "+(int)Math.ceil(health)+"/"+(int)max,health<max*.3?NamedTextColor.RED:NamedTextColor.GOLD));
     }
-    /** Knocked out: back to the stable for one in-game day, then it returns by itself. */
+    /** Knocked out: back to the stable until the configured recovery time has elapsed. */
     private void faint(Player owner,PetBody body){
         PetRecord record=body.record;
-        record.faintedUntil=gameTime()+setting("faint-ticks",24000,200,240000);record.health=-1;stable(owner).dirty=true;
-        Location at=body.location().add(0,.5,0);despawn(owner.getUniqueId());
+        record.faintedUntil=gameTime()+setting("faint-ticks",6000,200,240000);record.health=-1;stable(owner).dirty=true;
+        Location at=body.location().add(0,.5,0);despawnPrimary(owner.getUniqueId());
         at.getWorld().spawnParticle(Particle.CLOUD,at,16,.4,.3,.4,.02);
         at.getWorld().spawnParticle(Particle.SOUL,at,6,.3,.3,.3,.02);
         at.getWorld().playSound(at,Sound.BLOCK_BEACON_DEACTIVATE,.8f,1.4f);
         suspended.put(owner.getUniqueId(),"สลบ · พักฟื้นอีก "+recovery(record));
         owner.showTitle(Title.title(Component.text(record.name()+" สลบ!",NamedTextColor.RED),
             Component.text("พักฟื้นในคอก "+recovery(record),NamedTextColor.GRAY),Title.Times.times(Duration.ofMillis(200),Duration.ofSeconds(2),Duration.ofMillis(500))));
-        plugin.message(owner,record.name()+" ถูกโจมตีจนสลบ · พักฟื้น 1 วันในเกม (อีก "+recovery(record)+") แล้วจะกลับมาเอง · ระหว่างนี้เรียกตัวอื่นได้");
+        plugin.message(owner,record.name()+" ถูกโจมตีจนสลบ · พักฟื้นอีก "+recovery(record)+" แล้วจะกลับมาเอง · ระหว่างนี้เรียกตัวอื่นได้");
         plugin.getLogger().info("Pet fainted: "+owner.getName()+" "+record.species.id+" "+record.id);
     }
     /** Fainting counts in-game time on Evergarden's clock: /time set cannot skip it, restarts do not reset it. */
@@ -542,19 +672,27 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         for(Player player:Bukkit.getOnlinePlayers()){
             PetStable stable=store.cached(player.getUniqueId());
             if(stable==null||!stable.out||stable.activeRecord()==null){
-                if(out.containsKey(player.getUniqueId()))despawn(player.getUniqueId());
+                if(out.containsKey(player.getUniqueId())||secondaryOut.containsKey(player.getUniqueId()))despawn(player.getUniqueId());
                 continue;
             }
             UUID id=player.getUniqueId();PetBody body=out.get(id);PetRecord active=stable.activeRecord();
             if(active.faintedUntil>0){
-                if(faintLeft(active)>0){if(body!=null)despawn(id);suspended.put(id,"สลบ · พักฟื้นอีก "+recovery(active));continue;}
+                if(faintLeft(active)>0){
+                    if(body!=null)despawnPrimary(id);
+                    suspended.put(id,"สลบ · พักฟื้นอีก "+recovery(active));
+                    if(blocker(player)==null)maintainSecondary(player,stable);else despawnSecondary(id);
+                    continue;
+                }
                 active.faintedUntil=0;stable.dirty=true;
                 plugin.message(player,active.name()+" ฟื้นตัวแล้ว กำลังกลับมาหาคุณ");
             }
             String reason=blocker(player);
             if(reason==null&&stranded.getOrDefault(id,0)>20*10)reason="ตามเจ้าของไม่ทัน";
             if(reason!=null){
-                if(body!=null){despawn(id);Location at=body.location();at.getWorld().spawnParticle(Particle.END_ROD,at.add(0,.6,0),8,.3,.3,.3,.02);}
+                if(body!=null||secondaryOut.containsKey(id)){
+                    Location at=body!=null?body.location():secondaryOut.get(id).location();
+                    despawn(id);at.getWorld().spawnParticle(Particle.END_ROD,at.add(0,.6,0),8,.3,.3,.3,.02);
+                }
                 if(!reason.equals(suspended.put(id,reason))&&reason.equals("ใกล้การต่อสู้กับบอส"))
                     plugin.message(player,stable.activeRecord().name()+" หลบไปรอนอกสนามบอส · จะกลับมาเองหลังจบการต่อสู้");
                 if(reason.equals("ตามเจ้าของไม่ทัน"))stranded.remove(id);
@@ -563,10 +701,17 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
             if(body!=null&&!body.valid()){despawn(id);body=null;}
             if(body==null){if(spawnNear(player))suspended.remove(id);else suspended.put(id,"รอพื้นที่ปลอดภัยใกล้เจ้าของ");}
             body=out.get(id);
+            maintainSecondary(player,stable);
             // Passive skills work while the companion is close (a pet left on stay far away does not count).
             if(body!=null&&(body.perched||body.location().getWorld()==player.getWorld()&&body.location().distanceSquared(player.getLocation())<=32*32))
                 if(active.species!=PetCatalog.Species.AETHERIUS||!riding.riding(id))PetSkills.passive(player,active,clock,target->foe(player,target));
         }
+    }
+    private void maintainSecondary(Player player,PetStable stable){
+        UUID id=player.getUniqueId();PetBody body=secondaryOut.get(id);PetRecord secondary=stable.secondaryRecord();
+        if(secondary==null||stable.nesting(secondary.id)||faintLeft(secondary)>0){despawnSecondary(id);return;}
+        if(body!=null&&(!body.valid()||body.record!=secondary)){despawnSecondary(id);body=null;}
+        if(body==null)spawnSecondary(player);
     }
     private void grow(){
         long now=System.currentTimeMillis();
@@ -574,6 +719,14 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
             Player player=Bukkit.getPlayer(entry.getKey());if(player==null)continue;
             if(now-moved.getOrDefault(entry.getKey(),now)>AFK_MS)continue;
             PetStable stable=stable(player);PetRecord record=stable.activeRecord();if(record==null)continue;
+            record.growth++;record.minutes++;
+            if(record.minutes%10==0)record.bond=Math.min(PetRecord.BOND_MAX,record.bond+1);
+            stable.dirty=true;checkGrowth(player,record);
+        }
+        for(var entry:new ArrayList<>(secondaryOut.entrySet())){
+            Player player=Bukkit.getPlayer(entry.getKey());if(player==null)continue;
+            if(now-moved.getOrDefault(entry.getKey(),now)>AFK_MS)continue;
+            PetStable stable=stable(player);PetRecord record=stable.secondaryRecord();if(record==null)continue;
             record.growth++;record.minutes++;
             if(record.minutes%10==0)record.bond=Math.min(PetRecord.BOND_MAX,record.bond+1);
             stable.dirty=true;checkGrowth(player,record);
@@ -601,6 +754,7 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         if(raised)plugin.message(player,opened>0?"เลี้ยง "+record.name()+" มาตั้งแต่เด็กจนโตเต็มวัย · คอกสัตว์เพิ่ม "+opened+" ช่อง (ตอนนี้ "+stable.capacity()+" ช่อง)"
             :"เลี้ยง "+record.name()+" มาตั้งแต่เด็กจนโตเต็มวัย · คอกสัตว์ครบ "+stable.capacity()+" ช่องสูงสุดแล้ว");
         if(record.id.equals(stable(player).active))rebuild(player);
+        else if(record.id.equals(stable(player).secondary)){despawnSecondary(player.getUniqueId());spawnSecondary(player);}
     }
 
     // ---- interaction ----
@@ -634,7 +788,10 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         player.sendActionBar(Component.text(record.name()+" · ความผูกพัน "+record.bond+" · การเติบโต "+record.growth,NamedTextColor.LIGHT_PURPLE));
         checkGrowth(player,record);
     }
-    @Override public void lost(PetBody body){if(body.owner!=null&&out.get(body.owner)==body){riding.stop(body.owner,true);out.remove(body.owner);}}
+    @Override public void lost(PetBody body){
+        if(body.owner!=null&&out.get(body.owner)==body){riding.stop(body.owner,true);out.remove(body.owner);}
+        if(body.owner!=null&&secondaryOut.get(body.owner)==body)secondaryOut.remove(body.owner);
+    }
 
     // ---- player lifecycle ----
     @EventHandler public void join(PlayerJoinEvent event){
@@ -706,6 +863,8 @@ public final class PetCompanions implements PetBodies.Manager,Listener,AutoClose
         motion.cancel();upkeep.cancel();growth.cancel();saver.cancel();
         riding.close();
         for(UUID owner:new ArrayList<>(out.keySet()))despawn(owner);
+        for(UUID owner:new ArrayList<>(secondaryOut.keySet()))despawnSecondary(owner);
+        PetSkills.disable();
         HandlerList.unregisterAll(this);
     }
 }

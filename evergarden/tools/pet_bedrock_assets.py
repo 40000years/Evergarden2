@@ -1,4 +1,4 @@
-"""Native Bedrock entities for the 32 wild pets (96 growth variants), and form portraits.
+"""Native Bedrock entities for every pet (32 wild species and the mythical five, 111 growth variants), and form portraits.
 
 Reuses the boss exporter: a Java carrier is replaced by Geyser with the custom
 entity ``voidscape:everpet_<species>_<stage>``. The server only names the clip
@@ -25,7 +25,6 @@ from pet_portraits import bedrock_textures
 ROOT = Path(__file__).resolve().parents[2]
 PETS = ROOT / 'evergarden/src/main/resources/modelengine/pets'
 DIST = ROOT / 'evergarden/dist'
-MYTHICAL = {'aetherius', 'ignis_draconis', 'zephyros', 'solaris', 'fenrir'}
 CLIPS = ['idle', 'walk', 'fly', 'sit', 'greet']
 
 
@@ -38,8 +37,6 @@ def assets():
     for path in sorted(PETS.glob('everpet_*.bbmodel')):
         model = json.loads(path.read_text(encoding='utf8'))
         species, stage = model['meta']['evergarden_pet_species'], model['meta']['evergarden_pet_stage']
-        if species in MYTHICAL:
-            continue
         # The controller maps property index -> clip by position; the server uses this order.
         assert [clip['name'] for clip in model['animations']] == CLIPS, path.name
         model_id = f'everpet_{species}_{stage}'

@@ -1,0 +1,2770 @@
+{
+  "format": 1,
+  "species": [
+    {
+      "id": "prism_kirin",
+      "display": "Prism Kirin",
+      "thai": "กิเลนปริซึม",
+      "rarity": "rare",
+      "flies": true,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "AMETHYST_SHARD",
+      "design": "กิเลนขาวมุก เกล็ดแก้วสีรุ้ง เขาผลึกแตกกิ่งและแผงคอพริ้ว",
+      "growth": [
+        "ลูกกิเลนขาป้อม เขาผลึกตุ่มเดียว",
+        "เขายาวและเกล็ดแก้วเริ่มเรียงตามลำตัว",
+        "เขาแตกกิ่ง แผงคอชั้นยาว หางพู่ปริซึม"
+      ],
+      "passiveName": "ม่านแสงปริซึม",
+      "passive": "ความเร็ว I ใกล้ดอกไม้ · โชค I ใกล้ดอกไม้ · ฟื้นเลือด 1 HP ทุก 30 วินาที ตลอดเวลา",
+      "traitName": "เขารุ้งชี้เป้า",
+      "trait": "60% ทำให้ศัตรู เรืองแสง 4 วินาที · คูลดาวน์ 4 วินาที · โจมตีเป้าหมายใหม่ ×1.35",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "NEAR_FLOWERS",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "LUCK",
+          "condition": "NEAR_FLOWERS",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 30,
+          "condition": "ALWAYS",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 4,
+        "chance": 0.6,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.35,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "clockwork_red_panda",
+      "display": "Clockwork Red Panda",
+      "thai": "แพนด้าแดงจักรกล",
+      "rarity": "rare",
+      "flies": false,
+      "hover": false,
+      "habitat": "LUNAR_CITY",
+      "food": "SWEET_BERRIES",
+      "design": "แพนด้าแดงหางวงแหวน เครื่องทองเหลืองซ่อนในขน สายพานเล็กและหัวใจไขลาน",
+      "growth": [
+        "หูใหญ่แก้มอิ่ม เฟืองหัวใจเล็ก",
+        "หางยาวขึ้นและสนับแขนทองเหลือง",
+        "พวงหางวงแหวน หน้าปัดอกและเฟืองหลังที่มีข้อหมุน"
+      ],
+      "passiveName": "หัวใจไขลาน",
+      "passive": "ขุดเร็ว I ตลอดเวลา · ความเร็ว I ขณะวิ่ง · เพิ่มความอิ่ม 0.5 แต้ม ทุก 45 วินาที ตลอดเวลา",
+      "traitName": "เฟืองล็อกจังหวะ",
+      "trait": "55% ทำให้ศัตรู ช้าลง 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "HASTE",
+          "condition": "ALWAYS",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "SPEED",
+          "condition": "SPRINTING",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "SATURATION",
+          "every": 45,
+          "condition": "ALWAYS",
+          "value": 0.5
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 2,
+        "chance": 0.55,
+        "amplifier": 1,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "nebula_whale",
+      "display": "Nebula Whale",
+      "thai": "วาฬเนบิวลา",
+      "rarity": "rare",
+      "flies": true,
+      "hover": true,
+      "habitat": "LUNAR_CITY",
+      "food": "GLOW_BERRIES",
+      "design": "วาฬอวกาศท้องสีม่วงอ่อน ครีบยาว แผนที่กลุ่มดาวและผลึกดาวบนหลัง",
+      "growth": [
+        "วาฬหัวกลมครีบสั้น จุดดาวน้อย",
+        "ครีบยาวขึ้นและแนวกลุ่มดาวเริ่มต่อกัน",
+        "หางพระจันทร์กว้าง ครีบชั้นยาวและมงกุฎเนบิวลา"
+      ],
+      "passiveName": "อ้อมกอดเนบิวลา",
+      "passive": "ร่อนลงช้า I เมื่อตกเกิน 3 บล็อก · มองในที่มืด I ในที่มืด · รับหัวใจโล่ I 20 วินาที ทุก 60 วินาที ตลอดเวลา",
+      "traitName": "คลื่นสุญญากาศ",
+      "trait": "50% ทำให้ศัตรู อ่อนแรง 4 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SLOW_FALLING",
+          "condition": "FALLING",
+          "amplifier": 0,
+          "ticks": 40
+        },
+        {
+          "type": "NIGHT_VISION",
+          "condition": "DARK",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [
+        {
+          "action": "ABSORPTION",
+          "every": 60,
+          "condition": "ALWAYS",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 4,
+        "chance": 0.5,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "ember_salamander",
+      "display": "Ember Salamander",
+      "thai": "ซาลาแมนเดอร์ถ่านเพลิง",
+      "rarity": "rare",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "BLAZE_POWDER",
+      "design": "ซาลาแมนเดอร์ถ่านดำ ผิวหินลาวา ตาอำพัน เหงือกเปลวไฟและหางเตาอบ",
+      "growth": [
+        "ลูกตากลมเท้ากว้าง เหงือกประกายสั้น",
+        "หางยาวขึ้น เกล็ดลาวาและเหงือกแยกช่อ",
+        "สันหลังภูเขาไฟ เปลวเหงือกหลายชั้น หางแตกปลายเพลิง"
+      ],
+      "passiveName": "ประกายเตาอุ่น",
+      "passive": "ต้านไฟ I ขณะติดไฟ · ขุดเร็ว I บนพื้นหิน · ดับไฟ ทุก 8 วินาที ขณะติดไฟ",
+      "traitName": "หางสะเก็ดไฟ",
+      "trait": "65% ทำให้ศัตรู ติดไฟ 3 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "FIRE_RESISTANCE",
+          "condition": "BURNING",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "HASTE",
+          "condition": "ON_STONE",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "CLEAR_FIRE",
+          "every": 8,
+          "condition": "BURNING",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "FIRE",
+        "seconds": 3,
+        "chance": 0.65,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "moonstone_sphinx",
+      "display": "Moonstone Sphinx",
+      "thai": "สฟิงซ์มูนสโตน",
+      "rarity": "rare",
+      "flies": true,
+      "hover": false,
+      "habitat": "LUNAR_CITY",
+      "food": "RAW_GOLD",
+      "design": "แมวสฟิงซ์ขนทรายอ่อน สวมมงกุฎจันทร์ ปีกหินจันทร์และปลอกคอสีคราม",
+      "growth": [
+        "แมวหน้ากลม ปีกติ่งและผ้าคลุมสั้น",
+        "ปีกเริ่มมีขนหินและคอระย้า",
+        "มงกุฎเสี้ยวจันทร์เต็ม ปีกชั้นยาวและหางพู่มูนสโตน"
+      ],
+      "passiveName": "ปริศนาผู้พิทักษ์",
+      "passive": "มองในที่มืด I ในที่มืด · ต้านทาน I ขณะย่อตัว · โชค I ในที่มืด",
+      "traitName": "ปริศนาจันทรา",
+      "trait": "40% ทำให้ศัตรู ตาพร่า 2 วินาที · คูลดาวน์ 4 วินาที · โจมตีเป้าหมายใหม่ ×1.4",
+      "boosts": [
+        {
+          "type": "NIGHT_VISION",
+          "condition": "DARK",
+          "amplifier": 0,
+          "ticks": 600
+        },
+        {
+          "type": "RESISTANCE",
+          "condition": "SNEAKING",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "LUCK",
+          "condition": "DARK",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "BLINDNESS",
+        "seconds": 2,
+        "chance": 0.4,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.4,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "thunder_quetzal",
+      "display": "Thunder Quetzal",
+      "thai": "เควตซัลสายฟ้า",
+      "rarity": "rare",
+      "flies": true,
+      "hover": true,
+      "habitat": "ANCIENT_FOREST",
+      "food": "GLOW_BERRIES",
+      "design": "นกป่ามรกต อกสีปะการัง หงอนสายฟ้า ปีกซ้อนขนและหางริบบิ้นยาว",
+      "growth": [
+        "ลูกนกอกปุยหางสั้น หงอนสองแฉก",
+        "ปีกขนยาวขึ้นและริบบิ้นหางคู่",
+        "หงอนสายฟ้าเต็ม หางสี่สายพลิ้วและขนปีกขลิบทอง"
+      ],
+      "passiveName": "กระแสลมยอดไม้",
+      "passive": "กระโดดสูง I ขณะวิ่ง · ร่อนลงช้า I เมื่อตกเกิน 3 บล็อก · ความเร็ว I ในที่โล่ง",
+      "traitName": "ขนปีกอัสนี",
+      "trait": "70% ทำให้ศัตรู ช้าลง 1 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "JUMP_BOOST",
+          "condition": "SPRINTING",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "SLOW_FALLING",
+          "condition": "FALLING",
+          "amplifier": 0,
+          "ticks": 40
+        },
+        {
+          "type": "SPEED",
+          "condition": "SKY",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1,
+        "chance": 0.7,
+        "amplifier": 2,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "sakura_baku",
+      "display": "Sakura Baku",
+      "thai": "บาคุซากุระ",
+      "rarity": "rare",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "CHERRY_LEAVES",
+      "design": "สมเสร็จกินฝันลายซากุระ งวงม้วน หูใบบัวและแผงขนรูปกลีบดอก",
+      "growth": [
+        "ลูกบาคุตัวกลมงวงจิ๋ว กลีบตูม",
+        "งวงยาวโค้งและดอกซากุระหลังเริ่มบาน",
+        "งวงม้วนเต็ม พวงดอกหลายช่อและแผงใบคอ"
+      ],
+      "passiveName": "ฝันหวานใต้ซากุระ",
+      "passive": "ล้างคลื่นไส้ ทุก 10 วินาที ตลอดเวลา · ล้าง Hunger ทุก 15 วินาที ตลอดเวลา · ฟื้นเลือด 1.5 HP ทุก 30 วินาที ใกล้ดอกไม้",
+      "traitName": "งวงกินฝัน",
+      "trait": "65% ทำให้ศัตรู อ่อนแรง 3 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [],
+      "pulses": [
+        {
+          "action": "CLEANSE_NAUSEA",
+          "every": 10,
+          "condition": "ALWAYS",
+          "value": 1
+        },
+        {
+          "action": "CLEANSE_HUNGER",
+          "every": 15,
+          "condition": "ALWAYS",
+          "value": 1
+        },
+        {
+          "action": "HEAL",
+          "every": 30,
+          "condition": "NEAR_FLOWERS",
+          "value": 1.5
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 3,
+        "chance": 0.65,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "obsidian_basilisk",
+      "display": "Obsidian Basilisk",
+      "thai": "บาซิลิสก์ออบซิเดียน",
+      "rarity": "rare",
+      "flies": false,
+      "hover": false,
+      "habitat": "LUNAR_CITY",
+      "food": "SPIDER_EYE",
+      "design": "กิ้งก่าหกขาเกล็ดออบซิเดียน รอยแร่เขียว มงกุฎผลึกและคางหนาม",
+      "growth": [
+        "กิ้งก่าตาโตขาสั้น เขาผลึกเล็ก",
+        "ลำตัวยาวขึ้นและสันหลังเริ่มสูง",
+        "มงกุฎผลึกคม เกล็ดหลังชั้นหกเหลี่ยม หางหอก"
+      ],
+      "passiveName": "หนังแก้วภูผา",
+      "passive": "มองในที่มืด I ในที่มืด · รับดาเมจจากการโจมตีลด 8% ในโหมดช่วยสู้ เมื่อสัตว์อยู่ในระยะ 8 บล็อก",
+      "traitName": "จ้องหินดำ",
+      "trait": "50% ทำให้ศัตรู ช้าลง 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "NIGHT_VISION",
+          "condition": "DARK",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [],
+      "guard": 0.92,
+      "armor": 0.8,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 2,
+        "chance": 0.5,
+        "amplifier": 2,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "glacier_narwhal",
+      "display": "Glacier Narwhal",
+      "thai": "นาร์วาฬธารน้ำแข็ง",
+      "rarity": "rare",
+      "flies": true,
+      "hover": true,
+      "habitat": "GLACIER",
+      "food": "COD",
+      "design": "นาร์วาฬสีธารน้ำแข็ง เขาเกลียวไพลิน ครีบเกล็ดน้ำแข็งและแก้มชมพู",
+      "growth": [
+        "ลูกนาร์วาฬหัวกลม เขาตุ่มน้ำแข็ง",
+        "เขายาวและครีบตกผลึก",
+        "เขาเกลียวยาวเต็ม ปลายหางสามชั้นและเกราะไพลิน"
+      ],
+      "passiveName": "พรเกลียวไพลิน",
+      "passive": "ว่ายน้ำเร็ว I ขณะอยู่ในน้ำ · หายใจใต้น้ำ I ใกล้น้ำ · ความเร็ว I บนหิมะหรือน้ำแข็ง",
+      "traitName": "เขาเกลียวเยือกแข็ง",
+      "trait": "65% ทำให้ศัตรู หนาวจัด 5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "DOLPHINS_GRACE",
+          "condition": "IN_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "WATER_BREATHING",
+          "condition": "NEAR_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "SPEED",
+          "condition": "ON_SNOW",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "FREEZE",
+        "seconds": 5,
+        "chance": 0.65,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "lotus_mantis",
+      "display": "Lotus Mantis",
+      "thai": "ตั๊กแตนตำข้าวบัวแก้ว",
+      "rarity": "rare",
+      "flies": true,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "FERN",
+      "design": "ตั๊กแตนตำข้าวสีหยก แขนเคียวกลีบบัว ปีกใบแก้วและมงกุฎดอกบัว",
+      "growth": [
+        "ลูกตั๊กแตนตากลม แขนกลีบตูม",
+        "เคียวกลีบบานและปีกใบคู่แรก",
+        "เคียวกลีบหลายชั้น ปีกใบบัวเต็มและมงกุฎดอกบัว"
+      ],
+      "passiveName": "จังหวะใบบัว",
+      "passive": "ขุดเร็ว I ขณะย่อตัว · กระโดดสูง I บนพื้นหญ้า · ฟื้นเลือด 0.5 HP ทุก 20 วินาที เมื่อเลือดต่ำกว่า 40%",
+      "traitName": "เคียวกลีบบัว",
+      "trait": "55% ทำให้ศัตรู อ่อนแรง 2 วินาที · คูลดาวน์ 4 วินาที · โจมตีเป้าหมายใหม่ ×1.5",
+      "boosts": [
+        {
+          "type": "HASTE",
+          "condition": "SNEAKING",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "JUMP_BOOST",
+          "condition": "ON_GRASS",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 20,
+          "condition": "LOW_HEALTH",
+          "value": 0.5
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 2,
+        "chance": 0.55,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.5,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "rune_armadillo",
+      "display": "Rune Armadillo",
+      "thai": "อาร์มาดิลโลอักขระ",
+      "rarity": "rare",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "BEETROOT",
+      "design": "อาร์มาดิลโลเกราะศิลาสีมอคคา แผ่นหลังประกบ อักขระสีฟ้าและหูทองแดง",
+      "growth": [
+        "ลูกเกราะสามแถบ จมูกชมพูและอุ้งเท้าใหญ่",
+        "เกราะเพิ่มแถบและอักขระเริ่มส่องแสง",
+        "เกราะซ้อนสมบูรณ์ เสาคาดอักขระและหางปล้องแข็งแรง"
+      ],
+      "passiveName": "วงแหวนอักขระ",
+      "passive": "ต้านทาน I บนพื้นหิน · รับหัวใจโล่ I 20 วินาที ทุก 60 วินาที ขณะย่อตัว",
+      "traitName": "กลิ้งผนึกศิลา",
+      "trait": "50% ทำให้ศัตรู ช้าลง 3 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "RESISTANCE",
+          "condition": "ON_STONE",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "ABSORPTION",
+          "every": 60,
+          "condition": "SNEAKING",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 0.75,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 3,
+        "chance": 0.5,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "astral_seahorse",
+      "display": "Astral Seahorse",
+      "thai": "ม้าน้ำดารา",
+      "rarity": "rare",
+      "flies": true,
+      "hover": true,
+      "habitat": "LUNAR_CITY",
+      "food": "KELP",
+      "design": "ม้าน้ำสีลาเวนเดอร์ ลำตัวข้อเกราะ ครีบม่านดาวและหางม้วนเกี่ยวเสี้ยวจันทร์",
+      "growth": [
+        "ม้าน้ำหัวโตหางม้วนสั้น ครีบจิ๋ว",
+        "หางม้วนยาวและสันมงกุฎดาว",
+        "เกราะดาราหลายปล้อง ครีบม่านยาวและมงกุฎแตกแขนง"
+      ],
+      "passiveName": "ลำนำกระแสดาว",
+      "passive": "หายใจใต้น้ำ I ตลอดเวลา · พลังคอนดูอิต I ขณะอยู่ในน้ำ · โชค I ขณะย่อตัว",
+      "traitName": "ฟองดาราล้อมเป้า",
+      "trait": "65% ทำให้ศัตรู เรืองแสง 5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "WATER_BREATHING",
+          "condition": "ALWAYS",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "CONDUIT_POWER",
+          "condition": "IN_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "LUCK",
+          "condition": "SNEAKING",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 5,
+        "chance": 0.65,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "sunforge_lion",
+      "display": "Sunforge Lion",
+      "thai": "สิงโตสุริยันหลอมทอง",
+      "rarity": "rare",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "COOKED_BEEF",
+      "design": "สิงโตสีทองแดง แผงคอรูปแฉกสุริยัน เกราะทองหลอมและหางพู่เปลว",
+      "growth": [
+        "ลูกสิงโตอุ้งเท้าโต แผงคอเล็ก",
+        "แผงคอเพิ่มชั้นและสนับทองหลอม",
+        "แผงสุริยันเต็มวง เกราะอกและพวงหางเพลิงสามชั้น"
+      ],
+      "passiveName": "หัวใจสุริยัน",
+      "passive": "พลังโจมตี I เมื่อเลือดต่ำกว่า 40% · ต้านไฟ I ในที่โล่ง",
+      "traitName": "ตะปบสุริยัน",
+      "trait": "60% ทำให้ศัตรู ติดไฟ 2.5 วินาที · คูลดาวน์ 4 วินาที · โจมตีเป้าหมายใหม่ ×1.4",
+      "boosts": [
+        {
+          "type": "STRENGTH",
+          "condition": "LOW_HEALTH",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "FIRE_RESISTANCE",
+          "condition": "SKY",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "FIRE",
+        "seconds": 2.5,
+        "chance": 0.6,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.4,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "paper_crane",
+      "display": "Paper Crane",
+      "thai": "กระเรียนกระดาษวิญญาณ",
+      "rarity": "rare",
+      "flies": true,
+      "hover": true,
+      "habitat": "GARDENS",
+      "food": "PAPER",
+      "design": "กระเรียนพับกระดาษงาช้าง ขอบทอง หมึกคราม ปีกพับมีสันและหางพู่ตราประทับ",
+      "growth": [
+        "กระเรียนพับป้อม คอสั้น ปีกพับเล็ก",
+        "คอยืดเป็นข้อและขอบปีกเริ่มแยกชั้น",
+        "ปีกกระดาษพับขนาดใหญ่ ขนหางพับและตราหมึกปลายปีก"
+      ],
+      "passiveName": "พรปีกกระดาษ",
+      "passive": "ร่อนลงช้า I เมื่อตกเกิน 3 บล็อก · กระโดดสูง I ตลอดเวลา · โชค I ในที่โล่ง",
+      "traitName": "ริบบิ้นพันธนา",
+      "trait": "55% ทำให้ศัตรู อ่อนแรง 3.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SLOW_FALLING",
+          "condition": "FALLING",
+          "amplifier": 0,
+          "ticks": 40
+        },
+        {
+          "type": "JUMP_BOOST",
+          "condition": "ALWAYS",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "LUCK",
+          "condition": "SKY",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 3.5,
+        "chance": 0.55,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "opal_chimera",
+      "display": "Opal Chimera",
+      "thai": "ไคเมราโอปอล",
+      "rarity": "rare",
+      "flies": true,
+      "hover": false,
+      "habitat": "GLACIER",
+      "food": "AMETHYST_SHARD",
+      "design": "ไคเมราสิงโตขาว หัวแพะข้างไหล่ หางงู ปีกแก้วโอปอลและเขามุก",
+      "growth": [
+        "ลูกสิงโตหัวกลม หัวแพะจิ๋วและหางงูตูม",
+        "เขาแพะม้วนและปีกโอปอลเริ่มคลี่",
+        "ไคเมราสามบุคลิก ปีกโอปอลเต็ม หางงูชูคอและเขาแพะวงคู่"
+      ],
+      "passiveName": "สามจิตผู้พิทักษ์",
+      "passive": "ความเร็ว I ขณะวิ่ง · พลังโจมตี I เมื่อเลือดต่ำกว่า 40% · มองในที่มืด I ในที่มืด",
+      "traitName": "สามหัวประสาน",
+      "trait": "45% ทำให้ศัตรู ติดพิษ 3 วินาที · คูลดาวน์ 4 วินาที · โจมตีเป้าหมายใหม่ ×1.3",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "SPRINTING",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "STRENGTH",
+          "condition": "LOW_HEALTH",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "NIGHT_VISION",
+          "condition": "DARK",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "POISON",
+        "seconds": 3,
+        "chance": 0.45,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.3,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "twilight_moth_dragon",
+      "display": "Twilight Moth Dragon",
+      "thai": "มังกรผีเสื้อสนธยา",
+      "rarity": "rare",
+      "flies": true,
+      "hover": true,
+      "habitat": "LUNAR_CITY",
+      "food": "HONEY_BOTTLE",
+      "design": "มังกรขนกำมะหยี่ม่วง ปีกผีเสื้อกลางคืนมีตาดาว หนวดพู่และหางจันทร์",
+      "growth": [
+        "มังกรขนปุยปีกกลม หนวดอ่อน",
+        "ปีกแยกคู่และลายตาดาวปรากฏ",
+        "ปีกสี่กลีบเต็มตาดาว หนวดพู่ยาวและหางเสี้ยวจันทร์"
+      ],
+      "passiveName": "เกล็ดฝุ่นสนธยา",
+      "passive": "มองในที่มืด I ตลอดเวลา · ร่อนลงช้า I เมื่อตกเกิน 3 บล็อก · ล้าง Wither ทุก 30 วินาที ในที่มืด",
+      "traitName": "ละอองปีกสนธยา",
+      "trait": "50% ทำให้ศัตรู อ่อนแรง 4.5 วินาที · คูลดาวน์ 4 วินาที · ดูดเลือด 8% ของดาเมจจริง",
+      "boosts": [
+        {
+          "type": "NIGHT_VISION",
+          "condition": "ALWAYS",
+          "amplifier": 0,
+          "ticks": 600
+        },
+        {
+          "type": "SLOW_FALLING",
+          "condition": "FALLING",
+          "amplifier": 0,
+          "ticks": 40
+        }
+      ],
+      "pulses": [
+        {
+          "action": "CLEANSE_WITHER",
+          "every": 30,
+          "condition": "DARK",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 4.5,
+        "chance": 0.5,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0.08
+      },
+      "aura": null
+    },
+    {
+      "id": "verdant_capricorn",
+      "display": "Verdant Capricorn",
+      "thai": "แคปริคอร์นพฤกษา",
+      "rarity": "rare",
+      "flies": true,
+      "hover": true,
+      "habitat": "GARDENS",
+      "food": "SEAGRASS",
+      "design": "แพะหางปลาสีหยก เขากิ่งไม้และเถาวัลย์ แผงคอสาหร่าย ครีบหางใบไม้",
+      "growth": [
+        "ลูกแพะหางปลาป้อม เขาใบอ่อน",
+        "เขาเริ่มโค้ง หางปล้องและครีบใบยาว",
+        "เขากิ่งไม้เต็มคู่ หางปลาโค้งและครีบใบแตกช่อ"
+      ],
+      "passiveName": "พรผาและธาร",
+      "passive": "กระโดดสูง II บนพื้นหิน · หายใจใต้น้ำ I ขณะอยู่ในน้ำ · ฟื้นเลือด 2 HP ทุก 40 วินาที ใกล้น้ำ",
+      "traitName": "เขาคู่ธารมรกต",
+      "trait": "50% ทำให้ศัตรู ช้าลง 3.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "JUMP_BOOST",
+          "condition": "ON_STONE",
+          "amplifier": 1,
+          "ticks": 60
+        },
+        {
+          "type": "WATER_BREATHING",
+          "condition": "IN_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 40,
+          "condition": "NEAR_WATER",
+          "value": 2
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 3.5,
+        "chance": 0.5,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "strawberry_hamster",
+      "display": "Strawberry Hamster",
+      "thai": "แฮมสเตอร์สตรอว์เบอร์รี",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "SWEET_BERRIES",
+      "design": "แฮมสเตอร์แก้มยุ้ยขนครีม หูชมพู ผ้าคลุมสตรอว์เบอร์รีและกระเป๋าเมล็ด",
+      "growth": [
+        "ก้อนแก้มกลมกับใบอ่อน",
+        "ผ้าคลุมผลเล็กและแก้มเมล็ด",
+        "ผ้าคลุมสตรอว์เบอร์รีเต็มผลกับกระเป๋าถัก"
+      ],
+      "passiveName": "กระเป๋าผลไม้",
+      "passive": "เติมความหิว 1 แต้ม ทุก 45 วินาที เมื่อยังหิว",
+      "traitName": "แก้มเบอร์รีหนึบ",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [],
+      "pulses": [
+        {
+          "action": "FOOD",
+          "every": 45,
+          "condition": "HUNGRY",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "cocoa_capybara",
+      "display": "Cocoa Capybara",
+      "thai": "คาปิบาราโกโก้",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "COCOA_BEANS",
+      "design": "คาปิบาราหน้าทู่ตาปรือ ขนโกโก้ ขาสั้นกว้าง เปลือกโกโก้สะพายหลัง",
+      "growth": [
+        "จมูกกลมกับยอดโกโก้",
+        "แผงขนคอเริ่มเข้ม",
+        "เปลือกโกโก้เต็มฝักและลายครีม"
+      ],
+      "passiveName": "พักริมธาร",
+      "passive": "ต้านทาน I ขณะยืนพัก · ฟื้นเลือด 1 HP ทุก 35 วินาที ใกล้น้ำ",
+      "traitName": "สะกิดใจเย็น",
+      "trait": "35% ทำให้ศัตรู อ่อนแรง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "RESISTANCE",
+          "condition": "STILL",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 35,
+          "condition": "NEAR_WATER",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "honey_otter",
+      "display": "Honey Otter",
+      "thai": "นากน้ำผึ้ง",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "HONEY_BOTTLE",
+      "design": "นากท้องครีมหางเรียวยาว ยืนถือรังผึ้งจิ๋ว มีผ้าผูกคอลายน้ำผึ้ง",
+      "growth": [
+        "กอดหยดน้ำผึ้ง",
+        "ถือรวงผึ้งสองชั้น",
+        "รวงผึ้งใหญ่และผ้าพันคอปลายหยด"
+      ],
+      "passiveName": "เสบียงนักว่าย",
+      "passive": "หายใจใต้น้ำ I ขณะอยู่ในน้ำ · เพิ่มความอิ่ม 0.8 แต้ม ทุก 30 วินาที ขณะอยู่ในน้ำ",
+      "traitName": "อุ้งมือน้ำผึ้ง",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "WATER_BREATHING",
+          "condition": "IN_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "SATURATION",
+          "every": 30,
+          "condition": "IN_WATER",
+          "value": 0.8
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "peach_shiba",
+      "display": "Peach Shiba",
+      "thai": "ชิบะพีช",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "COOKED_CHICKEN",
+      "design": "ชิบะขนพีชหางม้วน แก้มครีมและผ้าพันคอลูกพีช",
+      "growth": [
+        "หัวโตหูพับและหางม้วนเล็ก",
+        "หูตั้งกับผ้าผูกใบพีช",
+        "หางม้วนหนาและกระเป๋าพีช"
+      ],
+      "passiveName": "เพื่อนวิ่งสุขภาพดี",
+      "passive": "ความเร็ว I เมื่อเลือดอย่างน้อย 90% · ฟื้นเลือด 0.5 HP ทุก 45 วินาที ตลอดเวลา",
+      "traitName": "เห่าชี้เป้า",
+      "trait": "35% ทำให้ศัตรู เรืองแสง 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "FULL_HEALTH",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 45,
+          "condition": "ALWAYS",
+          "value": 0.5
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 2,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "blueberry_bat",
+      "display": "Blueberry Bat",
+      "thai": "ค้างคาวบลูเบอร์รี",
+      "rarity": "common",
+      "flies": true,
+      "hover": true,
+      "habitat": "ANCIENT_FOREST",
+      "food": "GLOW_BERRIES",
+      "design": "ค้างคาวขนสีน้ำเงินอวบ ปีกเยื่อม่วงมีนิ้วปีกชัด ใบและช่อบลูเบอร์รีประดับอก",
+      "growth": [
+        "ปีกสั้นหูโตกับเบอร์รีเดียว",
+        "นิ้วปีกยาวและใบคู่",
+        "ปีกเป็นหยักสามแฉกกับช่อเบอร์รี"
+      ],
+      "passiveName": "โซนาร์เบอร์รี",
+      "passive": "มองในที่มืด I ในที่มืด · ล้างตาบอด ทุก 20 วินาที ในที่มืด",
+      "traitName": "เสียงสะท้อนบลูเบอร์รี",
+      "trait": "35% ทำให้ศัตรู เรืองแสง 3 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "NIGHT_VISION",
+          "condition": "DARK",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [
+        {
+          "action": "CLEANSE_BLINDNESS",
+          "every": 20,
+          "condition": "DARK",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 3,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "mint_ferret",
+      "display": "Mint Ferret",
+      "thai": "เฟอเร็ตมินต์",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "COOKED_RABBIT",
+      "design": "เฟอเร็ตลำตัวยาวโค้ง หน้ากากครีม หางมินต์ลายปล้อง และผ้าพันคอใบมินต์",
+      "growth": [
+        "ตัวยาวสั้นกับหางป้อม",
+        "ลำตัวเพรียวและหางสามปล้อง",
+        "หางพลิ้วและผ้าผูกใบมินต์คู่"
+      ],
+      "passiveName": "ย่องกลิ่นมินต์",
+      "passive": "ความเร็ว I ขณะย่อตัว · ล้างพิษ ทุก 60 วินาที ตลอดเวลา",
+      "traitName": "ละอองมินต์",
+      "trait": "35% ทำให้ศัตรู อ่อนแรง 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "SNEAKING",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "CLEANSE_POISON",
+          "every": 60,
+          "condition": "ALWAYS",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 2,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "maple_raccoon",
+      "display": "Maple Raccoon",
+      "thai": "แร็กคูนเมเปิล",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "SWEET_BERRIES",
+      "design": "แร็กคูนหน้ากากเข้ม หางลายชัดและเสื้อคลุมใบเมเปิลกับถุงเดินป่า",
+      "growth": [
+        "หน้ากากกลมกับใบเล็ก",
+        "หางห้าปล้องและผ้าคลุม",
+        "เสื้อคลุมเมเปิลและกระเป๋าเดินป่า"
+      ],
+      "passiveName": "กระเป๋าใบเมเปิล",
+      "passive": "โชค I ในป่าโบราณ · เติมความหิว 1 แต้ม ทุก 60 วินาที ในป่าโบราณ",
+      "traitName": "ใบเมเปิลบังตา",
+      "trait": "35% ทำให้ศัตรู ตาพร่า 1 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "LUCK",
+          "condition": "FOREST",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "FOOD",
+          "every": 60,
+          "condition": "FOREST",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "BLINDNESS",
+        "seconds": 1,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "lavender_cat",
+      "display": "Lavender Cat",
+      "thai": "แมวลาเวนเดอร์",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "COD",
+      "design": "แมวขนม่วงนุ่มหูเรียว หางเครื่องหมายคำถาม ปลอกคอดอกลาเวนเดอร์",
+      "growth": [
+        "แก้มฟูกับหางงอสั้น",
+        "แผงอกฟูและดอกตูม",
+        "หางโค้งสง่ากับช่อลาเวนเดอร์เต็มดอก"
+      ],
+      "passiveName": "ครางกล่อมพัก",
+      "passive": "มองในที่มืด I ในที่มืด · ฟื้นเลือด 1 HP ทุก 40 วินาที ขณะยืนพัก",
+      "traitName": "อุ้งเท้าลาเวนเดอร์",
+      "trait": "35% ทำให้ศัตรู อ่อนแรง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "NIGHT_VISION",
+          "condition": "DARK",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 40,
+          "condition": "STILL",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "acorn_squirrel",
+      "display": "Acorn Squirrel",
+      "thai": "กระรอกโอ๊ก",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "BEETROOT_SEEDS",
+      "design": "กระรอกหางฟูตั้งโค้ง ลายหลังครีมและกอดลูกโอ๊กมีหมวกเกล็ด",
+      "growth": [
+        "หางปุยเล็กกับเมล็ดโอ๊ก",
+        "หางโค้งและลูกโอ๊กเต็มใบ",
+        "หางฟูใหญ่กับหมวกโอ๊กถัก"
+      ],
+      "passiveName": "เส้นทางบนยอดไม้",
+      "passive": "กระโดดสูง I ในป่าโบราณ · ความเร็ว I บนขอนไม้",
+      "traitName": "โอ๊กกลิ้งสะดุด",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "JUMP_BOOST",
+          "condition": "FOREST",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "SPEED",
+          "condition": "ON_LOGS",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "buttercream_corgi",
+      "display": "Buttercream Corgi",
+      "thai": "คอร์กีบัตเตอร์ครีม",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "COOKED_BEEF",
+      "design": "คอร์กีลำตัวยาวขาสั้น หูใหญ่ สันจมูกครีมและโบว์บัตเตอร์ครีม",
+      "growth": [
+        "หูกางกับอุ้งเท้าโต",
+        "อกฟูกับโบว์เนยเล็ก",
+        "ก้นหัวใจและโบว์ครีมสามชั้น"
+      ],
+      "passiveName": "ขาสั้นแรงเต็ม",
+      "passive": "ความเร็ว I บนทางเดิน · เพิ่มความอิ่ม 1 แต้ม ทุก 45 วินาที เมื่อความหิวเต็ม",
+      "traitName": "เห่าเรียกเพื่อน",
+      "trait": "35% ทำให้ศัตรู เรืองแสง 2.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "ON_PATH",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "SATURATION",
+          "every": 45,
+          "condition": "FULL_FOOD",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 2.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "pebble_pangolin",
+      "display": "Pebble Pangolin",
+      "thai": "ลิ่นกรวดมน",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "SPIDER_EYE",
+      "design": "ลิ่นจมูกยาวใส่เกล็ดหินมนซ้อนหลัง หางเกล็ดหลายข้อและกรงเล็บงอน",
+      "growth": [
+        "เกล็ดกลมอ่อนกับจมูกสั้น",
+        "เกล็ดหลังสลับสีและหางยาว",
+        "เกราะกรวดซ้อนเต็มตัวและหางโค้ง"
+      ],
+      "passiveName": "เกล็ดเพื่อนเหมือง",
+      "passive": "ขุดเร็ว I บนพื้นหิน · รับดาเมจจากการโจมตีลด 5% ในโหมดช่วยสู้ เมื่อสัตว์อยู่ในระยะ 8 บล็อก",
+      "traitName": "เกล็ดกรวดสะกิด",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "HASTE",
+          "condition": "ON_STONE",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 0.95,
+      "armor": 0.9,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "moss_toad",
+      "display": "Moss Toad",
+      "thai": "คางคกมอส",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "SPIDER_EYE",
+      "design": "คางคกท้องต่ำกว้าง ตาโปน ขาหลังพับ ผิวก้อนมอสและเห็ดจิ๋ว",
+      "growth": [
+        "ตาโตกับก้อนมอสอ่อน",
+        "สันมอสบนหลังกับเห็ดตูม",
+        "สวนมอสเต็มหลังและเห็ดลายจุด"
+      ],
+      "passiveName": "หมอนมอสชุ่มน้ำ",
+      "passive": "หายใจใต้น้ำ I ใกล้น้ำ · ฟื้นเลือด 1 HP ทุก 40 วินาที บนมอส",
+      "traitName": "ละอองมอส",
+      "trait": "25% ทำให้ศัตรู ติดพิษ 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "WATER_BREATHING",
+          "condition": "NEAR_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 40,
+          "condition": "ON_MOSS",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "POISON",
+        "seconds": 1.5,
+        "chance": 0.25,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "sunflower_duck",
+      "display": "Sunflower Duck",
+      "thai": "เป็ดทานตะวัน",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "WHEAT_SEEDS",
+      "design": "เป็ดตัวป้อมปากแบน ปีกขนซ้อนสามชั้น หมวกดอกทานตะวันและเท้าพังผืด",
+      "growth": [
+        "ลูกเป็ดฟูกับกลีบสามกลีบ",
+        "ปีกสามขนและดอกตูม",
+        "หมวกทานตะวันเต็มดอกกับขนหางพัด"
+      ],
+      "passiveName": "ย่างก้าวริมน้ำ",
+      "passive": "ความเร็ว I ใกล้น้ำ · โชค I บนพื้นหญ้า",
+      "traitName": "จิกเมล็ดทานตะวัน",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "NEAR_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "LUCK",
+          "condition": "ON_GRASS",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "teacup_chick",
+      "display": "Teacup Chick",
+      "thai": "ลูกเจี๊ยบถ้วยชา",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "WHEAT_SEEDS",
+      "design": "ลูกเจี๊ยบขนเหลืองสวมเปลือกไข่ลายถ้วยชา หูจับด้านข้างและปีกยกทักทาย",
+      "growth": [
+        "เปลือกไข่ถ้วยใบเล็ก",
+        "ถ้วยลายดอกและปีกงอก",
+        "ถ้วยขอบทองกับช่อชาหอม"
+      ],
+      "passiveName": "น้ำชาอุ่นใจ",
+      "passive": "ร่อนลงช้า I เมื่อตกเกิน 3 บล็อก · ฟื้นเลือด 1 HP ทุก 50 วินาที เมื่อความหิวเต็ม",
+      "traitName": "ไออุ่นน้ำชา",
+      "trait": "35% ทำให้ศัตรู อ่อนแรง 2.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SLOW_FALLING",
+          "condition": "FALLING",
+          "amplifier": 0,
+          "ticks": 40
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 50,
+          "condition": "FULL_FOOD",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 2.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "pumpkin_fox",
+      "display": "Pumpkin Fox",
+      "thai": "จิ้งจอกฟักทอง",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "PUMPKIN_PIE",
+      "design": "จิ้งจอกสีฟักทองหูเรียว หางแปรงปลายครีม เสื้อคลุมใบฟักทองกับฟักทองเล็ก",
+      "growth": [
+        "หน้ากลมกับใบฟักทอง",
+        "หางแปรงเริ่มฟูและฟักทองเล็ก",
+        "แผงคอใบหลายชั้นและหางพู่เต็ม"
+      ],
+      "passiveName": "ย่องหาเมล็ดทอง",
+      "passive": "โชค I ขณะย่อตัว · มองในที่มืด I ในป่าโบราณ",
+      "traitName": "ฟักทองบังตา",
+      "trait": "35% ทำให้ศัตรู ตาพร่า 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "LUCK",
+          "condition": "SNEAKING",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "NIGHT_VISION",
+          "condition": "FOREST",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "BLINDNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "rain_frog",
+      "display": "Rain Frog",
+      "thai": "กบฝนฟองใส",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "SPIDER_EYE",
+      "design": "กบฝนทรงกลมเตี้ย ตาอยู่บนหัว นิ้วเท้ากลม และใบกันฝนหยดน้ำ",
+      "growth": [
+        "ก้อนกลมตาโตกับใบอ่อน",
+        "นิ้วเท้าปุ่มกับใบกันฝน",
+        "หมวกใบกว้างพร้อมหยดฝนเกาะขอบ"
+      ],
+      "passiveName": "กระโดดรับหยดน้ำ",
+      "passive": "กระโดดสูง I ขณะอยู่ในน้ำ · ดับไฟ ทุก 20 วินาที ใกล้น้ำ",
+      "traitName": "หยดน้ำสะดุด",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "JUMP_BOOST",
+          "condition": "IN_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "CLEAR_FIRE",
+          "every": 20,
+          "condition": "NEAR_WATER",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "sleepy_sloth",
+      "display": "Sleepy Sloth",
+      "thai": "สลอธขี้เซา",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "APPLE",
+      "design": "สลอธนั่งพิงแขนยาวงอ กรงเล็บครีม หน้ากากตาปรือและหมอนใบไม้",
+      "growth": [
+        "กอดหมอนใบเดียว",
+        "แขนยาวกับหมอนใบคู่",
+        "แผงขนนุ่มและหมอนลายเส้นใบ"
+      ],
+      "passiveName": "พักอย่างมีแรง",
+      "passive": "ขุดเร็ว I ขณะย่อตัว · ฟื้นเลือด 1.5 HP ทุก 45 วินาที ขณะยืนพัก",
+      "traitName": "หาวชวนง่วง",
+      "trait": "30% ทำให้ศัตรู อ่อนแรง 3 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "HASTE",
+          "condition": "SNEAKING",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 45,
+          "condition": "STILL",
+          "value": 1.5
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 3,
+        "chance": 0.3,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "cherry_red_panda",
+      "display": "Cherry Red Panda",
+      "thai": "แพนด้าแดงเชอร์รี",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "BAMBOO",
+      "design": "แพนด้าแดงแก้มขาว หางฟูลายแดงครีม ผ้าผูกเชอร์รีคู่และกระเป๋าไม้ไผ่",
+      "growth": [
+        "แก้มอวบกับเชอร์รีเดี่ยว",
+        "หางห้าปล้องและใบไผ่",
+        "หางโค้งใหญ่กับเชอร์รีคู่และกระเป๋าไผ่"
+      ],
+      "passiveName": "วิ่งชมซากุระ",
+      "passive": "ความเร็ว I ในป่าโบราณ · โชค I ใกล้ดอกไม้",
+      "traitName": "กลีบซากุระชี้เป้า",
+      "trait": "35% ทำให้ศัตรู เรืองแสง 3.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "FOREST",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "LUCK",
+          "condition": "NEAR_FLOWERS",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 3.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "cotton_chinchilla",
+      "display": "Cotton Chinchilla",
+      "thai": "ชินชิลลาสำลี",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GLACIER",
+      "food": "WHEAT",
+      "design": "ชินชิลลาขนเงินฟูหูจานใหญ่ อุ้งเท้าเล็กและช่อฝ้ายสีขาวครีม",
+      "growth": [
+        "ก้อนขนกลมกับหูใหญ่",
+        "ขนแก้มฟูและฝ้ายหนึ่งดอก",
+        "ขนปลายเงินซ้อนชั้นกับฝ้ายสามปุย"
+      ],
+      "passiveName": "ปุยนุ่มรับแรงตก",
+      "passive": "ร่อนลงช้า I เมื่อตกเกิน 3 บล็อก · กระโดดสูง I ขณะย่อตัว",
+      "traitName": "ปุยฝ้ายหนึบ",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SLOW_FALLING",
+          "condition": "FALLING",
+          "amplifier": 0,
+          "ticks": 40
+        },
+        {
+          "type": "JUMP_BOOST",
+          "condition": "SNEAKING",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "bubble_seal",
+      "display": "Bubble Seal",
+      "thai": "แมวน้ำฟองนุ่ม",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GLACIER",
+      "food": "SALMON",
+      "design": "แมวน้ำตัวอ้วนทรงหยดน้ำ ครีบหน้ากาง หางแยกสองแฉกและผ้าพันคอฟองน้ำ",
+      "growth": [
+        "หัวกลมกับครีบป้อม",
+        "ครีบยาวและผ้าพันคอคลื่น",
+        "หางแฉกเต็มและลูกแก้วฟองประดับคอ"
+      ],
+      "passiveName": "ฟองอุ่นขั้วโลก",
+      "passive": "ว่ายน้ำเร็ว I ขณะอยู่ในน้ำ · ลดการแข็งตัว 100 tick ทุก 10 วินาที บนหิมะหรือน้ำแข็ง",
+      "traitName": "ฟองน้ำเย็น",
+      "trait": "35% ทำให้ศัตรู หนาวจัด 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "DOLPHINS_GRACE",
+          "condition": "IN_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "THAW",
+          "every": 10,
+          "condition": "ON_SNOW",
+          "value": 100
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "FREEZE",
+        "seconds": 2,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "seashell_crab",
+      "display": "Seashell Crab",
+      "thai": "ปูเปลือกหอย",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "KELP",
+      "design": "ปูสีพีชสวมกระดองหอยหมุนมุก ก้ามไม่เท่ากันและตากลมบนก้าน",
+      "growth": [
+        "ลูกปูก้ามจิ๋ว กระดองหอยชั้นเดียว",
+        "ก้ามโตขึ้น กระดองเริ่มหมุนเป็นเกลียว",
+        "กระดองเกลียวมุกเต็มชั้น ก้ามใหญ่ลายคลื่น"
+      ],
+      "passiveName": "ก้ามนักสำรวจน้ำ",
+      "passive": "ขุดเร็ว I ขณะอยู่ในน้ำ · รับดาเมจจากการโจมตีลด 3% ในโหมดช่วยสู้ เมื่อสัตว์อยู่ในระยะ 8 บล็อก",
+      "traitName": "ก้ามเปลือกหอย",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "HASTE",
+          "condition": "IN_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 0.97,
+      "armor": 0.9,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "kelp_turtle",
+      "display": "Kelp Turtle",
+      "thai": "เต่าสาหร่าย",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "SEAGRASS",
+      "design": "เต่าสีหยกกระดองหกเหลี่ยม มีสวนสาหร่ายพลิ้วและแต้มทราย",
+      "growth": [
+        "เต่าจิ๋วแก้มกลม สาหร่ายอ่อนสามใบ",
+        "กระดองหนาขึ้น สาหร่ายแตกกอ",
+        "กระดองแผ่นหยกซ้อนสวย สวนสาหร่ายเต็มหลัง"
+      ],
+      "passiveName": "เสบียงใต้ทะเล",
+      "passive": "หายใจใต้น้ำ I ใกล้น้ำ · รับหัวใจโล่ I 20 วินาที ทุก 60 วินาที ขณะอยู่ในน้ำ",
+      "traitName": "พันสาหร่าย",
+      "trait": "30% ทำให้ศัตรู อ่อนแรง 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "WATER_BREATHING",
+          "condition": "NEAR_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "ABSORPTION",
+          "every": 60,
+          "condition": "IN_WATER",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 2,
+        "chance": 0.3,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "tangerine_gecko",
+      "display": "Tangerine Gecko",
+      "thai": "ตุ๊กแกส้มหวาน",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "SPIDER_EYE",
+      "design": "ตุ๊กแกสีส้มอำพันลายกระ เม็ดนิ้วกลมเกาะพื้น หางปล้องโค้งเป็นเอกลักษณ์",
+      "growth": [
+        "ลูกตุ๊กแกหัวโตนิ้วป้อม",
+        "หางยาวขึ้น ลายส้มเริ่มชัด",
+        "หางโค้งหนา ลายกระและนิ้วเกาะครบ"
+      ],
+      "passiveName": "ไต่หินส้มจี๊ด",
+      "passive": "ขุดเร็ว I บนพื้นหิน · กระโดดสูง I บนพื้นหิน",
+      "traitName": "เกล็ดส้มสะท้อน",
+      "trait": "40% ทำให้ศัตรู เรืองแสง 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "HASTE",
+          "condition": "ON_STONE",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "JUMP_BOOST",
+          "condition": "ON_STONE",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 2,
+        "chance": 0.4,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "dandelion_meerkat",
+      "display": "Dandelion Meerkat",
+      "thai": "เมียร์แคตแดนดิไลออน",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "CARROT",
+      "design": "เมียร์แคตยืนเฝ้าตัวเพรียวสีทราย ผ้าพันคอใบไม้และพู่ดอกแดนดิไลออน",
+      "growth": [
+        "ลูกเมียร์แคตท้องกลม กอดดอกตูม",
+        "ยืนสูงขึ้น ดอกเริ่มฟู",
+        "เมียร์แคตผู้เฝ้าสวน พู่เมล็ดฟูเต็มดอก"
+      ],
+      "passiveName": "ยามกลางสวน",
+      "passive": "โชค I ในที่โล่ง · ล้างตาบอด ทุก 30 วินาที ตลอดเวลา",
+      "traitName": "สายตายามดอกหญ้า",
+      "trait": "35% ทำให้ศัตรู เรืองแสง 4 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "LUCK",
+          "condition": "SKY",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "CLEANSE_BLINDNESS",
+          "every": 30,
+          "condition": "ALWAYS",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 4,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "snowdrop_ermine",
+      "display": "Snowdrop Ermine",
+      "thai": "เออร์มินสโนว์ดรอป",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GLACIER",
+      "food": "SWEET_BERRIES",
+      "design": "พังพอนขาวหางดำลำตัวยาว ผ้าคลุมกลีบสโนว์ดรอปและหูสีชมพูน้ำแข็ง",
+      "growth": [
+        "ลูกพังพอนขาวหางสั้นหนานุ่ม",
+        "ลำตัวยาวขึ้น มีดอกสโนว์ดรอปข้างหู",
+        "ขนคอเป็นกลีบดอก หางขาวปลายดำยาวโค้ง"
+      ],
+      "passiveName": "เส้นทางสโนว์ดรอป",
+      "passive": "ความเร็ว I บนหิมะหรือน้ำแข็ง · มองในที่มืด I บนหิมะหรือน้ำแข็ง",
+      "traitName": "หางน้ำค้างแข็ง",
+      "trait": "35% ทำให้ศัตรู หนาวจัด 2.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "ON_SNOW",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "NIGHT_VISION",
+          "condition": "ON_SNOW",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "FREEZE",
+        "seconds": 2.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "cinnamon_alpaca",
+      "display": "Cinnamon Alpaca",
+      "thai": "อัลปากาอบเชย",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "WHEAT",
+      "design": "อัลปากาขนลอนอบเชย คอยาวอ่อนโยน หูทรงใบไม้และผ้าคาดลายถัก",
+      "growth": [
+        "ลูกอัลปากาขาสั้นขนฟู",
+        "คอยาวและขนลอนเพิ่มขึ้น",
+        "ขนลอนเป็นชั้นทั่วตัว ผ้าคาดถักสวย"
+      ],
+      "passiveName": "ขนอุ่นยามเดินทาง",
+      "passive": "ต้านทาน I บนหิมะหรือน้ำแข็ง · เติมความหิว 1 แต้ม ทุก 80 วินาที บนพื้นหญ้า",
+      "traitName": "ขนอัลปากาหนึบ",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "RESISTANCE",
+          "condition": "ON_SNOW",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "FOOD",
+          "every": 80,
+          "condition": "ON_GRASS",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "lotus_snail",
+      "display": "Lotus Snail",
+      "thai": "หอยทากบัวบาน",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "LILY_PAD",
+      "design": "หอยทากสีครีมกระดองเกลียวชมพูดอกบัว ตาบนหนวดและรอยประกายน้ำค้าง",
+      "growth": [
+        "หอยทากตัวป้อมกับดอกบัวตูม",
+        "กระดองเกลียวชัด ดอกเริ่มแย้ม",
+        "ดอกบัวหลายชั้นบานบนกระดองมุก"
+      ],
+      "passiveName": "พักในใบบัว",
+      "passive": "ฟื้นเลือด 0.5 HP ทุก 20 วินาที ขณะย่อตัว · ล้างพิษ ทุก 45 วินาที ใกล้น้ำ",
+      "traitName": "เมือกใบบัว",
+      "trait": "35% ทำให้ศัตรู ช้าลง 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 20,
+          "condition": "SNEAKING",
+          "value": 0.5
+        },
+        {
+          "action": "CLEANSE_POISON",
+          "every": 45,
+          "condition": "NEAR_WATER",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 2,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "pebble_pika",
+      "display": "Pebble Pika",
+      "thai": "พิก้าก้อนกรวด",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GLACIER",
+      "food": "WHEAT",
+      "design": "พิก้ากลมสีเทากรวด หูกลมขอบขาว ท้องครีมและก้อนหินประดับหลัง",
+      "growth": [
+        "ลูกพิก้ากลมเท่าฝ่ามือ",
+        "หูตั้งและลายกรวดเริ่มชัด",
+        "ขนแก้มฟู ลายกรวดหยาบละเอียดและหูซ้อนขอบ"
+      ],
+      "passiveName": "ผู้ช่วยข้ามผา",
+      "passive": "กระโดดสูง I บนพื้นหิน · ร่อนลงช้า I เมื่อตกเกิน 3 บล็อก",
+      "traitName": "เสียงเตือนพิกา",
+      "trait": "35% ทำให้ศัตรู อ่อนแรง 1 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "JUMP_BOOST",
+          "condition": "ON_STONE",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "SLOW_FALLING",
+          "condition": "FALLING",
+          "amplifier": 0,
+          "ticks": 40
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 1,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "coral_shrimp",
+      "display": "Coral Shrimp",
+      "thai": "กุ้งปะการัง",
+      "rarity": "common",
+      "flies": false,
+      "hover": true,
+      "habitat": "GARDENS",
+      "food": "DRIED_KELP",
+      "design": "กุ้งชมพูปะการังลำตัวงอเป็นปล้อง หนวดยาวสง่างามและหางพัดลายมุก",
+      "growth": [
+        "กุ้งน้อยตัวกลมหนวดสั้น",
+        "ลำตัวเริ่มงอ หางแผ่",
+        "กุ้งปล้องโค้ง หนวดยาวคู่และพัดหางสามแฉก"
+      ],
+      "passiveName": "เสบียงปะการัง",
+      "passive": "พลังคอนดูอิต I ขณะอยู่ในน้ำ · เติมความหิว 1 แต้ม ทุก 80 วินาที ขณะอยู่ในน้ำ",
+      "traitName": "หนวดปะการังสะดุด",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "CONDUIT_POWER",
+          "condition": "IN_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "FOOD",
+          "every": 80,
+          "condition": "IN_WATER",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "dew_dragonfly",
+      "display": "Dew Dragonfly",
+      "thai": "แมลงปอน้ำค้าง",
+      "rarity": "common",
+      "flies": true,
+      "hover": true,
+      "habitat": "GARDENS",
+      "food": "SUGAR",
+      "design": "แมลงปอตาสีหยก ปีกสี่ข้างเส้นใยใสและละอองน้ำค้าง ปล้องท้องเรียวยาว",
+      "growth": [
+        "แมลงปอน้อยตาโต ปีกสั้นกลม",
+        "ปีกยาวขึ้น ท้องเริ่มเป็นปล้อง",
+        "ปีกสี่ใสเส้นใยชัด หางหยกเรียวยาว"
+      ],
+      "passiveName": "ปีกน้ำค้างช่างธาร",
+      "passive": "ร่อนลงช้า I เมื่อตกเกิน 3 บล็อก · ขุดเร็ว I ใกล้น้ำ",
+      "traitName": "หยดน้ำชี้เป้า",
+      "trait": "40% ทำให้ศัตรู เรืองแสง 2.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SLOW_FALLING",
+          "condition": "FALLING",
+          "amplifier": 0,
+          "ticks": 40
+        },
+        {
+          "type": "HASTE",
+          "condition": "NEAR_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 2.5,
+        "chance": 0.4,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "starling_sparrow",
+      "display": "Starling Sparrow",
+      "thai": "นกกระจอกประกายดาว",
+      "rarity": "common",
+      "flies": true,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "WHEAT_SEEDS",
+      "design": "นกกระจอกสีครามน้ำตาล อกแต้มดาว คิ้วครีม ปีกซ้อนขนละเอียด",
+      "growth": [
+        "ลูกนกกลมขนฟู ปีกสั้น",
+        "ขนบินเริ่มซ้อนและอกมีจุดดาว",
+        "ปีกขนชั้นเต็ม หางพัดและอกประกายดาว"
+      ],
+      "passiveName": "ลมใต้ปีกเล็ก",
+      "passive": "ความเร็ว I ในที่โล่ง · ร่อนลงช้า I เมื่อตกเกิน 3 บล็อก",
+      "traitName": "จิกเบี่ยงจังหวะ",
+      "trait": "40% ทำให้ศัตรู อ่อนแรง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "SKY",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "SLOW_FALLING",
+          "condition": "FALLING",
+          "amplifier": 0,
+          "ticks": 40
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 1.5,
+        "chance": 0.4,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "apricot_tapir",
+      "display": "Apricot Tapir",
+      "thai": "สมเสร็จแอปริคอต",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "APPLE",
+      "design": "สมเสร็จสีแอปริคอตจมูกยื่น ท้องครีม ลายวัยเด็กค่อยเปลี่ยนเป็นแผ่นหลัง",
+      "growth": [
+        "ลูกสมเสร็จลายจุดครีมทั่วตัว",
+        "ลายจุดเริ่มรวมเป็นแถบ",
+        "แผ่นหลังแอปริคอตและจมูกโค้งชัด"
+      ],
+      "passiveName": "เสบียงป่าแอปริคอต",
+      "passive": "เติมความหิว 1 แต้ม ทุก 60 วินาที ในป่าโบราณ · ล้าง Hunger ทุก 20 วินาที ในป่าโบราณ",
+      "traitName": "งวงผลไม้ขวางทาง",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [],
+      "pulses": [
+        {
+          "action": "FOOD",
+          "every": 60,
+          "condition": "FOREST",
+          "value": 1
+        },
+        {
+          "action": "CLEANSE_HUNGER",
+          "every": 20,
+          "condition": "FOREST",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "sage_koala",
+      "display": "Sage Koala",
+      "thai": "โคอาลาใบเสจ",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "OAK_LEAVES",
+      "design": "โคอาลาหูฟูสีเทาเสจ จมูกดำมัน อุ้มกิ่งใบไม้และปลายเท้าหนา",
+      "growth": [
+        "ลูกโคอาลานั่งกอดใบอ่อน",
+        "หูฟูขึ้นและอุ้มกิ่งใบไม้",
+        "หูซ้อนขนฟูเต็ม กิ่งใบเสจโค้งในอ้อมแขน"
+      ],
+      "passiveName": "พักพิงต้นเสจ",
+      "passive": "ต้านทาน I บนขอนไม้ · ฟื้นเลือด 0.5 HP ทุก 30 วินาที ในป่าโบราณ",
+      "traitName": "อุ้งมือใบเสจ",
+      "trait": "40% ทำให้ศัตรู อ่อนแรง 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "RESISTANCE",
+          "condition": "ON_LOGS",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 30,
+          "condition": "FOREST",
+          "value": 0.5
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 2,
+        "chance": 0.4,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "chestnut_boar",
+      "display": "Chestnut Boar",
+      "thai": "หมูป่าเกาลัด",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "BEETROOT",
+      "design": "หมูป่าสีเกาลัดแผงคอหนา งาโค้งงามและจมูกชมพูแดง ลายลูกหมูป่า",
+      "growth": [
+        "ลูกหมูป่าลายทางจมูกป้อม",
+        "งาอ่อนและขนแผงคอเริ่มขึ้น",
+        "งาโค้งคู่ แผงคอหนาเป็นชั้นและกีบแข็ง"
+      ],
+      "passiveName": "ฮึดสู้เกาลัด",
+      "passive": "พลังโจมตี I เมื่อเลือดต่ำกว่า 40% · เพิ่มความอิ่ม 1 แต้ม ทุก 60 วินาที บนพื้นหญ้า",
+      "traitName": "จมูกเกาลัดดัน",
+      "trait": "35% ทำให้ศัตรู ช้าลง 1.5 วินาที · คูลดาวน์ 4 วินาที · โจมตีเป้าหมายใหม่ ×1.2",
+      "boosts": [
+        {
+          "type": "STRENGTH",
+          "condition": "LOW_HEALTH",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "SATURATION",
+          "every": 60,
+          "condition": "ON_GRASS",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.2,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "papaya_toucan",
+      "display": "Papaya Toucan",
+      "thai": "ทูแคนมะละกอ",
+      "rarity": "common",
+      "flies": true,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "MELON_SLICE",
+      "design": "ทูแคนปากใหญ่สีมะละกอปลายเขียว อกงาช้าง ปีกดำประกายฟ้าและตาวงแหวน",
+      "growth": [
+        "ลูกทูแคนปากสั้นแก้มกลม",
+        "จะงอยยาวขึ้นและเริ่มไล่สี",
+        "ปากมะละกอใหญ่สวย ขนปีกซ้อนและหางยาว"
+      ],
+      "passiveName": "ตานักหาอาหาร",
+      "passive": "โชค I ในป่าโบราณ · มองในที่มืด I ในป่าโบราณ",
+      "traitName": "จะงอยมะละกอชี้เป้า",
+      "trait": "40% ทำให้ศัตรู เรืองแสง 3 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "LUCK",
+          "condition": "FOREST",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "NIGHT_VISION",
+          "condition": "FOREST",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 3,
+        "chance": 0.4,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "lantern_firefly",
+      "display": "Lantern Firefly",
+      "thai": "หิ่งห้อยโคมอุ่น",
+      "rarity": "common",
+      "flies": true,
+      "hover": true,
+      "habitat": "LUNAR_CITY",
+      "food": "GLOW_BERRIES",
+      "design": "หิ่งห้อยสีเขียวเข้มท้องโคมแสงทอง ปีกฝาเป็นร่องและหนวดปลายมุก",
+      "growth": [
+        "หิ่งห้อยจิ๋วท้องโคมกลม",
+        "โคมยาวขึ้น ปีกเริ่มแยก",
+        "โคมท้องทองสามปล้อง ปีกฝาสลักร่องและปีกใส"
+      ],
+      "passiveName": "ตะเกียงพกพา",
+      "passive": "มองในที่มืด I ในที่มืด · เผยตำแหน่งมอนสเตอร์ที่ต่อสู้ได้ในรัศมี 5 บล็อก ในที่มืด",
+      "traitName": "ประกายตะเกียง",
+      "trait": "40% ทำให้ศัตรู เรืองแสง 4 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "NIGHT_VISION",
+          "condition": "DARK",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 4,
+        "chance": 0.4,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": {
+        "condition": "DARK",
+        "radius": 5
+      }
+    },
+    {
+      "id": "pearl_oyster",
+      "display": "Pearl Oyster",
+      "thai": "หอยมุกยิ้ม",
+      "rarity": "common",
+      "flies": false,
+      "hover": true,
+      "habitat": "GARDENS",
+      "food": "KELP",
+      "design": "หอยสองฝาทรงพัดสีลาเวนเดอร์ ขอบหยักสีครีม มีไข่มุกหน้ายิ้มอยู่ภายใน",
+      "growth": [
+        "หอยจิ๋วแง้มฝาพร้อมมุกน้อย",
+        "ฝาพัดกว้างและมุกโตขึ้น",
+        "ฝาเปลือกหอยลายรัศมีซ้อน มุกขาวประกายด้านใน"
+      ],
+      "passiveName": "ไข่มุกคุ้มครอง",
+      "passive": "โชค I ขณะอยู่ในน้ำ · รับหัวใจโล่ I 20 วินาที ทุก 90 วินาที ใกล้น้ำ",
+      "traitName": "ม่านมุก",
+      "trait": "30% ทำให้ศัตรู อ่อนแรง 2.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "LUCK",
+          "condition": "IN_WATER",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "ABSORPTION",
+          "every": 90,
+          "condition": "NEAR_WATER",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "WEAKNESS",
+        "seconds": 2.5,
+        "chance": 0.3,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "clover_fawn",
+      "display": "Clover Fawn",
+      "thai": "กวางน้อยโคลเวอร์",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "GARDENS",
+      "food": "WHEAT",
+      "design": "กวางสีน้ำผึ้งลายจุดโคลเวอร์ ขาเรียว คอครีมและเขากิ่งใบไม้เล็ก",
+      "growth": [
+        "ลูกกวางหูโตลายจุด",
+        "ขายาวขึ้น เริ่มมีเขาใบไม้",
+        "เขากิ่งโคลเวอร์เต็มทรง ขนลายดอกละเอียด"
+      ],
+      "passiveName": "พรสนามโคลเวอร์",
+      "passive": "ความเร็ว I บนพื้นหญ้า · ฟื้นเลือด 1 HP ทุก 45 วินาที ใกล้ดอกไม้",
+      "traitName": "แตะใบโคลเวอร์",
+      "trait": "30% ทำให้ศัตรู เรืองแสง 2 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "SPEED",
+          "condition": "ON_GRASS",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [
+        {
+          "action": "HEAL",
+          "every": 45,
+          "condition": "NEAR_FLOWERS",
+          "value": 1
+        }
+      ],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "GLOWING",
+        "seconds": 2,
+        "chance": 0.3,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "dusk_jerboa",
+      "display": "Dusk Jerboa",
+      "thai": "เจอร์บัวสนธยา",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "LUNAR_CITY",
+      "food": "PUMPKIN_SEEDS",
+      "design": "หนูเจอร์บัวสีทรายม่วง หูยาวโปร่ง ขาหลังใหญ่และหางเส้นยาวพู่สีคราม",
+      "growth": [
+        "ลูกเจอร์บัวตัวกลมหูยาว",
+        "ขาหลังโตและหางยาวขึ้น",
+        "ขายาวกระโดดทรงพลัง หูใหญ่และหางพู่โค้งงาม"
+      ],
+      "passiveName": "ก้าวน้อยกลางทราย",
+      "passive": "กระโดดสูง I บนพื้นทราย · มองในที่มืด I ในที่มืด",
+      "traitName": "ทรายใต้เท้าจิ๋ว",
+      "trait": "40% ทำให้ศัตรู ช้าลง 1 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "JUMP_BOOST",
+          "condition": "ON_SAND",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "NIGHT_VISION",
+          "condition": "DARK",
+          "amplifier": 0,
+          "ticks": 600
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 1,
+        "chance": 0.4,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    },
+    {
+      "id": "ribbon_lemur",
+      "display": "Ribbon Lemur",
+      "thai": "ลีเมอร์หางริบบิ้น",
+      "rarity": "common",
+      "flies": false,
+      "hover": false,
+      "habitat": "ANCIENT_FOREST",
+      "food": "SWEET_BERRIES",
+      "design": "ลีเมอร์ตาสีทองหน้ากากดำ หางวงแหวนโค้งสูงและปอยขนคล้ายริบบิ้น",
+      "growth": [
+        "ลูกลีเมอร์ตาโตหางม้วนสั้น",
+        "หางเริ่มโค้งสูงและมีวงแหวน",
+        "หางริบบิ้นวงแหวนเต็ม ลอนขนแก้มสวย"
+      ],
+      "passiveName": "ไต่เถาวัลย์ริบบิ้น",
+      "passive": "กระโดดสูง I ในป่าโบราณ · ขุดเร็ว I บนขอนไม้",
+      "traitName": "หางริบบิ้นพันขา",
+      "trait": "35% ทำให้ศัตรู ช้าลง 2.5 วินาที · คูลดาวน์ 4 วินาที",
+      "boosts": [
+        {
+          "type": "JUMP_BOOST",
+          "condition": "FOREST",
+          "amplifier": 0,
+          "ticks": 60
+        },
+        {
+          "type": "HASTE",
+          "condition": "ON_LOGS",
+          "amplifier": 0,
+          "ticks": 60
+        }
+      ],
+      "pulses": [],
+      "guard": 1.0,
+      "armor": 1.0,
+      "hit": {
+        "type": "SLOWNESS",
+        "seconds": 2.5,
+        "chance": 0.35,
+        "amplifier": 0,
+        "cooldown": 80,
+        "first": 1.0,
+        "lifesteal": 0
+      },
+      "aura": null
+    }
+  ]
+}

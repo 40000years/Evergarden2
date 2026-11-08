@@ -19,13 +19,13 @@ parser.add_argument('--server', type=Path)
 parser.add_argument('--plugin-jar', type=Path, help='Test an already built release instead of compiling production')
 parser.add_argument('--recipe-data-fixture', type=Path, help='Gzipped offline player NBT fixture to migrate before world/player loading')
 parser.add_argument('--timeout', type=int, default=240)
-parser.add_argument('--probe', choices=('elemental', 'heavens', 'heavens-bedrock', 'spectacle', 'blocks-bedrock', 'levels'), default='elemental',
+parser.add_argument('--probe', choices=('elemental', 'heavens', 'heavens-bedrock', 'spectacle', 'blocks-bedrock', 'levels', 'lag'), default='elemental',
                     help='Run the full regression probe or the focused Legendary light lifecycle probe')
 args = parser.parse_args()
 started = time.monotonic()
-probe_name = {'blocks-bedrock': 'LegendaryBlockBedrockChecks', 'heavens': 'HeavensDescentVisualChecks', 'heavens-bedrock': 'HeavensDescentBedrockChecks',
+probe_name = {'blocks-bedrock': 'LegendaryBlockBedrockChecks', 'lag': 'SpellLagProbe', 'heavens': 'HeavensDescentVisualChecks', 'heavens-bedrock': 'HeavensDescentBedrockChecks',
               'spectacle': 'LegendarySpectacleChecks', 'levels': 'SpellLevelChecks'}.get(args.probe, 'ElementalSystemChecks')
-result_name = {'blocks-bedrock': 'legendary-spectacle-result.txt', 'heavens': 'heavens-descent-visual-result.txt', 'heavens-bedrock': 'heavens-descent-bedrock-result.txt',
+result_name = {'blocks-bedrock': 'legendary-spectacle-result.txt', 'lag': 'legendary-spectacle-result.txt', 'heavens': 'heavens-descent-visual-result.txt', 'heavens-bedrock': 'heavens-descent-bedrock-result.txt',
                'spectacle': 'legendary-spectacle-result.txt', 'levels': 'spell-level-result.txt'}.get(args.probe, 'elemental-system-result.txt')
 source = args.source_server.resolve()
 server = (args.server or ROOT / 'output' / ('elemental-system-' + uuid.uuid4().hex)).resolve()
@@ -71,7 +71,7 @@ def compile_sources(sources, classes, extra=()):
 
 plugins = server / 'plugins'
 plugins.mkdir()
-if args.probe in ('heavens-bedrock', 'blocks-bedrock'):
+if args.probe in ('heavens-bedrock', 'blocks-bedrock', 'lag'):
     geyser_jar = source / 'plugins/Geyser-Spigot.jar'
     if not geyser_jar.is_file():
         raise RuntimeError('Bedrock probe source server must contain plugins/Geyser-Spigot.jar')
@@ -142,10 +142,11 @@ if args.probe in ('heavens', 'heavens-bedrock'):
 
 probe = server / 'probe-classes'
 probe_sources=[Path(__file__).with_name(probe_name + '.java')]
-if args.probe=='blocks-bedrock':probe_sources.append(Path(__file__).with_name('LegendarySpectacleChecks.java'))
+if args.probe in ('blocks-bedrock', 'lag'):probe_sources.append(Path(__file__).with_name('LegendarySpectacleChecks.java'))
+if args.probe=='lag':probe_sources.append(Path(__file__).with_name('LegendaryBlockBedrockChecks.java'))
 compile_sources(probe_sources, probe, [magic])
 (probe / 'plugin.yml').write_text(
-    f"name: {probe_name}\nversion: '1.0'\nmain: {probe_name}\napi-version: '26.2'\ndepend: [advance-magic{', Geyser-Spigot' if args.probe in ('heavens-bedrock','blocks-bedrock') else ''}]\n",
+    f"name: {probe_name}\nversion: '1.0'\nmain: {probe_name}\napi-version: '26.2'\ndepend: [advance-magic{', Geyser-Spigot' if args.probe in ('heavens-bedrock','blocks-bedrock','lag') else ''}]\n",
     encoding='utf8')
 subprocess.run(['jar', '--create', '--file', str(plugins / 'elemental-system-checks.jar'), '-C', str(probe), '.'], check=True)
 config = plugins / 'advance-magic'

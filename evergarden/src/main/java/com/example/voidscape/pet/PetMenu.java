@@ -94,7 +94,9 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
     /** The card text shared by chest lore and Bedrock forms. */
     List<String> describe(PetStable stable,PetRecord record){
         List<String> lines=new ArrayList<>();
-        lines.add(record.species.display+" · "+record.species.thai+(record.species.mythical()?" · ✦ ระดับตำนาน":""));
+        lines.add(record.species.display+" · "+record.species.thai+" · ระดับ"+record.species.rarity.thai);
+        var profile=PetExpansion.of(record.species);
+        if(profile!=null){lines.add(profile.design());lines.add(profile.growth().get(record.stage.ordinal()));}
         PetCatalog.Stage next=next(record);
         lines.add(record.stage.thai+(next==null?" · โตเต็มวัย":" · เติบโต "+record.growth+"/"+companions.threshold(next)));
         if(record.species.mythical())lines.add(record.species==PetCatalog.Species.FENRIR
@@ -107,16 +109,21 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         lines.add("ขนาด "+Math.round(record.size*100)+"% · รุ่นที่ "+record.generation+(record.aura?" · ✦ ออร่า":""));
         long now=System.currentTimeMillis(),rest=record.bred+breeding.cooldownMillis(record)-now;
         Player owner=Bukkit.getPlayer(stable.owner);
-        if(record.id.equals(stable.active)&&stable.out&&owner!=null)lines.add("★ "+companions.state(owner));
+        if(record.id.equals(stable.active)&&stable.out&&owner!=null)lines.add("★ ตัวแรก · ให้บัฟ · "+companions.state(owner));
+        if(record.id.equals(stable.secondary)&&stable.out)lines.add("☆ ตัวที่สอง · อยู่เฉย ๆ ตามเจ้าของ · ไม่ให้บัฟหรือช่วยสู้");
         if(stable.nesting(record.id))lines.add("อยู่ในรังผสมพันธุ์");
         else if(record.bred>0&&rest>0)lines.add("พักหลังผสมพันธุ์ อีก "+hours(rest));
         lines.add("อาหารที่ชอบ: "+PetTaming.foodName(taming.food(record.species)));
-        lines.add("โหมด: "+PetSkills.modeName(record.mode)+" · "+fighter(record));
+        lines.add("โหมด: "+(stable.out&&record.id.equals(stable.secondary)?"อยู่เฉย ๆ":PetSkills.modeName(record.mode))+" · "+fighter(record));
         if(companions.faintLeft(record)>0)lines.add("✖ สลบ · พักฟื้นอีก "+companions.recovery(record));
-        PetSkills.Skill skill=PetSkills.of(record.species);
+        var expanded=PetExpansion.of(record.species);
+        PetSkills.Skill skill=expanded==null?PetSkills.of(record.species):PetExpansion.skill(record);
         if(skill!=null){
-            lines.add("✦ "+skill.passiveName()+": "+skill.passive());
-            lines.add("⚔ "+skill.traitName()+": "+skill.trait());
+            if(expanded==null){lines.add("✦ "+skill.passiveName()+": "+skill.passive());lines.add("⚔ "+skill.traitName()+": "+skill.trait());}
+            else{
+                lines.add("✦ "+skill.passiveName());for(String part:skill.passive().split(" · "))lines.add("  "+part);
+                lines.add("⚔ "+skill.traitName());for(String part:skill.trait().split(" · "))lines.add("  "+part);
+            }
         }
         return lines;
     }
@@ -132,13 +139,16 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
     /** The skill page: what the pet does while out, in a fight, and how each mode behaves. */
     List<String> skillPage(PetRecord record){
         List<String> lines=new ArrayList<>();
-        PetSkills.Skill skill=PetSkills.of(record.species);
+        var expanded=PetExpansion.of(record.species);
+        PetSkills.Skill skill=expanded==null?PetSkills.of(record.species):PetExpansion.skill(record);
         if(skill!=null){
             lines.add("สกิลติดตัว · "+skill.passiveName());
-            lines.add("  "+skill.passive());
-            lines.add("  ทำงานเมื่อออกมาอยู่ใกล้คุณ (ไม่เกิน 32 บล็อก) ทุกโหมด");
+            if(expanded==null)lines.add("  "+skill.passive());
+            else for(String part:skill.passive().split(" · "))lines.add("  "+part);
+            lines.add(expanded==null?"  ทำงานจากตัวแรกเมื่ออยู่ใกล้คุณ (ไม่เกิน 32 บล็อก) ทุกโหมด":"  บัฟจากตัวแรกในระยะ 32 บล็อก · เงื่อนไขตามคำอธิบาย");
             lines.add("สกิลต่อสู้ · "+skill.traitName());
-            lines.add("  "+skill.trait());
+            if(expanded==null)lines.add("  "+skill.trait());
+            else for(String part:skill.trait().split(" · "))lines.add("  "+part);
             lines.add("  ทำงานเมื่อกัดศัตรูในโหมดช่วยสู้");
         }
         lines.add("พลังต่อสู้ · "+fighter(record));
@@ -146,7 +156,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         lines.add("  มนตราเพิ่มแรงกัด · ว่องไวทำให้กัดถี่ขึ้น");
         lines.add("ช่วยสู้ · ไล่กัดสิ่งที่คุณตีหรือมอนที่หมายหัวคุณ");
         lines.add("  ไม่ตีผู้เล่น สัตว์เลี้ยง บอส หรือ NPC");
-        lines.add("  ศัตรูสวนกลับได้ เลือดหมดจะสลบ พักฟื้น 1 วันในเกม");
+        lines.add("  ศัตรูสวนกลับได้ เลือดหมดจะสลบและพักฟื้นตามเวลาที่ตั้งไว้");
         lines.add("  เลือดฟื้นเองเมื่อพ้นการต่อสู้ 5 วินาที");
         return lines;
     }
@@ -154,7 +164,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         List<String> lore=new ArrayList<>(describe(stable,record));
         if(hint!=null){lore.add("");lore.add(hint);}
         ItemStack item=art(portrait(record,false),record.name(),NamedTextColor.GOLD,lore);
-        return record.id.equals(stable.active)&&stable.out?glint(item):item;
+        return stable.summoned(record.id)?glint(item):item;
     }
 
     // ---- entry points ----
@@ -169,14 +179,14 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
     // ---- actions shared by both menus ----
     private void toggleSummon(Player player,UUID id){
         PetStable stable=companions.stable(player);
-        if(stable.out&&id.equals(stable.active)){companions.dismiss(player);plugin.message(player,stable.get(id).name()+" กลับเข้าคอกแล้ว");return;}
+        if(stable.summoned(id)){companions.dismiss(player,id);plugin.message(player,stable.get(id).name()+" กลับเข้าคอกแล้ว");return;}
         String problem=companions.summon(player,id);
         plugin.message(player,problem!=null?problem:stable.get(id).name()+" ออกมาเดินกับคุณแล้ว");
     }
     private void release(Player player,UUID id){
         PetStable stable=companions.stable(player);PetRecord record=stable.get(id);if(record==null)return;
         if(stable.locked){plugin.message(player,"อ่านหรือบันทึกข้อมูลคอกสัตว์ไม่ได้ · แจ้งแอดมินก่อนปล่อยสัตว์");return;}
-        if(id.equals(stable.active))companions.despawn(player.getUniqueId());
+        if(stable.summoned(id))companions.dismiss(player,id);
         stable.remove(id);
         UUID[] draft=drafts.get(player.getUniqueId());
         if(draft!=null)for(int i=0;i<2;i++)if(id.equals(draft[i]))draft[i]=null;
@@ -320,12 +330,14 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         List<String> guide=new ArrayList<>(List.of("§fคลิกสัตว์ = ดูข้อมูล เรียก ตั้งชื่อ เปลี่ยนโหมด","§fปุ่มรังด้านบน = ผสมพันธุ์ (ตัวโตเต็มวัย ชนิดเดียวกัน)",
             "","วิธีผูกมิตร: คลิกขวาสัตว์ป่าพร้อมอาหารที่ชอบจนไว้ใจ 100%","ร่างกลางและโตเต็มวัยต้องมีเชือกจูง (Lead) พากลับ","","อาหารที่ชอบ:"));
         for(var species:WildPetSpawns.eligibleSpecies())guide.add(species.thai+": "+PetTaming.foodNameThai(taming.food(species)));
+        guide.add("");guide.add("ปกติ 72 ชนิด · หายาก 17 ชนิด · ตำนาน 5 ชนิด");
+        guide.add("ระดับหายากรวม "+String.format(Locale.ROOT,"%.1f%%",plugin.wildPets().rareChance()*100)+" ของการพบที่ไม่ใช่ตำนาน · พบในถิ่นบ่อยขึ้น 3 เท่า");
         guide.add("");guide.add("เลี้ยงจากเด็กจนโตเต็มวัย = คอกเพิ่ม "+stable.perRaised+" ช่องถาวรต่อตัว");
         guide.add("รับได้ครั้งเดียวต่อตัว · จับตอนโตหรือร่างกลางไม่นับ");
         put(holder,0,art("skilltree_help","วิธีใช้ · อาหารที่ชอบ",NamedTextColor.AQUA,guide),null);
         List<String> legends=new ArrayList<>(List.of("หายากกว่าสัตว์ป่าทั่วไปมาก · ครั้งละ 1 ตัวในโลก",
             "เรทพื้นฐาน "+String.format(Locale.ROOT,"%.2f%%",plugin.wildPets().legendChance()*100)+" ต่อชนิดต่อการพบในถิ่นที่ถูกต้อง",
-            "เวลาและอากาศเพิ่มโอกาส · ไม่มีการันตีตำนาน",""));
+            "พบได้ทุกเวลา · มีระบบการันตีตามจำนวนครั้งที่เข้าเงื่อนไข",""));
         for(var species:WildPetSpawns.mythicalSpecies()){
             legends.add("✦ "+species.thai+": "+PetTaming.foodNameThai(taming.food(species)));
             legends.add(WildPetSpawns.legendHint(species));
@@ -377,7 +389,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
             "ว่องไว "+record.agility+"/"+PetRecord.STAT_MAX+" · กัดถี่ขึ้น","มนตรา "+record.affinity+"/"+PetRecord.STAT_MAX+" · กัดแรงขึ้น",
             "ขนาด "+Math.round(record.size*100)+"% · รุ่นที่ "+record.generation+(record.aura?" · ✦ ออร่า":""),"ลูกได้ค่าพลังจากพ่อแม่")),null);
         if(record.species.mythical()){
-            boolean riding=companions.riding().riding(player.getUniqueId());
+            boolean riding=id.equals(stable.active)&&companions.riding().riding(player.getUniqueId());
             boolean fenrir=record.species==PetCatalog.Species.FENRIR;
             List<String> saddle=new ArrayList<>(List.of(fenrir?"วิ่งเร็ว · กระโดดสูง · บินไม่ได้":"บินได้เมื่อโตเต็มวัย",
                 fenrir?"เดินเพื่อวิ่ง · กระโดดสูงราว 6 บล็อก":"เดินเพื่อบิน · กระโดดขึ้น · ก้มแล้วเดินหน้าลง",
@@ -388,7 +400,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
                 else{String problem=companions.riding().start(player,id);if(problem!=null)plugin.message(player,problem);}
             });
         }
-        boolean following=stable.out&&id.equals(stable.active);
+        boolean following=stable.summoned(id);
         put(holder,28,art(following?"menu_dismiss":"menu_summon",following?"เก็บเข้าคอก":"เรียกออกมา",following?NamedTextColor.GOLD:NamedTextColor.GREEN,
             List.of(following?companions.state(player):"ติดตามคุณไปทุกที่ เติบโตเมื่ออยู่ด้วยกัน")),()->{toggleSummon(player,id);chestPet(player,id);});
         put(holder,30,art("menu_rename","ตั้งชื่อ",NamedTextColor.AQUA,List.of(bedrock(player)?"เปิดช่องให้พิมพ์ชื่อ (ไม่ต้องใช้แชท)":"เปิดป้ายให้พิมพ์ชื่อ (ไม่ต้องใช้แชท)",
@@ -401,15 +413,16 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
             List.of("ลบออกจากคอกถาวร","คลิกสองครั้งภายใน 5 วินาทีเพื่อยืนยัน")),null);
         holder.actions.put(34,()->{if(confirm(player,holder,"release",()->chestPet(player,id))){release(player,id);chestStable(player);}else chestPet(player,id);});
         PetSkills.Skill skill=PetSkills.of(record.species);
-        String[][] modes={{"follow","เดินตามคุณ ไม่ร่วมต่อสู้"},{"stay","ยืนรอตรงที่อยู่ มองตามคุณ","ถ้าคุณไปไกลเกิน 64 บล็อกจะวิ่งตามมา"},
+        String[][] modes={{"idle","อยู่เฉย ๆ ไม่ร่วมต่อสู้","ถ้าเจ้าของไปไกลจะติดตามเพื่อความปลอดภัย"},{"follow","เดินตามคุณ ไม่ร่วมต่อสู้"},{"stay","ยืนรอตรงที่อยู่ มองตามคุณ","ถ้าคุณไปไกลเกิน 64 บล็อกจะวิ่งตามมา"},
             {"perch","ตัวเล็กลงแล้วเกาะบนหัวคุณ","ไม่บังการคลิกหรือขุด"},{"assist","ไล่กัดสิ่งที่คุณตีหรือมอนที่หมายหัวคุณ",
-            skill==null?"":"⚔ "+skill.traitName()+": "+skill.trait(),"ศัตรูสวนกลับได้ · สลบแล้วพักฟื้น 1 วันในเกม"}};
+            skill==null?"":"⚔ "+skill.traitName()+": "+skill.trait(),"ศัตรูสวนกลับได้ · สลบแล้วต้องพักฟื้น"}};
         for(int i=0;i<modes.length;i++){
-            String mode=modes[i][0];boolean current=mode.equals(record.mode);
+            String mode=modes[i][0];boolean second=stable.out&&id.equals(stable.secondary);
+            boolean current=second?mode.equals("idle"):mode.equals(record.mode);
             List<String> lore=new ArrayList<>(Arrays.asList(modes[i]).subList(1,modes[i].length));
-            lore.removeIf(String::isEmpty);lore.add(current?"● ใช้อยู่":"คลิกเพื่อเลือก");
-            ItemStack item=art("menu_mode_"+mode+(current?"_on":""),"โหมด"+PetSkills.modeName(mode),current?NamedTextColor.GOLD:NamedTextColor.WHITE,lore);
-            put(holder,37+i*2,current?glint(item):item,()->{setMode(player,id,mode);chestPet(player,id);});
+            lore.removeIf(String::isEmpty);lore.add(second?"สัตว์ตัวที่สองอยู่เฉย ๆ จนกว่าจะเป็นตัวแรก":current?"● ใช้อยู่":"คลิกเพื่อเลือก");
+            ItemStack item=art("menu_mode_"+(mode.equals("idle")?"stay":mode)+(current?"_on":""),"โหมด"+PetSkills.modeName(mode),current?NamedTextColor.GOLD:NamedTextColor.WHITE,lore);
+            put(holder,36+i*2,current?glint(item):item,()->{setMode(player,id,mode);chestPet(player,id);});
         }
         show(player,holder);
     }
@@ -577,7 +590,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
         String name=sanitize(raw);
         if(name==null){plugin.message(player,"ชื่อว่างใช้ไม่ได้");return false;}
         record.name=name;stable.dirty=true;
-        PetBody body=companions.body(player.getUniqueId());
+        PetBody body=companions.bodyFor(player.getUniqueId(),id);
         if(body!=null&&body.record==record){
             body.shell.customName(Component.text(name+" · "+record.species.display+" · "+record.stage.thai,NamedTextColor.AQUA));
             body.updateNametag();
@@ -621,7 +634,7 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
             case "mode"->{
                 PetRecord target=stable.activeRecord();
                 if(target==null){plugin.message(player,"ยังไม่มีตัวที่ติดตาม · เรียกออกมาก่อนด้วย /pet summon");return true;}
-                if(args.length<2){plugin.message(player,target.name()+" · โหมด"+PetSkills.modeName(target.mode)+" · เปลี่ยนด้วย /pet mode <follow|stay|perch|assist>");return true;}
+                if(args.length<2){plugin.message(player,target.name()+" · โหมด"+PetSkills.modeName(target.mode)+" · เปลี่ยนด้วย /pet mode <idle|follow|stay|perch|assist>");return true;}
                 setMode(player,target.id,args[1].toLowerCase(Locale.ROOT));
             }
             case "skills","skill","info"->{
@@ -634,13 +647,14 @@ public final class PetMenu implements Listener,CommandExecutor,TabCompleter,Auto
                 plugin.message(player,"=== รายการอาหารสำหรับเทมสัตว์เลี้ยง "+PetCatalog.available().size()+" ชนิด ===");
                 for(var sp:PetCatalog.available()){
                     Material f=taming.food(sp);
-                    player.sendMessage(Component.text("✦ "+sp.thai+" ("+sp.display+"): ",NamedTextColor.AQUA)
+                    player.sendMessage(Component.text("["+sp.rarity.thai+"] "+sp.thai+" ("+sp.display+"): ",sp.rare()?NamedTextColor.LIGHT_PURPLE:NamedTextColor.AQUA)
                         .append(Component.text(PetTaming.foodNameThai(f),NamedTextColor.YELLOW)));
                     if(sp.mythical())player.sendMessage(Component.text("  "+WildPetSpawns.legendHint(sp),NamedTextColor.GOLD));
                 }
                 player.sendMessage(Component.text("วิธีเทม: คลิกขวาป้อนอาหารจนไว้ใจครบ 100% (ตัวโตต้องมีเชือกจูง Lead พากลับ)",NamedTextColor.GRAY));
+                player.sendMessage(Component.text("หายาก: "+String.format(Locale.ROOT,"%.1f%%",plugin.wildPets().rareChance()*100)+" ของการพบที่ไม่ใช่ตำนาน · ในถิ่นของแต่ละชนิดพบได้บ่อยขึ้น 3 เท่า",NamedTextColor.LIGHT_PURPLE));
                 player.sendMessage(Component.text("ตำนาน: พื้นฐาน "+String.format(Locale.ROOT,"%.2f%%",plugin.wildPets().legendChance()*100)
-                    +" ต่อชนิดต่อการพบในถิ่น · โบนัสสูงสุด ×3 · ไม่มีการันตี",NamedTextColor.GOLD));
+                    +" ต่อชนิดต่อการพบในถิ่น · พบได้ทุกเวลา · มีระบบการันตี",NamedTextColor.GOLD));
                 player.sendMessage(Component.text("เลี้ยงตั้งแต่เด็กจนโตเต็มวัย: คอกเพิ่ม "+stable.perRaised+" ช่องถาวรต่อตัว (ครั้งเดียว)",NamedTextColor.GREEN));
             }
             case "nest","breed"->chestNest(player);

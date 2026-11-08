@@ -25,6 +25,11 @@ public final class StructureProtection implements Listener {
             if(boss!=null&&y<=boss.kind().maxY+16&&plugin.bossStructures().enabled(boss.kind())
                     &&plugin.getConfig().getBoolean("structures.boss-structures."+boss.kind().id+".enabled",true))return true;
         }
+        if(plugin.dragonNests()!=null&&y>=DragonNest.MIN_Y){
+            var nest=plugin.dragonNests().at(x,z,0);
+            if(nest!=null&&y<=nest.kind().maxY+24&&plugin.dragonNests().enabled(nest.kind())
+                    &&plugin.getConfig().getBoolean("structures.dragon-nests."+nest.kind().id+".enabled",true))return true;
+        }
         if(plugin.getConfig().getBoolean("structures.world-boss-temple.enabled",true)
             &&y>=WorldBossTemple.MIN_Y&&y<=WorldBossTemple.MAX_Y+24
             &&plugin.bossTemples()!=null&&plugin.bossTemples().at(x,z,0)!=null)return true;

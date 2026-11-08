@@ -52,7 +52,7 @@ final class ArkhaiaMinions implements AutoCloseable {
         double maxHealth(){return healthScale*(echo?200:kind==ArkhaiaWaves.Kind.PHLEGETHON?1000:kind==ArkhaiaWaves.Kind.BANSHEE_WAIL?500:kind==ArkhaiaWaves.Kind.COCYTUS?700:kind==ArkhaiaWaves.Kind.MALEFEASANCE?600:kind==ArkhaiaWaves.Kind.STYX?900:800);}
         double size(){return kind==ArkhaiaWaves.Kind.MALEFEASANCE?(echo?1.2:2.0):(echo?2.4:RiverVisual.SCALE);}
         String key(){return echo?kind+":"+mob.getUniqueId():kind.toString();}
-        Spirit(ArkhaiaWaves.Kind kind){this.kind=kind;health=kind==ArkhaiaWaves.Kind.STYX?600:maxHealth();bar=Bukkit.createBossBar(name(kind)+" · "+(int)health+" / "+(int)maxHealth(),BarColor.BLUE,BarStyle.SOLID);bar.setProgress(health/maxHealth());}
+        Spirit(ArkhaiaWaves.Kind kind){this.kind=kind;health=kind==ArkhaiaWaves.Kind.STYX?600:maxHealth();bar=Bukkit.createBossBar(BossNames.legacy(name(kind))+" §8· §f"+(int)health+" / "+(int)maxHealth(),BarColor.BLUE,BarStyle.SOLID);bar.setProgress(health/maxHealth());}
     }
     private static final class Shade {
         final Mob mob;final long until;long attackAt,contactAt;Location aim;
@@ -126,6 +126,7 @@ final class ArkhaiaMinions implements AutoCloseable {
         return center.getWorld().getPlayers().stream().filter(inside).toList();
     }
     private void tag(Mob mob){
+        BossDamage.tag(mob,"Arkhaia");
         if(passive)mob.setAI(false);
         mob.setPersistent(false);mob.setRemoveWhenFarAway(false);mob.addScoreboardTag("evergarden_unique");mob.addScoreboardTag("arkhaia_minion");
         mob.getPersistentDataContainer().set(plugin.key("world_boss_entity"),PersistentDataType.BYTE,(byte)1);
@@ -145,6 +146,7 @@ final class ArkhaiaMinions implements AutoCloseable {
         s.nextVisual=0;
         Class<? extends Mob> type=switch(s.kind){case ACHERON,STYX->WitherSkeleton.class;case COCYTUS->Stray.class;case PHLEGETHON->Husk.class;case BANSHEE_WAIL->Drowned.class;case MALEFEASANCE->Skeleton.class;};
         s.mob=center.getWorld().spawn(at,type,m->{s.mob=m;tag(m);m.getAttribute(Attribute.SCALE).setBaseValue(s.size());m.getAttribute(Attribute.MAX_HEALTH).setBaseValue(s.maxHealth());m.setHealth(s.maxHealth());
+            BossDamage.tag(m,s.echo?"Acheron Echo":name(s.kind));
             m.customName(net.kyori.adventure.text.Component.text(s.echo?"Acheron Echo":name(s.kind)));m.setCustomNameVisible(true);
             m.getEquipment().setItemInMainHand(new ItemStack(s.kind==ArkhaiaWaves.Kind.ACHERON||s.kind==ArkhaiaWaves.Kind.STYX?Material.IRON_SWORD:Material.AMETHYST_SHARD));
             m.getEquipment().setHelmet(new ItemStack(Material.CHAINMAIL_HELMET));
@@ -338,26 +340,15 @@ final class ArkhaiaMinions implements AutoCloseable {
         }else{
             if(s.kind==ArkhaiaWaves.Kind.MALEFEASANCE||s.kind==ArkhaiaWaves.Kind.STYX)s.mob.setHealth(s.health);
             if(s.kind==ArkhaiaWaves.Kind.STYX&&s.health<s.maxHealth()*.5)s.enraged=true;
-            s.bar.setProgress(s.health/s.maxHealth());s.bar.setTitle((s.echo?"Acheron Echo":name(s.kind))+" | "+(int)Math.ceil(s.health)+" / "+(int)s.maxHealth());
+            s.bar.setProgress(s.health/s.maxHealth());s.bar.setTitle(BossNames.legacy(s.echo?"Acheron Echo":name(s.kind))+" §8| §f"+(int)Math.ceil(s.health)+" / "+(int)s.maxHealth());
             if(s.kind==ArkhaiaWaves.Kind.ACHERON&&!s.echo)splitThresholds(s,before);
         }
         return true;
     }
     boolean rejectsMagic(Entity target){return allSpirits().stream().anyMatch(s->s.kind==ArkhaiaWaves.Kind.MALEFEASANCE&&(s.mob==target||s.visual!=null&&s.visual.owns(target)));}
     private boolean advanceMagicDamage(){var magic=Bukkit.getPluginManager().getPlugin("advance-magic");return magic instanceof com.example.advancemagic.AdvanceMagicPlugin m&&m.isEnabled()&&m.context()!=null&&m.context().isMagicDamage();}
-    private String weaponType(EntityDamageEvent event,Player attacker){
-        if(event instanceof EntityDamageByEntityEvent by){
-            if(by.getDamager() instanceof Trident)return "TRIDENT";
-            if(by.getDamager() instanceof AbstractArrow arrow){
-                ItemStack weapon=arrow.getWeapon();
-                return weapon==null?(arrow.isShotFromCrossbow()?"CROSSBOW":"BOW"):weapon.getType().name();
-            }
-            if(by.getDamager() instanceof Projectile projectile)return projectile.getType().name();
-        }
-        String type=attacker.getInventory().getItemInMainHand().getType().name();
-        for(String family:List.of("SWORD","PICKAXE","AXE","SHOVEL","HOE"))if(type.endsWith("_"+family))return family;
-        return type.equals("AIR")?"FIST":type;
-    }
+    /** Phlegethon's weapon families, shared with every boss's phase-three adaptation. */
+    private String weaponType(EntityDamageEvent event,Player attacker){return BossAdaptation.family(event,attacker);}
     boolean outgoing(EntityDamageByEntityEvent event){
         if(applying)return false;
         if(trials.owns(event.getDamager())){event.setCancelled(true);return true;}
@@ -840,7 +831,7 @@ final class ArkhaiaMinions implements AutoCloseable {
             if(!s.mob.isValid()){aerial.remove(s);trials.remove(s);plugin.getLogger().warning("Recovering missing Arkhaia minion "+s.kind);spawn(s);}
             leash(s.mob);
             s.bar.getPlayers().stream().filter(p->!players.contains(p)).toList().forEach(s.bar::removePlayer);if(!s.echo)players.forEach(s.bar::addPlayer);
-            if(now%10==0&&!s.echo)s.bar.setTitle(name(s.kind)+" · "+(int)Math.ceil(s.health)+" / "+(int)s.maxHealth()+souls.status(s.soul)+(now<s.stunUntil?" · STUN":""));
+            if(now%10==0&&!s.echo)s.bar.setTitle(BossNames.legacy(name(s.kind))+" §8· §f"+(int)Math.ceil(s.health)+" / "+(int)s.maxHealth()+souls.status(s.soul)+(now<s.stunUntil?" · STUN":""));
             Player target=players.stream().filter(p->!repelled(p,s.mob)).min(Comparator.comparingDouble(p->p.getLocation().distanceSquared(s.mob.getLocation()))).orElse(null);
             if(demo&&passive){
                 s.mob.setAI(false);s.mob.getPathfinder().stopPathfinding();

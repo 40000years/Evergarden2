@@ -34,8 +34,10 @@ import elemental_spell_assets
 import elemental_vfx_assets
 import seraph_armor_assets
 import revenant_armor_assets
+import dragon_armor_assets
 import skilltree_gui_assets
 import menu_gui_assets
+import retired_magic_assets
 DIST = ROOT / 'dist'
 BEDROCK_PACK_VERSION = [2, 33, 1]  # Retired wand-crafting core assets removed.
 
@@ -77,9 +79,14 @@ def png(path, pixels):
 
 
 def archive(folder, path):
+    # Art for the retired wand spells and the Longinus projectile is never shipped again (1.35.0).
+    retired = set()
+    if path.suffix in ('.zip', '.mcpack') and path.name.startswith('advance-magic-'):
+        files = {f.relative_to(folder).as_posix(): f.read_bytes() for f in folder.rglob('*') if f.is_file()}
+        retired = retired_magic_assets.prune(files)
     with zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED, compresslevel=9) as z:
         for f in sorted(folder.rglob('*')):
-            if f.is_file():
+            if f.is_file() and f.relative_to(folder).as_posix() not in retired:
                 info = zipfile.ZipInfo(f.relative_to(folder).as_posix(), (2026, 9, 9, 0, 0, 0))
                 info.compress_type = zipfile.ZIP_DEFLATED
                 data=f.read_bytes()
@@ -192,6 +199,7 @@ def main():
         elemental_vfx_assets.register(java, bedrock)
         seraph_armor_assets.register(java, bedrock, atlas, upgrade_definitions)
         revenant_armor_assets.register(java, bedrock, atlas, upgrade_definitions)
+        dragon_armor_assets.register(java, bedrock, atlas, upgrade_definitions)
         skilltree_gui_assets.register(java, bedrock, atlas, upgrade_definitions)
         menu_gui_assets.register(java, bedrock, atlas, upgrade_definitions)
         legendary_seven_assets.register(java, bedrock, atlas, upgrade_definitions)

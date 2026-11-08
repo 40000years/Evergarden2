@@ -16,6 +16,9 @@ ELEMENTS={e['uuid']:e for e in MODEL['elements']}
 CLIPS={c['name']:c for c in MODEL['animations']}
 OUT=ROOT/'previews/arkhaia-model-engine';OUT.mkdir(parents=True,exist_ok=True)
 
+# Pet Atelier textures are painted with Minecraft's face orientation; older rigs are face-symmetric.
+MC_FACES=False
+
 def combat_timing(action):
     source=dict(line.split('=',1) for line in (ROOT/'evergarden/src/main/resources/modelengine/arkhaia-combat.properties').read_text().splitlines()
                 if line and not line.startswith('#'))
@@ -62,13 +65,24 @@ def render(clip='idle',time=0,yaw=17,elevation=7,size=650,gaze=None,span=57):
     scale=(size-85)/span;origin=np.array([size/2,size*.83])
     for cube,matrix in transformed(clip,time,gaze):
         x0,y0,z0=cube['from'];x1,y1,z1=cube['to'];rot=matrix[:3,:3]@rotation(cube.get('rotation',[0,0,0]));pivot=np.array(cube.get('origin',[0,0,0]))
-        for face,normal,verts in (
+        quads=(
             ('north',(0,0,-1),[(x0,y1,z0),(x1,y1,z0),(x1,y0,z0),(x0,y0,z0)]),
             ('south',(0,0,1),[(x1,y1,z1),(x0,y1,z1),(x0,y0,z1),(x1,y0,z1)]),
             ('east',(1,0,0),[(x1,y1,z0),(x1,y1,z1),(x1,y0,z1),(x1,y0,z0)]),
             ('west',(-1,0,0),[(x0,y1,z1),(x0,y1,z0),(x0,y0,z0),(x0,y0,z1)]),
             ('up',(0,1,0),[(x0,y1,z1),(x1,y1,z1),(x1,y1,z0),(x0,y1,z0)]),
-            ('down',(0,-1,0),[(x0,y0,z0),(x1,y0,z0),(x1,y0,z1),(x0,y0,z1)])):
+            ('down',(0,-1,0),[(x0,y0,z0),(x1,y0,z0),(x1,y0,z1),(x0,y0,z1)]))
+        if MC_FACES:
+            # Minecraft FaceInfo orientation: (u0,v0), (u1,v0), (u1,v1), (u0,v1). The view stays mirrored,
+            # so the picture is a true mirror image of the in-game model.
+            quads=(
+                ('north',(0,0,-1),[(x1,y1,z0),(x0,y1,z0),(x0,y0,z0),(x1,y0,z0)]),
+                ('south',(0,0,1),[(x0,y1,z1),(x1,y1,z1),(x1,y0,z1),(x0,y0,z1)]),
+                ('east',(1,0,0),[(x1,y1,z1),(x1,y1,z0),(x1,y0,z0),(x1,y0,z1)]),
+                ('west',(-1,0,0),[(x0,y1,z0),(x0,y1,z1),(x0,y0,z1),(x0,y0,z0)]),
+                ('up',(0,1,0),[(x0,y1,z0),(x1,y1,z0),(x1,y1,z1),(x0,y1,z1)]),
+                ('down',(0,-1,0),[(x0,y0,z1),(x1,y0,z1),(x1,y0,z0),(x0,y0,z0)]))
+        for face,normal,verts in quads:
             normal=rot@normal
             if normal@camera<=0:continue
             verts=(np.array(verts)-pivot)@rotation(cube.get('rotation',[0,0,0])).T+pivot

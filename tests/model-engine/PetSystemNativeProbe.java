@@ -100,12 +100,33 @@ public class PetSystemNativeProbe extends JavaPlugin {
         pets=garden.pets();companions=get(pets,"companions");taming=get(pets,"taming");breeding=get(pets,"breeding");
         store=get(pets,"store");bodies=get(pets,"bodies");renderer=get(pets,"renderer");
         garden.getConfig().set("pets.wild-spawns.chance-per-player",0.0);garden.wildPets().reload();
+        // The synthetic combat arena may overlap a generated dimensional sanctuary;
+        // allow the probe's test zombies there without changing production configuration.
+        garden.getConfig().set("dimensional-sanctuaries.habitat.suppress-natural-hostiles",false);
         home=new Location(world,512.5,120,512.5);platform(512,512,64);
         actorA=fake(home,"PetTamer");actorB=fake(home.clone().add(3,0,0),"PetRival");
         tamer=actorA.getBukkitEntity();rival=actorB.getBukkitEntity();
         for(Player p:List.of(tamer,rival))Bukkit.getPluginManager().callEvent(new PlayerResourcePackStatusEvent(p,JudgePackService.PACK_ID,PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
+        guideChecks();
         world.addPluginChunkTicket(0,0,this);waited=0;awaitSeraph();
     }catch(Exception error){throw new RuntimeException(error);}}
+
+    void guideChecks(){
+        var serializer=net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer.legacySection();
+        for(var type:com.example.voidscape.guide.GuideBookType.values()){
+            ItemStack book=garden.relics().createGuideBook(type);
+            var meta=(org.bukkit.inventory.meta.BookMeta)book.getItemMeta();
+            var pages=com.example.voidscape.guide.GuideData.pagesFor(type);
+            check(book.getType()==Material.WRITTEN_BOOK&&meta.getPageCount()==pages.size(),"guide book "+type+" contains every updated page");
+            for(int i=0;i<pages.size();i++)check(meta.page(i+1).equals(serializer.deserialize(pages.get(i).content())),"guide book "+type+" page "+(i+1)+" matches shared Java/Bedrock content");
+            check(garden.relics().getGuideBookType(book)==type,"guide book "+type+" retains its identity");
+            meta.page(1,net.kyori.adventure.text.Component.text("outdated"));book.setItemMeta(meta);
+            check(garden.relics().migrate(book)&&((org.bukkit.inventory.meta.BookMeta)book.getItemMeta()).page(1).equals(serializer.deserialize(pages.get(0).content())),"old "+type+" guide item migrates to updated pages");
+        }
+        garden.guideMenu().open(tamer);
+        check(tamer.getOpenInventory().getTopInventory().getItem(13)!=null&&tamer.getOpenInventory().getTopInventory().getItem(15)!=null,"guide menu offers both books");
+        tamer.closeInventory();
+    }
 
     // ---- Seraph ----
     void awaitSeraph(){try{
@@ -157,6 +178,8 @@ public class PetSystemNativeProbe extends JavaPlugin {
         f.firstTime(tamer,"tame.frost_wyvern",5,"first");int before=f.carried(tamer);f.firstTime(tamer,"tame.frost_wyvern",5,"first");
         check(f.carried(tamer)==before,"a first-time reward is paid once ever");
         var block=world.getBlockAt(home.clone().add(0,0,-30));block.setType(Material.CHEST,false);
+        // A reused trial world can retain this coordinate's one-time treasure marker.
+        block.getChunk().getPersistentDataContainer().remove(new NamespacedKey("evergarden","seraph_feather_"+block.getX()+"_"+block.getY()+"_"+block.getZ()));
         var chest=(org.bukkit.block.Chest)block.getState();
         com.example.voidscape.trade.SeraphFeathers.treasure(garden,chest,"boss");
         int loot=Arrays.stream(chest.getBlockInventory().getContents()).filter(i->com.example.voidscape.trade.SeraphFeathers.isFeather(garden,i)).mapToInt(ItemStack::getAmount).sum();
@@ -175,6 +198,31 @@ public class PetSystemNativeProbe extends JavaPlugin {
         Object core=offer(legendList,"legend:core:cocytus");
         check(com.example.voidscape.trade.SeraphFeathers.isGolden(garden,first(core))&&first(core).getAmount()==15&&second(core).getAmount()==3,"Core of Legend: 15 golden feathers + 3 orbs of one sanctuary");
         check(legendList.stream().filter(o->{try{return ((String)get(o,"id")).startsWith("legend:core:");}catch(Exception e){return false;}}).count()==6,"any of the six sanctuaries can pay for the Core");
+        // ---- legend shop: one shared stock per in-game day, and baby mythical eggs for realm cores ----
+        boolean allShared=true;
+        for(Object o:legendList)allShared&="legend-shop".equals(get(o,"category"))&&(int)get(o,"limit")==10&&(boolean)get(o,"gameDay")&&!(boolean)get(o,"weekly");
+        check(allShared,"every legend-shop line shares one stock of 10 per in-game day");
+        var eggs=Map.of("egg:solaris",com.example.voidscape.boss.RealmBosses.Kind.CINDER_COLOSSUS,"egg:aetherius",com.example.voidscape.boss.RealmBosses.Kind.CRYSTAL_MOTH,
+            "egg:zephyros",com.example.voidscape.boss.RealmBosses.Kind.CRYSTAL_MOTH,"egg:fenrir",com.example.voidscape.boss.RealmBosses.Kind.SOUL_HOUND,
+            "egg:ignis_draconis",com.example.voidscape.boss.RealmBosses.Kind.UNLIT_SUN);
+        Object petBreeding=get(garden.pets(),"breeding");
+        for(var e:eggs.entrySet()){
+            Object line=offer(legendList,e.getKey());
+            check(com.example.voidscape.boss.RealmCores.identify(garden,first(line))==e.getValue()&&first(line).getAmount()==2&&second(line)==null,e.getKey()+" costs 2 "+e.getValue().title+" cores");
+            @SuppressWarnings("unchecked") var shown=((java.util.function.Supplier<ItemStack>)get(line,"result")).get();
+            check(call(petBreeding,"eggId",shown)==null,e.getKey()+" preview can never hatch (no ledger id)");
+        }
+        check((int)call(shop(),"remaining",tamer,offer(legendList,"egg:solaris"))==10,"a fresh player has 10 legend trades left today");
+        inv.clear();
+        check(garden.pets().grantEgg(tamer,com.example.voidscape.pet.PetCatalog.Species.FENRIR,"probe")==null,"a bought Fenrir egg is registered");
+        ItemStack bought=Arrays.stream(inv.getStorageContents()).filter(i->{try{return call(petBreeding,"eggId",i)!=null;}catch(Exception x){return false;}}).findFirst().orElse(null);
+        check(bought!=null,"the bought egg is delivered to the inventory");
+        if(bought!=null){
+            var ledgerEgg=((YamlConfiguration)get(get(garden.pets(),"store"),"eggs")).getConfigurationSection("eggs."+call(petBreeding,"eggId",bought));
+            check(ledgerEgg!=null&&"fenrir".equals(ledgerEgg.getString("species"))&&"baby".equals(ledgerEgg.getString("pet.stage"))&&!ledgerEgg.getBoolean("item-delivery-pending"),
+                "the egg ledger holds a baby Fenrir ("+(ledgerEgg==null?"none":ledgerEgg.getValues(true))+")");
+        }
+        inv.clear();
         Object excalibur=offer(legendList,"weapon:excalibur");
         check(SoulOrbs.isLegendCore(garden,first(excalibur))&&first(excalibur).getAmount()==3,"legendary weapons cost 3 Cores of Legend");
         // ---- the vanilla trading screen only accepts the genuine articles ----
@@ -300,6 +348,8 @@ public class PetSystemNativeProbe extends JavaPlugin {
         check(garden.wildPets().count()==0,"the tamed pet leaves the wild registry");
         var records=records(tamer);check(records.size()==1,"the stable records the new companion");
         PetRecord record=records.values().iterator().next();
+        Path justTamed=garden.getDataFolder().toPath().resolve("pets/players/"+tamer.getUniqueId()+".yml");
+        check(Files.isRegularFile(justTamed)&&YamlConfiguration.loadConfiguration(justTamed.toFile()).isConfigurationSection("pets."+record.id()),"newly tamed pet is on disk before autosave or relog");
         check(record.species()==PetCatalog.Species.FROST_WYVERN&&record.stage()==PetCatalog.Stage.BABY,"record keeps species and growth stage");
         check(record.id().equals(get(stable(tamer),"active"))&&(boolean)get(stable(tamer),"out"),"a first pet becomes the active companion at once");
         check(call(companions,"body",tamer.getUniqueId())==body,"the same body keeps walking: no despawn or flicker");
@@ -325,12 +375,12 @@ public class PetSystemNativeProbe extends JavaPlugin {
     void companionTurn(Object body)throws Exception{
         put(body,"yaw",0f);put(body,"targetYaw",0f);put(body,"speed",.32d);put(body,"airborne",false);put(body,"modeUntil",0);
         call(body,"move",home.clone());tamer.teleport(home.clone().add(0,0,-10));
-        Location start=((Rabbit)get(body,"shell")).getLocation();call(companions,"follow",body,tamer,true);
+        Location start=((Rabbit)get(body,"shell")).getLocation();call(companions,"follow",body,tamer,true,false);
         Location next=(Location)call(body,"destination");
         check(start.distanceSquared(next)<1e-6&&(double)get(body,"speed")<.001,"a companion stops its stride before turning toward an owner behind it");
         check(Math.abs(wrap((float)get(body,"yaw")))<=14.01&&(int)get(body,"stuck")==0,"a sharp companion turn is gradual and does not count as stuck");
         alignedCarrier(body,"companion turn");
-        for(int i=0;i<32;i++){call(companions,"follow",body,tamer,true);call(body,"tickGlide");call(body,"tickGlide");}
+        for(int i=0;i<32;i++){call(companions,"follow",body,tamer,true,false);call(body,"tickGlide");call(body,"tickGlide");}
         check(((Rabbit)get(body,"shell")).getLocation().distance(tamer.getLocation())<8,"the companion resumes walking after facing its new destination");
     }
     void companionsTest(){try{
@@ -439,9 +489,199 @@ public class PetSystemNativeProbe extends JavaPlugin {
         tamer.getInventory().setItemInMainHand(copy);
         Bukkit.getPluginManager().callEvent(new PlayerInteractEvent(tamer,Action.RIGHT_CLICK_AIR,copy,null,BlockFace.SELF,EquipmentSlot.HAND));
         check(records(tamer).size()==before+1,"a duplicated egg item cannot hatch a second pet");
+        hatchRecoveryChecks(child);
+        collectionRecoveryChecks(child);
+        inventoryRecoveryChecks(child);
         later(2,this::menuBreedingTest);
     }catch(Exception error){throw new RuntimeException(error);}}
     static NamespacedKey PetBreeding_EGG_MODEL(){return new NamespacedKey("voidscape","pet_egg");}
+
+    /** Simulate restart boundaries using real ledger/stable files, not only in-memory flags. */
+    @SuppressWarnings("unchecked") void hatchRecoveryChecks(PetRecord child)throws Exception{
+        YamlConfiguration ledger=(YamlConfiguration)get(store,"eggs");UUID owner=UUID.randomUUID();String eggId=UUID.randomUUID().toString();
+        ConfigurationSection egg=ledger.createSection("eggs."+eggId);
+        egg.set("pet-id",child.id().toString());egg.set("hatched",true);egg.set("hatched-by",owner.toString());
+        egg.set("hatched-at",System.currentTimeMillis());egg.set("delivery-pending",true);
+        call(child,"save",egg.createSection("pet"));put(store,"eggsDirty",true);
+        check((boolean)call(store,"saveEggsNow"),"pending hatch journal is durably written before recovery");
+        Object stable=call(store,"stable",owner);Map<UUID,PetRecord> owned=(Map<UUID,PetRecord>)get(stable,"pets");
+        Path stableFile=garden.getDataFolder().toPath().resolve("pets/players/"+owner+".yml");
+        check(owned.size()==1&&owned.containsKey(child.id()),"interrupted hatch restores the baby to its owner's stable");
+        check(YamlConfiguration.loadConfiguration(stableFile.toFile()).isConfigurationSection("pets."+child.id()),"restored baby reaches the stable file before journal completion");
+        check(!YamlConfiguration.loadConfiguration(garden.getDataFolder().toPath().resolve("pets/eggs.yml").toFile()).getBoolean("eggs."+eggId+".delivery-pending"),"recovery completes the on-disk journal");
+        egg.set("delivery-pending",true);put(store,"eggsDirty",true);check((boolean)call(store,"saveEggsNow"),"simulate interruption after stable write");
+        ((Map<UUID,Object>)get(store,"stables")).remove(owner);
+        stable=call(store,"stable",owner);owned=(Map<UUID,PetRecord>)get(stable,"pets");
+        check(owned.size()==1,"replaying an existing delivered baby does not duplicate it");
+        call(stable,"remove",child.id());check((boolean)call(store,"saveStableNow",stable),"released recovered baby saved");
+        ((Map<UUID,Object>)get(store,"stables")).remove(owner);
+        Object reloaded=call(store,"stable",owner);check(((Map<?,?>)get(reloaded,"pets")).isEmpty(),"committed then released baby is not resurrected after reload");
+        UUID corrupt=UUID.randomUUID();Path corruptFile=stableFile.resolveSibling(corrupt+".yml");
+        String invalid="version: 1\npets:\n  invalid-id:\n    species: frost_wyvern\n    stage: baby\n";
+        Files.writeString(corruptFile,invalid);Object locked=call(store,"stable",corrupt);
+        check((boolean)get(locked,"locked"),"invalid pet entry locks its stable rather than silently discarding data");
+        put(locked,"dirty",true);call(store,"save",locked);
+        check(Files.readString(corruptFile).equals(invalid),"locked stable cannot overwrite the original damaged record");
+        UUID ioOwner=UUID.randomUUID();Object retry=call(store,"stable",ioOwner);
+        call(retry,"add",child);Path blocked=stableFile.resolveSibling(ioOwner+".yml");Files.createDirectory(blocked);
+        check(!(boolean)call(store,"saveStableNow",retry)&&(boolean)get(retry,"dirty"),"failed stable write retains a dirty snapshot instead of claiming success");
+        Files.delete(blocked);call(store,"flush");
+        check((boolean)call(store,"saveStableNow",retry)&&YamlConfiguration.loadConfiguration(blocked.toFile()).isConfigurationSection("pets."+child.id()),"stable snapshot is writable once the storage problem is repaired");
+    }
+
+    PetRecord recoveryParent()throws Exception{
+        Constructor<PetRecord> ctor=PetRecord.class.getDeclaredConstructor(UUID.class,PetCatalog.Species.class,PetCatalog.Stage.class);ctor.setAccessible(true);
+        PetRecord parent=ctor.newInstance(UUID.randomUUID(),PetCatalog.Species.SHADOW_PANTHER,PetCatalog.Stage.ADULT);
+        put(parent,"bond",100);return parent;
+    }
+    ConfigurationSection recoveryEgg(String id,UUID owner,PetRecord child)throws Exception{
+        ConfigurationSection egg=((YamlConfiguration)get(store,"eggs")).createSection("eggs."+id);
+        egg.set("owner",owner.toString());egg.set("species",child.species().id);egg.set("created",System.currentTimeMillis());
+        egg.set("parents","recovery test");egg.set("incubated",0L);egg.set("hatched",false);
+        egg.set("pet-id",child.id().toString());call(child,"save",egg.createSection("pet"));
+        egg.set("item-token",UUID.randomUUID().toString());egg.set("item-delivery-pending",true);
+        return egg;
+    }
+    boolean saveRecoveryLedger()throws Exception{put(store,"eggsDirty",true);return (boolean)call(store,"saveEggsNow");}
+    YamlConfiguration diskEggs(){return YamlConfiguration.loadConfiguration(garden.getDataFolder().toPath().resolve("pets/eggs.yml").toFile());}
+    int eggCopies(Player player,String id)throws Exception{
+        int count=0;for(ItemStack item:player.getInventory().getContents())if(id.equals(call(breeding,"eggId",item)))count+=item.getAmount();return count;
+    }
+    ItemStack recoveryItem(String id,PetRecord child)throws Exception{return (ItemStack)call(breeding,"egg",id,child.species(),"recovery test",0);}
+
+    /** Crash before the stable write, then crash after it: both reopen real files. */
+    @SuppressWarnings("unchecked") void collectionRecoveryChecks(PetRecord child)throws Exception{
+        UUID owner=UUID.randomUUID();Object original=call(store,"stable",owner);PetRecord a=recoveryParent(),b=recoveryParent();
+        call(original,"add",a);call(original,"add",b);put(original,"nestA",a.id());put(original,"nestB",b.id());
+        long ready=System.currentTimeMillis()-1000;put(original,"nestReady",ready);put(original,"eggDay",Math.floorDiv(System.currentTimeMillis(),86_400_000L));put(original,"eggsToday",0);
+        check((boolean)call(store,"saveStableNow",original),"ready source nest is persisted before collection crash simulation");
+        String id=UUID.randomUUID().toString();ConfigurationSection egg=recoveryEgg(id,owner,child);
+        long created=egg.getLong("created");egg.set("collection-pending",true);egg.set("source.a",a.id().toString());egg.set("source.b",b.id().toString());egg.set("source.ready",ready);
+        check(saveRecoveryLedger(),"collection journal reaches disk before the stable debit");
+        ((Map<UUID,Object>)get(store,"stables")).remove(owner);Object recovered=call(store,"stable",owner);
+        Map<UUID,PetRecord> parents=(Map<UUID,PetRecord>)get(recovered,"pets");
+        check(!(boolean)get(recovered,"locked")&&get(recovered,"nestA")==null&&get(recovered,"nestB")==null,"restart completes an interrupted collection and settles its source nest");
+        check((int)get(recovered,"eggsToday")==1&&id.equals(get(recovered,"lastEggCollected")),"collection recovery records one daily quota debit and a durable receipt");
+        check((long)get(parents.get(a.id()),"bred")==created&&(long)get(parents.get(b.id()),"bred")==created,"both recovered parents receive the collection cooldown");
+        Path file=garden.getDataFolder().toPath().resolve("pets/players/"+owner+".yml");YamlConfiguration written=YamlConfiguration.loadConfiguration(file.toFile());
+        check(written.getInt("eggs.today")==1&&id.equals(written.getString("eggs.last-collected"))&&!written.contains("nest.a"),"source debit and collection receipt are saved together in the stable file");
+        check(!diskEggs().getBoolean("eggs."+id+".collection-pending")&&diskEggs().getBoolean("eggs."+id+".item-delivery-pending"),"recovered collection is committed while its missing inventory delivery remains pending");
+        egg.set("collection-pending",true);check(saveRecoveryLedger(),"simulate crash after stable save but before collection journal finalization");
+        ((Map<UUID,Object>)get(store,"stables")).remove(owner);Object replay=call(store,"stable",owner);
+        check((int)get(replay,"eggsToday")==1&&id.equals(get(replay,"lastEggCollected")),"replaying an already debited collection does not spend the daily quota twice");
+        check(!diskEggs().getBoolean("eggs."+id+".collection-pending")&&!(boolean)get(replay,"locked"),"replayed collection finalizes safely from its saved receipt");
+        egg.set("item-delivery-pending",false);check(saveRecoveryLedger(),"offline collection fixture is finalized after recovery checks");
+    }
+
+    /** Pending grants may recover; committed inventory items must never be regenerated. */
+    void inventoryRecoveryChecks(PetRecord child)throws Exception{
+        tamer.getInventory().clear();rival.getInventory().clear();
+        String missing=UUID.randomUUID().toString();ConfigurationSection egg=recoveryEgg(missing,tamer.getUniqueId(),child);
+        ItemStack stale=recoveryItem(missing,child);String oldToken=egg.getString("item-token");
+        check(saveRecoveryLedger(),"missing inventory grant has an on-disk pending delivery record");
+        check((int)call(breeding,"retryDeliveries",tamer)==1&&eggCopies(tamer,missing)==1,"pending egg missing from the inventory is restored once");
+        check(!diskEggs().getBoolean("eggs."+missing+".item-delivery-pending"),"egg grant is committed only after the actual player inventory save is confirmed");
+        check(!oldToken.equals(egg.getString("item-token")),"missing-item recovery rotates the token to invalidate a rolled-back old copy");
+        check((int)call(breeding,"retryDeliveries",tamer)==0&&eggCopies(tamer,missing)==1,"retrying a committed inventory grant cannot duplicate its egg");
+        int owned=records(tamer).size();egg.set("incubated",0L);tamer.getInventory().clear();tamer.getInventory().setItemInMainHand(stale);
+        call(breeding,"incubate");check(egg.getLong("incubated")==0,"a stale token cannot incubate the current ledger egg");
+        check((int)call(breeding,"rush",tamer)==0&&egg.getLong("incubated")==0,"admin rush also ignores a stale-token egg");
+        egg.set("incubated",(long)call(breeding,"incubateMillis"));
+        check(call(breeding,"hatch",tamer,stale)!=null&&records(tamer).size()==owned,"a stale token from before recovery cannot hatch the recovered egg");
+        check(carried().isEmpty(),"the pet menu does not accept a stale-token egg as a carried egg");
+        tamer.getInventory().clear();tamer.getInventory().addItem(recoveryItem(missing,child));
+        egg.set("item-delivery-pending",true);check(saveRecoveryLedger(),"simulate crash after item save before delivery finalization");
+        check((int)call(breeding,"retryDeliveries",tamer)==1&&eggCopies(tamer,missing)==1&&!diskEggs().getBoolean("eggs."+missing+".item-delivery-pending"),"an existing pending inventory egg is acknowledged without adding another item");
+        ItemStack committed=Arrays.stream(tamer.getInventory().getContents()).filter(i->{try{return missing.equals(call(breeding,"eggId",i));}catch(Exception e){return false;}}).findFirst().orElseThrow();
+        tamer.getInventory().clear();rival.getInventory().addItem(committed);
+        check((int)call(breeding,"retryDeliveries",tamer)==0&&eggCopies(tamer,missing)==0&&eggCopies(rival,missing)==1,"a committed egg given to another player is not returned to its former owner");
+        var chestBlock=world.getBlockAt(home.clone().add(0,0,-31));chestBlock.setType(Material.CHEST,false);
+        var chest=(org.bukkit.block.Chest)chestBlock.getState();chest.getBlockInventory().clear();rival.getInventory().clear();chest.getBlockInventory().addItem(committed);
+        check((int)call(breeding,"retryDeliveries",tamer)==0&&eggCopies(tamer,missing)==0&&chest.getBlockInventory().containsAtLeast(committed,1),"a committed egg stored in a chest is not recreated in its original owner's inventory");
+        chest.getBlockInventory().clear();chestBlock.setType(Material.AIR,false);
+        String full=UUID.randomUUID().toString();ConfigurationSection fullEgg=recoveryEgg(full,tamer.getUniqueId(),child);check(saveRecoveryLedger(),"full-inventory fixture is journaled before recovery");
+        for(int slot=0;slot<tamer.getInventory().getStorageContents().length;slot++)tamer.getInventory().setItem(slot,new ItemStack(Material.COBBLESTONE,64));
+        check((int)call(breeding,"retryDeliveries",tamer)==0&&eggCopies(tamer,full)==0&&diskEggs().getBoolean("eggs."+full+".item-delivery-pending"),"a full inventory keeps the egg pending without dropping or discarding it");
+        tamer.getInventory().setItem(8,null);
+        check((int)call(breeding,"retryDeliveries",tamer)==1&&eggCopies(tamer,full)==1&&!fullEgg.getBoolean("item-delivery-pending"),"freeing one slot lets the same pending egg finish delivery");
+        tamer.getInventory().clear();
+        String cursorId=UUID.randomUUID().toString();ConfigurationSection cursorEgg=recoveryEgg(cursorId,tamer.getUniqueId(),child);tamer.setItemOnCursor(recoveryItem(cursorId,child));
+        check(saveRecoveryLedger(),"cursor-only pending delivery is journaled");
+        check((int)call(breeding,"retryDeliveries",tamer)==1&&eggCopies(tamer,cursorId)==1&&tamer.getItemOnCursor().getType().isAir()&&!cursorEgg.getBoolean("item-delivery-pending"),"an unsaved cursor egg moves into the saved inventory before delivery is acknowledged");
+        tamer.getInventory().clear();
+        String staleFullId=UUID.randomUUID().toString();ConfigurationSection staleFullEgg=recoveryEgg(staleFullId,tamer.getUniqueId(),child);ItemStack staleFullItem=recoveryItem(staleFullId,child);
+        staleFullEgg.set("item-token",UUID.randomUUID().toString());check(saveRecoveryLedger(),"full-inventory stale-copy fixture has its newer pending token saved");
+        for(int slot=0;slot<tamer.getInventory().getStorageContents().length;slot++)tamer.getInventory().setItem(slot,new ItemStack(Material.COBBLESTONE,64));
+        tamer.getInventory().setItem(5,staleFullItem);
+        check(!(boolean)call(breeding,"pendingItem",staleFullItem),"a stale-token copy does not trap itself behind the pending-delivery movement guard");
+        check((int)call(breeding,"retryDeliveries",tamer)==1&&eggCopies(tamer,staleFullId)==1&&!staleFullEgg.getBoolean("item-delivery-pending")
+            &&(boolean)call(breeding,"currentEgg",tamer.getInventory().getItem(5),staleFullEgg),"recovery replaces the stale copy in an otherwise full inventory with exactly one current egg");
+        tamer.getInventory().clear();
+        String legacyId=UUID.randomUUID().toString();ConfigurationSection legacyEgg=recoveryEgg(legacyId,tamer.getUniqueId(),child);legacyEgg.set("item-token",null);legacyEgg.set("item-delivery-pending",false);
+        tamer.getInventory().addItem(recoveryItem(legacyId,child));check(saveRecoveryLedger(),"legacy tokenless egg fixture is saved as an already committed item");
+        check(carried().stream().anyMatch(c->{try{return legacyId.equals(call(c,"id"));}catch(Exception e){return false;}}),"the pet menu still recognizes an existing legacy egg without a delivery token");
+        check((int)call(breeding,"rush",tamer)==1&&legacyEgg.getLong("incubated")==((long)call(breeding,"incubateMillis")),"admin rush still incubates an existing legacy tokenless egg");
+        tamer.getInventory().clear();
+        String foreign=UUID.randomUUID().toString();ConfigurationSection foreignEgg=recoveryEgg(foreign,rival.getUniqueId(),child);check(saveRecoveryLedger(),"another owner's pending fixture is journaled");
+        check((int)call(breeding,"retryDeliveries",tamer)==0&&eggCopies(tamer,foreign)==0&&foreignEgg.getBoolean("item-delivery-pending"),"pending eggs are delivered only to the recorded owner");
+        foreignEgg.set("item-delivery-pending",false);
+        String spent=UUID.randomUUID().toString();ConfigurationSection spentEgg=recoveryEgg(spent,tamer.getUniqueId(),child);spentEgg.set("hatched",true);spentEgg.set("hatched-by",tamer.getUniqueId().toString());spentEgg.set("hatched-at",System.currentTimeMillis());spentEgg.set("delivery-pending",true);check(saveRecoveryLedger(),"pending hatch fixture is durably recorded");
+        check((int)call(breeding,"retryDeliveries",tamer)==0&&eggCopies(tamer,spent)==0&&spentEgg.getBoolean("delivery-pending"),"a pending baby hatch is never recovered as a new egg item");
+        spentEgg.set("delivery-pending",false);spentEgg.set("item-delivery-pending",false);check(saveRecoveryLedger(),"spent and foreign recovery fixtures are finalized");
+        inventorySaveFailureChecks(child);
+        deadInventoryRecoveryChecks(child);
+        tamer.getInventory().clear();rival.getInventory().clear();
+    }
+
+    /** The old inventory on the death screen must not acknowledge a grant before respawn. */
+    void deadInventoryRecoveryChecks(PetRecord child)throws Exception{
+        tamer.getInventory().clear();String id=UUID.randomUUID().toString();ConfigurationSection egg=recoveryEgg(id,tamer.getUniqueId(),child);
+        if(!saveRecoveryLedger())throw new AssertionError("cannot persist dead-player recovery fixture");
+        Class<?> helper=Class.forName("com.example.voidscape.pet.PetEggInventorySave");Method save=helper.getDeclaredMethod("save",VoidscapePlugin.class,Player.class);save.setAccessible(true);
+        float health=actorA.getHealth();
+        try{
+            // NMS setter changes only synchronized health; Bukkit's setter would trigger a real death.
+            actorA.setHealth(0);
+            check(tamer.isDead()&&(int)call(breeding,"retryDeliveries",tamer)==0&&eggCopies(tamer,id)==0&&diskEggs().getBoolean("eggs."+id+".item-delivery-pending"),"the death-screen inventory cannot receive or acknowledge a pending egg");
+            check(!(boolean)save.invoke(null,garden,tamer),"inventory-save confirmation refuses a dead player's pre-respawn inventory");
+        }finally{actorA.setHealth(health);}
+        check(!tamer.isDead()&&(int)call(breeding,"retryDeliveries",tamer)==1&&eggCopies(tamer,id)==1&&!egg.getBoolean("item-delivery-pending"),"the same pending egg is delivered exactly once after the player is alive again");
+    }
+
+    void inventorySaveFailureChecks(PetRecord child)throws Exception{
+        Class<?> helper=Class.forName("com.example.voidscape.pet.PetEggInventorySave");Method save=helper.getDeclaredMethod("save",VoidscapePlugin.class,Player.class);save.setAccessible(true);
+        check((boolean)save.invoke(null,garden,tamer),"inventory receipt helper confirms a real saved player-data snapshot");
+        String id=UUID.randomUUID().toString();ConfigurationSection egg=recoveryEgg(id,tamer.getUniqueId(),child);
+        tamer.getInventory().addItem(recoveryItem(id,child));check(saveRecoveryLedger(),"inventory save failure fixture is journaled");
+        Field disabled=Class.forName("org.spigotmc.SpigotConfig").getDeclaredField("disablePlayerDataSaving");disabled.setAccessible(true);boolean previous=disabled.getBoolean(null);
+        try{
+            disabled.setBoolean(null,true);
+            check(!(boolean)save.invoke(null,garden,tamer),"disabled player-data saving cannot be mistaken for a confirmed inventory snapshot");
+            check((int)call(breeding,"retryDeliveries",tamer)==0&&eggCopies(tamer,id)==1&&diskEggs().getBoolean("eggs."+id+".item-delivery-pending"),"silently skipped inventory save leaves the delivery pending without duplicating the carried egg");
+            egg.set("incubated",(long)call(breeding,"incubateMillis"));
+            ItemStack pending=Arrays.stream(tamer.getInventory().getContents()).filter(i->{try{return id.equals(call(breeding,"eggId",i));}catch(Exception e){return false;}}).findFirst().orElseThrow();
+            int before=records(tamer).size();check(call(breeding,"hatch",tamer,pending)!=null&&records(tamer).size()==before,"an unconfirmed inventory grant cannot hatch while its delivery is pending");
+            Item dropped=world.dropItem(home.clone().add(0,1,0),pending.clone());PlayerDropItemEvent drop=new PlayerDropItemEvent(tamer,dropped);
+            Bukkit.getPluginManager().callEvent(drop);check(drop.isCancelled(),"a pending egg cannot be dropped before its inventory save is confirmed");dropped.remove();
+            PlayerSwapHandItemsEvent swap=new PlayerSwapHandItemsEvent(tamer,pending.clone(),new ItemStack(Material.AIR));Bukkit.getPluginManager().callEvent(swap);
+            check(swap.isCancelled(),"a pending egg cannot be transferred through the off-hand swap");
+            var chest=Bukkit.createInventory(null,9);tamer.openInventory(chest);tamer.getInventory().setItem(0,pending);
+            var click=new org.bukkit.event.inventory.InventoryClickEvent(tamer.getOpenInventory(),org.bukkit.event.inventory.InventoryType.SlotType.QUICKBAR,36,
+                org.bukkit.event.inventory.ClickType.SHIFT_LEFT,org.bukkit.event.inventory.InventoryAction.MOVE_TO_OTHER_INVENTORY);
+            Bukkit.getPluginManager().callEvent(click);check(click.isCancelled(),"a pending egg cannot be shift-clicked into a chest");tamer.closeInventory();
+            var hopper=new org.bukkit.event.inventory.InventoryMoveItemEvent(tamer.getInventory(),pending,chest,true);Bukkit.getPluginManager().callEvent(hopper);
+            check(hopper.isCancelled(),"automation cannot move an egg whose inventory delivery remains pending");
+            List<ItemStack> drops=new ArrayList<>(List.of(pending.clone(),new ItemStack(Material.DIAMOND)));
+            var death=new org.bukkit.event.entity.PlayerDeathEvent(tamer,org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(),drops,0,net.kyori.adventure.text.Component.empty(),false);
+            death.setKeepInventory(false);call(breeding,"deathPending",death);
+            check(death.getDrops().size()==1&&death.getDrops().get(0).getType()==Material.DIAMOND,"death does not release an unconfirmed egg as a dropped item and retains ordinary loot");
+            List<ItemStack> kept=new ArrayList<>(List.of(pending.clone()));
+            var keepDeath=new org.bukkit.event.entity.PlayerDeathEvent(tamer,org.bukkit.damage.DamageSource.builder(org.bukkit.damage.DamageType.GENERIC).build(),kept,0,net.kyori.adventure.text.Component.empty(),false);
+            keepDeath.setKeepInventory(true);call(breeding,"deathPending",keepDeath);
+            check(keepDeath.getDrops().size()==1,"the pending-egg death guard respects keep-inventory deaths");
+        }finally{disabled.setBoolean(null,previous);}
+        check((int)call(breeding,"retryDeliveries",tamer)==1&&eggCopies(tamer,id)==1&&!egg.getBoolean("item-delivery-pending"),"restoring player-data saving completes the original pending grant exactly once");
+    }
 
     // ---- the nest through the /pet menu, the admin rush, and hatching from the menu or the off hand ----
     @SuppressWarnings("unchecked") Map<Integer,Runnable> actions()throws Exception{
@@ -461,6 +701,29 @@ public class PetSystemNativeProbe extends JavaPlugin {
         for(int i=0;i<2;i++)garden.pets().command(console,new String[]{"pets","give",tamer.getName(),"crystal_tortoise","adult"});
         List<UUID> pair=records(tamer).values().stream().filter(r->r.species()==PetCatalog.Species.CRYSTAL_TORTOISE).map(PetRecord::id).toList();
         check(pair.size()==2,"two adult tortoises join the stable for the menu flow");
+        // Exercise the public entry points with both platform results. The test actor is a fake
+        // Paper player, so inject only the cached platform result rather than claiming to test a
+        // real Geyser connection or client rendering.
+        Field platforms=JudgePackService.class.getDeclaredField("PLATFORMS");platforms.setAccessible(true);
+        @SuppressWarnings("unchecked") Map<UUID,Object> platformCache=(Map<UUID,Object>)platforms.get(null);
+        Class<?> platformType=Class.forName("com.example.voidscape.boss.JudgePackService$Platform");
+        Constructor<?> platformCtor=platformType.getDeclaredConstructor(boolean.class,long.class);platformCtor.setAccessible(true);
+        try{
+            for(boolean bedrock:new boolean[]{false,true}){
+                platformCache.put(tamer.getUniqueId(),platformCtor.newInstance(bedrock,System.currentTimeMillis()));
+                check(JudgePackService.bedrock(tamer)==bedrock,"platform fixture is "+(bedrock?"Bedrock":"Java"));
+                ((PetMenu)menu).onCommand(tamer,null,"pets",new String[]{});
+                check(actions().containsKey(6)&&actions().containsKey(10),"/pets opens the stable chest for "+(bedrock?"Bedrock":"Java"));
+                ItemStack portrait=tamer.getOpenInventory().getTopInventory().getItem(10);
+                check(portrait.getItemMeta().getItemModel().getNamespace().equals("evergarden"),"stable pet portrait uses Evergarden item model");
+                actions().get(10).run();
+                check(actions().containsKey(0)&&actions().containsKey(30)&&actions().containsKey(32),"stable selection opens pet card with rename and breed actions");
+                actions().get(0).run();
+                check(actions().containsKey(6),"back button returns to stable chest");
+                ((PetMenu)menu).onCommand(tamer,null,"pet",new String[]{"nest"});
+                check(title(13).equals("ยังเริ่มไม่ได้"),"/pet nest opens shared breeding chest");
+            }
+        }finally{platformCache.remove(tamer.getUniqueId());}
         Material seagrass=food(PetCatalog.Species.CRYSTAL_TORTOISE);
         tamer.getInventory().clear();tamer.getInventory().addItem(new ItemStack(seagrass,8));
         call(menu,"chestNest",tamer);
@@ -533,10 +796,64 @@ public class PetSystemNativeProbe extends JavaPlugin {
         tamer.getInventory().clear();tamer.teleport(home);
         PetRecord cat=records(tamer).values().stream().filter(r->r.species()==PetCatalog.Species.SHADOW_PANTHER&&r.stage()==PetCatalog.Stage.ADULT).findFirst().orElseThrow();
         UUID id=cat.id();
+        // Start a new selection: summon no longer replaces an already active pet.
+        call(companions,"dismiss",tamer);
         check(call(companions,"summon",tamer,id)==null&&body(tamer)!=null,"an adult panther comes out for the mode checks");
         @SuppressWarnings("unchecked") List<String> card=(List<String>)call(menu,"describe",stable(tamer),cat);
         check(card.stream().anyMatch(l->l.contains("ฝีเท้าเงา"))&&card.stream().anyMatch(l->l.contains("ซุ่มโจมตี")),"the pet card lists its passive and battle skills");
         check(card.stream().anyMatch(l->l.contains("โหมด: ติดตาม")&&l.contains("❤")),"the pet card shows its mode and health");
+        PetRecord second=records(tamer).values().stream().filter(r->r.species()==PetCatalog.Species.CRYSTAL_TORTOISE).findFirst().orElseThrow();
+        Object stable=stable(tamer);
+        put(second,"mode","assist");
+        check(call(companions,"summon",tamer,second.id())==null,"a second, different species may be summoned");
+        @SuppressWarnings("unchecked") Map<UUID,Object> secondBodies=(Map<UUID,Object>)get(companions,"secondaryOut");
+        Object secondBody=secondBodies.get(tamer.getUniqueId());
+        check(secondBody!=null&&body(tamer)!=secondBody&&id.equals(get(stable,"active"))&&second.id().equals(get(stable,"secondary")),"both bodies are present with the first retaining primary status");
+        @SuppressWarnings("unchecked") Map<UUID,Integer> stranded=(Map<UUID,Integer>)get(companions,"stranded");
+        stranded.put(tamer.getUniqueId(),17);
+        call(companions,"follow",secondBody,tamer,true,true);
+        check(Objects.equals(stranded.get(tamer.getUniqueId()),17),"secondary movement cannot clear the first pet's stuck counter");
+        stranded.remove(tamer.getUniqueId());
+        check(String.valueOf(call(companions,"mode",tamer,second.id(),"assist")).contains("ตัวที่สอง"),"the secondary cannot be switched to combat mode");
+        check(String.valueOf(call(call(companions,"riding"),"start",tamer,second.id())).contains("ตัวที่สอง"),"the secondary cannot be mounted or grant mount blessings");
+        String oldName=(String)get(second,"name");
+        check((boolean)call(menu,"applyName",tamer,second.id(),"Second Test")&&String.valueOf(get(second,"name")).equals("Second Test"),"a secondary pet can be renamed");
+        check(((Rabbit)get(secondBody,"shell")).customName().toString().contains("Second Test"),"renaming updates the visible secondary body");
+        put(second,"name",oldName);
+        tamer.removePotionEffect(org.bukkit.potion.PotionEffectType.ABSORPTION);
+        tamer.removePotionEffect(org.bukkit.potion.PotionEffectType.SPEED);
+        put(companions,"clock",0);call(companions,"maintain");
+        check(!tamer.hasPotionEffect(org.bukkit.potion.PotionEffectType.ABSORPTION),"secondary tortoise never grants its absorption passive");
+        check(tamer.hasPotionEffect(org.bukkit.potion.PotionEffectType.SPEED),"first panther grants its speed passive");
+        String stableText=(String)call(stable,"serialize");YamlConfiguration savedYaml=new YamlConfiguration();savedYaml.loadFromString(stableText);
+        Method loadStable=stable.getClass().getDeclaredMethod("load",UUID.class,YamlConfiguration.class,int.class);loadStable.setAccessible(true);
+        Object restored=loadStable.invoke(null,tamer.getUniqueId(),savedYaml,6);
+        check(id.equals(get(restored,"active"))&&second.id().equals(get(restored,"secondary"))&&(boolean)get(restored,"out"),"both selections survive stable serialization and reload");
+        savedYaml.set("secondary",null);Object legacy=loadStable.invoke(null,tamer.getUniqueId(),savedYaml,6);
+        check(id.equals(get(legacy,"active"))&&get(legacy,"secondary")==null&&(boolean)get(legacy,"out"),"old one-pet stable data loads unchanged");
+        call(companions,"despawn",tamer.getUniqueId());
+        check(!tamer.hasPotionEffect(org.bukkit.potion.PotionEffectType.SPEED),"unloading the first pet clears its own passive");
+        call(companions,"maintain");
+        check(body(tamer)!=null&&secondBodies.get(tamer.getUniqueId())!=null,"both selections return after bodies are unloaded");
+        tamer.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SPEED,600,3));
+        call(companions,"dismiss",tamer,second.id());
+        check(body(tamer)!=null&&!secondBodies.containsKey(tamer.getUniqueId())&&get(stable,"secondary")==null,"dismissing the second keeps the first companion");
+        check(call(companions,"summon",tamer,second.id())==null,"second companion may be summoned again");
+        call(companions,"dismiss",tamer,id);
+        check(second.id().equals(get(stable,"active"))&&get(stable,"secondary")==null&&body(tamer)!=null,"dismissing first promotes the remaining companion");
+        check(tamer.getPotionEffect(org.bukkit.potion.PotionEffectType.SPEED)!=null&&tamer.getPotionEffect(org.bukkit.potion.PotionEffectType.SPEED).getAmplifier()==3,"an external replacement potion survives pet promotion");
+        tamer.removePotionEffect(org.bukkit.potion.PotionEffectType.SPEED);
+        call(companions,"dismiss",tamer);check(call(companions,"summon",tamer,id)==null,"original first companion can be selected again");
+        tamer.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.SPEED,600,0));
+        call(companions,"maintain");
+        check(tamer.getPotionEffect(org.bukkit.potion.PotionEffectType.SPEED).getDuration()>500,"a pre-existing potion is not replaced by the pet passive");
+        tamer.removePotionEffect(org.bukkit.potion.PotionEffectType.SPEED);
+        check(call(companions,"summon",tamer,second.id())==null,"second companion can return before first faints");
+        put(cat,"faintedUntil",garden.world().getGameTime()+6000);call(companions,"despawnPrimary",tamer.getUniqueId());
+        check(call(companions,"summon",tamer,second.id())==null&&second.id().equals(get(stable,"active")),"a second pet can replace a fainted first pet");
+        put(cat,"faintedUntil",0L);call(companions,"dismiss",tamer);check(call(companions,"summon",tamer,id)==null,"normal test selection restored");
+        check(call(companions,"mode",tamer,id,"idle")==null&&"idle".equals(get(cat,"mode")),"idle is an available noncombat mode");
+        check(call(companions,"mode",tamer,id,"follow")==null,"follow can be restored");
         // Perch: a small body on the head, moved every tick, never a passenger.
         check(call(companions,"mode",tamer,id,"perch")==null,"perch mode is accepted");
         Object perched=body(tamer);
@@ -603,15 +920,17 @@ public class PetSystemNativeProbe extends JavaPlugin {
         check(hunter.isDead(),"the companion bites the foe down on its own");
         check(tamer.equals(hunter.getKiller()),"its kill counts as the owner's, so loot and XP drop");
         tamer.setInvulnerable(true);
-        // Counter-hits knock it out for one in-game day.
+        // Counter-hits knock it out for the configured recovery period.
         garden.getConfig().set("pets.companions.counter-chance",100);
         Zombie brute=foe(home.clone().add(0,0,3));
+        // Survive even a rare critical opening bite so this checks the guaranteed counter-hit.
+        brute.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH).setBaseValue(200);brute.setHealth(200);
         put(cat,"health",1d);put(cat,"combatTick",(long)Bukkit.getCurrentTick());
         brute.damage(.5,tamer);
         for(int i=0;i<200&&body(tamer)!=null;i++)follow(1);
         check(body(tamer)==null,"a companion at 1 health that is hit back faints");
         long now=garden.world().getGameTime();
-        check((long)get(cat,"faintedUntil")>=now+23_900,"it rests for one in-game day");
+        check((long)get(cat,"faintedUntil")>=now+garden.getConfig().getInt("pets.companions.faint-ticks",6000)-100,"it rests for the configured recovery period");
         check(String.valueOf(call(companions,"summon",tamer,id)).contains("สลบ"),"a fainted pet cannot be summoned");
         call(companions,"maintain");
         check(body(tamer)==null&&((String)call(companions,"state",tamer)).contains("สลบ"),"upkeep keeps it resting and says why");

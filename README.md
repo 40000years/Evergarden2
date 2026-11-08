@@ -1,5 +1,35 @@
 # Evergarden2 — Sky Landmarks
 
+Evergarden **3.0.0-e2.179-mount-refinement** gives Fenrir a fast ground sprint and high jump,
+adds five rider buffs to Aetherius, and animates Ignis's trailing tail and Fenrir's running gait.
+The other four mythical mounts still fly without mana. Board through `/pet`, `/pet ride`,
+or an empty-hand right-click. Java pack URLs and SHA remain unchanged; Bedrock pack **3.68.0**
+updates the animation tracks. See [mythical riding](docs/mythical-riding.md).
+
+Evergarden **3.0.0-e2.177-mythical-pets** opens all five mythical pets with habitat-specific
+0.1% encounter odds and situational bonuses. Raising a pet from baby to adult permanently
+adds two stable slots, with paginated stable and breeding menus. Includes all 111 native
+growth variants and 222 Java/Bedrock menu portraits (Bedrock pack **3.67.0**), preserving
+the e2.176 structure-enchant caps and other delivered features. See [mythical pets](docs/mythical-pets.md).
+
+Evergarden **3.0.0-e2.158-temple-rewards** gives every positive hand/core contributor
+both Vault Tier 5 keys (two by default) and one random Legendary elemental spell
+scroll after defeating the Boss-temple Judge. Saved rewards wait for offline/dead
+players, full inventories or an Advance Magic outage after startup; saved spell IDs
+cannot reroll on claim. New victories no longer add retired cores, while previously
+queued cores remain claimable. Use `/evergarden boss claim` to collect queued rewards.
+This release preserves the Vault economy, resource packs and embedded mirror list.
+Run this release with the paired Advance Magic JAR. See [Judge rewards](docs/ancient-judge.md).
+
+Evergarden **3.0.0-e2.157-vault-economy** removes mana potions and guaranteed supply
+bonuses from Vaults. Configured enchant books and single-enchant diamond equipment
+become the main rewards; only those rewards can double, with at most two items per
+opening. Staffs and special equipment have lower, explicit rates. Existing
+`boss-treasure.yml` profiles control enchant types, weights and levels. The release
+preserves e2.156 models, packs and embedded mirrors. See [Vault balance](docs/vault-balance.md).
+
+Advance Magic **1.37.0-spell-vfx** adds illustrated elemental spell effects and fixes Bedrock earth-spell particle overload, cube material selection and repeated static-prop updates. Sprite and vanilla particles now share the same traffic budgets, including concurrent casts. Bedrock pack **2.38.0**; install with Evergarden e2.156 and restart Geyser with the server. Local release gates pass; the new Java pack mirror is staged and awaits publication approval. See [spell rework and validation](docs/spell-rework.md) and [mirror status](docs/pack-mirror.md).
+
 Evergarden **3.0.0-e2.156-malefeasance-v5** redraws both Malefeasance forms as anime sorceresses (no code changes):
 - **Phase 1:** a beautiful, wicked witch in the style of Merlin, with long black hair, a tall wine-lined collar, a crescent staff, a grimoire and a violet orb.
 - **Phase 2:** a cute, smug little witch with a big curled hat, lilac twin tails, starry eyes with a fang grin, bat wings and a star wand.

@@ -11,6 +11,16 @@ public final class RealmBosses {
     /** Clip order of every realm blueprint; the Bedrock controller indexes this list. */
     public static final List<String> CLIPS=List.of("idle","walk","attack_windup","attack_active","attack_recover",
         "skill_windup","skill_active","skill_recover","ultimate_windup","ultimate_active","ultimate_recover","stun","transition","spawn");
+    /** Clip order of the three elemental dragon rigs merged into realm_bosses (attack clips from
+     *  evergarden/tools/dragon_attack_clips.py follow the original eight, so earlier indices never shift). */
+    public static final List<String> DRAGON_CLIPS=List.of("idle","walk","fly","tail_whip","wing_flap","roar","takeoff","land",
+        "bite","claw","breath","cast");
+    public static final Map<String,String> DRAGON_CODES=Map.of(
+        "forge_dragon_fire","df",
+        "forge_dragon_storm","ds",
+        "forge_dragon_ice","di"
+    );
+    public static final List<String> DRAGON_MODELS=List.of("forge_dragon_fire","forge_dragon_storm","forge_dragon_ice");
     /* ModelEngine builds with a model cap import twelve models in all; the main bosses, the river rigs and
        internal_fire take eleven. All four realm rigs therefore ship in ONE merged blueprint: bones prefixed with
        the rig's code, clips with its model id, one texture each. A spawned rig drops the other rigs' bones. */
@@ -26,9 +36,15 @@ public final class RealmBosses {
     }
     public static final List<String> MODELS=Arrays.stream(Kind.values()).map(k->k.model).toList();
     public static boolean realm(String model){return MODELS.contains(model);}
+    public static boolean dragon(String model){return model!=null&&DRAGON_CODES.containsKey(model);}
+    public static boolean sharedBlueprint(String model){return realm(model)||dragon(model);}
     /** Whether a bone of the merged blueprint belongs to this rig: its code prefix, or its head tracker, which the
      *  blueprint names hi_&lt;code&gt; and ModelEngine registers as &lt;code&gt; once it strips the behaviour prefix. */
     public static boolean owns(String model,String bone){
+        if(dragon(model)){
+            String code=DRAGON_CODES.get(model);
+            return bone.startsWith(code+"_")||bone.equals("hi_"+code)||bone.equals(code);
+        }
         Kind kind=Kind.of(model);
         return kind!=null&&(bone.startsWith(kind.code+"_")||bone.equals("hi_"+kind.code)||bone.equals(kind.code));
     }

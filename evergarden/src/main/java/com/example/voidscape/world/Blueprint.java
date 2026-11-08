@@ -419,14 +419,25 @@ public final class Blueprint {
             data.setRegion(x1, b.y1, z1, x2 + 1, b.y2 + 1, z2 + 1, b.material);
         }
 
-        // Render Tier I - V visual crest stars above North & South Gate Arches (z = -21 and z = 21, y = 110..111)
-        int tier = Math.clamp(site.tier(), 1, 5);
-        Material tierGlow = switch (tier) {
+        // Render Tier I - VIII visual crest stars above North & South Gate Arches (z = -21 and z = 21, y = 110..111)
+        int sealTier = Math.clamp(site.tier(), 1, DungeonLayout.MAX_TIER);
+        int tier = Math.min(sealTier, 5);
+        Material tierGlow = switch (sealTier) {
             case 1 -> Material.VERDANT_FROGLIGHT;
             case 2 -> Material.SEA_LANTERN;
             case 3 -> Material.OCHRE_FROGLIGHT;
             case 4 -> Material.SHROOMLIGHT;
+            case 5 -> Material.CRYING_OBSIDIAN;
+            case 6 -> Material.SEA_LANTERN;
+            case 7 -> Material.PEARLESCENT_FROGLIGHT;
             default -> Material.CRYING_OBSIDIAN;
+        };
+        // Tier VI-VIII crown the stars with their seal colour: azure, violet, blood.
+        Material crown = switch (sealTier) {
+            case 6 -> Material.BLUE_STAINED_GLASS;
+            case 7 -> Material.PURPLE_STAINED_GLASS;
+            case 8 -> Material.RED_STAINED_GLASS;
+            default -> Material.SEA_LANTERN;
         };
         int[] starOffsets = switch (tier) {
             case 1 -> new int[]{0};
@@ -443,7 +454,7 @@ public final class Blueprint {
                 if (lx >= 0 && lx <= 15) {
                     data.setBlock(lx, 110, lz, tierGlow);
                     if (tier == 5) {
-                        data.setBlock(lx, 111, lz, Material.SEA_LANTERN);
+                        data.setBlock(lx, 111, lz, crown);
                     }
                 }
             }

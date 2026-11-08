@@ -140,6 +140,10 @@ final class PerchHunt {
         perches.clear();
     }
 
+    void forget(UUID player) {
+        perches.remove(player);
+    }
+
     private static boolean playable(Player p) {
         return p.isOnline() && !p.isDead()
             && (p.getGameMode() == GameMode.SURVIVAL || p.getGameMode() == GameMode.ADVENTURE);

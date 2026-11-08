@@ -96,7 +96,8 @@ final class PetBreeding implements Listener,AutoCloseable {
             if(food==Material.HONEY_BOTTLE)player.getInventory().addItem(new ItemStack(Material.GLASS_BOTTLE,cost))
                 .values().forEach(left->player.getWorld().dropItemNaturally(player.getLocation(),left));
         }
-        if(stable.out&&(a.id.equals(stable.active)||b.id.equals(stable.active)))companions.dismiss(player);
+        if(stable.summoned(a.id))companions.dismiss(player,a.id);
+        if(stable.summoned(b.id))companions.dismiss(player,b.id);
         stable.nestA=a.id;stable.nestB=b.id;stable.nestReady=now+nestMillis();stable.dirty=true;
         player.playSound(player.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_RESONATE,.8f,1.3f);
         return null;
@@ -132,6 +133,39 @@ final class PetBreeding implements Listener,AutoCloseable {
         player.playSound(player.getLocation(),Sound.ENTITY_CHICKEN_EGG,1,.8f);
         plugin.getLogger().info("Pet egg "+id+" laid for "+player.getName()+" ("+a.species.id+")");
         return null;
+    }
+    /**
+     * A bought baby egg: registered in the ledger exactly like a nest egg, so the item cannot be
+     * duplicated, then delivered now (or queued for /pets when the inventory is full).
+     * Returns why it failed, or null once the egg is on disk.
+     */
+    String grantEgg(Player player,PetCatalog.Species species,String source){
+        if(store.eggsLocked())return "บันทึกไข่เสียหาย · แจ้งแอดมิน";
+        PetStable stable=companions.stable(player);
+        if(stable.locked)return "อ่านข้อมูลคอกสัตว์ของคุณไม่ได้ · แจ้งแอดมิน";
+        PetRecord child=PetRecord.tamed(species,PetCatalog.Stage.BABY,random);
+        String id=UUID.randomUUID().toString();
+        ConfigurationSection egg=store.eggs.createSection("eggs."+id);
+        egg.set("owner",player.getUniqueId().toString());egg.set("species",species.id);egg.set("created",System.currentTimeMillis());
+        egg.set("parents",source);egg.set("incubated",0L);egg.set("hatched",false);egg.set("collection-pending",false);
+        egg.set("item-delivery-pending",true);egg.set("item-token",UUID.randomUUID().toString());
+        child.save(egg.createSection("pet"));egg.set("pet-id",child.id.toString());
+        store.eggsDirty=true;
+        if(!store.saveEggsNow()){store.eggs.set("eggs."+id,null);store.eggsDirty=true;return "บันทึกไข่ไม่ได้ · กรุณาแจ้งแอดมิน";}
+        plugin.getLogger().info("Pet egg "+id+" bought by "+player.getName()+" ("+species.id+", "+source+")");
+        retryDeliveries(player);
+        if(egg.getBoolean("item-delivery-pending"))plugin.message(player,"ไข่เก็บไว้ในรายการรอส่งแล้ว · เว้นช่องกระเป๋าแล้วเปิด /pets อีกครั้ง");
+        return null;
+    }
+    /** What a shop shows: looks like the egg but carries no ledger id, so it can never hatch. */
+    static ItemStack preview(PetCatalog.Species species){
+        ItemStack item=new ItemStack(Material.PAPER);var meta=item.getItemMeta();
+        meta.displayName(Component.text("ไข่ "+species.display+" · ร่างเด็ก",NamedTextColor.GOLD).decoration(TextDecoration.ITALIC,false));
+        meta.lore(List.of(Component.text(species.thai+" (สัตว์ในตำนาน)",NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false),
+            Component.text("ได้ไข่ที่ลงทะเบียนแล้วเมื่อแลก · พกไว้ให้ฟักแล้วคลิกขวา",NamedTextColor.DARK_GRAY).decoration(TextDecoration.ITALIC,false)));
+        meta.setItemModel(EGG_MODEL);meta.setMaxStackSize(1);
+        var model=meta.getCustomModelDataComponent();model.setStrings(List.of(EGG_MODEL.toString()));meta.setCustomModelDataComponent(model);
+        item.setItemMeta(meta);return item;
     }
     ItemStack egg(String id,PetCatalog.Species species,String parents,int percent){
         ItemStack item=new ItemStack(Material.PAPER);var meta=item.getItemMeta();

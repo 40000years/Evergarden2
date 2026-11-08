@@ -105,16 +105,14 @@ public final class ResourcePackDeliveryChecks {
         expectInvalid(() -> a.offer(player, URL, "bad", "Magic", false, false));
         expectInvalid(() -> a.offer(player, "file:///tmp/pack.zip", HASH, "Magic", false, false));
         expectInvalid(() -> a.offer(player, "https://user:password@example.org/pack.zip", HASH, "Magic", false, false));
-        // A change of policy is part of the offer identity. Required/optional
-        // groups stay distinct and retain their original relative priority.
+        // Even a legacy caller requesting a required pack is made optional.
         int before = requests.size();
         a.offer(player, URL + "required.zip", HASH, "Magic", true, false);
         b.offer(player, URL + "optional.zip", HASH, "Garden", false, false);
         c.offer(player, URL + "optional.zip", HASH, "Judge", false, false);
         tick();
-        check(requests.size() == before + 2, "mixed required policy creates two batches");
-        check(requests.get(before).required() && ids(requests.get(before)).equals(List.of(MAGIC)), "only configured pack is required");
-        check(!requests.getLast().required() && ids(requests.getLast()).equals(List.of(GARDEN, JUDGE)), "judge remains optional");
+        check(requests.size() == before + 1, "legacy required and optional offers share one batch");
+        check(!requests.getLast().required() && ids(requests.getLast()).equals(List.of(MAGIC, GARDEN, JUDGE)), "all packs remain optional");
 
         failSend = true;
         a.offer(player, URL + "failed.zip", HASH, "Magic", false, false);
@@ -175,11 +173,10 @@ public final class ResourcePackDeliveryChecks {
         tick();
         reply(player,MAGIC,PlayerResourcePackStatusEvent.Status.DECLINED);
         validate();
-        check(kicks==1,"declining a required pack disconnects the player");
+        check(kicks==0,"declining a legacy required pack keeps the player connected");
         reply(player,MAGIC,PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED);
         validate();
-        check(kicks==1,"success stops required-pack enforcement");
-        check(repeating.stream().allMatch(task->task.cancelled),"watchdog stops once required packs finish");
+        check(kicks==0,"successful loading keeps the player connected");
         required.offer(player,URL+"timeout.zip",HASH,"Required",true,false);
         tick();
         var sessions=ResourcePackManager.class.getDeclaredField("sessions");sessions.setAccessible(true);
@@ -189,19 +186,19 @@ public final class ResourcePackDeliveryChecks {
         var sentAt=attempt.getClass().getDeclaredField("sentAt");sentAt.setAccessible(true);
         sentAt.setLong(attempt,System.nanoTime()-180_000_000_000L);
         validate();
-        check(kicks==1,"a slow three-minute download keeps the player connected");
+        check(kicks==0,"a slow three-minute download keeps the player connected");
         sentAt.setLong(attempt,System.nanoTime()-601_000_000_000L);
         validate();
-        check(kicks==2,"a stalled required load disconnects after the deadline");
+        check(kicks==0,"a stalled load remains connected after the deadline");
         required.unavailable(player);
         check(required.status(player).equals("UNAVAILABLE"),"missing required pack is explicit");
         validate();
-        check(kicks==3,"a required pack with no valid URL cannot be bypassed");
+        check(kicks==0,"an unavailable pack keeps the player connected");
         check(required.offer(player,URL+"required-check.zip",HASH,"Required",true,false),"corrected pack configuration can be offered again");
         tick();
         reply(player,MAGIC,PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD);
         validate();
-        check(kicks==4,"failed required download disconnects");
+        check(kicks==0,"a failed download keeps the player connected");
         required.close();
         check(services.getKnownServices().isEmpty()&&repeating.stream().allMatch(task->task.cancelled),"required watchdog releases with the last owner");
         recovery(magic, garden);
@@ -269,7 +266,7 @@ public final class ResourcePackDeliveryChecks {
         tick();
         reply(player, JUDGE, PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD);
         validate();
-        check(kicks == kicked + 1, "a required pack with no address left still disconnects");
+        check(kicks == kicked, "a pack with no address left keeps the player connected");
         expectInvalid(() -> j.offer(player, List.of(URL + "x.zip"), List.of(), "Judge", true, true));
         m.close(); g.close(); j.close();
         check(services.getKnownServices().isEmpty(), "recovery state releases with the last owner");
@@ -297,7 +294,7 @@ public final class ResourcePackDeliveryChecks {
     static void tick() { var work = List.copyOf(scheduled); scheduled.clear(); for (var task : work) if (!task.cancelled) task.action.run(); }
     static ResourcePackManager manager() { return services.load(ResourcePackManager.class); }
     static void reply(Player player, UUID pack, PlayerResourcePackStatusEvent.Status status) { manager().status(new PlayerResourcePackStatusEvent(player, pack, status)); }
-    static void validate() throws Exception {var method=ResourcePackManager.class.getDeclaredMethod("validateRequired");method.setAccessible(true);method.invoke(manager());}
+    static void validate() throws Exception {var method=ResourcePackManager.class.getDeclaredMethod("validateProgress");method.setAccessible(true);method.invoke(manager());}
     static List<UUID> ids(ResourcePackRequest request) { return request.packs().stream().map(pack -> pack.id()).toList(); }
     static Plugin plugin(String name) {
         var config = new org.bukkit.configuration.file.YamlConfiguration();

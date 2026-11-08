@@ -23,13 +23,11 @@ def check(ok,label):
 
 def main():
     manifest=json.loads((FOLDER/'manifest.json').read_text(encoding='utf8'))
-    # The mythical five keep their species ids but ship no blueprints until the legendary tier opens.
-    total=(len(SPECIES)-len(MYTHICAL))*len(STAGES)
-    check(len(manifest)==total==96,'manifest has every obtainable species and growth stage')
+    # Every species ships, the mythical five included since the legendary tier opened (e2.177).
+    total=len(SPECIES)*len(STAGES)
+    check(len(manifest)==total==282,'manifest has every species and growth stage')
     check(len(list(FOLDER.glob('*.bbmodel')))==total,'no missing or unexpected blueprint')
-    check(not any(entry['species'] in MYTHICAL for entry in manifest)
-          and not any(path.name.startswith(tuple(f'everpet_{s}_' for s in MYTHICAL)) for path in FOLDER.glob('*.bbmodel')),
-          'no mythical blueprint is shipped')
+    check(all(any(entry['species']==s for entry in manifest) for s in MYTHICAL),'the mythical five are shipped')
     hashes=set();silhouettes={}
     for entry in manifest:
         path=FOLDER/(entry['id']+'.bbmodel');raw=path.read_bytes();model=json.loads(raw)
@@ -40,7 +38,8 @@ def main():
         check(model['meta']['evergarden_animation_position_x']=='inverted','R4 translation convention')
         check(entry['sha256'] not in hashes,'not a duplicate blueprint');hashes.add(entry['sha256'])
         texture=Image.open(io.BytesIO(base64.b64decode(model['textures'][0]['source'].split(',')[1])))
-        check(texture.size==(512,512),'embedded atlas correct size')
+        atlas_size=1024 if entry['species'] in __import__('pet_expansion_catalog').SPECIES else 512
+        check(texture.size==(atlas_size,atlas_size),'embedded atlas correct size')
         check(len(texture.getcolors(512*512))>16,'painted material atlas')
         elements={e['uuid']:e for e in model['elements']};owned=[];bones={};names=set()
         check(len(elements)==len(model['elements']),'unique element UUIDs')
@@ -59,7 +58,7 @@ def main():
             check(all(math.isfinite(v) for field in ('from','to','origin','rotation') for v in e[field]),'finite cube transform')
             check(all(b>a for a,b in zip(e['from'],e['to'])),'positive cube dimensions')
             check(set(e['faces'])=={'north','south','east','west','up','down'},'six textured faces')
-            for face in e['faces'].values():check(face['texture']==0 and all(0<=v<=512 for v in face['uv']),'valid atlas UV')
+            for face in e['faces'].values():check(face['texture']==0 and all(0<=v<=atlas_size for v in face['uv']),'valid atlas UV')
         check({a['name'] for a in model['animations']}=={'idle','walk','fly','sit','greet'},'five preview clips')
         for clip in model['animations']:
             check(clip['override'],'full skeleton override avoids additive pose drift')
@@ -81,7 +80,7 @@ def main():
         if entry['species']=='arcane_nine_tails':
             check(len([n for n in names if n.startswith('tail') and not any(s in n for s in ('tip','end'))])>=9,'nine distinct articulated tails')
         if entry['species']=='crimson_cerberus':check(len([n for n in names if n.startswith('head')])>=3,'three separate heads')
-    for species in (s for s in SPECIES if s not in MYTHICAL):
+    for species in SPECIES:
         forms=[silhouettes[(species,s)] for s in STAGES]
         # Scaling alone would preserve all cube dimensions divided by head width.
         signatures=[]

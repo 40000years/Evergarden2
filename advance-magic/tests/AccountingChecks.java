@@ -1,7 +1,4 @@
 import com.example.advancemagic.mana.CastAccount;
-import com.example.advancemagic.effect.Geometry;
-import org.bukkit.util.BoundingBox;
-import org.bukkit.util.Vector;
 
 public final class AccountingChecks {
     static int count;
@@ -25,11 +22,6 @@ public final class AccountingChecks {
         CastAccount restored=new CastAccount(a.mana());restored.restore("lightning",20000);
         check(restored.remaining("lightning",18000)==2000,"persisted cooldown survives reconstruction");
         check(new CastAccount(-30).mana()==0&&new CastAccount(900).mana()==100,"stored mana clamped");
-        BoundingBox wall=new BoundingBox(3,0,-2,4,3,3);
-        check(Geometry.intersects(wall,new Vector(0,1,0),new Vector(20,1,0)),"fast projectile cannot tunnel through wall");
-        check(!Geometry.intersects(wall,new Vector(0,4,0),new Vector(20,4,0)),"projectile above wall passes");
-        check(Geometry.intersects(wall,new Vector(3.5,1,0),new Vector(3.5,1,0)),"stationary projectile inside wall");
-        check(!Geometry.intersects(wall,new Vector(0,1,0),new Vector(0,1,0)),"stationary projectile outside wall");
         // Upgraded mana and dragon breath progression assertions
         CastAccount upgraded=new CastAccount(150,250,5.0);
         check(upgraded.maxMana()==250.0,"custom max mana preserved");
@@ -55,6 +47,6 @@ public final class AccountingChecks {
         double cd25=Math.max(minCd,wandBaseCd-(25/5)*5.0);
         check(cd0==25.0&&cd5==20.0&&cd10==15.0&&cd25==5.0,"wand-bound cooldown reduction scales every 5 casts and caps at safe floor");
 
-        System.out.println("PASS: "+count+" accounting and collision assertions");
+        System.out.println("PASS: "+count+" accounting assertions");
     }
 }

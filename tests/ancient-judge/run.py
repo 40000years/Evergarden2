@@ -3,6 +3,7 @@ import argparse
 import os
 from pathlib import Path
 import shutil
+import socket
 import subprocess
 import uuid
 
@@ -25,9 +26,10 @@ for name in ('libraries','versions','cache'):
 shutil.copy2(args.paper_template/'paper.jar',server/'paper.jar')
 plugins=server/'plugins';plugins.mkdir(exist_ok=True)
 shutil.copy2(args.garden_jar,plugins/'evergarden.jar');shutil.copy2(args.magic_jar,plugins/'advance-magic.jar')
+# No public pack mirrors: the probe checks that this server's own host serves the embedded Judge pack.
 for folder in ('Evergarden','advance-magic'):
     target=plugins/folder;target.mkdir(exist_ok=True)
-    config='config-version: 2\nresource-pack:\n  enabled: false\n  host:\n    enabled: false\n'
+    config='config-version: 2\nresource-pack:\n  enabled: false\n  mirrors: []\n  host:\n    enabled: false\n'
     if folder=='Evergarden':config+='structures:\n  world-boss-temple:\n    chance: 1.0\nworld-boss:\n  core-health: 40000\n  empty-reset-seconds: 30\n  fight-timeout-seconds: 1800\n  visuals:\n    pack:\n      host:\n        bind: 127.0.0.1\n        port: 0\n        public-host: 127.0.0.1\n'
     (target/'config.yml').write_text(config,encoding='utf8')
 classes=server/'probe-classes';classes.mkdir(exist_ok=True)
@@ -39,7 +41,10 @@ subprocess.run(['javac','--release','25','-proc:none','-encoding','UTF-8','-cp',
 shutil.copy2(source/'plugin.yml',classes/'plugin.yml')
 subprocess.run(['jar','--create','--file',str(plugins/'ancient-judge-probe.jar'),'-C',str(classes),'.'],check=True)
 (server/'eula.txt').write_text('eula=true\n')
-(server/'server.properties').write_text('server-ip=127.0.0.1\nserver-port=0\nonline-mode=false\nview-distance=2\nsimulation-distance=2\nspawn-protection=0\npause-when-empty-seconds=-1\nmax-tick-time=240000\nlevel-name=probe_base\nlevel-type=minecraft:flat\ngenerate-structures=false\n')
+# Packs ride the Minecraft port, so their URL needs the real port: port 0 would hand out http://127.0.0.1:0/.
+with socket.socket() as probe_socket:
+    probe_socket.bind(('127.0.0.1',0));game_port=probe_socket.getsockname()[1]
+(server/'server.properties').write_text('server-ip=127.0.0.1\nserver-port='+str(game_port)+'\nonline-mode=false\nview-distance=2\nsimulation-distance=2\nspawn-protection=0\npause-when-empty-seconds=-1\nmax-tick-time=240000\nlevel-name=probe_base\nlevel-type=minecraft:flat\ngenerate-structures=false\n')
 for phase in (1,2):
     log=server/f'console-{phase}.log'
     with log.open('w',encoding='utf8') as out:

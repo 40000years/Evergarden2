@@ -163,6 +163,8 @@ public class ArkhaiaDuelProbe extends JavaPlugin implements Listener {
         advance(12);position(-5);burst(99999);advance(1);check(boss().phase()==3&&((Set<?>)get(runState(),"blessings")).isEmpty(),"phase three at 35% clears blessings");
         advance(ArkhaiaSovereign.TRANSITION+2);boss().schedule(now(),0,9999);
         player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(200);
+        phaseThreeAdaptation();
+        // The duel runs at the published phase-three power: the doubled 55% sweep stops at the 95% percent-blow cap.
         boolean duel=false,struck=false;
         for(int i=0;i<200&&!struck;i++){
             var a=act();duel|=a.duel()&&get(runState(),"duelist")!=null;
@@ -175,7 +177,8 @@ public class ArkhaiaDuelProbe extends JavaPlugin implements Listener {
             advance(1);
         }
         check(duel,"phase three challenges the player to an execution duel");
-        check(struck&&player.getHealth()<=200-200*.55+1,"duel sweep hits for 55% of max health on its marked side");
+        check(struck&&!player.isDead()&&player.getHealth()>0&&player.getHealth()<=200-200*.55+1,
+            "phase-three duel sweep hits hard on its marked side but leaves a full-health player alive ("+player.getHealth()+" HP left)");
         boolean parried=false;
         for(int i=0;i<200&&!parried;i++){var a=act();
             if(a.state()==ArkhaiaSovereign.State.WINDUP&&a.move()==ArkhaiaSovereign.Move.EXECUTE&&a.age()>=a.duration()-ArkhaiaSovereign.flash(ArkhaiaSovereign.Move.EXECUTE,3)+1){
@@ -222,6 +225,44 @@ public class ArkhaiaDuelProbe extends JavaPlugin implements Listener {
         player.teleport(new Location(world,site.x()+80,109,site.z()));advance(205);
         check(hp()==7000&&parts().size()==2,"a wiped party restarts the phase instead of closing the fight");
         long clock=now();put(runState(),"lastPresent",clock-180*20);advance(1);check(parts().isEmpty(),"empty arena closes after the three-minute return grace");
+    }
+    /** e2.196: Phlegethon's weapon adaptation and doubled blows in phase three. */
+    void phaseThreeAdaptation()throws Exception{
+        check(boss().phase()==3&&!boss().invulnerable()&&!boss().broken(),"phase three is open for the adaptation checks (state="+boss().state()+")");
+        ItemStack held=player.getInventory().getItemInMainHand();
+        double[] dealt=new double[5];
+        ItemStack[] items={null,null,null,new ItemStack(Material.DIAMOND_SWORD),null};
+        for(int i=0;i<dealt.length;i++){
+            player.getInventory().setItemInMainHand(items[i]);position(-5);double before=hp();burst(100);dealt[i]=before-hp();advance(1);
+        }
+        check(Math.abs(dealt[0]-100)<1e-6&&Math.abs(dealt[1]-50)<1e-6&&Math.abs(dealt[2]-25)<1e-6,
+            "phase three halves each repeated spell from the same held item ("+dealt[0]+", "+dealt[1]+", "+dealt[2]+")");
+        check(Math.abs(dealt[3]-100)<1e-6,"switching to a sword resets Arkhaia's adaptation");
+        check(Math.abs(dealt[4]-100)<1e-6,"returning to bare hands starts at full damage");
+        player.getInventory().setItemInMainHand(held);
+        var magic=manager().getClass().getDeclaredMethod("magic",runState().getClass(),Player.class,double.class,boolean.class);magic.setAccessible(true);
+        vulnerable();double before=player.getHealth();magic.invoke(manager(),runState(),player,20.0,false);
+        double doubled=before-player.getHealth();
+        String key="boss-phase-three.damage-multiplier.arkhaia";Object old=garden.getConfig().get(key);
+        garden.getConfig().set(key,1.0);
+        vulnerable();before=player.getHealth();magic.invoke(manager(),runState(),player,20.0,false);
+        double normal=before-player.getHealth();
+        garden.getConfig().set(key,old);player.setInvulnerable(true);player.setHealth(player.getAttribute(Attribute.MAX_HEALTH).getValue());
+        check(Math.abs(doubled-40)<1e-6&&Math.abs(normal-20)<1e-6,"every Arkhaia blow deals double in phase three ("+doubled+" vs "+normal+" at multiplier 1)");
+        // Blows sized by max HP (sweeps, Execute) double only up to boss-phase-three.percent-blow-cap (0.95).
+        var percentMagic=manager().getClass().getDeclaredMethod("magic",runState().getClass(),Player.class,double.class,boolean.class,boolean.class);percentMagic.setAccessible(true);
+        double max=player.getAttribute(Attribute.MAX_HEALTH).getValue(),taken[]=new double[3];
+        String cap="boss-phase-three.percent-blow-cap";Object oldCap=garden.getConfig().get(cap);
+        try{
+            double[] share={.55,.2,.3};
+            for(int i=0;i<3;i++){
+                if(i==2)garden.getConfig().set(cap,0.0);
+                vulnerable();player.setHealth(max);percentMagic.invoke(manager(),runState(),player,max*share[i],false,true);taken[i]=max-player.getHealth();
+            }
+        }finally{garden.getConfig().set(cap,oldCap);player.setInvulnerable(true);player.setHealth(max);}
+        check(Math.abs(taken[0]-max*.95)<1e-6,"a doubled 55% sweep stops at 95% of max health instead of killing from full ("+taken[0]+" of "+max+")");
+        check(Math.abs(taken[1]-max*.4)<1e-6,"a percent blow under the cap still doubles ("+taken[1]+")");
+        check(Math.abs(taken[2]-max*.6)<1e-6,"percent-blow-cap 0 doubles percent blows plainly ("+taken[2]+")");
     }
     void finish(Throwable error){
         try{Files.writeString(Path.of("arkhaia-result.txt"),error==null?"PASS "+checks+" Paper checks":"FAIL "+error);}catch(Exception ignored){}

@@ -15,6 +15,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     private BossPacks packs;
     private WrathArmorBreak armorBreak;
     private WrathTremor tremor;
+    private SinDeathAttribution deaths;
     private NamespacedKey entityKey;
 
     @Override
@@ -36,6 +37,7 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
         packs = new BossPacks(this); packs.start();
         armorBreak = new WrathArmorBreak(this);
         tremor = new WrathTremor(this);
+        deaths = new SinDeathAttribution(this);
         Bukkit.getPluginManager().registerEvents(this, this);
         Objects.requireNonNull(getCommand("7sins")).setTabCompleter(this);
         Bukkit.getScheduler().runTaskTimer(this, () -> {
@@ -53,11 +55,12 @@ public final class SevenSinsPlugin extends JavaPlugin implements Listener, TabCo
     @Override
     public void onDisable() {
         bosses.values().forEach(WrathBoss::remove); bosses.clear();
-        if (armorBreak != null) armorBreak.close(); if (tremor != null) tremor.close(); if (packs != null) packs.close();
+        if (armorBreak != null) armorBreak.close(); if (tremor != null) tremor.close(); if (deaths != null) deaths.close(); if (packs != null) packs.close();
     }
     public BossPacks packs() { return packs; }
     public WrathArmorBreak armorBreak() { return armorBreak; }
     public WrathTremor tremor() { return tremor; }
+    SinDeathAttribution deaths() { return deaths; }
     public double wrathScale() {
         double scale = getConfig().getDouble("wrath.model-scale", 5);
         return Double.isFinite(scale) ? Math.max(0.25, Math.min(8, scale)) : 5;

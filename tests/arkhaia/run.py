@@ -46,6 +46,7 @@ p.add_argument('--airborne',action='store_true')
 p.add_argument('--direct-launch',action='store_true',help='Launch pre-extracted Paper from template classpath without Paperclip extraction')
 p.add_argument('--prepare-only',action='store_true',help='Prepare and compile the isolated fixture without starting Java')
 p.add_argument('--reward-hooks',action='store_true')
+p.add_argument('--dragon-hunt',action='store_true',help='Dragon Nest hunt: chase rules, health roll and every dragon move on Paper')
 args=p.parse_args();args.pack_download=args.pack_download or args.pack_order;server=args.server.resolve();server.mkdir(parents=True,exist_ok=False)
 args.banshee=args.banshee or args.banshee_hunt
 for name in ('libraries','versions','cache'):
@@ -97,6 +98,7 @@ if args.pack_order:probe='PackOrderProbe'
 if args.armor_sets:probe='ArmorSetsProbe'
 if args.armor_exchange:probe='BossArmorExchangeProbe'
 if args.reward_hooks:probe='BossRewardHooksProbe'
+if args.dragon_hunt:probe='DragonHuntProbe'
 (classes/'plugin.yml').write_text(f"name: ArkhaiaProbe\nversion: '1'\nmain: {probe}\napi-version: '26.2'\ndepend: [Evergarden, advance-magic, LevelledMobs]\n",encoding='utf8')
 probe_files=['plugin.yml',*[f.name for f in classes.glob(probe+'*.class')]]
 if args.seraphon:probe_files.extend(f.name for f in classes.glob('ArkhaiaProbe*.class'))

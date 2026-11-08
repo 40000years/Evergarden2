@@ -417,13 +417,13 @@ public final class WrathBoss {
                 if (toward.lengthSquared() > 1) player.setVelocity(toward.normalize().multiply(0.75).setY(0.15));
             }
             case LUST -> {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 80, 1));
+                plugin.deaths().apply(player, new PotionEffect(PotionEffectType.WITHER, 80, 1), type);
                 base.setHealth(Math.min(nativeMaxHealth, base.getHealth() + 15 * nativeMaxHealth / maxHealth));
             }
             case ENVY -> player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 45, 0));
             case GLUTTONY -> {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 140, 2));
-                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 80, 1));
+                plugin.deaths().apply(player, new PotionEffect(PotionEffectType.POISON, 80, 1), type);
             }
             case SLOTH -> {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 100, 3));

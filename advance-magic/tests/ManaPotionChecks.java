@@ -21,15 +21,15 @@ import java.util.*;
 
 /** Real brewing stand ticks, vanilla bottle consumption and persisted progression on a Paper player. */
 final class ManaPotionChecks implements Listener {
-    final BasicCastingChecks probe;
+    final ManaPotionProbe probe;
     boolean cancelConsume,cancelBrew,cancelSleep;
     int brewEvents;
-    ManaPotionChecks(BasicCastingChecks probe){this.probe=probe;}
+    ManaPotionChecks(ManaPotionProbe probe){this.probe=probe;}
     @EventHandler(priority=EventPriority.HIGH) public void consume(PlayerItemConsumeEvent event){if(cancelConsume)event.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGH) public void brew(BrewEvent event){brewEvents++;if(cancelBrew)event.setCancelled(true);}
     @EventHandler(priority=EventPriority.HIGH) public void sleep(PlayerDeepSleepEvent event){if(cancelSleep)event.setCancelled(true);}
     void check(boolean value,String label){probe.check(value,"mana potions: "+label);}
-    static void run(BasicCastingChecks probe){new ManaPotionChecks(probe).run();}
+    static void run(ManaPotionProbe probe){new ManaPotionChecks(probe).run();}
     ItemStack vanilla(PotionType type){ItemStack item=new ItemStack(Material.POTION);PotionMeta meta=(PotionMeta)item.getItemMeta();meta.setBasePotionType(type);item.setItemMeta(meta);return item;}
     void run(){
         Bukkit.getPluginManager().registerEvents(this,probe);

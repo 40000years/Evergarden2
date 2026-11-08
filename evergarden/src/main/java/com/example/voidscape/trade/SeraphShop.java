@@ -13,10 +13,14 @@ import com.example.voidscape.VoidscapePlugin;
 import com.example.voidscape.boss.JudgePackService;
 import com.example.voidscape.boss.BossArmorCores;
 import com.example.voidscape.boss.BossArmorCores.Core;
+import com.example.voidscape.boss.DragonScales;
+import com.example.voidscape.world.DragonNestLayout;
 import com.example.voidscape.boss.RealmBosses;
 import com.example.voidscape.boss.RealmCores;
 import com.example.voidscape.boss.SoulOrbs;
 import com.example.voidscape.boss.SoulOrbs.Orb;
+import com.example.voidscape.pet.PetCatalog;
+import com.example.voidscape.pet.PetSystem;
 import io.papermc.paper.event.player.PlayerPurchaseEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -51,11 +55,25 @@ public final class SeraphShop implements Listener {
      * One trade line. {@code limit} is shared by the whole {@code category} per day or week; 0 = unlimited.
      * {@code special} is the villager-style discount on the first ingredient (shown struck through).
      */
-    record Offer(String id,String category,int limit,boolean weekly,ItemStack first,ItemStack second,Supplier<ItemStack> result,int special){
+    record Offer(String id,String category,int limit,boolean weekly,ItemStack first,ItemStack second,Supplier<ItemStack> result,int special,
+            boolean gameDay,PetCatalog.Species egg){
+        Offer(String id,String category,int limit,boolean weekly,ItemStack first,ItemStack second,Supplier<ItemStack> result,int special){
+            this(id,category,limit,weekly,first,second,result,special,false,null);
+        }
         Offer(String id,String category,int limit,boolean weekly,ItemStack first,ItemStack second,Supplier<ItemStack> result){
             this(id,category,limit,weekly,first,second,result,0);
         }
+        /** Moves this line into the legend shop's one shared stock, reset every in-game day. */
+        Offer shared(int limit){return new Offer(id,LEGEND_SHOP,limit,false,first,second,result,special,true,egg);}
     }
+    static final String LEGEND_SHOP="legend-shop";
+    /** Which realm boss core hatches which baby mythical (two cores per egg by default). */
+    static final List<Map.Entry<RealmBosses.Kind,PetCatalog.Species>> MYTHICAL_EGGS=List.of(
+        Map.entry(RealmBosses.Kind.CINDER_COLOSSUS,PetCatalog.Species.SOLARIS),
+        Map.entry(RealmBosses.Kind.CRYSTAL_MOTH,PetCatalog.Species.AETHERIUS),
+        Map.entry(RealmBosses.Kind.CRYSTAL_MOTH,PetCatalog.Species.ZEPHYROS),
+        Map.entry(RealmBosses.Kind.SOUL_HOUND,PetCatalog.Species.FENRIR),
+        Map.entry(RealmBosses.Kind.UNLIT_SUN,PetCatalog.Species.IGNIS_DRACONIS));
     /** The sale running for one promotion period: some staff elements plus one rotating category. */
     record Promotion(long period,Set<Element> staffs,String other,long endsTick){
         boolean onSale(Element element){return staffs.contains(element);}
@@ -188,6 +206,26 @@ public final class SeraphShop implements Listener {
         }
         return offers;
     }
+    /**
+     * Dragon armor for dragon scales: each piece asks for scales of its own dragon plus Golden Seraph Feathers.
+     * Defaults per piece (scales / golden feathers): helm 8/4, chestplate 14/6, leggings 12/5, boots 8/4, so a full
+     * set is 42 scales and 19 golden feathers, roughly twenty dragon kills even for the top damage dealer.
+     */
+    List<Offer> dragonArmorOffers(){
+        AdvanceMagicPlugin magic=magic();List<Offer> offers=new ArrayList<>();
+        if(magic==null)return offers;
+        ArmorSetService armor=new ArmorSetService(magic);
+        for(DragonNestLayout.Kind kind:DragonNestLayout.Kind.values()){
+            ArmorSet set=switch(kind){case FIRE->ArmorSet.INFERNAL_DRAKE;case STORM->ArmorSet.TEMPEST_DRAKE;case ICE->ArmorSet.FROSTWYRM;};
+            for(Piece piece:Piece.values()){
+                int scales=Math.max(1,price("dragon-armor-scales-"+piece.id(),switch(piece){case HELM,BOOTS->8;case CHESTPLATE->14;default->12;}));
+                int golden=price("dragon-armor-golden-"+piece.id(),switch(piece){case HELM,BOOTS->4;case CHESTPLATE->6;default->5;});
+                offers.add(new Offer("dragon-armor:"+set.id()+":"+piece.id(),"dragon-armor",0,false,
+                    DragonScales.create(plugin,kind,scales),golden>0?SeraphFeathers.golden(plugin,golden):null,()->armor.create(set,piece)));
+            }
+        }
+        return offers;
+    }
     /** A Nether or End boss core sells back for Golden Seraph Feathers (5 each by default), without stock limits. */
     List<Offer> realmCoreOffers(){
         List<Offer> offers=new ArrayList<>();int golden=plugin.integer("seraph-trader.prices.realm-core-golden",5,1,64);
@@ -204,16 +242,38 @@ public final class SeraphShop implements Listener {
         for(Orb orb:Orb.values())offers.add(new Offer("legend:core:"+orb.id(),"legend-core",coreLimit,true,
             SeraphFeathers.golden(plugin,golden),orbs(orb,orbCost),()->SoulOrbs.legendCore(plugin),coreDiscount));
         offers.addAll(realmCoreOffers());
-        if(magic==null)return offers;
-        ItemStack cores=SoulOrbs.legendCore(plugin);cores.setAmount(price("legendary-weapon-cores",3));
-        for(Weapon weapon:Weapon.values())offers.add(new Offer("weapon:"+weapon.id(),"weapon",limit("legendary-weapons-per-week",1),true,
-            cores.clone(),null,()->magic.legendaryWeapons().create(weapon)));
-        ItemStack core=SoulOrbs.legendCore(plugin);core.setAmount(price("legendary-scroll-cores",1));
-        for(ElementalSpell spell:rotation(SeraphFeathers.week(),ElementalSpell.Rarity.LEGENDARY,limit("legendary-scrolls-on-offer",2)))
-            offers.add(new Offer("scroll:"+spell.id(),"legendary-scroll",limit("legendary-scrolls-per-week",1),true,core.clone(),null,()->magic.staffSpells().createScroll(spell)));
-        offers.addAll(armorOffers());
+        offers.addAll(eggOffers());
+        if(magic!=null){
+            ItemStack cores=SoulOrbs.legendCore(plugin);cores.setAmount(price("legendary-weapon-cores",3));
+            for(Weapon weapon:Weapon.values())offers.add(new Offer("weapon:"+weapon.id(),"weapon",limit("legendary-weapons-per-week",1),true,
+                cores.clone(),null,()->magic.legendaryWeapons().create(weapon)));
+            ItemStack core=SoulOrbs.legendCore(plugin);core.setAmount(price("legendary-scroll-cores",1));
+            for(ElementalSpell spell:rotation(SeraphFeathers.week(),ElementalSpell.Rarity.LEGENDARY,limit("legendary-scrolls-on-offer",2)))
+                offers.add(new Offer("scroll:"+spell.id(),"legendary-scroll",limit("legendary-scrolls-per-week",1),true,core.clone(),null,()->magic.staffSpells().createScroll(spell)));
+            offers.addAll(armorOffers());
+            offers.addAll(dragonArmorOffers());
+        }
+        // Everything in the legend shop draws on one stock per player, reset each in-game day.
+        int shared=legendShopLimit();
+        offers.replaceAll(offer->offer.shared(shared));
         return offers;
     }
+    /** Two cores of a Nether or End boss buy a registered baby egg of its mythical companion. */
+    List<Offer> eggOffers(){
+        List<Offer> offers=new ArrayList<>();int cost=plugin.integer("seraph-trader.prices.mythical-egg-cores",2,1,64);
+        for(var entry:MYTHICAL_EGGS){
+            ItemStack cores=RealmCores.create(plugin,entry.getKey());cores.setAmount(cost);
+            PetCatalog.Species species=entry.getValue();
+            offers.add(new Offer("egg:"+species.id,"egg",0,false,cores,null,()->PetSystem.eggPreview(species),0,false,species));
+        }
+        return offers;
+    }
+    int legendShopLimit(){return limit("legend-shop-per-day",10);}
+    /** Evergarden's game clock (never paused by its frozen sky): one in-game day is 24000 ticks. */
+    long gameDay(){return plugin.world()==null?0:plugin.world().getGameTime()/24000L;}
+    long ticksToNextGameDay(){return plugin.world()==null?24000:24000L-Math.floorMod(plugin.world().getGameTime(),24000L);}
+    private String period(Offer offer){return offer.gameDay?"game-day-"+gameDay():offer.weekly?SeraphFeathers.week():SeraphFeathers.day();}
+    int legendShopUsed(UUID id){return feathers.used(id,LEGEND_SHOP,"game-day-"+gameDay());}
     private static ItemStack idless(ItemStack staff){
         var meta=staff.getItemMeta();
         meta.getPersistentDataContainer().remove(new NamespacedKey("advance_magic","spell_staff_id"));
@@ -222,7 +282,7 @@ public final class SeraphShop implements Listener {
     }
     int remaining(Player player,Offer offer){
         if(offer.limit<=0)return 9999;
-        return Math.max(0,offer.limit-feathers.used(player.getUniqueId(),offer.category,offer.weekly));
+        return Math.max(0,offer.limit-feathers.used(player.getUniqueId(),offer.category,period(offer)));
     }
     /** Opens a villager-style trading screen whose stock reflects this player's remaining limits. */
     void openTrader(Player player,boolean legends){
@@ -257,14 +317,45 @@ public final class SeraphShop implements Listener {
         Offer offer=session.offers.get(index);
         // Several lines can share one category (e.g. any staff); the screen only knows its own line.
         if(remaining(player,offer)<=0){
-            event.setCancelled(true);plugin.message(player,"ครบจำนวนที่แลกได้"+(offer.weekly?"สัปดาห์นี้":"วันนี้")+"แล้ว");
+            event.setCancelled(true);
+            plugin.message(player,offer.gameDay?"ร้านตำนานวันนี้แลกครบ "+offer.limit+" ชิ้นแล้ว · รีเซ็ตในอีก "+Math.max(1,ticksToNextGameDay()/1200)+" นาที"
+                :"ครบจำนวนที่แลกได้"+(offer.weekly?"สัปดาห์นี้":"วันนี้")+"แล้ว");
             player.playSound(player.getLocation(),Sound.ENTITY_VILLAGER_NO,.7f,1.2f);return;
         }
-        if(offer.limit>0)feathers.use(player.getUniqueId(),offer.category,offer.weekly);
+        if(offer.egg!=null){event.setCancelled(true);buyEgg(player,offer);return;}
+        if(offer.limit>0)feathers.use(player.getUniqueId(),offer.category,period(offer));
         plugin.getLogger().info("Seraph trade: "+player.getName()+" ("+player.getUniqueId()+") "+offer.id);
         player.playSound(player.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_CHIME,1,1.25f);
-        trader.celebrate(player,offer.id.startsWith("weapon:")||offer.id.startsWith("legend:")||offer.id.startsWith("armor:"));
+        trader.celebrate(player,offer.id.startsWith("weapon:")||offer.id.startsWith("legend:")||offer.id.startsWith("armor:")||offer.id.startsWith("dragon-armor:"));
         if(offer.id.startsWith("staff:"))Bukkit.getScheduler().runTask(plugin,()->mintStaffs(player));
+    }
+    /**
+     * Eggs never come from the trade result: the preview has no ledger id. Take the cores from the
+     * trade slots only after the real egg is safely registered, so a failed save costs nothing.
+     */
+    private void buyEgg(Player player,Offer offer){
+        PetSystem pets=plugin.pets();
+        if(pets==null||!(player.getOpenInventory().getTopInventory() instanceof MerchantInventory inventory)){
+            plugin.message(player,"ระบบสัตว์เลี้ยงยังไม่พร้อม · ลองใหม่ภายหลัง");return;
+        }
+        RealmBosses.Kind kind=RealmCores.identify(plugin,offer.first);int cost=offer.first.getAmount(),have=0;
+        for(int slot=0;slot<2;slot++){ItemStack item=inventory.getItem(slot);if(kind!=null&&kind==RealmCores.identify(plugin,item))have+=item.getAmount();}
+        if(kind==null||have<cost){plugin.message(player,"ต้องใช้ "+RealmCores.title(kind)+" ×"+cost);return;}
+        String problem=pets.grantEgg(player,offer.egg,"Seraph · "+RealmCores.title(kind));
+        if(problem!=null){plugin.message(player,problem);player.playSound(player.getLocation(),Sound.ENTITY_VILLAGER_NO,.7f,1.2f);return;}
+        int left=cost;
+        for(int slot=0;slot<2&&left>0;slot++){
+            ItemStack item=inventory.getItem(slot);
+            if(kind!=RealmCores.identify(plugin,item))continue;
+            int take=Math.min(left,item.getAmount());left-=take;
+            item.setAmount(item.getAmount()-take);inventory.setItem(slot,item.getAmount()<=0?null:item);
+        }
+        if(offer.limit>0)feathers.use(player.getUniqueId(),offer.category,period(offer));
+        plugin.getLogger().info("Seraph trade: "+player.getName()+" ("+player.getUniqueId()+") "+offer.id);
+        plugin.message(player,"ได้รับไข่ "+offer.egg.display+" (ร่างเด็ก) · พกไว้ให้ฟักแล้วคลิกขวา");
+        player.playSound(player.getLocation(),Sound.BLOCK_AMETHYST_BLOCK_CHIME,1,1.25f);
+        trader.celebrate(player,true);
+        Bukkit.getScheduler().runTask(plugin,player::updateInventory);
     }
     /** Gives every bought staff (inventory or cursor) its own ID. */
     private void mintStaffs(Player player){
@@ -303,7 +394,8 @@ public final class SeraphShop implements Listener {
             "ได้จากกิจกรรมวันนี้: "+feathers.earnedToday(id)+"/"+feathers.dailyCap(),
             "พรประจำวัน: "+(feathers.blessedToday(player)?"รับแล้ว":"ยังไม่รับ"),
             "คทาสัปดาห์นี้: "+feathers.used(id,"staff",true)+"/"+limit("staffs-per-week",2)
-                +" · Core of Legend: "+feathers.used(id,"legend-core",true)+"/"+limit("legend-cores-per-week",1));
+                +" · ร้านตำนานวันนี้: "+legendShopUsed(id)+"/"+legendShopLimit(),
+            "ร้านตำนานรีเซ็ตทุก 1 วันในเกม · อีก "+Math.max(1,ticksToNextGameDay()/1200)+" นาที");
     }
     void hub(Player player){
         Hub hub=new Hub();hub.inventory=Bukkit.createInventory(hub,27,text("✦ Seraph ผู้แลกเปลี่ยน",NamedTextColor.GOLD));
@@ -315,7 +407,9 @@ public final class SeraphShop implements Listener {
         hub.actions.put(11,()->openTrader(player,false));
         hub.inventory.setItem(13,button(SeraphFeathers.feather(plugin,1),"ขนนกเซราฟของคุณ",NamedTextColor.YELLOW,summary(player)));
         hub.inventory.setItem(15,button(SoulOrbs.legendCore(plugin),"ร้านตำนาน",NamedTextColor.GOLD,List.of("Core of Legend · อาวุธตำนาน","คัมภีร์ Legendary · ชุด Seraph / Revenant","1 คอร์บอส แลกเกราะของชุดนั้น 1 ชิ้น",
-            "Core บอสมิติ Nether / End · 1 ชิ้นแลกขนนกทองคำ "+plugin.integer("seraph-trader.prices.realm-core-golden",5,1,64)+" อัน","คลิกเพื่อเปิด")));
+            "Core บอสมิติ Nether / End · 1 ชิ้นแลกขนนกทองคำ "+plugin.integer("seraph-trader.prices.realm-core-golden",5,1,64)+" อัน",
+            "Core บอสมิติ "+plugin.integer("seraph-trader.prices.mythical-egg-cores",2,1,64)+" ชิ้น แลกไข่สัตว์ในตำนานร่างเด็ก",
+            "แลกรวมได้ "+legendShopLimit()+" ชิ้นต่อวันในเกม (เหลือ "+Math.max(0,legendShopLimit()-legendShopUsed(player.getUniqueId()))+")","คลิกเพื่อเปิด")));
         hub.actions.put(15,()->openTrader(player,true));
         hub.inventory.setItem(19,button(new ItemStack(Material.MAP),"ร้านแผนที่",NamedTextColor.GREEN,List.of(
             "Sanctuary โลกปกติ · ขนนกเซราฟ "+maps.price(SanctuaryMaps.Destination.ACHERON)+" อัน",

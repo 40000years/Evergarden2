@@ -1,0 +1,359 @@
+[
+  {
+    "species": "prism_kirin",
+    "stage": "baby",
+    "parts": 151,
+    "bones": 17,
+    "height": 1.036
+  },
+  {
+    "species": "prism_kirin",
+    "stage": "medium",
+    "parts": 166,
+    "bones": 17,
+    "height": 1.308
+  },
+  {
+    "species": "prism_kirin",
+    "stage": "adult",
+    "parts": 181,
+    "bones": 17,
+    "height": 1.61
+  },
+  {
+    "species": "clockwork_red_panda",
+    "stage": "baby",
+    "parts": 134,
+    "bones": 18,
+    "height": 0.675
+  },
+  {
+    "species": "clockwork_red_panda",
+    "stage": "medium",
+    "parts": 148,
+    "bones": 18,
+    "height": 0.785
+  },
+  {
+    "species": "clockwork_red_panda",
+    "stage": "adult",
+    "parts": 151,
+    "bones": 18,
+    "height": 0.9
+  },
+  {
+    "species": "nebula_whale",
+    "stage": "baby",
+    "parts": 135,
+    "bones": 13,
+    "height": 0.576
+  },
+  {
+    "species": "nebula_whale",
+    "stage": "medium",
+    "parts": 156,
+    "bones": 13,
+    "height": 0.721
+  },
+  {
+    "species": "nebula_whale",
+    "stage": "adult",
+    "parts": 175,
+    "bones": 13,
+    "height": 0.937
+  },
+  {
+    "species": "ember_salamander",
+    "stage": "baby",
+    "parts": 149,
+    "bones": 17,
+    "height": 0.432
+  },
+  {
+    "species": "ember_salamander",
+    "stage": "medium",
+    "parts": 157,
+    "bones": 17,
+    "height": 0.522
+  },
+  {
+    "species": "ember_salamander",
+    "stage": "adult",
+    "parts": 177,
+    "bones": 17,
+    "height": 0.681
+  },
+  {
+    "species": "moonstone_sphinx",
+    "stage": "baby",
+    "parts": 167,
+    "bones": 21,
+    "height": 0.786
+  },
+  {
+    "species": "moonstone_sphinx",
+    "stage": "medium",
+    "parts": 174,
+    "bones": 21,
+    "height": 0.908
+  },
+  {
+    "species": "moonstone_sphinx",
+    "stage": "adult",
+    "parts": 181,
+    "bones": 21,
+    "height": 1.038
+  },
+  {
+    "species": "thunder_quetzal",
+    "stage": "baby",
+    "parts": 155,
+    "bones": 14,
+    "height": 0.931
+  },
+  {
+    "species": "thunder_quetzal",
+    "stage": "medium",
+    "parts": 167,
+    "bones": 14,
+    "height": 1.109
+  },
+  {
+    "species": "thunder_quetzal",
+    "stage": "adult",
+    "parts": 201,
+    "bones": 16,
+    "height": 1.297
+  },
+  {
+    "species": "sakura_baku",
+    "stage": "baby",
+    "parts": 139,
+    "bones": 19,
+    "height": 0.68
+  },
+  {
+    "species": "sakura_baku",
+    "stage": "medium",
+    "parts": 156,
+    "bones": 19,
+    "height": 0.796
+  },
+  {
+    "species": "sakura_baku",
+    "stage": "adult",
+    "parts": 173,
+    "bones": 19,
+    "height": 0.916
+  },
+  {
+    "species": "obsidian_basilisk",
+    "stage": "baby",
+    "parts": 160,
+    "bones": 19,
+    "height": 0.558
+  },
+  {
+    "species": "obsidian_basilisk",
+    "stage": "medium",
+    "parts": 168,
+    "bones": 19,
+    "height": 0.683
+  },
+  {
+    "species": "obsidian_basilisk",
+    "stage": "adult",
+    "parts": 176,
+    "bones": 19,
+    "height": 0.81
+  },
+  {
+    "species": "glacier_narwhal",
+    "stage": "baby",
+    "parts": 134,
+    "bones": 13,
+    "height": 0.536
+  },
+  {
+    "species": "glacier_narwhal",
+    "stage": "medium",
+    "parts": 158,
+    "bones": 13,
+    "height": 0.577
+  },
+  {
+    "species": "glacier_narwhal",
+    "stage": "adult",
+    "parts": 180,
+    "bones": 13,
+    "height": 0.716
+  },
+  {
+    "species": "lotus_mantis",
+    "stage": "baby",
+    "parts": 137,
+    "bones": 21,
+    "height": 0.9
+  },
+  {
+    "species": "lotus_mantis",
+    "stage": "medium",
+    "parts": 151,
+    "bones": 21,
+    "height": 1.04
+  },
+  {
+    "species": "lotus_mantis",
+    "stage": "adult",
+    "parts": 163,
+    "bones": 21,
+    "height": 1.187
+  },
+  {
+    "species": "rune_armadillo",
+    "stage": "baby",
+    "parts": 185,
+    "bones": 17,
+    "height": 0.534
+  },
+  {
+    "species": "rune_armadillo",
+    "stage": "medium",
+    "parts": 208,
+    "bones": 17,
+    "height": 0.623
+  },
+  {
+    "species": "rune_armadillo",
+    "stage": "adult",
+    "parts": 223,
+    "bones": 17,
+    "height": 0.744
+  },
+  {
+    "species": "astral_seahorse",
+    "stage": "baby",
+    "parts": 162,
+    "bones": 14,
+    "height": 1.038
+  },
+  {
+    "species": "astral_seahorse",
+    "stage": "medium",
+    "parts": 179,
+    "bones": 14,
+    "height": 1.225
+  },
+  {
+    "species": "astral_seahorse",
+    "stage": "adult",
+    "parts": 194,
+    "bones": 14,
+    "height": 1.408
+  },
+  {
+    "species": "sunforge_lion",
+    "stage": "baby",
+    "parts": 150,
+    "bones": 17,
+    "height": 0.815
+  },
+  {
+    "species": "sunforge_lion",
+    "stage": "medium",
+    "parts": 164,
+    "bones": 17,
+    "height": 1.018
+  },
+  {
+    "species": "sunforge_lion",
+    "stage": "adult",
+    "parts": 182,
+    "bones": 17,
+    "height": 1.267
+  },
+  {
+    "species": "paper_crane",
+    "stage": "baby",
+    "parts": 111,
+    "bones": 14,
+    "height": 0.626
+  },
+  {
+    "species": "paper_crane",
+    "stage": "medium",
+    "parts": 139,
+    "bones": 14,
+    "height": 0.907
+  },
+  {
+    "species": "paper_crane",
+    "stage": "adult",
+    "parts": 169,
+    "bones": 14,
+    "height": 1.224
+  },
+  {
+    "species": "opal_chimera",
+    "stage": "baby",
+    "parts": 231,
+    "bones": 24,
+    "height": 0.746
+  },
+  {
+    "species": "opal_chimera",
+    "stage": "medium",
+    "parts": 249,
+    "bones": 24,
+    "height": 0.874
+  },
+  {
+    "species": "opal_chimera",
+    "stage": "adult",
+    "parts": 267,
+    "bones": 24,
+    "height": 1.133
+  },
+  {
+    "species": "twilight_moth_dragon",
+    "stage": "baby",
+    "parts": 226,
+    "bones": 22,
+    "height": 1.008
+  },
+  {
+    "species": "twilight_moth_dragon",
+    "stage": "medium",
+    "parts": 243,
+    "bones": 22,
+    "height": 1.191
+  },
+  {
+    "species": "twilight_moth_dragon",
+    "stage": "adult",
+    "parts": 260,
+    "bones": 22,
+    "height": 1.387
+  },
+  {
+    "species": "verdant_capricorn",
+    "stage": "baby",
+    "parts": 203,
+    "bones": 19,
+    "height": 0.952
+  },
+  {
+    "species": "verdant_capricorn",
+    "stage": "medium",
+    "parts": 225,
+    "bones": 19,
+    "height": 1.246
+  },
+  {
+    "species": "verdant_capricorn",
+    "stage": "adult",
+    "parts": 247,
+    "bones": 19,
+    "height": 1.523
+  }
+]

@@ -43,6 +43,66 @@ arkhaia:
     damage-percent: 100
     # A wiped party restarts the current phase after 10 seconds; the arena closes after this grace.
     return-grace-seconds: 180
+# Phase three of Arkhaia, Seraphon, the Ancient Judge, the Dragon Nest dragons (enraged) and the four realm bosses.
+#  adaptation: Phlegethon's weapon adaptation. Another weapon family resets it and lands in full; one chain per
+#    boss, shared by the whole party.
+#      full = each repeated hit from the same family halves the previous one (10, 5, 2.5 ...), like Phlegethon
+#      half = repeated hits stop at 50% (Phlegethon's ritual rule) · off = no adaptation
+#    The Judge uses half: its final phase already accepts melee weapons only.
+#  damage-multiplier: the boss's own attacks deal this many times their normal damage in phase three.
+#    The Judge's red spells already take 55-90% of max health, so x2 makes every phase-three hit lethal
+#    without a Totem, Resistance or absorption.
+boss-phase-three:
+  adaptation:
+    arkhaia: full
+    seraphon: full
+    judge: half
+    dragons: full
+    realm: full
+  damage-multiplier:
+    arkhaia: 2.0
+    seraphon: 2.0
+    judge: 2.0
+    dragons: 2.0
+    realm: 2.0
+  # Blows sized by the victim's max HP (Arkhaia sweeps/Execute, Seraphon solar beam/radiant burst, the Judge's red
+  # spells) are multiplied only up to this share of max HP, so a full-health player survives one; never weaker
+  # than outside phase three. 0 = multiply them plainly (a doubled 55% sweep then kills from full health).
+  percent-blow-cap: 0.95
+dragon-bosses:
+  # Resident elemental dragons guarding the three Dragon Nests in Evergarden (docs/dragon-hunt.md).
+  enabled: true
+  # A resting dragon wakes when a player comes this close to its nest (or strikes it).
+  aggro-radius: 56.0
+  # The hunt: the dragon flies after every player within chase-radius blocks of ITSELF, anywhere up to
+  # max-roam blocks from its nest, and never flies past max-roam. To escape, out-fly it beyond chase-radius
+  # or get past max-roam from the nest (warping counts). It then flies home slowly (untouchable) and is restored.
+  # Speeds are blocks per tick: hovering/close fight, sprint after prey farther than 48 blocks, walking in the
+  # nest, and the slow flight home. (The old leash-radius / fly-speed / return-speed keys are no longer read.)
+  hunt:
+    chase-radius: 300.0
+    max-roam: 1000.0
+    fly-speed: 1.05
+    chase-speed: 1.6
+    walk-speed: 0.42
+    return-speed: 0.6
+  # Health is rolled between these each time a dragon spawns (per-element health-min/max override them).
+  health-min: 13000.0
+  health-max: 15000.0
+  # Extra health per additional hunter (0 = off, health stays within the roll); capped by health-cap.
+  party-health-per-player: 0.0
+  health-cap: 60000.0
+  # Scales every dragon attack (100 = the published tuning).
+  damage-percent: 100.0
+  # Share of each hit that lands as a sonic rend ignoring armor and Protection (100 = published tuning).
+  rend-percent: 100.0
+  respawn-seconds: 1800
+  fire:
+    enabled: true
+  storm:
+    enabled: true
+  ice:
+    enabled: true
 dimension:
   world-name: evergarden
   seed: 72819345
@@ -99,6 +159,20 @@ structures:
     seraphon-sanctum:
       enabled: true
       chance: null
+  dragon-nests:
+    # Colossal 233x233 elemental Dragon Nests (109-block clear open-sky basin for scale 5.5 dragons).
+    # Slightly rarer than ordinary boss structures (0.018 per sky cell vs 0.03).
+    spacing-chunks: null
+    minimum-gap: 72
+    dragon-nest-fire:
+      enabled: true
+      chance: 0.018
+    dragon-nest-storm:
+      enabled: true
+      chance: 0.018
+    dragon-nest-ice:
+      enabled: true
+      chance: 0.018
   world-boss-temple:
     enabled: true
     # Ancient 241x241 temple with a clear 161-block combat arena; boss not added yet.
@@ -119,6 +193,9 @@ structures:
       arkhaia-castle: 0.075
       seraphon-valkyrie: 0.075
       seraphon-sanctum: 0.075
+      dragon-nest-fire: 0.10
+      dragon-nest-storm: 0.10
+      dragon-nest-ice: 0.10
     second-chest-chance: 0.30
     bonus-weights:
       echo-shard: 300
@@ -197,6 +274,11 @@ world-boss:
         public-host: ''
         # Optional HTTP(S) base override; otherwise resource-pack.host.public-url is used.
         public-url: ''
+    # Build the boss/dragon rigs with ModelEngine's whole-rotation cube format (26.x clients) while ModelEngine
+    # imports, without editing plugins/ModelEngine/config.yml. The dragons' 22,000 freely rotated cubes then stay one
+    # model file per bone instead of ~22,300 split files: rebuild ~40 s -> ~15 s, boss pack 27 MB -> 17 MB, and the
+    # client loads ~1,500 model files instead of ~22,300. Only applied in memory during each import; false = old format.
+    compact-model-rotation: true
   # Virtual solo HP, separately scaled from LevelledMobs. No automatic DPS adaptation.
   # Upgrade previous published HP defaults once; preserve administrator tuning.
   balance-version: 4
@@ -293,12 +375,16 @@ resource-pack:
 # /evergarden pets list | spawn <id> <baby|medium|adult> | gallery <stage>
 # /evergarden pets growth <id> compares the three growth stages together.
 # /evergarden pets animate <idle|walk|fly|sit|greet> | clear
-# Preview entities never save to disk; abilities, mounts and progression come later.
+# Preview entities never save to disk; owned companions are stored separately.
 pets:
+  rare:
+    # Fraction of non-mythical encounters that use the seventeen rare species.
+    # The habitat and recent-encounter variety weights apply within each tier.
+    chance: 0.08
   wild-spawns:
     enabled: true
     # Independent custom encounters; ordinary monster spawning stays disabled.
-    # Only the 12 rare species; the five mythical pets never spawn naturally.
+    # Mythical pets may replace a successful ordinary encounter in their own habitat.
     attempt-interval-seconds: 45
     chance-per-player: 0.12
     stage-weights:
@@ -335,10 +421,13 @@ pets:
     # 0 = no limit on earned slots; the stable and breeding menus have multiple pages.
     max-slots: 0
   mythical:
-    # Per species, per successful wild encounter in its habitat (0.1%, not per 45-second attempt).
-    # Time/weather only boost this by x2/x3; all five remain obtainable in Evergarden's frozen night.
-    # No mythical pity timer. At most one wild mythical can be present in the world at once.
-    chance: 0.001
+    # Per species, per successful wild encounter in its habitat (2%, not per 45-second attempt).
+    # All five have equal odds at every time and in all weather.
+    # At most one wild mythical can be present in the world at once.
+    chance: 0.02
+    spawn-rate-version: 3
+    # Guaranteed any eligible species on this many eligible successful encounters; 0 disables.
+    pity-encounters: 0
     lifetime-seconds: 1200
     trust-multiplier: 0.5
     stage-weights:
@@ -360,11 +449,11 @@ pets:
       absorption-cooldown-seconds: 120
     # Rider feet above the pet model origin; size variations are applied automatically.
     seat-height:
-      aetherius: 1.05
-      ignis_draconis: 1.25
-      zephyros: 1.05
-      solaris: 0.9
-      fenrir: 1.05
+      aetherius: 2.10
+      ignis_draconis: 2.15
+      zephyros: 1.98
+      solaris: 1.72
+      fenrir: 1.62
     anticheat:
       bypass-permissions:
         GrimAC: [grim.disabled]
@@ -382,8 +471,9 @@ pets:
     # Assist: foes within this many blocks of the owner; a foe hits back on this % of bites.
     assist-radius: 16
     counter-chance: 35
-    # A pet knocked out in a fight rests this many game ticks (24000 = one in-game day).
-    faint-ticks: 24000
+    # A knocked-out pet rests this many game ticks (6000 = five minutes at 20 TPS).
+    faint-ticks: 6000
+    recovery-version: 2
   # Growth points: +1 per minute out with an active owner, plus feeding and boss victories.
   growth:
     medium: 120
@@ -436,6 +526,18 @@ seraph-trader:
   # Ingredient amounts (max 64 per slot). 1 golden feather = 10 feathers in the exchange.
   prices:
     staff-feathers: 40
+    mythical-egg-cores: 2      # cores of one realm boss per baby mythical egg
+    # Dragon armor from Dragon Nest scales (scales of the matching dragon + Golden Seraph Feathers per piece).
+    # A full set: 42 scales and 19 golden feathers. A hunter earns 1 scale for 3%+ of the damage, 2 from 12%,
+    # +1 for the top damage dealer.
+    dragon-armor-scales-helm: 8
+    dragon-armor-golden-helm: 4
+    dragon-armor-scales-chestplate: 14
+    dragon-armor-golden-chestplate: 6
+    dragon-armor-scales-leggings: 12
+    dragon-armor-golden-leggings: 5
+    dragon-armor-scales-boots: 8
+    dragon-armor-golden-boots: 4
     staff-orbs: 7              # Soul Orbs in the element's colour (element-orbs below)
     special-staff-feathers: 60 # Light and Dark
     special-staff-orbs: 9
@@ -472,10 +574,11 @@ seraph-trader:
     scroll-epic-per-day: 2
     good-potions-per-day: 10
     supreme-potions-per-day: 2
-    legend-cores-per-week: 1
-    legendary-weapons-per-week: 1
     legendary-scrolls-on-offer: 2
-    legendary-scrolls-per-week: 1
+    # The whole legend shop (Core of Legend, legendary weapons and scrolls, boss armor,
+    # realm core sales and mythical eggs) shares one stock per player, reset every
+    # in-game day (24000 ticks of Evergarden's game clock, about 20 minutes).
+    legend-shop-per-day: 10
   # Matched by colour: fire red/orange, wind and earth green, ice and water blue,
   # lightning and dark purple, light gold.
   element-orbs:
@@ -529,6 +632,10 @@ dimensional-sanctuaries:
     empty-reset-seconds: 15
     respawn-ticks: 600
     damage-percent: 100
+    # Each extra challenger adds this share of the boss's solo health, up to party-health-max x solo health
+    # (3.8 = five players). The per-boss health-per-extra-player / health-cap keys are no longer read.
+    party-health-percent: 70.0
+    party-health-max: 3.8
     cinder-colossus:
       health: 3800.0
       health-per-extra-player: 950.0

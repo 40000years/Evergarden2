@@ -10,10 +10,68 @@ import net.minecraft.world.entity.EquipmentSlot;
 import org.bukkit.event.*;
 import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import net.kyori.adventure.text.Component;
+import java.util.*;
 
 /** Armor wear for encounter impacts whose damage type intentionally bypasses armor. */
-final class BossDamage {
+public final class BossDamage {
     private BossDamage(){}
+    private record Attribution(UUID player,String name) {}
+    private record Lingering(UUID world,String name,long until) {}
+    private static final ThreadLocal<Attribution> SCOPED=new ThreadLocal<>();
+    private static final ThreadLocal<Attribution> EFFECT=new ThreadLocal<>();
+    private static final Map<UUID,Lingering> WITHER=new HashMap<>(),FIRE=new HashMap<>();
+    private static NamespacedKey bossNameKey;
+
+    /** Tag an actual boss or its attack proxy; ordinary mobs are never inferred from proximity. */
+    public static void tag(Entity entity,String name){
+        if(entity==null||name==null||name.isBlank())return;
+        if(bossNameKey!=null)entity.getPersistentDataContainer().set(bossNameKey,PersistentDataType.STRING,name);
+        // Keep a real entity name as a fallback for death-message plugins that read the
+        // Bukkit killer's display name instead of our persistent boss attribution tag.
+        // These proxy names stay hidden above the entity; explicitly authored names
+        // (for example summoned minions) are left intact.
+        if(entity.customName()==null){
+            entity.customName(BossNames.styled(name));
+            entity.setCustomNameVisible(false);
+        }
+    }
+    private static String name(Entity entity){
+        if(entity==null||bossNameKey==null)return null;
+        String result=entity.getPersistentDataContainer().get(bossNameKey,PersistentDataType.STRING);
+        if(result==null&&entity instanceof Projectile shot&&shot.getShooter() instanceof Entity shooter)
+            result=shooter.getPersistentDataContainer().get(bossNameKey,PersistentDataType.STRING);
+        return result;
+    }
+    /** Attach a boss name to exactly this synchronous damage/death operation. */
+    public static void scoped(Player player,String name,Runnable action){
+        Attribution previous=SCOPED.get();SCOPED.set(new Attribution(player.getUniqueId(),name));
+        try{action.run();}finally{if(previous==null)SCOPED.remove();else SCOPED.set(previous);}
+    }
+    /** Apply a status normally while recording the source if Paper accepts a Wither effect. */
+    public static boolean effect(Player player,PotionEffect effect,String name){
+        Attribution previous=EFFECT.get();EFFECT.set(new Attribution(player.getUniqueId(),name));
+        try{return player.addPotionEffect(effect);}finally{if(previous==null)EFFECT.remove();else EFFECT.set(previous);}
+    }
+    /** Record boss fire only when it did not start as unrelated existing fire. */
+    public static void ignite(Player player,int ticks,String name){
+        int before=player.getFireTicks();Lingering old=FIRE.get(player.getUniqueId());
+        boolean ours=old!=null&&old.world.equals(player.getWorld().getUID())&&old.until>=Bukkit.getCurrentTick()&&old.name.equals(name);
+        player.setFireTicks(Math.max(before,ticks));
+        if(before<=0||ours)FIRE.put(player.getUniqueId(),new Lingering(player.getWorld().getUID(),name,Bukkit.getCurrentTick()+Math.max(ticks,player.getFireTicks())+2L));
+        else FIRE.remove(player.getUniqueId());
+    }
     private static final ThreadLocal<Impact> CURRENT=new ThreadLocal<>();
     private static final class Impact {
         final Player player;final double amount;final DamageSource source;final boolean armor;
@@ -22,7 +80,41 @@ final class BossDamage {
         Impact(Player player,double amount,DamageSource source,boolean armor){this.player=player;this.amount=amount;this.source=source;this.armor=armor;}
     }
     static void register(JavaPlugin plugin){
+        bossNameKey=new NamespacedKey(plugin,"boss_death_name");WITHER.clear();FIRE.clear();
         plugin.getServer().getPluginManager().registerEvents(new Listener(){
+            @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+            public void potion(EntityPotionEffectEvent event){
+                if(!(event.getEntity() instanceof Player player)||event.getModifiedType()!=PotionEffectType.WITHER)return;
+                UUID id=player.getUniqueId();WITHER.remove(id);
+                PotionEffect effect=event.getNewEffect();if(effect==null||(event.getOldEffect()!=null&&!event.isOverride()))return;
+                Attribution requested=EFFECT.get();String source=requested!=null&&requested.player.equals(id)?requested.name:name(event.getSource());
+                if(source==null||source.isBlank())return;
+                long duration=effect.getDuration()==PotionEffect.INFINITE_DURATION?Integer.MAX_VALUE:Math.max(0,effect.getDuration());
+                WITHER.put(id,new Lingering(player.getWorld().getUID(),source,Bukkit.getCurrentTick()+duration+2L));
+            }
+            @EventHandler(priority=EventPriority.MONITOR,ignoreCancelled=true)
+            public void combust(EntityCombustEvent event){if(event.getEntity() instanceof Player p)FIRE.remove(p.getUniqueId());}
+            @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
+            public void deathName(PlayerDeathEvent event){
+                Player player=event.getEntity();UUID id=player.getUniqueId();Attribution scoped=SCOPED.get();
+                String boss=scoped!=null&&scoped.player.equals(id)?scoped.name:null;
+                if(boss==null){boss=name(event.getDamageSource().getCausingEntity());if(boss==null)boss=name(event.getDamageSource().getDirectEntity());}
+                if(boss==null){
+                    var type=event.getDamageSource().getDamageType();
+                    Lingering effect=type==org.bukkit.damage.DamageType.WITHER?WITHER.get(id):type==org.bukkit.damage.DamageType.ON_FIRE?FIRE.get(id):null;
+                    if(effect!=null&&effect.until>=Bukkit.getCurrentTick()&&effect.world.equals(player.getWorld().getUID())
+                            &&(type!=org.bukkit.damage.DamageType.WITHER||player.hasPotionEffect(PotionEffectType.WITHER))
+                            &&(type!=org.bukkit.damage.DamageType.ON_FIRE||player.getFireTicks()>0))boss=effect.name;
+                }
+                if(boss!=null&&!boss.isBlank()){
+                    Component message=Component.text(player.getName()+" ถูกสังหารโดย ",net.kyori.adventure.text.format.NamedTextColor.GRAY)
+                        .append(BossNames.styled(boss));
+                    if(event.deathMessage()!=null)event.deathMessage(message);
+                    event.deathScreenMessageOverride(message);
+                }
+            }
+            @EventHandler(priority=EventPriority.MONITOR) public void deathCleanup(PlayerDeathEvent e){WITHER.remove(e.getEntity().getUniqueId());FIRE.remove(e.getEntity().getUniqueId());}
+            @EventHandler public void quit(PlayerQuitEvent e){WITHER.remove(e.getPlayer().getUniqueId());FIRE.remove(e.getPlayer().getUniqueId());}
             @EventHandler(priority=EventPriority.HIGHEST,ignoreCancelled=true)
             public void soulFixed(org.bukkit.event.entity.EntityDamageEvent event){
                 Impact impact=CURRENT.get();

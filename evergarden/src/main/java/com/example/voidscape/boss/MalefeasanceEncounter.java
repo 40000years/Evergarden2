@@ -60,11 +60,11 @@ final class MalefeasanceEncounter {
             if(p2){
                 owner.bar.setColor(s.crimson?org.bukkit.boss.BarColor.YELLOW:org.bukkit.boss.BarColor.BLUE);
                 owner.bar.setProgress(Math.clamp(owner.health/owner.maxHealth(),0,1));
-                owner.bar.setTitle("Malefeasance | ASTRAL ARCH-SORCERESS | "+(int)Math.ceil(owner.health)+" / "+(int)owner.maxHealth()+" | PHASE 2");
+                owner.bar.setTitle(BossNames.legacy("Malefeasance")+" §8| §dASTRAL ARCH-SORCERESS §8| §f"+(int)Math.ceil(owner.health)+" / "+(int)owner.maxHealth()+" | PHASE 2");
             }else{
                 owner.bar.setColor(s.crimson?org.bukkit.boss.BarColor.RED:org.bukkit.boss.BarColor.PURPLE);
                 owner.bar.setProgress(Math.clamp(owner.health/owner.maxHealth(),0,1));
-                owner.bar.setTitle("Malefeasance | "+(int)Math.ceil(owner.health)+" / "+(int)owner.maxHealth()+" | MAGIC IMMUNE | REBIRTH READY");
+                owner.bar.setTitle(BossNames.legacy("Malefeasance")+" §8| §f"+(int)Math.ceil(owner.health)+" / "+(int)owner.maxHealth()+" | MAGIC IMMUNE | REBIRTH READY");
             }
         }
         if(now<owner.revivalUntil){rebirthFrame(s,target,now);return true;}
@@ -214,7 +214,7 @@ final class MalefeasanceEncounter {
         String id=p.getUniqueId()+":"+type.getKey();Debuff old=s.debuffs.get(id);PotionEffect current=p.getPotionEffect(type);
         if(current!=null&&current.getAmplifier()>amplifier)return;
         s.debuffs.put(id,new Debuff(p,type,amplifier,old==null?current:old.previous,old==null?now:old.began,now+120));
-        p.addPotionEffect(new PotionEffect(type,120,amplifier,false,true,true));
+        BossDamage.effect(p,new PotionEffect(type,120,amplifier,false,true,true),"Malefeasance");
     }
     private void restore(Debuff debuff,long now){
         PotionEffect current=debuff.player.getPotionEffect(debuff.type);
@@ -244,7 +244,7 @@ final class MalefeasanceEncounter {
         s.nextBlink=owner.revivalUntil+20;
         owner.bar.setProgress(0.50);
         owner.bar.setColor(org.bukkit.boss.BarColor.BLUE);
-        owner.bar.setTitle("Malefeasance | ASTRAL ASCENSION | "+(int)owner.health+" / "+(int)owner.maxHealth()+" | PHASE 2");
+        owner.bar.setTitle(BossNames.legacy("Malefeasance")+" §8| §dASTRAL ASCENSION §8| §f"+(int)owner.health+" / "+(int)owner.maxHealth()+" | PHASE 2");
         owner.mob.getWorld().playSound(owner.mob.getLocation(),Sound.ITEM_TOTEM_USE,1,.85f);
         owner.mob.getWorld().playSound(owner.mob.getLocation(),Sound.UI_TOAST_CHALLENGE_COMPLETE,1,1.4f);
         burst(owner.mob.getLocation(),true);

@@ -36,6 +36,8 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
         Wheel(String key,double angle,double radius,double turn){this.key=key;this.angle=angle;this.radius=radius;this.turn=turn;}
     }
     private static final class Run {
+        /** Phlegethon's weapon adaptation, active in phase three. */
+        final BossAdaptation adaptation=new BossAdaptation();
         final String id;final Location center;final BossBar bar;final SeraphonEffects effects;
         final Set<Chunk> tickets=new HashSet<>();final Set<UUID> contributors=new HashSet<>(),roster=new HashSet<>();
         final Map<UUID,Long> hits=new HashMap<>(),beamHits=new HashMap<>();
@@ -50,7 +52,7 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
         Run(VoidscapePlugin plugin,BossStructureLayout.Site site){
             center=new Location(plugin.world(),site.x()+.5,site.kind().floorY+1,site.z()+.5);position=center.clone();
             id=center.getWorld().getUID()+"_"+site.x()+"_"+site.z();
-            bar=Bukkit.createBossBar("SERAPHON · ผู้พิทักษ์บัญชาสวรรค์",BarColor.YELLOW,BarStyle.SEGMENTED_10);
+            bar=Bukkit.createBossBar(BossNames.legacy("SERAPHON"),BarColor.YELLOW,BarStyle.SEGMENTED_10);
             effects=new SeraphonEffects(plugin);
         }
     }
@@ -104,6 +106,7 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
     private void spawn(Run r){
         if(r.visual!=null){r.visual.close();r.visual=null;}if(r.anchor!=null)r.anchor.remove();
         r.anchor=r.center.getWorld().spawn(r.position,Slime.class,e->{
+            BossDamage.tag(e,"Seraphon");
             e.setSize(8);e.setAI(false);e.setGravity(false);e.setSilent(true);e.setInvisible(true);e.setCollidable(false);
             e.setPersistent(false);e.setRemoveWhenFarAway(false);e.setNoDamageTicks(0);
             e.getAttribute(Attribute.MAX_HEALTH).setBaseValue(1024);e.setHealth(1024);
@@ -129,7 +132,7 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
         if(r.fighting)present.forEach(r.bar::addPlayer);
         r.bar.setProgress(Math.clamp(r.health/r.maxHealth,0,1));
         String state=tick<r.stunUntil?" · ร่วงพื้น ×2":r.skill==Skill.CHOIR?" · โล่ศักดิ์สิทธิ์ · ทำลายวงล้อ":r.skill==Skill.WINGS?" · หลบใต้ปีก!":"";
-        r.bar.setTitle("SERAPHON · ผู้พิทักษ์บัญชาสวรรค์ · "+(int)Math.ceil(r.health)+" / "+(int)r.maxHealth+" · PHASE "+r.phase+state);
+        r.bar.setTitle(BossNames.legacy("SERAPHON")+" §8· §f"+(int)Math.ceil(r.health)+" / "+(int)r.maxHealth+" · PHASE "+r.phase+state);
         r.bar.setColor(tick<r.stunUntil?BarColor.PINK:r.phase==3?BarColor.WHITE:r.phase==2?BarColor.BLUE:BarColor.YELLOW);
     }
     private void tick(){
@@ -205,7 +208,7 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
         r.center.getWorld().playSound(r.position,Sound.ENTITY_IRON_GOLEM_DAMAGE,1.4f,.5f);
     }
     private void regroup(Run r){
-        r.regrouped=true;r.health=Math.max(r.health,phaseStart(r));r.skill=null;r.stunUntil=0;r.next=tick+40;
+        r.regrouped=true;r.health=Math.max(r.health,phaseStart(r));r.skill=null;r.stunUntil=0;r.next=tick+40;r.adaptation.reset();
         r.bolts.clear();r.pillars.clear();r.wheels.clear();r.solar.clear();r.effects.clearAttack();
         if(r.phase==2)r.choirDue=tick+40;if(r.phase==3)r.wingsDue=tick+300;
         r.position=r.center.clone();
@@ -302,7 +305,7 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
             r.effects.beam("attack:solar:fire:"+i,from,end,2.4);
             Vector delta=end.toVector().subtract(from.toVector());double length=delta.length();if(length<.01)continue;
             for(Player p:players(r)){var box=p.getBoundingBox().expand(.8);
-                if(box.contains(from.toVector())||box.rayTrace(from.toVector(),delta.clone().normalize(),length)!=null)hit(r,p,p.getAttribute(Attribute.MAX_HEALTH).getValue()*.6);}
+                if(box.contains(from.toVector())||box.rayTrace(from.toVector(),delta.clone().normalize(),length)!=null)hit(r,p,p.getAttribute(Attribute.MAX_HEALTH).getValue()*.6,true);}
         }
         r.center.getWorld().playSound(r.position,Sound.ENTITY_GENERIC_EXPLODE,2,1.4f);
         if(reflected)ground(r,GROUNDED,"§bลำแสงสะท้อนกลับ! เธอร่วงลงพื้น — โจมตี ×2");
@@ -349,7 +352,7 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
     private void endChoir(Run r,boolean broken){
         if(broken){ground(r,GROUNDED_LONG,"§bวงล้อทั้งหมดแตก! เธอร่วงจากฟ้า — โจมตี ×2");return;}
         // Radiant burst: only the shadows of surviving wheels shelter.
-        for(Player p:players(r))if(r.wheels.stream().noneMatch(w->shaded(r,w,p)))hit(r,p,p.getAttribute(Attribute.MAX_HEALTH).getValue()*.4);
+        for(Player p:players(r))if(r.wheels.stream().noneMatch(w->shaded(r,w,p)))hit(r,p,p.getAttribute(Attribute.MAX_HEALTH).getValue()*.4,true);
         r.effects.pulse(r.center,40,tick,false);r.center.getWorld().playSound(r.center,Sound.ENTITY_GENERIC_EXPLODE,3,.6f);
         announce(r,"§eแสงศักดิ์สิทธิ์ระเบิด — วงล้อที่เหลือหายไป");r.wheels.clear();r.effects.removePrefix("attack:wheel");
     }
@@ -372,7 +375,7 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
     private void judgeWings(Run r){
         for(Player p:players(r))if(!SeraphonRules.sheltered(p.getX(),p.getZ(),r.position.getX(),r.position.getZ())){
             // Like the Judge's Final Judgment: direct zero health, no cancellable damage event.
-            p.setHealth(0);
+            BossDamage.scoped(p,"Seraphon",()->p.setHealth(0));
         }
         r.effects.pulse(r.center,RADIUS,tick,true);r.center.getWorld().playSound(r.center,Sound.ENTITY_LIGHTNING_BOLT_THUNDER,3,.5f);
         ground(r,GROUNDED_LONG,"§fประตูสวรรค์ปิด — เธอหมดแรงร่วงพื้น โจมตี ×2");
@@ -474,9 +477,13 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
         }
     }
     /** Armor-piercing light: Protection, Resistance, absorption, cancellation and Totems still apply. */
-    private boolean hit(Run r,Player p,double amount){
+    private boolean hit(Run r,Player p,double amount){return hit(r,p,amount,false);}
+    /** {@code share}: the blow is a share of the victim's max HP, so phase three caps it (BossAdaptation.percentBlow). */
+    private boolean hit(Run r,Player p,double amount,boolean share){
         if(!inside(r,p)||!r.fighting||r.dead||r.anchor==null||!r.anchor.isValid())return false;
         double percent=plugin.getConfig().getDouble("seraphon.damage-percent",100);amount*=Double.isFinite(percent)?Math.clamp(percent,0,1000)/100:1;
+        if(r.phase==3)amount=share?BossAdaptation.percentBlow(plugin,BossAdaptation.SERAPHON,amount,p.getAttribute(Attribute.MAX_HEALTH).getValue())
+            :amount*BossAdaptation.damageMultiplier(plugin,BossAdaptation.SERAPHON);
         applying=true;try{return BossDamage.hit(p,amount,DamageSource.builder(DamageType.INDIRECT_MAGIC).withCausingEntity(r.anchor).withDirectEntity(r.anchor).build(),true);}finally{applying=false;}
     }
     private Player attacker(EntityDamageEvent e){
@@ -503,6 +510,7 @@ public final class SeraphonBoss implements Listener,AutoCloseable {
         if(tick<r.hits.getOrDefault(p.getUniqueId(),0L))return;
         if(!r.fighting){if(p.getY()>r.center.getY()+5)return;wake(r);}
         r.hits.put(p.getUniqueId(),tick+10);double before=r.health;
+        if(r.phase==3)amount=r.adaptation.phaseThree(plugin,e,p,amount,BossAdaptation.SERAPHON,"Seraphon",r.position.clone().add(0,4,0));
         double multiplier=tick<r.stunUntil?2:r.skill==Skill.CHOIR||r.skill==Skill.WINGS?.25
             :r.skill!=null&&tick-r.start>=r.skill.windup+r.skill.active?1.35:1;
         r.health=Math.max(0,r.health-amount*multiplier);r.contributors.add(p.getUniqueId());

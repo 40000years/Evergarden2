@@ -73,6 +73,10 @@ elemental-combat:
   boss-damage-cap-percent: 5
   healing-per-cast-percent: 60
   healing-pulse-lock-ticks: 15
+  # Heals, shields and buffs reach every nearby player who is not on an opposing scoreboard team.
+  # false = only the caster and players on the caster's own scoreboard team (the pre-1.41 rule).
+  # Spell damage to players still follows `pvp` above, the world's PvP and PvP plugins.
+  support-all-players: true
   phoenix-health-percent: 25
   summon-goal-range: 12
   # Heaven's Descent beam: firing seconds after the 1.2 s charge (3..10), reach in blocks

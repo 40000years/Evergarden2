@@ -3,6 +3,7 @@ import com.example.voidscape.boss.*;
 import com.example.voidscape.compat.LevelledMobsCompat;
 import com.example.voidscape.world.WorldBossTempleLayout;
 import com.example.advancemagic.AdvanceMagicPlugin;
+import com.example.advancemagic.elemental.ElementalSpell;
 import com.mojang.authlib.GameProfile;
 import io.netty.channel.embedded.EmbeddedChannel;
 import net.minecraft.network.Connection;
@@ -54,15 +55,15 @@ public final class AncientJudgeProbe extends JavaPlugin {
         Path checkpoint=Path.of("judge-checkpoint.txt");
         if(Files.exists(checkpoint)){
             List<String> pending=Files.readAllLines(checkpoint);
-            UUID returningId=UUID.fromString(pending.get(1));String rolledCore=pending.get(2);
+            UUID returningId=UUID.fromString(pending.get(1));String rolledSpell=pending.get(2);
             var rewards=(org.bukkit.configuration.file.YamlConfiguration)field(boss,"ledger");
             String rewardPath="rewards."+returningId;
-            check(rewards.getStringList(rewardPath+".cores").equals(List.of(rolledCore)),"dead/offline contributor keeps the exact core roll across a full restart");
+            check(rewards.getStringList(rewardPath+".legendary-spells").equals(List.of(rolledSpell))&&rewards.getInt(rewardPath+".tier5-keys")==2,"dead/offline contributor keeps the exact legendary spell and Tier V keys across a full restart");
             Player returning=actor(world,site,"ReturningJudge",returningId);
             boss.claimReward(returning);
-            check(coreIds(returning).equals(List.of(rolledCore))&&!rewards.contains(rewardPath),"returning contributor receives exactly the saved core and consumes its pending reward");
+            check(spellIds(returning).equals(List.of(rolledSpell))&&tier5Keys(returning)==2&&coreIds(returning).isEmpty()&&!rewards.contains(rewardPath),"returning contributor receives exactly the saved spell plus explicit Tier V keys and consumes its pending reward");
             int exp=returning.getTotalExperience();boss.claimReward(returning);
-            check(coreIds(returning).equals(List.of(rolledCore))&&returning.getTotalExperience()==exp,"repeated claim after restart cannot duplicate a core or XP");
+            check(spellIds(returning).equals(List.of(rolledSpell))&&tier5Keys(returning)==2&&returning.getTotalExperience()==exp,"repeated claim after restart cannot duplicate a spell, key or XP");
             Player actor=actor(world,site,"RestartActor");
             check(boss.status(actor).contains("ฟื้นตัว"),"victory cooldown survives a full Paper restart");
             check(!boss.start(actor,false)&&boss.activeCount()==0,"ordinary summoning cannot bypass persisted cooldown");
@@ -112,7 +113,15 @@ public final class AncientJudgeProbe extends JavaPlugin {
         check(owned.stream().allMatch(e->!e.isPersistent()),"runtime entities cannot survive chunk serialization");
         check(owned.stream().filter(ItemDisplay.class::isInstance).noneMatch(a::canSee)&&owned.stream().filter(BlockDisplay.class::isInstance).anyMatch(a::canSee),"without accepted pack Java sees the sculpture, no missing-texture models");
         var packReply=HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create(garden.judgePack().url(null))).GET().build(),HttpResponse.BodyHandlers.ofByteArray());
-        check(packReply.statusCode()==200&&Arrays.equals(packReply.body(),garden.getResource("resource-packs/judge-java.zip").readAllBytes()),"automatic local pack host serves the exact embedded addon");
+        // Since the pet graphics joined it, the served Judge pack is the embedded addon merged with native-pets.zip
+        // (JudgePackService.start), written to the data folder; the host must serve exactly that, addon included.
+        byte[] assembled=java.nio.file.Files.readAllBytes(garden.getDataFolder().toPath().resolve("resource-packs/judge-java.zip"));
+        java.util.function.Function<byte[],Set<String>> names=bytes->{Set<String> found=new HashSet<>();
+            try(var zip=new java.util.zip.ZipInputStream(new java.io.ByteArrayInputStream(bytes))){for(var e=zip.getNextEntry();e!=null;e=zip.getNextEntry())found.add(e.getName());}
+            catch(java.io.IOException failure){throw new java.io.UncheckedIOException(failure);}return found;};
+        check(packReply.statusCode()==200&&Arrays.equals(packReply.body(),assembled)
+            &&names.apply(packReply.body()).containsAll(names.apply(garden.getResource("resource-packs/judge-java.zip").readAllBytes())),
+            "automatic local pack host serves the assembled Judge pack with every embedded addon entry");
         Bukkit.getPluginManager().callEvent(new PlayerResourcePackStatusEvent(a,JudgePackService.PACK_ID,PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED));
         for(int i=0;i<2;i++)boss.tick();
         check(owned.stream().filter(BlockDisplay.class::isInstance).noneMatch(a::canSee)&&owned.stream().filter(ItemDisplay.class::isInstance).anyMatch(a::canSee),"pack acceptance swaps only that viewer to the new sculpture");
@@ -356,23 +365,25 @@ public final class AncientJudgeProbe extends JavaPlugin {
         check(world.getEntities().stream().noneMatch(e->e.getPersistentDataContainer().has(garden.key("world_boss_entity"),PersistentDataType.BYTE)),"victory removes every sculpture and warning entity");
         check(!world.getPluginChunkTickets().values().stream().anyMatch(plugins->plugins.contains(garden)),"victory releases every encounter chunk ticket");
         check(floor.matches(world),"no fight or falling block changes the protected temple floor");
-        check(Arrays.stream(a.getInventory().getContents()).filter(Objects::nonNull).filter(garden.relics()::isVoidKey).mapToInt(ItemStack::getAmount).sum()==2,"credited survivor receives configured Evergarden keys");
-        check(coreIds(a).size()==1,"victory grants exactly one usable random Advance Magic core to the survivor");
+        check(tier5Keys(a)==2,"credited survivor receives two explicitly tagged Tier V Vault keys");
+        check(spellIds(a).size()==1&&ElementalSpell.parse(spellIds(a).getFirst()).rarity()==ElementalSpell.Rarity.LEGENDARY&&coreIds(a).isEmpty(),"victory also grants exactly one usable legendary spell scroll and no retired wand core");
         var ledger=(org.bukkit.configuration.file.YamlConfiguration)field(boss,"ledger");
         String pendingPath="rewards."+outsider.getUniqueId();
-        List<String> smallRoll=ledger.getStringList(pendingPath+".cores");
-        check(smallRoll.size()==1&&coreIds(outsider).isEmpty(),"any positive hand damage earns one core; a full inventory preserves the reward");
+        List<String> smallRoll=ledger.getStringList(pendingPath+".legendary-spells");
+        check(smallRoll.size()==1&&ledger.getInt(pendingPath+".tier5-keys")==2&&spellIds(outsider).isEmpty(),"any positive hand damage earns the key plus legendary spell bundle; a full inventory preserves it");
         int savedXp=outsider.getTotalExperience();
         outsider.getInventory().setItem(0,null);boss.claimReward(outsider);
-        check(ledger.getStringList(pendingPath+".cores").equals(smallRoll)&&coreIds(outsider).isEmpty()&&outsider.getTotalExperience()==savedXp,"one free slot cannot consume a reward needing both a key and a core slot");
+        check(ledger.getStringList(pendingPath+".legendary-spells").equals(smallRoll)&&spellIds(outsider).isEmpty()&&outsider.getTotalExperience()==savedXp,"one free slot cannot consume a reward needing key, scroll and feather slots");
         outsider.getInventory().setItem(1,null);boss.claimReward(outsider);
-        check(coreIds(outsider).equals(smallRoll)&&!ledger.contains(pendingPath),"enough inventory space claims the unchanged core roll exactly once");
+        check(ledger.getStringList(pendingPath+".legendary-spells").equals(smallRoll)&&spellIds(outsider).isEmpty()&&outsider.getTotalExperience()==savedXp,"two free slots keep the entire reward queued when its feathers also need space");
+        outsider.getInventory().setItem(2,null);boss.claimReward(outsider);
+        check(spellIds(outsider).equals(smallRoll)&&tier5Keys(outsider)==2&&!ledger.contains(pendingPath),"three free slots claim the unchanged spell and Tier V keys exactly once");
         boss.claimReward(outsider);boss.claimReward(a);
-        check(coreIds(a).size()==1&&coreIds(outsider).equals(smallRoll),"repeated manual claims cannot add extra victory cores");
-        String deadPath="rewards."+b.getUniqueId();List<String> deadRoll=ledger.getStringList(deadPath+".cores");
-        check(b.isDead()&&deadRoll.size()==1&&coreIds(b).isEmpty(),"dead hand-damage contributor receives one queued core");
-        boss.claimReward(b);check(ledger.getStringList(deadPath+".cores").equals(deadRoll),"dead players cannot consume their queued core before respawning");
-        check(fight.contribution(visitor.getUniqueId())==0&&!ledger.contains("rewards."+visitor.getUniqueId())&&coreIds(visitor).isEmpty(),"minion-only participation does not earn a main-boss core");
+        check(spellIds(a).size()==1&&tier5Keys(a)==2&&spellIds(outsider).equals(smallRoll)&&tier5Keys(outsider)==2,"repeated manual claims cannot add extra victory spells or keys");
+        String deadPath="rewards."+b.getUniqueId();List<String> deadRoll=ledger.getStringList(deadPath+".legendary-spells");
+        check(b.isDead()&&deadRoll.size()==1&&ledger.getInt(deadPath+".tier5-keys")==2&&spellIds(b).isEmpty(),"dead hand-damage contributor receives a queued legendary spell plus Tier V keys");
+        boss.claimReward(b);check(ledger.getStringList(deadPath+".legendary-spells").equals(deadRoll),"dead players cannot consume their queued spell before respawning");
+        check(fight.contribution(visitor.getUniqueId())==0&&!ledger.contains("rewards."+visitor.getUniqueId())&&spellIds(visitor).isEmpty(),"minion-only participation does not earn a main-boss spell");
         check(garden.getDataFolder().toPath().resolve("world-bosses.yml").toFile().exists(),"cooldown and pending rewards are journaled");
         check(!boss.start(a,false),"defeated temple refuses an immediate normal restart");
         check(boss.start(a,true),"explicit admin restart is available for testing");boss.stop(a);
@@ -443,6 +454,7 @@ public final class AncientJudgeProbe extends JavaPlugin {
         check(boss.startTest(p,3),"reset directly back to phase three");
         run=((Map<?,?>)field(boss,"active")).values().iterator().next();var targets=(Map<JudgmentFight.Part,Slime>)field(run,"targets");
         signatureFinalChecks(p,world,site,run,targets.get(JudgmentFight.Part.CORE));
+        phaseThreeAdaptationChecks(p,world,site,run,targets.get(JudgmentFight.Part.CORE));
         boss.triggerTestRupture(p);targets.get(JudgmentFight.Part.CORE).damage(1000000,p);
         check(boss.activeCount()==0&&p.getGameMode()==GameMode.CREATIVE&&ledger.saveToString().equals(before),"test victory restores the original mode and leaves rewards and cooldown ledger unchanged");
         check(world.getEntities().stream().noneMatch(e->e.getPersistentDataContainer().has(garden.key("world_boss_entity"),PersistentDataType.BYTE)),"test victory cleans even an active charge's physical seals");
@@ -495,6 +507,52 @@ public final class AncientJudgeProbe extends JavaPlugin {
         Map<JudgmentFight.Part,Slime> targets=(Map<JudgmentFight.Part,Slime>)field(run,"targets");magic.context().damage(p,targets.get(JudgmentFight.Part.LEFT),100,DamageType.MAGIC);
         check(fight.hand(JudgmentFight.Part.LEFT)==1400,"normal weapon damage remains a valid fallback in phase two");
         p.teleport(center);boss.triggerTestBait(p);check(boss.triggerTestJudgment(p)&&((Map<?,?>)field(run,"runeMarkers")).isEmpty(),"judgment overrides a test lure and hides lure runes so only genuine safe circles remain");
+    }
+    /** e2.196: Phlegethon's weapon adaptation on the phase-three heart, and red spells scaled by damage-multiplier.judge. */
+    void phaseThreeAdaptationChecks(Player p,World world,WorldBossTempleLayout.Site site,Object run,Slime core)throws Exception{
+        JudgmentFight fight=(JudgmentFight)field(run,"fight");
+        check(fight.phase()==3,"adaptation checks run in phase three");
+        ItemStack held=p.getInventory().getItemInMainHand();
+        ItemStack[] items={new ItemStack(Material.DIAMOND_AXE),new ItemStack(Material.GOLDEN_AXE),new ItemStack(Material.NETHERITE_AXE),
+            new ItemStack(Material.DIAMOND_SWORD),new ItemStack(Material.IRON_AXE)};
+        double[] lost=new double[items.length];
+        for(int i=0;i<items.length;i++){
+            p.getInventory().setItemInMainHand(items[i]);core.setNoDamageTicks(0);
+            double before=fight.core();core.damage(100,p);lost[i]=before-fight.core();
+        }
+        check(lost[0]>0&&Math.abs(lost[1]-lost[0]/2)<1e-6&&Math.abs(lost[2]-lost[0]/2)<1e-6,
+            "the phase-three heart adapts to repeated axe hits whatever the material, but never below half ("+lost[0]+", "+lost[1]+", "+lost[2]+")");
+        check(Math.abs(lost[3]-lost[0])<1e-6,"a sword after axes strikes the heart in full");
+        check(Math.abs(lost[4]-lost[0])<1e-6,"returning to an axe starts at full damage");
+        String mode="boss-phase-three.adaptation.judge";Object oldMode=garden.getConfig().get(mode);
+        garden.getConfig().set(mode,"off");
+        try{
+            double[] plain=new double[2];
+            for(int i=0;i<2;i++){core.setNoDamageTicks(0);double before=fight.core();core.damage(100,p);plain[i]=before-fight.core();}
+            check(Math.abs(plain[0]-lost[0])<1e-6&&Math.abs(plain[1]-lost[0])<1e-6,"boss-phase-three.adaptation.judge off removes the Judge's adaptation");
+        }finally{garden.getConfig().set(mode,oldMode);p.getInventory().setItemInMainHand(held);}
+        Class<?> attackType=Class.forName("com.example.voidscape.boss.WorldBossManager$Attack");
+        // Attack is a private enum: read its constant directly instead of invoking its public valueOf reflectively.
+        Object rupture=Arrays.stream(attackType.getEnumConstants()).filter(a->((Enum<?>)a).name().equals("RUPTURE")).findFirst().orElseThrow();
+        Method resolve=boss.getClass().getDeclaredMethod("resolve",run.getClass(),List.class);resolve.setAccessible(true);
+        Player victim=actor(world,site,"JudgeRedSpell");victim.setInvulnerable(false);victim.setGameMode(GameMode.SURVIVAL);
+        victim.getAttribute(Attribute.MAX_HEALTH).setBaseValue(1000);victim.teleport((Location)field(run,"center"));
+        // Red spells are sized by max HP: phase three doubles them only up to boss-phase-three.percent-blow-cap (0.95).
+        String key="boss-phase-three.damage-multiplier.judge",cap="boss-phase-three.percent-blow-cap";
+        Object old=garden.getConfig().get(key),oldCap=garden.getConfig().get(cap);
+        double[] taken=new double[3];Object[] multiplier={1.0,0.5,old};
+        try{
+            for(int i=0;i<3;i++){
+                garden.getConfig().set(key,multiplier[i]);victim.setHealth(1000);victim.setNoDamageTicks(0);
+                setField(run,"pulsesLeft",0);setField(run,"attack",rupture);resolve.invoke(boss,run,List.of(victim));taken[i]=1000-victim.getHealth();
+            }
+            check(taken[0]>0&&taken[0]<950,"an unmultiplied Rupture stays below the cap ("+taken[0]+" of 1000 HP)");
+            check(Math.abs(taken[1]-taken[0])<1e-6,"a phase-three multiplier below 1 never weakens a red spell ("+taken[1]+")");
+            check(Math.abs(taken[2]-950)<1e-3&&!victim.isDead(),"at the default x2 a phase-three Rupture takes 95% of max HP and leaves a full-health player alive ("+taken[2]+")");
+            garden.getConfig().set(cap,0.0);victim.setHealth(1000);victim.setNoDamageTicks(0);
+            setField(run,"pulsesLeft",0);setField(run,"attack",rupture);resolve.invoke(boss,run,List.of(victim));
+            check(victim.isDead()||victim.getHealth()<=0,"percent-blow-cap 0 restores the plain x2: a phase-three Rupture is lethal through 1000 HP ("+2*taken[0]+" damage)");
+        }finally{garden.getConfig().set(key,old);garden.getConfig().set(cap,oldCap);}
     }
     void signatureFinalChecks(Player safe,World world,WorldBossTempleLayout.Site site,Object run,Slime core)throws Exception{
         check((long)field(run,"nextJudgment")-(long)field(boss,"tick")==400,"phase-three signature is initially scheduled twenty seconds after transition");
@@ -641,14 +699,25 @@ public final class AncientJudgeProbe extends JavaPlugin {
         var broken=new org.bukkit.event.block.BlockBreakEvent(temple,p);Bukkit.getPluginManager().callEvent(broken);check(broken.isCancelled(),"actual world-boss temple architecture stays protected");
         var outside=world.getBlockAt(site.x()+121,100,site.z());
         var outsideBreak=new org.bukkit.event.block.BlockBreakEvent(outside,p);Bukkit.getPluginManager().callEvent(outsideBreak);check(!outsideBreak.isCancelled(),"terrain immediately beyond the temple footprint is editable");
-        String[] ids={"shulker_levitation","solar_apocalypse","chronos_final_hour","heavens_judgment","verdant_sovereign","lunar_requiem","crimson_oblivion"};
-        for(int i=0;i<ids.length;i++){
+        // The 7 Mythic wand cores this once pinned were retired with the wands (Advance Magic 1.35.0); the top Vault
+        // bracket now draws from a larger pool (21 choices in e2.195). Every choice must still be a real reward.
+        int[] pool={-1};
+        for(int i=0;i==0||i<pool[0];i++){
             int choice=i;
-            var random=new Random(0){@Override public int nextInt(int bound){if(bound==10000)return 9900;if(bound==ids.length)return choice;throw new AssertionError("Unexpected Mythic draw bound: "+bound);}};
+            var random=new Random(0){@Override public int nextInt(int bound){if(bound==10000)return 9900;if(pool[0]<0)pool[0]=bound;return Math.min(choice,bound-1);}};
             ItemStack reward=garden.relics().rollVaultReward(random);
-            var spell=magic.wands().coreSpell(reward);
-            check(spell!=null&&spell.id().equals(ids[i]),"production Vault roll creates a usable Mythic core: "+ids[i]);
+            check(reward!=null&&!reward.getType().isAir(),"production top Vault roll choice "+i+" creates a real reward ("+(reward==null?"null":reward.getType())+")");
         }
+        check(pool[0]>1,"the top Vault bracket draws from several rewards ("+pool[0]+")");
+    }
+    int tier5Keys(Player p){
+        return Arrays.stream(p.getInventory().getStorageContents()).filter(Objects::nonNull).filter(garden.relics()::isVoidKey)
+            .filter(item->item.getItemMeta().getPersistentDataContainer().getOrDefault(garden.key("key_tier"),PersistentDataType.INTEGER,0)==5)
+            .mapToInt(ItemStack::getAmount).sum();
+    }
+    List<String> spellIds(Player p){
+        return Arrays.stream(p.getInventory().getStorageContents()).filter(Objects::nonNull).filter(item->magic.staffSpells().scroll(item)!=null)
+            .flatMap(item->Collections.nCopies(item.getAmount(),magic.staffSpells().scroll(item).id()).stream()).toList();
     }
     List<String> coreIds(Player p){
         return Arrays.stream(p.getInventory().getStorageContents()).filter(Objects::nonNull).filter(item->magic.wands().coreSpell(item)!=null)

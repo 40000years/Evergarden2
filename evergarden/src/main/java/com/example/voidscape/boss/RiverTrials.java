@@ -124,7 +124,7 @@ final class RiverTrials {
     boolean step(ArkhaiaMinions.Spirit unit,Player target,List<Player> players,long now){
         if(unit.kind==MALEFEASANCE)return dimensions.step(unit,target,players,now);
         if(!supported(unit))return false;State s=state(unit,now);
-        if(now%10==0)unit.bar.setTitle(ArkhaiaMinions.name(unit.kind)+" | "+(int)Math.ceil(unit.health)+" / "+(int)unit.maxHealth()
+        if(now%10==0)unit.bar.setTitle(BossNames.legacy(ArkhaiaMinions.name(unit.kind))+" §8| §f"+(int)Math.ceil(unit.health)+" / "+(int)unit.maxHealth()
             +(unit.kind==MALEFEASANCE?" | SHADOWS "+s.shadows.size()+"/2":unit.kind==STYX?" | STAGGER "+s.stagger+"/3"+(now<unit.siphonUntil?" | BLOOD "+((unit.siphonUntil-now+19)/20)+"s":"")+(now<unit.berserkUntil?" | BERSERK "+((unit.berserkUntil-now+19)/20)+"s":"")+(unit.enraged?" | ENRAGED +30%":""):"")
             +(now<s.recoveryUntil?" | EXPOSED x1.5":""));
         if(now<unit.stunUntil){unit.mob.setAI(false);unit.mob.getPathfinder().stopPathfinding();host.renderTrial(unit,target,"stun",1);return true;}
